@@ -10,5 +10,5 @@ add_executable(lluvia-core src/main.cpp)
 
 
 add_executable(vulkanDriverTest test/test_VulkanDriver.cpp)
-target_link_libraries(vulkanDriverTest gtest_main vulkan)
+target_link_libraries(vulkanDriverTest vulkan ${GTEST_BOTH_LIBRARIES} pthread)
 add_test(NAME vulkanDriverTest COMMAND vulkanDriverTest)
