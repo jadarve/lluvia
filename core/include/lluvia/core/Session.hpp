@@ -9,12 +9,6 @@
 namespace ll {
 
 /**
- * \brief Creates a new Session using default settings.
- */
-Session createSession();
-
-
-/**
  * \brief The Session class contains all the state required to run compute Graphs.
  */
 class Session {
@@ -33,6 +27,12 @@ public:
 
     NDArray createArray(const std::vector<int>& shape);
 };
+
+
+/**
+ * \brief Creates a new Session using default settings.
+ */
+Session createSession();
     
 } // namespace ll
 
