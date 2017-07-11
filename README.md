@@ -1,5 +1,13 @@
 # LLUVIA
 
+# Dependencies
+
+* Googletest
+
+```
+sudo zypper install googletest-devel
+```
+
 # Generate Eclipse CDT project
 
 ```
