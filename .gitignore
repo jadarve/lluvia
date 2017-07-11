@@ -41,3 +41,6 @@ build_eclipse
 # SublimeText
 *.sublime-project
 *.sublime-workspace
+
+# local stuff
+local
