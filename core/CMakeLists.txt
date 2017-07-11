@@ -1,7 +1,7 @@
 
 test_macro()
 
-add_executable(lluvia-core src/main.cpp)
+# add_executable(lluvia-core src/main.cpp)
 
 # Add test cpp file
 # add_executable(runUnitTests test/test_Test.cpp)
