@@ -37,7 +37,7 @@ Create a `lluvia.sublime-project` file and copy-paste the following code
     ],
     "settings" : {
         "ecc_common_flags": [
-            "-Icore/include",
+            "-I$project_base_path/core/include/",
             "-I<VULKAN_PATH>"
         ],
         "easy_clang_complete_verbose": true,
