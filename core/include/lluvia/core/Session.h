@@ -47,12 +47,6 @@ private:
 
 };
 
-
-/**
- * \brief Creates a new Session using default settings.
- */
-Session createSession();
-
 } // namespace ll
 
 #endif // LLUVIA_CORE_SESSION_H_
