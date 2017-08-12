@@ -40,15 +40,15 @@ include_directories(${GTEST_INCLUDE_DIRS})
 #################################################
 # VULKAN SETTINGS
 #################################################
-include_directories(
-    $ENV{VULKAN_SDK}/include)
-
+include_directories($ENV{VULKAN_SDK}/include)
 link_directories($ENV{VULKAN_SDK}/lib)
+
 
 #################################################
 # LIBRARY SETTINGS
 #################################################
 set (LIBRARY_OUTPUT_PATH   "lib")
+
 
 #################################################
 # INCLUDE SETTINGS
@@ -56,13 +56,14 @@ set (LIBRARY_OUTPUT_PATH   "lib")
 # include_directories("${PROJECT_SOURCE_DIR}/include")
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_macro.cmake)
 
+
 #################################################
 # COMPILER SETTINGS
 #################################################
 
 message(STATUS "Configuring for Unix system")
 set (CMAKE_CXX_COMPILER         "g++")
-set (CMAKE_CXX_FLAGS            "-std=c++11 -flto -O3 -Wall")
+set (CMAKE_CXX_FLAGS            "-std=c++11 -O3 -Wall")
 
 
 #################################################
