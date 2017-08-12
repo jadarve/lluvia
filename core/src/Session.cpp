@@ -1,9 +1,11 @@
 #include "lluvia/core/Session.h"
 
 #include <exception>
+#include <iostream>
 
 namespace ll {
 
+using namespace std;
 
 Session::Session() {
 
@@ -54,7 +56,7 @@ void Session::init() {
 
 
 bool Session::initInstance() {
-
+    
     const vk::ApplicationInfo appInfo = vk::ApplicationInfo()
             .setPApplicationName("computeKit")
             .setApplicationVersion(0)
@@ -71,13 +73,17 @@ bool Session::initInstance() {
         throw std::system_error(std::error_code(), "Incompatible driver");
     }
 
+    // TODO: let user to choose physical device
+    handle->physicalDevice = handle->instance.enumeratePhysicalDevices()[0];
+
     return true;
 }
 
 
 bool Session::initDevice() {
-
-    const float queuePriority = 1.0f;
+    
+    float queuePriority = 1.0f;
+    handle->computeQueueFamilyIndex = getComputeFamilyQueueIndex();
 
     vk::DeviceQueueCreateInfo devQueueCreateInfo = vk::DeviceQueueCreateInfo()
         .setQueueCount(1)
@@ -94,16 +100,15 @@ bool Session::initDevice() {
 
 
 bool Session::initQueue() {
-
+    
     // get the first compute capable queue
-    handle->computeQueueFamilyIndex = getComputeFamilyQueueIndex();
     handle->queue = handle->device.getQueue(handle->computeQueueFamilyIndex, 0);
     return true;
 }
 
 
 uint32_t Session::getComputeFamilyQueueIndex() {
-
+    
     std::vector<vk::QueueFamilyProperties> queueProperties = handle->physicalDevice.getQueueFamilyProperties();
 
     uint32_t queueIndex = 0;
