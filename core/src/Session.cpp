@@ -10,6 +10,7 @@ using namespace std;
 Session::Session() {
 
     handle = std::make_shared<impl::SessionHandle>();
+    device = std::make_shared<vk::Device>();
     init();
 }
 
@@ -21,9 +22,15 @@ Session::~Session() {
         // destroy all buffers
         // destroy memory managers
 
-        handle->device.destroy();
+        device->destroy();
         handle->instance.destroy();
     }
+}
+
+
+bool configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t heapSize) {
+
+    return true;
 }
 
 
@@ -41,7 +48,7 @@ void Session::init() {
     } catch(...) {
 
         if(deviceCreated) {
-            handle->device.destroy();
+            device->destroy();
         }
 
         if(instanceCreated) {
@@ -94,7 +101,7 @@ bool Session::initDevice() {
             .setQueueCreateInfoCount(1)
             .setPQueueCreateInfos(&devQueueCreateInfo);
 
-    handle->device = handle->physicalDevice.createDevice(devCreateInfo);
+    *device = handle->physicalDevice.createDevice(devCreateInfo);
     return true;
 }
 
@@ -102,7 +109,7 @@ bool Session::initDevice() {
 bool Session::initQueue() {
     
     // get the first compute capable queue
-    handle->queue = handle->device.getQueue(handle->computeQueueFamilyIndex, 0);
+    handle->queue = device->getQueue(handle->computeQueueFamilyIndex, 0);
     return true;
 }
 

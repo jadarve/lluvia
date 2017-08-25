@@ -4,6 +4,9 @@ test_macro()
 include_directories(include)
 add_library(lluviacore SHARED
     src/Session.cpp
+    src/Buffer.cpp
+    src/Memory.cpp
+    src/impl/MemoryHeap.cpp
 )
 
 target_link_libraries(lluviacore vulkan)

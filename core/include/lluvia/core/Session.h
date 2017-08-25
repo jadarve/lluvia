@@ -7,6 +7,9 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include "lluvia/core/Memory.h"
+#include "lluvia/core/Buffer.h"
+
 
 namespace ll {
 
@@ -17,7 +20,7 @@ namespace impl {
 typedef struct {
     vk::Instance instance;
     vk::PhysicalDevice physicalDevice;
-    vk::Device device;
+    // vk::Device device;
     vk::Queue queue;
     uint32_t computeQueueFamilyIndex;
 
@@ -37,6 +40,12 @@ public:
     Session();
     ~Session();
 
+
+    bool configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t heapSize);
+
+    // ll::Buffer allocateBuffer(const vk::MemoryPropertyFlags flags, const size_t size);
+
+
 private:
     void init();
     bool initInstance();
@@ -45,6 +54,9 @@ private:
     uint32_t getComputeFamilyQueueIndex();
 
     std::shared_ptr<impl::SessionHandle> handle;
+    std::shared_ptr<vk::Device> device;
+
+    std::vector<ll::Memory> memories;
 
 };
 
