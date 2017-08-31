@@ -8,6 +8,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include "lluvia/core/impl/MemoryFreeSpaceManager.h"
 
 namespace ll {
 namespace impl {
@@ -28,22 +29,13 @@ public:
     MemoryHeap& operator = (const MemoryHeap& heap) = default;
     MemoryHeap& operator = (MemoryHeap&& heap)      = default;
 
-    size_t getSize() const;
-    int getFreeSpaceCount() const;
-
-    std::tuple<bool, uint64_t> allocate(const uint64_t size);
-    void release(const uint64_t offset, const uint64_t size);
-
 
 private:
     vk::DeviceMemory memory;
-    size_t size {0};
 
-    // stores the offsets and sizes of each
-    // contiguous block of free memory
-    std::vector<uint64_t> offsetVector;
-    std::vector<uint64_t> sizeVector;
+    ll::impl::MemoryFreeSpaceManager freeSpaceManager;
 
+    // It can be a raw pointer. MemoryHeap does not own the device
     std::shared_ptr<vk::Device> device {nullptr};
 
     std::shared_ptr<int> referenceCounter {nullptr};

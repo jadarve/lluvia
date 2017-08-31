@@ -12,7 +12,7 @@ sudo zypper install googletest-devel
 
 ```
 mkdir lluvia_eclipse
-cd build_eclipse
+cd lluvia_eclipse
 cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../lluvia
 ```
 

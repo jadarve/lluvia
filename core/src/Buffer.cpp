@@ -21,7 +21,7 @@ Buffer::~Buffer() {
     if(referenceCounter.use_count() == 1) {
 
         // FIXME: this may throw exception
-        heap->release(offset, size);
+        // heap->release(offset, size);
     }
 }
 

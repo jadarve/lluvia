@@ -47,7 +47,7 @@ link_directories($ENV{VULKAN_SDK}/lib)
 #################################################
 # LIBRARY SETTINGS
 #################################################
-set (LIBRARY_OUTPUT_PATH   "lib")
+set(LIBRARY_OUTPUT_PATH   "lib")
 
 
 #################################################
