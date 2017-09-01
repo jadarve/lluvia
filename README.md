@@ -1,4 +1,4 @@
-# LLUVIA
+# Low Level Unified VIsion Algorithms (LLUVIA)
 
 # Dependencies
 
