@@ -130,8 +130,8 @@ void MemoryFreeSpaceManager::release(const uint64_t offset, const uint64_t size)
 
 
     // insert a new interval before position
-    offsetVector.insert(offsetVector.begin() + position, offset);
-    sizeVector.insert(sizeVector.begin() + position, size);
+    offsetVector.insert((offsetVector.begin() + position) -1, offset);
+    sizeVector.insert((sizeVector.begin() + position) -1, size);
 }
 
 

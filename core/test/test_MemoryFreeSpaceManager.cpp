@@ -1,13 +1,14 @@
 
-#include <vector>
 #include <algorithm>
+#include <vector>
+#include <tuple>
 
 #include <gtest/gtest.h>
 
 #include "lluvia/core/impl/MemoryFreeSpaceManager.h"
 
 
-void compareResults(const ll::impl::MemoryFreeSpaceManager& manager,
+void checkMemory(const ll::impl::MemoryFreeSpaceManager& manager,
     const std::vector<uint64_t>& offsetVectorExpected,
     const std::vector<uint64_t>& sizeVectorExpected) {
 
@@ -21,6 +22,14 @@ void compareResults(const ll::impl::MemoryFreeSpaceManager& manager,
     ASSERT_EQ(true, sizeVectorEqual);
 }
 
+
+void checkAllocation(const std::tuple<bool, uint64_t>& expected, const std::tuple<bool, uint64_t>& returned) {
+
+    ASSERT_EQ(true, std::get<0>(expected) == std::get<0>(returned));
+    ASSERT_EQ(true, std::get<1>(expected) == std::get<1>(returned));
+}
+
+
 TEST(MemoryHeapTest, NoInsertions) {
 
     auto size = uint64_t{1024};
@@ -29,11 +38,14 @@ TEST(MemoryHeapTest, NoInsertions) {
 
     auto manager = ll::impl::MemoryFreeSpaceManager{size};
 
-    compareResults(manager, offsetVector, sizeVector);
+    checkMemory(manager, offsetVector, sizeVector);
 }
 
 
-TEST(MemoryHeapTest, OneInsertion) {
+/**
+ * Allocate
+ */
+TEST(MemoryHeapTest, A) {
 
     auto size = uint64_t{1024};
     auto offsetVector = std::vector<uint64_t>{512};
@@ -42,8 +54,54 @@ TEST(MemoryHeapTest, OneInsertion) {
     auto manager = ll::impl::MemoryFreeSpaceManager{size};
     manager.allocate(512);
 
-    compareResults(manager, offsetVector, sizeVector);
+    checkMemory(manager, offsetVector, sizeVector);
 }
+
+
+/**
+ * Allocate + Allocate + Allocate
+ */
+TEST(MemoryHeapTest, AAA) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{256};
+    auto sizeB = uint64_t{512};
+    auto sizeC = uint64_t{128};
+
+    auto manager = ll::impl::MemoryFreeSpaceManager{size};
+
+    checkAllocation(manager.allocate(sizeA), std::make_tuple(true, 0));
+    checkAllocation(manager.allocate(sizeB), std::make_tuple(true, sizeA));
+    checkAllocation(manager.allocate(sizeC), std::make_tuple(true, sizeA + sizeB));
+
+    auto offsetVector = std::vector<uint64_t>{sizeA + sizeB + sizeC};
+    auto sizeVector = std::vector<uint64_t>{size - (sizeA + sizeB + sizeC)};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+/**
+ * Allocate + Allocate + Release + Allocate
+ */
+TEST(MemoryHeapTest, AARA) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{256};
+    auto sizeB = uint64_t{512};
+    auto sizeC = uint64_t{128};
+
+    auto manager = ll::impl::MemoryFreeSpaceManager{size};
+
+    checkAllocation(manager.allocate(sizeA), std::make_tuple(true, 0));         // alloc A
+    checkAllocation(manager.allocate(sizeB), std::make_tuple(true, sizeA));     // alloc B
+    manager.release(0, sizeA);                                                  // release A
+    checkAllocation(manager.allocate(sizeC), std::make_tuple(true, 0));         // alloc C
+
+    auto offsetVector = std::vector<uint64_t>{sizeC, sizeA + sizeB};
+    auto sizeVector = std::vector<uint64_t>{sizeA - sizeC, size - (sizeA + sizeB)};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
 
 int main(int argc, char **argv) {
     

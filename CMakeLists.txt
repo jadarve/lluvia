@@ -63,7 +63,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_macro.cmake)
 
 message(STATUS "Configuring for Unix system")
 set (CMAKE_CXX_COMPILER         "g++")
-set (CMAKE_CXX_FLAGS            "-std=c++11 -O3 -Wall")
+set (CMAKE_CXX_FLAGS            "-std=c++11 -O0 -Wall")
 
 
 #################################################
