@@ -14,6 +14,12 @@ namespace ll {
 namespace impl {
 
 
+struct MemoryAllocationTryInfo {
+    ll::MemoryAllocationInfo allocInfo;
+    uint32_t index;
+};
+
+
 class MemoryFreeSpaceManager {
 
 public:
@@ -34,6 +40,9 @@ public:
 
     bool allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept;
     void release(const ll::MemoryAllocationInfo& info);
+
+    bool tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
+    void commitAllocation(const ll::impl::MemoryAllocationTryInfo& tyrInfo) noexcept;
 
 private:
     uint64_t size {0};

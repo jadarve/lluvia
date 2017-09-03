@@ -35,24 +35,12 @@ std::vector<uint64_t> MemoryFreeSpaceManager::getSizeVector() const {
 
 bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept {
 
+    auto tryInfo = MemoryAllocationTryInfo{};
 
-    auto position = 0;
-    for(auto& s : sizeVector) {
-
-        if(size <= s) {
-
-            auto offset = offsetVector[position];
-
-            // update offset and size of this block
-            offsetVector[position] += size;
-            sizeVector[position] -= size;
-
-            out.offset = offset;
-            out.size = size;
-            return true;
-        }
-
-        ++ position;
+    if(tryAllocate(size, tryInfo)) {
+        out = tryInfo.allocInfo;
+        commitAllocation(tryInfo);
+        return true;
     }
 
     return false;
@@ -136,6 +124,34 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) {
     // insert a new interval before position
     offsetVector.insert((offsetVector.begin() + position) -1, info.offset);
     sizeVector.insert((sizeVector.begin() + position) -1, info.size);
+}
+
+
+bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
+
+    auto position = 0;
+    for(auto& s : sizeVector) {
+
+        if(size <= s) {
+
+            tryInfo.allocInfo.offset = offsetVector[position];
+            tryInfo.allocInfo.size = size;
+            tryInfo.index = position;
+            return true;
+        }
+
+        ++ position;
+    }
+
+    return false;
+}
+
+
+void MemoryFreeSpaceManager::commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
+
+    // update offset and size of this block
+    offsetVector[tryInfo.index] += tryInfo.allocInfo.size;
+    sizeVector[tryInfo.index] -= tryInfo.allocInfo.size;
 }
 
 
