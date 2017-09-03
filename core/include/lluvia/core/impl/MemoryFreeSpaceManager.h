@@ -13,6 +13,12 @@ namespace ll {
 namespace impl {
 
 
+struct MemoryAllocationInfo {
+    uint64_t offset;
+    uint64_t size;
+};
+
+
 class MemoryFreeSpaceManager {
 
 public:
@@ -31,9 +37,8 @@ public:
     std::vector<uint64_t> getOffsetVector() const;
     std::vector<uint64_t> getSizeVector() const;
 
-    std::tuple<bool, uint64_t> allocate(const uint64_t size);
-    void release(const uint64_t offset, const uint64_t size);
-
+    bool allocate(uint64_t size, ll::impl::MemoryAllocationInfo& out) noexcept;
+    void release(const ll::impl::MemoryAllocationInfo& info);
 
 private:
 

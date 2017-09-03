@@ -33,7 +33,7 @@ std::vector<uint64_t> MemoryFreeSpaceManager::getSizeVector() const {
 }
 
 
-std::tuple<bool, uint64_t> MemoryFreeSpaceManager::allocate(const uint64_t size) {
+bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::impl::MemoryAllocationInfo& out) noexcept {
 
     auto position = 0;
     for(auto& s : sizeVector) {
@@ -46,19 +46,21 @@ std::tuple<bool, uint64_t> MemoryFreeSpaceManager::allocate(const uint64_t size)
             offsetVector[position] += size;
             sizeVector[position] -= size;
 
-            return std::make_tuple(true, offset);
+            out.offset = offset;
+            out.size = size;
+            return true;
         }
 
         ++ position;
     }
 
-    return std::make_tuple(false, 0);
+    return true;
 }
 
 
-void MemoryFreeSpaceManager::release(const uint64_t offset, const uint64_t size) {
+void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) {
 
-    auto offsetPlusSize = offset + size;
+    auto offsetPlusSize = info.offset + info.size;
     auto intervalUpdated = false;
     auto lowerBoundUpdated = true;
 
@@ -72,19 +74,20 @@ void MemoryFreeSpaceManager::release(const uint64_t offset, const uint64_t size)
 
         if(offsetPlusSize == offset_i) {
             // update lower bound
-            offset_i -= size;
+            offset_i -= info.size;
+            size_i += info.size;
             intervalUpdated = true;
             lowerBoundUpdated = true;
             break;
         }
-        else if(offset == offset_i + size_i) {
+        else if(info.offset == offset_i + size_i) {
             // update upper bound
-            size_i += size;
+            size_i += info.size;
             intervalUpdated = true;
             lowerBoundUpdated = false;
             break;
         }
-        else if(offset > offset_i) {
+        else if(info.offset > offset_i) {
             break;
         }
     }
@@ -97,13 +100,13 @@ void MemoryFreeSpaceManager::release(const uint64_t offset, const uint64_t size)
         if(lowerBoundUpdated) {
 
             if(position > 0) {
-                auto offsetPosLeft = offsetVector[position -1];
-                auto& sizePosLeft = sizeVector[position -1];
+                auto offsetLeft = offsetVector[position -1];
+                auto sizeLeft = sizeVector[position -1];
 
-                if(offsetPosLeft + sizePosLeft == offsetVector[position]) {
+                if(offsetLeft + sizeLeft == offsetVector[position]) {
 
                     // merge
-                    sizePosLeft += sizeVector[position];
+                    sizeVector[position -1] += sizeVector[position];
                     offsetVector.erase(offsetVector.begin() + position);
                     sizeVector.erase(sizeVector.begin() + position);
                 }
@@ -113,12 +116,13 @@ void MemoryFreeSpaceManager::release(const uint64_t offset, const uint64_t size)
 
             if(position < offsetVector.size() -1) {
 
-                auto& offsetPosRight = offsetVector[position + 1];
+                auto offsetRight = offsetVector[position + 1];
 
-                if(offsetVector[position] + sizeVector[position] == offsetPosRight) {
+                if(offsetVector[position] + sizeVector[position] == offsetRight) {
 
                     // merge
-                    offsetPosRight -= sizeVector[position];
+                    offsetVector[position + 1] -= sizeVector[position];
+                    sizeVector[position + 1] += sizeVector[position];
                     offsetVector.erase(offsetVector.begin() + position);
                     sizeVector.erase(sizeVector.begin() + position);
                 }
@@ -128,10 +132,9 @@ void MemoryFreeSpaceManager::release(const uint64_t offset, const uint64_t size)
         return;
     }
 
-
     // insert a new interval before position
-    offsetVector.insert((offsetVector.begin() + position) -1, offset);
-    sizeVector.insert((sizeVector.begin() + position) -1, size);
+    offsetVector.insert((offsetVector.begin() + position) -1, info.offset);
+    sizeVector.insert((sizeVector.begin() + position) -1, info.size);
 }
 
 
