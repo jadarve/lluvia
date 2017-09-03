@@ -8,6 +8,7 @@
 #include "lluvia/core/impl/MemoryFreeSpaceManager.h"
 
 
+using namespace ll;
 using namespace ll::impl;
 
 

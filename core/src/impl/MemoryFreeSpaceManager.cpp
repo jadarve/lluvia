@@ -6,9 +6,9 @@ namespace impl {
 
 
 MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t size) :
+        size {size},
         offsetVector {0},
-        sizeVector {size},
-        size {size} {
+        sizeVector {size} {
         
 }
 
@@ -33,7 +33,8 @@ std::vector<uint64_t> MemoryFreeSpaceManager::getSizeVector() const {
 }
 
 
-bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::impl::MemoryAllocationInfo& out) noexcept {
+bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept {
+
 
     auto position = 0;
     for(auto& s : sizeVector) {
@@ -54,7 +55,7 @@ bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::impl::MemoryAllocationI
         ++ position;
     }
 
-    return true;
+    return false;
 }
 
 

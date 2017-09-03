@@ -16,7 +16,6 @@ add_library(lluvia-core SHARED
     src/Session.cpp
     src/Buffer.cpp
     src/Memory.cpp
-    src/impl/MemoryHeap.cpp
     src/impl/MemoryFreeSpaceManager.cpp
 )
 
@@ -33,6 +32,7 @@ target_link_libraries(lluvia-core vulkan)
 # target_link_libraries(vulkanDriverTest vulkan ${GTEST_BOTH_LIBRARIES} pthread)
 # add_test(NAME vulkanDriverTest COMMAND vulkanDriverTest)
 
+add_gtest(test_VulkanDriver test/test_VulkanDriver.cpp)
 add_gtest(test_MemoryFreeSpaceManager test/test_MemoryFreeSpaceManager.cpp)
 
 

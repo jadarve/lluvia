@@ -7,7 +7,7 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include "lluvia/core/impl/MemoryHeap.h"
+#include "lluvia/core/Memory.h"
 
 namespace ll {
 
@@ -19,9 +19,8 @@ public:
     Buffer(const Buffer& b) = default;
     Buffer(Buffer&& b)      = default;
 
-    Buffer( const std::shared_ptr<vk::Device>& device,
-            const std::shared_ptr<ll::impl::MemoryHeap>& heap,
-            const uint64_t offset, const uint64_t size);
+    Buffer( ll::Memory* memory,
+            const ll::MemoryAllocationInfo& allocInfo);
 
     virtual ~Buffer();
 
@@ -29,17 +28,16 @@ public:
     Buffer& operator = (Buffer&& buffer)      = default;
 
     uint64_t getSize() const;
-    uint64_t getOffset() const;
-
 
 protected:
-    uint64_t offset {0};
-    uint64_t size   {0};
+    vk::Buffer vkBuffer;
 
-    std::shared_ptr<vk::Device>  device {nullptr};
-    std::shared_ptr<ll::impl::MemoryHeap> heap {nullptr};
+    ll::MemoryAllocationInfo allocInfo;
+    ll::Memory* memory;
 
     std::shared_ptr<int> referenceCounter {nullptr};
+
+friend class ll::Memory;
 };
 
 

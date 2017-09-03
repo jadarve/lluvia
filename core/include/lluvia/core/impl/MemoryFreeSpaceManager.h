@@ -8,15 +8,10 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include "lluvia/core/MemoryAllocationInfo.h"
 
 namespace ll {
 namespace impl {
-
-
-struct MemoryAllocationInfo {
-    uint64_t offset;
-    uint64_t size;
-};
 
 
 class MemoryFreeSpaceManager {
@@ -37,17 +32,17 @@ public:
     std::vector<uint64_t> getOffsetVector() const;
     std::vector<uint64_t> getSizeVector() const;
 
-    bool allocate(uint64_t size, ll::impl::MemoryAllocationInfo& out) noexcept;
-    void release(const ll::impl::MemoryAllocationInfo& info);
+    bool allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept;
+    void release(const ll::MemoryAllocationInfo& info);
 
 private:
+    uint64_t size {0};
 
     // separate offset and size vectors help to keep data locality
     // when scanning for inserting or deleting a new interval.
     std::vector<uint64_t> offsetVector;
     std::vector<uint64_t> sizeVector;
-
-    uint64_t size {0};
+    
 };
 
 
