@@ -18,7 +18,7 @@ class Buffer;
 
 
 struct HeapInfo {
-    uint32_t index;
+    uint32_t heapIndex;
     uint64_t size;
     std::vector<uint32_t> familyQueueIndices;
 };
@@ -42,18 +42,22 @@ public:
     Memory& operator = (const Memory& memory) = default;
     Memory& operator = (Memory&& memory)      = default;
 
+    uint64_t capacity() const;
+
     ll::Buffer allocateBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);
 
+
 private:
 
-    inline void configureBuffer(ll::Buffer& buffer, const MemoryAllocationInfo& allocInfo, const uint32_t pageIndex);
+    inline void configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo, const uint32_t pageIndex);
+    inline ll::Buffer buildBuffer(const vk::Buffer vkBuffer, const ll::impl::MemoryAllocationTryInfo& tryInfo);
 
     vk::Device device;
     
     ll::HeapInfo heapInfo;
     uint64_t pageSize;
-    uint64_t memoryUsed;
+    uint64_t memoryCapacity;
 
     std::vector<vk::DeviceMemory> memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;

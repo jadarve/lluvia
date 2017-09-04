@@ -8,40 +8,60 @@ namespace ll {
 
 
 Memory::Memory(const vk::Device device, const HeapInfo heapInfo, const uint64_t pageSize):
-    device {device},
-    pageSize {pageSize},
-    memoryUsed {0u} {
+    device          {device},
+    pageSize        {pageSize},
+    memoryCapacity  {0u} {
     
     this->heapInfo = std::move(heapInfo);
+    referenceCounter = std::make_shared<int>(0);
 }
 
 
 Memory::~Memory() {
 
+    if(referenceCounter.use_count() == 1) {
+
+        for(auto& memory : memoryPages) {
+            device.freeMemory(memory);
+        }
+    }
+}
+
+
+uint64_t Memory::capacity() const {
+    return memoryCapacity;
 }
 
 
 ll::Buffer Memory::allocateBuffer(const uint64_t size) {
 
-    auto buffer = ll::Buffer {};
+    vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
+        .setSharingMode(vk::SharingMode::eExclusive)
+        .setSize(size)
+        .setUsage(vk::BufferUsageFlagBits::eStorageBuffer)
+        .setQueueFamilyIndexCount(heapInfo.familyQueueIndices.size())
+        .setPQueueFamilyIndices(heapInfo.familyQueueIndices.data());
 
-    // TODO: figure out buffer alignment
-    auto sizeAligned = size;
+    // It's safe to not guard this call with a try-catch. If an
+    // exception is thrown, let the caller to handle it. The memory
+    // manager is still in its original state.
+    auto vkBuffer = device.createBuffer(bufferInfo);
+
+    // query alignment and offset
+    auto memRequirements = device.getBufferMemoryRequirements(vkBuffer);
 
     auto tryInfo = impl::MemoryAllocationTryInfo{};
-
     auto pageIndex = 0u;
     for(auto& manager : pageManagers) {
 
-        if(manager.tryAllocate(sizeAligned, tryInfo)) {
+        if(manager.tryAllocate(memRequirements.size, tryInfo)) {
 
             // Configure buffer object. Internally handles error cases.
-            configureBuffer(buffer, tryInfo.allocInfo, pageIndex);
+            configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
             
-            // The Buffer object has been constructed successfully and it is
-            // now possible to commit the allocation.
-            manager.commitAllocation(tryInfo);
-            return buffer;
+            // build a ll::Buffer object and commit the allocation if the
+            // object construction is successful.
+            return buildBuffer(vkBuffer, tryInfo);
         }
 
         ++ pageIndex;
@@ -55,7 +75,7 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
     // if it is possible to create a new vk::DeviceMemory object according
     // to the physical device limits.
 
-    auto newPageSize = std::max(pageSize, sizeAligned);
+    auto newPageSize = std::max(pageSize, memRequirements.size);
     
 
     // reserve space to store a new memory page and manager.
@@ -70,7 +90,7 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
 
     vk::MemoryAllocateInfo allocateInfo = vk::MemoryAllocateInfo()
         .setAllocationSize(newPageSize)
-        .setMemoryTypeIndex(heapInfo.index);
+        .setMemoryTypeIndex(heapInfo.heapIndex);
 
 
     // Safe to not try-catch the creation of manager and memory.
@@ -79,21 +99,19 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
     auto manager = impl::MemoryFreeSpaceManager {newPageSize};
     auto memory = device.allocateMemory(allocateInfo);
 
-
     // push objects to vectors after reserving space
     memoryPages.push_back(memory);
     pageManagers.push_back(std::move(manager));
-
+    memoryCapacity += newPageSize;
 
     // this allocation try is guaranteed to work as there is enough
-    // free space in the page to fit sizeAligned.
-    manager.tryAllocate(sizeAligned, tryInfo);
-    configureBuffer(buffer, tryInfo.allocInfo, pageIndex);
+    // free space in the page to fit memRequirements.size.
+    manager.tryAllocate(memRequirements.size, tryInfo);
+    configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
     
-    // The Buffer object has been constructed successfully and it is
-    // now possible to commit the allocation.
-    manager.commitAllocation(tryInfo);
-    return buffer;
+    // build a ll::Buffer object and commit the allocation if the
+    // object construction is successful.
+    return buildBuffer(vkBuffer, tryInfo);
 }
 
 
@@ -104,34 +122,36 @@ void Memory::releaseBuffer(const ll::Buffer& buffer) {
 }
 
 
-inline void Memory::configureBuffer(ll::Buffer& buffer, const MemoryAllocationInfo& allocInfo,
+inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo,
     const uint32_t pageIndex) {
 
-    buffer.allocInfo = allocInfo;
-    buffer.allocInfo.page = pageIndex;
-    buffer.memory = this;
-
-    vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
-        .setSharingMode(vk::SharingMode::eExclusive)
-        .setSize(allocInfo.size)
-        .setUsage(vk::BufferUsageFlagBits::eStorageBuffer)
-        .setQueueFamilyIndexCount(heapInfo.familyQueueIndices.size())
-        .setPQueueFamilyIndices(heapInfo.familyQueueIndices.data());
-
-    // It's safe to not guard this call with a try-catch. If an
-    // exception is thrown, let the caller to handle it. The memory
-    // manager is still in its original state.
-    buffer.vkBuffer = device.createBuffer(bufferInfo);
-
     try {
-        device.bindBufferMemory(buffer.vkBuffer, memoryPages[pageIndex], buffer.allocInfo.offset);
+
+        device.bindBufferMemory(vkBuffer, memoryPages[pageIndex], allocInfo.offset);
 
     } catch(...) {
 
-        // need to destroy the buffer before rethrowing the exception.
-        device.destroyBuffer(buffer.vkBuffer);
+        device.destroyBuffer(vkBuffer);
         throw;  // rethrow exception
     }
 }
+
+
+inline Buffer Memory::buildBuffer(const vk::Buffer vkBuffer,
+    const ll::impl::MemoryAllocationTryInfo& tryInfo) {
+
+    try {
+
+        // ll::Buffer can throw exception.
+        auto buffer = ll::Buffer {vkBuffer, this, tryInfo.allocInfo};
+        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
+        return std::move(buffer);
+
+    } catch(...) {
+        device.destroyBuffer(vkBuffer);
+        throw;
+    }
+}
+
 
 } // namespace ll

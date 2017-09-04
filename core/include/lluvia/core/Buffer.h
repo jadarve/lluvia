@@ -19,7 +19,7 @@ public:
     Buffer(const Buffer& b) = default;
     Buffer(Buffer&& b)      = default;
 
-    Buffer( ll::Memory* memory,
+    Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
             const ll::MemoryAllocationInfo& allocInfo);
 
     virtual ~Buffer();

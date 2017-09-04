@@ -6,9 +6,9 @@ namespace impl {
 
 
 MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t size) :
-        size {size},
-        offsetVector {0},
-        sizeVector {size} {
+        size            {size},
+        offsetVector    {0},
+        sizeVector      {size} {
         
 }
 
