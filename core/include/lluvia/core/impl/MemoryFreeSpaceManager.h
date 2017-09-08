@@ -17,6 +17,8 @@ namespace impl {
 struct MemoryAllocationTryInfo {
     ll::MemoryAllocationInfo allocInfo;
     uint32_t index;
+    bool needOffsetAlignment;
+    uint64_t alignmentSize;;
 };
 
 
@@ -39,9 +41,12 @@ public:
     std::vector<uint64_t> getSizeVector() const;
 
     bool allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept;
+    bool allocate(uint64_t size, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept;
     void release(const ll::MemoryAllocationInfo& info);
 
+    bool reserveManagerSpace() noexcept;
     bool tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
+    bool tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
     void commitAllocation(const ll::impl::MemoryAllocationTryInfo& tyrInfo) noexcept;
 
 private:

@@ -54,14 +54,18 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
     auto pageIndex = 0u;
     for(auto& manager : pageManagers) {
 
-        if(manager.tryAllocate(memRequirements.size, tryInfo)) {
+        if(manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
 
-            // Configure buffer object. Internally handles error cases.
-            configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
-            
-            // build a ll::Buffer object and commit the allocation if the
-            // object construction is successful.
-            return buildBuffer(vkBuffer, tryInfo);
+            // reserve space in the memory manager to insert any new free interval
+            if(manager.reserveManagerSpace()) {
+
+                // Configure buffer object. Internally handles error cases.
+                configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
+                
+                // build a ll::Buffer object and commit the allocation if the
+                // object construction is successful.
+                return buildBuffer(vkBuffer, tryInfo);
+            }
         }
 
         ++ pageIndex;

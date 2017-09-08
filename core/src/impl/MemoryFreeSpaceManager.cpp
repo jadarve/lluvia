@@ -38,9 +38,29 @@ bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::MemoryAllocationInfo& o
     auto tryInfo = MemoryAllocationTryInfo{};
 
     if(tryAllocate(size, tryInfo)) {
-        out = tryInfo.allocInfo;
-        commitAllocation(tryInfo);
-        return true;
+        
+        if(reserveManagerSpace()) {
+            out = tryInfo.allocInfo;
+            commitAllocation(tryInfo);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool MemoryFreeSpaceManager::allocate(uint64_t size, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept {
+
+    auto tryInfo = MemoryAllocationTryInfo{};
+
+    if(tryAllocate(size, alignment, tryInfo)) {
+        
+        if(reserveManagerSpace()) {
+            out = tryInfo.allocInfo;
+            commitAllocation(tryInfo);
+            return true;
+        }
     }
 
     return false;
@@ -127,16 +147,77 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) {
 }
 
 
+bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
+
+    try {
+
+        auto newOffsetVector = std::vector<uint64_t> {};
+        auto newSizeVector = std::vector<uint64_t> {};
+
+        // offsetVector and sizeVector should have the same size and capacity
+        if(offsetVector.size() == offsetVector.capacity()) {
+            newOffsetVector = std::vector<uint64_t>(offsetVector.capacity() + 1024);
+            newSizeVector = std::vector<uint64_t>(sizeVector.capacity() + 1024);
+
+            newOffsetVector.insert(newOffsetVector.begin(), offsetVector.begin(), offsetVector.end());
+            newSizeVector.insert(newSizeVector.begin(), sizeVector.begin(), sizeVector.end());
+
+            // move the new vectors to the members and delete the old ones
+            offsetVector = std::move(newOffsetVector);
+            sizeVector = std::move(newSizeVector);
+        }
+
+        return true;
+
+    } catch(...) {
+
+        // return false if any error, bad_alloc due to insufficient memory, is caught.
+        return false;
+    }
+}
+
 bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
+
+    return tryAllocate(size, 0u, tryInfo);
+}
+
+
+bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
+
+    auto offsetMask = uint64_t{0};
+    while(alignment > 0) {
+        offsetMask = (offsetMask << 1) | 0x01u;
+        alignment >>= 1;
+    }
 
     auto position = 0;
     for(auto& s : sizeVector) {
 
-        if(size <= s) {
+        if((size + alignment) <= s) {
+            
+            auto offset = offsetVector[position];
+            auto offsetModulus = offset & offsetMask; 
 
-            tryInfo.allocInfo.offset = offsetVector[position];
-            tryInfo.allocInfo.size = size;
-            tryInfo.index = position;
+            // check if offset meets the offsetAlignment requirement
+            if(offsetModulus == 0) {
+
+                tryInfo.allocInfo.offset = offset;
+                tryInfo.allocInfo.size = size;
+                tryInfo.index = position;
+                tryInfo.needOffsetAlignment = false;
+                tryInfo.alignmentSize = 0;
+
+            } else {
+
+                // set parameters in tryInfo to insert a new free space interval
+                tryInfo.allocInfo.offset = offset + offsetModulus;
+                tryInfo.allocInfo.size = size;
+                tryInfo.index = position;
+                tryInfo.needOffsetAlignment = true;
+                tryInfo.alignmentSize = offsetModulus;
+            }
+
+            
             return true;
         }
 
@@ -149,9 +230,18 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocati
 
 void MemoryFreeSpaceManager::commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
 
-    // update offset and size of this block
+    // update offset and size of [index] block
     offsetVector[tryInfo.index] += tryInfo.allocInfo.size;
     sizeVector[tryInfo.index] -= tryInfo.allocInfo.size;
+
+    if(tryInfo.needOffsetAlignment) {
+
+        // insertion of this new interval is guaranteed to succeed as
+        // the memory required for the allocation has already been reserved
+        offsetVector.insert(offsetVector.begin() + tryInfo.index, tryInfo.allocInfo.offset - tryInfo.alignmentSize);
+        sizeVector.insert(sizeVector.begin() + tryInfo.index, tryInfo.alignmentSize);
+    }
+    
 }
 
 
