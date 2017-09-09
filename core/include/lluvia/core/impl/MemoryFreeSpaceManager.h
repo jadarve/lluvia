@@ -17,8 +17,6 @@ namespace impl {
 struct MemoryAllocationTryInfo {
     ll::MemoryAllocationInfo allocInfo;
     uint32_t index;
-    bool needOffsetAlignment;
-    uint64_t alignmentSize;;
 };
 
 

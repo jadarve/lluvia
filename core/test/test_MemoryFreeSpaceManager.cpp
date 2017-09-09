@@ -242,6 +242,52 @@ TEST(MemoryHeapTest, AARAR) {
 }
 
 
+TEST(MemoryHeapTest, offset_A) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{10};
+
+    auto alignment = 0x08u;
+
+    auto manager = MemoryFreeSpaceManager(size);
+
+    auto allocA = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, alignment, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0}, allocA);
+
+    auto offsetVector = std::vector<uint64_t>{sizeA};
+    auto sizeVector = std::vector<uint64_t>{size - sizeA};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+TEST(MemoryHeapTest, offset_AA) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{10};
+    auto sizeB = uint64_t{20};
+
+    auto alignment = 0x08u;
+    auto offsetB = 16u;
+
+    auto manager = MemoryFreeSpaceManager(size);
+
+    auto allocA = MemoryAllocationInfo{};
+    auto allocB = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, alignment, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA}, allocA);
+
+    auto boolB = manager.allocate(sizeB, alignment, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB}, allocB);
+
+    auto offsetVector = std::vector<uint64_t>{offsetB + sizeB};
+    auto sizeVector = std::vector<uint64_t>{size - (sizeA + 6 + sizeB)};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
 int main(int argc, char **argv) {
     
     testing::InitGoogleTest(&argc, argv);

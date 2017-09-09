@@ -74,7 +74,13 @@ bool MemoryFreeSpaceManager::allocate(uint64_t size, uint64_t alignment, ll::Mem
 
 void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) {
 
-    auto offsetPlusSize = info.offset + info.size;
+    // correct the offset and size of the allocated interval with
+    // the left padding required for aligning offset.
+    auto infoLocal = info;
+    infoLocal.offset -= infoLocal.leftPadding;
+    infoLocal.size += infoLocal.leftPadding;
+    
+    auto offsetPlusSize = infoLocal.offset + infoLocal.size;
     auto intervalUpdated = false;
     auto lowerBoundUpdated = true;
 
@@ -88,20 +94,20 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) {
 
         if(offsetPlusSize == offset_i) {
             // update lower bound
-            offset_i -= info.size;
-            size_i += info.size;
+            offset_i -= infoLocal.size;
+            size_i += infoLocal.size;
             intervalUpdated = true;
             lowerBoundUpdated = true;
             break;
         }
-        else if(info.offset == offset_i + size_i) {
+        else if(infoLocal.offset == offset_i + size_i) {
             // update upper bound
-            size_i += info.size;
+            size_i += infoLocal.size;
             intervalUpdated = true;
             lowerBoundUpdated = false;
             break;
         }
-        else if(info.offset > offset_i) {
+        else if(infoLocal.offset > offset_i) {
             break;
         }
     }
@@ -190,38 +196,26 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocati
 bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
 
     auto offsetMask = uint64_t{0};
-    while(alignment > 0) {
+    auto maskCounter = alignment;
+
+    while(maskCounter > 1u) {
         offsetMask = (offsetMask << 1) | 0x01u;
-        alignment >>= 1;
+        maskCounter >>= 1;
     }
 
     auto position = 0;
     for(auto& s : sizeVector) {
 
-        if((size + alignment) <= s) {
-            
-            auto offset = offsetVector[position];
-            auto offsetModulus = offset & offsetMask; 
+    	auto offset = offsetVector[position];
+    	auto offsetModulus = offset & offsetMask;
+    	auto leftPadding = (alignment - offsetModulus) & offsetMask;
 
-            // check if offset meets the offsetAlignment requirement
-            if(offsetModulus == 0) {
+        if((size + leftPadding) <= s) {
 
-                tryInfo.allocInfo.offset = offset;
-                tryInfo.allocInfo.size = size;
-                tryInfo.index = position;
-                tryInfo.needOffsetAlignment = false;
-                tryInfo.alignmentSize = 0;
-
-            } else {
-
-                // set parameters in tryInfo to insert a new free space interval
-                tryInfo.allocInfo.offset = offset + offsetModulus;
-                tryInfo.allocInfo.size = size;
-                tryInfo.index = position;
-                tryInfo.needOffsetAlignment = true;
-                tryInfo.alignmentSize = offsetModulus;
-            }
-
+            tryInfo.allocInfo.offset = offset + leftPadding;
+            tryInfo.allocInfo.size = size;
+            tryInfo.allocInfo.leftPadding = leftPadding;
+            tryInfo.index = position;
             
             return true;
         }
@@ -235,18 +229,13 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::
 
 void MemoryFreeSpaceManager::commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
 
+    // the space used for the allocation is equalt to the requested size plus
+    // the bytes required to align the offset
+    auto sizePlusAlignment = tryInfo.allocInfo.size + tryInfo.allocInfo.leftPadding;
+
     // update offset and size of [index] block
-    offsetVector[tryInfo.index] += tryInfo.allocInfo.size;
-    sizeVector[tryInfo.index] -= tryInfo.allocInfo.size;
-
-    if(tryInfo.needOffsetAlignment) {
-
-        // insertion of this new interval is guaranteed to succeed as
-        // the memory required for the allocation has already been reserved
-        offsetVector.insert(offsetVector.begin() + tryInfo.index, tryInfo.allocInfo.offset - tryInfo.alignmentSize);
-        sizeVector.insert(sizeVector.begin() + tryInfo.index, tryInfo.alignmentSize);
-    }
-    
+    offsetVector[tryInfo.index] += sizePlusAlignment;
+    sizeVector[tryInfo.index] -= sizePlusAlignment;    
 }
 
 
