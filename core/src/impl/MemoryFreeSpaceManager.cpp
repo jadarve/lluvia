@@ -5,11 +5,16 @@ namespace ll {
 namespace impl {
 
 
+constexpr const size_t CAPACITY_INCREASE = 512u;
+
+
 MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t size) :
         size            {size},
         offsetVector    {0},
         sizeVector      {size} {
-        
+       
+    offsetVector.reserve(CAPACITY_INCREASE);
+    sizeVector.reserve(CAPACITY_INCREASE); 
 }
 
 
@@ -151,13 +156,12 @@ bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 
     try {
 
-        auto newOffsetVector = std::vector<uint64_t> {};
-        auto newSizeVector = std::vector<uint64_t> {};
-
         // offsetVector and sizeVector should have the same size and capacity
         if(offsetVector.size() == offsetVector.capacity()) {
-            newOffsetVector = std::vector<uint64_t>(offsetVector.capacity() + 1024);
-            newSizeVector = std::vector<uint64_t>(sizeVector.capacity() + 1024);
+            auto newOffsetVector = std::vector<uint64_t> {};
+            auto newSizeVector = std::vector<uint64_t> {};
+            newOffsetVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
+            newSizeVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
 
             newOffsetVector.insert(newOffsetVector.begin(), offsetVector.begin(), offsetVector.end());
             newSizeVector.insert(newSizeVector.begin(), sizeVector.begin(), sizeVector.end());
@@ -171,7 +175,8 @@ bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 
     } catch(...) {
 
-        // return false if any error, bad_alloc due to insufficient memory, is caught.
+        // std::length_error if the new capacity of the new vectors ecceeds max_size().
+        // std::bad_alloc if there is not enough memory to allocate the new vectors.
         return false;
     }
 }
