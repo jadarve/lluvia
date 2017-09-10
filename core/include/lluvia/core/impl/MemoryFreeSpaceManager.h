@@ -40,7 +40,7 @@ public:
 
     bool allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept;
     bool allocate(uint64_t size, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept;
-    void release(const ll::MemoryAllocationInfo& info);
+    void release(const ll::MemoryAllocationInfo& info) noexcept;
 
     bool reserveManagerSpace() noexcept;
     bool tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;

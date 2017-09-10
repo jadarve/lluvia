@@ -72,7 +72,7 @@ bool MemoryFreeSpaceManager::allocate(uint64_t size, uint64_t alignment, ll::Mem
 }
 
 
-void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) {
+void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept {
 
     // correct the offset and size of the allocated interval with
     // the left padding required for aligning offset.
@@ -153,6 +153,8 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) {
     }
 
     // insert a new interval before position
+    // since reserveManagerSpace() is called before inserting the new interval
+    // this insert() calls should not throw exceptions.
     offsetVector.insert((offsetVector.begin() + position) -1, info.offset);
     sizeVector.insert((sizeVector.begin() + position) -1, info.size);
 }

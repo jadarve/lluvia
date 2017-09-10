@@ -121,6 +121,14 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
 
 void Memory::releaseBuffer(const ll::Buffer& buffer) {
 
+    // reserve space in case the release of this buffer requires
+    // the insertion of a new free interval.
+    pageManagers[buffer.allocInfo.page].reserveManagerSpace();
+
+    // release the allocated memory regardless of the result of
+    // reserveManagerSpace(). In case it failed the release method
+    // should throw and exception and abort the program (since it is
+    // declared as noexcept).
     pageManagers[buffer.allocInfo.page].release(buffer.allocInfo);
     device.destroyBuffer(buffer.vkBuffer);
 }
