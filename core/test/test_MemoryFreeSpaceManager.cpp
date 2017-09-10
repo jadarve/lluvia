@@ -33,6 +33,7 @@ void checkAllocation(bool boolExpected, bool boolReturned, const MemoryAllocatio
     ASSERT_EQ(true, boolExpected == boolReturned);
     ASSERT_EQ(true, allocExpected.offset == allocReturned.offset);
     ASSERT_EQ(true, allocExpected.size == allocReturned.size);
+    ASSERT_EQ(true, allocExpected.leftPadding == allocReturned.leftPadding);
 }
 
 
@@ -277,16 +278,214 @@ TEST(MemoryHeapTest, offset_AA) {
     auto allocB = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, alignment, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, 6u}, allocB);
 
     auto offsetVector = std::vector<uint64_t>{offsetB + sizeB};
     auto sizeVector = std::vector<uint64_t>{size - (sizeA + 6 + sizeB)};
     checkMemory(manager, offsetVector, sizeVector);
 }
 
+
+TEST(MemoryHeapTest, offset_AAR) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{10};
+    auto sizeB = uint64_t{20};
+
+    auto alignment = 0x08u;
+    auto offsetB = 16u;
+
+    auto manager = MemoryFreeSpaceManager(size);
+
+    auto allocA = MemoryAllocationInfo{};
+    auto allocB = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, alignment, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0}, allocA);
+
+    auto boolB = manager.allocate(sizeB, alignment, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, 6u}, allocB);
+
+    manager.release(allocB);
+
+    auto offsetVector = std::vector<uint64_t>{sizeA};
+    auto sizeVector = std::vector<uint64_t>{size - sizeA};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+TEST(MemoryHeapTest, offset_AAA) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{10};
+    auto sizeB = uint64_t{20};
+    auto sizeC = uint64_t{30};
+
+    auto alignment = 0x08u;
+    auto offsetB = 16u;
+    auto offsetC = 40u;
+
+    auto paddingA = 0u;
+    auto paddingB = 6u;
+    auto paddingC = 4u;
+
+    auto manager = MemoryFreeSpaceManager(size);
+
+    auto allocA = MemoryAllocationInfo{};
+    auto allocB = MemoryAllocationInfo{};
+    auto allocC = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, alignment, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+
+    auto boolB = manager.allocate(sizeB, alignment, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+
+    auto boolC = manager.allocate(sizeC, alignment, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+
+    auto offsetVector = std::vector<uint64_t>{offsetC + sizeC};
+    auto sizeVector = std::vector<uint64_t>{size - (sizeA + paddingB + sizeB + paddingC + sizeC)};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+/**
+ * Allocate + Allocate + Allocate + Release + Release + Release
+ *
+ * Release first allocated objects first.
+ */
+TEST(MemoryHeapTest, offset_AAARRR_fifo) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{10};
+    auto sizeB = uint64_t{20};
+    auto sizeC = uint64_t{30};
+
+    auto alignment = 0x08u;
+    auto offsetB = 16u;
+    auto offsetC = 40u;
+
+    auto paddingA = 0u;
+    auto paddingB = 6u;
+    auto paddingC = 4u;
+
+    auto manager = MemoryFreeSpaceManager(size);
+
+    auto allocA = MemoryAllocationInfo{};
+    auto allocB = MemoryAllocationInfo{};
+    auto allocC = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, alignment, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+
+    auto boolB = manager.allocate(sizeB, alignment, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+
+    auto boolC = manager.allocate(sizeC, alignment, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+
+    manager.release(allocA);
+    manager.release(allocB);
+    manager.release(allocC);
+
+    auto offsetVector = std::vector<uint64_t>{0};
+    auto sizeVector = std::vector<uint64_t>{size};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+/**
+ * Allocate + Allocate + Allocate + Release + Release + Release
+ *
+ * Release last allocated objects first.
+ */
+TEST(MemoryHeapTest, offset_AAARRR_lifo) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{10};
+    auto sizeB = uint64_t{20};
+    auto sizeC = uint64_t{30};
+
+    auto alignment = 0x08u;
+    auto offsetB = 16u;
+    auto offsetC = 40u;
+
+    auto paddingA = 0u;
+    auto paddingB = 6u;
+    auto paddingC = 4u;
+
+    auto manager = MemoryFreeSpaceManager(size);
+
+    auto allocA = MemoryAllocationInfo{};
+    auto allocB = MemoryAllocationInfo{};
+    auto allocC = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, alignment, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+
+    auto boolB = manager.allocate(sizeB, alignment, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+
+    auto boolC = manager.allocate(sizeC, alignment, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+
+    manager.release(allocC);
+    manager.release(allocB);
+    manager.release(allocA);
+    
+    auto offsetVector = std::vector<uint64_t>{0};
+    auto sizeVector = std::vector<uint64_t>{size};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+/**
+ * Allocate + Allocate + Release + Allocate + Release
+ *
+ * Test lower bound merge
+ */
+TEST(MemoryHeapTest, offset_AARAR) {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{30};
+    auto sizeB = uint64_t{20};
+    auto sizeC = uint64_t{10};
+
+    auto paddingA = 0u;
+	auto paddingB = 2u;
+	auto paddingC = 0u;
+
+    auto alignment = 0x08u;
+    auto offsetB = sizeA + paddingB;
+    auto offsetC = 0u;
+
+    auto manager = MemoryFreeSpaceManager{size};
+
+    auto allocA = MemoryAllocationInfo{};
+    auto allocB = MemoryAllocationInfo{};
+    auto allocC = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, alignment, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+
+    auto boolB = manager.allocate(sizeB, alignment, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+
+    manager.release(allocA);
+
+    auto boolC = manager.allocate(sizeC, alignment, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+
+    manager.release(allocB);
+
+    auto offsetVector = std::vector<uint64_t>{sizeC};
+    auto sizeVector = std::vector<uint64_t>{size - sizeC};
+    checkMemory(manager, offsetVector, sizeVector);
+}
 
 int main(int argc, char **argv) {
     

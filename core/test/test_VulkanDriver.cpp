@@ -27,9 +27,6 @@ TEST(VulkanDriverTest, CreateInstance) {
     vk::Instance instance;
     vk::Result result = vk::createInstance(&instanceInfo, nullptr, &instance);
 
-    auto devSize = sizeof(vk::Device);
-    auto memSize = sizeof(vk::DeviceMemory);
-
     // check that the instance is created successfully
     ASSERT_EQ(result, vk::Result::eSuccess);
 }
