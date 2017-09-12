@@ -27,19 +27,6 @@ target_link_libraries(lluvia-core vulkan)
 # target_link_libraries(runUnitTests gtest_main)
 # add_test(NAME runUnitTests COMMAND runUnitTests)
 
-
-# add_executable(vulkanDriverTest test/test_VulkanDriver.cpp)
-# target_link_libraries(vulkanDriverTest vulkan ${GTEST_BOTH_LIBRARIES} pthread)
-# add_test(NAME vulkanDriverTest COMMAND vulkanDriverTest)
-
 add_gtest(test_VulkanDriver test/test_VulkanDriver.cpp)
 add_gtest(test_MemoryFreeSpaceManager test/test_MemoryFreeSpaceManager.cpp)
-
-
-# add_executable(sessionTest test/test_SessionCreation.cpp)
-# target_link_libraries(sessionTest vulkan lluvia-core ${GTEST_BOTH_LIBRARIES} pthread)
-# add_test(NAME sessionTest COMMAND sessionTest)
-
-# add_executable(minimumComputeGraph test/test_MinimumComputeGraph.cpp)
-# target_link_libraries(minimumComputeGraph vulkan ${GTEST_BOTH_LIBRARIES} pthread)
-# add_test(NAME minimumComputeGraph COMMAND minimumComputeGraph)
+add_gtest(test_SessionCreation test/test_SessionCreation.cpp)

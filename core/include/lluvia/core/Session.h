@@ -1,7 +1,6 @@
 #ifndef LLUVIA_CORE_SESSION_H_
 #define LLUVIA_CORE_SESSION_H_
 
-
 #include <vector>
 #include <memory>
 
@@ -20,7 +19,7 @@ namespace impl {
 typedef struct {
     vk::Instance instance;
     vk::PhysicalDevice physicalDevice;
-    // vk::Device device;
+    vk::Device device;
     vk::Queue queue;
     uint32_t computeQueueFamilyIndex;
 
@@ -38,9 +37,15 @@ class Session {
 
 public:
     Session();
+    Session(const Session& session) = default;
+    Session(Session&& Memory)       = default;
+
     ~Session();
 
+    Session& operator = (const Session& session) = default;
+    Session& operator = (Session&& session)      = default;
 
+    std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
     bool configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t heapSize);
 
     // ll::Buffer allocateBuffer(const vk::MemoryPropertyFlags flags, const size_t size);
@@ -54,7 +59,6 @@ private:
     uint32_t getComputeFamilyQueueIndex();
 
     std::shared_ptr<impl::SessionHandle> handle;
-    std::shared_ptr<vk::Device> device;
 
     std::vector<ll::Memory> memories;
 
