@@ -17,7 +17,7 @@ namespace ll {
 class Buffer;
 
 
-struct HeapInfo {
+struct VkHeapInfo {
     uint32_t heapIndex;
     uint64_t size;
     std::vector<uint32_t> familyQueueIndices;
@@ -35,7 +35,7 @@ public:
     Memory(const Memory& memory) = default;
     Memory(Memory&& memory)      = default;
 
-    Memory(const vk::Device device, const HeapInfo heapInfo, const uint64_t pageSize);
+    Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize);
 
     ~Memory();
 
@@ -55,7 +55,7 @@ private:
 
     vk::Device device;
     
-    ll::HeapInfo heapInfo;
+    ll::VkHeapInfo heapInfo;
     uint64_t pageSize;
     uint64_t memoryCapacity;
 

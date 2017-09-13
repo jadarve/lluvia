@@ -30,10 +30,12 @@ Session::~Session() {
 
 std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 
-    auto memoryFlags = std::vector<vk::MemoryPropertyFlags> {};
-
     auto memProperties = handle->physicalDevice.getMemoryProperties();
-    for(auto i = 0u; i < memProperties.memoryTypeCount; i ++) {
+
+    auto memoryFlags = std::vector<vk::MemoryPropertyFlags> {};
+    memoryFlags.reserve(memProperties.memoryTypeCount);
+
+    for(auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
 
         auto flags = memProperties.memoryTypes[i].propertyFlags;
 
@@ -50,9 +52,31 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-bool configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t heapSize) {
+std::tuple<bool, uint32_t> Session::configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) {
 
-    return true;
+    // can throw?
+    auto memProperties = handle->physicalDevice.getMemoryProperties();
+
+    for(auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
+
+        auto memType = memProperties.memoryTypes[i];
+        if(memType.propertyFlags == flags) {
+            
+            auto heapInfo = ll::VkHeapInfo {};
+            heapInfo.heapIndex = memType.heapIndex;
+            heapInfo.size = memProperties.memoryHeaps[0].size;
+
+            // TODO
+            // heapInfo.familyQueueIndices = 
+
+            // can throw exception. Invariants of Session are kept.
+            memories.push_back(ll::Memory {handle->device, heapInfo, pageSize});
+
+            return std::make_tuple(true, memories.size() - 1);
+        }
+    }
+
+    return std::make_tuple(false, 0);
 }
 
 

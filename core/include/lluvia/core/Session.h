@@ -1,8 +1,9 @@
 #ifndef LLUVIA_CORE_SESSION_H_
 #define LLUVIA_CORE_SESSION_H_
 
-#include <vector>
 #include <memory>
+#include <vector>
+#include <tuple>
 
 #include <vulkan/vulkan.hpp>
 
@@ -46,9 +47,15 @@ public:
     Session& operator = (Session&& session)      = default;
 
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
-    bool configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t heapSize);
+
+    /**
+     * Exceptions:
+     * std::bad_alloc
+     */
+    std::tuple<bool, uint32_t> configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
 
     // ll::Buffer allocateBuffer(const vk::MemoryPropertyFlags flags, const size_t size);
+    // ll::Buffer allocateBuffer(const uint32_t memoryIndex, const size_t size);
 
 
 private:

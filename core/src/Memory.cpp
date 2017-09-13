@@ -7,12 +7,12 @@
 namespace ll {
 
 
-Memory::Memory(const vk::Device device, const HeapInfo heapInfo, const uint64_t pageSize):
+Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
     device          {device},
+    heapInfo        (heapInfo),
     pageSize        {pageSize},
     memoryCapacity  {0u} {
     
-    this->heapInfo = std::move(heapInfo);
     referenceCounter = std::make_shared<int>(0);
 }
 
