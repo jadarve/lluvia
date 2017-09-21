@@ -8,12 +8,12 @@ namespace ll {
 
 
 Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
-    device          {device},
-    heapInfo        (heapInfo),
-    pageSize        {pageSize},
-    memoryCapacity  {0u} {
-    
-    referenceCounter = std::make_shared<int>(0);
+    device              {device},
+    heapInfo            (heapInfo),
+    pageSize            {pageSize},
+    memoryCapacity      {0u},
+    referenceCounter    {std::make_shared<int>(0)} {
+
 }
 
 
@@ -48,7 +48,7 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
     auto vkBuffer = device.createBuffer(bufferInfo);
 
     // query alignment and offset
-    auto memRequirements = device.getBufferMemoryRequirements(vkBuffer);
+    const auto memRequirements = device.getBufferMemoryRequirements(vkBuffer);
 
     auto tryInfo = impl::MemoryAllocationTryInfo{};
     auto pageIndex = 0u;
@@ -79,7 +79,7 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
     // if it is possible to create a new vk::DeviceMemory object according
     // to the physical device limits.
 
-    auto newPageSize = std::max(pageSize, memRequirements.size);
+    const auto newPageSize = std::max(pageSize, memRequirements.size);
     
 
     // reserve space to store a new memory page and manager.
@@ -144,7 +144,7 @@ inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocation
     } catch(...) {
 
         device.destroyBuffer(vkBuffer);
-        throw;  // rethrow exception
+        throw;  // rethrow
     }
 }
 
@@ -160,8 +160,9 @@ inline Buffer Memory::buildBuffer(const vk::Buffer vkBuffer,
         return std::move(buffer);
 
     } catch(...) {
+
         device.destroyBuffer(vkBuffer);
-        throw;
+        throw; // rethrow
     }
 }
 

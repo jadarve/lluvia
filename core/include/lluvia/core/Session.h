@@ -56,7 +56,7 @@ private:
 
     std::vector<ll::Memory> memories;
 
-    std::shared_ptr<int> referenceCounter;
+    std::shared_ptr<int> referenceCounter {nullptr};
 };
 
 } // namespace ll

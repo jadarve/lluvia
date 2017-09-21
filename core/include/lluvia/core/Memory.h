@@ -54,16 +54,15 @@ private:
     inline ll::Buffer buildBuffer(const vk::Buffer vkBuffer, const ll::impl::MemoryAllocationTryInfo& tryInfo);
 
     vk::Device device;
-    
-    ll::VkHeapInfo heapInfo;
-    uint64_t pageSize;
-    uint64_t memoryCapacity;
+
+    const           ll::VkHeapInfo heapInfo;
+    const uint64_t  pageSize;
+    uint64_t        memoryCapacity;
 
     std::vector<vk::DeviceMemory> memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
 
     std::shared_ptr<int> referenceCounter {nullptr};
-
 };
 
 } // namespace ll
