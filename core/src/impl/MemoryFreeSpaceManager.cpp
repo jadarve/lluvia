@@ -80,7 +80,7 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
     infoLocal.offset -= infoLocal.leftPadding;
     infoLocal.size += infoLocal.leftPadding;
     
-    auto offsetPlusSize = infoLocal.offset + infoLocal.size;
+    const auto offsetPlusSize = infoLocal.offset + infoLocal.size;
     auto intervalUpdated = false;
     auto lowerBoundUpdated = true;
 
@@ -95,7 +95,7 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
         if(offsetPlusSize == offset_i) {
             // update lower bound
             offset_i -= infoLocal.size;
-            size_i += infoLocal.size;
+            size_i   += infoLocal.size;
             intervalUpdated = true;
             lowerBoundUpdated = true;
             break;
@@ -120,8 +120,8 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
         if(lowerBoundUpdated) {
 
             if(position > 0) {
-                auto offsetLeft = offsetVector[position -1];
-                auto sizeLeft = sizeVector[position -1];
+                const auto offsetLeft = offsetVector[position -1];
+                const auto sizeLeft = sizeVector[position -1];
 
                 if(offsetLeft + sizeLeft == offsetVector[position]) {
 
@@ -136,7 +136,7 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
 
             if(position < offsetVector.size() -1) {
 
-                auto offsetRight = offsetVector[position + 1];
+                const auto offsetRight = offsetVector[position + 1];
 
                 if(offsetVector[position] + sizeVector[position] == offsetRight) {
 
@@ -166,6 +166,7 @@ bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 
         // offsetVector and sizeVector should have the same size and capacity
         if(offsetVector.size() == offsetVector.capacity()) {
+
             auto newOffsetVector = std::vector<uint64_t> {};
             auto newSizeVector = std::vector<uint64_t> {};
             newOffsetVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
@@ -233,7 +234,7 @@ void MemoryFreeSpaceManager::commitAllocation(const ll::impl::MemoryAllocationTr
 
     // the space used for the allocation is equalt to the requested size plus
     // the bytes required to align the offset
-    auto sizePlusAlignment = tryInfo.allocInfo.size + tryInfo.allocInfo.leftPadding;
+    const auto sizePlusAlignment = tryInfo.allocInfo.size + tryInfo.allocInfo.leftPadding;
 
     // update offset and size of [index] block
     offsetVector[tryInfo.index] += sizePlusAlignment;
