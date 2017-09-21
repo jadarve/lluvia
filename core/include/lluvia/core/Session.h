@@ -14,23 +14,6 @@
 namespace ll {
 
 
-// implementation namespace
-namespace impl {
-
-typedef struct {
-    vk::Instance instance;
-    vk::PhysicalDevice physicalDevice;
-    vk::Device device;
-    vk::Queue queue;
-    uint32_t computeQueueFamilyIndex;
-
-} SessionHandle;
-
-
-} // namespace impl
-
-
-
 /**
  * \brief The Session class contains all the state required to run compute Graphs.
  */
@@ -65,10 +48,15 @@ private:
     bool initQueue();
     uint32_t getComputeFamilyQueueIndex();
 
-    std::shared_ptr<impl::SessionHandle> handle;
+    vk::Instance instance;
+    vk::PhysicalDevice physicalDevice;
+    vk::Device device;
+    vk::Queue queue;
+    uint32_t computeQueueFamilyIndex;
 
     std::vector<ll::Memory> memories;
 
+    std::shared_ptr<int> referenceCounter;
 };
 
 } // namespace ll
