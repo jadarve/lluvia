@@ -16,6 +16,7 @@ add_library(lluvia-core SHARED
     src/Session.cpp
     src/Buffer.cpp
     src/Memory.cpp
+    src/Shader.cpp
     src/impl/MemoryFreeSpaceManager.cpp
 )
 

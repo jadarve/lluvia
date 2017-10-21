@@ -1,18 +1,19 @@
 #ifndef LLUVIA_CORE_SESSION_H_
 #define LLUVIA_CORE_SESSION_H_
 
-#include <memory>
-#include <vector>
-#include <tuple>
+#include "lluvia/core/Buffer.h"
+#include "lluvia/core/Memory.h"
+#include "lluvia/core/Shader.h"
 
 #include <vulkan/vulkan.hpp>
 
-#include "lluvia/core/Memory.h"
-#include "lluvia/core/Buffer.h"
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
 
 namespace ll {
-
 
 /**
  * \brief The Session class contains all the state required to run compute Graphs.
@@ -21,8 +22,8 @@ class Session {
 
 public:
     Session();
-    Session(const Session& session) = default;
-    Session(Session&& Memory)       = default;
+    Session(const Session& session)     = default;
+    Session(Session&& session)          = default;
 
     ~Session();
 
@@ -37,12 +38,14 @@ public:
      */
     std::tuple<bool, uint32_t> configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
 
+
+    std::tuple<bool, ll::Shader> createShader(const std::string& spirvPath) const;
+
     // ll::Buffer allocateBuffer(const vk::MemoryPropertyFlags flags, const size_t size);
     // ll::Buffer allocateBuffer(const uint32_t memoryIndex, const size_t size);
 
 
 private:
-    void init();
     bool initInstance();
     bool initDevice();
     bool initQueue();
