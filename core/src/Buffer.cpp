@@ -16,7 +16,7 @@ Buffer::Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
 
 Buffer::~Buffer() {
 
-    if(referenceCounter.use_count() == 1) {
+    if (referenceCounter.use_count() == 1) {
         memory->releaseBuffer(*this);
     }
 }

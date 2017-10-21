@@ -26,7 +26,7 @@ public:
     MemoryFreeSpaceManager()                                = default;
     MemoryFreeSpaceManager(const MemoryFreeSpaceManager& m) = default;
     MemoryFreeSpaceManager(MemoryFreeSpaceManager&& m)      = default;
-    
+
     MemoryFreeSpaceManager(const uint64_t size);
 
     MemoryFreeSpaceManager& operator = (const MemoryFreeSpaceManager& heap) = default;
@@ -54,7 +54,7 @@ private:
     // when scanning for inserting or deleting a new interval.
     std::vector<uint64_t> offsetVector;
     std::vector<uint64_t> sizeVector;
-    
+
 };
 
 

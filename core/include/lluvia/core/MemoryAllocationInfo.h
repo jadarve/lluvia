@@ -8,7 +8,7 @@ namespace ll {
 struct MemoryAllocationInfo {
 
     /** \brief aligned offset */
-    uint64_t offset; 
+    uint64_t offset;
 
     /** \brief requested size */
     uint64_t size;

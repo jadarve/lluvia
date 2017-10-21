@@ -19,9 +19,9 @@ Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const ui
 
 Memory::~Memory() {
 
-    if(referenceCounter.use_count() == 1) {
+    if (referenceCounter.use_count() == 1) {
 
-        for(auto& memory : memoryPages) {
+        for (auto& memory : memoryPages) {
             device.freeMemory(memory);
         }
     }
@@ -36,11 +36,11 @@ uint64_t Memory::capacity() const {
 ll::Buffer Memory::allocateBuffer(const uint64_t size) {
 
     vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
-        .setSharingMode(vk::SharingMode::eExclusive)
-        .setSize(size)
-        .setUsage(vk::BufferUsageFlagBits::eStorageBuffer)
-        .setQueueFamilyIndexCount(heapInfo.familyQueueIndices.size())
-        .setPQueueFamilyIndices(heapInfo.familyQueueIndices.data());
+                                      .setSharingMode(vk::SharingMode::eExclusive)
+                                      .setSize(size)
+                                      .setUsage(vk::BufferUsageFlagBits::eStorageBuffer)
+                                      .setQueueFamilyIndexCount(heapInfo.familyQueueIndices.size())
+                                      .setPQueueFamilyIndices(heapInfo.familyQueueIndices.data());
 
     // It's safe to not guard this call with a try-catch. If an
     // exception is thrown, let the caller to handle it. The memory
@@ -52,16 +52,16 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
 
     auto tryInfo = impl::MemoryAllocationTryInfo{};
     auto pageIndex = 0u;
-    for(auto& manager : pageManagers) {
+    for (auto& manager : pageManagers) {
 
-        if(manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
+        if (manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
 
             // reserve space in the memory manager to insert any new free interval
-            if(manager.reserveManagerSpace()) {
+            if (manager.reserveManagerSpace()) {
 
                 // Configure buffer object. Internally handles error cases.
                 configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
-                
+
                 // build a ll::Buffer object and commit the allocation if the
                 // object construction is successful.
                 return buildBuffer(vkBuffer, tryInfo);
@@ -74,27 +74,27 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
 
     // None of the existing pages could allocate the buffer. Create a ne
     // memory page and allocate the buffer in it.
-    
+
     // FIXME: Check for the availability of more device memory and see
     // if it is possible to create a new vk::DeviceMemory object according
     // to the physical device limits.
 
     const auto newPageSize = std::max(pageSize, memRequirements.size);
-    
+
 
     // reserve space to store a new memory page and manager.
-    if(memoryPages.size() == memoryPages.capacity()) {
+    if (memoryPages.size() == memoryPages.capacity()) {
         memoryPages.reserve(memoryPages.capacity() + 1);
     }
 
-    if(pageManagers.size() == pageManagers.capacity()) {
+    if (pageManagers.size() == pageManagers.capacity()) {
         pageManagers.reserve(memoryPages.capacity() + 1);
     }
 
 
     vk::MemoryAllocateInfo allocateInfo = vk::MemoryAllocateInfo()
-        .setAllocationSize(newPageSize)
-        .setMemoryTypeIndex(heapInfo.heapIndex);
+                                          .setAllocationSize(newPageSize)
+                                          .setMemoryTypeIndex(heapInfo.heapIndex);
 
 
     // Safe to not try-catch the creation of manager and memory.
@@ -112,7 +112,7 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
     // free space in the page to fit memRequirements.size.
     manager.tryAllocate(memRequirements.size, tryInfo);
     configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
-    
+
     // build a ll::Buffer object and commit the allocation if the
     // object construction is successful.
     return buildBuffer(vkBuffer, tryInfo);
@@ -135,13 +135,13 @@ void Memory::releaseBuffer(const ll::Buffer& buffer) {
 
 
 inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo,
-    const uint32_t pageIndex) {
+                                    const uint32_t pageIndex) {
 
     try {
 
         device.bindBufferMemory(vkBuffer, memoryPages[pageIndex], allocInfo.offset);
 
-    } catch(...) {
+    } catch (...) {
 
         device.destroyBuffer(vkBuffer);
         throw;  // rethrow
@@ -150,7 +150,7 @@ inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocation
 
 
 inline Buffer Memory::buildBuffer(const vk::Buffer vkBuffer,
-    const ll::impl::MemoryAllocationTryInfo& tryInfo) {
+                                  const ll::impl::MemoryAllocationTryInfo& tryInfo) {
 
     try {
 
@@ -159,7 +159,7 @@ inline Buffer Memory::buildBuffer(const vk::Buffer vkBuffer,
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return std::move(buffer);
 
-    } catch(...) {
+    } catch (...) {
 
         device.destroyBuffer(vkBuffer);
         throw; // rethrow

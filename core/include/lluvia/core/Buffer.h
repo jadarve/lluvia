@@ -37,7 +37,7 @@ protected:
 
     std::shared_ptr<int> referenceCounter {nullptr};
 
-friend class ll::Memory;
+    friend class ll::Memory;
 };
 
 
