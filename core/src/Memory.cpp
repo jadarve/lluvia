@@ -33,7 +33,7 @@ uint64_t Memory::capacity() const {
 }
 
 
-ll::Buffer Memory::allocateBuffer(const uint64_t size) {
+ll::Buffer Memory::createBuffer(const uint64_t size) {
 
     vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
                                       .setSharingMode(vk::SharingMode::eExclusive)
@@ -101,11 +101,12 @@ ll::Buffer Memory::allocateBuffer(const uint64_t size) {
     // If exception is thrown, this object is left in its previous
     // state plus the reserved space in memoryPages and pageManagers.
     auto manager = impl::MemoryFreeSpaceManager {newPageSize};
-    auto memory = device.allocateMemory(allocateInfo);
+    auto memory  = device.allocateMemory(allocateInfo);
 
     // push objects to vectors after reserving space
     memoryPages.push_back(memory);
     pageManagers.push_back(std::move(manager));
+    
     memoryCapacity += newPageSize;
 
     // this allocation try is guaranteed to work as there is enough

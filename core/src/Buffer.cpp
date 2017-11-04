@@ -6,11 +6,12 @@ namespace ll {
 
 Buffer::Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
                 const ll::MemoryAllocationInfo& allocInfo):
-    vkBuffer    {vkBuffer},
-    allocInfo   (allocInfo),
-    memory      {memory} {
+    vkBuffer         {vkBuffer},
+    allocInfo        (allocInfo),
+    memory           {memory},
+    referenceCounter {std::make_shared<int>(0)} {
 
-    referenceCounter = std::make_shared<int>(0);
+    assert(memory == nullptr);
 }
 
 

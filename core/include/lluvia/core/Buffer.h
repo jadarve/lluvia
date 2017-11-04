@@ -22,22 +22,26 @@ public:
     Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
             const ll::MemoryAllocationInfo& allocInfo);
 
-    virtual ~Buffer();
+    ~Buffer();
 
     Buffer& operator = (const Buffer& buffer) = default;
     Buffer& operator = (Buffer&& buffer)      = default;
 
+    bool isValid() const {return referenceCounter.use_count() != 0;}
+
     uint64_t getSize() const;
 
-protected:
-    vk::Buffer vkBuffer;
+
+private:
+    vk::Buffer               vkBuffer;
 
     ll::MemoryAllocationInfo allocInfo;
-    ll::Memory* memory;
+    ll::Memory*              memory;
 
     std::shared_ptr<int> referenceCounter {nullptr};
 
-    friend class ll::Memory;
+
+friend class ll::Memory;
 };
 
 

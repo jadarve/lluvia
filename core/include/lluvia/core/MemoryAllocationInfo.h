@@ -16,7 +16,7 @@ struct MemoryAllocationInfo {
     /** \brief left padding required to align offset */
     uint64_t leftPadding;
 
-    /** \brief page number */
+    /** \brief page number within memory */
     uint64_t page;
 };
 

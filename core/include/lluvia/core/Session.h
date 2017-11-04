@@ -38,12 +38,11 @@ public:
      */
     std::tuple<bool, uint32_t> configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
 
+    ll::Memory createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
+
+    ll::Buffer createBuffer(const uint32_t memoryIndex, const size_t size);
 
     std::tuple<bool, ll::Shader> createShader(const std::string& spirvPath) const;
-
-    // ll::Buffer allocateBuffer(const vk::MemoryPropertyFlags flags, const size_t size);
-    // ll::Buffer allocateBuffer(const uint32_t memoryIndex, const size_t size);
-
 
 private:
     bool initInstance();
@@ -51,13 +50,11 @@ private:
     bool initQueue();
     uint32_t getComputeFamilyQueueIndex();
 
-    vk::Instance instance;
-    vk::PhysicalDevice physicalDevice;
-    vk::Device device;
-    vk::Queue queue;
-    uint32_t computeQueueFamilyIndex;
-
-    std::vector<ll::Memory> memories;
+    vk::Instance         instance;
+    vk::PhysicalDevice   physicalDevice;
+    vk::Device           device;
+    vk::Queue            queue;
+    uint32_t             computeQueueFamilyIndex;
 
     std::shared_ptr<int> referenceCounter {nullptr};
 };

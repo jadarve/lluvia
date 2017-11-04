@@ -24,7 +24,7 @@ public:
 
 
 private:
-    vk::Device device;
+    vk::Device       device;
     vk::ShaderModule module;
 
     std::shared_ptr<int> referenceCounter {nullptr};

@@ -42,9 +42,11 @@ public:
     Memory& operator = (const Memory& memory) = default;
     Memory& operator = (Memory&& memory)      = default;
 
+    bool isValid() const {return referenceCounter.use_count() != 0;}
+
     uint64_t capacity() const;
 
-    ll::Buffer allocateBuffer(const uint64_t size);
+    ll::Buffer createBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);
 
 
@@ -55,11 +57,11 @@ private:
 
     vk::Device device;
 
-    const           ll::VkHeapInfo heapInfo;
-    const uint64_t  pageSize;
-    uint64_t        memoryCapacity;
+    const           ll::VkHeapInfo heapInfo     {};
+    const uint64_t  pageSize                    {0u};
+    uint64_t        memoryCapacity              {0u};
 
-    std::vector<vk::DeviceMemory> memoryPages;
+    std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
 
     std::shared_ptr<int> referenceCounter {nullptr};

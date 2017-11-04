@@ -13,12 +13,12 @@ Session::Session():
     referenceCounter    {std::make_shared<int>(0)} {
 
     auto instanceCreated = false;
-    auto deviceCreated = false;
+    auto deviceCreated   = false;
 
     try {
 
         instanceCreated = initInstance();
-        deviceCreated = initDevice();
+        deviceCreated   = initDevice();
         initQueue();
 
     } catch (...) {
@@ -53,8 +53,8 @@ Session::~Session() {
 std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 
     const auto memProperties = physicalDevice.getMemoryProperties();
+          auto memoryFlags   = std::vector<vk::MemoryPropertyFlags> {};
 
-    auto memoryFlags = std::vector<vk::MemoryPropertyFlags> {};
     memoryFlags.reserve(memProperties.memoryTypeCount);
 
     for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
@@ -74,9 +74,8 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-std::tuple<bool, uint32_t> Session::configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) {
+ll::Memory Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) {
 
-    // can throw?
     const auto memProperties = physicalDevice.getMemoryProperties();
 
     for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
@@ -85,31 +84,38 @@ std::tuple<bool, uint32_t> Session::configureMemory(const vk::MemoryPropertyFlag
         if (memType.propertyFlags == flags) {
 
             auto heapInfo = ll::VkHeapInfo {};
+
             heapInfo.heapIndex = memType.heapIndex;
-            heapInfo.size = memProperties.memoryHeaps[0].size;
+            heapInfo.size      = memProperties.memoryHeaps[0].size;
 
             // TODO
             // heapInfo.familyQueueIndices =
 
             // can throw exception. Invariants of Session are kept.
-            memories.push_back(ll::Memory {device, heapInfo, pageSize});
-
-            return std::make_tuple(true, memories.size() - 1);
+            return std::move(ll::Memory {device, heapInfo, pageSize});
         }
     }
 
-    return std::make_tuple(false, 0);
+    return std::move(ll::Memory {});
+}
+
+
+ll::Buffer createBuffer(const uint32_t memoryIndex, const size_t size) {
+
+    return Buffer {};
 }
 
 
 std::tuple<bool, ll::Shader> Session::createShader(const std::string& spirvPath) const {
 
-    auto file = ifstream {spirvPath, std::ios::ate | std::ios::binary};
+    // workaround for GCC 4.8
+    ifstream file {spirvPath, std::ios::ate | std::ios::binary};
 
     if (file.is_open()) {
 
-        auto fileSize = (size_t) file.tellg();
-        auto spirvCode = std::vector<char> {};
+        const auto fileSize  = static_cast<size_t>(file.tellg());
+              auto spirvCode = std::vector<char> {};
+
         spirvCode.reserve(fileSize);
 
         file.seekg(0);
@@ -151,6 +157,7 @@ bool Session::initInstance() {
 bool Session::initDevice() {
 
     const auto queuePriority = 1.0f;
+
     computeQueueFamilyIndex = getComputeFamilyQueueIndex();
 
     auto devQueueCreateInfo = vk::DeviceQueueCreateInfo()
@@ -179,10 +186,11 @@ uint32_t Session::getComputeFamilyQueueIndex() {
 
     const auto queueProperties = physicalDevice.getQueueFamilyProperties();
 
-    uint32_t queueIndex = 0;
+    auto queueIndex = uint32_t {0};
     for (auto prop : queueProperties) {
 
         const auto compute = ((prop.queueFlags & vk::QueueFlagBits::eCompute) == vk::QueueFlagBits::eCompute);
+
         if (compute != 0) {
             return queueIndex;
         }
