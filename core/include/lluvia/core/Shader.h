@@ -12,22 +12,20 @@ namespace ll {
 class Shader {
 
 public:
-    Shader()                        = default;
-    Shader(const Shader& shader)    = default;
-    Shader(Shader&& shader)         = default;
+    Shader()                        = delete;
+    Shader(const Shader& shader)    = delete;
+    Shader(Shader&& shader)         = delete;
     Shader(const vk::Device& device, const std::vector<char>& spirvCode);
 
     ~Shader();
 
-    Shader& operator = (const Shader& shader) = default;
-    Shader& operator = (Shader&& shader)      = default;
+    Shader& operator = (const Shader& shader) = delete;
+    Shader& operator = (Shader&& shader)      = delete;
 
 
 private:
     vk::Device       device;
     vk::ShaderModule module;
-
-    std::shared_ptr<int> referenceCounter {nullptr};
 };
 
 } // namespace ll

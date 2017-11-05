@@ -31,40 +31,36 @@ struct VkHeapInfo {
 class Memory {
 
 public:
-    Memory()                     = default;
-    Memory(const Memory& memory) = default;
-    Memory(Memory&& memory)      = default;
+    Memory()                     = delete;
+    Memory(const Memory& memory) = delete;
+    Memory(Memory&& memory)      = delete;
 
     Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize);
 
     ~Memory();
 
-    Memory& operator = (const Memory& memory) = default;
-    Memory& operator = (Memory&& memory)      = default;
-
-    bool isValid() const {return referenceCounter.use_count() != 0;}
+    Memory& operator = (const Memory& memory) = delete;
+    Memory& operator = (Memory&& memory)      = delete;
 
     uint64_t capacity() const;
 
-    ll::Buffer createBuffer(const uint64_t size);
+    std::unique_ptr<ll::Buffer> createBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);
 
 
 private:
 
     inline void configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo, const uint32_t pageIndex);
-    inline ll::Buffer buildBuffer(const vk::Buffer vkBuffer, const ll::impl::MemoryAllocationTryInfo& tryInfo);
+    inline std::unique_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer, const ll::impl::MemoryAllocationTryInfo& tryInfo);
 
     vk::Device device;
 
-    const           ll::VkHeapInfo heapInfo     {};
-    const uint64_t  pageSize                    {0u};
-    uint64_t        memoryCapacity              {0u};
+    const ll::VkHeapInfo    heapInfo        {};
+    const uint64_t          pageSize        {0u};
+          uint64_t          memoryCapacity  {0u};
 
     std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
-
-    std::shared_ptr<int> referenceCounter {nullptr};
 };
 
 } // namespace ll

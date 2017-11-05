@@ -3,8 +3,7 @@
 namespace ll {
 
 Shader::Shader(const vk::Device& device, const std::vector<char>& spirvCode):
-    device {device},
-    referenceCounter {std::make_shared<int>(0)} {
+    device {device} {
 
     vk::ShaderModuleCreateInfo moduleCreateInfo = vk::ShaderModuleCreateInfo()
             .setCodeSize(spirvCode.size())
@@ -14,11 +13,7 @@ Shader::Shader(const vk::Device& device, const std::vector<char>& spirvCode):
 }
 
 Shader::~Shader() {
-
-    if (referenceCounter.use_count() == 1) {
-
-        device.destroyShaderModule(module);
-    }
+    device.destroyShaderModule(module);
 }
 
 } // namespace ll

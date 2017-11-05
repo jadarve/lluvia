@@ -27,9 +27,9 @@
  */
 TEST_CASE("HostVisibleBuffer", "[BufferCreationTest]") {
 
-    ll::Session session {};
+    auto session = ll::Session::create();
 
-    auto memoryFlags = session.getSupportedMemoryFlags();
+    auto memoryFlags = session->getSupportedMemoryFlags();
 
     const auto hostVisibleCoherentFlags =   vk::MemoryPropertyFlagBits::eHostVisible
                                           | vk::MemoryPropertyFlagBits::eHostCoherent;
@@ -37,10 +37,10 @@ TEST_CASE("HostVisibleBuffer", "[BufferCreationTest]") {
 
     
     
-    auto memory = session.createMemory(hostVisibleCoherentFlags, 1024);
-    // ASSERT_EQ(memory.isValid(), true);
+    auto memory = session->createMemory(hostVisibleCoherentFlags, 1024);
+    REQUIRE(memory != nullptr);
 
-    auto buffer = memory.createBuffer(512);
-    REQUIRE(buffer.isValid());
+    auto buffer = memory->createBuffer(512);
+    REQUIRE(buffer != nullptr);
 
 }

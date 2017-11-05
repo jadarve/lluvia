@@ -14,7 +14,7 @@
 
 TEST_CASE("DefaultParameters", "[SessionCreationTest]") {
 
-    ll::Session session {};
+    auto session = ll::Session::create();
 }
 
 
@@ -32,9 +32,9 @@ TEST_CASE("DefaultParameters", "[SessionCreationTest]") {
  */
 TEST_CASE("MemoryFlags", "[SessionCreationTest]") {
 
-    ll::Session session {};
+    auto session = ll::Session::create();
 
-    auto memoryFlags = session.getSupportedMemoryFlags();
+    auto memoryFlags = session->getSupportedMemoryFlags();
 
     auto hostVisibleCoherentFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
     auto deviceLocalFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;

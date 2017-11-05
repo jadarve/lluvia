@@ -15,31 +15,26 @@ namespace ll {
 class Buffer {
 
 public:
-    Buffer()                = default;
-    Buffer(const Buffer& b) = default;
-    Buffer(Buffer&& b)      = default;
-
-    Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
-            const ll::MemoryAllocationInfo& allocInfo);
+    Buffer()                = delete;
+    Buffer(const Buffer& b) = delete;
+    Buffer(Buffer&& b)      = delete;
 
     ~Buffer();
 
-    Buffer& operator = (const Buffer& buffer) = default;
-    Buffer& operator = (Buffer&& buffer)      = default;
-
-    bool isValid() const {return referenceCounter.use_count() != 0;}
+    Buffer& operator = (const Buffer& buffer) = delete;
+    Buffer& operator = (Buffer&& buffer)      = delete;
 
     uint64_t getSize() const;
 
 
 private:
+    Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
+            const ll::MemoryAllocationInfo& allocInfo);
+
     vk::Buffer               vkBuffer;
 
     ll::MemoryAllocationInfo allocInfo;
     ll::Memory*              memory;
-
-    std::shared_ptr<int> referenceCounter {nullptr};
-
 
 friend class ll::Memory;
 };

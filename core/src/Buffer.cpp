@@ -8,18 +8,14 @@ Buffer::Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
                 const ll::MemoryAllocationInfo& allocInfo):
     vkBuffer         {vkBuffer},
     allocInfo        (allocInfo),
-    memory           {memory},
-    referenceCounter {std::make_shared<int>(0)} {
+    memory           {memory} {
 
-    assert(memory == nullptr);
+    assert(memory != nullptr);
 }
 
 
 Buffer::~Buffer() {
-
-    if (referenceCounter.use_count() == 1) {
-        memory->releaseBuffer(*this);
-    }
+    memory->releaseBuffer(*this);
 }
 
 

@@ -11,19 +11,15 @@ Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const ui
     device              {device},
     heapInfo            (heapInfo),
     pageSize            {pageSize},
-    memoryCapacity      {0u},
-    referenceCounter    {std::make_shared<int>(0)} {
+    memoryCapacity      {0u} {
 
 }
 
 
 Memory::~Memory() {
 
-    if (referenceCounter.use_count() == 1) {
-
-        for (auto& memory : memoryPages) {
-            device.freeMemory(memory);
-        }
+    for (auto& memory : memoryPages) {
+        device.freeMemory(memory);
     }
 }
 
@@ -33,7 +29,7 @@ uint64_t Memory::capacity() const {
 }
 
 
-ll::Buffer Memory::createBuffer(const uint64_t size) {
+std::unique_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
     vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
                                       .setSharingMode(vk::SharingMode::eExclusive)
@@ -150,13 +146,13 @@ inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocation
 }
 
 
-inline Buffer Memory::buildBuffer(const vk::Buffer vkBuffer,
-                                  const ll::impl::MemoryAllocationTryInfo& tryInfo) {
+inline std::unique_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer,
+    const ll::impl::MemoryAllocationTryInfo & tryInfo) {
 
     try {
 
         // ll::Buffer can throw exception.
-        auto buffer = ll::Buffer {vkBuffer, this, tryInfo.allocInfo};
+        auto buffer = std::unique_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, this, tryInfo.allocInfo}};
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return buffer;
 
