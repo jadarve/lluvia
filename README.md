@@ -2,10 +2,21 @@
 
 # Dependencies
 
-* Googletest
+* [Vulkan LunarG framework 1.0.65.0 installed](https://vulkan.lunarg.com/). The `VULKAN_SDK` environment variable should be set to point to the SDK location. Example:
+```
+    export VULKAN_SDK=~/vulkan/VulkanSDK/1.0.65.0/x86_64
+```
+* CMake 3.5 or above
+
+# Build
 
 ```
-sudo zypper install googletest-devel
+git clone https://github.com/jadarve/lluvia.git
+mkdir lluvia
+cd lluvia
+cmake ..
+make
+make test
 ```
 
 # Generate Eclipse CDT project
@@ -38,7 +49,7 @@ Create a `lluvia.sublime-project` file and copy-paste the following code
     "settings" : {
         "ecc_common_flags": [
             "-I$project_base_path/core/include/",
-            "-I<VULKAN_PATH>"
+            "-I<VULKAN_SDK>/include"
         ],
         "easy_clang_complete_verbose": true,
         "show_type_info": false,
