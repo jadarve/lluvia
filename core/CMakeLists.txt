@@ -12,11 +12,11 @@ endfunction()
 
 include_directories(include)
 add_library(lluvia-core SHARED
-    src/Session.cpp
     src/Buffer.cpp
-    src/Memory.cpp
-    src/Shader.cpp
     src/impl/MemoryFreeSpaceManager.cpp
+    src/Memory.cpp
+    src/Program.cpp
+    src/Session.cpp
 )
 
 target_link_libraries(lluvia-core vulkan)

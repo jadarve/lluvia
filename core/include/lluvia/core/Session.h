@@ -3,7 +3,7 @@
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/Memory.h"
-#include "lluvia/core/Shader.h"
+#include "lluvia/core/Program.h"
 
 #include <vulkan/vulkan.hpp>
 
@@ -33,9 +33,9 @@ public:
 
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
-    std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
+    std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) const;
 
-    std::unique_ptr<ll::Shader> createShader(const std::string& spirvPath) const;
+    std::unique_ptr<ll::Program> createProgram(const std::string& spirvPath) const;
 
 private:
     // Session objects should be created through factory methods

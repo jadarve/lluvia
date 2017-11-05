@@ -1,8 +1,8 @@
-#include "lluvia/core/Shader.h"
+#include "lluvia/core/Program.h"
 
 namespace ll {
 
-Shader::Shader(const vk::Device& device, const std::vector<char>& spirvCode):
+Program::Program(const vk::Device& device, const std::vector<char>& spirvCode):
     device {device} {
 
     vk::ShaderModuleCreateInfo moduleCreateInfo = vk::ShaderModuleCreateInfo()
@@ -12,7 +12,7 @@ Shader::Shader(const vk::Device& device, const std::vector<char>& spirvCode):
     module = device.createShaderModule(moduleCreateInfo);
 }
 
-Shader::~Shader() {
+Program::~Program() {
     device.destroyShaderModule(module);
 }
 

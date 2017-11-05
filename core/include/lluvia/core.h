@@ -4,8 +4,8 @@
 
 #include "core/Buffer.h"
 #include "core/Memory.h"
-#include "core/Shader.h"
-#include "core/Session.h"
 #include "core/Node.h"
+#include "core/Program.h"
+#include "core/Session.h"
 
 #endif // LLUVIA_CORE_H_

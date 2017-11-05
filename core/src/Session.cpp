@@ -73,7 +73,7 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) {
+std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) const {
 
     const auto memProperties = physicalDevice.getMemoryProperties();
 
@@ -97,7 +97,7 @@ std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
 }
 
 
-std::unique_ptr<ll::Shader> Session::createShader(const std::string& spirvPath) const {
+std::unique_ptr<ll::Program> Session::createProgram(const std::string& spirvPath) const {
 
     // workaround for GCC 4.8
     ifstream file {spirvPath, std::ios::ate | std::ios::binary};
@@ -113,7 +113,7 @@ std::unique_ptr<ll::Shader> Session::createShader(const std::string& spirvPath) 
         file.read(spirvCode.data(), fileSize);
         file.close();
 
-        return std::make_unique<ll::Shader>(device, spirvCode);
+        return std::make_unique<ll::Program>(device, spirvCode);
     }
 
     return nullptr;
