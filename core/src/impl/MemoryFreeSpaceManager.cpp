@@ -18,22 +18,22 @@ MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t size) :
 }
 
 
-uint64_t MemoryFreeSpaceManager::getSize() const {
+uint64_t MemoryFreeSpaceManager::getSize() const noexcept {
     return size;
 }
 
 
-int MemoryFreeSpaceManager::getFreeSpaceCount() const {
+int MemoryFreeSpaceManager::getFreeSpaceCount() const noexcept {
     return offsetVector.size();
 }
 
 
-std::vector<uint64_t> MemoryFreeSpaceManager::getOffsetVector() const {
+std::vector<uint64_t> MemoryFreeSpaceManager::getOffsetVector() const noexcept {
     return offsetVector;
 }
 
 
-std::vector<uint64_t> MemoryFreeSpaceManager::getSizeVector() const {
+std::vector<uint64_t> MemoryFreeSpaceManager::getSizeVector() const noexcept {
     return sizeVector;
 }
 

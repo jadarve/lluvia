@@ -24,7 +24,7 @@ public:
     Buffer& operator = (const Buffer& buffer) = delete;
     Buffer& operator = (Buffer&& buffer)      = delete;
 
-    uint64_t getSize() const;
+    uint64_t getSize() const noexcept;
 
 
 private:

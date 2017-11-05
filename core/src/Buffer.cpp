@@ -19,7 +19,7 @@ Buffer::~Buffer() {
 }
 
 
-uint64_t Buffer::getSize() const {
+uint64_t Buffer::getSize() const noexcept {
     return allocInfo.size;
 }
 

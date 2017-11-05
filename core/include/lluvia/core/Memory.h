@@ -42,7 +42,8 @@ public:
     Memory& operator = (const Memory& memory) = delete;
     Memory& operator = (Memory&& memory)      = delete;
 
-    uint64_t capacity() const;
+    uint64_t getPageSize()  const noexcept;
+    uint32_t getPageCount() const noexcept;
 
     std::unique_ptr<ll::Buffer> createBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);
@@ -57,7 +58,6 @@ private:
 
     const ll::VkHeapInfo    heapInfo        {};
     const uint64_t          pageSize        {0u};
-          uint64_t          memoryCapacity  {0u};
 
     std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;

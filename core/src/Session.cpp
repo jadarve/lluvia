@@ -79,16 +79,14 @@ std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
 
     for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
 
-        const auto memType = memProperties.memoryTypes[i];
+        const auto& memType = memProperties.memoryTypes[i];
         if (memType.propertyFlags == flags) {
 
             auto heapInfo = ll::VkHeapInfo {};
 
-            heapInfo.heapIndex = memType.heapIndex;
-            heapInfo.size      = memProperties.memoryHeaps[0].size;
-
-            // TODO
-            // heapInfo.familyQueueIndices =
+            heapInfo.heapIndex          = memType.heapIndex;
+            heapInfo.size               = memProperties.memoryHeaps[memType.heapIndex].size;
+            heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
 
             // can throw exception. Invariants of Session are kept.
             return std::make_unique<ll::Memory>(device, heapInfo, pageSize);
@@ -129,7 +127,7 @@ bool Session::initInstance() {
                    .setApplicationVersion(0)
                    .setEngineVersion(0)
                    .setPEngineName("lluvia")
-                   .setApiVersion(VK_MAKE_VERSION(1, 0, 54));
+                   .setApiVersion(VK_MAKE_VERSION(1, 0, 65));
 
     auto instanceInfo = vk::InstanceCreateInfo()
                         .setPApplicationInfo(&appInfo);

@@ -32,11 +32,11 @@ public:
     MemoryFreeSpaceManager& operator = (const MemoryFreeSpaceManager& heap) = default;
     MemoryFreeSpaceManager& operator = (MemoryFreeSpaceManager&& heap)      = default;
 
-    uint64_t getSize() const;
-    int getFreeSpaceCount() const;
+    uint64_t getSize()      const noexcept;
+    int getFreeSpaceCount() const noexcept;
 
-    std::vector<uint64_t> getOffsetVector() const;
-    std::vector<uint64_t> getSizeVector() const;
+    std::vector<uint64_t> getOffsetVector() const noexcept;
+    std::vector<uint64_t> getSizeVector()   const noexcept;
 
     bool allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept;
     bool allocate(uint64_t size, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept;

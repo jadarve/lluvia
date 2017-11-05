@@ -10,9 +10,8 @@ namespace ll {
 Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
     device              {device},
     heapInfo            (heapInfo),
-    pageSize            {pageSize},
-    memoryCapacity      {0u} {
-
+    pageSize            {pageSize} {
+        
 }
 
 
@@ -24,8 +23,12 @@ Memory::~Memory() {
 }
 
 
-uint64_t Memory::capacity() const {
-    return memoryCapacity;
+uint64_t Memory::getPageSize() const noexcept {
+    return pageSize;
+}
+
+uint32_t Memory::getPageCount() const noexcept {
+    return static_cast<uint32_t>(memoryPages.size());
 }
 
 
@@ -84,7 +87,7 @@ std::unique_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
     }
 
     if (pageManagers.size() == pageManagers.capacity()) {
-        pageManagers.reserve(memoryPages.capacity() + 1);
+        pageManagers.reserve(pageManagers.capacity() + 1);
     }
 
 
@@ -97,17 +100,17 @@ std::unique_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
     // If exception is thrown, this object is left in its previous
     // state plus the reserved space in memoryPages and pageManagers.
     auto manager = impl::MemoryFreeSpaceManager {newPageSize};
+    manager.reserveManagerSpace();
+
     auto memory  = device.allocateMemory(allocateInfo);
 
     // push objects to vectors after reserving space
     memoryPages.push_back(memory);
     pageManagers.push_back(std::move(manager));
     
-    memoryCapacity += newPageSize;
-
     // this allocation try is guaranteed to work as there is enough
     // free space in the page to fit memRequirements.size.
-    manager.tryAllocate(memRequirements.size, tryInfo);
+    pageManagers[pageIndex].tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo);
     configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
 
     // build a ll::Buffer object and commit the allocation if the
@@ -136,7 +139,8 @@ inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocation
 
     try {
 
-        device.bindBufferMemory(vkBuffer, memoryPages[pageIndex], allocInfo.offset);
+    	const auto& memoryPage = memoryPages[pageIndex];
+        device.bindBufferMemory(vkBuffer, memoryPage, allocInfo.offset);
 
     } catch (...) {
 

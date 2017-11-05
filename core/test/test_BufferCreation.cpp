@@ -25,22 +25,28 @@
  *  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
  *
  */
-TEST_CASE("HostVisibleBuffer", "[BufferCreationTest]") {
+TEST_CASE("DeviceLocalBuffer", "[BufferCreationTest]") {
 
     auto session = ll::Session::create();
-
-    auto memoryFlags = session->getSupportedMemoryFlags();
-
-    const auto hostVisibleCoherentFlags =   vk::MemoryPropertyFlagBits::eHostVisible
-                                          | vk::MemoryPropertyFlagBits::eHostCoherent;
-    // auto deviceLocalFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
-
+    const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
     
     
-    auto memory = session->createMemory(hostVisibleCoherentFlags, 1024);
+    auto memory = session->createMemory(memoryFlags, 2048);
     REQUIRE(memory != nullptr);
 
     auto buffer = memory->createBuffer(512);
     REQUIRE(buffer != nullptr);
+}
 
+TEST_CASE("HostVisibleCoherentCached", "[BufferCreationTest]") {
+
+    auto session = ll::Session::create();
+    const auto memoryFlags =  vk::MemoryPropertyFlagBits::eHostVisible
+                            | vk::MemoryPropertyFlagBits::eHostCoherent;
+    
+    auto memory = session->createMemory(memoryFlags, 2048);
+    REQUIRE(memory != nullptr);
+
+    auto buffer = memory->createBuffer(512);
+    REQUIRE(buffer != nullptr);
 }
