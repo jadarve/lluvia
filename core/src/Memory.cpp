@@ -158,7 +158,7 @@ inline Buffer Memory::buildBuffer(const vk::Buffer vkBuffer,
         // ll::Buffer can throw exception.
         auto buffer = ll::Buffer {vkBuffer, this, tryInfo.allocInfo};
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
-        return std::move(buffer);
+        return buffer;
 
     } catch (...) {
 

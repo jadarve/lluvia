@@ -5,14 +5,14 @@
  * \license Apache 2.0, see LICENSE for more details
  */
 
+#define CATCH_CONFIG_MAIN
+#include "catch/catch.hpp"
+
 #include <iostream>
-#include <gtest/gtest.h>
 #include <vulkan/vulkan.hpp>
 
-/**
- * Test Vulkan instance creation.
- */
-TEST(VulkanDriverTest, CreateInstance) {
+
+TEST_CASE("CreateInstance", "[VulkanDriverTest]") {
 
     const vk::ApplicationInfo appInfo = vk::ApplicationInfo()
             .setPApplicationName("lluvia")
@@ -23,17 +23,10 @@ TEST(VulkanDriverTest, CreateInstance) {
     const vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
             .setPApplicationInfo(&appInfo);
 
-
     vk::Instance instance;
     vk::Result result = vk::createInstance(&instanceInfo, nullptr, &instance);
 
     // check that the instance is created successfully
-    ASSERT_EQ(result, vk::Result::eSuccess);
+    REQUIRE(result == vk::Result::eSuccess);
 }
 
-
-int main(int argc, char **argv) {
-    
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

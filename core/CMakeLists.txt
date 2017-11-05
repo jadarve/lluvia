@@ -1,13 +1,12 @@
 
 test_macro()
 
-function(add_gtest NAME SRCS)
 
-    set(args_list --gtest_output=xml:test/${NAME}.xml)
+function(add_catchTest NAME SRCS)
+    
     add_executable(${NAME} ${SRCS})
-    target_link_libraries(${NAME} vulkan lluvia-core ${GTEST_BOTH_LIBRARIES} pthread)
-    GTEST_ADD_TESTS(${NAME} "${args_list}" ${SRCS})
-
+    target_link_libraries(${NAME} Catch vulkan stdc++ ${ARGV2})
+    add_test(NAME ${NAME}  COMMAND ${NAME})
 endfunction()
 
 
@@ -22,13 +21,6 @@ add_library(lluvia-core SHARED
 
 target_link_libraries(lluvia-core vulkan)
 
-
-# Add test cpp file
-# add_executable(runUnitTests test/test_Test.cpp)
-# target_link_libraries(runUnitTests gtest_main)
-# add_test(NAME runUnitTests COMMAND runUnitTests)
-
-add_gtest(test_VulkanDriver             test/test_VulkanDriver.cpp)
-add_gtest(test_MemoryFreeSpaceManager   test/test_MemoryFreeSpaceManager.cpp)
-add_gtest(test_SessionCreation          test/test_SessionCreation.cpp)
-add_gtest(test_BufferCreation           test/test_BufferCreation.cpp)
+add_catchTest(test_VulkanDriver             test/test_VulkanDriver.cpp)
+add_catchTest(test_MemoryFreeSpaceManager   test/test_MemoryFreeSpaceManager.cpp    lluvia-core)
+add_catchTest(test_SessionCreation          test/test_SessionCreation.cpp           lluvia-core)

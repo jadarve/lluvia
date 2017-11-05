@@ -1,9 +1,12 @@
 /**
- * \file test_SessionCreation.cpp
- * \brief test Session creation
+ * \file test_BufferCreation.cpp
+ * \brief test memory buffer creation
  * \copyright 2017, Juan David Adarve. See AUTHORS for more details
  * \license Apache 2.0, see LICENSE for more details
  */
+
+#define CATCH_CONFIG_MAIN
+#include "catch/catch.hpp"
 
 #include <iostream>
 #include <gtest/gtest.h>
@@ -22,7 +25,7 @@
  *  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
  *
  */
-TEST(BufferCreationTest, HostVisibleBuffer) {
+TEST_CASE("HostVisibleBuffer", "[BufferCreationTest]") {
 
     ll::Session session {};
 
@@ -35,16 +38,9 @@ TEST(BufferCreationTest, HostVisibleBuffer) {
     
     
     auto memory = session.createMemory(hostVisibleCoherentFlags, 1024);
-    ASSERT_EQ(memory.isValid(), true);
+    // ASSERT_EQ(memory.isValid(), true);
 
     auto buffer = memory.createBuffer(512);
-    // ASSERT_EQ(buffer.isValid(), true);
+    REQUIRE(buffer.isValid());
 
-}
-
-
-int main(int argc, char **argv) {
-
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

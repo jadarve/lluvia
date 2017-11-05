@@ -22,8 +22,8 @@ class Session {
 
 public:
     Session();
-    Session(const Session& session)     = default;
-    Session(Session&& session)          = default;
+    Session(const Session& session)              = default;
+    Session(Session&& session)                   = default;
 
     ~Session();
 
@@ -38,11 +38,12 @@ public:
      */
     std::tuple<bool, uint32_t> configureMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
 
-    ll::Memory createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
+    // ll::Memory createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
+    std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize);
 
     ll::Buffer createBuffer(const uint32_t memoryIndex, const size_t size);
 
-    std::tuple<bool, ll::Shader> createShader(const std::string& spirvPath) const;
+    // std::tuple<bool, ll::Shader> createShader(const std::string& spirvPath) const;
 
 private:
     bool initInstance();

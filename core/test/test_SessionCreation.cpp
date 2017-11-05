@@ -5,11 +5,14 @@
  * \license Apache 2.0, see LICENSE for more details
  */
 
+#define CATCH_CONFIG_MAIN
+#include "catch/catch.hpp"
+
 #include <iostream>
 #include <gtest/gtest.h>
 #include "lluvia/core.h"
 
-TEST(SessionCreationTest, DefaultParameters) {
+TEST_CASE("DefaultParameters", "[SessionCreationTest]") {
 
     ll::Session session {};
 }
@@ -27,7 +30,7 @@ TEST(SessionCreationTest, DefaultParameters) {
  *  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
  *
  */
-TEST(SessionCreationTest, MemoryFlags) {
+TEST_CASE("MemoryFlags", "[SessionCreationTest]") {
 
     ll::Session session {};
 
@@ -50,12 +53,5 @@ TEST(SessionCreationTest, MemoryFlags) {
         }
     }
 
-    ASSERT_EQ(true, hostFlagsFound && deviceFlagsFound);
-}
-
-
-int main(int argc, char **argv) {
-    
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    REQUIRE((hostFlagsFound && deviceFlagsFound) == true);
 }

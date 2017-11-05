@@ -2,40 +2,27 @@ cmake_minimum_required(VERSION 2.8.11)
 project(lluvia)
 
 #################################################
-# TEST SETTINGS
+# COMPILER SETTINGS
 #################################################
-# include(ExternalProject)
-# ExternalProject_Add(googletest
-#   GIT_REPOSITORY    https://github.com/google/googletest.git
-#   GIT_TAG           master
-#   SOURCE_DIR        "${CMAKE_BINARY_DIR}/googletest-src"
-#   BINARY_DIR        "${CMAKE_BINARY_DIR}/googletest-build"
-#   CONFIGURE_COMMAND ""
-#   BUILD_COMMAND     ""
-#   INSTALL_COMMAND   ""
-#   TEST_COMMAND      ""
-# )
+
+message(STATUS "Configuring for Unix system")
+set (CMAKE_CXX_COMPILER         "clang")
+set (CMAKE_CXX_FLAGS            "-std=c++14 -O0 -Wall")
 
 
-# enable_testing()
-# find_package(GTest REQUIRED)
-# include_directories(${GTEST_INCLUDE_DIRS})
-
-# # Add googletest directly to our build. This adds
-# # the following targets: gtest, gtest_main, gmock
-# # and gmock_main
-# add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
-#                  "${CMAKE_BINARY_DIR}/googletest-build")
-
+#################################################
+# CATCH SETTINGS
+#################################################
 enable_testing()
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
 
+file(DOWNLOAD
+     "https://github.com/catchorg/Catch2/releases/download/v2.0.1/catch.hpp"
+     "${CMAKE_BINARY_DIR}/catch/catch.hpp")
 
+set(CATCH_INCLUDE_DIR ${CMAKE_BINARY_DIR})
+add_library(Catch INTERFACE)
+target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})
 
-# # Prevent GoogleTest from overriding our compiler/linker options
-# # when building with Visual Studio
-# set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 #################################################
 # VULKAN SETTINGS
@@ -55,15 +42,6 @@ set(LIBRARY_OUTPUT_PATH   "lib")
 #################################################
 # include_directories("${PROJECT_SOURCE_DIR}/include")
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_macro.cmake)
-
-
-#################################################
-# COMPILER SETTINGS
-#################################################
-
-message(STATUS "Configuring for Unix system")
-set (CMAKE_CXX_COMPILER         "gcc")
-set (CMAKE_CXX_FLAGS            "-std=c++11 -O0 -Wall")
 
 
 #################################################

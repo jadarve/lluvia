@@ -74,7 +74,32 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-ll::Memory Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) {
+// ll::Memory Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) {
+
+//     const auto memProperties = physicalDevice.getMemoryProperties();
+
+//     for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
+
+//         const auto memType = memProperties.memoryTypes[i];
+//         if (memType.propertyFlags == flags) {
+
+//             auto heapInfo = ll::VkHeapInfo {};
+
+//             heapInfo.heapIndex = memType.heapIndex;
+//             heapInfo.size      = memProperties.memoryHeaps[0].size;
+
+//             // TODO
+//             // heapInfo.familyQueueIndices =
+
+//             // can throw exception. Invariants of Session are kept.
+//             return ll::Memory {device, heapInfo, pageSize};
+//         }
+//     }
+
+//     return ll::Memory {};
+// }
+
+std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) {
 
     const auto memProperties = physicalDevice.getMemoryProperties();
 
@@ -92,11 +117,11 @@ ll::Memory Session::createMemory(const vk::MemoryPropertyFlags flags, const uint
             // heapInfo.familyQueueIndices =
 
             // can throw exception. Invariants of Session are kept.
-            return std::move(ll::Memory {device, heapInfo, pageSize});
+            return std::make_unique<ll::Memory>(device, heapInfo, pageSize);
         }
     }
 
-    return std::move(ll::Memory {});
+    return nullptr;
 }
 
 
@@ -106,27 +131,27 @@ ll::Buffer createBuffer(const uint32_t memoryIndex, const size_t size) {
 }
 
 
-std::tuple<bool, ll::Shader> Session::createShader(const std::string& spirvPath) const {
+// std::tuple<bool, ll::Shader> Session::createShader(const std::string& spirvPath) const {
 
-    // workaround for GCC 4.8
-    ifstream file {spirvPath, std::ios::ate | std::ios::binary};
+//     // workaround for GCC 4.8
+//     ifstream file {spirvPath, std::ios::ate | std::ios::binary};
 
-    if (file.is_open()) {
+//     if (file.is_open()) {
 
-        const auto fileSize  = static_cast<size_t>(file.tellg());
-              auto spirvCode = std::vector<char> {};
+//         const auto fileSize  = static_cast<size_t>(file.tellg());
+//               auto spirvCode = std::vector<char> {};
 
-        spirvCode.reserve(fileSize);
+//         spirvCode.reserve(fileSize);
 
-        file.seekg(0);
-        file.read(spirvCode.data(), fileSize);
-        file.close();
+//         file.seekg(0);
+//         file.read(spirvCode.data(), fileSize);
+//         file.close();
 
-        return std::make_tuple(true, Shader {device, spirvCode});
-    }
+//         return std::make_tuple(true, Shader {device, spirvCode});
+//     }
 
-    return std::make_tuple(false, Shader {});
-}
+//     return std::make_tuple(false, Shader {});
+// }
 
 
 bool Session::initInstance() {
