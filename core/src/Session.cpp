@@ -105,9 +105,7 @@ std::unique_ptr<ll::Program> Session::createProgram(const std::string& spirvPath
     if (file.is_open()) {
 
         const auto fileSize  = static_cast<size_t>(file.tellg());
-              auto spirvCode = std::vector<char> {};
-
-        spirvCode.reserve(fileSize);
+              auto spirvCode = std::vector<char>(fileSize);
 
         file.seekg(0);
         file.read(spirvCode.data(), fileSize);
