@@ -2,6 +2,8 @@
 #define LLUVIA_CORE_SESSION_H_
 
 #include "lluvia/core/Buffer.h"
+#include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
@@ -35,7 +37,9 @@ public:
 
     std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) const;
 
-    std::unique_ptr<ll::Program> createProgram(const std::string& spirvPath) const;
+    std::shared_ptr<const ll::Program> createProgram(const std::string& spirvPath) const;
+
+    std::unique_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor);
 
 private:
     // Session objects should be created through factory methods

@@ -22,6 +22,7 @@ public:
     Program& operator = (const Program& program) = delete;
     Program& operator = (Program&& program)      = delete;
 
+    vk::ShaderModule getShaderModule() const noexcept;
 
 private:
     vk::Device       device;

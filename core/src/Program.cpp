@@ -16,4 +16,8 @@ Program::~Program() {
     device.destroyShaderModule(module);
 }
 
+vk::ShaderModule Program::getShaderModule() const noexcept {
+    return module;
+}
+
 } // namespace ll

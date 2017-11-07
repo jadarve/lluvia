@@ -12,6 +12,17 @@
 #include <gtest/gtest.h>
 #include "lluvia/core.h"
 
+
+TEST_CASE("NullProgram", "[test_ProgramCreation]") {
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    auto program = session->createProgram("noExist.spv");
+    REQUIRE(program == nullptr);
+}
+
+
 TEST_CASE("DefaultParameters", "[test_ProgramCreation]") {
 
     auto session = ll::Session::create();

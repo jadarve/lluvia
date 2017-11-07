@@ -11,6 +11,7 @@
 
 namespace ll {
 
+class ComputeNode;
 
 class Buffer {
 
@@ -26,7 +27,6 @@ public:
 
     uint64_t getSize() const noexcept;
 
-
 private:
     Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
             const ll::MemoryAllocationInfo& allocInfo);
@@ -37,6 +37,7 @@ private:
     ll::Memory*              memory;
 
 friend class ll::Memory;
+friend class ll::ComputeNode;
 };
 
 

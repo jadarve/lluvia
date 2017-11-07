@@ -3,8 +3,9 @@
 #define LLUVIA_CORE_H_
 
 #include "core/Buffer.h"
+#include "core/ComputeNode.h"
+#include "core/ComputeNodeDescriptor.h"
 #include "core/Memory.h"
-#include "core/Node.h"
 #include "core/Program.h"
 #include "core/Session.h"
 

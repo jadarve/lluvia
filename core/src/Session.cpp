@@ -97,7 +97,7 @@ std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
 }
 
 
-std::unique_ptr<ll::Program> Session::createProgram(const std::string& spirvPath) const {
+std::shared_ptr<const ll::Program> Session::createProgram(const std::string& spirvPath) const {
 
     // workaround for GCC 4.8
     ifstream file {spirvPath, std::ios::ate | std::ios::binary};
@@ -111,10 +111,16 @@ std::unique_ptr<ll::Program> Session::createProgram(const std::string& spirvPath
         file.read(spirvCode.data(), fileSize);
         file.close();
 
-        return std::make_unique<ll::Program>(device, spirvCode);
+        return std::make_shared<const ll::Program>(device, spirvCode);
     }
 
     return nullptr;
+}
+
+
+std::unique_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
+
+    return std::make_unique<ll::ComputeNode>(device, descriptor);
 }
 
 
