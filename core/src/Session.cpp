@@ -124,6 +124,41 @@ std::unique_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNod
 }
 
 
+void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
+
+    vk::CommandPoolCreateInfo createInfo = vk::CommandPoolCreateInfo()
+        .setQueueFamilyIndex(computeQueueFamilyIndex);
+
+    vk::CommandPool commandPool = device.createCommandPool(createInfo);
+
+    vk::CommandBufferAllocateInfo allocInfo = vk::CommandBufferAllocateInfo()
+        .setCommandPool(commandPool)
+        .setCommandBufferCount(1);
+
+    vector<vk::CommandBuffer> cmdBuffers = device.allocateCommandBuffers(allocInfo);
+    vk::CommandBuffer cmdBuffer = cmdBuffers[0];
+
+    // record command buffer
+    vk::CommandBufferBeginInfo beginInfo = vk::CommandBufferBeginInfo()
+        .setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+
+    cmdBuffer.begin(beginInfo);
+    node->record(cmdBuffer);
+    cmdBuffer.end();
+
+    // Here I can set semaphores to wait for and 
+    // semaphores to trigger once execution is completed.
+    vk::SubmitInfo submitInfo = vk::SubmitInfo()
+        .setCommandBufferCount(1)
+        .setPCommandBuffers(&cmdBuffer);
+
+    queue.submit(1, &submitInfo, nullptr);
+    queue.waitIdle();
+
+    device.destroyCommandPool(commandPool, nullptr);
+}
+
+
 bool Session::initInstance() {
 
     auto appInfo = vk::ApplicationInfo()

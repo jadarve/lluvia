@@ -41,6 +41,8 @@ public:
 
     std::unique_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor);
 
+    void run(const std::shared_ptr<ll::ComputeNode> node);
+
 private:
     // Session objects should be created through factory methods
     Session();

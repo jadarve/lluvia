@@ -24,14 +24,14 @@ ComputeNode::~ComputeNode() {
 
 
 
-void ComputeNode::bind(int index, const ll::Buffer& buffer) {
+void ComputeNode::bind(int index, const std::shared_ptr<ll::Buffer> buffer) {
 
     // TODO: assert that index contains a buffer
 
     vk::DescriptorBufferInfo descBufferInfo = vk::DescriptorBufferInfo()
         .setOffset(0)
         .setRange(VK_WHOLE_SIZE)
-        .setBuffer(buffer.vkBuffer);
+        .setBuffer(buffer->vkBuffer);
 
     vk::WriteDescriptorSet writeDescSet = vk::WriteDescriptorSet()
         .setDescriptorType(vk::DescriptorType::eStorageBuffer)

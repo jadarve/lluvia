@@ -1,6 +1,7 @@
 #ifndef LLUVIA_CORE_COMPUTE_NODE_H_
 #define LLUVIA_CORE_COMPUTE_NODE_H_
 
+#include <memory>
 #include <string>
 
 #include <vulkan/vulkan.hpp>
@@ -28,7 +29,7 @@ public:
     ComputeNode& operator = (ComputeNode&& node)      = delete;
 
 
-    void bind(int index, const ll::Buffer& buffer);
+    void bind(int index, const std::shared_ptr<ll::Buffer> buffer);
 
     void record(vk::CommandBuffer& commandBufer) const;
 
