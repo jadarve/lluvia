@@ -1,12 +1,6 @@
 #ifndef LLUVIA_CORE_SESSION_H_
 #define LLUVIA_CORE_SESSION_H_
 
-#include "lluvia/core/Buffer.h"
-#include "lluvia/core/ComputeNode.h"
-#include "lluvia/core/ComputeNodeDescriptor.h"
-#include "lluvia/core/Memory.h"
-#include "lluvia/core/Program.h"
-
 #include <vulkan/vulkan.hpp>
 
 #include <memory>
@@ -16,6 +10,13 @@
 
 
 namespace ll {
+
+class Buffer;
+class CommandBuffer;
+class ComputeNode;
+class ComputeNodeDescriptor;
+class Memory;
+class Program;
 
 /**
  * \brief The Session class contains all the state required to run compute Graphs.
@@ -39,7 +40,9 @@ public:
 
     std::shared_ptr<const ll::Program> createProgram(const std::string& spirvPath) const;
 
-    std::unique_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor);
+    std::unique_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const;
+
+    std::shared_ptr<ll::CommandBuffer> createCommandBuffer() const;
 
     void run(const std::shared_ptr<ll::ComputeNode> node);
 
@@ -50,12 +53,14 @@ private:
     bool initInstance();
     bool initDevice();
     bool initQueue();
+    bool initCommandPool();
     uint32_t getComputeFamilyQueueIndex();
 
     vk::Instance         instance;
     vk::PhysicalDevice   physicalDevice;
     vk::Device           device;
     vk::Queue            queue;
+    vk::CommandPool      commandPool;
     uint32_t             computeQueueFamilyIndex;
 };
 

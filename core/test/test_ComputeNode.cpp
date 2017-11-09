@@ -45,3 +45,52 @@ TEST_CASE("Construction", "[test_ComputeNode]") {
     session->run(node);
 }
 
+
+TEST_CASE("ConstructionCommandBuffer", "[test_ComputeNode]") {
+
+    // auto session = ll::Session::create();
+
+    // const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    // auto memory = session->createMemory(memoryFlags, 1024*sizeof(float));
+
+    // auto buffer0      = uniqueToShared(memory->createBuffer(32*sizeof(float)));
+    // auto buffer1      = uniqueToShared(memory->createBuffer(32*sizeof(float)));
+    // auto bufferSubOut = uniqueToShared(memory->createBuffer(32*sizeof(float)));
+    // auto bufferAbsOut = uniqueToShared(memory->createBuffer(32*sizeof(float)));
+
+    // auto program = session->createProgram("/home/jadarve/git/lluvia/glsl/comp.spv");
+
+    // auto desc0 = ll::ComputeNodeDescriptor()
+    //                         .setProgram(program)
+    //                         .setFunctionName("sub")
+    //                         .setLocalX(32)
+    //                         .addBufferParameter()   // first input
+    //                         .addBufferParameter()   // second input
+    //                         .addBufferParameter();  // output
+
+    // auto desc1 = ll::ComputeNodeDescriptor()
+    //                         .setProgram(program)
+    //                         .setFunctionName("abs")
+    //                         .setLocalX(32)
+    //                         .addBufferParameter()   // input
+    //                         .addBufferParameter();  // output
+
+    // auto nodeSub = uniqueToShared(session->createComputeNode(desc0));
+    // nodeSub->bind(0, buffer0);
+    // nodeSub->bind(1, buffer1);
+    // nodeSub->bind(2, bufferSubOut);
+
+    // auto nodeAbs = uniqueToShared(session->createComputeNode(desc1));
+    // nodeAbs->bind(0, bufferSubOut);
+    // nodeAbs->bind(1, bufferAbsOut);
+
+    // // create and record a command buffer
+    // auto cmdBuffer = session->createCommandBuffer();
+    // cmdBuffer->beginRecording();
+    // nodeSub->record(cmdBuffer);
+    // nodeAbs->record(cmdBuffer);
+    // cmdBuffer->endRecording();
+
+    // // run the command buffer
+    // session->run(cmdBuffer);
+}

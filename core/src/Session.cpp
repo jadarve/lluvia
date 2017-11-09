@@ -1,5 +1,12 @@
 #include "lluvia/core/Session.h"
 
+#include "lluvia/core/Buffer.h"
+#include "lluvia/core/CommandBuffer.h"
+#include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Memory.h"
+#include "lluvia/core/Program.h"
+
 #include <algorithm>
 #include <exception>
 #include <fstream>
@@ -9,10 +16,9 @@ namespace ll {
 
 using namespace std;
 
-std::unique_ptr<Session> Session::create() {
+std::unique_ptr<ll::Session> Session::create() {
 
-    auto session = std::unique_ptr<Session>{new Session()};
-    return session;
+    return std::unique_ptr<Session>{new Session()};
 }
 
 Session::Session() {
@@ -25,6 +31,7 @@ Session::Session() {
         instanceCreated = initInstance();
         deviceCreated   = initDevice();
         initQueue();
+        initCommandPool();
 
     } catch (...) {
 
@@ -118,11 +125,16 @@ std::shared_ptr<const ll::Program> Session::createProgram(const std::string& spi
 }
 
 
-std::unique_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
+std::unique_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
 
     return std::make_unique<ll::ComputeNode>(device, descriptor);
 }
 
+
+std::shared_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
+
+    return std::make_shared<ll::CommandBuffer>(device, commandPool);
+}
 
 void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
 
@@ -208,6 +220,16 @@ bool Session::initQueue() {
 
     // get the first compute capable queue
     queue = device.getQueue(computeQueueFamilyIndex, 0);
+    return true;
+}
+
+
+bool Session::initCommandPool() {
+
+    const auto createInfo = vk::CommandPoolCreateInfo()
+                                .setQueueFamilyIndex(computeQueueFamilyIndex);
+
+    commandPool = device.createCommandPool(createInfo);
     return true;
 }
 

@@ -13,6 +13,7 @@ endfunction()
 include_directories(include)
 add_library(lluvia-core SHARED
     src/Buffer.cpp
+    src/CommandBuffer.cpp
     src/ComputeNode.cpp
     src/ComputeNodeDescriptor.cpp
     src/impl/MemoryFreeSpaceManager.cpp
