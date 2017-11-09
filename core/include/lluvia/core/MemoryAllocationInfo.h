@@ -1,5 +1,5 @@
-#ifndef LLUVIA_CORE_MEMORY_ALLOCATION_H_
-#define LLUVIA_CORE_MEMORY_ALLOCATION_H_
+#ifndef LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_
+#define LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_
 
 #include <cstdint>
 
@@ -22,4 +22,4 @@ struct MemoryAllocationInfo {
 
 } // namespace ll
 
-#endif // LLUVIA_CORE_MEMORY_ALLOCATION_H_
+#endif // LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_

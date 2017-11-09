@@ -8,7 +8,6 @@
 #include <vulkan/vulkan.hpp>
 
 #include "lluvia/core/impl/MemoryFreeSpaceManager.h"
-#include "lluvia/core/MemoryAllocationInfo.h"
 
 
 namespace ll {

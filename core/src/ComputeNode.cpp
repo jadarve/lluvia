@@ -1,5 +1,9 @@
 #include "lluvia/core/ComputeNode.h"
 
+#include "lluvia/core/Buffer.h"
+#include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Program.h"
+
 #include <algorithm>
 #include <iostream>
 

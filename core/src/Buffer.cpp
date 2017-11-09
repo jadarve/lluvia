@@ -1,5 +1,6 @@
 #include "lluvia/core/Buffer.h"
 
+#include "lluvia/core/Memory.h"
 
 namespace ll {
 

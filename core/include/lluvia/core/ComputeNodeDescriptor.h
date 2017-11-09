@@ -7,9 +7,10 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include "lluvia/core/Program.h"
 
 namespace ll {
+
+class Program;
 
 class ComputeNodeDescriptor {
 

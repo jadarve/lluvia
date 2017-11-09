@@ -1,5 +1,7 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 
+#include "lluvia/core/Program.h"
+
 #include <cassert>
 #include <vector>
 #include <iostream>

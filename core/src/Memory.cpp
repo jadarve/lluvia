@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "lluvia/core/Buffer.h"
+#include "lluvia/core/MemoryAllocationInfo.h"
 
 namespace ll {
 

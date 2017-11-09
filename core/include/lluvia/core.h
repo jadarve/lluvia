@@ -7,6 +7,7 @@
 #include "core/ComputeNode.h"
 #include "core/ComputeNodeDescriptor.h"
 #include "core/Memory.h"
+#include "core/MemoryAllocationInfo.h"
 #include "core/Program.h"
 #include "core/Session.h"
 

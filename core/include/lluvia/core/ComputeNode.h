@@ -1,15 +1,16 @@
 #ifndef LLUVIA_CORE_COMPUTE_NODE_H_
 #define LLUVIA_CORE_COMPUTE_NODE_H_
 
+#include <cstdint>
 #include <memory>
 #include <string>
 
 #include <vulkan/vulkan.hpp>
 
-#include "lluvia/core/Buffer.h"
-#include "lluvia/core/ComputeNodeDescriptor.h"
-
 namespace ll {
+
+class Buffer;
+class ComputeNodeDescriptor;
 
 /**
  * \brief Compute node.

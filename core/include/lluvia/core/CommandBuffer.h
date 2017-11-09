@@ -1,12 +1,10 @@
 #ifndef LLUVIA_CORE_COMMAND_BUFFER_H_
 #define LLUVIA_CORE_COMMAND_BUFFER_H_
 
-
 #include <vulkan/vulkan.hpp>
 
 
 namespace ll {
-
 
 class CommandBuffer {
 

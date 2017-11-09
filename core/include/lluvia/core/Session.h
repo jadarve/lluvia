@@ -3,6 +3,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <tuple>

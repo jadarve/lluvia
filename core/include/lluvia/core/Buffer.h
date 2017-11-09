@@ -1,17 +1,14 @@
 #ifndef LLUVIA_CORE_BUFFER_H_
 #define LLUVIA_CORE_BUFFER_H_
 
-
-#include <cstdint>
-#include <memory>
+#include "lluvia/core/MemoryAllocationInfo.h"
 
 #include <vulkan/vulkan.hpp>
-
-#include "lluvia/core/Memory.h"
 
 namespace ll {
 
 class ComputeNode;
+class Memory;
 
 class Buffer {
 
