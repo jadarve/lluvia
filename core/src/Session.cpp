@@ -56,6 +56,11 @@ Session::~Session() {
 }
 
 
+vk::PhysicalDeviceMemoryProperties Session::getPhysicalDeviceMemoryProperties() const {
+
+    return physicalDevice.getMemoryProperties();
+}
+
 std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 
     const auto memProperties = physicalDevice.getMemoryProperties();

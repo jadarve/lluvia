@@ -47,8 +47,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_macro.cmake)
 #################################################
 # SOURCE FILES SETTINGS
 #################################################
-# process the CMakeLists.txt file at src/ folder
-# it should add all the source files in the folder
 add_subdirectory(core)
-
+add_subdirectory(tools)
 

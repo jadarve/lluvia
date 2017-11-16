@@ -35,6 +35,7 @@ public:
     Session& operator = (const Session& session) = delete;
     Session& operator = (Session&& session)      = delete;
 
+    vk::PhysicalDeviceMemoryProperties getPhysicalDeviceMemoryProperties() const;
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
     std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) const;
