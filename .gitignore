@@ -42,5 +42,17 @@ build_eclipse
 *.sublime-project
 *.sublime-workspace
 
+# KDevelop
+.kdev4
+*.kdev4
+*~
+*.orig
+*.rej
+*.kdevelop
+*.kdevelop.filelist
+*.kdevelop.pcs
+*.kdevses
+.*kate-swp
+
 # local stuff
 local
