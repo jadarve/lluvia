@@ -31,6 +31,10 @@ TEST_CASE("DefaultParameters", "[SessionCreationTest]") {
  *
  */
 TEST_CASE("MemoryFlags", "[SessionCreationTest]") {
+    
+    auto containFlags = [](const auto& flags, const auto& value) {
+        return (flags & value) == value;
+    };
 
     auto session = ll::Session::create();
 
@@ -43,12 +47,12 @@ TEST_CASE("MemoryFlags", "[SessionCreationTest]") {
     auto deviceFlagsFound = false;
 
     for(auto flags : memoryFlags) {
-
-        if(flags == hostVisibleCoherentFlags) {
+        
+        if (containFlags(flags, hostVisibleCoherentFlags)) {
             hostFlagsFound = true;
         }
-
-        if(flags == deviceLocalFlags) {
+        
+        if (containFlags(flags, deviceLocalFlags)) {
             deviceFlagsFound = true;
         }
     }
