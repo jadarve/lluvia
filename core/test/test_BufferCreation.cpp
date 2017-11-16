@@ -31,7 +31,7 @@ TEST_CASE("DeviceLocalBuffer", "[BufferCreationTest]") {
     const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
     
     
-    auto memory = session->createMemory(memoryFlags, 2048);
+    auto memory = session->createMemory(memoryFlags, 2048, false);
     REQUIRE(memory != nullptr);
 
     auto buffer = memory->createBuffer(512);
@@ -44,7 +44,7 @@ TEST_CASE("HostVisibleCoherentCached", "[BufferCreationTest]") {
     const auto memoryFlags =  vk::MemoryPropertyFlagBits::eHostVisible
                             | vk::MemoryPropertyFlagBits::eHostCoherent;
     
-    auto memory = session->createMemory(memoryFlags, 2048);
+    auto memory = session->createMemory(memoryFlags, 2048, false);
     REQUIRE(memory != nullptr);
 
     auto buffer = memory->createBuffer(512);

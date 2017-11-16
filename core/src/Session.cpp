@@ -85,14 +85,19 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) const {
-
+std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const {
+    
+    auto compareFlags = [](const auto& flags, const auto& value, bool exactFlagsMatch) {
+        return exactFlagsMatch? flags == value : (flags & value) == value;
+    };
+    
     const auto memProperties = physicalDevice.getMemoryProperties();
 
     for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
 
         const auto& memType = memProperties.memoryTypes[i];
-        if (memType.propertyFlags == flags) {
+        
+        if (compareFlags(memType.propertyFlags, flags, exactFlagsMatch)) {
 
             auto heapInfo = ll::VkHeapInfo {};
 

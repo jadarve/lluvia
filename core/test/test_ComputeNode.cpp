@@ -23,7 +23,7 @@ TEST_CASE("Construction", "[test_ComputeNode]") {
     REQUIRE(session != nullptr);
 
     const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
-    auto memory = session->createMemory(memoryFlags, 1024*4);
+    auto memory = session->createMemory(memoryFlags, 1024*4, false);
     REQUIRE(memory != nullptr);
 
     auto buffer = uniqueToShared(memory->createBuffer(32*sizeof(float)));

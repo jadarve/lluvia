@@ -38,7 +38,7 @@ public:
     vk::PhysicalDeviceMemoryProperties getPhysicalDeviceMemoryProperties() const;
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
-    std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize) const;
+    std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactMatch = true) const;
 
     std::shared_ptr<const ll::Program> createProgram(const std::string& spirvPath) const;
 
