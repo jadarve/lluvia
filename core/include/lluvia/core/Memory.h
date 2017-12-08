@@ -44,14 +44,14 @@ public:
     uint64_t getPageSize()  const noexcept;
     uint32_t getPageCount() const noexcept;
 
-    std::unique_ptr<ll::Buffer> createBuffer(const uint64_t size);
+    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);
 
 
 private:
 
     inline void configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo, const uint32_t pageIndex);
-    inline std::unique_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer, const ll::impl::MemoryAllocationTryInfo& tryInfo);
+    inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer, const ll::impl::MemoryAllocationTryInfo& tryInfo);
 
     vk::Device device;
 

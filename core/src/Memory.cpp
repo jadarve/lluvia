@@ -33,7 +33,7 @@ uint32_t Memory::getPageCount() const noexcept {
 }
 
 
-std::unique_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
+std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
     vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
                                       .setSharingMode(vk::SharingMode::eExclusive)
@@ -151,13 +151,13 @@ inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocation
 }
 
 
-inline std::unique_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer,
+inline std::shared_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer,
     const ll::impl::MemoryAllocationTryInfo & tryInfo) {
 
     try {
 
         // ll::Buffer can throw exception.
-        auto buffer = std::unique_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, this, tryInfo.allocInfo}};
+        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, this, tryInfo.allocInfo}};
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return buffer;
 

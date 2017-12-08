@@ -135,9 +135,9 @@ std::shared_ptr<const ll::Program> Session::createProgram(const std::string& spi
 }
 
 
-std::unique_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
+std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
 
-    return std::make_unique<ll::ComputeNode>(device, descriptor);
+    return std::make_shared<ll::ComputeNode>(device, descriptor);
 }
 
 

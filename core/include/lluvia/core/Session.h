@@ -42,7 +42,7 @@ public:
 
     std::shared_ptr<const ll::Program> createProgram(const std::string& spirvPath) const;
 
-    std::unique_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const;
+    std::shared_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const;
 
     std::shared_ptr<ll::CommandBuffer> createCommandBuffer() const;
 
