@@ -12,41 +12,69 @@
 #include <gtest/gtest.h>
 #include "lluvia/core.h"
 
-template<class T>
-auto uniqueToShared(std::unique_ptr<T>&& ptr) {
-    return static_cast<std::shared_ptr<T> >(std::move(ptr));
-}
 
-TEST_CASE("Construction", "[test_ComputeNode]") {
+// TEST_CASE("Construction", "test_ComputeNode") {
+
+//     auto session = ll::Session::create();
+//     REQUIRE(session != nullptr);
+
+//     const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+//     auto memory = session->createMemory(memoryFlags, 1024*4, false);
+//     REQUIRE(memory != nullptr);
+
+//     auto buffer = uniqueToShared(memory->createBuffer(32*sizeof(float)));
+//     REQUIRE(buffer != nullptr);
+
+//     auto program = session->createProgram("/home/jadarve/git/lluvia/glsl/comp.spv");
+//     REQUIRE(program != nullptr);
+
+//     auto nodeDescriptor = ll::ComputeNodeDescriptor()
+//                             .setProgram(program)
+//                             .setFunctionName("main")
+//                             .setLocalX(32)
+//                             .addBufferParameter();
+
+//     auto node = uniqueToShared(session->createComputeNode(nodeDescriptor));
+//     REQUIRE(node != nullptr);
+
+//     node->bind(0, buffer);
+//     session->run(node);
+// }
+
+
+TEST_CASE("BufferAssignment", "test_ComputeNode") {
+
+    using memflags = vk::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
-    auto memory = session->createMemory(memoryFlags, 1024*4, false);
-    REQUIRE(memory != nullptr);
+    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
+    auto hostMemory = session->createMemory(hostMemFlags, 1024*4, false);
+    REQUIRE(hostMemory != nullptr);
 
-    auto buffer = uniqueToShared(memory->createBuffer(32*sizeof(float)));
-    REQUIRE(buffer != nullptr);
+    const auto bufferSize = 32;
+    auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
 
     auto program = session->createProgram("/home/jadarve/git/lluvia/glsl/comp.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
                             .setProgram(program)
-                            .setFunctionName("main")
+                            .setFunctionName("assign")
                             .setLocalX(32)
                             .addBufferParameter();
 
-    auto node = uniqueToShared(session->createComputeNode(nodeDescriptor));
+    auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
 
     node->bind(0, buffer);
     session->run(node);
+
 }
 
 
-TEST_CASE("ConstructionCommandBuffer", "[test_ComputeNode]") {
+TEST_CASE("ConstructionCommandBuffer", "test_ComputeNode") {
 
     // auto session = ll::Session::create();
 

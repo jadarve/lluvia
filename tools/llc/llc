@@ -1,0 +1,70 @@
+#!/usr/bin/python
+
+'''
+    llc
+    ----------
+    Lluvia GLSL compiler wrapper
+
+    USAGE
+    ----------
+
+
+    :copyright: 2017, Juan David Adarve. See AUTHORS for more details.
+    :license: Apache 2, see LICENSE for more details.
+'''
+
+import argparse
+import os
+import subprocess
+
+
+def parseArguments():
+
+    parser = argparse.ArgumentParser(description='llc description')
+    parser.add_argument('src_file', type=str, help='source file.')
+    parser.add_argument('-o', '--output', type=str, help='path of the output file generated.')
+    parser.add_argument('-v', '--verbose', help='increases output verbosity.', action='store_true')
+    parser.add_argument('--glslc', type=str, help='path to glslc binary')
+
+    return parser.parse_args()
+
+
+def main():
+
+    args = parseArguments()
+
+    if args.verbose:
+        print('llc: source file: {0}'.format(args.src_file))
+        print('llc: output file: {0}'.format(args.output))
+        print('llc: glslc path:  {0}'.format(args.glslc))
+
+
+    # optional arguments for calling glslc
+    optArguments = list()
+
+    # process --output
+    if args.output is not None:
+
+        try:
+            folder = os.path.split(args.output)[0]
+            if args.verbose: print('llc: creating output folder: {0}'.format(folder))
+            os.makedirs(folder)
+        except OSError:
+            pass
+
+        optArguments.append('-o {0}'.format(args.output))
+
+    
+    glslCommand = 'glslc {0}' if args.glslc is None else args.glslc + ' {0}'
+    glslCommand = glslCommand.format('{0} {1}'.format(' '.join(optArguments), args.src_file))
+    
+    if args.verbose: print('llc: command: {0}'.format(glslCommand))
+
+    # run glslc
+    ret = subprocess.call(glslCommand, shell=True)
+
+    if args.verbose: print('llc: return code: {0}'.format(ret))
+
+
+if __name__ == '__main__':
+    main()

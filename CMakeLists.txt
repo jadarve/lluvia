@@ -48,5 +48,10 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_macro.cmake)
 # SOURCE FILES SETTINGS
 #################################################
 add_subdirectory(core)
+
+# creates the list of GLSL shaders to build. The list is stored in LL_GLSL_SRCS variable.
+add_subdirectory(glsl)
 add_subdirectory(tools)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/build_glsl.cmake)
+build_glsl ("Moni moni" "This is the output")
