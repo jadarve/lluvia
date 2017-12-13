@@ -1,10 +1,13 @@
 
+set (_TEST_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test/include)
+
 function(add_catchTest NAME SRCS)
     
     add_executable (${NAME} ${SRCS})
+    target_include_directories(${NAME} PRIVATE ${_TEST_INCLUDE_DIR})
     target_link_libraries (${NAME} Catch vulkan stdc++ ${ARGV2})
     add_test (NAME ${NAME}  COMMAND ${NAME})
-    
+
 endfunction()
 
 
@@ -21,6 +24,10 @@ add_library (lluvia-core SHARED
 )
 
 target_link_libraries (lluvia-core vulkan)
+
+
+# configure
+configure_file (${_TEST_INCLUDE_DIR}/coreTestConfig.h.in ${_TEST_INCLUDE_DIR}/coreTestConfig.h)
 
 add_catchTest (test_VulkanDriver             test/test_VulkanDriver.cpp)
 add_catchTest (test_MemoryFreeSpaceManager   test/test_MemoryFreeSpaceManager.cpp    lluvia-core)

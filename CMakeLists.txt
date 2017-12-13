@@ -37,6 +37,10 @@ link_directories($ENV{VULKAN_SDK}/lib)
 set(LIBRARY_OUTPUT_PATH   "lib")
 
 
+# TODO: Set this type of variables together in a code block
+set (LL_SHADER_OUTPUT_DIR ${CMAKE_BINARY_DIR}/glsl)
+
+
 #################################################
 # INCLUDE SETTINGS
 #################################################

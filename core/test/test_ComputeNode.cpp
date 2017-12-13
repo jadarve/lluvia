@@ -8,6 +8,8 @@
 #define CATCH_CONFIG_MAIN
 #include "catch/catch.hpp"
 
+#include "coreTestConfig.h"
+
 #include <iostream>
 #include <gtest/gtest.h>
 #include "lluvia/core.h"
@@ -56,7 +58,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     const auto bufferSize = 32;
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
 
-    auto program = session->createProgram("/home/jadarve/git/lluvia/glsl/comp.spv");
+    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
