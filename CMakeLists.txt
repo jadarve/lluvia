@@ -53,5 +53,7 @@ add_subdirectory(core)
 add_subdirectory(glsl)
 add_subdirectory(tools)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/build_glsl.cmake)
-build_glsl ("Moni moni" "This is the output")
+
+# creates the shaders custom target
+include (${CMAKE_CURRENT_SOURCE_DIR}/cmake/shaders.cmake)
+
