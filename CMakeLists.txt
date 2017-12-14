@@ -14,14 +14,7 @@ set (CMAKE_CXX_FLAGS            "-std=c++14 -O0 -Wall")
 # CATCH SETTINGS
 #################################################
 enable_testing()
-
-file(DOWNLOAD
-     "https://github.com/catchorg/Catch2/releases/download/v2.0.1/catch.hpp"
-     "${CMAKE_BINARY_DIR}/catch/catch.hpp")
-
-set(CATCH_INCLUDE_DIR ${CMAKE_BINARY_DIR})
-add_library(Catch INTERFACE)
-target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Catch.cmake)
 
 
 #################################################
