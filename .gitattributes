@@ -1,0 +1,2 @@
+# set compute shader files as GLSL
+*.comp linguist-language=GLSL
