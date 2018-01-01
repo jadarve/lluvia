@@ -63,7 +63,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
                             .setProgram(program)
-                            .setFunctionName("assign")
+                            .setFunctionName("main")
                             .setLocalX(32)
                             .addBufferParameter();
 
