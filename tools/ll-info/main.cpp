@@ -9,6 +9,29 @@
 
 using namespace std;
 
+
+std::string getLayerProperties() {
+
+    auto buffer = std::ostringstream {};
+    buffer << "************************************************************\n";
+    buffer << "                   LAYER PROPERTIES\n";
+    buffer << "************************************************************\n";
+
+    auto layerProperties = ll::Session::getVulkanInstanceLayerProperties();
+    
+
+    for (const auto& layer : layerProperties) {
+        
+        buffer << "Name:                   " << layer.layerName << "\n";
+        buffer << "Description:            " << layer.description << "\n";
+        buffer << "Spec version:           " << layer.specVersion << "\n";
+        buffer << "implementation version: " << layer.implementationVersion << "\n\n";
+    }
+
+
+    return buffer.str();
+}
+
 std::string getPhysicalDevicePropertiesString(const vk::PhysicalDeviceMemoryProperties& memProperties) {
 
     auto compareFlagBit = [](const auto& flag, const auto& value) {
@@ -20,33 +43,33 @@ std::string getPhysicalDevicePropertiesString(const vk::PhysicalDeviceMemoryProp
     buffer << "************************************************************\n";
     buffer << "           PHYSICAL DEVICE MEMORY PROPERTIES\n";
     buffer << "************************************************************\n";
-    buffer << "Heap count:\t\t" << memProperties.memoryHeapCount << "\n";
-    buffer << "Memory type count:\t" << memProperties.memoryTypeCount << "\n\n";
+    buffer << "Heap count:          " << memProperties.memoryHeapCount << "\n";
+    buffer << "Memory type count:   " << memProperties.memoryTypeCount << "\n\n";
 
 
-    for(int i = 0; i < memProperties.memoryHeapCount; i ++) {
+    for(auto i = 0u; i < memProperties.memoryHeapCount; i ++) {
         vk::MemoryHeap heap = memProperties.memoryHeaps[i];
 
         buffer << "Heap: " << i << "\n";
-        buffer << "\tSize:\t" << heap.size << "\n";
-        buffer << "\tFlags:" << "\n";
-        buffer << "\t\tDevice local:\t" << ((heap.flags & vk::MemoryHeapFlagBits::eDeviceLocal) == vk::MemoryHeapFlagBits::eDeviceLocal) << "\n";
-        buffer << "\t\tMulti instance:\t" << ((heap.flags & vk::MemoryHeapFlagBits::eMultiInstanceKHX) == vk::MemoryHeapFlagBits::eMultiInstanceKHX) << "\n";
+        buffer << "    Size:    " << heap.size << "\n";
+        buffer << "    Flags:" << "\n";
+        buffer << "        Device local:    " << ((heap.flags & vk::MemoryHeapFlagBits::eDeviceLocal) == vk::MemoryHeapFlagBits::eDeviceLocal) << "\n";
+        buffer << "        Multi instance:  " << ((heap.flags & vk::MemoryHeapFlagBits::eMultiInstanceKHX) == vk::MemoryHeapFlagBits::eMultiInstanceKHX) << "\n";
         buffer << "\n";
     }
 
-    for(int i = 0; i <  memProperties.memoryTypeCount; i ++) {
+    for(auto i = 0u; i <  memProperties.memoryTypeCount; i ++) {
         vk::MemoryType type = memProperties.memoryTypes[i];
         vk::MemoryPropertyFlags flags = type.propertyFlags;
 
         buffer << "Type: " << i << "\n";
-        buffer << "\tHeap index: " << type.heapIndex << "\n";
-        buffer << "\tFlags" << "\n";
-        buffer << "\t\tDevice local:\t\t" << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eDeviceLocal) << "\n";
-        buffer << "\t\tHost visible:\t\t" << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostVisible) << "\n";
-        buffer << "\t\tHost coherent:\t\t" << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCoherent) << "\n";
-        buffer << "\t\tHost cached:\t\t" << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCached) << "\n";
-        buffer << "\t\tLazily allocated:\t" << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eLazilyAllocated) << "\n";
+        buffer << "    Heap index: " << type.heapIndex << "\n";
+        buffer << "    Flags" << "\n";
+        buffer << "        Device local:      " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eDeviceLocal) << "\n";
+        buffer << "        Host visible:      " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostVisible) << "\n";
+        buffer << "        Host coherent:     " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCoherent) << "\n";
+        buffer << "        Host cached:       " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCached) << "\n";
+        buffer << "        Lazily allocated:  " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eLazilyAllocated) << "\n";
         buffer << "\n";
     }
 
@@ -57,6 +80,7 @@ std::string getPhysicalDevicePropertiesString(const vk::PhysicalDeviceMemoryProp
 int main() {
 
     auto session = ll::Session::create();
+    cout << getLayerProperties();
     cout << getPhysicalDevicePropertiesString(session->getPhysicalDeviceMemoryProperties());
 
     return EXIT_SUCCESS;
