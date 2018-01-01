@@ -94,7 +94,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
     vk::MemoryAllocateInfo allocateInfo = vk::MemoryAllocateInfo()
                                           .setAllocationSize(newPageSize)
-                                          .setMemoryTypeIndex(heapInfo.heapIndex);
+                                          .setMemoryTypeIndex(heapInfo.typeIndex);
 
 
     // Safe to not try-catch the creation of manager and memory.

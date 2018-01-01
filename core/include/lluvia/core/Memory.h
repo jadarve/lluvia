@@ -17,7 +17,7 @@ class Buffer;
 
 
 struct VkHeapInfo {
-    uint32_t heapIndex;
+    uint32_t typeIndex;
     uint64_t size;
     std::vector<uint32_t> familyQueueIndices;
 };

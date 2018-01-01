@@ -21,6 +21,19 @@ std::unique_ptr<ll::Session> Session::create() {
     return std::unique_ptr<Session>{new Session()};
 }
 
+
+std::vector<vk::LayerProperties> Session::getVulkanInstanceLayerProperties() {
+    
+    return vk::enumerateInstanceLayerProperties();
+}
+
+
+std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties() {
+    
+    return vk::enumerateInstanceExtensionProperties();
+}
+
+
 Session::Session() {
 
     auto instanceCreated = false;
@@ -51,6 +64,7 @@ Session::Session() {
 
 Session::~Session() {
 
+    device.destroyCommandPool(commandPool);
     device.destroy();
     instance.destroy();
 }
@@ -101,7 +115,7 @@ std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
 
             auto heapInfo = ll::VkHeapInfo {};
 
-            heapInfo.heapIndex          = memType.heapIndex;
+            heapInfo.typeIndex          = i;
             heapInfo.size               = memProperties.memoryHeaps[memType.heapIndex].size;
             heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
 
@@ -182,7 +196,7 @@ void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
 
 
 bool Session::initInstance() {
-
+    
     auto appInfo = vk::ApplicationInfo()
                    .setPApplicationName("lluvia")
                    .setApplicationVersion(0)

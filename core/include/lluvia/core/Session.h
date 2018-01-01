@@ -25,6 +25,9 @@ class Program;
 class Session {
 
 public:
+    static std::vector<vk::LayerProperties>     getVulkanInstanceLayerProperties();
+    static std::vector<vk::ExtensionProperties> getVulkanExtensionProperties();
+    
     static std::unique_ptr<ll::Session> create();
 
     Session(const Session& session)              = delete;
@@ -34,7 +37,7 @@ public:
 
     Session& operator = (const Session& session) = delete;
     Session& operator = (Session&& session)      = delete;
-
+    
     vk::PhysicalDeviceMemoryProperties getPhysicalDeviceMemoryProperties() const;
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
