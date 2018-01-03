@@ -135,6 +135,22 @@ void Memory::releaseBuffer(const ll::Buffer& buffer) {
 }
 
 
+void* Memory::mapBuffer(const ll::Buffer& buffer) {
+
+    const auto page   = buffer.allocInfo.page;
+    const auto offset = buffer.allocInfo.offset + buffer.allocInfo.leftPadding;
+    const auto size   = buffer.allocInfo.size;
+
+    return device.mapMemory(memoryPages[page], offset, size);
+}
+
+void Memory::unmapBuffer(const ll::Buffer& buffer) {
+
+    const auto page = buffer.allocInfo.page;
+    device.unmapMemory(memoryPages[page]);
+}
+
+
 inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo,
                                     const uint32_t pageIndex) {
 

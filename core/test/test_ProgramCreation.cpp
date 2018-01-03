@@ -8,6 +8,8 @@
 #define CATCH_CONFIG_MAIN
 #include "catch/catch.hpp"
 
+#include "coreTestConfig.h"
+
 #include <iostream>
 #include <gtest/gtest.h>
 #include "lluvia/core.h"
@@ -28,7 +30,7 @@ TEST_CASE("DefaultParameters", "[test_ProgramCreation]") {
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    auto program = session->createProgram("../glsl/comp.spv");
+    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
     REQUIRE(program != nullptr);
 }
 

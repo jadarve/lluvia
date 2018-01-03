@@ -55,7 +55,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto hostMemory = session->createMemory(hostMemFlags, 1024*4, false);
     REQUIRE(hostMemory != nullptr);
 
-    const auto bufferSize = 32;
+    const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
 
     auto program = session->createProgram(SHADER_PATH + "/assign.spv");
@@ -64,7 +64,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
                             .setProgram(program)
                             .setFunctionName("main")
-                            .setLocalX(32)
+                            .setLocalX(bufferSize)
                             .addBufferParameter();
 
     auto node = session->createComputeNode(nodeDescriptor);
@@ -73,6 +73,13 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     node->bind(0, buffer);
     session->run(node);
 
+    const auto* bufferMap = static_cast<const float*>(hostMemory->mapBuffer(*buffer));
+    for (auto i = 0u; i < bufferSize; ++i) {
+
+        std::cout << i << ": " << bufferMap[i] << std::endl;;
+    }
+
+    hostMemory->unmapBuffer(*buffer);
 }
 
 

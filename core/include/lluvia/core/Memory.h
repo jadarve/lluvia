@@ -46,6 +46,8 @@ public:
 
     std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);
+    void* mapBuffer(const ll::Buffer& buffer);
+    void unmapBuffer(const ll::Buffer& buffer);
 
 
 private:
