@@ -9,7 +9,6 @@
 #include "catch/catch.hpp"
 
 #include <iostream>
-#include <gtest/gtest.h>
 #include "lluvia/core.h"
 
 TEST_CASE("DefaultParameters", "[SessionCreationTest]") {

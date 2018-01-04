@@ -38,18 +38,31 @@ public:
     Session& operator = (const Session& session) = delete;
     Session& operator = (Session&& session)      = delete;
     
+    ///////////////////////////////////////////////////////
+    // Memory Management
+    ///////////////////////////////////////////////////////
     vk::PhysicalDeviceMemoryProperties getPhysicalDeviceMemoryProperties() const;
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
     std::unique_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch = true) const;
 
+    ///////////////////////////////////////////////////////
+    // Memory Resources
+    ///////////////////////////////////////////////////////
+    std::shared_ptr<ll::CommandBuffer> createCommandBuffer() const;
+
+    ///////////////////////////////////////////////////////
+    // Compute Pipeline
+    ///////////////////////////////////////////////////////
     std::shared_ptr<const ll::Program> createProgram(const std::string& spirvPath) const;
 
     std::shared_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const;
 
-    std::shared_ptr<ll::CommandBuffer> createCommandBuffer() const;
-
+    ///////////////////////////////////////////////////////
+    // Operations
+    ///////////////////////////////////////////////////////
     void run(const std::shared_ptr<ll::ComputeNode> node);
+    void copyBuffer(const ll::Buffer& src, const ll::Buffer& dst);
 
 private:
     // Session objects should be created through factory methods
@@ -60,6 +73,8 @@ private:
     bool initQueue();
     bool initCommandPool();
     uint32_t getComputeFamilyQueueIndex();
+
+    std::tuple<vk::CommandPool, vk::CommandBuffer> createOneTimeSubmitCommandBuffer();
 
     vk::Instance         instance;
     vk::PhysicalDevice   physicalDevice;

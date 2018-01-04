@@ -9,6 +9,7 @@ namespace ll {
 
 class ComputeNode;
 class Memory;
+class Session;
 
 class Buffer {
 
@@ -35,6 +36,7 @@ private:
 
 friend class ll::Memory;
 friend class ll::ComputeNode;
+friend class ll::Session;
 };
 
 

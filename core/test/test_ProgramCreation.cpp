@@ -11,7 +11,6 @@
 #include "coreTestConfig.h"
 
 #include <iostream>
-#include <gtest/gtest.h>
 #include "lluvia/core.h"
 
 
