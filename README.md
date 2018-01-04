@@ -19,6 +19,12 @@ make
 make test
 ```
 
+For debugging failed tests, you can enable the [standard validation layers](https://vulkan.lunarg.com/doc/view/1.0.65.0/windows/layers.html) provided by the LunarG SDK.
+
+```
+export VK_INSTANCE_LAYERS=VK_LAYER_LUNARG_standard_validation
+```
+
 # Generate Eclipse CDT project
 
 ```
