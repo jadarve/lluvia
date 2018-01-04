@@ -35,10 +35,14 @@ uint32_t Memory::getPageCount() const noexcept {
 
 std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
+    const auto usageFlags = vk::BufferUsageFlagBits::eStorageBuffer
+                          | vk::BufferUsageFlagBits::eTransferSrc
+                          | vk::BufferUsageFlagBits::eTransferDst;
+
     vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
                                       .setSharingMode(vk::SharingMode::eExclusive)
                                       .setSize(size)
-                                      .setUsage(vk::BufferUsageFlagBits::eStorageBuffer)
+                                      .setUsage(usageFlags)
                                       .setQueueFamilyIndexCount(heapInfo.familyQueueIndices.size())
                                       .setPQueueFamilyIndices(heapInfo.familyQueueIndices.data());
 
