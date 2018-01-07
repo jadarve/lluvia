@@ -117,6 +117,7 @@ std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
 
             heapInfo.typeIndex          = i;
             heapInfo.size               = memProperties.memoryHeaps[memType.heapIndex].size;
+            heapInfo.flags              = memType.propertyFlags;
             heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
 
             // can throw exception. Invariants of Session are kept.

@@ -25,12 +25,15 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
         
     auto hostMemory = session->createMemory(hostMemFlags, bufferSize, false);
     REQUIRE(hostMemory != nullptr);
+    REQUIRE(hostMemory->isMappable() == true);
 
     auto hostBuffer = hostMemory->createBuffer(bufferSize);
     REQUIRE(hostBuffer != nullptr);
+    REQUIRE(hostBuffer->isMappable() == true);
 
     auto deviceMemory = session->createMemory(deviceMemFlags, bufferSize, false);
     REQUIRE(deviceMemory != nullptr);
+    // deviceMemory can be mappable on platforms with shared memory between host and device.
 
     auto deviceBuffer = deviceMemory->createBuffer(bufferSize);
     REQUIRE(deviceBuffer != nullptr);

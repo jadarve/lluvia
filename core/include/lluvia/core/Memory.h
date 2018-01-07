@@ -19,6 +19,7 @@ class Buffer;
 struct VkHeapInfo {
     uint32_t typeIndex;
     uint64_t size;
+    vk::MemoryPropertyFlags flags;
     std::vector<uint32_t> familyQueueIndices;
 };
 
@@ -43,6 +44,8 @@ public:
 
     uint64_t getPageSize()  const noexcept;
     uint32_t getPageCount() const noexcept;
+
+    bool isMappable() const;
 
     std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);

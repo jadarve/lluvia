@@ -25,4 +25,9 @@ uint64_t Buffer::getSize() const noexcept {
 }
 
 
+bool Buffer::isMappable() const {
+    return memory->isMappable();
+}
+
+
 } // namespace ll

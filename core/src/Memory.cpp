@@ -28,9 +28,16 @@ uint64_t Memory::getPageSize() const noexcept {
     return pageSize;
 }
 
+
 uint32_t Memory::getPageCount() const noexcept {
     return static_cast<uint32_t>(memoryPages.size());
 }
+
+
+bool Memory::isMappable() const {
+    return (heapInfo.flags & vk::MemoryPropertyFlagBits::eHostVisible) == vk::MemoryPropertyFlagBits::eHostVisible;
+}
+
 
 
 std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {

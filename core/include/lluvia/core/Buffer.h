@@ -25,6 +25,8 @@ public:
 
     uint64_t getSize() const noexcept;
 
+    bool isMappable() const;
+
 private:
     Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
             const ll::MemoryAllocationInfo& allocInfo);
