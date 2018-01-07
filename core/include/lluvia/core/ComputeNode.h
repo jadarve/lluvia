@@ -32,7 +32,7 @@ public:
 
     void bind(int index, const std::shared_ptr<ll::Buffer> buffer);
 
-    void record(vk::CommandBuffer& commandBufer) const;
+    void record(const vk::CommandBuffer& commandBufer) const;
 
 private:
     void init(const ll::ComputeNodeDescriptor& descriptor);

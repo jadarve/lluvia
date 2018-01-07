@@ -74,8 +74,6 @@ private:
     bool initCommandPool();
     uint32_t getComputeFamilyQueueIndex();
 
-    std::tuple<vk::CommandPool, vk::CommandBuffer> createOneTimeSubmitCommandBuffer();
-
     vk::Instance         instance;
     vk::PhysicalDevice   physicalDevice;
     vk::Device           device;

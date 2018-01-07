@@ -7,6 +7,8 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
+#include "lluvia/core/impl/OneTimeSubmitCommandBuffer.h"
+
 #include <algorithm>
 #include <exception>
 #include <fstream>
@@ -161,30 +163,13 @@ std::shared_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
     return std::make_shared<ll::CommandBuffer>(device, commandPool);
 }
 
+
 void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
 
-    auto commandPool = vk::CommandPool {};
-    auto commandBuffer = vk::CommandBuffer {};
-    std::tie(commandPool, commandBuffer) = createOneTimeSubmitCommandBuffer();
+    impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
 
-    // record command buffer
-    vk::CommandBufferBeginInfo beginInfo = vk::CommandBufferBeginInfo()
-        .setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
-
-    commandBuffer.begin(beginInfo);
-    node->record(commandBuffer);
-    commandBuffer.end();
-
-    // Here I can set semaphores to wait for and 
-    // semaphores to trigger once execution is completed.
-    vk::SubmitInfo submitInfo = vk::SubmitInfo()
-        .setCommandBufferCount(1)
-        .setPCommandBuffers(&commandBuffer);
-
-    queue.submit(1, &submitInfo, nullptr);
-    queue.waitIdle();
-
-    device.destroyCommandPool(commandPool, nullptr);
+    node->record(runner.getCommandBuffer());
+    runner.runAndWait(queue);
 }
 
 
@@ -192,35 +177,17 @@ void Session::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
 
     assert(dst.getSize() >= src.getSize());
 
-    auto commandPool = vk::CommandPool {};
-    auto commandBuffer = vk::CommandBuffer {};
-    std::tie(commandPool, commandBuffer) = createOneTimeSubmitCommandBuffer();
-
-    // record command buffer
-    vk::CommandBufferBeginInfo beginInfo = vk::CommandBufferBeginInfo()
-        .setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+    impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
 
     auto copyInfo = vk::BufferCopy()
         .setSrcOffset(0)
         .setDstOffset(0)
         .setSize(src.getSize());
 
-    commandBuffer.begin(beginInfo);
-    commandBuffer.copyBuffer(src.vkBuffer, dst.vkBuffer, 1, &copyInfo);
-    commandBuffer.end();
+    runner.getCommandBuffer().copyBuffer(src.vkBuffer, dst.vkBuffer, 1, &copyInfo);
 
-    // Here I can set semaphores to wait for and 
-    // semaphores to trigger once execution is completed.
-    vk::SubmitInfo submitInfo = vk::SubmitInfo()
-        .setCommandBufferCount(1)
-        .setPCommandBuffers(&commandBuffer);
-
-    queue.submit(1, &submitInfo, nullptr);
-    queue.waitIdle();
-
-    device.destroyCommandPool(commandPool, nullptr);
+    runner.runAndWait(queue);
 }
-
 
 bool Session::initInstance() {
     
@@ -304,22 +271,5 @@ uint32_t Session::getComputeFamilyQueueIndex() {
     throw std::system_error(std::error_code(), "No compute capable queue family found.");
 }
 
-
-std::tuple<vk::CommandPool, vk::CommandBuffer> Session::createOneTimeSubmitCommandBuffer() {
-
-    vk::CommandPoolCreateInfo createInfo = vk::CommandPoolCreateInfo()
-        .setQueueFamilyIndex(computeQueueFamilyIndex);
-
-    vk::CommandPool commandPool = device.createCommandPool(createInfo);
-
-    vk::CommandBufferAllocateInfo allocInfo = vk::CommandBufferAllocateInfo()
-        .setCommandPool(commandPool)
-        .setCommandBufferCount(1);
-
-    vector<vk::CommandBuffer> cmdBuffers = device.allocateCommandBuffers(allocInfo);
-    vk::CommandBuffer cmdBuffer = cmdBuffers[0];
-
-    return std::make_tuple(commandPool, cmdBuffer);
-}
 
 } // namespace ll

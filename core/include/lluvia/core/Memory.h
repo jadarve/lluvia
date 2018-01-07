@@ -45,7 +45,7 @@ public:
     uint64_t getPageSize()  const noexcept;
     uint32_t getPageCount() const noexcept;
 
-    bool isMappable() const;
+    bool isMappable() const noexcept;
 
     std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size);
     void releaseBuffer(const ll::Buffer& buffer);

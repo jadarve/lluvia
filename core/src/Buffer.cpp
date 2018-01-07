@@ -25,7 +25,7 @@ uint64_t Buffer::getSize() const noexcept {
 }
 
 
-bool Buffer::isMappable() const {
+bool Buffer::isMappable() const noexcept {
     return memory->isMappable();
 }
 

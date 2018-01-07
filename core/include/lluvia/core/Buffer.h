@@ -25,7 +25,7 @@ public:
 
     uint64_t getSize() const noexcept;
 
-    bool isMappable() const;
+    bool isMappable() const noexcept;
 
 private:
     Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
@@ -34,6 +34,12 @@ private:
     vk::Buffer               vkBuffer;
 
     ll::MemoryAllocationInfo allocInfo;
+
+    // Pointer to the Memory object this buffer was created from.
+    // This pointer is guaranteed to reference a valid object since
+    // construction time.
+    // This buffer does not own the memory object and it is not
+    // deleted in the destructor.
     ll::Memory*              memory;
 
 friend class ll::Memory;

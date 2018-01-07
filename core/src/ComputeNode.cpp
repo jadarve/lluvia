@@ -49,7 +49,7 @@ void ComputeNode::bind(int index, const std::shared_ptr<ll::Buffer> buffer) {
 }
 
 
-void ComputeNode::record(vk::CommandBuffer& commandBufer) const {
+void ComputeNode::record(const vk::CommandBuffer& commandBufer) const {
 
     commandBufer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
     commandBufer.bindDescriptorSets(vk::PipelineBindPoint::eCompute, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);

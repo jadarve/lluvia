@@ -18,6 +18,7 @@ add_library (lluvia-core SHARED
     src/ComputeNode.cpp
     src/ComputeNodeDescriptor.cpp
     src/impl/MemoryFreeSpaceManager.cpp
+    src/impl/OneTimeSubmitCommandBuffer.cpp
     src/Memory.cpp
     src/Program.cpp
     src/Session.cpp

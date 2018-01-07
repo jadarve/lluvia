@@ -34,7 +34,7 @@ uint32_t Memory::getPageCount() const noexcept {
 }
 
 
-bool Memory::isMappable() const {
+bool Memory::isMappable() const noexcept {
     return (heapInfo.flags & vk::MemoryPropertyFlagBits::eHostVisible) == vk::MemoryPropertyFlagBits::eHostVisible;
 }
 
