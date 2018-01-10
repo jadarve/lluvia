@@ -24,7 +24,10 @@ add_library (lluvia-core SHARED
     src/Session.cpp
 )
 
-target_link_libraries (lluvia-core vulkan)
+target_link_libraries (lluvia-core
+    json
+    vulkan
+)
 
 
 # configure
