@@ -14,6 +14,7 @@ namespace ll {
 
 // forward declarations
 class Buffer;
+class Visitor;
 
 
 struct VkHeapInfo {
@@ -42,6 +43,7 @@ public:
     Memory& operator = (const Memory& memory) = delete;
     Memory& operator = (Memory&& memory)      = delete;
 
+    vk::MemoryPropertyFlags getMemoryPropertyFlags() const noexcept;
     uint64_t getPageSize()  const noexcept;
     uint32_t getPageCount() const noexcept;
 
@@ -52,11 +54,12 @@ public:
     void* mapBuffer(const ll::Buffer& buffer);
     void unmapBuffer(const ll::Buffer& buffer);
 
+    void accept(ll::Visitor* visitor);
 
 private:
 
     inline void configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo, const uint32_t pageIndex);
-    inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer, const ll::impl::MemoryAllocationTryInfo& tryInfo);
+    inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags, const ll::impl::MemoryAllocationTryInfo& tryInfo);
 
     vk::Device device;
 

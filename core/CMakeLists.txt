@@ -11,17 +11,23 @@ function(add_catchTest NAME SRCS)
 endfunction()
 
 
-include_directories (include)
+include_directories (
+    include
+)
+
 add_library (lluvia-core SHARED
     src/Buffer.cpp
     src/CommandBuffer.cpp
     src/ComputeNode.cpp
     src/ComputeNodeDescriptor.cpp
+    src/ComputeGraph.cpp
+    src/ComputeGraphFileWriter.cpp
     src/impl/MemoryFreeSpaceManager.cpp
     src/impl/OneTimeSubmitCommandBuffer.cpp
     src/Memory.cpp
     src/Program.cpp
     src/Session.cpp
+    src/utils.cpp
 )
 
 target_link_libraries (lluvia-core
@@ -40,3 +46,4 @@ add_catchTest (test_BufferCreation           test/test_BufferCreation.cpp       
 add_catchTest (test_BufferCopy               test/test_BufferCopy.cpp                lluvia-core)
 add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp           lluvia-core)
 add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp               lluvia-core)
+add_catchTest (test_ComputeGraphWriter       test/test_ComputeGraphWriter.cpp        lluvia-core)

@@ -10,6 +10,7 @@ namespace ll {
 class ComputeNode;
 class Memory;
 class Session;
+class Visitor;
 
 class Buffer {
 
@@ -25,13 +26,18 @@ public:
 
     uint64_t getSize() const noexcept;
 
+    vk::BufferUsageFlags getUsageFlags() const noexcept;
+
     bool isMappable() const noexcept;
 
+    void accept(ll::Visitor* visitor);
+
 private:
-    Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
-            const ll::MemoryAllocationInfo& allocInfo);
+    Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
+            ll::Memory* memory, const ll::MemoryAllocationInfo& allocInfo);
 
     vk::Buffer               vkBuffer;
+    vk::BufferUsageFlags     vkUsageFlags;
 
     ll::MemoryAllocationInfo allocInfo;
 

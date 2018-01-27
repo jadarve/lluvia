@@ -7,8 +7,8 @@ project(lluvia)
 
 # variable to control de verbosity of the custom functions
 set (LL_CMAKE_VERBOSE TRUE)
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
-include (download_file)
+set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include (Modules/download_file)
 
 
 #################################################
@@ -24,13 +24,13 @@ set (CMAKE_CXX_FLAGS            "-std=c++14 -O0 -Wall")
 # CATCH SETTINGS
 #################################################
 enable_testing()
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/thirdparty/Catch.cmake)
+include(cmake/thirdparty/Catch.cmake)
 
 
 #################################################
 # THIRD PARTY SETTINGS
 #################################################
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/thirdparty/JSON.cmake)
+include(cmake/thirdparty/JSON.cmake)
 
 #################################################
 # VULKAN SETTINGS
@@ -60,5 +60,5 @@ add_subdirectory(tools)
 
 
 # creates the shaders custom target
-include (${CMAKE_CURRENT_SOURCE_DIR}/cmake/shaders.cmake)
+include (cmake/shaders.cmake)
 

@@ -101,7 +101,7 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const {
+std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const {
     
     auto compareFlags = [](const auto& flags, const auto& value, bool exactFlagsMatch) {
         return exactFlagsMatch? flags == value : (flags & value) == value;
@@ -123,7 +123,7 @@ std::unique_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
             heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
 
             // can throw exception. Invariants of Session are kept.
-            return std::make_unique<ll::Memory>(device, heapInfo, pageSize);
+            return std::make_shared<ll::Memory>(device, heapInfo, pageSize);
         }
     }
 

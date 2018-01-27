@@ -24,6 +24,10 @@ Memory::~Memory() {
 }
 
 
+vk::MemoryPropertyFlags Memory::getMemoryPropertyFlags() const noexcept {
+    return heapInfo.flags;
+}
+
 uint64_t Memory::getPageSize() const noexcept {
     return pageSize;
 }
@@ -37,7 +41,6 @@ uint32_t Memory::getPageCount() const noexcept {
 bool Memory::isMappable() const noexcept {
     return (heapInfo.flags & vk::MemoryPropertyFlagBits::eHostVisible) == vk::MemoryPropertyFlagBits::eHostVisible;
 }
-
 
 
 std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
@@ -75,7 +78,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
                 // build a ll::Buffer object and commit the allocation if the
                 // object construction is successful.
-                return buildBuffer(vkBuffer, tryInfo);
+                return buildBuffer(vkBuffer, usageFlags, tryInfo);
             }
         }
 
@@ -127,7 +130,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
     // build a ll::Buffer object and commit the allocation if the
     // object construction is successful.
-    return buildBuffer(vkBuffer, tryInfo);
+    return buildBuffer(vkBuffer, usageFlags, tryInfo);
 }
 
 
@@ -155,10 +158,17 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
     return device.mapMemory(memoryPages[page], offset, size);
 }
 
+
 void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
     const auto page = buffer.allocInfo.page;
     device.unmapMemory(memoryPages[page]);
+}
+
+
+void Memory::accept(ll::Visitor* visitor) {
+    assert(visitor != nullptr);
+    // nothing to visit. Reference to the buffer objects are not stored in this class.
 }
 
 
@@ -179,12 +189,13 @@ inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocation
 
 
 inline std::shared_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer,
+    const vk::BufferUsageFlags vkUsageFlags,
     const ll::impl::MemoryAllocationTryInfo & tryInfo) {
 
     try {
 
         // ll::Buffer can throw exception.
-        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, this, tryInfo.allocInfo}};
+        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, vkUsageFlags, this, tryInfo.allocInfo}};
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return buffer;
 

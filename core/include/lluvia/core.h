@@ -4,11 +4,14 @@
 
 #include "core/Buffer.h"
 #include "core/CommandBuffer.h"
+#include "core/ComputeGraph.h"
+#include "core/ComputeGraphFileWriter.h"
 #include "core/ComputeNode.h"
 #include "core/ComputeNodeDescriptor.h"
 #include "core/Memory.h"
 #include "core/MemoryAllocationInfo.h"
 #include "core/Program.h"
 #include "core/Session.h"
+#include "core/Visitor.h"
 
 #endif // LLUVIA_CORE_H_

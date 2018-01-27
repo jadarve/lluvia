@@ -5,9 +5,10 @@
 namespace ll {
 
 
-Buffer::Buffer( const vk::Buffer vkBuffer, ll::Memory* memory,
-                const ll::MemoryAllocationInfo& allocInfo):
+Buffer::Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
+                ll::Memory* memory, const ll::MemoryAllocationInfo& allocInfo):
     vkBuffer         {vkBuffer},
+    vkUsageFlags     {vkUsageFlags},
     allocInfo        (allocInfo),
     memory           {memory} {
 
@@ -25,9 +26,18 @@ uint64_t Buffer::getSize() const noexcept {
 }
 
 
+vk::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
+    return vkUsageFlags;
+}
+
+
 bool Buffer::isMappable() const noexcept {
     return memory->isMappable();
 }
 
+
+void Buffer::accept(ll::Visitor *visitor) {
+    assert(visitor != nullptr);
+}
 
 } // namespace ll
