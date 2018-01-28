@@ -26,8 +26,9 @@ public:
     MemoryFreeSpaceManager()                                = default;
     MemoryFreeSpaceManager(const MemoryFreeSpaceManager& m) = default;
     MemoryFreeSpaceManager(MemoryFreeSpaceManager&& m)      = default;
-
     MemoryFreeSpaceManager(const uint64_t size);
+
+    ~MemoryFreeSpaceManager()                               = default;
 
     MemoryFreeSpaceManager& operator = (const MemoryFreeSpaceManager& heap) = default;
     MemoryFreeSpaceManager& operator = (MemoryFreeSpaceManager&& heap)      = default;

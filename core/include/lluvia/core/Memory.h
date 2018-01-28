@@ -29,7 +29,7 @@ struct VkHeapInfo {
  * \brief Class to manage a particular type of memory. Memory pages of the
  * given type are allocated and managed.
  */
-class Memory {
+class Memory : public std::enable_shared_from_this<ll::Memory> {
 
 public:
     Memory()                     = delete;

@@ -6,7 +6,7 @@ namespace ll {
 
 
 Buffer::Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-                ll::Memory* memory, const ll::MemoryAllocationInfo& allocInfo):
+                std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo):
     vkBuffer         {vkBuffer},
     vkUsageFlags     {vkUsageFlags},
     allocInfo        (allocInfo),

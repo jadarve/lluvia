@@ -28,6 +28,7 @@ vk::MemoryPropertyFlags Memory::getMemoryPropertyFlags() const noexcept {
     return heapInfo.flags;
 }
 
+
 uint64_t Memory::getPageSize() const noexcept {
     return pageSize;
 }
@@ -69,7 +70,8 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
     for (auto& manager : pageManagers) {
 
         if (manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
-
+            tryInfo.allocInfo.page = pageIndex;
+            
             // reserve space in the memory manager to insert any new free interval
             if (manager.reserveManagerSpace()) {
 
@@ -126,6 +128,8 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
     // this allocation try is guaranteed to work as there is enough
     // free space in the page to fit memRequirements.size.
     pageManagers[pageIndex].tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo);
+    tryInfo.allocInfo.page = pageIndex;
+    
     configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
 
     // build a ll::Buffer object and commit the allocation if the
@@ -195,7 +199,7 @@ inline std::shared_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer
     try {
 
         // ll::Buffer can throw exception.
-        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, vkUsageFlags, this, tryInfo.allocInfo}};
+        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, vkUsageFlags, shared_from_this(), tryInfo.allocInfo}};
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return buffer;
 

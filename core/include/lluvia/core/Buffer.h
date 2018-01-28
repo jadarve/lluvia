@@ -5,6 +5,8 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include <memory>
+
 namespace ll {
 
 class ComputeGraph;
@@ -35,19 +37,17 @@ public:
 
 private:
     Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-            ll::Memory* memory, const ll::MemoryAllocationInfo& allocInfo);
+            std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo);
 
     vk::Buffer               vkBuffer;
     vk::BufferUsageFlags     vkUsageFlags;
 
     ll::MemoryAllocationInfo allocInfo;
 
-    // Pointer to the Memory object this buffer was created from.
-    // This pointer is guaranteed to reference a valid object since
-    // construction time.
-    // This buffer does not own the memory object and it is not
-    // deleted in the destructor.
-    ll::Memory*              memory;
+    // Shared pointer to the memory this buffer was created from
+    // This will keep the memory alive until this buffer is deleted
+    // avoiding reference to a corrupted memory location.
+    std::shared_ptr<ll::Memory> memory;
 
 
 friend class ll::Memory;

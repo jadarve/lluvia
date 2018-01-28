@@ -38,7 +38,6 @@ TEST_CASE("MemoryAndBuffers", "test_ComputeGraphWriter") {
     auto devBuffer_3 = devMemory->createBuffer(2048); REQUIRE(devBuffer_3 != nullptr);
     auto devBuffer_4 = devMemory->createBuffer(4096); REQUIRE(devBuffer_4 != nullptr);
 
-
     auto graph = std::make_shared<ll::ComputeGraph>();
     graph->addMemory("hostMemory", hostMemory);
     graph->addMemory("devMemory", devMemory);
@@ -52,7 +51,6 @@ TEST_CASE("MemoryAndBuffers", "test_ComputeGraphWriter") {
     graph->addBuffer("devBuffer_2", devBuffer_2);
     graph->addBuffer("devBuffer_3", devBuffer_3);
     graph->addBuffer("devBuffer_4", devBuffer_4);
-
 
     auto writer = ll::ComputeGraphFileWriter {};
 

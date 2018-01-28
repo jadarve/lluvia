@@ -232,6 +232,8 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::
 
 void MemoryFreeSpaceManager::commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
 
+    assert(tryInfo.index < offsetVector.size());
+    
     // the space used for the allocation is equalt to the requested size plus
     // the bytes required to align the offset
     const auto sizePlusAlignment = tryInfo.allocInfo.size + tryInfo.allocInfo.leftPadding;

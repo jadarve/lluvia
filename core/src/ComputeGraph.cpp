@@ -41,6 +41,7 @@ bool ComputeGraph::containsMemory(const std::string& name) const noexcept {
 
 
 void ComputeGraph::addMemory(const std::string& name, std::shared_ptr<ll::Memory> memory) {
+    assert(memory != nullptr);
     memories[name] = memory;
 }
 
@@ -68,6 +69,7 @@ bool ComputeGraph::containsBuffer(const std::string& name) const noexcept{
 
 
 void ComputeGraph::addBuffer(const std::string& name, std::shared_ptr<ll::Buffer> buffer) {
+    assert(buffer != nullptr);
     buffers[name] = buffer;
 }
 
@@ -84,7 +86,7 @@ std::string ComputeGraph::getMemoryNameForBuffer(const std::string& name) const 
 
     for (const auto& it : memories) {
 
-        if (it.second.get() == buffer->memory) {
+        if (it.second == buffer->memory) {
             return it.first;
         }
     }

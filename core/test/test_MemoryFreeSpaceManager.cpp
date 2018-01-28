@@ -40,7 +40,7 @@ void checkAllocation(bool boolExpected, bool boolReturned, const MemoryAllocatio
 /**
  * No insertions
  */
-TEST_CASE("NoInsertions", "[MemoryFreeSpaceManager]") {
+TEST_CASE("NoInsertions", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto offsetVector = std::vector<uint64_t>{0};
@@ -55,7 +55,7 @@ TEST_CASE("NoInsertions", "[MemoryFreeSpaceManager]") {
 /**
  * Allocate
  */
-TEST_CASE("A", "[MemoryFreeSpaceManager]") {
+TEST_CASE("A", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{256};
@@ -74,9 +74,36 @@ TEST_CASE("A", "[MemoryFreeSpaceManager]") {
 
 
 /**
+ * Allocate + Release full size
+ */
+TEST_CASE("AR_fullSize", "test_MemoryFreeSpaceManager") {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{1024};
+
+    auto offsetVector = std::vector<uint64_t>{sizeA};
+    auto sizeVector = std::vector<uint64_t>{size - sizeA};
+
+    auto manager = MemoryFreeSpaceManager{size};
+
+    auto allocA = MemoryAllocationInfo{};
+    auto boolA = manager.allocate(sizeA, allocA);
+    
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
+    checkMemory(manager, offsetVector, sizeVector);
+
+    manager.release(allocA);
+
+    offsetVector = std::vector<uint64_t>{0};
+    sizeVector = std::vector<uint64_t>{size};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+/**
  * Allocate + Allocate + Allocate
  */
-TEST_CASE("AAA", "[MemoryFreeSpaceManager]") {
+TEST_CASE("AAA", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{256};
@@ -108,7 +135,7 @@ TEST_CASE("AAA", "[MemoryFreeSpaceManager]") {
  *
  * Release first allocated objects first.
  */
-TEST_CASE("AAARRR_fifo", "[MemoryFreeSpaceManager]") {
+TEST_CASE("AAARRR_fifo", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{256};
@@ -144,7 +171,7 @@ TEST_CASE("AAARRR_fifo", "[MemoryFreeSpaceManager]") {
  *
  * Release last allocated objects first.
  */
-TEST_CASE("AAARRR_lifo", "[MemoryFreeSpaceManager]") {
+TEST_CASE("AAARRR_lifo", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{256};
@@ -178,7 +205,7 @@ TEST_CASE("AAARRR_lifo", "[MemoryFreeSpaceManager]") {
 /**
  * Allocate + Allocate + Release + Allocate
  */
-TEST_CASE("AARA", "[MemoryFreeSpaceManager]") {
+TEST_CASE("AARA", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{256};
@@ -214,7 +241,7 @@ TEST_CASE("AARA", "[MemoryFreeSpaceManager]") {
  *
  * Test lower bound merge
  */
-TEST_CASE("AARAR", "[MemoryFreeSpaceManager]") {
+TEST_CASE("AARAR", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{256};
@@ -246,7 +273,7 @@ TEST_CASE("AARAR", "[MemoryFreeSpaceManager]") {
 }
 
 
-TEST_CASE("offset_A", "[MemoryFreeSpaceManager]") {
+TEST_CASE("offset_A", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{10};
@@ -266,7 +293,7 @@ TEST_CASE("offset_A", "[MemoryFreeSpaceManager]") {
 }
 
 
-TEST_CASE("offset_AA", "[MemoryFreeSpaceManager]") {
+TEST_CASE("offset_AA", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{10};
@@ -292,7 +319,7 @@ TEST_CASE("offset_AA", "[MemoryFreeSpaceManager]") {
 }
 
 
-TEST_CASE("offset_AAR", "[MemoryFreeSpaceManager]") {
+TEST_CASE("offset_AAR", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{10};
@@ -320,7 +347,7 @@ TEST_CASE("offset_AAR", "[MemoryFreeSpaceManager]") {
 }
 
 
-TEST_CASE("offset_AAA", "[MemoryFreeSpaceManager]") {
+TEST_CASE("offset_AAA", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{10};
@@ -361,7 +388,7 @@ TEST_CASE("offset_AAA", "[MemoryFreeSpaceManager]") {
  *
  * Release first allocated objects first.
  */
-TEST_CASE("offset_AAARRR_fifo", "[MemoryFreeSpaceManager]") {
+TEST_CASE("offset_AAARRR_fifo", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{10};
@@ -406,7 +433,7 @@ TEST_CASE("offset_AAARRR_fifo", "[MemoryFreeSpaceManager]") {
  *
  * Release last allocated objects first.
  */
-TEST_CASE("offset_AAARRR_lifo", "[MemoryFreeSpaceManager]") {
+TEST_CASE("offset_AAARRR_lifo", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{10};
@@ -451,7 +478,7 @@ TEST_CASE("offset_AAARRR_lifo", "[MemoryFreeSpaceManager]") {
  *
  * Test lower bound merge
  */
-TEST_CASE("offset_AARAR", "[MemoryFreeSpaceManager]") {
+TEST_CASE("offset_AARAR", "test_MemoryFreeSpaceManager") {
 
     auto size = uint64_t{1024};
     auto sizeA = uint64_t{30};
