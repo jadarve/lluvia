@@ -80,7 +80,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
                 // build a ll::Buffer object and commit the allocation if the
                 // object construction is successful.
-                return buildBuffer(vkBuffer, usageFlags, tryInfo);
+                return buildBuffer(vkBuffer, usageFlags, tryInfo, size);
             }
         }
 
@@ -134,7 +134,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
     // build a ll::Buffer object and commit the allocation if the
     // object construction is successful.
-    return buildBuffer(vkBuffer, usageFlags, tryInfo);
+    return buildBuffer(vkBuffer, usageFlags, tryInfo, size);
 }
 
 
@@ -194,12 +194,13 @@ inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocation
 
 inline std::shared_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer,
     const vk::BufferUsageFlags vkUsageFlags,
-    const ll::impl::MemoryAllocationTryInfo & tryInfo) {
+    const ll::impl::MemoryAllocationTryInfo & tryInfo,
+    const uint64_t requestedSize) {
 
     try {
 
         // ll::Buffer can throw exception.
-        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, vkUsageFlags, shared_from_this(), tryInfo.allocInfo}};
+        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, vkUsageFlags, shared_from_this(), tryInfo.allocInfo, requestedSize}};
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return buffer;
 

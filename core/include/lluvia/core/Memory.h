@@ -59,7 +59,11 @@ public:
 private:
 
     inline void configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo, const uint32_t pageIndex);
-    inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags, const ll::impl::MemoryAllocationTryInfo& tryInfo);
+    
+    inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer,
+        const vk::BufferUsageFlags vkUsageFlags,
+        const ll::impl::MemoryAllocationTryInfo& tryInfo,
+        const uint64_t requestedSize);
 
     vk::Device device;
 

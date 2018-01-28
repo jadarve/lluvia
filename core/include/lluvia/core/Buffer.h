@@ -37,12 +37,18 @@ public:
 
 private:
     Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-            std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo);
+            std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
+            const uint64_t requestedSize);
 
     vk::Buffer               vkBuffer;
     vk::BufferUsageFlags     vkUsageFlags;
 
     ll::MemoryAllocationInfo allocInfo;
+
+    // the size requested for the buffer. It can
+    // be less than allocInfo.size due to alignment
+    // and size requirements for the given memory.
+    uint64_t                 requestedSize;
 
     // Shared pointer to the memory this buffer was created from
     // This will keep the memory alive until this buffer is deleted

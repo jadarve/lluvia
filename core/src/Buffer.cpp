@@ -6,10 +6,12 @@ namespace ll {
 
 
 Buffer::Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-                std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo):
+                std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
+                const uint64_t requestedSize):
     vkBuffer         {vkBuffer},
     vkUsageFlags     {vkUsageFlags},
     allocInfo        (allocInfo),
+    requestedSize    {requestedSize},
     memory           {memory} {
 
     assert(memory != nullptr);
@@ -22,7 +24,7 @@ Buffer::~Buffer() {
 
 
 uint64_t Buffer::getSize() const noexcept {
-    return allocInfo.size;
+    return requestedSize;
 }
 
 

@@ -76,12 +76,12 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
 
     // correct the offset and size of the allocated interval with
     // the left padding required for aligning offset.
-    auto infoLocal = info;
+    auto infoLocal    = info;
     infoLocal.offset -= infoLocal.leftPadding;
-    infoLocal.size += infoLocal.leftPadding;
+    infoLocal.size   += infoLocal.leftPadding;
 
     const auto offsetPlusSize = infoLocal.offset + infoLocal.size;
-    auto intervalUpdated = false;
+    auto intervalUpdated   = false;
     auto lowerBoundUpdated = true;
 
     // update the interval offset or size if the input parameters are
@@ -96,14 +96,14 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
             // update lower bound
             offset_i -= infoLocal.size;
             size_i   += infoLocal.size;
-            intervalUpdated = true;
+            intervalUpdated   = true;
             lowerBoundUpdated = true;
             break;
         }
         else if (infoLocal.offset == offset_i + size_i) {
             // update upper bound
             size_i += infoLocal.size;
-            intervalUpdated = true;
+            intervalUpdated   = true;
             lowerBoundUpdated = false;
             break;
         }
@@ -142,7 +142,7 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
 
                     // merge
                     offsetVector[position + 1] -= sizeVector[position];
-                    sizeVector[position + 1] += sizeVector[position];
+                    sizeVector[position + 1]   += sizeVector[position];
                     offsetVector.erase(offsetVector.begin() + position);
                     sizeVector.erase(sizeVector.begin() + position);
                 }
@@ -162,23 +162,22 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
 
 bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 
+    // offsetVector and sizeVector should have the same size and capacity
+    assert(offsetVector.size() == offsetVector.capacity());
+
     try {
 
-        // offsetVector and sizeVector should have the same size and capacity
-        if (offsetVector.size() == offsetVector.capacity()) {
+        auto newOffsetVector = std::vector<uint64_t> {};
+        auto newSizeVector   = std::vector<uint64_t> {};
+        newOffsetVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
+        newSizeVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
 
-            auto newOffsetVector = std::vector<uint64_t> {};
-            auto newSizeVector = std::vector<uint64_t> {};
-            newOffsetVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
-            newSizeVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
+        newOffsetVector.insert(newOffsetVector.begin(), offsetVector.begin(), offsetVector.end());
+        newSizeVector.insert(newSizeVector.begin(), sizeVector.begin(), sizeVector.end());
 
-            newOffsetVector.insert(newOffsetVector.begin(), offsetVector.begin(), offsetVector.end());
-            newSizeVector.insert(newSizeVector.begin(), sizeVector.begin(), sizeVector.end());
-
-            // move the new vectors to the members and delete the old ones
-            offsetVector = std::move(newOffsetVector);
-            sizeVector = std::move(newSizeVector);
-        }
+        // move the new vectors to the members and delete the old ones
+        offsetVector = std::move(newOffsetVector);
+        sizeVector   = std::move(newSizeVector);
 
         return true;
 
@@ -190,6 +189,7 @@ bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
     }
 }
 
+
 bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
 
     return tryAllocate(size, 0u, tryInfo);
@@ -198,7 +198,7 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocati
 
 bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
 
-    auto offsetMask = uint64_t{0};
+    auto offsetMask  = uint64_t{0};
     auto maskCounter = alignment;
 
     while (maskCounter > 1u) {
@@ -209,16 +209,16 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::
     auto position = 0;
     for (auto& s : sizeVector) {
 
-        auto offset = offsetVector[position];
+        auto offset        = offsetVector[position];
         auto offsetModulus = offset & offsetMask;
-        auto leftPadding = (alignment - offsetModulus) & offsetMask;
+        auto leftPadding   = (alignment - offsetModulus) & offsetMask;
 
         if ((size + leftPadding) <= s) {
 
-            tryInfo.allocInfo.offset = offset + leftPadding;
-            tryInfo.allocInfo.size = size;
+            tryInfo.allocInfo.offset      = offset + leftPadding;
+            tryInfo.allocInfo.size        = size;
             tryInfo.allocInfo.leftPadding = leftPadding;
-            tryInfo.index = position;
+            tryInfo.index                 = position;
 
             return true;
         }
@@ -240,7 +240,7 @@ void MemoryFreeSpaceManager::commitAllocation(const ll::impl::MemoryAllocationTr
 
     // update offset and size of [index] block
     offsetVector[tryInfo.index] += sizePlusAlignment;
-    sizeVector[tryInfo.index] -= sizePlusAlignment;
+    sizeVector[tryInfo.index]   -= sizePlusAlignment;
 }
 
 
