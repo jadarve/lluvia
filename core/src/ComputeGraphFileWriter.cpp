@@ -26,6 +26,8 @@ class ComputeGraphFileWriterImpl : public ll::Visitor {
 public:
     void visitComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& name = {}) {
 
+        this->graph = graph;
+        
         // placeholders
         obj["memories"] = nullptr;
         obj["buffers"]  = nullptr;
@@ -57,6 +59,7 @@ public:
     }
 
 
+    std::shared_ptr<ll::ComputeGraph> graph {nullptr};
     json obj;
 };
 
@@ -68,22 +71,15 @@ public:
 // ComputeGraphFileWriter
 ///////////////////////////////////////////////////////////
 
-ComputeGraphFileWriter::ComputeGraphFileWriter() {
-
-    pimpl = new impl::ComputeGraphFileWriterImpl();
-}
-
-ComputeGraphFileWriter::~ComputeGraphFileWriter() {
-    delete pimpl;
-}
 
 void ComputeGraphFileWriter::write(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath) {
 
-    pimpl->visitComputeGraph(graph);
-    graph->accept(pimpl);
+    auto visitor = impl::ComputeGraphFileWriterImpl {};
+    visitor.visitComputeGraph(graph);
+    graph->accept(&visitor);
 
     // TODO create ofstream and write pimpl->obj
-    std::cout << std::setw(4) << pimpl->obj << std::endl;
+    std::cout << std::setw(4) << visitor.obj << std::endl;
 }
 
 

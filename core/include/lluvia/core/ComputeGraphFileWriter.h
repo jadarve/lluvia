@@ -7,34 +7,14 @@
 
 namespace ll {
 
-class Buffer;
+// forward declarations
 class ComputeGraph;
-class Memory;
-
-
-namespace impl {
-
-class ComputeGraphFileWriterImpl;
-
-} // namespace impl
 
 
 class ComputeGraphFileWriter {
 
 public:
-    ComputeGraphFileWriter();
-    ComputeGraphFileWriter(const ComputeGraphFileWriter&) = default; // not copiable
-    ComputeGraphFileWriter(ComputeGraphFileWriter&&)      = default;
-
-    virtual ~ComputeGraphFileWriter();
-
-    ComputeGraphFileWriter& operator = (const ComputeGraphFileWriter&) = default; // not copiable
-    ComputeGraphFileWriter& operator = (ComputeGraphFileWriter&&)      = default;
-
     void write(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath);
-
-private:
-    impl::ComputeGraphFileWriterImpl* pimpl {nullptr};
 };
 
 } // namespace ll
