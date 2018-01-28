@@ -16,6 +16,13 @@ using json = nlohmann::json;
 
 namespace ll {
 
+ComputeGraph::~ComputeGraph() {
+
+    // destruction order
+    buffers.clear();
+    memories.clear();
+}
+
 std::vector<std::string> ComputeGraph::getMemoryNames() const {
 
     auto names = std::vector<std::string>(memories.size());
@@ -67,6 +74,24 @@ void ComputeGraph::addBuffer(const std::string& name, std::shared_ptr<ll::Buffer
 
 std::shared_ptr<ll::Buffer> ComputeGraph::getBuffer(const std::string& name) const {
     return buffers.at(name);
+}
+
+
+std::string ComputeGraph::getMemoryNameForBuffer(const std::string& name) const {
+
+    // can throw std::out_of_range
+    auto buffer = getBuffer(name);
+
+    for (const auto& it : memories) {
+
+        if (it.second.get() == buffer->memory) {
+            return it.first;
+        }
+    }
+
+    // if the code reaches this point, the memory object the buffer was
+    // created from is not inside the memories container.
+    throw std::out_of_range(std::string{"memory not found for buffer: "} + name);
 }
 
 

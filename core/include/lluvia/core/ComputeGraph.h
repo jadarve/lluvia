@@ -27,7 +27,7 @@ public:
     ComputeGraph(const ComputeGraph& node)              = delete;   // not copiable
     ComputeGraph(ComputeGraph&& node)                   = default;
 
-    ~ComputeGraph()                                     = default;
+    ~ComputeGraph();
 
     ComputeGraph& operator = (const ComputeGraph& node) = delete;   // not copiable
     ComputeGraph& operator = (ComputeGraph&& node)      = default;
@@ -41,6 +41,7 @@ public:
     bool containsBuffer(const std::string& name) const noexcept;
     void addBuffer(const std::string& name, std::shared_ptr<ll::Buffer> buffer);
     std::shared_ptr<ll::Buffer> getBuffer(const std::string& name) const;
+    std::string getMemoryNameForBuffer(const std::string& name) const;
 
     std::vector<std::string> getProgramNames() const;
     bool containsProgram(const std::string& name) const noexcept;

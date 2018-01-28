@@ -27,7 +27,7 @@ public:
     void visitComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& name = {}) {
 
         this->graph = graph;
-        
+
         // placeholders
         obj["memories"] = nullptr;
         obj["buffers"]  = nullptr;
@@ -48,12 +48,12 @@ public:
     void visitBuffer(std::shared_ptr<ll::Buffer> buffer, const std::string& name = {}) {
 
         auto j = json {};
-        j["name"]  = name;
-        j["size"]  = buffer->getSize();
-        j["usage"] = ll::bufferUsageFlagsToVectorString(buffer->getUsageFlags());
+        j["name"]   = name;
+        j["size"]   = buffer->getSize();
+        j["usage"]  = ll::bufferUsageFlagsToVectorString(buffer->getUsageFlags());
 
-        // TODO
-        j["memory"] = "memory_name";
+        // can throw std::out_of_range
+        j["memory"] = graph->getMemoryNameForBuffer(name);
 
         obj["buffers"].push_back(j);
     }
@@ -75,6 +75,9 @@ public:
 void ComputeGraphFileWriter::write(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath) {
 
     auto visitor = impl::ComputeGraphFileWriterImpl {};
+
+    // while visiting the graph, std::out_of_range can be thrown if
+    // the memory of a buffer object is not stored in the graph
     visitor.visitComputeGraph(graph);
     graph->accept(&visitor);
 

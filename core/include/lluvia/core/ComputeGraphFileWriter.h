@@ -14,6 +14,9 @@ class ComputeGraph;
 class ComputeGraphFileWriter {
 
 public:
+
+    // throws: std::out_of_range if any element in the graph is not found
+    // throws: TODO writing the file
     void write(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath);
 };
 

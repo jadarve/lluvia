@@ -24,9 +24,11 @@
  *  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
  *
  */
-TEST_CASE("DeviceLocalBuffer", "[BufferCreationTest]") {
+TEST_CASE("DeviceLocalBuffer", "test_BufferCreation") {
 
     auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
     const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
     
     
@@ -37,9 +39,12 @@ TEST_CASE("DeviceLocalBuffer", "[BufferCreationTest]") {
     REQUIRE(buffer != nullptr);
 }
 
-TEST_CASE("HostVisibleCoherentCached", "[BufferCreationTest]") {
+
+TEST_CASE("HostVisibleCoherentCached", "test_BufferCreation") {
 
     auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
     const auto memoryFlags =  vk::MemoryPropertyFlagBits::eHostVisible
                             | vk::MemoryPropertyFlagBits::eHostCoherent;
     
@@ -48,4 +53,20 @@ TEST_CASE("HostVisibleCoherentCached", "[BufferCreationTest]") {
 
     auto buffer = memory->createBuffer(512);
     REQUIRE(buffer != nullptr);
+}
+
+
+TEST_CASE("BufferSizeEqualPageSize", "test_BufferCreation") {
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+    
+    auto memory = session->createMemory(vk::MemoryPropertyFlagBits::eDeviceLocal, 4096, false);
+    REQUIRE(memory != nullptr);
+
+    auto buffer0 = memory->createBuffer(128);  REQUIRE(buffer0 != nullptr);
+    auto buffer1 = memory->createBuffer(32);   REQUIRE(buffer1 != nullptr);
+    auto buffer2 = memory->createBuffer(768);  REQUIRE(buffer2 != nullptr);
+    auto buffer3 = memory->createBuffer(2048); REQUIRE(buffer3 != nullptr);
+    auto buffer4 = memory->createBuffer(4096); REQUIRE(buffer4 != nullptr);
 }

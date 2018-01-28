@@ -7,6 +7,7 @@
 
 namespace ll {
 
+class ComputeGraph;
 class ComputeNode;
 class Memory;
 class Session;
@@ -48,7 +49,9 @@ private:
     // deleted in the destructor.
     ll::Memory*              memory;
 
+
 friend class ll::Memory;
+friend class ll::ComputeGraph;
 friend class ll::ComputeNode;
 friend class ll::Session;
 };

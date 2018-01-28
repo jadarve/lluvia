@@ -28,32 +28,30 @@ TEST_CASE("MemoryAndBuffers", "test_ComputeGraphWriter") {
     auto devMemory = session->createMemory(memflags::eDeviceLocal, 4096, false);
     REQUIRE(devMemory != nullptr);
 
-    auto hb_0 = hostMemory->createBuffer(512);  REQUIRE(hb_0 != nullptr);
-    auto hb_1 = hostMemory->createBuffer(1024); REQUIRE(hb_1 != nullptr);
-    auto hb_2 = hostMemory->createBuffer(256);  REQUIRE(hb_2 != nullptr);
+    auto hostBuffer_0 = hostMemory->createBuffer(512);  REQUIRE(hostBuffer_0 != nullptr);
+    auto hostBuffer_1 = hostMemory->createBuffer(1024); REQUIRE(hostBuffer_1 != nullptr);
+    auto hostBuffer_2 = hostMemory->createBuffer(256);  REQUIRE(hostBuffer_2 != nullptr);
 
-
-    auto db_0 = hostMemory->createBuffer(128);  REQUIRE(db_0 != nullptr);
-    auto db_1 = hostMemory->createBuffer(32);   REQUIRE(db_1 != nullptr);
-    auto db_2 = hostMemory->createBuffer(768);  REQUIRE(db_2 != nullptr);
-    auto db_3 = hostMemory->createBuffer(2048); REQUIRE(db_3 != nullptr);
-    auto db_4 = hostMemory->createBuffer(4096); REQUIRE(db_4 != nullptr);
-
+    auto devBuffer_0 = devMemory->createBuffer(128);  REQUIRE(devBuffer_0 != nullptr);
+    auto devBuffer_1 = devMemory->createBuffer(32);   REQUIRE(devBuffer_1 != nullptr);
+    auto devBuffer_2 = devMemory->createBuffer(768);  REQUIRE(devBuffer_2 != nullptr);
+    auto devBuffer_3 = devMemory->createBuffer(2048); REQUIRE(devBuffer_3 != nullptr);
+    auto devBuffer_4 = devMemory->createBuffer(4096); REQUIRE(devBuffer_4 != nullptr);
 
 
     auto graph = std::make_shared<ll::ComputeGraph>();
     graph->addMemory("hostMemory", hostMemory);
     graph->addMemory("devMemory", devMemory);
 
-    graph->addBuffer("hb_0", hb_0);
-    graph->addBuffer("hb_1", hb_1);
-    graph->addBuffer("hb_2", hb_2);
+    graph->addBuffer("hostBuffer_0", hostBuffer_0);
+    graph->addBuffer("hostBuffer_1", hostBuffer_1);
+    graph->addBuffer("hostBuffer_2", hostBuffer_2);
 
-    graph->addBuffer("db_0", db_0);
-    graph->addBuffer("db_1", db_1);
-    graph->addBuffer("db_2", db_2);
-    graph->addBuffer("db_3", db_3);
-    graph->addBuffer("db_4", db_4);
+    graph->addBuffer("devBuffer_0", devBuffer_0);
+    graph->addBuffer("devBuffer_1", devBuffer_1);
+    graph->addBuffer("devBuffer_2", devBuffer_2);
+    graph->addBuffer("devBuffer_3", devBuffer_3);
+    graph->addBuffer("devBuffer_4", devBuffer_4);
 
 
     auto writer = ll::ComputeGraphFileWriter {};
