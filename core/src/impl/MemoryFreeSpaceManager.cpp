@@ -163,21 +163,25 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
 bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 
     // offsetVector and sizeVector should have the same size and capacity
-    assert(offsetVector.size() == offsetVector.capacity());
+    assert(offsetVector.size()     == sizeVector.size());
+    assert(offsetVector.capacity() == sizeVector.capacity());
 
     try {
 
-        auto newOffsetVector = std::vector<uint64_t> {};
-        auto newSizeVector   = std::vector<uint64_t> {};
-        newOffsetVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
-        newSizeVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
+        if (offsetVector.size() == offsetVector.capacity()) {
+            
+            auto newOffsetVector = std::vector<uint64_t> {};
+            auto newSizeVector   = std::vector<uint64_t> {};
+            newOffsetVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
+            newSizeVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
 
-        newOffsetVector.insert(newOffsetVector.begin(), offsetVector.begin(), offsetVector.end());
-        newSizeVector.insert(newSizeVector.begin(), sizeVector.begin(), sizeVector.end());
+            newOffsetVector.insert(newOffsetVector.begin(), offsetVector.begin(), offsetVector.end());
+            newSizeVector.insert(newSizeVector.begin(), sizeVector.begin(), sizeVector.end());
 
-        // move the new vectors to the members and delete the old ones
-        offsetVector = std::move(newOffsetVector);
-        sizeVector   = std::move(newSizeVector);
+            // move the new vectors to the members and delete the old ones
+            offsetVector = std::move(newOffsetVector);
+            sizeVector   = std::move(newSizeVector);
+        }
 
         return true;
 
