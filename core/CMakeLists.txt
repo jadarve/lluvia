@@ -40,6 +40,7 @@ target_link_libraries (lluvia-core
 configure_file (${_TEST_INCLUDE_DIR}/coreTestConfig.h.in ${_TEST_INCLUDE_DIR}/coreTestConfig.h)
 
 add_catchTest (test_VulkanDriver             test/test_VulkanDriver.cpp)
+add_catchTest (test_Base64                   test/test_Base64.cpp                    lluvia-core)
 add_catchTest (test_MemoryFreeSpaceManager   test/test_MemoryFreeSpaceManager.cpp    lluvia-core)
 add_catchTest (test_SessionCreation          test/test_SessionCreation.cpp           lluvia-core)
 add_catchTest (test_BufferCreation           test/test_BufferCreation.cpp            lluvia-core)
