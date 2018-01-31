@@ -1,4 +1,4 @@
-#include "lluvia/core/ComputeGraphFileWriter.h"
+#include "lluvia/core/io.h"
 
 #include "lluvia/core/ComputeGraph.h"
 #include "lluvia/core/Memory.h"
@@ -66,13 +66,7 @@ public:
 } // namespace impl
 
 
-
-///////////////////////////////////////////////////////////
-// ComputeGraphFileWriter
-///////////////////////////////////////////////////////////
-
-
-void ComputeGraphFileWriter::write(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath) {
+void writeComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath) {
 
     auto visitor = impl::ComputeGraphFileWriterImpl {};
 
@@ -83,6 +77,12 @@ void ComputeGraphFileWriter::write(std::shared_ptr<ll::ComputeGraph> graph, cons
 
     // TODO create ofstream and write pimpl->obj
     std::cout << std::setw(4) << visitor.obj << std::endl;
+}
+
+
+std::shared_ptr<ll::ComputeGraph> readComputeGraph(const std::string& filePath, std::shared_ptr<ll::Session> session) {
+    
+    return nullptr;
 }
 
 

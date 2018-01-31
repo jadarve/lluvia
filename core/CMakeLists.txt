@@ -18,10 +18,10 @@ include_directories (
 add_library (lluvia-core SHARED
     src/Buffer.cpp
     src/CommandBuffer.cpp
+    src/ComputeGraph.cpp
     src/ComputeNode.cpp
     src/ComputeNodeDescriptor.cpp
-    src/ComputeGraph.cpp
-    src/ComputeGraphFileWriter.cpp
+    src/io.cpp
     src/impl/MemoryFreeSpaceManager.cpp
     src/impl/OneTimeSubmitCommandBuffer.cpp
     src/Memory.cpp

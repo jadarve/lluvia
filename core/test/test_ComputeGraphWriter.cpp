@@ -52,7 +52,5 @@ TEST_CASE("MemoryAndBuffers", "test_ComputeGraphWriter") {
     graph->addBuffer("devBuffer_3", devBuffer_3);
     graph->addBuffer("devBuffer_4", devBuffer_4);
 
-    auto writer = ll::ComputeGraphFileWriter {};
-
-    writer.write(graph, "moni moni");
+    ll::writeComputeGraph(graph, "moni moni");
 }
