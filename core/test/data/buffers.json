@@ -1,0 +1,101 @@
+{
+    "buffers": [
+        {
+            "memory": "devMemory",
+            "name": "devBuffer_4",
+            "size": 4096,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        },
+        {
+            "memory": "devMemory",
+            "name": "devBuffer_3",
+            "size": 2048,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        },
+        {
+            "memory": "devMemory",
+            "name": "devBuffer_2",
+            "size": 768,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        },
+        {
+            "memory": "devMemory",
+            "name": "devBuffer_1",
+            "size": 32,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        },
+        {
+            "memory": "hostMemory",
+            "name": "hostBuffer_0",
+            "size": 512,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        },
+        {
+            "memory": "devMemory",
+            "name": "devBuffer_0",
+            "size": 128,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        },
+        {
+            "memory": "hostMemory",
+            "name": "hostBuffer_1",
+            "size": 1024,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        },
+        {
+            "memory": "hostMemory",
+            "name": "hostBuffer_2",
+            "size": 256,
+            "usage": [
+                "TRANSFER_SRC",
+                "TRANSFER_DST",
+                "STORAGE_BUFFER"
+            ]
+        }
+    ],
+    "memories": [
+        {
+            "flags": [
+                "DEVICE_LOCAL"
+            ],
+            "name": "devMemory",
+            "page_size": 4096
+        },
+        {
+            "flags": [
+                "HOST_VISIBLE",
+                "HOST_COHERENT"
+            ],
+            "name": "hostMemory",
+            "page_size": 1024
+        }
+    ]
+}

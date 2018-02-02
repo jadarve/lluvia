@@ -11,8 +11,10 @@
 
 namespace ll {
 
+vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std::string>& flagsVector);
 std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPropertyFlags flags);
 
+vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector);
 std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags);
 
 

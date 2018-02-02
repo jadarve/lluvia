@@ -17,7 +17,7 @@
 using memflags = vk::MemoryPropertyFlagBits;
 
 
-TEST_CASE("MemoryAndBuffers", "test_ComputeGraphWriter") {
+TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
 
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
@@ -53,4 +53,13 @@ TEST_CASE("MemoryAndBuffers", "test_ComputeGraphWriter") {
     graph->addBuffer("devBuffer_4", devBuffer_4);
 
     ll::writeComputeGraph(graph, "moni moni");
+}
+
+
+TEST_CASE("ReadGraph", "test_IO") {
+
+    auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
+    REQUIRE(session != nullptr);
+
+    auto graph = ll::readComputeGraph(DATA_PATH + "/buffers.json", session);
 }

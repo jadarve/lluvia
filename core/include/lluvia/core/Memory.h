@@ -49,7 +49,10 @@ public:
 
     bool isMappable() const noexcept;
 
-    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size);
+    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size,
+        const vk::BufferUsageFlags usageFlags = {vk::BufferUsageFlagBits::eStorageBuffer
+                                                 | vk::BufferUsageFlagBits::eTransferSrc
+                                                 | vk::BufferUsageFlagBits::eTransferDst});
     void releaseBuffer(const ll::Buffer& buffer);
     void* mapBuffer(const ll::Buffer& buffer);
     void unmapBuffer(const ll::Buffer& buffer);

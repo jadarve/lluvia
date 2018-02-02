@@ -44,11 +44,7 @@ bool Memory::isMappable() const noexcept {
 }
 
 
-std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
-
-    const auto usageFlags = vk::BufferUsageFlagBits::eStorageBuffer
-                          | vk::BufferUsageFlagBits::eTransferSrc
-                          | vk::BufferUsageFlagBits::eTransferDst;
+std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::BufferUsageFlags usageFlags) {
 
     vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
                                       .setSharingMode(vk::SharingMode::eExclusive)
