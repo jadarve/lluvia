@@ -18,11 +18,13 @@ public:
     ComputeNodeDescriptor()                                                     = default;
     ComputeNodeDescriptor(const ComputeNodeDescriptor& descriptor)              = default;
     ComputeNodeDescriptor(ComputeNodeDescriptor&& descriptor)                   = default;
+
     ~ComputeNodeDescriptor()                                                    = default;
+    
     ComputeNodeDescriptor& operator = (const ComputeNodeDescriptor& descriptor) = default;
     ComputeNodeDescriptor& operator = (ComputeNodeDescriptor&& descriptor)      = default;
 
-    ComputeNodeDescriptor& setProgram(const std::shared_ptr<const ll::Program>& program);
+    ComputeNodeDescriptor& setProgram(std::shared_ptr<ll::Program> program);
     ComputeNodeDescriptor& setFunctionName(const std::string& name);
     ComputeNodeDescriptor& addBufferParameter();
 
@@ -49,12 +51,12 @@ public:
     uint32_t getLocalY()          const noexcept;
     uint32_t getLocalZ()          const noexcept;
 
-    std::shared_ptr<const ll::Program>          getProgram()           const noexcept;
+    std::shared_ptr<ll::Program>                getProgram()           const noexcept;
     std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const noexcept;
 
 
 private:
-    std::shared_ptr<const ll::Program> program;
+    std::shared_ptr<ll::Program> program;
     std::string functionName;
     std::vector<vk::DescriptorSetLayoutBinding> parameterBindings;
 

@@ -131,7 +131,7 @@ std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
 }
 
 
-std::shared_ptr<const ll::Program> Session::createProgram(const std::string& spirvPath) const {
+std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath) const {
 
     // workaround for GCC 4.8
     ifstream file {spirvPath, std::ios::ate | std::ios::binary};
@@ -139,16 +139,22 @@ std::shared_ptr<const ll::Program> Session::createProgram(const std::string& spi
     if (file.is_open()) {
 
         const auto fileSize  = static_cast<size_t>(file.tellg());
-              auto spirvCode = std::vector<char>(fileSize);
+              auto spirvCode = std::vector<uint8_t>(fileSize);
 
         file.seekg(0);
-        file.read(spirvCode.data(), fileSize);
+        file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
         file.close();
 
-        return std::make_shared<const ll::Program>(device, spirvCode);
+        return std::make_shared<ll::Program>(device, spirvCode);
     }
 
     return nullptr;
+}
+
+
+std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& spirv) const {
+
+    return std::make_shared<ll::Program>(device, spirv);
 }
 
 

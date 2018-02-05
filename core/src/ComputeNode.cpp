@@ -13,10 +13,15 @@ using namespace std;
 
 
 ComputeNode::ComputeNode(const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
-    device {device} {
+    device       {device},
+    localGroup   {descriptor.getLocalGroup()},
+    globalGroup  {descriptor.getGlobalGroup()},
+    program      {descriptor.getProgram()},
+    functionName {descriptor.getFunctionName()} {
 
     init(descriptor);
 }
+
 
 ComputeNode::~ComputeNode() {
 
@@ -26,6 +31,45 @@ ComputeNode::~ComputeNode() {
     device.destroyDescriptorSetLayout(descriptorSetLayout);
 }
 
+
+std::string ComputeNode::getFunctionName() const noexcept {
+    return functionName;
+}
+
+
+std::shared_ptr<ll::Program> ComputeNode::getProgram() const noexcept{
+    return program;
+}
+
+
+uint32_t ComputeNode::getLocalX() const noexcept {
+    return localGroup[0];
+}
+
+
+uint32_t ComputeNode::getLocalY() const noexcept {
+    return localGroup[1];
+}
+
+
+uint32_t ComputeNode::getLocalZ() const noexcept {
+    return localGroup[2];
+}
+
+
+uint32_t ComputeNode::getGlobalX() const noexcept {
+    return globalGroup[0];
+}
+
+
+uint32_t ComputeNode::getGlobalY() const noexcept {
+    return globalGroup[1];
+}
+
+
+uint32_t ComputeNode::getGlobalZ() const noexcept {
+    return globalGroup[2];
+}
 
 
 void ComputeNode::bind(int index, const std::shared_ptr<ll::Buffer> buffer) {
@@ -57,13 +101,11 @@ void ComputeNode::record(const vk::CommandBuffer& commandBufer) const {
 }
 
 
-void ComputeNode::init(const ll::ComputeNodeDescriptor& descriptor) {
+void ComputeNode::accept(ll::Visitor* visitor) {
+    assert(visitor != nullptr);
+}
 
-    /////////////////////////////////////////////
-    // Local and Global group
-    /////////////////////////////////////////////
-    localGroup = descriptor.getLocalGroup();
-    globalGroup = descriptor.getGlobalGroup();
+void ComputeNode::init(const ll::ComputeNodeDescriptor& descriptor) {
 
     /////////////////////////////////////////////
     // Specialization constants
@@ -87,8 +129,8 @@ void ComputeNode::init(const ll::ComputeNodeDescriptor& descriptor) {
     /////////////////////////////////////////////
     stageInfo = vk::PipelineShaderStageCreateInfo()
         .setStage(vk::ShaderStageFlagBits::eCompute)
-        .setModule(descriptor.getProgram()->getShaderModule())
-        .setPName(descriptor.getFunctionName().c_str())
+        .setModule(program->getShaderModule())
+        .setPName(functionName.c_str())
         .setPSpecializationInfo(&specializationInfo);
 
 

@@ -10,13 +10,12 @@ namespace ll {
 
 using namespace std;
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<const ll::Program>& program) {
-    this->program = std::move(program);
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(std::shared_ptr<ll::Program> program) {
+    this->program = program;
     return *this;
 }
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) {
-    
     functionName = name;
     return *this;
 }
@@ -140,7 +139,7 @@ std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterB
 }
 
 
-std::shared_ptr<const ll::Program> ComputeNodeDescriptor::getProgram() const noexcept {
+std::shared_ptr<ll::Program> ComputeNodeDescriptor::getProgram() const noexcept {
     return program;
 }
 

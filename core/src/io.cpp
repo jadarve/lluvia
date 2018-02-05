@@ -1,10 +1,12 @@
 #include "lluvia/core/io.h"
 
-#include "lluvia/core/ComputeGraph.h"
-#include "lluvia/core/Memory.h"
 #include "lluvia/core/Buffer.h"
-#include "lluvia/core/utils.h"
+#include "lluvia/core/ComputeGraph.h"
+#include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/Memory.h"
+#include "lluvia/core/Program.h"
 #include "lluvia/core/Session.h"
+#include "lluvia/core/utils.h"
 #include "lluvia/core/Visitor.h"
 
 
@@ -31,8 +33,10 @@ public:
         this->graph = graph;
 
         // placeholders
-        obj["memories"] = nullptr;
-        obj["buffers"]  = nullptr;
+        obj["memories"]      = nullptr;
+        obj["buffers"]       = nullptr;
+        obj["programs"]      = nullptr;
+        obj["compute_nodes"] = nullptr;
     }
 
 
@@ -61,8 +65,177 @@ public:
     }
 
 
+    virtual void visitProgram(std::shared_ptr<ll::Program> program, const std::string& name = {}) {
+
+        const auto& spirv = program->getSpirV();
+
+        auto j = json {};
+        j["name"] = name;
+        j["spirv"] = ll::toBase64(spirv.data(), spirv.size());
+
+        obj["programs"].push_back(j);
+    }
+
+
+    virtual void visitComputeNode(std::shared_ptr<ll::ComputeNode> node, const std::string& name = {}) {
+
+        auto j = json {};
+        j["name"]       = name;
+        j["program"]    = graph->getProgramNameForComputeNode(name);
+        j["function"]   = node->getFunctionName();
+        j["local_x"]    = node->getLocalX();
+        j["local_y"]    = node->getLocalY();
+        j["local_z"]    = node->getLocalZ();
+        j["global_x"]   = node->getGlobalX();
+        j["global_y"]   = node->getGlobalY();
+        j["global_z"]   = node->getGlobalZ();
+        j["parameters"] = nullptr; // TODO
+
+        obj["compute_nodes"].push_back(j);
+    }
+
+
     std::shared_ptr<ll::ComputeGraph> graph {nullptr};
     json obj;
+};
+
+
+class ComputeGraphJsonReader {
+
+public:
+
+    std::shared_ptr<ll::ComputeGraph> build(const std::string& filePath, std::shared_ptr<ll::Session> session) {
+
+        assert(session != nullptr);
+        this->session = session;
+
+        std::ifstream file {filePath, std::ios_base::in};
+
+        if (file.is_open()) {
+
+            auto j = json {};
+            file >> j;
+
+            graph = std::make_shared<ll::ComputeGraph>();
+
+            const auto& memories = j["memories"];
+            if (!memories.is_null()) {
+
+                assert(memories.is_array());
+                for (const auto& mem : memories) {
+                    buildMemory(mem);
+                }
+            }
+
+            const auto& buffers = j["buffers"];
+            if (!buffers.is_null()) {
+
+                assert(buffers.is_array());
+                for (const auto& buf : buffers) {
+                    buildBuffer(buf);
+                }
+            }
+
+            const auto& programs = j["programs"];
+            if (!programs.is_null()) {
+
+                assert(programs.is_array());
+                for (const auto& prog : programs) {
+                    buildProgram(prog);
+                }
+            }
+
+            const auto& nodes = j["compute_nodes"];
+            if (!nodes.is_null()) {
+
+                assert(nodes.is_array());
+                for (const auto& n : nodes) {
+                    buildComputeNode(n);
+                }
+            }
+
+            return graph;
+        }
+
+        return nullptr;
+    }
+
+
+    void buildMemory(const json& j) {
+
+        const auto memFlagsVector = j["flags"];
+        const auto pageSize       = j["page_size"];
+        const auto name           = j["name"];
+
+        assert(!memFlagsVector.is_null());
+        assert(memFlagsVector.is_array());
+
+        assert(!pageSize.is_null());
+        assert(pageSize.is_number_integer());
+
+        assert(!name.is_null());
+        assert(name.is_string());
+
+        const auto flags    = ll::vectorStringToMemoryPropertyFlags(memFlagsVector);
+
+        auto memory = session->createMemory(flags, pageSize.get<uint64_t>(), false);
+        graph->addMemory(name, memory);
+    }
+
+
+    void buildBuffer(const json& j) {
+
+        const auto name        = j["name"];
+        const auto memName     = j["memory"];
+        const auto size        = j["size"];
+        const auto usageVector = j["usage"];
+
+        assert(!name.is_null());
+        assert(name.is_string());
+
+        assert(!memName.is_null());
+        assert(memName.is_string());
+
+        assert(!size.is_null());
+        assert(size.is_number_integer());
+
+        assert(!usageVector.is_null());
+        assert(usageVector.is_array());
+
+        const auto usageFlags = ll::vectorStringToBufferUsageFLags(usageVector);
+
+        // can throw std::out_of_range
+        auto memory = graph->getMemory(memName);
+
+        auto buffer = memory->createBuffer(size, usageFlags);
+        graph->addBuffer(name, buffer);
+    }
+
+
+    void buildProgram(const json& j) {
+
+        const auto name = j["name"];
+        const auto spirvString = j["spirv"];
+
+        assert(!name.is_null());
+        assert(name.is_string());
+
+        assert(!spirvString.is_null());
+        assert(spirvString.is_string());
+
+        auto program = session->createProgram(ll::fromBase64(spirvString));
+    }
+
+
+    void buildComputeNode(const json& j) {
+        // TODO
+    }
+
+
+private:
+    std::shared_ptr<ll::Session> session;
+    std::shared_ptr<ll::ComputeGraph> graph;
+
 };
 
 } // namespace impl
@@ -84,90 +257,8 @@ void writeComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::strin
 
 std::shared_ptr<ll::ComputeGraph> readComputeGraph(const std::string& filePath, std::shared_ptr<ll::Session> session) {
 
-    assert(session != nullptr);
-
-    std::ifstream file {filePath, std::ios_base::in};
-
-    try {
-
-        if (file.is_open()) {
-
-            auto j = json {};
-            file >> j;
-
-            auto graph = std::make_shared<ll::ComputeGraph>();
-
-            // memories
-            for (const auto& mem : j["memories"]) {
-
-                const auto memFlagsVector = mem["flags"];
-                const auto pageSize       = mem["page_size"];
-                const auto name           = mem["name"];
-
-                assert (memFlagsVector != nullptr);
-                assert (memFlagsVector.is_array());
-
-                assert (pageSize != nullptr);
-                assert (pageSize.is_number_integer());
-
-                assert (name != nullptr);
-                assert (name.is_string());
-
-                const auto flags    = ll::vectorStringToMemoryPropertyFlags(memFlagsVector);
-
-                // TODO: need to include exact match flags
-                auto memory = session->createMemory(flags, pageSize.get<uint64_t>(), false);
-                graph->addMemory(name, memory);
-            }
-
-            // buffers
-            for (const auto& buf : j["buffers"]) {
-
-                const auto name        = buf["name"];
-                const auto memName     = buf["memory"];
-                const auto size        = buf["size"];
-                const auto usageVector = buf["usage"];
-
-                assert (name != nullptr);
-                assert (name.is_string());
-
-                assert (memName != nullptr);
-                assert (memName.is_string());
-
-                assert (size != nullptr);
-                assert (size.is_number_integer());
-
-                assert (usageVector != nullptr);
-                assert (usageVector.is_array());
-
-                const auto usageFlags = ll::vectorStringToBufferUsageFLags(usageVector);
-
-                // can throw std::out_of_range
-                auto memory = graph->getMemory(memName);
-
-                auto buffer = memory->createBuffer(size, usageFlags);
-                graph->addBuffer(name, buffer);
-
-            }
-
-            return graph;
-            // std::cout << std::setw(4) << j << std::endl;
-        }
-
-    }
-    catch (const json::exception& e) {
-
-        // json::exceptions should not be thrown out of this function
-        std::cerr << "json exception" << std::endl;
-    }
-    catch (const std::out_of_range& e) {
-
-        // some element in the graph was not found.
-        std::cerr << "out_of_range exception" << std::endl;
-    }
-
-    
-    return nullptr;
+    auto reader = impl::ComputeGraphJsonReader {};
+    return reader.build(filePath, session);
 }
 
 

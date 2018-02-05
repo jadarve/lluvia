@@ -11,6 +11,8 @@ namespace ll {
 
 class Buffer;
 class ComputeNodeDescriptor;
+class Program;
+class Visitor;
 
 /**
  * \brief Compute node.
@@ -30,9 +32,24 @@ public:
     ComputeNode& operator = (ComputeNode&& node)      = delete;
 
 
+    std::string getFunctionName() const noexcept;
+
+    std::shared_ptr<ll::Program> getProgram() const noexcept;
+
+    uint32_t getLocalX() const noexcept;
+    uint32_t getLocalY() const noexcept;
+    uint32_t getLocalZ() const noexcept;
+
+    uint32_t getGlobalX() const noexcept;
+    uint32_t getGlobalY() const noexcept;
+    uint32_t getGlobalZ() const noexcept;
+
+
     void bind(int index, const std::shared_ptr<ll::Buffer> buffer);
 
     void record(const vk::CommandBuffer& commandBufer) const;
+
+    void accept(ll::Visitor* visitor);
 
 private:
     void init(const ll::ComputeNodeDescriptor& descriptor);
@@ -53,6 +70,9 @@ private:
 
     std::array<uint32_t, 3>             localGroup  {{1, 1, 1}};
     std::array<uint32_t, 3>             globalGroup {{1, 1, 1}};
+
+    std::shared_ptr<ll::Program>        program;
+    std::string                         functionName;
 
     // specialization constants
     // vk::SpecializationInfo specializationInfo;

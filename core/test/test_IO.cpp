@@ -22,7 +22,7 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    auto hostMemory = session->createMemory(memflags::eHostVisible | memflags::eHostCoherent, 1024, false);
+    auto hostMemory = session->createMemory(memflags::eHostVisible | memflags::eHostCoherent, 1024, true);
     REQUIRE(hostMemory != nullptr);
 
     auto devMemory = session->createMemory(memflags::eDeviceLocal, 4096, false);
@@ -52,6 +52,21 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
     graph->addBuffer("devBuffer_3", devBuffer_3);
     graph->addBuffer("devBuffer_4", devBuffer_4);
 
+    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
+    REQUIRE(program != nullptr);
+    graph->addProgram("assign", program);
+
+    auto nodeDescriptor = ll::ComputeNodeDescriptor()
+                            .setProgram(program)
+                            .setFunctionName("main")
+                            .setLocalX(1024)
+                            .addBufferParameter();
+
+    auto node = session->createComputeNode(nodeDescriptor);
+    REQUIRE(node != nullptr);
+    graph->addComputeNode("node_0", node);
+
+
     ll::writeComputeGraph(graph, "moni moni");
 }
 
@@ -62,4 +77,5 @@ TEST_CASE("ReadGraph", "test_IO") {
     REQUIRE(session != nullptr);
 
     auto graph = ll::readComputeGraph(DATA_PATH + "/buffers.json", session);
+    REQUIRE(graph != nullptr);
 }

@@ -54,7 +54,8 @@ public:
     ///////////////////////////////////////////////////////
     // Compute Pipeline
     ///////////////////////////////////////////////////////
-    std::shared_ptr<const ll::Program> createProgram(const std::string& spirvPath) const;
+    std::shared_ptr<ll::Program> createProgram(const std::string& spirvPath) const;
+    std::shared_ptr<ll::Program> createProgram(const std::vector<uint8_t>& spirv) const;
 
     std::shared_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const;
 

@@ -35,6 +35,7 @@ vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std:
 
         if (strFlag == STRING_VK_MEMORY_DEVICE_LOCAL)     flags |= vk::MemoryPropertyFlagBits::eDeviceLocal;
         if (strFlag == STRING_VK_MEMORY_HOST_CACHED)      flags |= vk::MemoryPropertyFlagBits::eHostCached;
+        if (strFlag == STRING_VK_MEMORY_HOST_COHERENT)    flags |= vk::MemoryPropertyFlagBits::eHostCoherent;
         if (strFlag == STRING_VK_MEMORY_HOST_VISIBLE)     flags |= vk::MemoryPropertyFlagBits::eHostVisible;
         if (strFlag == STRING_VK_MEMORY_LAZILY_ALLOCATED) flags |= vk::MemoryPropertyFlagBits::eLazilyAllocated;
     }
