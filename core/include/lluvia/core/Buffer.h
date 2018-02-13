@@ -2,6 +2,7 @@
 #define LLUVIA_CORE_BUFFER_H_
 
 #include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/Object.h"
 
 #include <vulkan/vulkan.hpp>
 
@@ -15,17 +16,19 @@ class Memory;
 class Session;
 class Visitor;
 
-class Buffer {
+class Buffer: public virtual Object {
 
 public:
     Buffer()                = delete;
     Buffer(const Buffer& b) = delete;
     Buffer(Buffer&& b)      = delete;
 
-    ~Buffer();
+    virtual ~Buffer();
 
     Buffer& operator = (const Buffer& buffer) = delete;
     Buffer& operator = (Buffer&& buffer)      = delete;
+
+    ObjectType getType() const noexcept override;
 
     uint64_t getSize() const noexcept;
 

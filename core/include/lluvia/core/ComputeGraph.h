@@ -14,6 +14,7 @@ namespace ll {
 class Buffer;
 class ComputeNode;
 class Memory;
+class Object;
 class Program;
 class Session;
 class Visitor;
@@ -37,7 +38,7 @@ public:
     bool containsMemory(const std::string& name) const noexcept;
     void addMemory(const std::string& name, std::shared_ptr<ll::Memory> memory);
     std::shared_ptr<ll::Memory> getMemory(const std::string& name) const;
-    std::string getMemoryNameForBuffer(const std::string& name) const;
+    std::string findMemoryNameForBuffer(const std::string& name) const;
 
     std::vector<std::string> getBufferNames() const;
     bool containsBuffer(const std::string& name) const noexcept;
@@ -51,7 +52,9 @@ public:
 
     void addComputeNode(const std::string& name, std::shared_ptr<ll::ComputeNode> node);
     std::shared_ptr<ll::ComputeNode> getComputeNode(const std::string& name) const;
-    std::string getProgramNameForComputeNode(const std::string& name) const;
+    std::string findProgramNameForComputeNode(const std::string& name) const;
+
+    std::string findObjectName(std::shared_ptr<ll::Object> param);
 
     void accept(ll::Visitor* visitor);
 

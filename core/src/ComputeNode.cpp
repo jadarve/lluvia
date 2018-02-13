@@ -14,12 +14,9 @@ using namespace std;
 
 ComputeNode::ComputeNode(const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
     device       {device},
-    localGroup   {descriptor.getLocalGroup()},
-    globalGroup  {descriptor.getGlobalGroup()},
-    program      {descriptor.getProgram()},
-    functionName {descriptor.getFunctionName()} {
+    descriptor   {descriptor} {
 
-    init(descriptor);
+    init();
 }
 
 
@@ -33,48 +30,62 @@ ComputeNode::~ComputeNode() {
 
 
 std::string ComputeNode::getFunctionName() const noexcept {
-    return functionName;
+    return descriptor.functionName;
 }
 
 
 std::shared_ptr<ll::Program> ComputeNode::getProgram() const noexcept{
-    return program;
+    return descriptor.program;
 }
 
 
 uint32_t ComputeNode::getLocalX() const noexcept {
-    return localGroup[0];
+    return descriptor.localGroup[0];
 }
 
 
 uint32_t ComputeNode::getLocalY() const noexcept {
-    return localGroup[1];
+    return descriptor.localGroup[1];
 }
 
 
 uint32_t ComputeNode::getLocalZ() const noexcept {
-    return localGroup[2];
+    return descriptor.localGroup[2];
 }
 
 
 uint32_t ComputeNode::getGlobalX() const noexcept {
-    return globalGroup[0];
+    return descriptor.globalGroup[0];
 }
 
 
 uint32_t ComputeNode::getGlobalY() const noexcept {
-    return globalGroup[1];
+    return descriptor.globalGroup[1];
 }
 
 
 uint32_t ComputeNode::getGlobalZ() const noexcept {
-    return globalGroup[2];
+    return descriptor.globalGroup[2];
 }
 
 
-void ComputeNode::bind(int index, const std::shared_ptr<ll::Buffer> buffer) {
+size_t ComputeNode::getParameterCount() const noexcept {
+    return parameters.size();
+}
+
+
+std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexcept {
+    assert(index < parameters.size());
+    return parameters[index];
+}
+
+
+void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
 
     // TODO: assert that index contains a buffer
+    assert(index < parameters.size());
+
+    parameters[index] = buffer;
 
     vk::DescriptorBufferInfo descBufferInfo = vk::DescriptorBufferInfo()
         .setOffset(0)
@@ -97,7 +108,7 @@ void ComputeNode::record(const vk::CommandBuffer& commandBufer) const {
 
     commandBufer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
     commandBufer.bindDescriptorSets(vk::PipelineBindPoint::eCompute, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
-    commandBufer.dispatch(globalGroup[0], globalGroup[1], globalGroup[2]);
+    commandBufer.dispatch(descriptor.globalGroup[0], descriptor.globalGroup[1], descriptor.globalGroup[2]);
 }
 
 
@@ -105,42 +116,47 @@ void ComputeNode::accept(ll::Visitor* visitor) {
     assert(visitor != nullptr);
 }
 
-void ComputeNode::init(const ll::ComputeNodeDescriptor& descriptor) {
+
+void ComputeNode::init() {
+
+    assert(descriptor.program != nullptr);
+    assert(!descriptor.functionName.empty());
+
+    parameters.resize(descriptor.parameterBindings.size());
 
     /////////////////////////////////////////////
     // Specialization constants
     /////////////////////////////////////////////
 
     const size_t size = sizeof(uint32_t);
-    vector<vk::SpecializationMapEntry> specializationMapEntries {
+    auto specializationMapEntries = vector<vk::SpecializationMapEntry> {
         {1, 0*size, size},
         {2, 1*size, size},
         {3, 2*size, size}
     };
 
-    vk::SpecializationInfo specializationInfo = vk::SpecializationInfo()
+    auto specializationInfo = vk::SpecializationInfo()
         .setMapEntryCount(specializationMapEntries.size())
         .setPMapEntries(specializationMapEntries.data())
-        .setDataSize(localGroup.size()*sizeof(uint32_t))
-        .setPData(&localGroup[0]);
+        .setDataSize(descriptor.localGroup.size()*sizeof(uint32_t))
+        .setPData(&descriptor.localGroup[0]);
 
     /////////////////////////////////////////////
     // Pipeline stage info
     /////////////////////////////////////////////
     stageInfo = vk::PipelineShaderStageCreateInfo()
         .setStage(vk::ShaderStageFlagBits::eCompute)
-        .setModule(program->getShaderModule())
-        .setPName(functionName.c_str())
+        .setModule(descriptor.program->getShaderModule())
+        .setPName(descriptor.functionName.c_str())
         .setPSpecializationInfo(&specializationInfo);
 
 
     /////////////////////////////////////////////
     // Descriptor pool and descriptor set
     /////////////////////////////////////////////
-    std::vector<vk::DescriptorSetLayoutBinding> parameterBindings {descriptor.getParameterBindings()};
-    vk::DescriptorSetLayoutCreateInfo descLayoutInfo = vk::DescriptorSetLayoutCreateInfo()
-        .setBindingCount(parameterBindings.size())
-        .setPBindings(parameterBindings.data());
+    auto descLayoutInfo = vk::DescriptorSetLayoutCreateInfo()
+        .setBindingCount(descriptor.parameterBindings.size())
+        .setPBindings(descriptor.parameterBindings.data());
 
     descriptorSetLayout = device.createDescriptorSetLayout(descLayoutInfo);
 

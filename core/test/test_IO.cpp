@@ -64,6 +64,9 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
+    
+    node->bind(0, hostBuffer_0);
+    
     graph->addComputeNode("node_0", node);
 
 

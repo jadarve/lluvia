@@ -1,6 +1,8 @@
 #ifndef LLUVIA_CORE_COMPUTE_NODE_H_
 #define LLUVIA_CORE_COMPUTE_NODE_H_
 
+#include "lluvia/core/ComputeNodeDescriptor.h"
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -10,7 +12,7 @@
 namespace ll {
 
 class Buffer;
-class ComputeNodeDescriptor;
+class Object;
 class Program;
 class Visitor;
 
@@ -44,15 +46,18 @@ public:
     uint32_t getGlobalY() const noexcept;
     uint32_t getGlobalZ() const noexcept;
 
+    size_t getParameterCount() const noexcept;
+    std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;
 
-    void bind(int index, const std::shared_ptr<ll::Buffer> buffer);
+
+    void bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer);
 
     void record(const vk::CommandBuffer& commandBufer) const;
 
     void accept(ll::Visitor* visitor);
 
 private:
-    void init(const ll::ComputeNodeDescriptor& descriptor);
+    void init();
 
     vk::Device                          device;
 
@@ -68,18 +73,14 @@ private:
     vk::DescriptorSet                   descriptorSet;
     vk::DescriptorPool                  descriptorPool;
 
-    std::array<uint32_t, 3>             localGroup  {{1, 1, 1}};
-    std::array<uint32_t, 3>             globalGroup {{1, 1, 1}};
-
-    std::shared_ptr<ll::Program>        program;
-    std::string                         functionName;
+    ll::ComputeNodeDescriptor           descriptor;
 
     // specialization constants
     // vk::SpecializationInfo specializationInfo;
     // std::vector<vk::SpecializationMapEntry> specializationMapEntries;
     // // uint32_t local_x {1};
 
-    // std::shared_ptr<uint32_t> local_x;
+    std::vector<std::shared_ptr<ll::Object>> parameters;
 };
 
 

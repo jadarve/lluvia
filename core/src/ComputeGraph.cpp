@@ -43,6 +43,8 @@ bool ComputeGraph::containsMemory(const std::string& name) const noexcept {
 
 void ComputeGraph::addMemory(const std::string& name, std::shared_ptr<ll::Memory> memory) {
     assert(memory != nullptr);
+    assert(!name.empty());
+
     memories[name] = memory;
 }
 
@@ -52,7 +54,7 @@ std::shared_ptr<ll::Memory> ComputeGraph::getMemory(const std::string& name) con
 }
 
 
-std::string ComputeGraph::getMemoryNameForBuffer(const std::string& name) const {
+std::string ComputeGraph::findMemoryNameForBuffer(const std::string& name) const {
 
     // can throw std::out_of_range
     auto buffer = getBuffer(name);
@@ -89,6 +91,8 @@ bool ComputeGraph::containsBuffer(const std::string& name) const noexcept{
 
 void ComputeGraph::addBuffer(const std::string& name, std::shared_ptr<ll::Buffer> buffer) {
     assert(buffer != nullptr);
+    assert(!name.empty());
+
     buffers[name] = buffer;
 }
 
@@ -117,6 +121,8 @@ bool ComputeGraph::containsProgram(const std::string& name) const noexcept {
 
 void ComputeGraph::addProgram(const std::string& name, std::shared_ptr<ll::Program> program) {
     assert(program != nullptr);
+    assert(!name.empty());
+
     programs[name] = program;
 }
 
@@ -128,6 +134,8 @@ std::shared_ptr<ll::Program> ComputeGraph::getProgram(const std::string& name) c
 
 void ComputeGraph::addComputeNode(const std::string& name, std::shared_ptr<ll::ComputeNode> node) {
     assert(node != nullptr);
+    assert(!name.empty());
+    
     computeNodes[name] = node;
 }
 
@@ -137,7 +145,7 @@ std::shared_ptr<ll::ComputeNode> ComputeGraph::getComputeNode(const std::string&
 }
 
 
-std::string ComputeGraph::getProgramNameForComputeNode(const std::string& name) const {
+std::string ComputeGraph::findProgramNameForComputeNode(const std::string& name) const {
 
     // can throw std::out_of_range
     auto node = getComputeNode(name);
@@ -152,6 +160,18 @@ std::string ComputeGraph::getProgramNameForComputeNode(const std::string& name) 
     // if the code reaches this point, the program object the node was
     // created from is not inside the programs container.
     throw std::out_of_range(std::string{"program not found for node: "} + name);
+}
+
+
+std::string ComputeGraph::findObjectName(std::shared_ptr<ll::Object> param) {
+
+    for (const auto& it : buffers) {
+        if (it.second == param) {
+            return it.first;
+        }
+    }
+
+    throw std::out_of_range(std::string{"parameter name not found: "});
 }
 
 

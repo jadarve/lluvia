@@ -59,7 +59,7 @@ public:
         j["usage"]  = ll::bufferUsageFlagsToVectorString(buffer->getUsageFlags());
 
         // can throw std::out_of_range
-        j["memory"] = graph->getMemoryNameForBuffer(name);
+        j["memory"] = graph->findMemoryNameForBuffer(name);
 
         obj["buffers"].push_back(j);
     }
@@ -81,7 +81,7 @@ public:
 
         auto j = json {};
         j["name"]       = name;
-        j["program"]    = graph->getProgramNameForComputeNode(name);
+        j["program"]    = graph->findProgramNameForComputeNode(name);
         j["function"]   = node->getFunctionName();
         j["local_x"]    = node->getLocalX();
         j["local_y"]    = node->getLocalY();
@@ -89,7 +89,18 @@ public:
         j["global_x"]   = node->getGlobalX();
         j["global_y"]   = node->getGlobalY();
         j["global_z"]   = node->getGlobalZ();
-        j["parameters"] = nullptr; // TODO
+        j["parameters"] = nullptr; // placeholder
+
+        const auto pCount = node->getParameterCount();
+        for (auto i = 0u; i < pCount; ++i) {
+            const auto param = node->getParameter(i);
+
+            auto p = json {};
+            p["type"] = objectTypeToString(param->getType());
+            p["name"] = graph->findObjectName(param);
+
+            j["parameters"].push_back(p);
+        }
 
         obj["compute_nodes"].push_back(j);
     }

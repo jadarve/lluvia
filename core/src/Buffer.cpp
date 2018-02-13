@@ -23,6 +23,11 @@ Buffer::~Buffer() {
 }
 
 
+ObjectType Buffer::getType() const noexcept {
+    return ObjectType::Buffer;
+}
+
+
 uint64_t Buffer::getSize() const noexcept {
     return requestedSize;
 }
