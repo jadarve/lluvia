@@ -32,7 +32,6 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addBufferParameter() {
     };
 
     parameterBindings.push_back(std::move(param));
-    ++ bufferCount;
     return *this;
 }
 
@@ -82,7 +81,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexce
 std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
     vector<vk::DescriptorPoolSize> poolSizes{
-        {vk::DescriptorType::eStorageBuffer, bufferCount}
+        {vk::DescriptorType::eStorageBuffer, getStorageBufferCount()}
     };
     
     return poolSizes;
@@ -141,6 +140,21 @@ std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterB
 
 std::shared_ptr<ll::Program> ComputeNodeDescriptor::getProgram() const noexcept {
     return program;
+}
+
+
+uint32_t ComputeNodeDescriptor::getStorageBufferCount() const noexcept {
+    return countDescriptorType(vk::DescriptorType::eStorageBuffer);    
+}
+
+
+uint32_t ComputeNodeDescriptor::countDescriptorType(const vk::DescriptorType type) const noexcept {
+
+    auto count = uint32_t {0};
+    for (const auto& it : parameterBindings) {
+        count += static_cast<uint32_t>(it.descriptorType == type);
+    }
+    return count;
 }
 
 } // namespace ll

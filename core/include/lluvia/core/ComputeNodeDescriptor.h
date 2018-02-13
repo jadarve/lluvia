@@ -10,6 +10,7 @@
 
 namespace ll {
 
+class ComputeNode;
 class Program;
 
 class ComputeNodeDescriptor {
@@ -38,35 +39,39 @@ public:
 
     std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
 
+    std::shared_ptr<ll::Program> getProgram() const noexcept;
+
     std::string getFunctionName() const noexcept;
+    
+    std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const noexcept;
 
     std::array<uint32_t, 3> getGlobalGroup() const noexcept;
     std::array<uint32_t, 3> getLocalGroup()  const noexcept;
 
-    uint32_t getGlobalX()         const noexcept;
-    uint32_t getGlobalY()         const noexcept;
-    uint32_t getGlobalZ()         const noexcept;
+    uint32_t getGlobalX() const noexcept;
+    uint32_t getGlobalY() const noexcept;
+    uint32_t getGlobalZ() const noexcept;
 
-    uint32_t getLocalX()          const noexcept;
-    uint32_t getLocalY()          const noexcept;
-    uint32_t getLocalZ()          const noexcept;
+    uint32_t getLocalX() const noexcept;
+    uint32_t getLocalY() const noexcept;
+    uint32_t getLocalZ() const noexcept;
 
-    std::shared_ptr<ll::Program>                getProgram()           const noexcept;
-    std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const noexcept;
+    uint32_t getStorageBufferCount() const noexcept;
 
 
 private:
-    std::shared_ptr<ll::Program> program;
-    std::string functionName;
+    uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
+
+    std::shared_ptr<ll::Program>                program;
+    std::string                                 functionName;
     std::vector<vk::DescriptorSetLayoutBinding> parameterBindings;
 
     // local and global work group
     std::array<uint32_t, 3> localGroup  {{1, 1, 1}};
     std::array<uint32_t, 3> globalGroup {{1, 1, 1}};
 
-    // counters for layout parameters
-    uint32_t bufferCount {0};
 
+friend class ComputeNode;
 };
 
 
