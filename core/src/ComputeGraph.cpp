@@ -61,7 +61,7 @@ std::string ComputeGraph::findMemoryNameForObject(const std::string& name) const
 
     if (obj->getType() == ll::ObjectType::Buffer) {
 
-        auto buffer = std::dynamic_pointer_cast<ll::Buffer>(obj);
+        auto buffer = std::static_pointer_cast<ll::Buffer>(obj);
 
         for (const auto& it : memories) {
 
@@ -192,7 +192,7 @@ void ComputeGraph::accept(ll::Visitor* visitor) {
         auto& obj = it.second;
 
         if (obj->getType() == ll::ObjectType::Buffer) {
-            visitor->visitBuffer(std::dynamic_pointer_cast<ll::Buffer>(obj), it.first);    
+            visitor->visitBuffer(std::static_pointer_cast<ll::Buffer>(obj), it.first);    
         }
         
     }
