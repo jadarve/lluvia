@@ -38,12 +38,12 @@ public:
     bool containsMemory(const std::string& name) const noexcept;
     void addMemory(const std::string& name, std::shared_ptr<ll::Memory> memory);
     std::shared_ptr<ll::Memory> getMemory(const std::string& name) const;
-    std::string findMemoryNameForBuffer(const std::string& name) const;
+    std::string findMemoryNameForObject(const std::string& name) const;
 
-    std::vector<std::string> getBufferNames() const;
-    bool containsBuffer(const std::string& name) const noexcept;
-    void addBuffer(const std::string& name, std::shared_ptr<ll::Buffer> buffer);
-    std::shared_ptr<ll::Buffer> getBuffer(const std::string& name) const;
+    std::vector<std::string> getObjectNames() const;
+    bool containsObject(const std::string& name) const noexcept;
+    void addObject(const std::string& name, std::shared_ptr<ll::Object> object);
+    std::shared_ptr<ll::Object> getObject(const std::string& name) const;
 
     std::vector<std::string> getProgramNames() const;
     bool containsProgram(const std::string& name) const noexcept;
@@ -60,7 +60,7 @@ public:
 
 private:
     std::unordered_map<std::string, std::shared_ptr<ll::Memory>>      memories;
-    std::unordered_map<std::string, std::shared_ptr<ll::Buffer>>      buffers;
+    std::unordered_map<std::string, std::shared_ptr<ll::Object>>      objects;
     std::unordered_map<std::string, std::shared_ptr<ll::Program>>     programs;
     std::unordered_map<std::string, std::shared_ptr<ll::ComputeNode>> computeNodes;
 

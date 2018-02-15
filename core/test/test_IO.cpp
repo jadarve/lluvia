@@ -42,15 +42,15 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
     graph->addMemory("hostMemory", hostMemory);
     graph->addMemory("devMemory", devMemory);
 
-    graph->addBuffer("hostBuffer_0", hostBuffer_0);
-    graph->addBuffer("hostBuffer_1", hostBuffer_1);
-    graph->addBuffer("hostBuffer_2", hostBuffer_2);
+    graph->addObject("hostBuffer_0", hostBuffer_0);
+    graph->addObject("hostBuffer_1", hostBuffer_1);
+    graph->addObject("hostBuffer_2", hostBuffer_2);
 
-    graph->addBuffer("devBuffer_0", devBuffer_0);
-    graph->addBuffer("devBuffer_1", devBuffer_1);
-    graph->addBuffer("devBuffer_2", devBuffer_2);
-    graph->addBuffer("devBuffer_3", devBuffer_3);
-    graph->addBuffer("devBuffer_4", devBuffer_4);
+    graph->addObject("devBuffer_0", devBuffer_0);
+    graph->addObject("devBuffer_1", devBuffer_1);
+    graph->addObject("devBuffer_2", devBuffer_2);
+    graph->addObject("devBuffer_3", devBuffer_3);
+    graph->addObject("devBuffer_4", devBuffer_4);
 
     auto program = session->createProgram(SHADER_PATH + "/assign.spv");
     REQUIRE(program != nullptr);
@@ -81,4 +81,17 @@ TEST_CASE("ReadGraph", "test_IO") {
 
     auto graph = ll::readComputeGraph(DATA_PATH + "/buffers.json", session);
     REQUIRE(graph != nullptr);
+
+    // check the contents of the graph
+    REQUIRE(graph->containsMemory("devMemory"));
+    REQUIRE(graph->containsMemory("hostMemory"));
+
+    REQUIRE(graph->containsObject("devBuffer_0"));
+    REQUIRE(graph->containsObject("devBuffer_1"));
+    REQUIRE(graph->containsObject("devBuffer_2"));
+    REQUIRE(graph->containsObject("devBuffer_3"));
+    REQUIRE(graph->containsObject("devBuffer_4"));
+    REQUIRE(graph->containsObject("hostBuffer_0"));
+    REQUIRE(graph->containsObject("hostBuffer_1"));
+    REQUIRE(graph->containsObject("hostBuffer_2"));
 }

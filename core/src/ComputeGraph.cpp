@@ -20,7 +20,7 @@ namespace ll {
 ComputeGraph::~ComputeGraph() {
 
     // destruction order
-    buffers.clear();
+    objects.clear();
     memories.clear();
 }
 
@@ -54,29 +54,34 @@ std::shared_ptr<ll::Memory> ComputeGraph::getMemory(const std::string& name) con
 }
 
 
-std::string ComputeGraph::findMemoryNameForBuffer(const std::string& name) const {
+std::string ComputeGraph::findMemoryNameForObject(const std::string& name) const {
 
     // can throw std::out_of_range
-    auto buffer = getBuffer(name);
+    auto obj = getObject(name);
 
-    for (const auto& it : memories) {
+    if (obj->getType() == ll::ObjectType::Buffer) {
 
-        if (it.second == buffer->memory) {
-            return it.first;
+        auto buffer = std::static_pointer_cast<ll::Buffer>(obj);
+
+        for (const auto& it : memories) {
+
+            if (it.second == buffer->memory) {
+                return it.first;
+            }
         }
     }
 
     // if the code reaches this point, the memory object the buffer was
     // created from is not inside the memories container.
-    throw std::out_of_range(std::string{"memory not found for buffer: "} + name);
+    throw std::out_of_range(std::string{"memory not found for object: "} + name);
 }
 
 
-std::vector<std::string> ComputeGraph::getBufferNames() const {
+std::vector<std::string> ComputeGraph::getObjectNames() const {
 
-    auto names = std::vector<std::string>(buffers.size());
+    auto names = std::vector<std::string>(objects.size());
 
-    for (const auto& v : buffers) {
+    for (const auto& v : objects) {
         names.push_back(v.first);
     }
 
@@ -84,21 +89,21 @@ std::vector<std::string> ComputeGraph::getBufferNames() const {
 }
 
 
-bool ComputeGraph::containsBuffer(const std::string& name) const noexcept{
-    return buffers.find(name) != buffers.cend();
+bool ComputeGraph::containsObject(const std::string& name) const noexcept{
+    return objects.find(name) != objects.cend();
 }
 
 
-void ComputeGraph::addBuffer(const std::string& name, std::shared_ptr<ll::Buffer> buffer) {
-    assert(buffer != nullptr);
+void ComputeGraph::addObject(const std::string& name, std::shared_ptr<ll::Object> object) {
+    assert(object != nullptr);
     assert(!name.empty());
 
-    buffers[name] = buffer;
+    objects[name] = object;
 }
 
 
-std::shared_ptr<ll::Buffer> ComputeGraph::getBuffer(const std::string& name) const {
-    return buffers.at(name);
+std::shared_ptr<ll::Object> ComputeGraph::getObject(const std::string& name) const {
+    return objects.at(name);
 }
 
 
@@ -165,13 +170,13 @@ std::string ComputeGraph::findProgramNameForComputeNode(const std::string& name)
 
 std::string ComputeGraph::findObjectName(std::shared_ptr<ll::Object> param) {
 
-    for (const auto& it : buffers) {
+    for (const auto& it : objects) {
         if (it.second == param) {
             return it.first;
         }
     }
 
-    throw std::out_of_range(std::string{"parameter name not found: "});
+    throw std::out_of_range(std::string{"object name not found: "});
 }
 
 
@@ -182,8 +187,14 @@ void ComputeGraph::accept(ll::Visitor* visitor) {
         visitor->visitMemory(it.second, it.first);
     }
 
-    for (const auto& it : buffers) {
-        visitor->visitBuffer(it.second, it.first);
+    for (const auto& it : objects) {
+
+        auto& obj = it.second;
+
+        if (obj->getType() == ll::ObjectType::Buffer) {
+            visitor->visitBuffer(std::static_pointer_cast<ll::Buffer>(obj), it.first);    
+        }
+        
     }
 
     for (const auto& it : programs) {
