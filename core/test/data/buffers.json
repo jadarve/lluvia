@@ -1,6 +1,7 @@
 {
-    "buffers": [
+    "objects": [
         {
+            "type": "buffer",
             "memory": "devMemory",
             "name": "devBuffer_4",
             "size": 4096,
@@ -11,6 +12,7 @@
             ]
         },
         {
+            "type": "buffer",
             "memory": "devMemory",
             "name": "devBuffer_3",
             "size": 2048,
@@ -21,6 +23,7 @@
             ]
         },
         {
+            "type": "buffer",
             "memory": "devMemory",
             "name": "devBuffer_2",
             "size": 768,
@@ -31,6 +34,7 @@
             ]
         },
         {
+            "type": "buffer",
             "memory": "devMemory",
             "name": "devBuffer_1",
             "size": 32,
@@ -41,6 +45,7 @@
             ]
         },
         {
+            "type": "buffer",
             "memory": "hostMemory",
             "name": "hostBuffer_0",
             "size": 512,
@@ -51,6 +56,7 @@
             ]
         },
         {
+            "type": "buffer",
             "memory": "devMemory",
             "name": "devBuffer_0",
             "size": 128,
@@ -61,6 +67,7 @@
             ]
         },
         {
+            "type": "buffer",
             "memory": "hostMemory",
             "name": "hostBuffer_1",
             "size": 1024,
@@ -71,6 +78,7 @@
             ]
         },
         {
+            "type": "buffer",
             "memory": "hostMemory",
             "name": "hostBuffer_2",
             "size": 256,

@@ -16,7 +16,7 @@ class Memory;
 class Session;
 class Visitor;
 
-class Buffer: public virtual Object {
+class Buffer: public Object {
 
 public:
     Buffer()                = delete;

@@ -34,7 +34,7 @@ public:
 
         // placeholders
         obj["memories"]      = nullptr;
-        obj["buffers"]       = nullptr;
+        obj["objects"]       = nullptr;
         obj["programs"]      = nullptr;
         obj["compute_nodes"] = nullptr;
     }
@@ -55,13 +55,14 @@ public:
 
         auto j = json {};
         j["name"]   = name;
+        j["type"]   = ll::objectTypeToString(buffer->getType());
         j["size"]   = buffer->getSize();
         j["usage"]  = ll::bufferUsageFlagsToVectorString(buffer->getUsageFlags());
 
         // can throw std::out_of_range
-        j["memory"] = graph->findMemoryNameForBuffer(name);
+        j["memory"] = graph->findMemoryNameForObject(name);
 
-        obj["buffers"].push_back(j);
+        obj["objects"].push_back(j);
     }
 
 
@@ -138,12 +139,18 @@ public:
                 }
             }
 
-            const auto& buffers = j["buffers"];
-            if (!buffers.is_null()) {
+            const auto& objects = j["objects"];
+            if (!objects.is_null()) {
 
-                assert(buffers.is_array());
-                for (const auto& buf : buffers) {
-                    buildBuffer(buf);
+                assert(objects.is_array());
+                for (const auto& obj : objects) {
+
+                    switch (ll::stringToObjectType(obj["type"].get<std::string>())) {
+                        case ll::ObjectType::Buffer:
+                            buildBuffer(obj);
+                            break;
+                        // TODO: other object types
+                    }
                 }
             }
 
@@ -219,7 +226,7 @@ public:
         auto memory = graph->getMemory(memName);
 
         auto buffer = memory->createBuffer(size, usageFlags);
-        graph->addBuffer(name, buffer);
+        graph->addObject(name, buffer);
     }
 
 
