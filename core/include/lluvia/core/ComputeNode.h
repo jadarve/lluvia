@@ -49,7 +49,7 @@ public:
     size_t getParameterCount() const noexcept;
     std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;
 
-
+    // FIXME: should change ll::Buffer to generic ll::Object type and bind according to object type
     void bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer);
 
     void record(const vk::CommandBuffer& commandBufer) const;

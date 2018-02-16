@@ -95,3 +95,18 @@ TEST_CASE("ReadGraph", "test_IO") {
     REQUIRE(graph->containsObject("hostBuffer_1"));
     REQUIRE(graph->containsObject("hostBuffer_2"));
 }
+
+TEST_CASE("ReadGraph_ComputeNode", "test_IO") {
+
+    auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
+    REQUIRE(session != nullptr);
+
+    auto graph = ll::readComputeGraph(DATA_PATH + "/computeNode.json", session);
+    REQUIRE(graph != nullptr);
+
+    // check the contents of the graph
+    REQUIRE(graph->containsMemory("hostMemory"));
+    REQUIRE(graph->containsObject("hostBuffer_0"));
+    REQUIRE(graph->containsProgram("assign"));
+    REQUIRE(graph->containsComputeNode("node_0"));
+}

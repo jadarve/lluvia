@@ -145,6 +145,11 @@ void ComputeGraph::addComputeNode(const std::string& name, std::shared_ptr<ll::C
 }
 
 
+bool ComputeGraph::containsComputeNode(const std::string& name) const noexcept {
+    return computeNodes.find(name) != computeNodes.end();
+}
+
+
 std::shared_ptr<ll::ComputeNode> ComputeGraph::getComputeNode(const std::string& name) const {
     return computeNodes.at(name);
 }

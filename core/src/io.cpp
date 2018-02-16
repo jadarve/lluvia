@@ -3,26 +3,44 @@
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeGraph.h"
 #include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/Session.h"
 #include "lluvia/core/utils.h"
 #include "lluvia/core/Visitor.h"
 
-
 #include "json/json.hpp"
-
 
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <type_traits>
 
 
 using json = nlohmann::json;
 
 
 namespace ll {
-
 namespace impl {
+
+
+template<typename U, typename T>
+U getValueFromJson(T&& name, const json& j) {
+
+    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
+
+    const auto value = j[name];
+    assert(!value.is_null());
+
+    if (std::is_integral<U>())          assert(value.is_number_integer());
+    if (std::is_floating_point<U>())    assert(value.is_number());
+    if (std::is_same<U, bool>())        assert(value.is_boolean());
+    if (std::is_same<U, std::string>()) assert(value.is_string());
+    if (std::is_same<U, json>())        assert(value.is_object() || value.is_array());
+    
+    return value.template get<U>();
+}
 
 
 class ComputeGraphFileWriterImpl : public ll::Visitor {
@@ -145,7 +163,10 @@ public:
                 assert(objects.is_array());
                 for (const auto& obj : objects) {
 
-                    switch (ll::stringToObjectType(obj["type"].get<std::string>())) {
+                    const auto pTypeString = getValueFromJson<std::string>("type", obj);
+                    const auto pType = ll::stringToObjectType(pTypeString);
+
+                    switch (pType) {
                         case ll::ObjectType::Buffer:
                             buildBuffer(obj);
                             break;
@@ -181,44 +202,23 @@ public:
 
     void buildMemory(const json& j) {
 
-        const auto memFlagsVector = j["flags"];
-        const auto pageSize       = j["page_size"];
-        const auto name           = j["name"];
-
-        assert(!memFlagsVector.is_null());
-        assert(memFlagsVector.is_array());
-
-        assert(!pageSize.is_null());
-        assert(pageSize.is_number_integer());
-
-        assert(!name.is_null());
-        assert(name.is_string());
+        const auto name           = getValueFromJson<std::string>("name", j);
+        const auto pageSize       = getValueFromJson<uint64_t>("page_size", j);
+        const auto memFlagsVector = getValueFromJson<json>("flags", j);
 
         const auto flags    = ll::vectorStringToMemoryPropertyFlags(memFlagsVector);
 
-        auto memory = session->createMemory(flags, pageSize.get<uint64_t>(), false);
+        auto memory = session->createMemory(flags, pageSize, false);
         graph->addMemory(name, memory);
     }
 
 
     void buildBuffer(const json& j) {
 
-        const auto name        = j["name"];
-        const auto memName     = j["memory"];
-        const auto size        = j["size"];
-        const auto usageVector = j["usage"];
-
-        assert(!name.is_null());
-        assert(name.is_string());
-
-        assert(!memName.is_null());
-        assert(memName.is_string());
-
-        assert(!size.is_null());
-        assert(size.is_number_integer());
-
-        assert(!usageVector.is_null());
-        assert(usageVector.is_array());
+        const auto name        = getValueFromJson<std::string>("name", j);
+        const auto memName     = getValueFromJson<std::string>("memory", j);;
+        const auto size        = getValueFromJson<uint64_t>("size", j);;
+        const auto usageVector = getValueFromJson<json>("usage", j);
 
         const auto usageFlags = ll::vectorStringToBufferUsageFLags(usageVector);
 
@@ -232,21 +232,79 @@ public:
 
     void buildProgram(const json& j) {
 
-        const auto name = j["name"];
-        const auto spirvString = j["spirv"];
-
-        assert(!name.is_null());
-        assert(name.is_string());
-
-        assert(!spirvString.is_null());
-        assert(spirvString.is_string());
+        const auto name        = getValueFromJson<std::string>("name", j);
+        const auto spirvString = getValueFromJson<std::string>("spirv", j);
 
         auto program = session->createProgram(ll::fromBase64(spirvString));
+        graph->addProgram(name, program);
     }
 
 
     void buildComputeNode(const json& j) {
-        // TODO
+
+        const auto name         = getValueFromJson<std::string>("name", j);
+        const auto functionName = getValueFromJson<std::string>("function", j);
+        const auto programName  = getValueFromJson<std::string>("program", j);
+        const auto globalX      = getValueFromJson<uint32_t>("global_x", j);
+        const auto globalY      = getValueFromJson<uint32_t>("global_y", j);
+        const auto globalZ      = getValueFromJson<uint32_t>("global_z", j);
+        const auto localX       = getValueFromJson<uint32_t>("local_x", j);
+        const auto localY       = getValueFromJson<uint32_t>("local_y", j);
+        const auto localZ       = getValueFromJson<uint32_t>("local_z", j);
+        const auto parameters   = getValueFromJson<json>("parameters", j);
+
+        // can throw std::out_of_range
+        auto program = graph->getProgram(programName);
+        auto descriptor = ll::ComputeNodeDescriptor()
+                            .setGlobalX(globalX)
+                            .setGlobalY(globalY)
+                            .setGlobalZ(globalZ)
+                            .setLocalX(localX)
+                            .setLocalY(localY)
+                            .setLocalZ(localZ)
+                            .setFunctionName(functionName)
+                            .setProgram(program);
+
+
+        // parameter descriptor
+        for (const auto& p : parameters) {
+
+            const auto pTypeString = getValueFromJson<std::string>("type", p);
+            const auto pType       = ll::stringToObjectType(pTypeString);
+
+            switch (pType) {
+                case ll::ObjectType::Buffer:
+                    descriptor.addBufferParameter();
+                    break;
+            }
+        }
+
+        auto computeNode = session->createComputeNode(descriptor);
+        
+        // parameter binding
+        auto pIndex = uint32_t {0};
+        for (const auto& p : parameters) {
+
+            const auto pName       = getValueFromJson<std::string>("name", p);
+            const auto pTypeString = getValueFromJson<std::string>("type", p);
+            const auto pType       = ll::stringToObjectType(pTypeString);
+
+            std::cout << pName << " : " << pTypeString << std::endl;
+
+            // can throw std::out_of_range
+            auto param = graph->getObject(pName);
+            assert(param->getType() == pType);
+
+            switch (pType) {
+                case ll::ObjectType::Buffer:
+                    computeNode->bind(pIndex, std::static_pointer_cast<ll::Buffer>(param));
+                    break;
+            }
+
+            ++pIndex;
+        }
+
+        graph->addComputeNode(name, computeNode);
     }
 
 
