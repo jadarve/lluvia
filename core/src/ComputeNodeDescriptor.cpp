@@ -24,7 +24,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::addBufferParameter() {
 
-    const vk::DescriptorSetLayoutBinding param {
+    auto param = vk::DescriptorSetLayoutBinding {
         static_cast<uint32_t>(parameterBindings.size()),
         vk::DescriptorType::eStorageBuffer,
         1,
@@ -32,7 +32,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addBufferParameter() {
         nullptr
     };
 
-    parameterBindings.push_back(std::move(param));
+    parameterBindings.push_back(param);
     return *this;
 }
 

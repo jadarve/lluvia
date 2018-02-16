@@ -51,6 +51,7 @@ public:
     std::shared_ptr<ll::Program> getProgram(const std::string& name) const;
 
     void addComputeNode(const std::string& name, std::shared_ptr<ll::ComputeNode> node);
+    bool containsComputeNode(const std::string& name) const noexcept;
     std::shared_ptr<ll::ComputeNode> getComputeNode(const std::string& name) const;
     std::string findProgramNameForComputeNode(const std::string& name) const;
 
