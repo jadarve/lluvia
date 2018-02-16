@@ -18,8 +18,8 @@ std::string objectTypeToString(const ObjectType type);
 template<typename T>
 ll::ObjectType stringToObjectType(T&& name) {
 
-    // FIXME: check that T is a string-like type 
-
+    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
+    
     if (name == "buffer") {return ll::ObjectType::Buffer;}
 
     throw std::out_of_range("invalid name for object type: " + name);
