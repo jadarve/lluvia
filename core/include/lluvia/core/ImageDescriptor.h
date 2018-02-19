@@ -21,6 +21,10 @@ enum class ChannelType : uint32_t {
     Uint32,
     Int32,
     Float32,
+
+    Uint64,
+    Int64,
+    Float64
 };
 
 
