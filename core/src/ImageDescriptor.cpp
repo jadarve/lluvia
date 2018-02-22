@@ -2,6 +2,7 @@
 
 namespace ll {
 
+
 ImageDescriptor& ImageDescriptor::setChannelType(const ll::ChannelType type) noexcept {
     
     channelType = type;
@@ -11,24 +12,32 @@ ImageDescriptor& ImageDescriptor::setChannelType(const ll::ChannelType type) noe
 
 ImageDescriptor& ImageDescriptor::setChannelCount(const uint32_t count) noexcept {
 
+    assert(count > 0 && count <= 4);
+
     channelCount = count;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setWidth(const uint32_t width) noexcept {
+    assert(width > 0);
+
     this->width = width;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setHeight(const uint32_t height) noexcept {
+    assert(height > 0);
+
     this->height = height;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setDepth(const uint32_t depth) noexcept {
+    assert(depth > 0);
+
     this->depth = depth;
     return *this;
 }
@@ -59,5 +68,85 @@ uint32_t ImageDescriptor::getDepth() const noexcept {
 }
 
 
+vk::ImageType ImageDescriptor::getImageType() const noexcept {
+
+    if (height == 1) return vk::ImageType::e1D;
+    if (depth == 1)  return vk::ImageType::e2D;
+
+    return vk::ImageType::e3D;
+}
+
+vk::Format ImageDescriptor::getFormat() const {
+
+    switch (channelCount) {
+
+        case 1:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16Sint;
+                case ChannelType::Float16: return vk::Format::eR16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32Sint;
+                case ChannelType::Float32: return vk::Format::eR32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64Sint;
+                case ChannelType::Float64: return vk::Format::eR64Sfloat;
+            }
+        break;
+
+        case 2:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8G8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8G8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16G16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16G16Sint;
+                case ChannelType::Float16: return vk::Format::eR16G16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32G32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32G32Sint;
+                case ChannelType::Float32: return vk::Format::eR32G32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64G64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64G64Sint;
+                case ChannelType::Float64: return vk::Format::eR64G64Sfloat;
+            }
+        break;
+
+        case 3:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8G8B8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8G8B8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16G16B16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16G16B16Sint;
+                case ChannelType::Float16: return vk::Format::eR16G16B16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32G32B32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32G32B32Sint;
+                case ChannelType::Float32: return vk::Format::eR32G32B32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64G64B64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64G64B64Sint;
+                case ChannelType::Float64: return vk::Format::eR64G64B64Sfloat;
+            }
+        break;
+
+        case 4:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8G8B8A8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8G8B8A8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16G16B16A16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16G16B16A16Sint;
+                case ChannelType::Float16: return vk::Format::eR16G16B16A16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32G32B32A32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32G32B32A32Sint;
+                case ChannelType::Float32: return vk::Format::eR32G32B32A32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64G64B64A64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64G64B64A64Sint;
+                case ChannelType::Float64: return vk::Format::eR64G64B64A64Sfloat;
+            }
+        break;
+
+        default:
+        throw std::runtime_error("channel count must be between 1 and 4, got: " + std::to_string(channelCount));
+    }
+}
 
 } // namespace ll

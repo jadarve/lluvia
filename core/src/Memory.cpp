@@ -3,6 +3,8 @@
 #include <algorithm>
 
 #include "lluvia/core/Buffer.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 
 namespace ll {
@@ -163,6 +165,34 @@ void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
     const auto page = buffer.allocInfo.page;
     device.unmapMemory(memoryPages[page]);
+}
+
+
+std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descriptor) {
+
+    // TODO: check that image witdh, height and depth are within supported range of the device
+
+    auto imgInfo = vk::ImageCreateInfo {}
+                    .setExtent({descriptor.getWidth(), descriptor.getHeight(), descriptor.getDepth()})
+                    .setImageType(descriptor.getImageType())
+                    .setArrayLayers(1)
+                    .setMipLevels(1)
+                    .setTiling(vk::ImageTiling::eLinear)
+                    .setSamples(vk::SampleCountFlagBits::e1)
+                    .setSharingMode(vk::SharingMode::eExclusive)
+                    .setUsage(vk::ImageUsageFlagBits::eStorage) // TODO: what's this?
+                    .setFormat(descriptor.getFormat())
+                    .setInitialLayout(vk::ImageLayout::ePreinitialized);
+
+    auto vkImage = device.createImage(imgInfo);
+
+    // query alignment and offset
+    const auto memRequirements = device.getImageMemoryRequirements(vkImage);
+
+    // check that memRequirements.memoryTypeBits is supported in this memory
+
+
+    return std::shared_ptr<ll::Image> {};
 }
 
 

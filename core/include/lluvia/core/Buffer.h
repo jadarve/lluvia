@@ -23,7 +23,7 @@ public:
     Buffer(const Buffer& b) = delete;
     Buffer(Buffer&& b)      = delete;
 
-    virtual ~Buffer();
+    ~Buffer();
 
     Buffer& operator = (const Buffer& buffer) = delete;
     Buffer& operator = (Buffer&& buffer)      = delete;

@@ -14,6 +14,8 @@ namespace ll {
 
 // forward declarations
 class Buffer;
+class Image;
+class ImageDescriptor;
 class Visitor;
 
 
@@ -53,9 +55,12 @@ public:
         const vk::BufferUsageFlags usageFlags = {vk::BufferUsageFlagBits::eStorageBuffer
                                                  | vk::BufferUsageFlagBits::eTransferSrc
                                                  | vk::BufferUsageFlagBits::eTransferDst});
+
     void releaseBuffer(const ll::Buffer& buffer);
     void* mapBuffer(const ll::Buffer& buffer);
     void unmapBuffer(const ll::Buffer& buffer);
+
+    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor);
 
     void accept(ll::Visitor* visitor);
 

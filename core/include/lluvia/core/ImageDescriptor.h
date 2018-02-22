@@ -31,6 +31,8 @@ enum class ChannelType : uint32_t {
 class ImageDescriptor {
 
 public:
+    // constexpr const static std::array<vk::Format, 44> imageFormats;
+    
     ImageDescriptor()                                               = default;
     ImageDescriptor(const ImageDescriptor& descriptor)              = default;
     ImageDescriptor(ImageDescriptor&& descriptor)                   = default;
@@ -52,13 +54,16 @@ public:
     uint32_t getHeight()             const noexcept;
     uint32_t getDepth()              const noexcept;
 
-private:
-    ll::ChannelType channelType;
-    uint32_t channelCount;
+    vk::ImageType getImageType() const noexcept;
+    vk::Format getFormat() const;
 
-    uint32_t width;
-    uint32_t height;
-    uint32_t depth;
+private:
+    ll::ChannelType channelType  {ll::ChannelType::Uint8};
+    uint32_t channelCount        {1};
+
+    uint32_t width  {1};
+    uint32_t height {1};
+    uint32_t depth  {1};
 };
 
 

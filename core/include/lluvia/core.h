@@ -7,6 +7,8 @@
 #include "core/ComputeGraph.h"
 #include "core/ComputeNode.h"
 #include "core/ComputeNodeDescriptor.h"
+#include "core/Image.h"
+#include "core/ImageDescriptor.h"
 #include "core/io.h"
 #include "core/Memory.h"
 #include "core/MemoryAllocationInfo.h"
