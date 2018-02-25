@@ -63,72 +63,13 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // query alignment and offset
     const auto memRequirements = device.getBufferMemoryRequirements(vkBuffer);
 
+    // TODO: check that memRequirements.memoryTypeBits is supported in this memory
+
+    // find or create a new memory page where the buffer can be allocated
     auto tryInfo = impl::MemoryAllocationTryInfo{};
-    auto pageIndex = 0u;
-    for (auto& manager : pageManagers) {
-
-        if (manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
-            tryInfo.allocInfo.page = pageIndex;
-            
-            // reserve space in the memory manager to insert any new free interval
-            if (manager.reserveManagerSpace()) {
-
-                // Configure buffer object. Internally handles error cases.
-                configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
-
-                // build a ll::Buffer object and commit the allocation if the
-                // object construction is successful.
-                return buildBuffer(vkBuffer, usageFlags, tryInfo, size);
-            }
-        }
-
-        ++ pageIndex;
-    }
-
-
-    // None of the existing pages could allocate the buffer. Create a ne
-    // memory page and allocate the buffer in it.
-
-    // FIXME: Check for the availability of more device memory and see
-    // if it is possible to create a new vk::DeviceMemory object according
-    // to the physical device limits.
-
-    const auto newPageSize = std::max(pageSize, memRequirements.size);
-
-
-    // reserve space to store a new memory page and manager.
-    if (memoryPages.size() == memoryPages.capacity()) {
-        memoryPages.reserve(memoryPages.capacity() + 1);
-    }
-
-    if (pageManagers.size() == pageManagers.capacity()) {
-        pageManagers.reserve(pageManagers.capacity() + 1);
-    }
-
-
-    vk::MemoryAllocateInfo allocateInfo = vk::MemoryAllocateInfo()
-                                          .setAllocationSize(newPageSize)
-                                          .setMemoryTypeIndex(heapInfo.typeIndex);
-
-
-    // Safe to not try-catch the creation of manager and memory.
-    // If exception is thrown, this object is left in its previous
-    // state plus the reserved space in memoryPages and pageManagers.
-    auto manager = impl::MemoryFreeSpaceManager {newPageSize};
-    manager.reserveManagerSpace();
-
-    auto memory  = device.allocateMemory(allocateInfo);
-
-    // push objects to vectors after reserving space
-    memoryPages.push_back(memory);
-    pageManagers.push_back(std::move(manager));
+    getSuitableMemoryPage(memRequirements, tryInfo);
     
-    // this allocation try is guaranteed to work as there is enough
-    // free space in the page to fit memRequirements.size.
-    pageManagers[pageIndex].tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo);
-    tryInfo.allocInfo.page = pageIndex;
-    
-    configureBuffer(vkBuffer, tryInfo.allocInfo, pageIndex);
+    configureBuffer(vkBuffer, tryInfo);
 
     // build a ll::Buffer object and commit the allocation if the
     // object construction is successful.
@@ -189,8 +130,11 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     // query alignment and offset
     const auto memRequirements = device.getImageMemoryRequirements(vkImage);
 
-    // check that memRequirements.memoryTypeBits is supported in this memory
+    // TODO: check that memRequirements.memoryTypeBits is supported in this memory
 
+    // find or create a new memory page where the buffer can be allocated
+    auto tryInfo = impl::MemoryAllocationTryInfo{};
+    getSuitableMemoryPage(memRequirements, tryInfo);
 
     return std::shared_ptr<ll::Image> {};
 }
@@ -202,13 +146,69 @@ void Memory::accept(ll::Visitor* visitor) {
 }
 
 
-inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo,
-                                    const uint32_t pageIndex) {
+void Memory::getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements, impl::MemoryAllocationTryInfo& tryInfo) {
+
+    auto pageIndex = 0u;
+    for (auto& manager : pageManagers) {
+
+        if (manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
+            tryInfo.allocInfo.page = pageIndex;
+            manager.reserveManagerSpace();
+        }
+
+        ++ pageIndex;
+    }
+
+
+    // None of the existing pages could allocate the object. Create a ne
+    // memory page and allocate the object in it.
+
+    // FIXME: Check for the availability of more device memory and see
+    // if it is possible to create a new vk::DeviceMemory object according
+    // to the physical device limits.
+
+    const auto newPageSize = std::max(pageSize, memRequirements.size);
+
+
+    // reserve space to store a new memory page and manager.
+    if (memoryPages.size() == memoryPages.capacity()) {
+        memoryPages.reserve(memoryPages.capacity() + 1);
+    }
+
+    if (pageManagers.size() == pageManagers.capacity()) {
+        pageManagers.reserve(pageManagers.capacity() + 1);
+    }
+
+
+    vk::MemoryAllocateInfo allocateInfo = vk::MemoryAllocateInfo()
+                                          .setAllocationSize(newPageSize)
+                                          .setMemoryTypeIndex(heapInfo.typeIndex);
+
+
+    // Safe to not try-catch the creation of manager and memory.
+    // If exception is thrown, this object is left in its previous
+    // state plus the reserved space in memoryPages and pageManagers.
+    auto manager = impl::MemoryFreeSpaceManager {newPageSize};
+    manager.reserveManagerSpace();
+
+    auto memory  = device.allocateMemory(allocateInfo);
+
+    // push objects to vectors after reserving space
+    memoryPages.push_back(memory);
+    pageManagers.push_back(std::move(manager));
+
+    // this allocation try is guaranteed to work as there is enough
+    // free space in the page to fit memRequirements.size.
+    pageManagers[pageIndex].tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo);
+    tryInfo.allocInfo.page = pageIndex;
+}
+
+
+inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const impl::MemoryAllocationTryInfo& tryInfo) {
 
     try {
-
-    	const auto& memoryPage = memoryPages[pageIndex];
-        device.bindBufferMemory(vkBuffer, memoryPage, allocInfo.offset);
+        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
+        device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
 
     } catch (...) {
 
