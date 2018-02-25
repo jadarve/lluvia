@@ -31,8 +31,6 @@ enum class ChannelType : uint32_t {
 class ImageDescriptor {
 
 public:
-    // constexpr const static std::array<vk::Format, 44> imageFormats;
-    
     ImageDescriptor()                                               = default;
     ImageDescriptor(const ImageDescriptor& descriptor)              = default;
     ImageDescriptor(ImageDescriptor&& descriptor)                   = default;

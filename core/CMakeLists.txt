@@ -51,6 +51,7 @@ add_catchTest (test_MemoryFreeSpaceManager   test/test_MemoryFreeSpaceManager.cp
 add_catchTest (test_SessionCreation          test/test_SessionCreation.cpp           lluvia-core)
 add_catchTest (test_BufferCreation           test/test_BufferCreation.cpp            lluvia-core)
 add_catchTest (test_BufferCopy               test/test_BufferCopy.cpp                lluvia-core)
+add_catchTest (test_ImageCreation            test/test_ImageCreation.cpp             lluvia-core)
 add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp           lluvia-core)
 add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp               lluvia-core)
 add_catchTest (test_IO                       test/test_IO.cpp                        lluvia-core)

@@ -1,11 +1,13 @@
 #include "lluvia/core/Memory.h"
 
-#include <algorithm>
-
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
+
+#include <algorithm>
+#include <iostream>
+
 
 namespace ll {
 
@@ -132,9 +134,13 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
 
     // TODO: check that memRequirements.memoryTypeBits is supported in this memory
 
-    // find or create a new memory page where the buffer can be allocated
+    // find or create a new memory page where the image can be allocated
     auto tryInfo = impl::MemoryAllocationTryInfo{};
     getSuitableMemoryPage(memRequirements, tryInfo);
+
+    std::cout << "Memory::createImage():" << std::endl;
+    std::cout << "    req size:       " << memRequirements.size << std::endl;
+    std::cout << "    req alignement: " << memRequirements.alignment << std::endl;
 
     return std::shared_ptr<ll::Image> {};
 }
@@ -142,7 +148,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
 
 void Memory::accept(ll::Visitor* visitor) {
     assert(visitor != nullptr);
-    // nothing to visit. Reference to the buffer objects are not stored in this class.
+    // nothing to visit
 }
 
 
