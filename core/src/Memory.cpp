@@ -70,8 +70,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // TODO: check that memRequirements.memoryTypeBits is supported in this memory
 
     // find or create a new memory page where the buffer can be allocated
-    auto tryInfo = impl::MemoryAllocationTryInfo{};
-    getSuitableMemoryPage(memRequirements, tryInfo);
+    auto tryInfo = getSuitableMemoryPage(memRequirements);
     
     // configureBuffer(vkBuffer, tryInfo);
 
@@ -129,12 +128,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     // TODO: check that memRequirements.memoryTypeBits is supported in this memory
 
     // find or create a new memory page where the image can be allocated
-    auto tryInfo = impl::MemoryAllocationTryInfo{};
-    getSuitableMemoryPage(memRequirements, tryInfo);
-
-    std::cout << "Memory::createImage():" << std::endl;
-    std::cout << "    req size:       " << memRequirements.size << std::endl;
-    std::cout << "    req alignement: " << memRequirements.alignment << std::endl;
+    auto tryInfo = getSuitableMemoryPage(memRequirements);
 
     return buildImage(vkImage, descriptor, tryInfo);
 }
@@ -153,14 +147,16 @@ void Memory::accept(ll::Visitor* visitor) {
 }
 
 
-void Memory::getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements, impl::MemoryAllocationTryInfo& tryInfo) {
+impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements) {
 
+    auto tryInfo = impl::MemoryAllocationTryInfo {};
     auto pageIndex = 0u;
     for (auto& manager : pageManagers) {
 
         if (manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
             tryInfo.allocInfo.page = pageIndex;
             manager.reserveManagerSpace();
+            return tryInfo;
         }
 
         ++ pageIndex;
@@ -208,6 +204,8 @@ void Memory::getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements
     // free space in the page to fit memRequirements.size.
     pageManagers[pageIndex].tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo);
     tryInfo.allocInfo.page = pageIndex;
+
+    return tryInfo;
 }
 
 

@@ -66,7 +66,7 @@ public:
     void accept(ll::Visitor* visitor);
 
 private:
-    void getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements, impl::MemoryAllocationTryInfo& tryInfo);
+    impl::MemoryAllocationTryInfo getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements);
     void releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
     
     inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer,

@@ -30,6 +30,8 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
 
     auto image = memory->createImage(desc);
     REQUIRE(image != nullptr);
+
+    session->changeImageLayout(image, vk::ImageLayout::eGeneral);
 }
 
 

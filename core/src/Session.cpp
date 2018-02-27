@@ -4,6 +4,7 @@
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Image.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
@@ -195,6 +196,38 @@ void Session::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
 
     runner.runAndWait(queue);
 }
+
+
+void Session::changeImageLayout(std::shared_ptr<ll::Image> image, const vk::ImageLayout newLayout) {
+
+    impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
+
+    auto barrier = vk::ImageMemoryBarrier {}
+                    .setOldLayout(image->layout)
+                    .setNewLayout(newLayout)
+                    .setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+                    .setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+                    .setImage(image->image)
+                    .setSrcAccessMask(vk::AccessFlagBits::eMemoryRead)      // TODO ???
+                    .setDstAccessMask(vk::AccessFlagBits::eMemoryWrite);    // TODO ???
+
+    barrier.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
+    barrier.subresourceRange.setBaseMipLevel(0);
+    barrier.subresourceRange.setLevelCount(1);
+    barrier.subresourceRange.setBaseArrayLayer(0);
+    barrier.subresourceRange.setLayerCount(1);
+
+
+    runner.getCommandBuffer().pipelineBarrier(
+        vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eComputeShader,
+        vk::DependencyFlagBits::eDeviceGroupKHX,
+        0, nullptr,
+        0, nullptr,
+        1, &barrier);
+    
+    runner.runAndWait(queue); 
+}
+
 
 bool Session::initInstance() {
     

@@ -15,6 +15,7 @@
 namespace ll {
 
 class Memory;
+class Session;
 
 
 class Image: public Object {
@@ -48,6 +49,7 @@ private:
     std::shared_ptr<ll::Memory> memory;
 
 friend class ll::Memory;
+friend class ll::Session;
 };
 
 } // namespace ll
