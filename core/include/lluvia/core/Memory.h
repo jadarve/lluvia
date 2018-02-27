@@ -61,18 +61,22 @@ public:
     void unmapBuffer(const ll::Buffer& buffer);
 
     std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor);
+    void releaseImage(const ll::Image& image);
 
     void accept(ll::Visitor* visitor);
 
 private:
     void getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements, impl::MemoryAllocationTryInfo& tryInfo);
-
-    inline void configureBuffer(vk::Buffer& vkBuffer, const impl::MemoryAllocationTryInfo& tryInfo);
+    void releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
     
     inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer,
         const vk::BufferUsageFlags vkUsageFlags,
         const ll::impl::MemoryAllocationTryInfo& tryInfo,
         const uint64_t requestedSize);
+
+    inline std::shared_ptr<ll::Image> buildImage(vk::Image& vkImage,
+        const ll::ImageDescriptor& descriptor,
+        const impl::MemoryAllocationTryInfo& tryInfo);
 
     vk::Device device;
 

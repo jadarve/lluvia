@@ -11,6 +11,8 @@
 
 namespace ll {
 
+constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined;
+
 
 Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
     device              {device},
@@ -71,7 +73,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     auto tryInfo = impl::MemoryAllocationTryInfo{};
     getSuitableMemoryPage(memRequirements, tryInfo);
     
-    configureBuffer(vkBuffer, tryInfo);
+    // configureBuffer(vkBuffer, tryInfo);
 
     // build a ll::Buffer object and commit the allocation if the
     // object construction is successful.
@@ -81,15 +83,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
 
 void Memory::releaseBuffer(const ll::Buffer& buffer) {
 
-    // reserve space in case the release of this buffer requires
-    // the insertion of a new free interval.
-    pageManagers[buffer.allocInfo.page].reserveManagerSpace();
-
-    // release the allocated memory regardless of the result of
-    // reserveManagerSpace(). In case it failed the release method
-    // should throw and exception and abort the program (since it is
-    // declared as noexcept).
-    pageManagers[buffer.allocInfo.page].release(buffer.allocInfo);
+    releaseMemoryAllocation(buffer.allocInfo);
     device.destroyBuffer(buffer.vkBuffer);
 }
 
@@ -123,9 +117,9 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setTiling(vk::ImageTiling::eLinear)
                     .setSamples(vk::SampleCountFlagBits::e1)
                     .setSharingMode(vk::SharingMode::eExclusive)
-                    .setUsage(vk::ImageUsageFlagBits::eStorage) // TODO: what's this?
+                    .setUsage(vk::ImageUsageFlagBits::eTransferDst) // TODO: what's this?
                     .setFormat(descriptor.getFormat())
-                    .setInitialLayout(vk::ImageLayout::ePreinitialized);
+                    .setInitialLayout(InitialImageLayout);
 
     auto vkImage = device.createImage(imgInfo);
 
@@ -142,7 +136,14 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     std::cout << "    req size:       " << memRequirements.size << std::endl;
     std::cout << "    req alignement: " << memRequirements.alignment << std::endl;
 
-    return std::shared_ptr<ll::Image> {};
+    return buildImage(vkImage, descriptor, tryInfo);
+}
+
+
+void Memory::releaseImage(const ll::Image& image) {
+
+    releaseMemoryAllocation(image.allocInfo);
+    device.destroyImage(image.image);
 }
 
 
@@ -210,17 +211,17 @@ void Memory::getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements
 }
 
 
-inline void Memory::configureBuffer(vk::Buffer& vkBuffer, const impl::MemoryAllocationTryInfo& tryInfo) {
+void Memory::releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo) {
 
-    try {
-        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
-        device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
+    // reserve space in case the release of this allocation requires
+    // the insertion of a new free interval.
+    pageManagers[allocInfo.page].reserveManagerSpace();
 
-    } catch (...) {
-
-        device.destroyBuffer(vkBuffer);
-        throw;  // rethrow
-    }
+    // release the allocated memory regardless of the result of
+    // reserveManagerSpace(). In case it failed the release method
+    // should throw and exception and abort the program (since it is
+    // declared as noexcept).
+    pageManagers[allocInfo.page].release(allocInfo);
 }
 
 
@@ -231,6 +232,9 @@ inline std::shared_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer
 
     try {
 
+        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
+        device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
+
         // ll::Buffer can throw exception.
         auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, vkUsageFlags, shared_from_this(), tryInfo.allocInfo, requestedSize}};
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
@@ -240,6 +244,26 @@ inline std::shared_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer
 
         device.destroyBuffer(vkBuffer);
         throw; // rethrow
+    }
+}
+
+
+inline std::shared_ptr<ll::Image> Memory::buildImage(vk::Image& vkImage,
+    const ll::ImageDescriptor& descriptor,
+    const impl::MemoryAllocationTryInfo& tryInfo) {
+
+    try {
+        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
+        device.bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
+
+        auto image = std::shared_ptr<ll::Image> {new ll::Image {vkImage, descriptor, shared_from_this(), tryInfo.allocInfo, InitialImageLayout}};
+        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
+        return image;
+
+    } catch (...) {
+
+        device.destroyImage(vkImage);
+        throw;  // rethrow
     }
 }
 

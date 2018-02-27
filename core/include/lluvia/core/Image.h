@@ -32,15 +32,22 @@ public:
     ObjectType getType() const noexcept override;
 
 private:
+    Image( const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
+           std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
+           const vk::ImageLayout layout);
+
     ll::ImageDescriptor descriptor;
     ll::MemoryAllocationInfo allocInfo;
 
-    uint64_t rowPitch;
+    vk::Image       image;
+    vk::ImageLayout layout;
 
     // Shared pointer to the memory this image was created from
     // This will keep the memory alive until this image is deleted
     // avoiding reference to a corrupted memory location.
     std::shared_ptr<ll::Memory> memory;
+
+friend class ll::Memory;
 };
 
 } // namespace ll
