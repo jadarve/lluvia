@@ -1,4 +1,6 @@
 #include "lluvia/core/Image.h"
+#include "lluvia/core/ImageView.h"
+#include "lluvia/core/ImageViewDescriptor.h"
 
 #include "lluvia/core/Memory.h"
 
@@ -26,6 +28,12 @@ Image::~Image() {
 
 ObjectType Image::getType() const noexcept {
     return ObjectType::Image;
+}
+
+
+std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescriptor& descriptor) const {
+
+    return std::shared_ptr<ll::ImageView> {};
 }
 
 } // namespace ll

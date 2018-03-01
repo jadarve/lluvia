@@ -14,6 +14,8 @@
 
 namespace ll {
 
+class ImageView;
+class ImageViewDescriptor;
 class Memory;
 class Session;
 
@@ -32,6 +34,8 @@ public:
 
     ObjectType getType() const noexcept override;
 
+    std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor) const;
+
 private:
     Image( const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
            std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
@@ -48,6 +52,7 @@ private:
     // avoiding reference to a corrupted memory location.
     std::shared_ptr<ll::Memory> memory;
 
+friend class ll::ImageView;
 friend class ll::Memory;
 friend class ll::Session;
 };

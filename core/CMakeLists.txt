@@ -26,6 +26,8 @@ add_library (lluvia-core SHARED
     src/ComputeNodeDescriptor.cpp
     src/Image.cpp
     src/ImageDescriptor.cpp
+    src/ImageView.cpp
+    src/ImageViewDescriptor.cpp
     src/impl/MemoryFreeSpaceManager.cpp
     src/impl/OneTimeSubmitCommandBuffer.cpp
     src/io.cpp

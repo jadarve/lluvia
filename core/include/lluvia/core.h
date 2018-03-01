@@ -9,6 +9,7 @@
 #include "core/ComputeNodeDescriptor.h"
 #include "core/Image.h"
 #include "core/ImageDescriptor.h"
+#include "core/ImageViewDescriptor.h"
 #include "core/io.h"
 #include "core/Memory.h"
 #include "core/MemoryAllocationInfo.h"
