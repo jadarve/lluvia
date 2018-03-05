@@ -68,15 +68,6 @@ public:
 private:
     impl::MemoryAllocationTryInfo getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements);
     void releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
-    
-    inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer,
-        const vk::BufferUsageFlags vkUsageFlags,
-        const ll::impl::MemoryAllocationTryInfo& tryInfo,
-        const uint64_t requestedSize);
-
-    inline std::shared_ptr<ll::Image> buildImage(vk::Image& vkImage,
-        const ll::ImageDescriptor& descriptor,
-        const impl::MemoryAllocationTryInfo& tryInfo);
 
     vk::Device device;
 

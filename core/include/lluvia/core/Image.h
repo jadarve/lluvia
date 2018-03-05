@@ -20,7 +20,8 @@ class Memory;
 class Session;
 
 
-class Image: public Object {
+class Image: public std::enable_shared_from_this<ll::Image>,
+             public Object {
 
 public:
     Image()                = delete;
@@ -34,16 +35,17 @@ public:
 
     ObjectType getType() const noexcept override;
 
-    std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor) const;
+    std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor);
 
 private:
-    Image( const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
+    Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
            std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
            const vk::ImageLayout layout);
 
     ll::ImageDescriptor descriptor;
     ll::MemoryAllocationInfo allocInfo;
 
+    vk::Device      device;
     vk::Image       image;
     vk::ImageLayout layout;
 

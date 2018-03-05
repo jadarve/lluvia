@@ -72,11 +72,25 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // find or create a new memory page where the buffer can be allocated
     auto tryInfo = getSuitableMemoryPage(memRequirements);
     
-    // configureBuffer(vkBuffer, tryInfo);
+    
 
     // build a ll::Buffer object and commit the allocation if the
     // object construction is successful.
-    return buildBuffer(vkBuffer, usageFlags, tryInfo, size);
+    try {
+        
+        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
+        device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
+
+        // ll::Buffer can throw exception.
+        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, usageFlags, shared_from_this(), tryInfo.allocInfo, size}};
+        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
+        return buffer;
+
+    } catch (...) {
+
+        device.destroyBuffer(vkBuffer);
+        throw; // rethrow
+    }
 }
 
 
@@ -113,10 +127,10 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setImageType(descriptor.getImageType())
                     .setArrayLayers(1)
                     .setMipLevels(1)
-                    .setTiling(vk::ImageTiling::eLinear)
+                    .setTiling(vk::ImageTiling::eOptimal)
                     .setSamples(vk::SampleCountFlagBits::e1)
                     .setSharingMode(vk::SharingMode::eExclusive)
-                    .setUsage(vk::ImageUsageFlagBits::eTransferDst) // TODO: what's this?
+                    .setUsage(vk::ImageUsageFlagBits::eStorage) // TODO: what's this?
                     .setFormat(descriptor.getFormat())
                     .setInitialLayout(InitialImageLayout);
 
@@ -129,8 +143,20 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
 
     // find or create a new memory page where the image can be allocated
     auto tryInfo = getSuitableMemoryPage(memRequirements);
+    
+    try {
+        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
+        device.bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
 
-    return buildImage(vkImage, descriptor, tryInfo);
+        auto image = std::shared_ptr<ll::Image> {new ll::Image {device, vkImage, descriptor, shared_from_this(), tryInfo.allocInfo, InitialImageLayout}};
+        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
+        return image;
+
+    } catch (...) {
+
+        device.destroyImage(vkImage);
+        throw;  // rethrow
+    }
 }
 
 
@@ -220,49 +246,6 @@ void Memory::releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo) 
     // should throw and exception and abort the program (since it is
     // declared as noexcept).
     pageManagers[allocInfo.page].release(allocInfo);
-}
-
-
-inline std::shared_ptr<ll::Buffer> Memory::buildBuffer(const vk::Buffer vkBuffer,
-    const vk::BufferUsageFlags vkUsageFlags,
-    const ll::impl::MemoryAllocationTryInfo & tryInfo,
-    const uint64_t requestedSize) {
-
-    try {
-
-        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
-        device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
-
-        // ll::Buffer can throw exception.
-        auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, vkUsageFlags, shared_from_this(), tryInfo.allocInfo, requestedSize}};
-        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
-        return buffer;
-
-    } catch (...) {
-
-        device.destroyBuffer(vkBuffer);
-        throw; // rethrow
-    }
-}
-
-
-inline std::shared_ptr<ll::Image> Memory::buildImage(vk::Image& vkImage,
-    const ll::ImageDescriptor& descriptor,
-    const impl::MemoryAllocationTryInfo& tryInfo) {
-
-    try {
-        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
-        device.bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
-
-        auto image = std::shared_ptr<ll::Image> {new ll::Image {vkImage, descriptor, shared_from_this(), tryInfo.allocInfo, InitialImageLayout}};
-        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
-        return image;
-
-    } catch (...) {
-
-        device.destroyImage(vkImage);
-        throw;  // rethrow
-    }
 }
 
 

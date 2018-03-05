@@ -11,7 +11,7 @@ ImageView::ImageView(vk::Device device,
                      std::shared_ptr<ll::Image> image,
                      const ll::ImageViewDescriptor& descriptor) :
     device {device},
-    image  {std::move(image)} {
+    image  {image} {
 
     auto imageViewInfo = vk::ImageViewCreateInfo {}
                             .setViewType(vk::ImageViewType::e2D)        // TODO: set according to image extend

@@ -51,13 +51,13 @@ vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexce
                 .setAddressModeW(getVkAddressMode(addressMode[static_cast<uint32_t>(ll::ImageAxis::W)]))
                 .setUnnormalizedCoordinates(!normalizedCoordinates)
                 .setAnisotropyEnable(false)
+                .setMaxAnisotropy(1.0f)
                 .setCompareEnable(false)
                 .setCompareOp(vk::CompareOp::eAlways)
                 .setMipmapMode(vk::SamplerMipmapMode::eNearest)
                 .setMipLodBias(0.0f)
                 .setMinLod(0.0f)
-                .setMaxLod(0.0f)
-                .setAnisotropyEnable(false);
+                .setMaxLod(0.0f);
 
     // filter mode
     switch (filterMode) {

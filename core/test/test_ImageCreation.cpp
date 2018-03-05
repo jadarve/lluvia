@@ -32,6 +32,14 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     REQUIRE(image != nullptr);
 
     session->changeImageLayout(image, vk::ImageLayout::eGeneral);
+
+    auto imgViewDesc = ll::ImageViewDescriptor {}
+                        .setFilteringMode(ll::ImageFilterMode::Nearest)
+                        .setAddressMode(ll::ImageAddressMode::ClampToEdge)
+                        .setNormalizedCoordinates(false);
+
+    auto imageView = image->createImageView(imgViewDesc);
+    REQUIRE(imageView != nullptr);
 }
 
 
