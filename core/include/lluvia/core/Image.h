@@ -14,14 +14,15 @@
 
 namespace ll {
 
+class ComputeNode;
 class ImageView;
 class ImageViewDescriptor;
 class Memory;
 class Session;
 
 
-class Image: public std::enable_shared_from_this<ll::Image>,
-             public Object {
+class Image: public Object,
+             public std::enable_shared_from_this<ll::Image> {
 
 public:
     Image()                = delete;
@@ -33,7 +34,7 @@ public:
     Image& operator = (const Image&) = delete;
     Image& operator = (Image&&)      = delete;
 
-    ObjectType getType() const noexcept override;
+    ll::ObjectType getType() const noexcept override;
 
     std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor);
 
@@ -46,14 +47,15 @@ private:
     ll::MemoryAllocationInfo allocInfo;
 
     vk::Device      device;
-    vk::Image       image;
-    vk::ImageLayout layout;
+    vk::Image       vkImage;
+    vk::ImageLayout vkLayout;
 
     // Shared pointer to the memory this image was created from
     // This will keep the memory alive until this image is deleted
     // avoiding reference to a corrupted memory location.
     std::shared_ptr<ll::Memory> memory;
 
+friend class ll::ComputeNode;
 friend class ll::ImageView;
 friend class ll::Memory;
 friend class ll::Session;

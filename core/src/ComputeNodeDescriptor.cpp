@@ -37,6 +37,21 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addBufferParameter() {
 }
 
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::addCombinedImageSamplerParameter() {
+
+    auto param = vk::DescriptorSetLayoutBinding {
+        static_cast<uint32_t>(parameterBindings.size()),
+        vk::DescriptorType::eCombinedImageSampler,
+        1,
+        vk::ShaderStageFlagBits::eCompute,
+        nullptr
+    };
+
+    parameterBindings.push_back(param);
+    return *this;
+}
+
+
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalX(const uint32_t x) noexcept {
     assert(x >= 1);
     globalGroup[0] = x;
@@ -82,7 +97,8 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexce
 std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
     vector<vk::DescriptorPoolSize> poolSizes{
-        {vk::DescriptorType::eStorageBuffer, getStorageBufferCount()}
+        {vk::DescriptorType::eStorageBuffer, getStorageBufferCount()},
+        {vk::DescriptorType::eCombinedImageSampler, getCombinedImageSamplerCount()}
     };
     
     return poolSizes;
@@ -145,7 +161,12 @@ std::shared_ptr<ll::Program> ComputeNodeDescriptor::getProgram() const noexcept 
 
 
 uint32_t ComputeNodeDescriptor::getStorageBufferCount() const noexcept {
-    return countDescriptorType(vk::DescriptorType::eStorageBuffer);    
+    return countDescriptorType(vk::DescriptorType::eStorageBuffer);
+}
+
+
+uint32_t ComputeNodeDescriptor::getCombinedImageSamplerCount() const noexcept {
+    return countDescriptorType(vk::DescriptorType::eCombinedImageSampler);
 }
 
 

@@ -7,6 +7,10 @@
 
 namespace ll {
 
+ll::ObjectType ImageView::getType() const noexcept {
+    return ll::ObjectType::ImageView;
+}
+
 ImageView::ImageView(vk::Device device, 
                      std::shared_ptr<ll::Image> image,
                      const ll::ImageViewDescriptor& descriptor) :
@@ -16,7 +20,7 @@ ImageView::ImageView(vk::Device device,
     auto imageViewInfo = vk::ImageViewCreateInfo {}
                             .setViewType(vk::ImageViewType::e2D)        // TODO: set according to image extend
                             .setFormat(image->descriptor.getFormat())
-                            .setImage(image->image);
+                            .setImage(image->vkImage);
 
     // TODO
     imageViewInfo.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
@@ -26,16 +30,16 @@ ImageView::ImageView(vk::Device device,
     imageViewInfo.subresourceRange.setLayerCount(1);
 
     
-    imageView = device.createImageView(imageViewInfo);
+    vkImageView = device.createImageView(imageViewInfo);
 
-    sampler = device.createSampler(descriptor.getVkSamplerCreateInfo());
+    vkSampler = device.createSampler(descriptor.getVkSamplerCreateInfo());
 }
 
 
 ImageView::~ImageView() {
 
-    device.destroyImageView(imageView);
-    device.destroySampler(sampler);
+    device.destroyImageView(vkImageView);
+    device.destroySampler(vkSampler);
 }
 
 } // namespace ll

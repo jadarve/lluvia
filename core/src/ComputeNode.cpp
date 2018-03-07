@@ -2,6 +2,9 @@
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageView.h"
+#include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
 
 #include <algorithm>
@@ -80,27 +83,48 @@ std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexce
 }
 
 
-void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
+// void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
 
-    // TODO: assert that index contains a buffer
+//     // TODO: assert that index contains a buffer
+//     assert(index < parameters.size());
+
+//     parameters[index] = buffer;
+
+//     vk::DescriptorBufferInfo descBufferInfo = vk::DescriptorBufferInfo()
+//         .setOffset(0)
+//         .setRange(VK_WHOLE_SIZE)
+//         .setBuffer(buffer->vkBuffer);
+
+//     vk::WriteDescriptorSet writeDescSet = vk::WriteDescriptorSet()
+//         .setDescriptorType(vk::DescriptorType::eStorageBuffer)
+//         .setDstSet(descriptorSet)
+//         .setDstBinding(index)
+//         .setDescriptorCount(1)
+//         .setPBufferInfo(&descBufferInfo);
+
+//     // update the informacion of the descriptor set
+//     device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
+// }
+
+
+void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object> obj) {
+
+    // TODO: assert that the type in obj is compatible with the descriptor at index
     assert(index < parameters.size());
 
-    parameters[index] = buffer;
+    switch (obj->getType()) {
+        case ll::ObjectType::Buffer:
+            bindBuffer(index, std::static_pointer_cast<ll::Buffer>(obj));
+            break;
 
-    vk::DescriptorBufferInfo descBufferInfo = vk::DescriptorBufferInfo()
-        .setOffset(0)
-        .setRange(VK_WHOLE_SIZE)
-        .setBuffer(buffer->vkBuffer);
+        case ll::ObjectType::ImageView:
+            bindImageView(index, std::static_pointer_cast<ll::ImageView>(obj));
+            break;
 
-    vk::WriteDescriptorSet writeDescSet = vk::WriteDescriptorSet()
-        .setDescriptorType(vk::DescriptorType::eStorageBuffer)
-        .setDstSet(descriptorSet)
-        .setDstBinding(index)
-        .setDescriptorCount(1)
-        .setPBufferInfo(&descBufferInfo);
+        default:
+            throw std::runtime_error("Unsupported object type: " + ll::objectTypeToString(obj->getType()));
+    }
 
-    // update the informacion of the descriptor set
-    device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
 }
 
 
@@ -191,6 +215,48 @@ void ComputeNode::init() {
 
     // create the compute pipeline
     pipeline = device.createComputePipeline(nullptr, computePipeInfo);
+}
+
+
+void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
+
+    parameters[index] = buffer;
+
+    auto descBufferInfo = vk::DescriptorBufferInfo()
+        .setOffset(0)
+        .setRange(VK_WHOLE_SIZE)
+        .setBuffer(buffer->vkBuffer);
+
+    auto writeDescSet = vk::WriteDescriptorSet()
+        .setDescriptorType(vk::DescriptorType::eStorageBuffer)
+        .setDstSet(descriptorSet)
+        .setDstBinding(index)
+        .setDescriptorCount(1)
+        .setPBufferInfo(&descBufferInfo);
+
+    // update the informacion of the descriptor set
+    device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
+}
+
+
+void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> imgView) {
+
+    parameters[index] = imgView;
+
+    auto descImgInfo = vk::DescriptorImageInfo {}
+        .setSampler(imgView->vkSampler)
+        .setImageView(imgView->vkImageView)
+        .setImageLayout(imgView->image->vkLayout);
+
+    auto writeDescSet = vk::WriteDescriptorSet()
+        .setDescriptorType(vk::DescriptorType::eCombinedImageSampler)
+        .setDstSet(descriptorSet)
+        .setDstBinding(index)
+        .setDescriptorCount(1)
+        .setPImageInfo(&descImgInfo);
+
+    // update the informacion of the descriptor set
+    device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
 }
 
 

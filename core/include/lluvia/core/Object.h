@@ -10,7 +10,8 @@ namespace ll {
 
 enum class ObjectType : uint32_t {
     Buffer,
-    Image
+    Image,
+    ImageView
 };
 
 
@@ -40,7 +41,7 @@ public:
     Object& operator = (const Object&) = default;
     Object& operator = (Object&&)      = default;
 
-    virtual ObjectType getType() const noexcept = 0;
+    virtual ll::ObjectType getType() const noexcept = 0;
 };
 
 

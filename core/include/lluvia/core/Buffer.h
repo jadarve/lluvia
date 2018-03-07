@@ -28,7 +28,7 @@ public:
     Buffer& operator = (const Buffer& buffer) = delete;
     Buffer& operator = (Buffer&& buffer)      = delete;
 
-    ObjectType getType() const noexcept override;
+    ll::ObjectType getType() const noexcept override;
 
     uint64_t getSize() const noexcept;
 

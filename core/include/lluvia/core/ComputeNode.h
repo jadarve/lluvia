@@ -12,6 +12,7 @@
 namespace ll {
 
 class Buffer;
+class ImageView;
 class Object;
 class Program;
 class Visitor;
@@ -50,7 +51,8 @@ public:
     std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;
 
     // FIXME: should change ll::Buffer to generic ll::Object type and bind according to object type
-    void bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer);
+    // void bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer);
+    void bind(uint32_t index, const std::shared_ptr<ll::Object> obj);
 
     void record(const vk::CommandBuffer& commandBufer) const;
 
@@ -58,6 +60,8 @@ public:
 
 private:
     void init();
+    void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> buffer);
+    void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> buffer);
 
     vk::Device                          device;
 

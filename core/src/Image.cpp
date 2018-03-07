@@ -14,8 +14,8 @@ Image::Image( const vk::Device& device, const vk::Image& vkImage, const ll::Imag
     descriptor {descriptor},
     allocInfo  (allocInfo),
     device     {device},
-    image      {vkImage},
-    layout     {layout},
+    vkImage    {vkImage},
+    vkLayout   {layout},
     memory     {memory} {
 
 }
@@ -27,7 +27,7 @@ Image::~Image() {
 }
 
 
-ObjectType Image::getType() const noexcept {
+ll::ObjectType Image::getType() const noexcept {
     return ObjectType::Image;
 }
 

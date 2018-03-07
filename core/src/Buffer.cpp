@@ -23,7 +23,7 @@ Buffer::~Buffer() {
 }
 
 
-ObjectType Buffer::getType() const noexcept {
+ll::ObjectType Buffer::getType() const noexcept {
     return ObjectType::Buffer;
 }
 

@@ -163,7 +163,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
 void Memory::releaseImage(const ll::Image& image) {
 
     releaseMemoryAllocation(image.allocInfo);
-    device.destroyImage(image.image);
+    device.destroyImage(image.vkImage);
 }
 
 

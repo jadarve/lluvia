@@ -203,11 +203,11 @@ void Session::changeImageLayout(std::shared_ptr<ll::Image> image, const vk::Imag
     impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
 
     auto barrier = vk::ImageMemoryBarrier {}
-                    .setOldLayout(image->layout)
+                    .setOldLayout(image->vkLayout)
                     .setNewLayout(newLayout)
                     .setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
                     .setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
-                    .setImage(image->image)
+                    .setImage(image->vkImage)
                     .setSrcAccessMask(vk::AccessFlagBits::eMemoryRead)      // TODO ???
                     .setDstAccessMask(vk::AccessFlagBits::eMemoryWrite);    // TODO ???
 
