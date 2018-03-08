@@ -3,6 +3,44 @@
 namespace ll {
 
 
+uint64_t getChannelTypeSize(ll::ChannelType type) {
+
+    switch (type) {
+        case ll::ChannelType::Uint8:
+        case ll::ChannelType::Int8:
+            return 1;
+
+        case ll::ChannelType::Uint16:
+        case ll::ChannelType::Int16:
+        case ll::ChannelType::Float16:
+            return 2;
+
+        case ll::ChannelType::Uint32:
+        case ll::ChannelType::Int32:
+        case ll::ChannelType::Float32:
+            return 4;
+
+        case ll::ChannelType::Uint64:
+        case ll::ChannelType::Int64:
+        case ll::ChannelType::Float64:
+            return 8;
+    }
+}
+
+ImageDescriptor::ImageDescriptor(const uint32_t width,
+                                 const uint32_t height,
+                                 const uint32_t depth,
+                                 const uint32_t channelCount,
+                                 ll::ChannelType channelType):
+    channelType  {channelType},
+    channelCount {channelCount},
+    width        {width},
+    height       {height},
+    depth        {depth} {
+
+}
+
+
 ImageDescriptor& ImageDescriptor::setChannelType(const ll::ChannelType type) noexcept {
     
     channelType = type;
@@ -65,6 +103,12 @@ uint32_t ImageDescriptor::getHeight() const noexcept {
 
 uint32_t ImageDescriptor::getDepth() const noexcept {
     return depth;
+}
+
+
+uint64_t ImageDescriptor::getSize() const noexcept {
+
+    return width*height*depth*channelCount*getChannelTypeSize(channelType);
 }
 
 

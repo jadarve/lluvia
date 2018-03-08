@@ -2,6 +2,7 @@
 # create the list of GLSL files to compile
 set (_GLSL_SRCS
     assign.comp
+    imgToBuffer.comp
 )
 
 # LL_GLSL_SRCS contains the list of GLSL source files to be compiled with their absolute path

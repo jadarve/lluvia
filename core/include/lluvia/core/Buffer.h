@@ -35,6 +35,8 @@ public:
     vk::BufferUsageFlags getUsageFlags() const noexcept;
 
     bool isMappable() const noexcept;
+    void* map();
+    void  unmap();
 
     void accept(ll::Visitor* visitor);
 

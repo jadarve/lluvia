@@ -72,13 +72,13 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     node->bind(0, buffer);
     session->run(node);
 
-    const auto* bufferMap = static_cast<const float*>(hostMemory->mapBuffer(*buffer));
+    const auto* bufferMap = static_cast<const float*>(buffer->map());
     for (auto i = 0u; i < bufferSize; ++i) {
 
         std::cout << i << ": " << bufferMap[i] << std::endl;;
     }
 
-    hostMemory->unmapBuffer(*buffer);
+    buffer->unmap();
 }
 
 

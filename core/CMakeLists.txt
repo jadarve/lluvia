@@ -56,4 +56,5 @@ add_catchTest (test_BufferCopy               test/test_BufferCopy.cpp           
 add_catchTest (test_ImageCreation            test/test_ImageCreation.cpp             lluvia-core)
 add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp           lluvia-core)
 add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp               lluvia-core)
+add_catchTest (test_ComputeNodeImage         test/test_ComputeNodeImage.cpp          lluvia-core)
 add_catchTest (test_IO                       test/test_IO.cpp                        lluvia-core)

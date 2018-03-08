@@ -56,10 +56,6 @@ public:
                                                  | vk::BufferUsageFlagBits::eTransferSrc
                                                  | vk::BufferUsageFlagBits::eTransferDst});
 
-    void releaseBuffer(const ll::Buffer& buffer);
-    void* mapBuffer(const ll::Buffer& buffer);
-    void unmapBuffer(const ll::Buffer& buffer);
-
     std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor);
     void releaseImage(const ll::Image& image);
 
@@ -69,6 +65,10 @@ private:
     impl::MemoryAllocationTryInfo getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements);
     void releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
 
+    void releaseBuffer(const ll::Buffer& buffer);
+    void* mapBuffer(const ll::Buffer& buffer);
+    void unmapBuffer(const ll::Buffer& buffer);
+
     vk::Device device;
 
     const ll::VkHeapInfo    heapInfo        {};
@@ -76,6 +76,9 @@ private:
 
     std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
+
+
+friend class ll::Buffer;
 };
 
 } // namespace ll

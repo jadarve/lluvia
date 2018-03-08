@@ -43,6 +43,18 @@ bool Buffer::isMappable() const noexcept {
 }
 
 
+void* Buffer::map() {
+    assert(isMappable());
+    
+    return memory->mapBuffer(*this);
+}
+
+
+void Buffer::unmap() {
+    memory->unmapBuffer(*this);
+}
+
+
 void Buffer::accept(ll::Visitor *visitor) {
     assert(visitor != nullptr);
 }
