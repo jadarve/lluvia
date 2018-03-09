@@ -14,6 +14,7 @@
 
 namespace ll {
 
+class CommandBuffer;
 class ComputeNode;
 class ImageView;
 class ImageViewDescriptor;
@@ -36,6 +37,13 @@ public:
 
     ll::ObjectType getType() const noexcept override;
 
+    ll::ChannelType getChannelType() const noexcept;
+    uint32_t getChannelCount()       const noexcept;
+    uint32_t getWidth()              const noexcept;
+    uint32_t getHeight()             const noexcept;
+    uint32_t getDepth()              const noexcept;
+    
+
     std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor);
 
 private:
@@ -55,6 +63,7 @@ private:
     // avoiding reference to a corrupted memory location.
     std::shared_ptr<ll::Memory> memory;
 
+friend class ll::CommandBuffer;
 friend class ll::ComputeNode;
 friend class ll::ImageView;
 friend class ll::Memory;

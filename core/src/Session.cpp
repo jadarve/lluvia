@@ -181,6 +181,12 @@ void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
 }
 
 
+void Session::run(const std::shared_ptr<ll::CommandBuffer> node) {
+
+    std::cout << "Session::run(const std::shared_ptr<ll::CommandBuffer> node)" << std::endl;
+}
+
+
 void Session::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
 
     assert(dst.getSize() >= src.getSize());

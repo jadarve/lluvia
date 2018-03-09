@@ -130,7 +130,9 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setTiling(vk::ImageTiling::eOptimal)
                     .setSamples(vk::SampleCountFlagBits::e1)
                     .setSharingMode(vk::SharingMode::eExclusive)
-                    .setUsage(vk::ImageUsageFlagBits::eStorage) // TODO: what's this?
+                    .setUsage(vk::ImageUsageFlagBits::eStorage
+                              | vk::ImageUsageFlagBits::eSampled
+                              | vk::ImageUsageFlagBits::eTransferDst) // TODO: what's this?
                     .setFormat(descriptor.getFormat())
                     .setInitialLayout(InitialImageLayout);
 

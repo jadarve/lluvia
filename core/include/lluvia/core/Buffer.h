@@ -10,6 +10,7 @@
 
 namespace ll {
 
+class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
 class Memory;
@@ -61,9 +62,10 @@ private:
     std::shared_ptr<ll::Memory> memory;
 
 
-friend class ll::Memory;
+friend class ll::CommandBuffer;
 friend class ll::ComputeGraph;
 friend class ll::ComputeNode;
+friend class ll::Memory;
 friend class ll::Session;
 };
 

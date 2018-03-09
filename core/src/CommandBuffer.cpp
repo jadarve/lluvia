@@ -1,5 +1,9 @@
 #include "lluvia/core/CommandBuffer.h"
 
+#include "lluvia/core/Buffer.h"
+#include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/Image.h"
+
 namespace ll {
 
 CommandBuffer::CommandBuffer(const vk::Device& device, const vk::CommandPool& cmdPool):
@@ -32,6 +36,72 @@ void CommandBuffer::begin() {
 
 void CommandBuffer::end() {
     commandBuffer.end();
+}
+
+
+void CommandBuffer::run(const ll::ComputeNode& node) {
+
+    node.record(commandBuffer);
+}
+
+
+void CommandBuffer::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
+
+    auto copyInfo = vk::BufferCopy()
+        .setSrcOffset(0)
+        .setDstOffset(0)
+        .setSize(src.getSize());
+
+    commandBuffer.copyBuffer(src.vkBuffer, dst.vkBuffer, 1, &copyInfo);
+}
+
+void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& dst) {
+
+    auto imgSubresourceLayers = vk::ImageSubresourceLayers {}
+        .setAspectMask(vk::ImageAspectFlagBits::eColor)
+        .setMipLevel(0)
+        .setBaseArrayLayer(0)
+        .setLayerCount(1);
+
+    auto copyInfo = vk::BufferImageCopy {}
+        .setBufferOffset(0)
+        .setBufferImageHeight(0) // thightly packed
+        .setBufferRowLength(0)
+        .setImageSubresource(imgSubresourceLayers)
+        .setImageOffset({0, 0, 0})
+        .setImageExtent({dst.getWidth(), dst.getHeight(), dst.getDepth()});
+
+    commandBuffer.copyBufferToImage(src.vkBuffer, dst.vkImage, dst.vkLayout, 1, &copyInfo);
+}
+
+
+void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout) {
+
+    auto barrier = vk::ImageMemoryBarrier {}
+                    .setOldLayout(image.vkLayout)
+                    .setNewLayout(newLayout)
+                    .setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+                    .setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+                    .setImage(image.vkImage)
+                    .setSrcAccessMask(vk::AccessFlagBits::eMemoryRead)      // TODO ???
+                    .setDstAccessMask(vk::AccessFlagBits::eMemoryWrite);    // TODO ???
+
+    barrier.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
+    barrier.subresourceRange.setBaseMipLevel(0);
+    barrier.subresourceRange.setLevelCount(1);
+    barrier.subresourceRange.setBaseArrayLayer(0);
+    barrier.subresourceRange.setLayerCount(1);
+
+
+    commandBuffer.pipelineBarrier(
+        vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eComputeShader,
+        vk::DependencyFlagBits::eDeviceGroupKHX,
+        0, nullptr,
+        0, nullptr,
+        1, &barrier);
+
+    // FIXME: this should be set only after the pipelineBarrier is executed
+    image.vkLayout = newLayout;
 }
 
 } // namespace ll

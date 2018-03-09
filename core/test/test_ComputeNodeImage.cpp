@@ -75,24 +75,24 @@ TEST_CASE("BufferAssignment", "test_ComputeNodeImage") {
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
 
-    node->bind(0, imageView);
-    node->bind(1, outputBuffer);
-
-    session->run(node);
-
-    // END OF STATIC PART
-
-
     auto cmdBuffer = session->createCommandBuffer();
     REQUIRE(cmdBuffer != nullptr);
 
-    // transition image to transfer destination
-    // copy from stage buffer to image
-    // transition image to general? or other layout
-    // run command buffer
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferDstOptimal);
+    cmdBuffer->copyBufferToImage(*stageBuffer, *image);
+    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
 
+    // the image view can only be bound after the underlying
+    // image is in the correct layout.
+    node->bind(0, imageView);
+    node->bind(1, outputBuffer);
 
-    // session->run(cmdBuffer);
+    cmdBuffer->run(*node);
+
+    cmdBuffer->end();
+
+    session->run(cmdBuffer);
 
     // END OF EXECUTION
 
