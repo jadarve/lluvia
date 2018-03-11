@@ -174,6 +174,8 @@ std::shared_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 
 void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
 
+    assert (node != nullptr);
+
     impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
 
     node->record(runner.getCommandBuffer());
@@ -181,9 +183,16 @@ void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
 }
 
 
-void Session::run(const std::shared_ptr<ll::CommandBuffer> node) {
+void Session::run(const std::shared_ptr<ll::CommandBuffer> cmdBuffer) {
 
-    std::cout << "Session::run(const std::shared_ptr<ll::CommandBuffer> node)" << std::endl;
+    assert (cmdBuffer != nullptr);
+
+    vk::SubmitInfo submitInfo = vk::SubmitInfo()
+        .setCommandBufferCount(1)
+        .setPCommandBuffers(&cmdBuffer->commandBuffer);
+
+    queue.submit(1, &submitInfo, nullptr);
+    queue.waitIdle();
 }
 
 

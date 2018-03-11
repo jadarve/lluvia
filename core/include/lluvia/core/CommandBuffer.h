@@ -9,6 +9,7 @@ namespace ll {
 class Buffer;
 class ComputeNode;
 class Image;
+class Session;
 
 class CommandBuffer {
 
@@ -36,6 +37,9 @@ private:
     vk::Device          device;
     vk::CommandPool     commandPool;
     vk::CommandBuffer   commandBuffer;
+
+
+friend class ll::Session;
 };
 
 
