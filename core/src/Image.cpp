@@ -9,14 +9,15 @@ namespace ll {
 
 Image::Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
               std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
-              const vk::ImageLayout layout) :
+              const vk::ImageLayout layout, const vk::ImageUsageFlags usageFlags) :
 
-    descriptor {descriptor},
-    allocInfo  (allocInfo),
-    device     {device},
-    vkImage    {vkImage},
-    vkLayout   {layout},
-    memory     {memory} {
+    descriptor   {descriptor},
+    allocInfo    (allocInfo),
+    device       {device},
+    vkImage      {vkImage},
+    vkLayout     {layout},
+    vkUsageFlags {usageFlags},
+    memory       {memory} {
 
 }
 
@@ -29,6 +30,16 @@ Image::~Image() {
 
 ll::ObjectType Image::getType() const noexcept {
     return ObjectType::Image;
+}
+
+
+uint64_t Image::getSize() const noexcept {
+    return allocInfo.size;
+}
+
+
+vk::ImageUsageFlags Image::getUsageFlags()const noexcept {
+    return vkUsageFlags;
 }
 
 

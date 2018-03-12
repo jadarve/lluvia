@@ -73,44 +73,20 @@ uint32_t ComputeNode::getGlobalZ() const noexcept {
 
 
 size_t ComputeNode::getParameterCount() const noexcept {
-    return parameters.size();
+    return objects.size();
 }
 
 
 std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexcept {
-    assert(index < parameters.size());
-    return parameters[index];
+    assert(index < objects.size());
+    return objects[index];
 }
-
-
-// void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
-
-//     // TODO: assert that index contains a buffer
-//     assert(index < parameters.size());
-
-//     parameters[index] = buffer;
-
-//     vk::DescriptorBufferInfo descBufferInfo = vk::DescriptorBufferInfo()
-//         .setOffset(0)
-//         .setRange(VK_WHOLE_SIZE)
-//         .setBuffer(buffer->vkBuffer);
-
-//     vk::WriteDescriptorSet writeDescSet = vk::WriteDescriptorSet()
-//         .setDescriptorType(vk::DescriptorType::eStorageBuffer)
-//         .setDstSet(descriptorSet)
-//         .setDstBinding(index)
-//         .setDescriptorCount(1)
-//         .setPBufferInfo(&descBufferInfo);
-
-//     // update the informacion of the descriptor set
-//     device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
-// }
 
 
 void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object> obj) {
 
     // TODO: assert that the type in obj is compatible with the descriptor at index
-    assert(index < parameters.size());
+    assert(index < objects.size());
 
     switch (obj->getType()) {
         case ll::ObjectType::Buffer:
@@ -146,7 +122,7 @@ void ComputeNode::init() {
     assert(descriptor.program != nullptr);
     assert(!descriptor.functionName.empty());
 
-    parameters.resize(descriptor.parameterBindings.size());
+    objects.resize(descriptor.parameterBindings.size());
 
     /////////////////////////////////////////////
     // Specialization constants
@@ -220,7 +196,7 @@ void ComputeNode::init() {
 
 void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
 
-    parameters[index] = buffer;
+    objects[index] = buffer;
 
     auto descBufferInfo = vk::DescriptorBufferInfo()
         .setOffset(0)
@@ -241,7 +217,7 @@ void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> b
 
 void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> imgView) {
 
-    parameters[index] = imgView;
+    objects[index] = imgView;
 
     auto descImgInfo = vk::DescriptorImageInfo {}
         .setSampler(imgView->vkSampler)

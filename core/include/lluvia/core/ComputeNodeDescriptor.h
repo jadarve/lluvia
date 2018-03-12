@@ -28,7 +28,7 @@ public:
     ComputeNodeDescriptor& setProgram(std::shared_ptr<ll::Program> program);
     ComputeNodeDescriptor& setFunctionName(const std::string& name);
     ComputeNodeDescriptor& addBufferParameter();
-    ComputeNodeDescriptor& addCombinedImageSamplerParameter();
+    ComputeNodeDescriptor& addImageViewParameter();
 
     ComputeNodeDescriptor& setGlobalX(const uint32_t x) noexcept;
     ComputeNodeDescriptor& setGlobalY(const uint32_t y) noexcept;

@@ -4,6 +4,8 @@
 #include "lluvia/core/ComputeGraph.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageView.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/Session.h"
@@ -46,7 +48,8 @@ U getValueFromJson(T&& name, const json& j) {
 class ComputeGraphFileWriterImpl : public ll::Visitor {
 
 public:
-    void visitComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& name = {}) {
+    void visitComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& name = {}) override {
+        assert(graph != nullptr);
 
         this->graph = graph;
 
@@ -58,7 +61,9 @@ public:
     }
 
 
-    void visitMemory(std::shared_ptr<ll::Memory> memory, const std::string& name = {}) {
+    void visitMemory(std::shared_ptr<ll::Memory> memory, const std::string& name = {}) override {
+        assert(memory != nullptr);
+        assert(!name.empty());
 
         auto j = json {};
         j["name"]      = name;
@@ -69,7 +74,9 @@ public:
     }
 
 
-    void visitBuffer(std::shared_ptr<ll::Buffer> buffer, const std::string& name = {}) {
+    void visitBuffer(std::shared_ptr<ll::Buffer> buffer, const std::string& name = {}) override {
+        assert(buffer != nullptr);
+        assert(!name.empty());
 
         auto j = json {};
         j["name"]   = name;
@@ -84,7 +91,80 @@ public:
     }
 
 
-    virtual void visitProgram(std::shared_ptr<ll::Program> program, const std::string& name = {}) {
+    void visitImage(std::shared_ptr<ll::Image> image, const std::string& name = {}) override {
+        assert(image != nullptr);
+        assert(!name.empty());
+
+        auto found = false;
+        for (const auto& o : obj["objects"]) {
+            found |= o["name"].get<std::string>() == name;
+        }
+
+        // insert the image if it has not been inserted before
+        // for instance, through the visitImageView method.
+        if (found) {
+            return;
+        }
+
+        auto j = json{};
+        j["name"] = name;
+        j["type"] = ll::objectTypeToString(image->getType());
+        j["width"] = image->getWidth();
+        j["height"] = image->getHeight();
+        j["depth"] = image->getDepth();
+        j["channel_count"] = image->getChannelCount();
+        j["channel_type"] = ll::channelTypeToString(image->getChannelType());
+        j["usage"] = ll::ImageUsageFlagsToVectorString(image->getUsageFlags());
+
+        // can throw std::out_of_range
+        j["memory"] = graph->findMemoryNameForObject(name);
+
+        obj["objects"].push_back(j);
+    }
+    
+
+    void visitImageView(std::shared_ptr<ll::ImageView> imageView, const std::string& name = {}) override {
+        assert(imageView != nullptr);
+        assert(!name.empty());
+
+        // visits the image that supports the image view if this one has not been inserted yet
+        auto imageName = std::string {};
+        try {
+            auto image = imageView->getImage();
+            imageName = graph->findObjectName(imageView->getImage());
+
+            auto found = false;
+            for (const auto& o : obj["objects"]) {
+                found |= o["name"].get<std::string>() == imageName;
+            }
+
+            if (!found) {
+                visitImage(image);
+            }
+
+        } catch (std::out_of_range& e) {
+            throw std::out_of_range {"The image supporting image view " + name + " is not included in this compute graph."};
+        }
+
+
+        auto j = json {};
+
+        j["name"]                   = name;
+        j["image"]                  = imageName;
+        j["filter_mode"]            = ll::imageFilterModeToString(imageView->getFilterMode());
+        j["address_mode_u"]         = ll::imageAddressModeToString(imageView->getAddressModeU());
+        j["address_mode_v"]         = ll::imageAddressModeToString(imageView->getAddressModeV());
+        j["address_mode_w"]         = ll::imageAddressModeToString(imageView->getAddressModeW());
+        j["normalized_coordinates"] = imageView->getNormalizedCoordinates();
+
+        obj["objects"].push_back(j);
+
+    }
+
+
+    void visitProgram(std::shared_ptr<ll::Program> program, const std::string& name = {}) override {
+        assert(program != nullptr);
+        assert(!name.empty());
 
         const auto& spirv = program->getSpirV();
 
@@ -96,7 +176,7 @@ public:
     }
 
 
-    virtual void visitComputeNode(std::shared_ptr<ll::ComputeNode> node, const std::string& name = {}) {
+    void visitComputeNode(std::shared_ptr<ll::ComputeNode> node, const std::string& name = {}) override {
 
         auto j = json {};
         j["name"]       = name;
@@ -115,7 +195,7 @@ public:
             const auto param = node->getParameter(i);
 
             auto p = json {};
-            p["type"] = objectTypeToString(param->getType());
+            p["type"] = ll::objectTypeToString(param->getType());
             p["name"] = graph->findObjectName(param);
 
             j["parameters"].push_back(p);
@@ -123,7 +203,6 @@ public:
 
         obj["compute_nodes"].push_back(j);
     }
-
 
     std::shared_ptr<ll::ComputeGraph> graph {nullptr};
     json obj;

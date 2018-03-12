@@ -118,7 +118,7 @@ void Memory::unmapBuffer(const ll::Buffer& buffer) {
 }
 
 
-std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descriptor) {
+std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descriptor, const vk::ImageUsageFlags usageFlags) {
 
     // TODO: check that image witdh, height and depth are within supported range of the device
 
@@ -130,9 +130,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setTiling(vk::ImageTiling::eOptimal)
                     .setSamples(vk::SampleCountFlagBits::e1)
                     .setSharingMode(vk::SharingMode::eExclusive)
-                    .setUsage(vk::ImageUsageFlagBits::eStorage
-                              | vk::ImageUsageFlagBits::eSampled
-                              | vk::ImageUsageFlagBits::eTransferDst) // TODO: what's this?
+                    .setUsage(usageFlags)
                     .setFormat(descriptor.getFormat())
                     .setInitialLayout(InitialImageLayout);
 
@@ -150,7 +148,14 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
         const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
         device.bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
 
-        auto image = std::shared_ptr<ll::Image> {new ll::Image {device, vkImage, descriptor, shared_from_this(), tryInfo.allocInfo, InitialImageLayout}};
+        auto image = std::shared_ptr<ll::Image> {new ll::Image {device,
+                                                                vkImage,
+                                                                descriptor,
+                                                                shared_from_this(),
+                                                                tryInfo.allocInfo,
+                                                                InitialImageLayout,
+                                                                usageFlags}};
+                                                                
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return image;
 

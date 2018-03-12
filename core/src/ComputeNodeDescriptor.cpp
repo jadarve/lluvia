@@ -37,7 +37,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addBufferParameter() {
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addCombinedImageSamplerParameter() {
+ComputeNodeDescriptor& ComputeNodeDescriptor::addImageViewParameter() {
 
     auto param = vk::DescriptorSetLayoutBinding {
         static_cast<uint32_t>(parameterBindings.size()),

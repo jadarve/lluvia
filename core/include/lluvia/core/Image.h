@@ -16,6 +16,7 @@ namespace ll {
 
 class CommandBuffer;
 class ComputeNode;
+class ComputeGraph;
 class ImageView;
 class ImageViewDescriptor;
 class Memory;
@@ -37,6 +38,10 @@ public:
 
     ll::ObjectType getType() const noexcept override;
 
+    uint64_t getSize() const noexcept;
+
+    vk::ImageUsageFlags getUsageFlags()const noexcept;
+
     ll::ChannelType getChannelType() const noexcept;
     uint32_t getChannelCount()       const noexcept;
     uint32_t getWidth()              const noexcept;
@@ -49,14 +54,15 @@ public:
 private:
     Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
            std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
-           const vk::ImageLayout layout);
+           const vk::ImageLayout layout, const vk::ImageUsageFlags usageFlags);
 
     ll::ImageDescriptor descriptor;
     ll::MemoryAllocationInfo allocInfo;
 
-    vk::Device      device;
-    vk::Image       vkImage;
-    vk::ImageLayout vkLayout;
+    vk::Device          device;
+    vk::Image           vkImage;
+    vk::ImageLayout     vkLayout;
+    vk::ImageUsageFlags vkUsageFlags;
 
     // Shared pointer to the memory this image was created from
     // This will keep the memory alive until this image is deleted
@@ -65,6 +71,7 @@ private:
 
 friend class ll::CommandBuffer;
 friend class ll::ComputeNode;
+friend class ll::ComputeGraph;
 friend class ll::ImageView;
 friend class ll::Memory;
 friend class ll::Session;

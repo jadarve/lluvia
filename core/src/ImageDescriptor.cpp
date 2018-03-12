@@ -3,6 +3,19 @@
 namespace ll {
 
 
+constexpr const char* STRING_CHANNEL_TYPE_UINT8   = "uint8";
+constexpr const char* STRING_CHANNEL_TYPE_INT8    = "int8";
+constexpr const char* STRING_CHANNEL_TYPE_UINT16  = "uint16";
+constexpr const char* STRING_CHANNEL_TYPE_INT16   = "int16";
+constexpr const char* STRING_CHANNEL_TYPE_FLOAT16 = "float16";
+constexpr const char* STRING_CHANNEL_TYPE_UINT32  = "uint32";
+constexpr const char* STRING_CHANNEL_TYPE_INT32   = "int32";
+constexpr const char* STRING_CHANNEL_TYPE_FLOAT32 = "float32";
+constexpr const char* STRING_CHANNEL_TYPE_UINT64  = "uint64";
+constexpr const char* STRING_CHANNEL_TYPE_INT64   = "int64";
+constexpr const char* STRING_CHANNEL_TYPE_FLOAT64 = "float64";
+
+
 uint64_t getChannelTypeSize(ll::ChannelType type) {
 
     switch (type) {
@@ -26,6 +39,43 @@ uint64_t getChannelTypeSize(ll::ChannelType type) {
             return 8;
     }
 }
+
+
+std::string channelTypeToString(ll::ChannelType type) {
+
+    switch (type) {
+        case ll::ChannelType::Uint8:   return STRING_CHANNEL_TYPE_UINT8;
+        case ll::ChannelType::Int8:    return STRING_CHANNEL_TYPE_INT8;
+        case ll::ChannelType::Uint16:  return STRING_CHANNEL_TYPE_UINT16;
+        case ll::ChannelType::Int16:   return STRING_CHANNEL_TYPE_INT16;
+        case ll::ChannelType::Float16: return STRING_CHANNEL_TYPE_FLOAT16;
+        case ll::ChannelType::Uint32:  return STRING_CHANNEL_TYPE_UINT32;
+        case ll::ChannelType::Int32:   return STRING_CHANNEL_TYPE_INT32;
+        case ll::ChannelType::Float32: return STRING_CHANNEL_TYPE_FLOAT32;
+        case ll::ChannelType::Uint64:  return STRING_CHANNEL_TYPE_UINT64;
+        case ll::ChannelType::Int64:   return STRING_CHANNEL_TYPE_INT64;
+        case ll::ChannelType::Float64: return STRING_CHANNEL_TYPE_FLOAT64;
+    }
+}
+
+
+ll::ChannelType stringToChannelType(const std::string& str) {
+
+    if (str == STRING_CHANNEL_TYPE_UINT8)   return ll::ChannelType::Uint8;
+    if (str == STRING_CHANNEL_TYPE_INT8)    return ll::ChannelType::Int8;
+    if (str == STRING_CHANNEL_TYPE_UINT16)  return ll::ChannelType::Uint16;
+    if (str == STRING_CHANNEL_TYPE_INT16)   return ll::ChannelType::Int16;
+    if (str == STRING_CHANNEL_TYPE_FLOAT16) return ll::ChannelType::Float16;
+    if (str == STRING_CHANNEL_TYPE_UINT32)  return ll::ChannelType::Uint32;
+    if (str == STRING_CHANNEL_TYPE_INT32)   return ll::ChannelType::Int32;
+    if (str == STRING_CHANNEL_TYPE_FLOAT32) return ll::ChannelType::Float32;
+    if (str == STRING_CHANNEL_TYPE_UINT64)  return ll::ChannelType::Uint64;
+    if (str == STRING_CHANNEL_TYPE_INT64)   return ll::ChannelType::Int64;
+    if (str == STRING_CHANNEL_TYPE_FLOAT64) return ll::ChannelType::Float64;
+
+    throw std::runtime_error("unknown channel type string: " + str);
+}
+
 
 ImageDescriptor::ImageDescriptor(const uint32_t width,
                                  const uint32_t height,

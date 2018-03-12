@@ -3,6 +3,62 @@
 
 namespace ll {
 
+constexpr const char* STRING_IMAGE_FILTER_MODE_NEAREST = "NEAREST";
+constexpr const char* STRING_IMAGE_FILTER_MODE_LINEAR  = "LINEAR";
+
+constexpr const char* STRING_IMAGE_ADDRESS_MODE_REPEAT               = "REPEAT";
+constexpr const char* STRING_IMAGE_ADDRESS_MODE_MIRRORED_REPEAT      = "MIRRORED_REPEAT";
+constexpr const char* STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_EDGE        = "CLAMP_TO_EDGE";
+constexpr const char* STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_BORDER      = "CLAMP_T_OBORDER";
+constexpr const char* STRING_IMAGE_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE = "MIRROR_CLAMP_TO_EDGE";
+
+
+std::string imageFilterModeToString(const ll::ImageFilterMode filterMode) {
+
+    switch (filterMode) {
+        case ll::ImageFilterMode::Nearest : return STRING_IMAGE_FILTER_MODE_NEAREST;
+        case ll::ImageFilterMode::Linear  : return STRING_IMAGE_FILTER_MODE_LINEAR;
+    }
+}
+
+
+ll::ImageFilterMode stringToImageFilterMode(const std::string& str) {
+
+    if (str == STRING_IMAGE_FILTER_MODE_NEAREST) return ll::ImageFilterMode::Nearest;
+    if (str == STRING_IMAGE_FILTER_MODE_LINEAR) return ll::ImageFilterMode::Linear;
+
+    throw std::runtime_error("unknown image filter mode: " + str +
+        ". Possible values are: " + STRING_IMAGE_FILTER_MODE_NEAREST + ", " + STRING_IMAGE_FILTER_MODE_LINEAR);
+}
+
+
+std::string imageAddressModeToString(const ll::ImageAddressMode addressMode) {
+
+    switch (addressMode) {
+        case ll::ImageAddressMode::Repeat            : return STRING_IMAGE_ADDRESS_MODE_REPEAT;
+        case ll::ImageAddressMode::MirroredRepeat    : return STRING_IMAGE_ADDRESS_MODE_MIRRORED_REPEAT;
+        case ll::ImageAddressMode::ClampToEdge       : return STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_EDGE;
+        case ll::ImageAddressMode::ClampToBorder     : return STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_BORDER;
+        case ll::ImageAddressMode::MirrorClampToEdge : return STRING_IMAGE_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE;
+    }
+}
+
+
+ll::ImageAddressMode stringToImageAddressMode(const std::string& str) {
+
+    if (str == STRING_IMAGE_ADDRESS_MODE_REPEAT)               return ll::ImageAddressMode::Repeat;
+    if (str == STRING_IMAGE_ADDRESS_MODE_MIRRORED_REPEAT)      return ll::ImageAddressMode::MirroredRepeat;
+    if (str == STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_EDGE)        return ll::ImageAddressMode::ClampToEdge;
+    if (str == STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_BORDER)      return ll::ImageAddressMode::ClampToBorder;
+    if (str == STRING_IMAGE_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE) return ll::ImageAddressMode::MirrorClampToEdge;
+
+    throw std::runtime_error("unknown image address mode: " + str +
+        ". Possible values are: " + STRING_IMAGE_ADDRESS_MODE_REPEAT + ", " + STRING_IMAGE_ADDRESS_MODE_MIRRORED_REPEAT
+        + ", " + STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_EDGE + ", " + STRING_IMAGE_ADDRESS_MODE_CLAMP_TO_BORDER
+        + ", " + STRING_IMAGE_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE);   
+}
+
+
 ImageViewDescriptor& ImageViewDescriptor::setFilteringMode(ll::ImageFilterMode filterMode) {
 
     this->filterMode = filterMode;

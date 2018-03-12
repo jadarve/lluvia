@@ -30,6 +30,9 @@ enum class ChannelType : uint32_t {
 
 uint64_t getChannelTypeSize(ll::ChannelType type);
 
+std::string     channelTypeToString(ll::ChannelType type);
+ll::ChannelType stringToChannelType(const std::string& str);
+
 
 class ImageDescriptor {
 

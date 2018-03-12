@@ -84,7 +84,7 @@ private:
     // std::vector<vk::SpecializationMapEntry> specializationMapEntries;
     // // uint32_t local_x {1};
 
-    std::vector<std::shared_ptr<ll::Object>> parameters;
+    std::vector<std::shared_ptr<ll::Object>> objects;
 };
 
 

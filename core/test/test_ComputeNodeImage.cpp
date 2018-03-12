@@ -20,6 +20,10 @@ TEST_CASE("BufferAssignment", "test_ComputeNodeImage") {
     constexpr const uint32_t WIDTH = 32u;
     constexpr const uint32_t HEIGHT = 32u;
 
+    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
+                                              | vk::ImageUsageFlagBits::eSampled
+                                              | vk::ImageUsageFlagBits::eTransferDst};
+
     using memflags = vk::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create();
@@ -62,7 +66,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNodeImage") {
     
     stageBuffer->unmap();
 
-    auto image = deviceMemory->createImage(imgDesc);
+    auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
 
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setAddressMode(ll::ImageAddressMode::Repeat)
@@ -81,7 +85,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNodeImage") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addCombinedImageSamplerParameter() // addImageViewParameter()
+                            .addImageViewParameter()
                             .addBufferParameter();
 
     auto node = session->createComputeNode(nodeDescriptor);

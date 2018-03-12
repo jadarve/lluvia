@@ -17,6 +17,8 @@ std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPrope
 vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector);
 std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags);
 
+vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector);
+std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags);
 
 std::string toBase64(const void* ptr, const size_t size);
 std::vector<uint8_t> fromBase64(const std::string& code);

@@ -7,13 +7,10 @@
 
 namespace ll {
 
-ll::ObjectType ImageView::getType() const noexcept {
-    return ll::ObjectType::ImageView;
-}
-
 ImageView::ImageView(vk::Device device, 
                      std::shared_ptr<ll::Image> image,
                      const ll::ImageViewDescriptor& descriptor) :
+    descriptor {descriptor},
     device {device},
     image  {image} {
 
@@ -41,5 +38,41 @@ ImageView::~ImageView() {
     device.destroyImageView(vkImageView);
     device.destroySampler(vkSampler);
 }
+
+
+ll::ObjectType ImageView::getType() const noexcept {
+    return ll::ObjectType::ImageView;
+}
+
+
+std::shared_ptr<ll::Image> ImageView::getImage() const noexcept {
+    return image;
+}
+
+
+ll::ImageFilterMode  ImageView::getFilterMode() const noexcept {
+    return descriptor.filterMode;
+}
+
+
+ll::ImageAddressMode ImageView::getAddressModeU() const noexcept {
+    return descriptor.addressMode[static_cast<uint32_t>(ll::ImageAxis::U)];
+}
+
+
+ll::ImageAddressMode ImageView::getAddressModeV() const noexcept {
+    return descriptor.addressMode[static_cast<uint32_t>(ll::ImageAxis::V)];
+}
+
+
+ll::ImageAddressMode ImageView::getAddressModeW() const noexcept {
+    return descriptor.addressMode[static_cast<uint32_t>(ll::ImageAxis::W)];
+}
+
+
+bool ImageView::getNormalizedCoordinates() const noexcept {
+    return descriptor.normalizedCoordinates;
+}
+
 
 } // namespace ll

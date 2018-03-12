@@ -8,6 +8,8 @@
 
 namespace ll {
 
+class ImageView;
+
 enum class ImageAxis : uint32_t {
     U = 0,
     V = 1,
@@ -27,6 +29,13 @@ enum class ImageAddressMode : uint32_t {
     ClampToBorder,
     MirrorClampToEdge
 };
+
+
+std::string imageFilterModeToString(const ll::ImageFilterMode filterMode);
+ll::ImageFilterMode stringToImageFilterMode(const std::string& str);
+
+std::string imageAddressModeToString(const ll::ImageAddressMode addressMode);
+ll::ImageAddressMode stringToImageAddressMode(const std::string& str);
 
 
 class ImageViewDescriptor {
@@ -59,6 +68,9 @@ private:
     std::array<ll::ImageAddressMode, 3> addressMode;
 
     bool normalizedCoordinates;
+
+
+friend class ImageView;
 };
 
 

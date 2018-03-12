@@ -52,13 +52,14 @@ public:
     bool isMappable() const noexcept;
 
     std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size,
-        const vk::BufferUsageFlags usageFlags = {vk::BufferUsageFlagBits::eStorageBuffer
+        const vk::BufferUsageFlags usageFlags = {  vk::BufferUsageFlagBits::eStorageBuffer
                                                  | vk::BufferUsageFlagBits::eTransferSrc
                                                  | vk::BufferUsageFlagBits::eTransferDst});
 
-    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor);
-    void releaseImage(const ll::Image& image);
-
+    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor,
+        const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
+                                                | vk::ImageUsageFlagBits::eSampled});
+    
     void accept(ll::Visitor* visitor);
 
 private:
@@ -68,6 +69,8 @@ private:
     void releaseBuffer(const ll::Buffer& buffer);
     void* mapBuffer(const ll::Buffer& buffer);
     void unmapBuffer(const ll::Buffer& buffer);
+
+    void releaseImage(const ll::Image& image);
 
     vk::Device device;
 
@@ -79,6 +82,7 @@ private:
 
 
 friend class ll::Buffer;
+friend class ll::Image;
 };
 
 } // namespace ll
