@@ -159,7 +159,7 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
 }
 
 
-TEST_CASE("ReadGraph", "test_IO") {
+TEST_CASE("ReadGraph_Buffers", "test_IO") {
 
     auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
     REQUIRE(session != nullptr);
@@ -181,7 +181,8 @@ TEST_CASE("ReadGraph", "test_IO") {
     REQUIRE(graph->containsObject("hostBuffer_2"));
 }
 
-TEST_CASE("ReadGraph_ComputeNode", "WriteGraph_ImageAndImageView") {
+
+TEST_CASE("ReadGraph_ComputeNode", "test_IO") {
 
     auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
     REQUIRE(session != nullptr);
@@ -194,4 +195,24 @@ TEST_CASE("ReadGraph_ComputeNode", "WriteGraph_ImageAndImageView") {
     REQUIRE(graph->containsObject("hostBuffer_0"));
     REQUIRE(graph->containsProgram("assign"));
     REQUIRE(graph->containsComputeNode("node_0"));
+}
+
+
+TEST_CASE("ReadGraph_ImageAndImageView", "test_IO") {
+
+    auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
+    REQUIRE(session != nullptr);
+
+    auto graph = ll::readComputeGraph(DATA_PATH + "/images.json", session);
+    REQUIRE(graph != nullptr);
+
+    // check the contents of the graph
+    REQUIRE(graph->containsMemory("deviceMemory"));
+    REQUIRE(graph->containsMemory("hostMemory"));
+    REQUIRE(graph->containsMemory("hostOutputMemory"));
+
+    REQUIRE(graph->containsObject("outputBuffer"));
+    REQUIRE(graph->containsObject("stageBuffer"));
+    REQUIRE(graph->containsObject("image"));
+    REQUIRE(graph->containsObject("imageView"));
 }

@@ -35,9 +35,16 @@ U getValueFromJson(T&& name, const json& j) {
     const auto value = j[name];
     assert(!value.is_null());
 
-    if (std::is_integral<U>())          assert(value.is_number_integer());
+    if (std::is_integral<U>()) {
+        if (std::is_same<U, bool>()) {
+            assert(value.is_boolean());
+        }
+        else {
+            assert(value.is_number_integer());
+        }
+    }
+
     if (std::is_floating_point<U>())    assert(value.is_number());
-    if (std::is_same<U, bool>())        assert(value.is_boolean());
     if (std::is_same<U, std::string>()) assert(value.is_string());
     if (std::is_same<U, json>())        assert(value.is_object() || value.is_array());
     
@@ -150,6 +157,7 @@ public:
         auto j = json {};
 
         j["name"]                   = name;
+        j["type"]                   = ll::objectTypeToString(imageView->getType());
         j["image"]                  = imageName;
         j["filter_mode"]            = ll::imageFilterModeToString(imageView->getFilterMode());
         j["address_mode_u"]         = ll::imageAddressModeToString(imageView->getAddressModeU());
@@ -237,6 +245,7 @@ public:
             }
 
             const auto& objects = j["objects"];
+            auto imageViewsToBuild = std::vector<json> {};
             if (!objects.is_null()) {
 
                 assert(objects.is_array());
@@ -249,8 +258,18 @@ public:
                         case ll::ObjectType::Buffer:
                             buildBuffer(obj);
                             break;
-                        // TODO: other object types
+                        case ll::ObjectType::Image:
+                            buildImage(obj);
+                            break;
+                        case ll::ObjectType::ImageView:
+                            imageViewsToBuild.push_back(obj);
+                            break;
                     }
+                }
+
+                // build image views
+                for (const auto& obj : imageViewsToBuild) {
+                    buildImageView(obj);
                 }
             }
 
@@ -309,6 +328,67 @@ public:
     }
 
 
+    void buildImage(const json& j) {
+
+        const auto name         = getValueFromJson<std::string>("name", j);
+        const auto memName      = getValueFromJson<std::string>("memory", j);
+        const auto usageVector  = getValueFromJson<json>("usage", j);
+        const auto width        = getValueFromJson<uint32_t>("width", j);
+        const auto height       = getValueFromJson<uint32_t>("height", j);
+        const auto depth        = getValueFromJson<uint32_t>("depth", j);
+        const auto channelType  = ll::stringToChannelType(getValueFromJson<std::string>("channel_type", j));
+        const auto channelCount = getValueFromJson<uint32_t>("channel_count", j);
+
+        const auto usageFlags = ll::vectorStringToImageUsageFlags(usageVector);
+
+
+        auto imgDesc = ll::ImageDescriptor {}
+                        .setWidth(width)
+                        .setHeight(height)
+                        .setDepth(depth)
+                        .setChannelCount(channelCount)
+                        .setChannelType(channelType);
+
+        // can throw std::out_of_range
+        auto memory = graph->getMemory(memName);
+
+        auto image = memory->createImage(imgDesc, usageFlags);
+        graph->addObject(name, image);
+    }
+
+
+    void buildImageView(const json& j) {
+
+        const auto name             = getValueFromJson<std::string>("name", j);
+        const auto imageName        = getValueFromJson<std::string>("image", j);
+        const auto normalizedCoords = getValueFromJson<bool>("normalized_coordinates", j);
+        const auto filterMode       = ll::stringToImageFilterMode(getValueFromJson<std::string>("filter_mode", j));
+        const auto addrModeU        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_u", j));
+        const auto addrModeV        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_v", j));
+        const auto addrModeW        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_w", j));
+
+
+        auto viewDesc = ll::ImageViewDescriptor {}
+                            .setNormalizedCoordinates(normalizedCoords)
+                            .setFilteringMode(filterMode)
+                            .setAddressMode(ll::ImageAxis::U, addrModeU)
+                            .setAddressMode(ll::ImageAxis::V, addrModeV)
+                            .setAddressMode(ll::ImageAxis::W, addrModeW);
+
+        // can throw std::out_of_range
+        auto obj = graph->getObject(imageName);
+
+        if (obj->getType() != ll::ObjectType::Image) {
+            throw std::runtime_error("object with name [" + imageName + "] is not an image.");
+        }
+
+        auto image = std::static_pointer_cast<ll::Image>(obj);
+        auto imageView = image->createImageView(viewDesc);
+
+        graph->addObject(name, imageView);
+    }
+
+
     void buildProgram(const json& j) {
 
         const auto name        = getValueFromJson<std::string>("name", j);
@@ -355,6 +435,13 @@ public:
                 case ll::ObjectType::Buffer:
                     descriptor.addBufferParameter();
                     break;
+
+                case ll::ObjectType::Image:
+                    break;
+
+                case ll::ObjectType::ImageView:
+                    descriptor.addImageViewParameter();
+                    break;
             }
         }
 
@@ -377,6 +464,13 @@ public:
             switch (pType) {
                 case ll::ObjectType::Buffer:
                     computeNode->bind(pIndex, std::static_pointer_cast<ll::Buffer>(param));
+                    break;
+
+                case ll::ObjectType::Image:
+                    break;
+
+                case ll::ObjectType::ImageView:
+                    computeNode->bind(pIndex, std::static_pointer_cast<ll::ImageView>(param));
                     break;
             }
 

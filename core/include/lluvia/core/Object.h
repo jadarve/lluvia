@@ -22,8 +22,9 @@ ll::ObjectType stringToObjectType(T&& name) {
 
     static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
     
-    if (name == "buffer") {return ll::ObjectType::Buffer;}
-    if (name == "image")  {return ll::ObjectType::Buffer;}
+    if (name == "BUFFER")     {return ll::ObjectType::Buffer;}
+    if (name == "IMAGE")      {return ll::ObjectType::Image;}
+    if (name == "IMAGE_VIEW") {return ll::ObjectType::ImageView;}
 
     throw std::out_of_range("invalid name for object type: " + name);
 }
