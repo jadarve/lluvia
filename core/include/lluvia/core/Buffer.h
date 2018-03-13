@@ -10,6 +10,7 @@
 
 namespace ll {
 
+class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
 class Memory;
@@ -23,18 +24,20 @@ public:
     Buffer(const Buffer& b) = delete;
     Buffer(Buffer&& b)      = delete;
 
-    virtual ~Buffer();
+    ~Buffer();
 
     Buffer& operator = (const Buffer& buffer) = delete;
     Buffer& operator = (Buffer&& buffer)      = delete;
 
-    ObjectType getType() const noexcept override;
+    ll::ObjectType getType() const noexcept override;
 
     uint64_t getSize() const noexcept;
 
     vk::BufferUsageFlags getUsageFlags() const noexcept;
 
     bool isMappable() const noexcept;
+    void* map();
+    void  unmap();
 
     void accept(ll::Visitor* visitor);
 
@@ -59,9 +62,10 @@ private:
     std::shared_ptr<ll::Memory> memory;
 
 
-friend class ll::Memory;
+friend class ll::CommandBuffer;
 friend class ll::ComputeGraph;
 friend class ll::ComputeNode;
+friend class ll::Memory;
 friend class ll::Session;
 };
 

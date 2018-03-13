@@ -4,6 +4,8 @@
 #include "lluvia/core/ComputeGraph.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageView.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/Session.h"
@@ -33,9 +35,16 @@ U getValueFromJson(T&& name, const json& j) {
     const auto value = j[name];
     assert(!value.is_null());
 
-    if (std::is_integral<U>())          assert(value.is_number_integer());
+    if (std::is_integral<U>()) {
+        if (std::is_same<U, bool>()) {
+            assert(value.is_boolean());
+        }
+        else {
+            assert(value.is_number_integer());
+        }
+    }
+
     if (std::is_floating_point<U>())    assert(value.is_number());
-    if (std::is_same<U, bool>())        assert(value.is_boolean());
     if (std::is_same<U, std::string>()) assert(value.is_string());
     if (std::is_same<U, json>())        assert(value.is_object() || value.is_array());
     
@@ -46,7 +55,8 @@ U getValueFromJson(T&& name, const json& j) {
 class ComputeGraphFileWriterImpl : public ll::Visitor {
 
 public:
-    void visitComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& name = {}) {
+    void visitComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& name = {}) override {
+        assert(graph != nullptr);
 
         this->graph = graph;
 
@@ -58,7 +68,9 @@ public:
     }
 
 
-    void visitMemory(std::shared_ptr<ll::Memory> memory, const std::string& name = {}) {
+    void visitMemory(std::shared_ptr<ll::Memory> memory, const std::string& name = {}) override {
+        assert(memory != nullptr);
+        assert(!name.empty());
 
         auto j = json {};
         j["name"]      = name;
@@ -69,7 +81,9 @@ public:
     }
 
 
-    void visitBuffer(std::shared_ptr<ll::Buffer> buffer, const std::string& name = {}) {
+    void visitBuffer(std::shared_ptr<ll::Buffer> buffer, const std::string& name = {}) override {
+        assert(buffer != nullptr);
+        assert(!name.empty());
 
         auto j = json {};
         j["name"]   = name;
@@ -84,7 +98,81 @@ public:
     }
 
 
-    virtual void visitProgram(std::shared_ptr<ll::Program> program, const std::string& name = {}) {
+    void visitImage(std::shared_ptr<ll::Image> image, const std::string& name = {}) override {
+        assert(image != nullptr);
+        assert(!name.empty());
+
+        auto found = false;
+        for (const auto& o : obj["objects"]) {
+            found |= o["name"].get<std::string>() == name;
+        }
+
+        // insert the image if it has not been inserted before
+        // for instance, through the visitImageView method.
+        if (found) {
+            return;
+        }
+
+        auto j = json{};
+        j["name"] = name;
+        j["type"] = ll::objectTypeToString(image->getType());
+        j["width"] = image->getWidth();
+        j["height"] = image->getHeight();
+        j["depth"] = image->getDepth();
+        j["channel_count"] = image->getChannelCount();
+        j["channel_type"] = ll::channelTypeToString(image->getChannelType());
+        j["usage"] = ll::ImageUsageFlagsToVectorString(image->getUsageFlags());
+
+        // can throw std::out_of_range
+        j["memory"] = graph->findMemoryNameForObject(name);
+
+        obj["objects"].push_back(j);
+    }
+    
+
+    void visitImageView(std::shared_ptr<ll::ImageView> imageView, const std::string& name = {}) override {
+        assert(imageView != nullptr);
+        assert(!name.empty());
+
+        // visits the image that supports the image view if this one has not been inserted yet
+        auto imageName = std::string {};
+        try {
+            auto image = imageView->getImage();
+            imageName = graph->findObjectName(imageView->getImage());
+
+            auto found = false;
+            for (const auto& o : obj["objects"]) {
+                found |= o["name"].get<std::string>() == imageName;
+            }
+
+            if (!found) {
+                visitImage(image);
+            }
+
+        } catch (std::out_of_range& e) {
+            throw std::out_of_range {"The image supporting image view " + name + " is not included in this compute graph."};
+        }
+
+
+        auto j = json {};
+
+        j["name"]                   = name;
+        j["type"]                   = ll::objectTypeToString(imageView->getType());
+        j["image"]                  = imageName;
+        j["filter_mode"]            = ll::imageFilterModeToString(imageView->getFilterMode());
+        j["address_mode_u"]         = ll::imageAddressModeToString(imageView->getAddressModeU());
+        j["address_mode_v"]         = ll::imageAddressModeToString(imageView->getAddressModeV());
+        j["address_mode_w"]         = ll::imageAddressModeToString(imageView->getAddressModeW());
+        j["normalized_coordinates"] = imageView->getNormalizedCoordinates();
+
+        obj["objects"].push_back(j);
+
+    }
+
+
+    void visitProgram(std::shared_ptr<ll::Program> program, const std::string& name = {}) override {
+        assert(program != nullptr);
+        assert(!name.empty());
 
         const auto& spirv = program->getSpirV();
 
@@ -96,7 +184,7 @@ public:
     }
 
 
-    virtual void visitComputeNode(std::shared_ptr<ll::ComputeNode> node, const std::string& name = {}) {
+    void visitComputeNode(std::shared_ptr<ll::ComputeNode> node, const std::string& name = {}) override {
 
         auto j = json {};
         j["name"]       = name;
@@ -115,7 +203,7 @@ public:
             const auto param = node->getParameter(i);
 
             auto p = json {};
-            p["type"] = objectTypeToString(param->getType());
+            p["type"] = ll::objectTypeToString(param->getType());
             p["name"] = graph->findObjectName(param);
 
             j["parameters"].push_back(p);
@@ -123,7 +211,6 @@ public:
 
         obj["compute_nodes"].push_back(j);
     }
-
 
     std::shared_ptr<ll::ComputeGraph> graph {nullptr};
     json obj;
@@ -158,6 +245,7 @@ public:
             }
 
             const auto& objects = j["objects"];
+            auto imageViewsToBuild = std::vector<json> {};
             if (!objects.is_null()) {
 
                 assert(objects.is_array());
@@ -170,8 +258,18 @@ public:
                         case ll::ObjectType::Buffer:
                             buildBuffer(obj);
                             break;
-                        // TODO: other object types
+                        case ll::ObjectType::Image:
+                            buildImage(obj);
+                            break;
+                        case ll::ObjectType::ImageView:
+                            imageViewsToBuild.push_back(obj);
+                            break;
                     }
+                }
+
+                // build image views
+                for (const auto& obj : imageViewsToBuild) {
+                    buildImageView(obj);
                 }
             }
 
@@ -230,6 +328,67 @@ public:
     }
 
 
+    void buildImage(const json& j) {
+
+        const auto name         = getValueFromJson<std::string>("name", j);
+        const auto memName      = getValueFromJson<std::string>("memory", j);
+        const auto usageVector  = getValueFromJson<json>("usage", j);
+        const auto width        = getValueFromJson<uint32_t>("width", j);
+        const auto height       = getValueFromJson<uint32_t>("height", j);
+        const auto depth        = getValueFromJson<uint32_t>("depth", j);
+        const auto channelType  = ll::stringToChannelType(getValueFromJson<std::string>("channel_type", j));
+        const auto channelCount = getValueFromJson<uint32_t>("channel_count", j);
+
+        const auto usageFlags = ll::vectorStringToImageUsageFlags(usageVector);
+
+
+        auto imgDesc = ll::ImageDescriptor {}
+                        .setWidth(width)
+                        .setHeight(height)
+                        .setDepth(depth)
+                        .setChannelCount(channelCount)
+                        .setChannelType(channelType);
+
+        // can throw std::out_of_range
+        auto memory = graph->getMemory(memName);
+
+        auto image = memory->createImage(imgDesc, usageFlags);
+        graph->addObject(name, image);
+    }
+
+
+    void buildImageView(const json& j) {
+
+        const auto name             = getValueFromJson<std::string>("name", j);
+        const auto imageName        = getValueFromJson<std::string>("image", j);
+        const auto normalizedCoords = getValueFromJson<bool>("normalized_coordinates", j);
+        const auto filterMode       = ll::stringToImageFilterMode(getValueFromJson<std::string>("filter_mode", j));
+        const auto addrModeU        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_u", j));
+        const auto addrModeV        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_v", j));
+        const auto addrModeW        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_w", j));
+
+
+        auto viewDesc = ll::ImageViewDescriptor {}
+                            .setNormalizedCoordinates(normalizedCoords)
+                            .setFilteringMode(filterMode)
+                            .setAddressMode(ll::ImageAxis::U, addrModeU)
+                            .setAddressMode(ll::ImageAxis::V, addrModeV)
+                            .setAddressMode(ll::ImageAxis::W, addrModeW);
+
+        // can throw std::out_of_range
+        auto obj = graph->getObject(imageName);
+
+        if (obj->getType() != ll::ObjectType::Image) {
+            throw std::runtime_error("object with name [" + imageName + "] is not an image.");
+        }
+
+        auto image = std::static_pointer_cast<ll::Image>(obj);
+        auto imageView = image->createImageView(viewDesc);
+
+        graph->addObject(name, imageView);
+    }
+
+
     void buildProgram(const json& j) {
 
         const auto name        = getValueFromJson<std::string>("name", j);
@@ -276,6 +435,13 @@ public:
                 case ll::ObjectType::Buffer:
                     descriptor.addBufferParameter();
                     break;
+
+                case ll::ObjectType::Image:
+                    break;
+
+                case ll::ObjectType::ImageView:
+                    descriptor.addImageViewParameter();
+                    break;
             }
         }
 
@@ -298,6 +464,13 @@ public:
             switch (pType) {
                 case ll::ObjectType::Buffer:
                     computeNode->bind(pIndex, std::static_pointer_cast<ll::Buffer>(param));
+                    break;
+
+                case ll::ObjectType::Image:
+                    break;
+
+                case ll::ObjectType::ImageView:
+                    computeNode->bind(pIndex, std::static_pointer_cast<ll::ImageView>(param));
                     break;
             }
 

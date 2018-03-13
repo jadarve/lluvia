@@ -1,0 +1,76 @@
+{
+    "memories": [
+        {
+            "flags": [
+                "DEVICE_LOCAL"
+            ],
+            "name": "deviceMemory",
+            "page_size": 4194304
+        },
+        {
+            "flags": [
+                "HOST_COHERENT",
+                "HOST_VISIBLE"
+            ],
+            "name": "hostOutputMemory",
+            "page_size": 4194304
+        },
+        {
+            "flags": [
+                "HOST_COHERENT",
+                "HOST_VISIBLE"
+            ],
+            "name": "hostMemory",
+            "page_size": 4194304
+        }
+    ],
+    "objects": [
+        {
+            "channel_count": 1,
+            "channel_type": "uint8",
+            "depth": 1,
+            "height": 32,
+            "memory": "deviceMemory",
+            "name": "image",
+            "type": "IMAGE",
+            "usage": [
+                "IMAGE_USAGE_TRANSFER_DST",
+                "IMAGE_USAGE_SAMPLED",
+                "IMAGE_USAGE_STORAGE"
+            ],
+            "width": 32
+        },
+        {
+            "memory": "hostOutputMemory",
+            "name": "outputBuffer",
+            "size": 4096,
+            "type": "BUFFER",
+            "usage": [
+                "STORAGE_BUFFER",
+                "TRANSFER_DST",
+                "TRANSFER_SRC"
+            ]
+        },
+        {
+            "address_mode_u": "REPEAT",
+            "address_mode_v": "REPEAT",
+            "address_mode_w": "REPEAT",
+            "filter_mode": "NEAREST",
+            "image": "image",
+            "name": "imageView",
+            "normalized_coordinates": false,
+            "type": "IMAGE_VIEW"
+        },
+        {
+            "memory": "hostMemory",
+            "name": "stageBuffer",
+            "size": 1024,
+            "type": "BUFFER",
+            "usage": [
+                "STORAGE_BUFFER",
+                "TRANSFER_DST",
+                "TRANSFER_SRC"
+            ]
+        }
+    ]
+}

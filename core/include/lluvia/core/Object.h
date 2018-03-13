@@ -9,7 +9,9 @@ namespace ll {
 
 
 enum class ObjectType : uint32_t {
-    Buffer
+    Buffer,
+    Image,
+    ImageView
 };
 
 
@@ -20,7 +22,9 @@ ll::ObjectType stringToObjectType(T&& name) {
 
     static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
     
-    if (name == "buffer") {return ll::ObjectType::Buffer;}
+    if (name == "BUFFER")     {return ll::ObjectType::Buffer;}
+    if (name == "IMAGE")      {return ll::ObjectType::Image;}
+    if (name == "IMAGE_VIEW") {return ll::ObjectType::ImageView;}
 
     throw std::out_of_range("invalid name for object type: " + name);
 }
@@ -38,7 +42,7 @@ public:
     Object& operator = (const Object&) = default;
     Object& operator = (Object&&)      = default;
 
-    virtual ObjectType getType() const noexcept = 0;
+    virtual ll::ObjectType getType() const noexcept = 0;
 };
 
 

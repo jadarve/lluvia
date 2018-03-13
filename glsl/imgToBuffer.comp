@@ -1,0 +1,27 @@
+#version 450
+
+#ifndef IMG_TO_BUFFER_COMP_
+#define IMG_TO_BUFFER_COMP_
+
+
+layout (
+    local_size_x_id = 1, local_size_x = 1,
+    local_size_y_id = 2, local_size_y = 1,
+    local_size_z_id = 3, local_size_z = 1
+) in;
+
+
+layout(binding = 0) uniform usampler2D img;
+layout(binding = 1) buffer out0 { uint outputBuffer[]; };
+
+
+void main() {
+
+    const vec2 coord = {gl_GlobalInvocationID.x, gl_GlobalInvocationID.y};
+    uvec4 texValue = texture(img, coord);
+
+    const uint index = gl_GlobalInvocationID.y*32 + gl_GlobalInvocationID.x;
+    outputBuffer[index] = texValue.x;
+}
+
+#endif // IMG_TO_BUFFER_COMP_

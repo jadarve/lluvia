@@ -16,6 +16,7 @@ class Buffer;
 class CommandBuffer;
 class ComputeNode;
 class ComputeNodeDescriptor;
+class Image;
 class Memory;
 class Program;
 
@@ -63,7 +64,10 @@ public:
     // Operations
     ///////////////////////////////////////////////////////
     void run(const std::shared_ptr<ll::ComputeNode> node);
+    void run(const std::shared_ptr<ll::CommandBuffer> node);
     void copyBuffer(const ll::Buffer& src, const ll::Buffer& dst);
+
+    void changeImageLayout(std::shared_ptr<ll::Image> image, const vk::ImageLayout newLayout);
 
 private:
     // Session objects should be created through factory methods

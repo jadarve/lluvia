@@ -70,11 +70,96 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
     graph->addComputeNode("node_0", node);
 
 
+    ll::writeComputeGraph(graph, "WriteGraph_MemoryAndBuffers");
+}
+
+
+TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
+
+    constexpr const uint32_t WIDTH = 32u;
+    constexpr const uint32_t HEIGHT = 32u;
+
+    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
+                                              | vk::ImageUsageFlagBits::eSampled
+                                              | vk::ImageUsageFlagBits::eTransferDst};
+
+    using memflags = vk::MemoryPropertyFlagBits;
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
+    const auto deviceMemFlags = memflags::eDeviceLocal;
+    const auto pageSize = uint64_t {1024*1024*4};
+
+    auto hostMemory       = session->createMemory(hostMemFlags, pageSize, false);
+    auto hostOutputMemory = session->createMemory(hostMemFlags, pageSize, false);
+    auto deviceMemory     = session->createMemory(deviceMemFlags, pageSize, false);
+
+    REQUIRE(hostMemory != nullptr);
+    REQUIRE(hostOutputMemory != nullptr);
+    REQUIRE(deviceMemory != nullptr);
+
+    auto imgDesc = ll::ImageDescriptor {}
+                    .setWidth(WIDTH)
+                    .setHeight(HEIGHT)
+                    .setChannelType(ll::ChannelType::Uint8)
+                    .setChannelCount(1);
+
+    auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
+    auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize()*sizeof(uint32_t));
+
+
+    auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
+    REQUIRE(image != nullptr);
+
+    session->changeImageLayout(image, vk::ImageLayout::eGeneral);
+
+    auto imgViewDesc = ll::ImageViewDescriptor {}
+                        .setAddressMode(ll::ImageAddressMode::Repeat)
+                        .setFilteringMode(ll::ImageFilterMode::Nearest)
+                        .setNormalizedCoordinates(false);
+
+    auto imageView = image->createImageView(imgViewDesc);
+    REQUIRE(imageView != nullptr);
+
+
+    auto program = session->createProgram(SHADER_PATH + "/imgToBuffer.spv");
+    REQUIRE(program != nullptr);
+
+    auto nodeDescriptor = ll::ComputeNodeDescriptor()
+                            .setProgram(program)
+                            .setFunctionName("main")
+                            .setLocalX(32)
+                            .setLocalY(32)
+                            .addImageViewParameter()
+                            .addBufferParameter();
+
+    auto node = session->createComputeNode(nodeDescriptor);
+    REQUIRE(node != nullptr);
+
+    node->bind(0, imageView);
+    node->bind(1, outputBuffer);
+
+    auto graph = std::make_shared<ll::ComputeGraph>();
+    
+    graph->addMemory("hostMemory", hostMemory);
+    graph->addMemory("hostOutputMemory", hostOutputMemory);
+    graph->addMemory("deviceMemory", deviceMemory);
+
+    graph->addObject("stageBuffer", stageBuffer);
+    graph->addObject("outputBuffer", outputBuffer);
+    graph->addObject("image", image);
+    graph->addObject("imageView", imageView);
+
+    graph->addProgram("imgToBuffer", program);
+    graph->addComputeNode("node", node);
+
     ll::writeComputeGraph(graph, "moni moni");
 }
 
 
-TEST_CASE("ReadGraph", "test_IO") {
+TEST_CASE("ReadGraph_Buffers", "test_IO") {
 
     auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
     REQUIRE(session != nullptr);
@@ -96,6 +181,7 @@ TEST_CASE("ReadGraph", "test_IO") {
     REQUIRE(graph->containsObject("hostBuffer_2"));
 }
 
+
 TEST_CASE("ReadGraph_ComputeNode", "test_IO") {
 
     auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
@@ -109,4 +195,24 @@ TEST_CASE("ReadGraph_ComputeNode", "test_IO") {
     REQUIRE(graph->containsObject("hostBuffer_0"));
     REQUIRE(graph->containsProgram("assign"));
     REQUIRE(graph->containsComputeNode("node_0"));
+}
+
+
+TEST_CASE("ReadGraph_ImageAndImageView", "test_IO") {
+
+    auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
+    REQUIRE(session != nullptr);
+
+    auto graph = ll::readComputeGraph(DATA_PATH + "/images.json", session);
+    REQUIRE(graph != nullptr);
+
+    // check the contents of the graph
+    REQUIRE(graph->containsMemory("deviceMemory"));
+    REQUIRE(graph->containsMemory("hostMemory"));
+    REQUIRE(graph->containsMemory("hostOutputMemory"));
+
+    REQUIRE(graph->containsObject("outputBuffer"));
+    REQUIRE(graph->containsObject("stageBuffer"));
+    REQUIRE(graph->containsObject("image"));
+    REQUIRE(graph->containsObject("imageView"));
 }

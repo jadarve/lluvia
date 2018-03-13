@@ -22,6 +22,19 @@ constexpr const char* STRING_VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER = "UNIFORM_TEX
 constexpr const char* STRING_VK_BUFFER_USAGE_VERTEX_BUFFER        = "VERTEX_BUFFER";
 
 
+constexpr const char* STRING_VK_IMAGE_USAGE_TRANSFER_SRC_BIT             = "IMAGE_USAGE_TRANSFER_SRC";
+constexpr const char* STRING_VK_IMAGE_USAGE_TRANSFER_DST_BIT             = "IMAGE_USAGE_TRANSFER_DST";
+constexpr const char* STRING_VK_IMAGE_USAGE_SAMPLED_BIT                  = "IMAGE_USAGE_SAMPLED";
+constexpr const char* STRING_VK_IMAGE_USAGE_STORAGE_BIT                  = "IMAGE_USAGE_STORAGE";
+constexpr const char* STRING_VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT         = "IMAGE_USAGE_COLOR_ATTACHMENT";
+constexpr const char* STRING_VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT = "IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT";
+constexpr const char* STRING_VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT     = "IMAGE_USAGE_TRANSIENT_ATTACHMENT";
+constexpr const char* STRING_VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT         = "IMAGE_USAGE_INPUT_ATTACHMENT";
+
+
+constexpr const auto BASE_64_ALPHABET = std::array<char, 65> {{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='}};
+
+
 auto compareFlagBit = [](const auto& flags, const auto& value) {
     return ((flags & value) == value);
 };
@@ -98,7 +111,41 @@ std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFla
 }
 
 
-constexpr const auto base64Alphabet = std::array<char, 65> {{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='}};
+vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector) {
+
+    auto flags = vk::ImageUsageFlags {};
+
+    for (const auto& strFlag : flagsVector) {
+
+        if (strFlag == STRING_VK_IMAGE_USAGE_TRANSFER_SRC_BIT)             flags |= vk::ImageUsageFlagBits::eTransferSrc;
+        if (strFlag == STRING_VK_IMAGE_USAGE_TRANSFER_DST_BIT)             flags |= vk::ImageUsageFlagBits::eTransferDst;
+        if (strFlag == STRING_VK_IMAGE_USAGE_SAMPLED_BIT)                  flags |= vk::ImageUsageFlagBits::eSampled;
+        if (strFlag == STRING_VK_IMAGE_USAGE_STORAGE_BIT)                  flags |= vk::ImageUsageFlagBits::eStorage;
+        if (strFlag == STRING_VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)         flags |= vk::ImageUsageFlagBits::eColorAttachment;
+        if (strFlag == STRING_VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) flags |= vk::ImageUsageFlagBits::eDepthStencilAttachment;
+        if (strFlag == STRING_VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT)     flags |= vk::ImageUsageFlagBits::eTransientAttachment;
+        if (strFlag == STRING_VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)         flags |= vk::ImageUsageFlagBits::eInputAttachment;
+    }
+
+    return flags;
+}
+
+
+std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags) {
+
+    auto flagsVector = std::vector<std::string> {};
+
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eTransferSrc))            flagsVector.push_back(STRING_VK_IMAGE_USAGE_TRANSFER_SRC_BIT);
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eTransferDst))            flagsVector.push_back(STRING_VK_IMAGE_USAGE_TRANSFER_DST_BIT);
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eSampled))                flagsVector.push_back(STRING_VK_IMAGE_USAGE_SAMPLED_BIT);
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eStorage))                flagsVector.push_back(STRING_VK_IMAGE_USAGE_STORAGE_BIT);
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eColorAttachment))        flagsVector.push_back(STRING_VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eDepthStencilAttachment)) flagsVector.push_back(STRING_VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eTransientAttachment))    flagsVector.push_back(STRING_VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT);
+    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eInputAttachment))        flagsVector.push_back(STRING_VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
+
+    return flagsVector;
+}
 
 
 std::string toBase64(const void* ptr, const size_t size) {
@@ -124,10 +171,10 @@ std::string toBase64(const void* ptr, const size_t size) {
                (static_cast<uint32_t>(data[i + 1])   <<  8) |
                (static_cast<uint32_t>(data[i + 2]));
 
-        code[++c] = base64Alphabet[(word & 0xFC0000) >> 18];
-        code[++c] = base64Alphabet[(word & 0x03F000) >> 12];
-        code[++c] = base64Alphabet[(word & 0x000FC0) >> 6];
-        code[++c] = base64Alphabet[(word & 0x00003F)];
+        code[++c] = BASE_64_ALPHABET[(word & 0xFC0000) >> 18];
+        code[++c] = BASE_64_ALPHABET[(word & 0x03F000) >> 12];
+        code[++c] = BASE_64_ALPHABET[(word & 0x000FC0) >> 6];
+        code[++c] = BASE_64_ALPHABET[(word & 0x00003F)];
     }
 
     // encodes the last bytes of buffer
@@ -141,20 +188,20 @@ std::string toBase64(const void* ptr, const size_t size) {
     case 1:
         word = (static_cast<uint32_t>(data[N])       << 16);
 
-        code[++c] = base64Alphabet[(word & 0xFC0000) >> 18];
-        code[++c] = base64Alphabet[(word & 0x03F000) >> 12];
-        code[++c] = base64Alphabet[64];     // padding
-        code[++c] = base64Alphabet[64];     // padding
+        code[++c] = BASE_64_ALPHABET[(word & 0xFC0000) >> 18];
+        code[++c] = BASE_64_ALPHABET[(word & 0x03F000) >> 12];
+        code[++c] = BASE_64_ALPHABET[64];     // padding
+        code[++c] = BASE_64_ALPHABET[64];     // padding
         break;
 
     default: // 2
         word = (static_cast<uint32_t>(data[N])       << 16) |
                (static_cast<uint32_t>(data[N + 1])   <<  8);
 
-        code[++c] = base64Alphabet[(word & 0xFC0000) >> 18];
-        code[++c] = base64Alphabet[(word & 0x03F000) >> 12];
-        code[++c] = base64Alphabet[(word & 0x000FC0) >> 6];
-        code[++c] = base64Alphabet[64];     // padding       
+        code[++c] = BASE_64_ALPHABET[(word & 0xFC0000) >> 18];
+        code[++c] = BASE_64_ALPHABET[(word & 0x03F000) >> 12];
+        code[++c] = BASE_64_ALPHABET[(word & 0x000FC0) >> 6];
+        code[++c] = BASE_64_ALPHABET[64];     // padding       
         break;
     }
 

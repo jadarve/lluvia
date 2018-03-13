@@ -23,7 +23,7 @@ Buffer::~Buffer() {
 }
 
 
-ObjectType Buffer::getType() const noexcept {
+ll::ObjectType Buffer::getType() const noexcept {
     return ObjectType::Buffer;
 }
 
@@ -40,6 +40,18 @@ vk::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
 
 bool Buffer::isMappable() const noexcept {
     return memory->isMappable();
+}
+
+
+void* Buffer::map() {
+    assert(isMappable());
+    
+    return memory->mapBuffer(*this);
+}
+
+
+void Buffer::unmap() {
+    memory->unmapBuffer(*this);
 }
 
 

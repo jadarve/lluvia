@@ -14,6 +14,8 @@ namespace ll {
 
 // forward declarations
 class Buffer;
+class Image;
+class ImageDescriptor;
 class Visitor;
 
 
@@ -50,23 +52,25 @@ public:
     bool isMappable() const noexcept;
 
     std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size,
-        const vk::BufferUsageFlags usageFlags = {vk::BufferUsageFlagBits::eStorageBuffer
+        const vk::BufferUsageFlags usageFlags = {  vk::BufferUsageFlagBits::eStorageBuffer
                                                  | vk::BufferUsageFlagBits::eTransferSrc
                                                  | vk::BufferUsageFlagBits::eTransferDst});
+
+    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor,
+        const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
+                                                | vk::ImageUsageFlagBits::eSampled});
+    
+    void accept(ll::Visitor* visitor);
+
+private:
+    impl::MemoryAllocationTryInfo getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements);
+    void releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
+
     void releaseBuffer(const ll::Buffer& buffer);
     void* mapBuffer(const ll::Buffer& buffer);
     void unmapBuffer(const ll::Buffer& buffer);
 
-    void accept(ll::Visitor* visitor);
-
-private:
-
-    inline void configureBuffer(vk::Buffer& vkBuffer, const MemoryAllocationInfo& allocInfo, const uint32_t pageIndex);
-    
-    inline std::shared_ptr<ll::Buffer> buildBuffer(const vk::Buffer vkBuffer,
-        const vk::BufferUsageFlags vkUsageFlags,
-        const ll::impl::MemoryAllocationTryInfo& tryInfo,
-        const uint64_t requestedSize);
+    void releaseImage(const ll::Image& image);
 
     vk::Device device;
 
@@ -75,6 +79,10 @@ private:
 
     std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
+
+
+friend class ll::Buffer;
+friend class ll::Image;
 };
 
 } // namespace ll

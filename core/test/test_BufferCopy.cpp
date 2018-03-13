@@ -39,12 +39,12 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     REQUIRE(deviceBuffer != nullptr);
 
     // fill the host buffer with some values
-    auto hostPtr = static_cast<int*>(hostMemory->mapBuffer(*hostBuffer));
+    auto hostPtr = static_cast<int*>(hostBuffer->map());
     REQUIRE(hostPtr != nullptr);
     for (auto i = 0u; i < length; ++i) {
         hostPtr[i] = i;
     }
-    hostMemory->unmapBuffer(*hostBuffer);
+    hostBuffer->unmap();
 
     // issue the copy command
     session->copyBuffer(*hostBuffer, *deviceBuffer);
@@ -63,8 +63,8 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
 
     // compare host and secondary values. If they are equal, then it
     // means that the memory content of deviceBuffer is also equal.
-    hostPtr = static_cast<int*>(hostMemory->mapBuffer(*hostBuffer));
-    auto secPtr = static_cast<int*>(secMemory->mapBuffer(*secBuffer));
+    hostPtr = static_cast<int*>(hostBuffer->map());
+    auto secPtr = static_cast<int*>(secBuffer->map());
 
     REQUIRE(hostPtr != nullptr);
     REQUIRE(secPtr != nullptr);
@@ -84,7 +84,7 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
 
     REQUIRE(areEqual == true);
 
-    hostMemory->unmapBuffer(*hostBuffer);
-    secMemory->unmapBuffer(*secBuffer);
+    hostBuffer->unmap();
+    secBuffer->unmap();
 }
 

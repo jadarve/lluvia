@@ -6,6 +6,11 @@
 
 namespace ll {
 
+class Buffer;
+class ComputeNode;
+class Image;
+class Session;
+
 class CommandBuffer {
 
 public:
@@ -23,10 +28,18 @@ public:
     void begin();
     void end();
 
+    void run(const ll::ComputeNode& node);
+    void copyBuffer(const ll::Buffer& src, const ll::Buffer& dst);
+    void copyBufferToImage(const ll::Buffer& src, const ll::Image& dst);
+    void changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout);
+
 private:
     vk::Device          device;
     vk::CommandPool     commandPool;
     vk::CommandBuffer   commandBuffer;
+
+
+friend class ll::Session;
 };
 
 

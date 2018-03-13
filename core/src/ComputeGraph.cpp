@@ -4,6 +4,8 @@
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageView.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/Session.h"
@@ -58,14 +60,27 @@ std::string ComputeGraph::findMemoryNameForObject(const std::string& name) const
 
     // can throw std::out_of_range
     auto obj = getObject(name);
+    
+    auto objMemory = std::shared_ptr<ll::Memory> {nullptr};
 
-    if (obj->getType() == ll::ObjectType::Buffer) {
+    switch(obj->getType()) {
+        case ll::ObjectType::Buffer:
+            objMemory = std::static_pointer_cast<ll::Buffer>(obj)->memory;
+            break;
 
-        auto buffer = std::static_pointer_cast<ll::Buffer>(obj);
+        case ll::ObjectType::Image:
+            objMemory = std::static_pointer_cast<ll::Image>(obj)->memory;
+            break;
 
+        case ll::ObjectType::ImageView:
+            objMemory = nullptr;
+            break;
+    }
+
+    if (objMemory != nullptr) {
         for (const auto& it : memories) {
 
-            if (it.second == buffer->memory) {
+            if (it.second == objMemory) {
                 return it.first;
             }
         }
@@ -196,10 +211,19 @@ void ComputeGraph::accept(ll::Visitor* visitor) {
 
         auto& obj = it.second;
 
-        if (obj->getType() == ll::ObjectType::Buffer) {
-            visitor->visitBuffer(std::static_pointer_cast<ll::Buffer>(obj), it.first);    
+        switch (obj->getType()) {
+            case ll::ObjectType::Buffer:
+                visitor->visitBuffer(std::static_pointer_cast<ll::Buffer>(obj), it.first);
+                break;
+
+            case ll::ObjectType::Image:
+                visitor->visitImage(std::static_pointer_cast<ll::Image>(obj), it.first);
+                break;
+
+            case ll::ObjectType::ImageView:
+                visitor->visitImageView(std::static_pointer_cast<ll::ImageView>(obj), it.first);
+                break;
         }
-        
     }
 
     for (const auto& it : programs) {
