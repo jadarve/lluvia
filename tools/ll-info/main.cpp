@@ -1,87 +1,92 @@
 
 #include "lluvia/core.h"
 
-#include <cstdlib>
+#import "json/json.hpp"
+
 #include <iostream>
-#include <sstream>      // stringbuf
-#include <string>
 
 
 using namespace std;
 
+using json = nlohmann::json;
 
-std::string getLayerProperties() {
 
-    auto buffer = std::ostringstream {};
-    buffer << "************************************************************\n";
-    buffer << "                   LAYER PROPERTIES\n";
-    buffer << "************************************************************\n";
+void getLayerProperties(json& jsonParent) {
+
+    // placeholder
+    jsonParent["layers"] = nullptr;
 
     auto layerProperties = ll::Session::getVulkanInstanceLayerProperties();
     
 
     for (const auto& layer : layerProperties) {
-        
-        buffer << "Name:                   " << layer.layerName << "\n";
-        buffer << "Description:            " << layer.description << "\n";
-        buffer << "Spec version:           " << layer.specVersion << "\n";
-        buffer << "implementation version: " << layer.implementationVersion << "\n\n";
+
+        auto jsonLayer = json {};
+        jsonLayer["name"] = layer.layerName;
+        jsonLayer["description"] = layer.description;
+        jsonLayer["spec_version"] = layer.specVersion;
+        jsonLayer["impl_version"] = layer.implementationVersion;
+
+        jsonParent["layers"].push_back(jsonLayer);
     }
-
-
-    return buffer.str();
 }
 
-std::string getPhysicalDevicePropertiesString(const vk::PhysicalDeviceMemoryProperties& memProperties) {
+
+void getPhysicalDeviceMemoryProperties(const vk::PhysicalDeviceMemoryProperties& memProperties, json& jsonParent) {
 
     auto compareFlagBit = [](const auto& flag, const auto& value) {
         return ((flag & value) == value);
     };
 
-    auto buffer = std::ostringstream {};
+    auto jsonMemProp = json {};
 
-    buffer << "************************************************************\n";
-    buffer << "           PHYSICAL DEVICE MEMORY PROPERTIES\n";
-    buffer << "************************************************************\n";
-    buffer << "Heap count:          " << memProperties.memoryHeapCount << "\n";
-    buffer << "Memory type count:   " << memProperties.memoryTypeCount << "\n\n";
-
-
+    auto jsonHeaps = json {};
     for(auto i = 0u; i < memProperties.memoryHeapCount; i ++) {
         vk::MemoryHeap heap = memProperties.memoryHeaps[i];
 
-        buffer << "Heap: " << i << "\n";
-        buffer << "    Size:    " << heap.size << "\n";
-        buffer << "    Flags:" << "\n";
-        buffer << "        Device local:    " << ((heap.flags & vk::MemoryHeapFlagBits::eDeviceLocal) == vk::MemoryHeapFlagBits::eDeviceLocal) << "\n";
-        buffer << "        Multi instance:  " << ((heap.flags & vk::MemoryHeapFlagBits::eMultiInstanceKHX) == vk::MemoryHeapFlagBits::eMultiInstanceKHX) << "\n";
-        buffer << "\n";
+        auto jsonHeap = json {};
+        jsonHeap["size"] = heap.size;
+        jsonHeap["flags"] = {
+                {"device_local", ((heap.flags & vk::MemoryHeapFlagBits::eDeviceLocal) == vk::MemoryHeapFlagBits::eDeviceLocal)},
+                {"multi_instance", ((heap.flags & vk::MemoryHeapFlagBits::eMultiInstanceKHX) == vk::MemoryHeapFlagBits::eMultiInstanceKHX)}
+            };
+        jsonHeaps.push_back(jsonHeap);
     }
+    jsonMemProp["heaps"] = jsonHeaps;
 
+    auto jsonMemories = json {};
     for(auto i = 0u; i <  memProperties.memoryTypeCount; i ++) {
         vk::MemoryType type = memProperties.memoryTypes[i];
         vk::MemoryPropertyFlags flags = type.propertyFlags;
 
-        buffer << "Type: " << i << "\n";
-        buffer << "    Heap index: " << type.heapIndex << "\n";
-        buffer << "    Flags" << "\n";
-        buffer << "        Device local:      " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eDeviceLocal) << "\n";
-        buffer << "        Host visible:      " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostVisible) << "\n";
-        buffer << "        Host coherent:     " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCoherent) << "\n";
-        buffer << "        Host cached:       " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCached) << "\n";
-        buffer << "        Lazily allocated:  " << compareFlagBit(flags, vk::MemoryPropertyFlagBits::eLazilyAllocated) << "\n";
-        buffer << "\n";
-    }
+        auto jsonMem = json {};
+        jsonMem["heap_index"] = type.heapIndex;
+        jsonMem["flags"] = {
+                {"device_local"    , compareFlagBit(flags, vk::MemoryPropertyFlagBits::eDeviceLocal)},
+                {"host_visible"    , compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostVisible)},
+                {"host_coherent"   , compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCoherent)},
+                {"host_cached"     , compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCached)},
+                {"lazily_allocated", compareFlagBit(flags, vk::MemoryPropertyFlagBits::eLazilyAllocated)}
+            };
 
-    return buffer.str();
+        jsonMemories.push_back(jsonMem);
+    }
+    jsonMemProp["memories"] = jsonMemories;
+
+    jsonParent["memory_properties"] = jsonMemProp;
 }
 
 
 int main() {
 
+    auto j = json {};
+
     auto session = ll::Session::create();
-    cout << getLayerProperties();
-    cout << getPhysicalDevicePropertiesString(session->getPhysicalDeviceMemoryProperties());
+
+    getLayerProperties(j);
+    getPhysicalDeviceMemoryProperties(session->getPhysicalDeviceMemoryProperties(), j);
+
+    cout << std::setw(2) << j << std::endl;
 
     return EXIT_SUCCESS;
 }

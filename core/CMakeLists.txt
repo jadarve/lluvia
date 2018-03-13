@@ -39,6 +39,7 @@ add_library (lluvia-core SHARED
 )
 
 target_link_libraries (lluvia-core
+    stdc++
     json
     vulkan
 )

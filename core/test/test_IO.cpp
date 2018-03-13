@@ -22,7 +22,7 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    auto hostMemory = session->createMemory(memflags::eHostVisible | memflags::eHostCoherent, 1024, true);
+    auto hostMemory = session->createMemory(memflags::eHostVisible | memflags::eHostCoherent, 1024, false);
     REQUIRE(hostMemory != nullptr);
 
     auto devMemory = session->createMemory(memflags::eDeviceLocal, 4096, false);
