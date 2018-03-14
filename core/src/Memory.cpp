@@ -18,7 +18,9 @@ Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const ui
     device              {device},
     heapInfo            (heapInfo),
     pageSize            {pageSize} {
-        
+    
+    // this prevents shifting outside the range of memoryTypeBits
+    assert(heapInfo.typeIndex <= 32u);
 }
 
 
@@ -67,7 +69,11 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // query alignment and offset
     const auto memRequirements = device.getBufferMemoryRequirements(vkBuffer);
 
-    // TODO: check that memRequirements.memoryTypeBits is supported in this memory
+    // check that memRequirements.memoryTypeBits is supported in this memory
+    const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
+    if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
+        throw std::runtime_error("memory " + std::to_string(heapInfo.typeIndex) + " does not support allocationg of buffer objects.");
+    }
 
     // find or create a new memory page where the buffer can be allocated
     auto tryInfo = getSuitableMemoryPage(memRequirements);
@@ -139,7 +145,11 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     // query alignment and offset
     const auto memRequirements = device.getImageMemoryRequirements(vkImage);
 
-    // TODO: check that memRequirements.memoryTypeBits is supported in this memory
+    // check that memRequirements.memoryTypeBits is supported in this memory
+    const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
+    if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
+        throw std::runtime_error("memory " + std::to_string(heapInfo.typeIndex) + " does not support allocationg of image objects.");
+    }
 
     // find or create a new memory page where the image can be allocated
     auto tryInfo = getSuitableMemoryPage(memRequirements);
