@@ -32,7 +32,6 @@ add_library (lluvia-core SHARED
     src/impl/OneTimeSubmitCommandBuffer.cpp
     src/io.cpp
     src/Memory.cpp
-    src/Object.cpp
     src/Program.cpp
     src/Session.cpp
     src/utils.cpp
