@@ -13,6 +13,38 @@ namespace ll {
 class ComputeNode;
 class Program;
 
+
+enum class ParameterType : uint32_t {
+    Buffer,
+    ImageView,
+    SampledImageView
+};
+
+
+template<typename T>
+T parameterTypeToString(const ll::ParameterType& param) {
+
+    switch (param) {
+        case ll::ParameterType::Buffer:           return "BUFFER";
+        case ll::ParameterType::ImageView:        return "IMAGE_VIEW";
+        case ll::ParameterType::SampledImageView: return "SAMPLED_IMAGE_VIEW";
+    }
+}
+
+
+template<typename T>
+ll::ParameterType stringToParameterType(T&& name) {
+
+    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
+    
+    if (name == "BUFFER")             {return ll::ParameterType::Buffer;}
+    if (name == "IMAGE_VIEW")         {return ll::ParameterType::ImageView;}
+    if (name == "SAMPLED_IMAGE_VIEW") {return ll::ParameterType::SampledImageView;}
+
+    throw std::out_of_range("invalid name for parameter type: " + name);
+}
+
+
 class ComputeNodeDescriptor {
 
 public:
@@ -27,9 +59,7 @@ public:
 
     ComputeNodeDescriptor& setProgram(std::shared_ptr<ll::Program> program);
     ComputeNodeDescriptor& setFunctionName(const std::string& name);
-    ComputeNodeDescriptor& addBufferParameter();
-    ComputeNodeDescriptor& addImageViewParameter();
-    ComputeNodeDescriptor& addSampledImageViewParameter();
+    ComputeNodeDescriptor& addParameter(const ll::ParameterType& param);
 
     ComputeNodeDescriptor& setGlobalX(const uint32_t x) noexcept;
     ComputeNodeDescriptor& setGlobalY(const uint32_t y) noexcept;

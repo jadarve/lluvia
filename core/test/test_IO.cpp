@@ -60,7 +60,7 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
                             .setProgram(program)
                             .setFunctionName("main")
                             .setLocalX(1024)
-                            .addBufferParameter();
+                            .addParameter(ll::ParameterType::Buffer);
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
@@ -140,8 +140,8 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addSampledImageViewParameter()
-                            .addBufferParameter();
+                            .addParameter(ll::ParameterType::SampledImageView)
+                            .addParameter(ll::ParameterType::Buffer);
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);

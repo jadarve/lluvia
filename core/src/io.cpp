@@ -436,20 +436,9 @@ public:
         for (const auto& p : parameters) {
 
             const auto pTypeString = getValueFromJson<std::string>("type", p);
-            const auto pType       = ll::stringToObjectType(pTypeString);
+            const auto pType       = ll::stringToParameterType(pTypeString);
 
-            switch (pType) {
-                case ll::ObjectType::Buffer:
-                    descriptor.addBufferParameter();
-                    break;
-
-                case ll::ObjectType::Image:
-                    break;
-
-                case ll::ObjectType::ImageView:
-                    descriptor.addImageViewParameter();
-                    break;
-            }
+            descriptor.addParameter(pType);
         }
 
         auto computeNode = session->createComputeNode(descriptor);

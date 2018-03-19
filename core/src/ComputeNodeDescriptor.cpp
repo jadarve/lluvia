@@ -8,7 +8,6 @@
 
 namespace ll {
 
-using namespace std;
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(std::shared_ptr<ll::Program> program) {
     this->program = program;
@@ -22,47 +21,30 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addBufferParameter() {
-
-    auto param = vk::DescriptorSetLayoutBinding {
-        static_cast<uint32_t>(parameterBindings.size()),
-        vk::DescriptorType::eStorageBuffer,
-        1,
-        vk::ShaderStageFlagBits::eCompute,
-        nullptr
-    };
-
-    parameterBindings.push_back(param);
-    return *this;
-}
+ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType& param) {
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addImageViewParameter() {
+    auto paramBinding = vk::DescriptorSetLayoutBinding {}
+                            .setBinding(static_cast<uint32_t>(parameterBindings.size()))
+                            .setDescriptorCount(1)
+                            .setStageFlags(vk::ShaderStageFlagBits::eCompute)
+                            .setPImmutableSamplers(nullptr);
+    
+    switch (param) {
+        case ll::ParameterType::Buffer:
+            paramBinding.setDescriptorType(vk::DescriptorType::eStorageBuffer);
+            break;
 
-    auto param = vk::DescriptorSetLayoutBinding {
-        static_cast<uint32_t>(parameterBindings.size()),
-        vk::DescriptorType::eStorageImage,
-        1,
-        vk::ShaderStageFlagBits::eCompute,
-        nullptr
-    };
+        case ll::ParameterType::ImageView:
+            paramBinding.setDescriptorType(vk::DescriptorType::eStorageImage);
+            break;
 
-    parameterBindings.push_back(param);
-    return *this;
-}
+        case ll::ParameterType::SampledImageView:
+            paramBinding.setDescriptorType(vk::DescriptorType::eCombinedImageSampler);
+            break;
+    }
 
-
-ComputeNodeDescriptor& ComputeNodeDescriptor::addSampledImageViewParameter() {
-
-    auto param = vk::DescriptorSetLayoutBinding {
-        static_cast<uint32_t>(parameterBindings.size()),
-        vk::DescriptorType::eCombinedImageSampler,
-        1,
-        vk::ShaderStageFlagBits::eCompute,
-        nullptr
-    };
-
-    parameterBindings.push_back(param);
+    parameterBindings.push_back(paramBinding);
     return *this;
 }
 
@@ -111,7 +93,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexce
 
 std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
-    vector<vk::DescriptorPoolSize> poolSizes{
+    std::vector<vk::DescriptorPoolSize> poolSizes{
         {vk::DescriptorType::eStorageBuffer, getStorageBufferCount()},
         {vk::DescriptorType::eCombinedImageSampler, getCombinedImageSamplerCount()}
     };
