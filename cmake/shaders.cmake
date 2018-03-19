@@ -12,7 +12,7 @@ foreach (_SRC ${LL_GLSL_SRCS})
 
     add_custom_command (
         OUTPUT ${_GLSL_OUTPUT}
-        COMMAND ${LLC_COMMAND} -o ${_GLSL_OUTPUT} ${_SRC}
+        COMMAND ${LLC_COMMAND} -I ${LL_GLSL_INCLUDE_DIRS} -o ${_GLSL_OUTPUT} ${_SRC}
         MAIN_DEPENDENCY ${_SRC}
         COMMENT "Building compute shader ${_GLSL_OUTPUT}"
     )

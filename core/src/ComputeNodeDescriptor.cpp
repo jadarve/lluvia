@@ -41,6 +41,21 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addImageViewParameter() {
 
     auto param = vk::DescriptorSetLayoutBinding {
         static_cast<uint32_t>(parameterBindings.size()),
+        vk::DescriptorType::eStorageImage,
+        1,
+        vk::ShaderStageFlagBits::eCompute,
+        nullptr
+    };
+
+    parameterBindings.push_back(param);
+    return *this;
+}
+
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::addSampledImageViewParameter() {
+
+    auto param = vk::DescriptorSetLayoutBinding {
+        static_cast<uint32_t>(parameterBindings.size()),
         vk::DescriptorType::eCombinedImageSampler,
         1,
         vk::ShaderStageFlagBits::eCompute,
@@ -162,6 +177,11 @@ std::shared_ptr<ll::Program> ComputeNodeDescriptor::getProgram() const noexcept 
 
 uint32_t ComputeNodeDescriptor::getStorageBufferCount() const noexcept {
     return countDescriptorType(vk::DescriptorType::eStorageBuffer);
+}
+
+
+uint32_t ComputeNodeDescriptor::getStoraImageCount() const noexcept {
+    return countDescriptorType(vk::DescriptorType::eStorageImage);
 }
 
 

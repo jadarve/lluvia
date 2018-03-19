@@ -1,0 +1,16 @@
+#version 450
+
+#include "lluvia/core.glsl"
+
+layout(binding = 0) uniform usampler2D img;
+layout(binding = 1) buffer out0 { uint outputBuffer[]; };
+
+
+void main() {
+
+    const ivec2 coord = LL_GLOBAL_COORDS_2D;
+    uvec4 texValue = texture(img, coord);
+
+    const uint index = coord.y*32 + coord.x;
+    outputBuffer[index] = texValue.x;
+}

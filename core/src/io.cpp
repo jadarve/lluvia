@@ -143,10 +143,14 @@ public:
             auto found = false;
             for (const auto& o : obj["objects"]) {
                 found |= o["name"].get<std::string>() == imageName;
+
+                if (found) {
+                    break;
+                }
             }
 
             if (!found) {
-                visitImage(image);
+                visitImage(image, imageName);
             }
 
         } catch (std::out_of_range& e) {
@@ -164,6 +168,7 @@ public:
         j["address_mode_v"]         = ll::imageAddressModeToString(imageView->getAddressModeV());
         j["address_mode_w"]         = ll::imageAddressModeToString(imageView->getAddressModeW());
         j["normalized_coordinates"] = imageView->getNormalizedCoordinates();
+        j["is_sampled"]             = imageView->isSampled();
 
         obj["objects"].push_back(j);
 
@@ -362,6 +367,7 @@ public:
         const auto name             = getValueFromJson<std::string>("name", j);
         const auto imageName        = getValueFromJson<std::string>("image", j);
         const auto normalizedCoords = getValueFromJson<bool>("normalized_coordinates", j);
+        const auto isSampled        = getValueFromJson<bool>("is_sampled", j);
         const auto filterMode       = ll::stringToImageFilterMode(getValueFromJson<std::string>("filter_mode", j));
         const auto addrModeU        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_u", j));
         const auto addrModeV        = ll::stringToImageAddressMode(getValueFromJson<std::string>("address_mode_v", j));
@@ -370,6 +376,7 @@ public:
 
         auto viewDesc = ll::ImageViewDescriptor {}
                             .setNormalizedCoordinates(normalizedCoords)
+                            .setIsSampled(isSampled)
                             .setFilteringMode(filterMode)
                             .setAddressMode(ll::ImageAxis::U, addrModeU)
                             .setAddressMode(ll::ImageAxis::V, addrModeV)

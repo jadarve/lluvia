@@ -196,6 +196,7 @@ void ComputeNode::init() {
 
 void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
 
+    // TODO: check parameter type buffer at index position.
     objects[index] = buffer;
 
     auto descBufferInfo = vk::DescriptorBufferInfo()
@@ -217,6 +218,7 @@ void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> b
 
 void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> imgView) {
 
+    // TODO: check parameter type image view at index position.
     objects[index] = imgView;
 
     auto descImgInfo = vk::DescriptorImageInfo {}
@@ -225,11 +227,12 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
         .setImageLayout(imgView->image->vkLayout);
 
     auto writeDescSet = vk::WriteDescriptorSet()
-        .setDescriptorType(vk::DescriptorType::eCombinedImageSampler)
         .setDstSet(descriptorSet)
         .setDstBinding(index)
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
+
+    writeDescSet.setDescriptorType(imgView->isSampled()? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
 
     // update the informacion of the descriptor set
     device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);

@@ -89,6 +89,13 @@ ImageViewDescriptor& ImageViewDescriptor::setNormalizedCoordinates(bool normaliz
 }
 
 
+ImageViewDescriptor& ImageViewDescriptor::setIsSampled(bool isSampled) {
+
+    this->isSampled = isSampled;
+    return *this;
+}
+
+
 vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexcept {
 
     auto getVkAddressMode = [](const ll::ImageAddressMode addressModeValue) {

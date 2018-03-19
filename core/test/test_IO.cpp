@@ -115,16 +115,24 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
 
     session->changeImageLayout(image, vk::ImageLayout::eGeneral);
 
-    auto imgViewDesc = ll::ImageViewDescriptor {}
+    auto sampledImgViewDesc = ll::ImageViewDescriptor {}
                         .setAddressMode(ll::ImageAddressMode::Repeat)
                         .setFilteringMode(ll::ImageFilterMode::Nearest)
-                        .setNormalizedCoordinates(false);
+                        .setNormalizedCoordinates(false)
+                        .setIsSampled(true);
 
-    auto imageView = image->createImageView(imgViewDesc);
-    REQUIRE(imageView != nullptr);
+    auto sampledImageView = image->createImageView(sampledImgViewDesc);
+    REQUIRE(sampledImageView != nullptr);
+
+    auto imgViewDesc = ll::ImageViewDescriptor {}
+                       .setNormalizedCoordinates(false)
+                       .setIsSampled(false);
+
+    auto storageImageView = image->createImageView(imgViewDesc);
+    REQUIRE(storageImageView != nullptr);
 
 
-    auto program = session->createProgram(SHADER_PATH + "/imgToBuffer.spv");
+    auto program = session->createProgram(SHADER_PATH + "/textureToBuffer.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -132,13 +140,13 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addImageViewParameter()
+                            .addSampledImageViewParameter()
                             .addBufferParameter();
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
 
-    node->bind(0, imageView);
+    node->bind(0, sampledImageView);
     node->bind(1, outputBuffer);
 
     auto graph = std::make_shared<ll::ComputeGraph>();
@@ -150,7 +158,8 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
     graph->addObject("stageBuffer", stageBuffer);
     graph->addObject("outputBuffer", outputBuffer);
     graph->addObject("image", image);
-    graph->addObject("imageView", imageView);
+    graph->addObject("sampledImageView", sampledImageView);
+    graph->addObject("storageImageView", storageImageView);
 
     graph->addProgram("imgToBuffer", program);
     graph->addComputeNode("node", node);
@@ -214,5 +223,6 @@ TEST_CASE("ReadGraph_ImageAndImageView", "test_IO") {
     REQUIRE(graph->containsObject("outputBuffer"));
     REQUIRE(graph->containsObject("stageBuffer"));
     REQUIRE(graph->containsObject("image"));
-    REQUIRE(graph->containsObject("imageView"));
+    REQUIRE(graph->containsObject("sampledImageView"));
+    REQUIRE(graph->containsObject("storageImageView"));
 }

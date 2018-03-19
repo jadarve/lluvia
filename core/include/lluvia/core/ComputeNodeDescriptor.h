@@ -29,6 +29,7 @@ public:
     ComputeNodeDescriptor& setFunctionName(const std::string& name);
     ComputeNodeDescriptor& addBufferParameter();
     ComputeNodeDescriptor& addImageViewParameter();
+    ComputeNodeDescriptor& addSampledImageViewParameter();
 
     ComputeNodeDescriptor& setGlobalX(const uint32_t x) noexcept;
     ComputeNodeDescriptor& setGlobalY(const uint32_t y) noexcept;
@@ -58,6 +59,7 @@ public:
     uint32_t getLocalZ() const noexcept;
 
     uint32_t getStorageBufferCount() const noexcept;
+    uint32_t getStoraImageCount() const noexcept;
     uint32_t getCombinedImageSamplerCount() const noexcept;
 
 

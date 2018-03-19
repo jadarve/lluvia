@@ -54,6 +54,7 @@ public:
     ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode);
     ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode);
     ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates);
+    ImageViewDescriptor& setIsSampled(bool isSampled);
 
 
     vk::SamplerCreateInfo getVkSamplerCreateInfo() const noexcept;
@@ -67,7 +68,8 @@ private:
      */
     std::array<ll::ImageAddressMode, 3> addressMode;
 
-    bool normalizedCoordinates;
+    bool normalizedCoordinates {false};
+    bool isSampled             {false};
 
 
 friend class ImageView;

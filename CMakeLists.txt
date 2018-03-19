@@ -57,6 +57,7 @@ add_subdirectory(core)
 # creates the list of GLSL shaders to build. The list is stored in LL_GLSL_SRCS variable.
 add_subdirectory(glsl)
 add_subdirectory(tools)
+# add_subdirectory(samples)
 
 
 # creates the shaders custom target
