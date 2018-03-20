@@ -13,10 +13,9 @@ function(add_catchTest NAME SRCS)
 
 endfunction()
 
+set(LL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(LL_LINK_LIBRARIES stdc++ json vulkan)
 
-include_directories (
-    include
-)
 
 add_library (lluvia-core SHARED
     src/Buffer.cpp
@@ -32,16 +31,19 @@ add_library (lluvia-core SHARED
     src/impl/OneTimeSubmitCommandBuffer.cpp
     src/io.cpp
     src/Memory.cpp
+    src/MemoryAllocationInfo.cpp
     src/Program.cpp
     src/Session.cpp
     src/utils.cpp
 )
 
-target_link_libraries (lluvia-core
-    stdc++
-    json
-    vulkan
+
+target_include_directories(lluvia-core
+    PUBLIC ${LL_INCLUDE_DIRS}
+    PUBLIC ${JSON_INCLUDE_DIR}
 )
+
+target_link_libraries(lluvia-core ${LL_LINK_LIBRARIES})
 
 
 # configure
@@ -58,3 +60,8 @@ add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp      
 add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp               lluvia-core)
 add_catchTest (test_ComputeNodeImage         test/test_ComputeNodeImage.cpp          lluvia-core)
 add_catchTest (test_IO                       test/test_IO.cpp                        lluvia-core)
+
+
+# store variables in the cache
+set(LL_INCLUDE_DIRS ${LL_INCLUDE_DIRS} CACHE INTERNAL "Lluvia include directories")
+set(LL_LINK_LIBRARIES lluvia-core ${LL_LINK_LIBRARIES} CACHE INTERNAL "Lluvia link libraries")

@@ -1,5 +1,6 @@
 #include "lluvia/core/impl/MemoryFreeSpaceManager.h"
 
+#include <iostream>
 
 namespace ll {
 namespace impl {
@@ -17,6 +18,17 @@ MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t size) :
     sizeVector.reserve(CAPACITY_INCREASE);
 }
 
+
+std::ostream& operator << (std::ostream& out, const MemoryFreeSpaceManager& manager) {
+
+    out << "size: " << manager.size << ". offsetVector: [size: " << manager.offsetVector.size() << ", capacity: " << manager.offsetVector.capacity() << "].";
+    out << " sizeVector: [size: " << manager.sizeVector.size() << ", capacity: " << manager.sizeVector.capacity() << "]\n";
+
+    for (auto i = 0u; i < manager.offsetVector.size(); ++i) {
+        out << "    [" << manager.offsetVector[i] << ", " << manager.sizeVector[i] << "]\n";
+    }
+    return out;
+}
 
 uint64_t MemoryFreeSpaceManager::getSize() const noexcept {
     return size;
@@ -74,6 +86,9 @@ bool MemoryFreeSpaceManager::allocate(uint64_t size, uint64_t alignment, ll::Mem
 
 void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept {
 
+    // std::cout << "MemoryFreeSpaceManager::release: [" << info.offset << ", " << info.size << ", " << info.leftPadding << ", " << info.page << "]" << std::endl;
+    // std::cout << "before:\n" << *this << std::endl;
+
     // correct the offset and size of the allocated interval with
     // the left padding required for aligning offset.
     auto infoLocal    = info;
@@ -107,10 +122,13 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
             lowerBoundUpdated = false;
             break;
         }
-        else if (infoLocal.offset > offset_i) {
+        // else if (infoLocal.offset > offset_i) {
+        else if (offset_i > infoLocal.offset) {
             break;
         }
     }
+
+    // std::cout << "    position: " << position << std::endl;
 
     // if one interval was updated, check for opportunities to merge
     // the updated interval with either the left or right one.
@@ -118,6 +136,7 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
 
         // check if there can be merges between intervals
         if (lowerBoundUpdated) {
+            // std::cout << "    merging lower interval" << std::endl;
 
             if (position > 0) {
                 const auto offsetLeft = offsetVector[position - 1];
@@ -133,6 +152,7 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
             }
         }
         else {
+            // std::cout << "    merging upper interval" << std::endl;
 
             if (position < offsetVector.size() - 1) {
 
@@ -149,14 +169,21 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
             }
         }
 
+        // std::cout << "MemoryFreeSpaceManager::release: return end: pos: " << position << " [" << offsetVector.size() << ", " << sizeVector.size() << "]" << std::endl;
+        // std::cout << *this << "\n" << std::endl;
         return;
     }
 
     // insert a new interval before position
     // since reserveManagerSpace() is called before inserting the new interval
     // this insert() calls should not throw exceptions.
-    offsetVector.insert((offsetVector.begin() + position) - 1, info.offset);
-    sizeVector.insert((sizeVector.begin() + position) - 1, info.size);
+    const auto insertOffset = offsetVector[position] > infoLocal.offset? position : std::max(0, static_cast<int32_t>(position) -1);
+    // std::cout << "    insertOffset: " << insertOffset << std::endl;
+
+    offsetVector.insert(offsetVector.begin() + insertOffset, infoLocal.offset);
+    sizeVector.insert(sizeVector.begin() + insertOffset, infoLocal.size);
+    // std::cout << "MemoryFreeSpaceManager::release: end: pos: " << position << " [" << offsetVector.size() << ", " << sizeVector.size() << "]" << std::endl;
+    // std::cout << *this << "\n" << std::endl;
 }
 
 

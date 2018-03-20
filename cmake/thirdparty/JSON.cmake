@@ -1,7 +1,7 @@
 message (STATUS "-------------------------------------------------")
 message (STATUS "Configuring JSON")
 
-set (JSON_FILE_PATH "${CMAKE_BINARY_DIR}/json/json.hpp")
+set (JSON_FILE_PATH "${CMAKE_BINARY_DIR}/thirdparty/json/json.hpp")
 
 # download the file only if it does not exists
 if (NOT EXISTS ${JSON_FILE_PATH})
@@ -15,8 +15,11 @@ if (NOT EXISTS ${JSON_FILE_PATH})
 
 endif()
 
-set (JSON_INCLUDE_DIR ${CMAKE_BINARY_DIR})
+set (JSON_INCLUDE_DIR "${CMAKE_BINARY_DIR}/thirdparty")
+set (JSON_INCLUDE_DIR ${JSON_INCLUDE_DIR} CACHE INTERNAL "JSON include directory")
+
 add_library (json INTERFACE)
 target_include_directories (json INTERFACE ${JSON_INCLUDE_DIR})
 
+message (STATUS "JSON_INCLUDE_DIR: ${JSON_INCLUDE_DIR}")
 message (STATUS "-------------------------------------------------")

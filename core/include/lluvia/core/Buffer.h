@@ -31,6 +31,7 @@ public:
 
     ll::ObjectType getType() const noexcept override;
 
+    ll::MemoryAllocationInfo getAllocationInfo() const noexcept;
     uint64_t getSize() const noexcept;
 
     vk::BufferUsageFlags getUsageFlags() const noexcept;

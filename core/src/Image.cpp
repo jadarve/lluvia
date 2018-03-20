@@ -33,6 +33,11 @@ ll::ObjectType Image::getType() const noexcept {
 }
 
 
+ll::MemoryAllocationInfo Image::getAllocationInfo() const noexcept {
+    return allocInfo;
+}
+
+
 uint64_t Image::getSize() const noexcept {
     return allocInfo.size;
 }
@@ -45,6 +50,11 @@ vk::ImageUsageFlags Image::getUsageFlags()const noexcept {
 
 ll::ChannelType Image::getChannelType() const noexcept {
     return descriptor.getChannelType();
+}
+
+
+uint64_t Image::getChannelTypeSize() const noexcept {
+    return ll::getChannelTypeSize(descriptor.getChannelType());
 }
 
 

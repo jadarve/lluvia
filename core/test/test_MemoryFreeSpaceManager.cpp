@@ -203,6 +203,42 @@ TEST_CASE("AAARRR_lifo", "test_MemoryFreeSpaceManager") {
 
 
 /**
+ * Allocate + Allocate + Allocate + Release + Release + Release
+ *
+ * Release in order 1, 3, 2 to check simultaneous lower and upper merge
+ */
+TEST_CASE("AAARRR_simultaneousMerge", "test_MemoryFreeSpaceManager") {
+
+    auto size = uint64_t{1024};
+    auto sizeA = uint64_t{256};
+    auto sizeB = uint64_t{512};
+    auto sizeC = uint64_t{128};
+
+    auto manager = MemoryFreeSpaceManager{size};
+
+    auto allocA = MemoryAllocationInfo{};
+    auto allocB = MemoryAllocationInfo{};
+    auto allocC = MemoryAllocationInfo{};
+
+    auto boolA = manager.allocate(sizeA, allocA);
+    auto boolB = manager.allocate(sizeB, allocB);
+    auto boolC = manager.allocate(sizeC, allocC);
+
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
+    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB});
+    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC});
+
+    manager.release(allocA);
+    manager.release(allocC);
+    manager.release(allocB);
+
+    auto offsetVector = std::vector<uint64_t>{0};
+    auto sizeVector = std::vector<uint64_t>{size};
+    checkMemory(manager, offsetVector, sizeVector);
+}
+
+
+/**
  * Allocate + Allocate + Release + Allocate
  */
 TEST_CASE("AARA", "test_MemoryFreeSpaceManager") {
