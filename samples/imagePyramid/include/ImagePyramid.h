@@ -17,6 +17,8 @@ public:
 
 
 private:
+    void initComputeNodes(std::shared_ptr<ll::Session> session);
+
     uint32_t levels;
 
     std::shared_ptr<ll::Image> inputImage;

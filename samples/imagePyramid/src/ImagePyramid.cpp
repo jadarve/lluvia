@@ -82,4 +82,67 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
     // transition all the images to general image layout
     cmdBuffer->end();
     session->run(cmdBuffer);
+
+
+    initComputeNodes(session);
+}
+
+
+void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
+
+    // Shader parameters
+    //
+    // layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
+    // layout(binding = 1, rgba8ui) uniform uimage2D outputImage;
+    auto programX = session->createProgram("imageDownsampleX.spv");
+    auto programY = session->createProgram("imageDownsampleY.spv");
+
+    assert(programX != nullptr);
+    assert(programY != nullptr);
+
+
+    auto descX = ll::ComputeNodeDescriptor {}
+        .setProgram(programX)
+        .setFunctionName("main")
+        .setLocalX(32)
+        .setLocalY(32)
+        .addParameter(ll::ParameterType::ImageView)
+        .addParameter(ll::ParameterType::ImageView);
+
+    auto descY = ll::ComputeNodeDescriptor {}
+        .setProgram(programY)
+        .setFunctionName("main")
+        .setLocalX(32)
+        .setLocalY(32)
+        .addParameter(ll::ParameterType::ImageView)
+        .addParameter(ll::ParameterType::ImageView);
+
+
+    auto width  = inputImage->getWidth();
+    auto height = inputImage->getHeight();
+
+    for (auto i = 0u; i < levels; ++i) {
+
+        width /= 2;
+
+        auto descX_i = ll::ComputeNodeDescriptor {descX}
+            .setGlobalX(width  / descX.getLocalX())
+            .setGlobalY(height / descX.getLocalY());
+
+        auto nodeX = session->createComputeNode(descX_i);
+        nodeX->bind(0, imageViewsY[i]);
+        nodeX->bind(1, imageViewsX[i]);
+        computeNodesX.push_back(nodeX);
+
+        height /= 2;
+
+        auto descY_i = ll::ComputeNodeDescriptor {descY}
+            .setGlobalX(width  / descX.getLocalX())
+            .setGlobalY(height / descX.getLocalY());
+
+        auto nodeY = session->createComputeNode(descY_i);
+        nodeY->bind(0, imageViewsX[i]);
+        nodeY->bind(1, imageViewsY[i + 1]);
+        computeNodesY.push_back(nodeY);
+    }
 }

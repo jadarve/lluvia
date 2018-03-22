@@ -93,11 +93,19 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexce
 
 std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
-    std::vector<vk::DescriptorPoolSize> poolSizes{
-        {vk::DescriptorType::eStorageBuffer, getStorageBufferCount()},
-        {vk::DescriptorType::eCombinedImageSampler, getCombinedImageSamplerCount()}
+    auto pushDescriptorPoolSize = [this](const vk::DescriptorType type, std::vector<vk::DescriptorPoolSize>& v) {
+
+        const auto count = countDescriptorType(type);
+        if (count > 0) {
+            v.push_back({type, count});
+        }
     };
-    
+
+    std::vector<vk::DescriptorPoolSize> poolSizes;
+    pushDescriptorPoolSize(vk::DescriptorType::eStorageBuffer, poolSizes);
+    pushDescriptorPoolSize(vk::DescriptorType::eStorageImage, poolSizes);
+    pushDescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, poolSizes);
+        
     return poolSizes;
 }
 
