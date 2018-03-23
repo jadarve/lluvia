@@ -48,6 +48,11 @@ vk::ImageUsageFlags Image::getUsageFlags()const noexcept {
 }
 
 
+vk::ImageLayout Image::getLayout() const noexcept {
+    return vkLayout;
+}
+
+
 ll::ChannelType Image::getChannelType() const noexcept {
     return descriptor.getChannelType();
 }

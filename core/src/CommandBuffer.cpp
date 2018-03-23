@@ -55,6 +55,7 @@ void CommandBuffer::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
     commandBuffer.copyBuffer(src.vkBuffer, dst.vkBuffer, 1, &copyInfo);
 }
 
+
 void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& dst) {
 
     auto imgSubresourceLayers = vk::ImageSubresourceLayers {}
@@ -72,6 +73,26 @@ void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& ds
         .setImageExtent({dst.getWidth(), dst.getHeight(), dst.getDepth()});
 
     commandBuffer.copyBufferToImage(src.vkBuffer, dst.vkImage, dst.vkLayout, 1, &copyInfo);
+}
+
+
+void CommandBuffer::copyImageToBuffer(const ll::Image& src, const ll::Buffer& dst) {
+
+    auto imgSubresourceLayers = vk::ImageSubresourceLayers {}
+        .setAspectMask(vk::ImageAspectFlagBits::eColor)
+        .setMipLevel(0)
+        .setBaseArrayLayer(0)
+        .setLayerCount(1);
+
+    auto copyInfo = vk::BufferImageCopy {}
+        .setBufferOffset(0)
+        .setBufferImageHeight(0) // thightly packed
+        .setBufferRowLength(0)
+        .setImageSubresource(imgSubresourceLayers)
+        .setImageOffset({0, 0, 0})
+        .setImageExtent({src.getWidth(), src.getHeight(), src.getDepth()});
+
+    commandBuffer.copyImageToBuffer(src.vkImage, src.vkLayout, dst.vkBuffer, 1, &copyInfo);
 }
 
 

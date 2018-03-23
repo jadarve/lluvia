@@ -32,6 +32,7 @@ include(cmake/thirdparty/Catch.cmake)
 # THIRD PARTY SETTINGS
 #################################################
 include(cmake/thirdparty/JSON.cmake)
+include(cmake/thirdparty/STB.cmake)
 
 
 #################################################

@@ -14,10 +14,14 @@ public:
 
     void setInputImage(std::shared_ptr<ll::Image> inputImage);
     void init(std::shared_ptr<ll::Session> session);
+    void record(std::shared_ptr<ll::CommandBuffer> cmdBuffer);
 
+    void writeAllImages(std::shared_ptr<ll::Session> session);
 
 private:
     void initComputeNodes(std::shared_ptr<ll::Session> session);
+
+    void writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> image, const std::string& filename);
 
     uint32_t levels;
 

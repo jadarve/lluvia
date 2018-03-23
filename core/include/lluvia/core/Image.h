@@ -41,7 +41,8 @@ public:
     ll::MemoryAllocationInfo getAllocationInfo() const noexcept;
     uint64_t getSize() const noexcept;
 
-    vk::ImageUsageFlags getUsageFlags()const noexcept;
+    vk::ImageUsageFlags getUsageFlags() const noexcept;
+    vk::ImageLayout     getLayout()     const noexcept;
 
     ll::ChannelType getChannelType() const noexcept;
     uint64_t getChannelTypeSize()    const noexcept;

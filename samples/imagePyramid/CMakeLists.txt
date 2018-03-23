@@ -32,6 +32,10 @@ target_include_directories(imagePyramid
     PUBLIC include
 )
 
-target_link_libraries(imagePyramid ${LL_LINK_LIBRARIES})
+target_link_libraries(imagePyramid
+    ${LL_LINK_LIBRARIES}
+    m
+    STB
+)
 
 message (STATUS "-------------------------------------------------")

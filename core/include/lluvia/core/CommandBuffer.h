@@ -31,6 +31,7 @@ public:
     void run(const ll::ComputeNode& node);
     void copyBuffer(const ll::Buffer& src, const ll::Buffer& dst);
     void copyBufferToImage(const ll::Buffer& src, const ll::Image& dst);
+    void copyImageToBuffer(const ll::Image& src, const ll::Buffer& dst);
     void changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout);
 
 private:

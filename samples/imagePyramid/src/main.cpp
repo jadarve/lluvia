@@ -3,15 +3,88 @@
 
 #include <lluvia/core.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
+
 #include <iostream>
 #include <memory>
 #include <vector>
 
 
+void readImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> inputImage) {
+
+    // read image data
+    int32_t texWidth, texHeight, texChannels;
+    stbi_uc* pixels = stbi_load("dog.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    uint64_t imageSize = texWidth * texHeight * 4;
+
+    if (!pixels) {
+        throw std::runtime_error("failed to load texture image!");
+    }
+
+
+    // stage buffer
+    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
+    auto stageBuffer        = hostMemory->createBuffer(imageSize);
+
+    // copy to stage buffer
+    auto mapPtr = stageBuffer->map();
+    std::memcpy(mapPtr, pixels, imageSize);
+    stageBuffer->unmap();
+
+    stbi_image_free(pixels);
+
+
+    // change input image layout to dst optimal
+    // copy stage buffer to input image
+    // change input image layout to general
+    auto cmdBuffer = session->createCommandBuffer();
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*inputImage, vk::ImageLayout::eTransferDstOptimal);
+    cmdBuffer->copyBufferToImage(*stageBuffer, *inputImage);
+    cmdBuffer->changeImageLayout(*inputImage, vk::ImageLayout::eGeneral);
+    cmdBuffer->end();
+    session->run(cmdBuffer);
+}
+
+
+void writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> image, int32_t count) {
+
+    const auto imageSize     = image->getSize();
+    const auto currentLayout = image->getLayout();
+
+    // create host visible memory
+    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
+    auto hostImage          = hostMemory->createBuffer(imageSize);
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferSrcOptimal);
+    cmdBuffer->copyImageToBuffer(*image, *hostImage);
+    cmdBuffer->changeImageLayout(*image, currentLayout);
+    cmdBuffer->end();
+
+    session->run(cmdBuffer);
+
+    auto mapPtr = hostImage->map();
+    const auto res = stbi_write_jpg("moni.jpg", image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr, 100);
+
+    std::cout << "stbi_write_jpg result: " << res << std::endl;
+
+    hostImage->unmap();
+}
+
+
 int main() {
 
-    const auto width       = 640u;
-    const auto height      = 480u;
+    const auto width       = 1280u;
+    const auto height      = 850u;
     const auto channels    = 4;
     const auto channelType = ll::ChannelType::Uint8;
 
@@ -24,11 +97,26 @@ int main() {
     auto memory = session->createMemory(inputImageMemFlags, memPageSize, false);
 
     auto imgDesc = ll::ImageDescriptor {width, height, 1, channels, channelType};
-    auto inputImage = memory->createImage(imgDesc);
+    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc;
+    auto inputImage = memory->createImage(imgDesc, imgFlags);
+
+    // read input image and copy it to inputImage
+    readImage(session, inputImage);
     
 
     auto imagePyramid = ImagePyramid {3};
     imagePyramid.setInputImage(inputImage);
     imagePyramid.init(session);
 
+
+    auto cmdBuffer = session->createCommandBuffer();
+    cmdBuffer->begin();
+    imagePyramid.record(cmdBuffer);
+    cmdBuffer->end();
+
+    session->run(cmdBuffer);
+
+    imagePyramid.writeAllImages(session);
+
+    // writeImage(session, inputImage, 0);
 }

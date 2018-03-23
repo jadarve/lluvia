@@ -1,5 +1,7 @@
 #include "ImagePyramid.h"
 
+#include <stb_image_write.h>
+
 #include <iostream>
 
 ImagePyramid::ImagePyramid(const uint32_t levels):
@@ -42,6 +44,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
 
     // create downsampled images
+    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferSrc;
     auto imgDesc = ll::ImageDescriptor {width, height, 1, channels, channelType};
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setIsSampled(false)
@@ -54,12 +57,12 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
     for (auto i = 0u; i < levels; ++i) {
 
-        std::cout << "    width: " << width << " height: " << height << std::endl;
+        std::cout << "    width: " << width << " height: " << height << " channels: " << channels << std::endl;
 
         width /= 2;
         imgDesc.setWidth(width);
 
-        auto imgDownX = memory->createImage(imgDesc);
+        auto imgDownX = memory->createImage(imgDesc, imgFlags);
         auto imgViewDownX = imgDownX->createImageView(imgViewDesc);
         imageViewsX.push_back(imgViewDownX);
         cmdBuffer->changeImageLayout(*imgDownX, vk::ImageLayout::eGeneral);
@@ -70,7 +73,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         height /= 2;
         imgDesc.setHeight(height);
 
-        auto imgDownY = memory->createImage(imgDesc);
+        auto imgDownY = memory->createImage(imgDesc, imgFlags);
         auto imgViewDownY = imgDownY->createImageView(imgViewDesc);
         imageViewsY.push_back(imgViewDownY);
         cmdBuffer->changeImageLayout(*imgDownY, vk::ImageLayout::eGeneral);
@@ -146,3 +149,60 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         computeNodesY.push_back(nodeY);
     }
 }
+
+
+void ImagePyramid::record(std::shared_ptr<ll::CommandBuffer> cmdBuffer) {
+
+    for (auto i = 0u; i < levels; ++i) {
+        cmdBuffer->run(*computeNodesX[i]);
+        cmdBuffer->run(*computeNodesY[i]);
+    }
+}
+
+
+void ImagePyramid::writeAllImages(std::shared_ptr<ll::Session> session) {
+
+    auto i = 0u;
+    for (auto imgViewX : imageViewsX) {
+
+        writeImage(session, imgViewX->getImage(), "imgX_" + std::to_string(i) + ".jpg");
+        ++ i;
+    }
+
+    i = 0u;
+    for (auto imgViewY : imageViewsY) {
+
+        writeImage(session, imgViewY->getImage(), "imgY_" + std::to_string(i) + ".jpg");
+        ++ i;
+    }
+}
+
+
+void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> image, const std::string& filename) {
+
+    const auto imageSize     = image->getSize();
+    const auto currentLayout = image->getLayout();
+
+    // create host visible memory
+    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
+    auto hostImage          = hostMemory->createBuffer(imageSize);
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferSrcOptimal);
+    cmdBuffer->copyImageToBuffer(*image, *hostImage);
+    cmdBuffer->changeImageLayout(*image, currentLayout);
+    cmdBuffer->end();
+
+    session->run(cmdBuffer);
+
+    auto mapPtr = hostImage->map();
+    const auto res = stbi_write_jpg(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr, 100);
+
+    std::cout << "stbi_write_jpg result: " << res << std::endl;
+
+    hostImage->unmap();
+}
+
