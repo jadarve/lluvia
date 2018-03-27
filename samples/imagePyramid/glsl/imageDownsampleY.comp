@@ -14,13 +14,18 @@ void main() {
         return;
     }
 
+    const bool topBorder    = coords.y == 0;
+    const bool bottomBorder = coords.y == imgSize.y -1;
+
     const ivec2 inputImgCoords = ivec2(coords.x, 2*coords.y);
 
-    const uvec4 img_m = imageLoad(inputImage, inputImgCoords + ivec2(0, -1));
     const uvec4 img_0 = imageLoad(inputImage, inputImgCoords);
-    const uvec4 img_p = imageLoad(inputImage, inputImgCoords + ivec2(0, +1));    
+
+    const uvec4 img_m = topBorder    ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(0, -1));
+    const uvec4 img_p = bottomBorder ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(0, +1));    
 
     // this is equivalent to 0.5*img_0 + 0.25*(img_m + img_p)
     const uvec4 filterValue = (img_0 >> 1) + ((img_m + img_p) >> 2);
+
     imageStore(outputImage, coords, filterValue);
 }

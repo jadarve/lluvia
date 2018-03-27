@@ -7,6 +7,7 @@ layout(binding = 1, rgba8ui) uniform uimage2D outputImage;
 
 void main() {
 
+    // this coordinates are relative to outputImage size
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(outputImage);
 
@@ -14,13 +15,19 @@ void main() {
         return;
     }
 
+    const bool leftBorder = coords.x == 0;
+    const bool rightBorder = coords.x == imgSize.x - 1;
+
+    // image coordinates for inputImage (twice the width of outputImage)
     const ivec2 inputImgCoords = ivec2(2*coords.x, coords.y);
 
-    const uvec4 img_m = imageLoad(inputImage, inputImgCoords + ivec2(-1, 0));
     const uvec4 img_0 = imageLoad(inputImage, inputImgCoords);
-    const uvec4 img_p = imageLoad(inputImage, inputImgCoords + ivec2(+1, 0));    
+
+    const uvec4 img_m = leftBorder  ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(-1, 0));
+    const uvec4 img_p = rightBorder ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(+1, 0));    
 
     // this is equivalent to 0.5*img_0 + 0.25*(img_m + img_p)
     const uvec4 filterValue = (img_0 >> 1) + ((img_m + img_p) >> 2);
+
     imageStore(outputImage, coords, filterValue);
 }
