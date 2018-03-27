@@ -33,6 +33,7 @@ public:
     void copyBufferToImage(const ll::Buffer& src, const ll::Image& dst);
     void copyImageToBuffer(const ll::Image& src, const ll::Buffer& dst);
     void changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout);
+    void memoryBarrier();
 
 private:
     vk::Device          device;

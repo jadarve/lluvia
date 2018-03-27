@@ -93,6 +93,10 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
 void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 
+    auto getGlobalSize = [](const auto size, const auto localSize) {
+        return static_cast<uint32_t>(std::ceil(static_cast<double>(size) / static_cast<double>(localSize)));
+    };
+
     // Shader parameters
     //
     // layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
@@ -129,8 +133,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         width /= 2;
 
         auto descX_i = ll::ComputeNodeDescriptor {descX}
-            .setGlobalX(width  / descX.getLocalX())
-            .setGlobalY(height / descX.getLocalY());
+            .setGlobalX(getGlobalSize(width,  descX.getLocalX()))
+            .setGlobalY(getGlobalSize(height, descX.getLocalY()));
 
         auto nodeX = session->createComputeNode(descX_i);
         nodeX->bind(0, imageViewsY[i]);
@@ -140,8 +144,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         height /= 2;
 
         auto descY_i = ll::ComputeNodeDescriptor {descY}
-            .setGlobalX(width  / descX.getLocalX())
-            .setGlobalY(height / descX.getLocalY());
+            .setGlobalX(getGlobalSize(width,  descY.getLocalX()))
+            .setGlobalY(getGlobalSize(height, descY.getLocalY()));
 
         auto nodeY = session->createComputeNode(descY_i);
         nodeY->bind(0, imageViewsX[i]);
@@ -154,8 +158,12 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 void ImagePyramid::record(std::shared_ptr<ll::CommandBuffer> cmdBuffer) {
 
     for (auto i = 0u; i < levels; ++i) {
+
         cmdBuffer->run(*computeNodesX[i]);
+        cmdBuffer->memoryBarrier();
+
         cmdBuffer->run(*computeNodesY[i]);
+        cmdBuffer->memoryBarrier();
     }
 }
 

@@ -115,7 +115,7 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
 
 
     commandBuffer.pipelineBarrier(
-        vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eComputeShader,
+        vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
         vk::DependencyFlagBits::eDeviceGroupKHX,
         0, nullptr,
         0, nullptr,
@@ -123,6 +123,22 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
 
     // FIXME: this should be set only after the pipelineBarrier is executed
     image.vkLayout = newLayout;
+}
+
+
+void CommandBuffer::memoryBarrier() {
+
+    auto barrier = vk::MemoryBarrier {}
+                    .setSrcAccessMask(vk::AccessFlagBits::eShaderWrite)
+                    .setDstAccessMask(vk::AccessFlagBits::eShaderRead);
+
+
+    commandBuffer.pipelineBarrier(
+        vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
+        vk::DependencyFlagBits::eDeviceGroupKHX,
+        1, &barrier,
+        0, nullptr,
+        0, nullptr);
 }
 
 } // namespace ll
