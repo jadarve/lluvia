@@ -52,35 +52,6 @@ void readImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> 
 }
 
 
-void writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> image, int32_t count) {
-
-    const auto imageSize     = image->getSize();
-    const auto currentLayout = image->getLayout();
-
-    // create host visible memory
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
-    auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
-    auto hostImage          = hostMemory->createBuffer(imageSize);
-
-    auto cmdBuffer = session->createCommandBuffer();
-
-    cmdBuffer->begin();
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferSrcOptimal);
-    cmdBuffer->copyImageToBuffer(*image, *hostImage);
-    cmdBuffer->changeImageLayout(*image, currentLayout);
-    cmdBuffer->end();
-
-    session->run(cmdBuffer);
-
-    auto mapPtr = hostImage->map();
-    const auto res = stbi_write_jpg("moni.jpg", image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr, 100);
-
-    std::cout << "stbi_write_jpg result: " << res << std::endl;
-
-    hostImage->unmap();
-}
-
-
 int main() {
 
     const auto width       = 1280u;
@@ -104,7 +75,7 @@ int main() {
     readImage(session, inputImage);
     
 
-    auto imagePyramid = ImagePyramid {3};
+    auto imagePyramid = ImagePyramid {4};
     imagePyramid.setInputImage(inputImage);
     imagePyramid.init(session);
 
