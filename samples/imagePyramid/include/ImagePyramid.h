@@ -32,10 +32,8 @@ private:
     std::vector<std::shared_ptr<ll::ImageView>> imageViewsX;
     std::vector<std::shared_ptr<ll::ImageView>> imageViewsY;
 
-
     std::vector<std::shared_ptr<ll::ComputeNode>> computeNodesX;
     std::vector<std::shared_ptr<ll::ComputeNode>> computeNodesY;
-
 
     std::shared_ptr<ll::Program> imageDownsampleXProgram;
     std::shared_ptr<ll::Program> imageDownsampleYProgram;
