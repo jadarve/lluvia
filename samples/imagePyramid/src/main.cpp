@@ -21,6 +21,7 @@ using image_t = struct {
     std::vector<uint8_t> data;
 };
 
+
 image_t readImage(const std::string& filepath) {
 
     // read image data
@@ -42,9 +43,14 @@ image_t readImage(const std::string& filepath) {
 }
 
 
-int main() {
+int main(int argc, const char** argv) {
 
-    const auto image = readImage("raton.jpg");
+    if (argc != 2) {
+        std::cout << "missing image path, use 'imagePyramid <path to image>'" << std::endl;
+        exit(-1);
+    }
+
+    const auto image = readImage(argv[1]);
 
     const auto channelType        = ll::ChannelType::Uint8;
     const auto imageSize          = image.width*image.height*image.channels*ll::getChannelTypeSize(channelType);
