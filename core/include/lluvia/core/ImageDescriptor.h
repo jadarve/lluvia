@@ -1,6 +1,8 @@
 #ifndef LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
 #define LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
 
+#include "lluvia/core/impl/enum_utils.h"
+
 #include <cstdint>
 
 #include <vulkan/vulkan.hpp>
@@ -10,28 +12,58 @@ namespace ll {
 
 
 enum class ChannelType : uint32_t {
+    Uint8   = 0,
+    Int8    = 1,
 
-    Uint8,
-    Int8,
+    Uint16  = 2,
+    Int16   = 3,
+    Float16 = 4,
 
-    Uint16,
-    Int16,
-    Float16,
+    Uint32  = 5,
+    Int32   = 6,
+    Float32 = 7,
 
-    Uint32,
-    Int32,
-    Float32,
-
-    Uint64,
-    Int64,
-    Float64
+    Uint64  = 8,
+    Int64   = 9,
+    Float64 = 10
 };
 
 
-uint64_t getChannelTypeSize(ll::ChannelType type);
+namespace impl {
 
-std::string     channelTypeToString(ll::ChannelType type);
-ll::ChannelType stringToChannelType(const std::string& str);
+    constexpr const std::array<const char*, 11> ChannelTypeStrings {{
+        "UINT8",
+        "INT8",
+
+        "UINT16",
+        "INT16",
+        "FLOAT16",
+
+        "UINT32",
+        "INT32",
+        "FLOAT32",
+
+        "UINT64",
+        "INT64",
+        "FLOAT64"
+    }};
+
+} // namespace impl
+
+
+template<typename T = std::string>
+inline T channelTypeToString(ll::ChannelType&& value) {
+    return ll::impl::enumToString<ll::ChannelType, ll::impl::ChannelTypeStrings.size(), impl::ChannelTypeStrings>(std::forward<ll::ChannelType>(value));
+}
+
+
+template<typename T>
+inline ll::ChannelType stringToChannelType(T&& stringValue) {
+    return impl::stringToEnum<ll::ChannelType, T, ll::impl::ChannelTypeStrings.size(), impl::ChannelTypeStrings>(std::forward<T>(stringValue));
+}
+
+
+uint64_t getChannelTypeSize(ll::ChannelType type);
 
 
 class ImageDescriptor {

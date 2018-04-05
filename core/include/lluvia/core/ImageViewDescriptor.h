@@ -1,6 +1,8 @@
 #ifndef LLUVIA_CORE_IMAGE_VIEW_DESCRIPTOR_H_
 #define LLUVIA_CORE_IMAGE_VIEW_DESCRIPTOR_H_
 
+#include "lluvia/core/impl/enum_utils.h"
+
 #include <cstdint>
 
 #include <vulkan/vulkan.hpp>
@@ -17,25 +19,61 @@ enum class ImageAxis : uint32_t {
 };
 
 enum class ImageFilterMode : uint32_t {
-    Nearest,
-    Linear
+    Nearest = 0,
+    Linear  = 1
 };
 
 
 enum class ImageAddressMode : uint32_t {
-    Repeat,
-    MirroredRepeat,
-    ClampToEdge,
-    ClampToBorder,
-    MirrorClampToEdge
+    Repeat            = 0,
+    MirroredRepeat    = 1,
+    ClampToEdge       = 2,
+    ClampToBorder     = 3,
+    MirrorClampToEdge = 4
 };
 
 
-std::string imageFilterModeToString(const ll::ImageFilterMode filterMode);
-ll::ImageFilterMode stringToImageFilterMode(const std::string& str);
+namespace impl {
 
-std::string imageAddressModeToString(const ll::ImageAddressMode addressMode);
-ll::ImageAddressMode stringToImageAddressMode(const std::string& str);
+    constexpr const std::array<const char*, 2> ImageFilterModeStrings {{
+        "NEAREST",
+        "LINEAR"
+    }};
+
+
+    constexpr const std::array<const char*, 5> ImageAddressModeStrings {{
+        "REPEAT",
+        "MIRRORED_REPEAT",
+        "CLAMP_TO_EDGE",
+        "CLAMP_T_OBORDER",
+        "MIRROR_CLAMP_TO_EDGE"
+    }};
+
+} // namespace impl
+
+
+template<typename T = std::string>
+inline T imageFilterModeToString(ll::ImageFilterMode&& value) {
+    return ll::impl::enumToString<ll::ImageFilterMode, impl::ImageFilterModeStrings.size(), impl::ImageFilterModeStrings>(std::forward<ll::ImageFilterMode>(value));
+}
+
+
+template<typename T>
+inline ll::ImageFilterMode stringToImageFilterMode(T&& stringValue) {
+    return impl::stringToEnum<ll::ImageFilterMode, T, ll::impl::ImageFilterModeStrings.size(), impl::ImageFilterModeStrings>(std::forward<T>(stringValue));
+}
+
+
+template<typename T = std::string>
+inline T imageAddressModeToString(ll::ImageAddressMode&& value) {
+    return impl::enumToString<ll::ImageAddressMode, ll::impl::ImageAddressModeStrings.size(), ll::impl::ImageAddressModeStrings>(std::forward<ll::ImageAddressMode>(value));
+}
+
+
+template<typename T>
+inline ll::ImageAddressMode stringToImageAddressMode(T&& stringValue) {
+    return impl::stringToEnum<ll::ImageAddressMode, T, ll::impl::ImageAddressModeStrings.size(), impl::ImageAddressModeStrings>(std::forward<T>(stringValue));
+}
 
 
 class ImageViewDescriptor {
