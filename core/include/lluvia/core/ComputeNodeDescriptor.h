@@ -1,6 +1,8 @@
 #ifndef LLUVIA_CORE_COMPUTE_DESCRIPTOR_NODE_H_
 #define LLUVIA_CORE_COMPUTE_DESCRIPTOR_NODE_H_
 
+#include "lluvia/core/impl/enum_utils.h"
+
 #include <array>
 #include <memory>
 #include <string>
@@ -15,33 +17,32 @@ class Program;
 
 
 enum class ParameterType : uint32_t {
-    Buffer,
-    ImageView,
-    SampledImageView
+    Buffer           = 0,
+    ImageView        = 1,
+    SampledImageView = 2
 };
 
 
-template<typename T>
-T parameterTypeToString(const ll::ParameterType& param) {
+namespace impl {
 
-    switch (param) {
-        case ll::ParameterType::Buffer:           return "BUFFER";
-        case ll::ParameterType::ImageView:        return "IMAGE_VIEW";
-        case ll::ParameterType::SampledImageView: return "SAMPLED_IMAGE_VIEW";
-    }
+    constexpr const std::array<const char*, 3> ParameterTypeStrings {{
+        "BUFFER",
+        "IMAGE_VIEW",
+        "SAMPLED_IMAGE_VIEW"
+    }};
+
+} // namespace impl
+
+
+template<typename T = std::string>
+inline T parameterTypeToString(ll::ParameterType&& value) {
+    return ll::impl::enumToString<ll::ParameterType, ll::impl::ParameterTypeStrings.size(), impl::ParameterTypeStrings>(std::forward<ll::ParameterType>(value));
 }
 
 
 template<typename T>
-ll::ParameterType stringToParameterType(T&& name) {
-
-    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
-    
-    if (name == "BUFFER")             {return ll::ParameterType::Buffer;}
-    if (name == "IMAGE_VIEW")         {return ll::ParameterType::ImageView;}
-    if (name == "SAMPLED_IMAGE_VIEW") {return ll::ParameterType::SampledImageView;}
-
-    throw std::out_of_range("invalid name for parameter type: " + name);
+inline ll::ParameterType stringToParameterType(T&& stringValue) {
+    return impl::stringToEnum<ll::ParameterType, T, ll::impl::ParameterTypeStrings.size(), impl::ParameterTypeStrings>(std::forward<T>(stringValue));
 }
 
 
@@ -88,8 +89,8 @@ public:
     uint32_t getLocalY() const noexcept;
     uint32_t getLocalZ() const noexcept;
 
-    uint32_t getStorageBufferCount() const noexcept;
-    uint32_t getStoraImageCount() const noexcept;
+    uint32_t getStorageBufferCount()        const noexcept;
+    uint32_t getStoraImageCount()           const noexcept;
     uint32_t getCombinedImageSamplerCount() const noexcept;
 
 
