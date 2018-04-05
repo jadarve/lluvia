@@ -35,6 +35,7 @@ public:
     ll::ImageAddressMode getAddressModeV()          const noexcept;
     ll::ImageAddressMode getAddressModeW()          const noexcept;
     bool                 getNormalizedCoordinates() const noexcept;
+    bool                 isSampled()                const noexcept;
 
 private:
     ImageView(vk::Device device, std::shared_ptr<ll::Image> image, const ll::ImageViewDescriptor& descriptor);

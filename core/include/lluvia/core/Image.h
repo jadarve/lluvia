@@ -38,11 +38,14 @@ public:
 
     ll::ObjectType getType() const noexcept override;
 
+    ll::MemoryAllocationInfo getAllocationInfo() const noexcept;
     uint64_t getSize() const noexcept;
 
-    vk::ImageUsageFlags getUsageFlags()const noexcept;
+    vk::ImageUsageFlags getUsageFlags() const noexcept;
+    vk::ImageLayout     getLayout()     const noexcept;
 
     ll::ChannelType getChannelType() const noexcept;
+    uint64_t getChannelTypeSize()    const noexcept;
     uint32_t getChannelCount()       const noexcept;
     uint32_t getWidth()              const noexcept;
     uint32_t getHeight()             const noexcept;

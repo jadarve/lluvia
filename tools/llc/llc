@@ -22,6 +22,7 @@ def parseArguments():
 
     parser = argparse.ArgumentParser(description='llc description')
     parser.add_argument('src_file', type=str, help='source file.')
+    parser.add_argument('-I', '--include', type=str, help='path to include directory.')
     parser.add_argument('-o', '--output', type=str, help='path of the output file generated.')
     parser.add_argument('-v', '--verbose', help='increases output verbosity.', action='store_true')
     parser.add_argument('--glslc', type=str, help='path to glslc binary')
@@ -34,9 +35,10 @@ def main():
     args = parseArguments()
 
     if args.verbose:
-        print('llc: source file: {0}'.format(args.src_file))
-        print('llc: output file: {0}'.format(args.output))
-        print('llc: glslc path:  {0}'.format(args.glslc))
+        print('llc: include path  : {0}'.format(args.include))
+        print('llc: source file   : {0}'.format(args.src_file))
+        print('llc: output file   : {0}'.format(args.output))
+        print('llc: glslc path    : {0}'.format(args.glslc))
 
 
     # optional arguments for calling glslc
@@ -53,6 +55,10 @@ def main():
             pass
 
         optArguments.append('-o {0}'.format(args.output))
+
+    # process --include
+    if args.include is not None:
+        optArguments.append('-I {0}'.format(args.include))
 
     
     glslCommand = 'glslc {0}' if args.glslc is None else args.glslc + ' {0}'

@@ -12,6 +12,7 @@
 namespace ll {
 
 class Buffer;
+class Image;
 class ImageView;
 class Object;
 class Program;
@@ -59,7 +60,7 @@ public:
 private:
     void init();
     void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> buffer);
-    void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> buffer);
+    void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> imageView);
 
     vk::Device                          device;
 

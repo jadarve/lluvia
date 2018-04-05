@@ -2,9 +2,10 @@
 #define LLUVIA_CORE_IMPL_MEMORY_FREE_SPACE_MANAGER_H_
 
 
+#include <memory>
+#include <ostream>
 #include <vector>
 #include <tuple>
-#include <memory>
 
 #include <vulkan/vulkan.hpp>
 
@@ -32,6 +33,8 @@ public:
 
     MemoryFreeSpaceManager& operator = (const MemoryFreeSpaceManager& heap) = default;
     MemoryFreeSpaceManager& operator = (MemoryFreeSpaceManager&& heap)      = default;
+
+    friend std::ostream& operator << (std::ostream& out, const MemoryFreeSpaceManager& manager);
 
     uint64_t getSize()      const noexcept;
     int getFreeSpaceCount() const noexcept;

@@ -9,6 +9,7 @@ project(lluvia)
 set (LL_CMAKE_VERBOSE TRUE)
 set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include (Modules/download_file)
+include (Modules/llAddShader)
 
 
 #################################################
@@ -31,6 +32,14 @@ include(cmake/thirdparty/Catch.cmake)
 # THIRD PARTY SETTINGS
 #################################################
 include(cmake/thirdparty/JSON.cmake)
+include(cmake/thirdparty/STB.cmake)
+
+
+#################################################
+# GLSL COMPILER SETTINGS
+#################################################
+set (LLC_COMMAND ${CMAKE_BINARY_DIR}/tools/llc/llc)
+message (STATUS "LLC_COMMAND: ${LLC_COMMAND}")
 
 #################################################
 # VULKAN SETTINGS
@@ -57,6 +66,7 @@ add_subdirectory(core)
 # creates the list of GLSL shaders to build. The list is stored in LL_GLSL_SRCS variable.
 add_subdirectory(glsl)
 add_subdirectory(tools)
+add_subdirectory(samples)
 
 
 # creates the shaders custom target

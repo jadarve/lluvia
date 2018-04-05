@@ -2,6 +2,7 @@
 #define LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_
 
 #include <cstdint>
+#include <ostream>
 
 namespace ll {
 
@@ -21,5 +22,9 @@ struct MemoryAllocationInfo {
 };
 
 } // namespace ll
+
+
+// \brief print memory allocation using "[offset, size, leftPadding, page]" format.
+std::ostream& operator<< (std::ostream &out, const ll::MemoryAllocationInfo& allocInfo);
 
 #endif // LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_

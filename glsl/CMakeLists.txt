@@ -2,7 +2,8 @@
 # create the list of GLSL files to compile
 set (_GLSL_SRCS
     assign.comp
-    imgToBuffer.comp
+    imageToBuffer.comp
+    textureToBuffer.comp
 )
 
 # LL_GLSL_SRCS contains the list of GLSL source files to be compiled with their absolute path
@@ -12,3 +13,5 @@ foreach (_src ${_GLSL_SRCS})
 endforeach ()
 
 set (LL_GLSL_SRCS ${LL_GLSL_SRCS} PARENT_SCOPE)
+
+set (LL_GLSL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)

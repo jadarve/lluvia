@@ -28,6 +28,11 @@ ll::ObjectType Buffer::getType() const noexcept {
 }
 
 
+ll::MemoryAllocationInfo Buffer::getAllocationInfo() const noexcept {
+    return allocInfo;
+}
+
+
 uint64_t Buffer::getSize() const noexcept {
     return requestedSize;
 }

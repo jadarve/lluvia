@@ -1,0 +1,17 @@
+#version 450
+
+#include "lluvia/core.glsl"
+
+layout(binding = 0, r8ui) uniform uimage2D inputImage;
+layout(binding = 1) buffer out0 { uint outputBuffer[]; };
+
+const uint OUTPUT_WIDTH = 32;
+
+void main() {
+
+    const ivec2 coord = LL_GLOBAL_COORDS_2D;
+    uvec4 texValue = imageLoad(inputImage, coord);
+
+    const uint index = coord.y*OUTPUT_WIDTH + coord.x;
+    outputBuffer[index] = texValue.x;
+}

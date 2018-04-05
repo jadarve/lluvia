@@ -1,4 +1,27 @@
 {
+    "compute_nodes": [
+        {
+            "function": "main",
+            "global_x": 1,
+            "global_y": 1,
+            "global_z": 1,
+            "local_x": 32,
+            "local_y": 32,
+            "local_z": 1,
+            "name": "node",
+            "parameters": [
+                {
+                    "name": "sampledImageView",
+                    "type": "IMAGE_VIEW"
+                },
+                {
+                    "name": "outputBuffer",
+                    "type": "BUFFER"
+                }
+            ],
+            "program": "imgToBuffer"
+        }
+    ],
     "memories": [
         {
             "flags": [
@@ -26,6 +49,17 @@
     ],
     "objects": [
         {
+            "memory": "hostOutputMemory",
+            "name": "outputBuffer",
+            "size": 4096,
+            "type": "BUFFER",
+            "usage": [
+                "STORAGE_BUFFER",
+                "TRANSFER_DST",
+                "TRANSFER_SRC"
+            ]
+        },
+        {
             "channel_count": 1,
             "channel_type": "uint8",
             "depth": 1,
@@ -41,23 +75,13 @@
             "width": 32
         },
         {
-            "memory": "hostOutputMemory",
-            "name": "outputBuffer",
-            "size": 4096,
-            "type": "BUFFER",
-            "usage": [
-                "STORAGE_BUFFER",
-                "TRANSFER_DST",
-                "TRANSFER_SRC"
-            ]
-        },
-        {
             "address_mode_u": "REPEAT",
             "address_mode_v": "REPEAT",
             "address_mode_w": "REPEAT",
             "filter_mode": "NEAREST",
             "image": "image",
-            "name": "imageView",
+            "is_sampled": false,
+            "name": "storageImageView",
             "normalized_coordinates": false,
             "type": "IMAGE_VIEW"
         },
@@ -71,6 +95,23 @@
                 "TRANSFER_DST",
                 "TRANSFER_SRC"
             ]
+        },
+        {
+            "address_mode_u": "REPEAT",
+            "address_mode_v": "REPEAT",
+            "address_mode_w": "REPEAT",
+            "filter_mode": "NEAREST",
+            "image": "image",
+            "is_sampled": true,
+            "name": "sampledImageView",
+            "normalized_coordinates": false,
+            "type": "IMAGE_VIEW"
+        }
+    ],
+    "programs": [
+        {
+            "name": "imgToBuffer",
+            "spirv": "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"
         }
     ]
 }

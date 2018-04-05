@@ -8,7 +8,6 @@
 
 namespace ll {
 
-using namespace std;
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(std::shared_ptr<ll::Program> program) {
     this->program = program;
@@ -22,32 +21,30 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addBufferParameter() {
-
-    auto param = vk::DescriptorSetLayoutBinding {
-        static_cast<uint32_t>(parameterBindings.size()),
-        vk::DescriptorType::eStorageBuffer,
-        1,
-        vk::ShaderStageFlagBits::eCompute,
-        nullptr
-    };
-
-    parameterBindings.push_back(param);
-    return *this;
-}
+ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType& param) {
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addImageViewParameter() {
+    auto paramBinding = vk::DescriptorSetLayoutBinding {}
+                            .setBinding(static_cast<uint32_t>(parameterBindings.size()))
+                            .setDescriptorCount(1)
+                            .setStageFlags(vk::ShaderStageFlagBits::eCompute)
+                            .setPImmutableSamplers(nullptr);
+    
+    switch (param) {
+        case ll::ParameterType::Buffer:
+            paramBinding.setDescriptorType(vk::DescriptorType::eStorageBuffer);
+            break;
 
-    auto param = vk::DescriptorSetLayoutBinding {
-        static_cast<uint32_t>(parameterBindings.size()),
-        vk::DescriptorType::eCombinedImageSampler,
-        1,
-        vk::ShaderStageFlagBits::eCompute,
-        nullptr
-    };
+        case ll::ParameterType::ImageView:
+            paramBinding.setDescriptorType(vk::DescriptorType::eStorageImage);
+            break;
 
-    parameterBindings.push_back(param);
+        case ll::ParameterType::SampledImageView:
+            paramBinding.setDescriptorType(vk::DescriptorType::eCombinedImageSampler);
+            break;
+    }
+
+    parameterBindings.push_back(paramBinding);
     return *this;
 }
 
@@ -96,11 +93,19 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexce
 
 std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
-    vector<vk::DescriptorPoolSize> poolSizes{
-        {vk::DescriptorType::eStorageBuffer, getStorageBufferCount()},
-        {vk::DescriptorType::eCombinedImageSampler, getCombinedImageSamplerCount()}
+    auto pushDescriptorPoolSize = [this](const vk::DescriptorType type, std::vector<vk::DescriptorPoolSize>& v) {
+
+        const auto count = countDescriptorType(type);
+        if (count > 0) {
+            v.push_back({type, count});
+        }
     };
-    
+
+    std::vector<vk::DescriptorPoolSize> poolSizes;
+    pushDescriptorPoolSize(vk::DescriptorType::eStorageBuffer, poolSizes);
+    pushDescriptorPoolSize(vk::DescriptorType::eStorageImage, poolSizes);
+    pushDescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, poolSizes);
+        
     return poolSizes;
 }
 
@@ -162,6 +167,11 @@ std::shared_ptr<ll::Program> ComputeNodeDescriptor::getProgram() const noexcept 
 
 uint32_t ComputeNodeDescriptor::getStorageBufferCount() const noexcept {
     return countDescriptorType(vk::DescriptorType::eStorageBuffer);
+}
+
+
+uint32_t ComputeNodeDescriptor::getStoraImageCount() const noexcept {
+    return countDescriptorType(vk::DescriptorType::eStorageImage);
 }
 
 

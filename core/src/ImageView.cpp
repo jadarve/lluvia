@@ -29,14 +29,19 @@ ImageView::ImageView(vk::Device device,
     
     vkImageView = device.createImageView(imageViewInfo);
 
-    vkSampler = device.createSampler(descriptor.getVkSamplerCreateInfo());
+    if (descriptor.isSampled) {
+        vkSampler = device.createSampler(descriptor.getVkSamplerCreateInfo());
+    }
 }
 
 
 ImageView::~ImageView() {
 
     device.destroyImageView(vkImageView);
-    device.destroySampler(vkSampler);
+
+    if (descriptor.isSampled) {
+        device.destroySampler(vkSampler);
+    }
 }
 
 
@@ -72,6 +77,11 @@ ll::ImageAddressMode ImageView::getAddressModeW() const noexcept {
 
 bool ImageView::getNormalizedCoordinates() const noexcept {
     return descriptor.normalizedCoordinates;
+}
+
+
+bool ImageView::isSampled() const noexcept {
+    return descriptor.isSampled;
 }
 
 

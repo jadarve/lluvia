@@ -64,7 +64,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
                             .setProgram(program)
                             .setFunctionName("main")
                             .setLocalX(bufferSize)
-                            .addBufferParameter();
+                            .addParameter(ll::ParameterType::Buffer);
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);

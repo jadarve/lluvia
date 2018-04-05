@@ -280,9 +280,16 @@ bool Session::initDevice() {
                               .setQueueFamilyIndex(computeQueueFamilyIndex)
                               .setPQueuePriorities(&queuePriority);
 
+    auto supportedFeatues = physicalDevice.getFeatures();
+    assert(supportedFeatues.shaderStorageImageExtendedFormats);
+
+    auto desiredFeatures = vk::PhysicalDeviceFeatures {}
+        .setShaderStorageImageExtendedFormats(true);
+
     auto devCreateInfo = vk::DeviceCreateInfo()
                          .setQueueCreateInfoCount(1)
-                         .setPQueueCreateInfos(&devQueueCreateInfo);
+                         .setPQueueCreateInfos(&devQueueCreateInfo)
+                         .setPEnabledFeatures(&desiredFeatures);
 
     device = physicalDevice.createDevice(devCreateInfo);
     return true;
