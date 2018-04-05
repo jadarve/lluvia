@@ -61,7 +61,7 @@
         },
         {
             "channel_count": 1,
-            "channel_type": "uint8",
+            "channel_type": "UINT8",
             "depth": 1,
             "height": 32,
             "memory": "deviceMemory",
