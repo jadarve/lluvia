@@ -27,7 +27,7 @@ inline E stringToEnum(T&& name) {
     auto it = std::find(stringValues.cbegin(), stringValues.cend(), name);
 
     if (it == stringValues.cend()) {
-        throw std::out_of_range("invalid string value [" + name + "] for enum type " + typeid(T).name());
+        throw std::out_of_range("invalid string value [" + name + "] for enum type " + typeid(E).name());
     }
 
     return static_cast<E>(std::distance(stringValues.cbegin(), it));
