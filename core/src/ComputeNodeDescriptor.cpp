@@ -10,7 +10,7 @@ namespace ll {
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) {
-    this->program = std::move(program);
+    this->program = program;
     return *this;
 }
 
