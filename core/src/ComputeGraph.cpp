@@ -43,7 +43,7 @@ bool ComputeGraph::containsMemory(const std::string& name) const noexcept {
 }
 
 
-void ComputeGraph::addMemory(const std::string& name, std::shared_ptr<ll::Memory> memory) {
+void ComputeGraph::addMemory(const std::string& name, const std::shared_ptr<ll::Memory>& memory) {
     assert(memory != nullptr);
     assert(!name.empty());
 
@@ -109,7 +109,7 @@ bool ComputeGraph::containsObject(const std::string& name) const noexcept{
 }
 
 
-void ComputeGraph::addObject(const std::string& name, std::shared_ptr<ll::Object> object) {
+void ComputeGraph::addObject(const std::string& name, const std::shared_ptr<ll::Object>& object) {
     assert(object != nullptr);
     assert(!name.empty());
 
@@ -119,6 +119,18 @@ void ComputeGraph::addObject(const std::string& name, std::shared_ptr<ll::Object
 
 std::shared_ptr<ll::Object> ComputeGraph::getObject(const std::string& name) const {
     return objects.at(name);
+}
+
+
+std::string ComputeGraph::findObjectName(const std::shared_ptr<ll::Object>& param) {
+
+    for (const auto& it : objects) {
+        if (it.second == param) {
+            return it.first;
+        }
+    }
+
+    throw std::out_of_range(std::string{"object name not found: "});
 }
 
 
@@ -139,7 +151,7 @@ bool ComputeGraph::containsProgram(const std::string& name) const noexcept {
 }
 
 
-void ComputeGraph::addProgram(const std::string& name, std::shared_ptr<ll::Program> program) {
+void ComputeGraph::addProgram(const std::string& name, const std::shared_ptr<ll::Program>& program) {
     assert(program != nullptr);
     assert(!name.empty());
 
@@ -152,7 +164,7 @@ std::shared_ptr<ll::Program> ComputeGraph::getProgram(const std::string& name) c
 }
 
 
-void ComputeGraph::addComputeNode(const std::string& name, std::shared_ptr<ll::ComputeNode> node) {
+void ComputeGraph::addComputeNode(const std::string& name, const std::shared_ptr<ll::ComputeNode>& node) {
     assert(node != nullptr);
     assert(!name.empty());
     
@@ -185,18 +197,6 @@ std::string ComputeGraph::findProgramNameForComputeNode(const std::string& name)
     // if the code reaches this point, the program object the node was
     // created from is not inside the programs container.
     throw std::out_of_range(std::string{"program not found for node: "} + name);
-}
-
-
-std::string ComputeGraph::findObjectName(std::shared_ptr<ll::Object> param) {
-
-    for (const auto& it : objects) {
-        if (it.second == param) {
-            return it.first;
-        }
-    }
-
-    throw std::out_of_range(std::string{"object name not found: "});
 }
 
 

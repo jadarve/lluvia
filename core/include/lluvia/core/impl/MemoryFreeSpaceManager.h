@@ -47,9 +47,9 @@ public:
     void release(const ll::MemoryAllocationInfo& info) noexcept;
 
     bool reserveManagerSpace() noexcept;
-    bool tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
-    bool tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
-    void commitAllocation(const ll::impl::MemoryAllocationTryInfo& tyrInfo) noexcept;
+    bool tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept;
+    bool tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept;
+    void commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
 
 private:
     uint64_t size {0};

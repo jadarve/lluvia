@@ -79,6 +79,7 @@ private:
 
     std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
+    std::vector<bool>                             memoryPageMappingFlags;
 
 
 friend class ll::Buffer;

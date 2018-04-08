@@ -221,13 +221,13 @@ bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 }
 
 
-bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
+bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept {
 
-    return tryAllocate(size, 0u, tryInfo);
+    return tryAllocate(size, 0u, tryInfoOut);
 }
 
 
-bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
+bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept {
 
     auto offsetMask  = uint64_t{0};
     auto maskCounter = alignment;
@@ -246,10 +246,10 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::
 
         if ((size + leftPadding) <= s) {
 
-            tryInfo.allocInfo.offset      = offset + leftPadding;
-            tryInfo.allocInfo.size        = size;
-            tryInfo.allocInfo.leftPadding = leftPadding;
-            tryInfo.index                 = position;
+            tryInfoOut.allocInfo.offset      = offset + leftPadding;
+            tryInfoOut.allocInfo.size        = size;
+            tryInfoOut.allocInfo.leftPadding = leftPadding;
+            tryInfoOut.index                 = position;
 
             return true;
         }

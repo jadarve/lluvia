@@ -33,8 +33,8 @@ public:
     void accept(ll::Visitor* visitor);
 
 private:
-    vk::Device        device;
-    vk::ShaderModule  module;
+    vk::Device           device;
+    vk::ShaderModule     module;
     std::vector<uint8_t> spirvCode;
 };
 

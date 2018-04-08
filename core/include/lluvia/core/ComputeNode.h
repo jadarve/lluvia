@@ -51,7 +51,7 @@ public:
     size_t getParameterCount() const noexcept;
     std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;
 
-    void bind(uint32_t index, const std::shared_ptr<ll::Object> obj);
+    void bind(uint32_t index, const std::shared_ptr<ll::Object>& obj);
 
     void record(const vk::CommandBuffer& commandBufer) const;
 
@@ -59,8 +59,8 @@ public:
 
 private:
     void init();
-    void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> buffer);
-    void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> imageView);
+    void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer);
+    void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imageView);
 
     vk::Device                          device;
 

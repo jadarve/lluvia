@@ -13,9 +13,9 @@ class Session;
 
 
 // throws: TODO reading the file
-std::shared_ptr<ll::ComputeGraph> readComputeGraph(const std::string& filePath, std::shared_ptr<ll::Session> session);
+std::shared_ptr<ll::ComputeGraph> readComputeGraph(const std::string& filePath, const std::shared_ptr<ll::Session>& session);
 
-void writeComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath);
+void writeComputeGraph(const std::shared_ptr<ll::ComputeGraph>& graph, const std::string& filePath);
 
 } // namespace ll
 

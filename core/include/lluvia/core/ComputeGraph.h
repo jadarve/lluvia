@@ -36,26 +36,25 @@ public:
 
     std::vector<std::string> getMemoryNames() const;
     bool containsMemory(const std::string& name) const noexcept;
-    void addMemory(const std::string& name, std::shared_ptr<ll::Memory> memory);
+    void addMemory(const std::string& name, const std::shared_ptr<ll::Memory>& memory);
     std::shared_ptr<ll::Memory> getMemory(const std::string& name) const;
     std::string findMemoryNameForObject(const std::string& name) const;
 
     std::vector<std::string> getObjectNames() const;
     bool containsObject(const std::string& name) const noexcept;
-    void addObject(const std::string& name, std::shared_ptr<ll::Object> object);
+    void addObject(const std::string& name, const std::shared_ptr<ll::Object>& object);
     std::shared_ptr<ll::Object> getObject(const std::string& name) const;
+    std::string findObjectName(const std::shared_ptr<ll::Object>& param);
 
     std::vector<std::string> getProgramNames() const;
     bool containsProgram(const std::string& name) const noexcept;
-    void addProgram(const std::string& name, std::shared_ptr<ll::Program> program);
+    void addProgram(const std::string& name, const std::shared_ptr<ll::Program>& program);
     std::shared_ptr<ll::Program> getProgram(const std::string& name) const;
 
-    void addComputeNode(const std::string& name, std::shared_ptr<ll::ComputeNode> node);
+    void addComputeNode(const std::string& name, const std::shared_ptr<ll::ComputeNode>& node);
     bool containsComputeNode(const std::string& name) const noexcept;
     std::shared_ptr<ll::ComputeNode> getComputeNode(const std::string& name) const;
     std::string findProgramNameForComputeNode(const std::string& name) const;
-
-    std::string findObjectName(std::shared_ptr<ll::Object> param);
 
     void accept(ll::Visitor* visitor);
 

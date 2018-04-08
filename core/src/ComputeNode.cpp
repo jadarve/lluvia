@@ -83,7 +83,7 @@ std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexce
 }
 
 
-void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object> obj) {
+void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
 
     // TODO: assert that the type in obj is compatible with the descriptor at index
     assert(index < objects.size());
@@ -194,7 +194,7 @@ void ComputeNode::init() {
 }
 
 
-void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> buffer) {
+void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer) {
 
     // TODO: check parameter type buffer at index position.
     objects[index] = buffer;
@@ -216,7 +216,7 @@ void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer> b
 }
 
 
-void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView> imgView) {
+void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imgView) {
 
     // TODO: check parameter type image view at index position.
     objects[index] = imgView;

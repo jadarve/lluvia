@@ -172,7 +172,7 @@ std::shared_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 }
 
 
-void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
+void Session::run(const std::shared_ptr<ll::ComputeNode>& node) {
 
     assert (node != nullptr);
 
@@ -183,7 +183,7 @@ void Session::run(const std::shared_ptr<ll::ComputeNode> node) {
 }
 
 
-void Session::run(const std::shared_ptr<ll::CommandBuffer> cmdBuffer) {
+void Session::run(const std::shared_ptr<ll::CommandBuffer>& cmdBuffer) {
 
     assert (cmdBuffer != nullptr);
 
@@ -213,7 +213,7 @@ void Session::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
 }
 
 
-void Session::changeImageLayout(std::shared_ptr<ll::Image> image, const vk::ImageLayout newLayout) {
+void Session::changeImageLayout(const std::shared_ptr<ll::Image>& image, const vk::ImageLayout newLayout) {
 
     impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
 
@@ -240,7 +240,9 @@ void Session::changeImageLayout(std::shared_ptr<ll::Image> image, const vk::Imag
         0, nullptr,
         1, &barrier);
     
-    runner.runAndWait(queue); 
+    runner.runAndWait(queue);
+
+    image->vkLayout = newLayout;
 }
 
 
