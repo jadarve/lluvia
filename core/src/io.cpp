@@ -55,7 +55,7 @@ U getValueFromJson(T&& name, const json& j) {
 class ComputeGraphFileWriterImpl : public ll::Visitor {
 
 public:
-    void visitComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& name = {}) override {
+    void visitComputeGraph(const std::shared_ptr<ll::ComputeGraph>& graph, const std::string& name = {}) override {
         assert(graph != nullptr);
 
         this->graph = graph;
@@ -68,7 +68,7 @@ public:
     }
 
 
-    void visitMemory(std::shared_ptr<ll::Memory> memory, const std::string& name = {}) override {
+    void visitMemory(const std::shared_ptr<ll::Memory>& memory, const std::string& name = {}) override {
         assert(memory != nullptr);
         assert(!name.empty());
 
@@ -81,7 +81,7 @@ public:
     }
 
 
-    void visitBuffer(std::shared_ptr<ll::Buffer> buffer, const std::string& name = {}) override {
+    void visitBuffer(const std::shared_ptr<ll::Buffer>& buffer, const std::string& name = {}) override {
         assert(buffer != nullptr);
         assert(!name.empty());
 
@@ -98,7 +98,7 @@ public:
     }
 
 
-    void visitImage(std::shared_ptr<ll::Image> image, const std::string& name = {}) override {
+    void visitImage(const std::shared_ptr<ll::Image>& image, const std::string& name = {}) override {
         assert(image != nullptr);
         assert(!name.empty());
 
@@ -130,7 +130,7 @@ public:
     }
     
 
-    void visitImageView(std::shared_ptr<ll::ImageView> imageView, const std::string& name = {}) override {
+    void visitImageView(const std::shared_ptr<ll::ImageView>& imageView, const std::string& name = {}) override {
         assert(imageView != nullptr);
         assert(!name.empty());
 
@@ -175,7 +175,7 @@ public:
     }
 
 
-    void visitProgram(std::shared_ptr<ll::Program> program, const std::string& name = {}) override {
+    void visitProgram(const std::shared_ptr<ll::Program>& program, const std::string& name = {}) override {
         assert(program != nullptr);
         assert(!name.empty());
 
@@ -189,7 +189,7 @@ public:
     }
 
 
-    void visitComputeNode(std::shared_ptr<ll::ComputeNode> node, const std::string& name = {}) override {
+    void visitComputeNode(const std::shared_ptr<ll::ComputeNode>& node, const std::string& name = {}) override {
 
         auto j = json {};
         j["name"]       = name;
@@ -226,7 +226,7 @@ class ComputeGraphJsonReader {
 
 public:
 
-    std::shared_ptr<ll::ComputeGraph> build(const std::string& filePath, std::shared_ptr<ll::Session> session) {
+    std::shared_ptr<ll::ComputeGraph> build(const std::string& filePath, const std::shared_ptr<ll::Session>& session) {
 
         assert(session != nullptr);
         this->session = session;
@@ -486,7 +486,7 @@ private:
 } // namespace impl
 
 
-void writeComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::string& filePath) {
+void writeComputeGraph(const std::shared_ptr<ll::ComputeGraph>& graph, const std::string& filePath) {
 
     auto visitor = impl::ComputeGraphFileWriterImpl {};
 
@@ -500,7 +500,7 @@ void writeComputeGraph(std::shared_ptr<ll::ComputeGraph> graph, const std::strin
 }
 
 
-std::shared_ptr<ll::ComputeGraph> readComputeGraph(const std::string& filePath, std::shared_ptr<ll::Session> session) {
+std::shared_ptr<ll::ComputeGraph> readComputeGraph(const std::string& filePath, const std::shared_ptr<ll::Session>& session) {
 
     auto reader = impl::ComputeGraphJsonReader {};
     return reader.build(filePath, session);
