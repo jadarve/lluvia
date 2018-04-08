@@ -8,7 +8,7 @@ namespace ll {
 
 
 Image::Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
-              std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
+              const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
               const vk::ImageLayout layout, const vk::ImageUsageFlags usageFlags) :
 
     descriptor   {descriptor},
@@ -17,7 +17,7 @@ Image::Image( const vk::Device& device, const vk::Image& vkImage, const ll::Imag
     vkImage      {vkImage},
     vkLayout     {layout},
     vkUsageFlags {usageFlags},
-    memory       {memory} {
+    memory       {std::move(memory)} {
 
 }
 

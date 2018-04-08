@@ -50,13 +50,12 @@ public:
     uint32_t getWidth()              const noexcept;
     uint32_t getHeight()             const noexcept;
     uint32_t getDepth()              const noexcept;
-    
 
     std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor);
 
 private:
     Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
-           std::shared_ptr<ll::Memory> memory, const ll::MemoryAllocationInfo& allocInfo,
+           const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
            const vk::ImageLayout layout, const vk::ImageUsageFlags usageFlags);
 
     ll::ImageDescriptor descriptor;
