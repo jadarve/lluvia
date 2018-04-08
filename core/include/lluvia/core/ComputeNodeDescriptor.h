@@ -58,9 +58,9 @@ public:
     ComputeNodeDescriptor& operator = (const ComputeNodeDescriptor& descriptor) = default;
     ComputeNodeDescriptor& operator = (ComputeNodeDescriptor&& descriptor)      = default;
 
-    ComputeNodeDescriptor& setProgram(std::shared_ptr<ll::Program> program);
+    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program);
     ComputeNodeDescriptor& setFunctionName(const std::string& name);
-    ComputeNodeDescriptor& addParameter(const ll::ParameterType& param);
+    ComputeNodeDescriptor& addParameter(const ll::ParameterType param);
 
     ComputeNodeDescriptor& setGlobalX(const uint32_t x) noexcept;
     ComputeNodeDescriptor& setGlobalY(const uint32_t y) noexcept;

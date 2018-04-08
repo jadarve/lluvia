@@ -9,8 +9,8 @@
 namespace ll {
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(std::shared_ptr<ll::Program> program) {
-    this->program = program;
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) {
+    this->program = std::move(program);
     return *this;
 }
 
@@ -21,7 +21,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType& param) {
+ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType param) {
 
 
     auto paramBinding = vk::DescriptorSetLayoutBinding {}
