@@ -12,7 +12,7 @@ Buffer::Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFla
     vkUsageFlags     {vkUsageFlags},
     allocInfo        (allocInfo),
     requestedSize    {requestedSize},
-    memory           {std::move(memory)} {
+    memory           {memory} {
 
     assert(memory != nullptr);
 }

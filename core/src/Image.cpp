@@ -17,7 +17,7 @@ Image::Image( const vk::Device& device, const vk::Image& vkImage, const ll::Imag
     vkImage      {vkImage},
     vkLayout     {layout},
     vkUsageFlags {usageFlags},
-    memory       {std::move(memory)} {
+    memory       {memory} {
 
 }
 
