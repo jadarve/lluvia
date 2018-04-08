@@ -113,6 +113,10 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
     const auto offset = buffer.allocInfo.offset + buffer.allocInfo.leftPadding;
     const auto size   = buffer.allocInfo.size;
 
+    assert(!memoryPageMappingFlags[page]);
+
+    // set mapping flag for this page to mapped
+    memoryPageMappingFlags[page] = true;
     return device.mapMemory(memoryPages[page], offset, size);
 }
 
@@ -121,6 +125,9 @@ void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
     const auto page = buffer.allocInfo.page;
     device.unmapMemory(memoryPages[page]);
+
+    // set mapping flag for this page to unmapped
+    memoryPageMappingFlags[page] = false;
 }
 
 
@@ -223,6 +230,10 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
 
     if (pageManagers.size() == pageManagers.capacity()) {
         pageManagers.reserve(pageManagers.capacity() + 1);
+    }
+
+    if (memoryPageMappingFlags.size() == memoryPageMappingFlags.capacity()) {
+        memoryPageMappingFlags.reserve(memoryPageMappingFlags.capacity() + 1);
     }
 
 
