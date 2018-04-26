@@ -53,6 +53,7 @@ build_eclipse
 *.kdevelop.pcs
 *.kdevses
 .*kate-swp
+*.bak
 
 # local stuff
 local
