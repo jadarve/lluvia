@@ -1,11 +1,13 @@
 #include "lluvia/core/Memory.h"
 
 #include "lluvia/core/Buffer.h"
+#include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 
 #include <algorithm>
+#include <exception>
 #include <iostream>
 
 
@@ -113,7 +115,9 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
     const auto offset = buffer.allocInfo.offset + buffer.allocInfo.leftPadding;
     const auto size   = buffer.allocInfo.size;
 
-    assert(!memoryPageMappingFlags[page]);
+    if (memoryPageMappingFlags[page]) {
+        throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] is already mapped by another object."};
+    }
 
     // set mapping flag for this page to mapped
     memoryPageMappingFlags[page] = true;
