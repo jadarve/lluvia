@@ -83,7 +83,7 @@ public:
     /**
     @brief      Gets the Vulkan buffer usage flags.
 
-    See https://www.khronos.org/registry/vulkan/specs/1.0/apispec.html#VkBufferUsageFlagBits
+    See @VULKAN_DOC#VkBufferUsageFlagBits
     for more information.
     
     @return     The usage flags.
@@ -147,7 +147,7 @@ public:
     @sa         ll::Buffer::map Maps the memory content of this object to host-visible memory.
     */
     void  unmap();
-    
+
 
     /**
     @brief      Accepts a visitor to this buffer.
