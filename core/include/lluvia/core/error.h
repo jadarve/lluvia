@@ -15,12 +15,19 @@
 namespace ll {
 
 
+/**
+@brief      Error codes
+*/
 enum class ErrorCode : int32_t {
-    MemoryMapFailed = 0
+    MemoryMapFailed = 0     /**< Memory mapping operation (map or unmap) failed */
 };
+
 
 namespace impl {
 
+    /**
+    String values for ll::ErrorCode enum.
+    */
     constexpr const std::array<const char*, 1> ErrorCodeStrings{{
         "MemoryMapFailed",
     }};
