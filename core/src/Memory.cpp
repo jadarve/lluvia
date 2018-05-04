@@ -128,6 +128,11 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
 void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
     const auto page = buffer.allocInfo.page;
+
+    if (!memoryPageMappingFlags[page]) {
+        throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] has not been mapped by any object."};
+    }
+
     device.unmapMemory(memoryPages[page]);
 
     // set mapping flag for this page to unmapped

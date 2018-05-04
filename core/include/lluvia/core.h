@@ -7,6 +7,7 @@
 #include "core/ComputeGraph.h"
 #include "core/ComputeNode.h"
 #include "core/ComputeNodeDescriptor.h"
+#include "core/error.h"
 #include "core/Image.h"
 #include "core/ImageDescriptor.h"
 #include "core/ImageView.h"
