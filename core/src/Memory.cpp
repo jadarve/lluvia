@@ -1,3 +1,10 @@
+/**
+@file       Memory.cpp
+@brief      Memory class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/Memory.h"
 
 #include "lluvia/core/Buffer.h"
@@ -74,7 +81,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // check that memRequirements.memoryTypeBits is supported in this memory
     const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
-        throw std::runtime_error("memory " + std::to_string(heapInfo.typeIndex) + " does not support allocationg of buffer objects.");
+        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(heapInfo.typeIndex) + " does not support allocating buffer objects.");
     }
 
     // find or create a new memory page where the buffer can be allocated
@@ -164,7 +171,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     // check that memRequirements.memoryTypeBits is supported in this memory
     const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
-        throw std::runtime_error("memory " + std::to_string(heapInfo.typeIndex) + " does not support allocationg of image objects.");
+        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(heapInfo.typeIndex) + " does not support allocating image objects.");
     }
 
     // find or create a new memory page where the image can be allocated

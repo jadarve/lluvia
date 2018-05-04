@@ -19,7 +19,8 @@ namespace ll {
 @brief      Error codes
 */
 enum class ErrorCode : int32_t {
-    MemoryMapFailed = 0     /**< Memory mapping operation (map or unmap) failed */
+    MemoryMapFailed       = 1,      /**< Memory mapping operation (map or unmap) failed */
+    ObjectAllocationError = 0,      /**< Error trying to allocate objects in a memory */
 };
 
 
@@ -28,8 +29,9 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<const char*, 1> ErrorCodeStrings{{
+    constexpr const std::array<const char*, 2> ErrorCodeStrings{{
         "MemoryMapFailed",
+        "ObjectAllocationError"
     }};
 
 } // namespace impl
