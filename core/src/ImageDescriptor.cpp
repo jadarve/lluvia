@@ -1,3 +1,10 @@
+/**
+@file       ImageDescriptor.cpp
+@brief      ImageDescriptor class and related enumerations.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ImageDescriptor.h"
 
 namespace ll {
@@ -39,6 +46,10 @@ ImageDescriptor::ImageDescriptor(const uint32_t width,
     height       {height},
     depth        {depth} {
 
+    assert(width  > 0);
+    assert(height > 0);
+    assert(depth  > 0);
+    assert(channelCount >= 1 && channelCount <= 4);
 }
 
 
@@ -121,7 +132,7 @@ vk::ImageType ImageDescriptor::getImageType() const noexcept {
     return vk::ImageType::e3D;
 }
 
-vk::Format ImageDescriptor::getFormat() const {
+vk::Format ImageDescriptor::getFormat() const noexcept {
 
     switch (channelCount) {
 
@@ -188,10 +199,10 @@ vk::Format ImageDescriptor::getFormat() const {
                 case ChannelType::Float64: return vk::Format::eR64G64B64A64Sfloat;
             }
         break;
-
-        default:
-        throw std::runtime_error("channel count must be between 1 and 4, got: " + std::to_string(channelCount));
     }
+
+    // this code should not be reached.
+    throw std::runtime_error("channel count must be between 1 and 4, got: " + std::to_string(channelCount));
 }
 
 } // namespace ll

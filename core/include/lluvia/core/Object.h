@@ -67,7 +67,7 @@ inline T objectTypeToString(ll::ObjectType&& value) {
 @brief      Converts from a string-like object to ll::ObjectType enum.
 
 This function can be used either with string literals, const char* or `std::string` objects.
-\p stringValue parameter is compared against the values in ll::ObjectTypeStrings and the
+\p stringValue parameter is compared against the values in ll::impl::ObjectTypeStrings and the
 corresponding enum value is returned. The comparison is case sensitive.
 
 @param[in]  stringValue  string-like parameter. String literals and `std::string` objects are allowed.
@@ -76,7 +76,7 @@ corresponding enum value is returned. The comparison is case sensitive.
 
 @return     ll::ObjectType value corresponding to stringValue
  
-@throws std::out_of_range if \p stringValue is not found in ll::ObjectTypeStrings.
+@throws std::out_of_range if \p stringValue is not found in ll::impl::ObjectTypeStrings.
 */
 template<typename T>
 inline ll::ObjectType stringToObjectType(T&& stringValue) {
