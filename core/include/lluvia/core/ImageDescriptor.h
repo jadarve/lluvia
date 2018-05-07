@@ -206,10 +206,44 @@ public:
     */
     ImageDescriptor& setDepth(const uint32_t depth)             noexcept;
 
+
+    /**
+    @brief      Gets the channel type.
+    
+    @return     The channel type.
+    */
     ll::ChannelType getChannelType() const noexcept;
+
+
+    /**
+    @brief      Gets the channel count.
+    
+    @return     The channel count. Number between 1 and 4.
+    */
     uint32_t getChannelCount()       const noexcept;
+
+
+    /**
+    @brief      Gets the image width.
+    
+    @return     The image width.
+    */
     uint32_t getWidth()              const noexcept;
+
+
+    /**
+    @brief      Gets the image height.
+    
+    @return     The image height.
+    */
     uint32_t getHeight()             const noexcept;
+
+
+    /**
+    @brief      Gets the image depth.
+    
+    @return     The image depth.
+    */
     uint32_t getDepth()              const noexcept;
 
     /**
