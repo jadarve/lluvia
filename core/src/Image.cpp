@@ -1,3 +1,10 @@
+/**
+@file       Image.cpp
+@brief      Image class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/ImageViewDescriptor.h"

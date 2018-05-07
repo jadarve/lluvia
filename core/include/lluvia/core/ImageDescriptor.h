@@ -224,25 +224,25 @@ public:
 
 
     /**
-    @brief      Gets the image width.
+    @brief      Gets the image width in pixels.
     
-    @return     The image width.
+    @return     The image width in pixels.
     */
     uint32_t getWidth()              const noexcept;
 
 
     /**
-    @brief      Gets the image height.
+    @brief      Gets the image height in pixels.
     
-    @return     The image height.
+    @return     The image height in pixels.
     */
     uint32_t getHeight()             const noexcept;
 
 
     /**
-    @brief      Gets the image depth.
+    @brief      Gets the image depth in pixels.
     
-    @return     The image depth.
+    @return     The image depth in pixels.
     */
     uint32_t getDepth()              const noexcept;
 

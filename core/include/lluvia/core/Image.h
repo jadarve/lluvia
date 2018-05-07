@@ -1,3 +1,10 @@
+/**
+@file       Image.h
+@brief      Image class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #ifndef LLUVIA_CORE_IMAGE_H_
 #define LLUVIA_CORE_IMAGE_H_
 
@@ -23,6 +30,37 @@ class Memory;
 class Session;
 
 
+/**
+@brief      Objects to manage images.
+
+Image objects are created by calling ll::Memory::createImage using
+a valid ll::ImageDescriptor.
+
+@code
+    auto session = ll::Session::create();
+
+    // device-local memory with page size of 2048 bytes
+    auto memory = session->createMemory(vk::MemoryPropertyFlagBits::eDeviceLocal, 2048);
+
+    // 8-bit unsigned, 4-channel, 640x480 image.
+    auto desc = ll::ImageDescriptor{}
+                    .setWidth(640)
+                    .setHeight(480)
+                    .setChannelType(ll::ChannelType::Uint8)
+                    .setChannelCount(4);
+
+    auto image = memory->createImage(desc);
+@endcode
+
+Images can be passed directly to compute nodes or through ll::ImageView
+objects. In the first case, the object is mapped to a GLSL image type while
+in the second case, it is mapped to sampler type. 
+
+\b TODO
+- Example of compute node using image objects.
+- Explain image layout transitions.
+
+*/
 class Image: public Object,
              public std::enable_shared_from_this<ll::Image> {
 
@@ -38,25 +76,114 @@ public:
 
     ll::ObjectType getType() const noexcept override;
 
+
+    /**
+    @brief      Gets the allocation information.
+    
+    @return     The allocation information.
+    */
     ll::MemoryAllocationInfo getAllocationInfo() const noexcept;
+
+
+    /**
+    @brief      Gets the memory allocation size in bytes.
+
+    This methods is equivalent to calling `getAllocationInfo().size`.
+    
+    @return     The image size in bytes.
+    */
     uint64_t getSize() const noexcept;
 
+
+    /**
+    @brief      Gets the Vulkan image usage flags.
+    
+    See @VULKAN_DOC#VkImageUsageFlagBits
+    for more information.
+
+    @return     The usage flags.
+    */
     vk::ImageUsageFlags getUsageFlags() const noexcept;
+
+
+    /**
+    @brief      Gets the Vulkan image layout.
+
+    The layout is changed through invocations of Session::changeImageLayout
+    or CommandBuffer::changeImageLayout.
+
+    See @VULKAN_DOC#_vkimagelayout_3
+    
+    @return     The image layout.
+    */
     vk::ImageLayout     getLayout()     const noexcept;
 
+
+    /**
+    @brief      Gets the channel type.
+    
+    @return     The channel type.
+    */
     ll::ChannelType getChannelType() const noexcept;
+
+
+    /**
+    @brief      Gets the channel type size.
+    
+    @return     The channel type size.
+    */
     uint64_t getChannelTypeSize()    const noexcept;
+
+
+    /**
+    @brief      Gets the channel count.
+    
+    @return     The channel count. Number between 1 and 4.
+    */
     uint32_t getChannelCount()       const noexcept;
+
+
+    /**
+    @brief      Gets the image width in pixels.
+    
+    @return     The image width in pixels.
+    */
     uint32_t getWidth()              const noexcept;
+
+
+    /**
+    @brief      Gets the image height in pixels.
+    
+    @return     The image height in pixels.
+    */
     uint32_t getHeight()             const noexcept;
+
+
+    /**
+    @brief      Gets the image depth in pixels.
+    
+    @return     The image depth in pixels.
+    */
     uint32_t getDepth()              const noexcept;
 
+
+    /**
+    @brief      Creates an image view from this image.
+    
+    @param[in]  descriptor  The image view descriptor
+    
+    @return     A new image view object.
+    */
     std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor);
 
 private:
-    Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
-           const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-           const vk::ImageLayout layout, const vk::ImageUsageFlags usageFlags);
+    Image(const vk::Device& device,
+          const vk::Image& vkImage,
+          const ll::ImageDescriptor& descriptor,
+          const std::shared_ptr<ll::Memory>& memory,
+          const ll::MemoryAllocationInfo& allocInfo,
+          const vk::ImageLayout layout,
+          const vk::ImageUsageFlags usageFlags);
 
     ll::ImageDescriptor descriptor;
     ll::MemoryAllocationInfo allocInfo;
