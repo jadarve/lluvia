@@ -176,7 +176,7 @@ for pixels outside the image boundaries.
                         .setIsSampled(true)
                         .setAddressMode(ll::ImageAddressMode::Repeat)
                         .setFilteringMode(ll::ImageFilterMode::Nearest);
-@encode
+@endcode
 */
 class ImageViewDescriptor {
 

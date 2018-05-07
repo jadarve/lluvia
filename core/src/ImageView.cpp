@@ -1,3 +1,10 @@
+/**
+@file       ImageView.cpp
+@brief      ImageView class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ImageView.h"
 
 #include "lluvia/core/Image.h"
@@ -75,7 +82,7 @@ ll::ImageAddressMode ImageView::getAddressModeW() const noexcept {
 }
 
 
-bool ImageView::getNormalizedCoordinates() const noexcept {
+bool ImageView::isNormalizedCoordinates() const noexcept {
     return descriptor.normalizedCoordinates;
 }
 

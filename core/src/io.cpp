@@ -167,7 +167,7 @@ public:
         j["address_mode_u"]         = ll::imageAddressModeToString(imageView->getAddressModeU());
         j["address_mode_v"]         = ll::imageAddressModeToString(imageView->getAddressModeV());
         j["address_mode_w"]         = ll::imageAddressModeToString(imageView->getAddressModeW());
-        j["normalized_coordinates"] = imageView->getNormalizedCoordinates();
+        j["normalized_coordinates"] = imageView->isNormalizedCoordinates();
         j["is_sampled"]             = imageView->isSampled();
 
         obj["objects"].push_back(j);
