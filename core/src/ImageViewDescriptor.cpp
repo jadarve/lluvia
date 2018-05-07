@@ -1,3 +1,10 @@
+/**
+@file       ImageViewDescriptor.cpp
+@brief      ImageViewDescriptor class and related enumerations and methods.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ImageViewDescriptor.h"
 
 
