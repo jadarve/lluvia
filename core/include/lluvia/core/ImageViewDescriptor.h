@@ -198,7 +198,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setFilteringMode(ll::ImageFilterMode filterMode);
+    ImageViewDescriptor& setFilteringMode(ll::ImageFilterMode filterMode) noexcept;
 
 
     /**
@@ -208,7 +208,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode);
+    ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode) noexcept;
 
 
     /**
@@ -219,7 +219,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode);
+    ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept;
 
 
     /**
@@ -229,7 +229,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates);
+    ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates) noexcept;
 
 
     /**
@@ -239,7 +239,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setIsSampled(bool isSampled);
+    ImageViewDescriptor& setIsSampled(bool isSampled) noexcept;
 
 
     /**
@@ -256,7 +256,7 @@ private:
     ll::ImageFilterMode filterMode;
 
     /**
-     * Address mode for X, Y, Z axes
+     * Address mode for U, V, W axes
      */
     std::array<ll::ImageAddressMode, 3> addressMode;
 
