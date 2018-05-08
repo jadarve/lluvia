@@ -1,3 +1,10 @@
+/**
+@file       io.cpp
+@brief      io related classes and methods.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/io.h"
 
 #include "lluvia/core/Buffer.h"
@@ -234,74 +241,78 @@ public:
         this->session = session;
 
         std::ifstream file {filePath, std::ios_base::in};
+        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
-        if (file.is_open()) {
+        auto j = json {};
 
-            auto j = json {};
+        try {
+
             file >> j;
 
-            graph = std::make_shared<ll::ComputeGraph>();
+        } catch (std::exception& e) {
+            throw std::runtime_error {"Error parsing JSON file: " + std::string{e.what()}};
+        }
+        
 
-            const auto& memories = j["memories"];
-            if (!memories.is_null()) {
+        graph = std::make_shared<ll::ComputeGraph>();
 
-                assert(memories.is_array());
-                for (const auto& mem : memories) {
-                    buildMemory(mem);
-                }
+        const auto& memories = j["memories"];
+        if (!memories.is_null()) {
+
+            assert(memories.is_array());
+            for (const auto& mem : memories) {
+                buildMemory(mem);
             }
-
-            const auto& objects = j["objects"];
-            auto imageViewsToBuild = std::vector<json> {};
-            if (!objects.is_null()) {
-
-                assert(objects.is_array());
-                for (const auto& obj : objects) {
-
-                    const auto pTypeString = getValueFromJson<std::string>("type", obj);
-                    const auto pType = ll::stringToObjectType(pTypeString);
-
-                    switch (pType) {
-                        case ll::ObjectType::Buffer:
-                            buildBuffer(obj);
-                            break;
-                        case ll::ObjectType::Image:
-                            buildImage(obj);
-                            break;
-                        case ll::ObjectType::ImageView:
-                            imageViewsToBuild.push_back(obj);
-                            break;
-                    }
-                }
-
-                // build image views
-                for (const auto& obj : imageViewsToBuild) {
-                    buildImageView(obj);
-                }
-            }
-
-            const auto& programs = j["programs"];
-            if (!programs.is_null()) {
-
-                assert(programs.is_array());
-                for (const auto& prog : programs) {
-                    buildProgram(prog);
-                }
-            }
-
-            const auto& nodes = j["compute_nodes"];
-            if (!nodes.is_null()) {
-
-                assert(nodes.is_array());
-                for (const auto& n : nodes) {
-                    buildComputeNode(n);
-                }
-            }
-
-            return graph;
         }
 
-        return nullptr;
+        const auto& objects = j["objects"];
+        auto imageViewsToBuild = std::vector<json> {};
+        if (!objects.is_null()) {
+
+            assert(objects.is_array());
+            for (const auto& obj : objects) {
+
+                const auto pTypeString = getValueFromJson<std::string>("type", obj);
+                const auto pType = ll::stringToObjectType(pTypeString);
+
+                switch (pType) {
+                    case ll::ObjectType::Buffer:
+                        buildBuffer(obj);
+                        break;
+                    case ll::ObjectType::Image:
+                        buildImage(obj);
+                        break;
+                    case ll::ObjectType::ImageView:
+                        imageViewsToBuild.push_back(obj);
+                        break;
+                }
+            }
+
+            // build image views
+            for (const auto& obj : imageViewsToBuild) {
+                buildImageView(obj);
+            }
+        }
+
+        const auto& programs = j["programs"];
+        if (!programs.is_null()) {
+
+            assert(programs.is_array());
+            for (const auto& prog : programs) {
+                buildProgram(prog);
+            }
+        }
+
+        const auto& nodes = j["compute_nodes"];
+        if (!nodes.is_null()) {
+
+            assert(nodes.is_array());
+            for (const auto& n : nodes) {
+                buildComputeNode(n);
+            }
+        }
+
+        return graph;
     }
 
 

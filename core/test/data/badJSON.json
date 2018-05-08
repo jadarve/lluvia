@@ -1,0 +1,27 @@
+{
+    "memories": [
+        {
+            "flags": [
+                "HOST_COHERENT",
+                "HOST_VISIBLE"
+            ],
+            "name": "hostMemory",
+            "page_size": 4096
+        }
+    ]
+    
+    "objects": [
+        {
+            "memory": "hostMemory",
+            "name": "hostBuffer_0",
+            "size": 1024,
+            "type": "BUFFER",
+
+            "usage": [
+                "STORAGE_BUFFER",
+                "TRANSFER_DST",
+                "TRANSFER_SRC"
+            ]
+        }
+    ],
+}

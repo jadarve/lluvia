@@ -164,7 +164,7 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
     graph->addProgram("imgToBuffer", program);
     graph->addComputeNode("node", node);
 
-    ll::writeComputeGraph(graph, "moni moni");
+    ll::writeComputeGraph(graph, "WriteGraph_ImageAndImageView");
 }
 
 
@@ -204,6 +204,24 @@ TEST_CASE("ReadGraph_ComputeNode", "test_IO") {
     REQUIRE(graph->containsObject("hostBuffer_0"));
     REQUIRE(graph->containsProgram("assign"));
     REQUIRE(graph->containsComputeNode("node_0"));
+}
+
+
+TEST_CASE("ReadGraph_NotExists", "test_IO") {
+
+    auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
+    REQUIRE(session != nullptr);
+
+    REQUIRE_THROWS_AS(ll::readComputeGraph(DATA_PATH + "/notExists.json", session), std::ifstream::failure);
+}
+
+
+TEST_CASE("ReadGraph_BadJSON", "test_IO") {
+
+    auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
+    REQUIRE(session != nullptr);
+
+    REQUIRE_THROWS_AS(ll::readComputeGraph(DATA_PATH + "/badJSON.json", session), std::runtime_error);
 }
 
 
