@@ -52,16 +52,46 @@ inline T errorCodeToString(ll::ErrorCode&& value) {
 }
 
 
+/**
+@brief      Class for error code category.
+*/
 class ErrorCategory : public std::error_category {
 
 public:
+    /**
+    @brief      Gets a singleton instance.
+    
+    @return     The instance.
+    */
     static ErrorCategory& getInstance() noexcept;
 
+
+    /**
+    @brief      Gets the error category name.
+    
+    @return     The name.
+    */
     virtual const char* name() const noexcept override { return "ll::ErrorCode"; }
+
+
+    /**
+    @brief      Converts from an error code to a string message.
+    
+    @param[in]  ev    error code. The value must correspond with one of ll::ErrorCode values.
+    
+    @return     The corresponding string for \p ev.
+    */
     virtual std::string message(int ev) const override { return errorCodeToString(static_cast<ll::ErrorCode>(ev)); }
 };
 
 
+/**
+@brief      Creates an error code.
+
+@param[in]  errorCode  The error code
+
+@return     a std::error_code instance.
+*/
 inline std::error_code createErrorCode(ll::ErrorCode errorCode) {
     return std::error_code {static_cast<int>(errorCode), ErrorCategory::getInstance()};
 }
