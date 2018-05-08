@@ -11,16 +11,6 @@
 namespace ll {
 
 
-constexpr const char* STRING_VK_IMAGE_USAGE_TRANSFER_SRC_BIT             = "IMAGE_USAGE_TRANSFER_SRC";
-constexpr const char* STRING_VK_IMAGE_USAGE_TRANSFER_DST_BIT             = "IMAGE_USAGE_TRANSFER_DST";
-constexpr const char* STRING_VK_IMAGE_USAGE_SAMPLED_BIT                  = "IMAGE_USAGE_SAMPLED";
-constexpr const char* STRING_VK_IMAGE_USAGE_STORAGE_BIT                  = "IMAGE_USAGE_STORAGE";
-constexpr const char* STRING_VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT         = "IMAGE_USAGE_COLOR_ATTACHMENT";
-constexpr const char* STRING_VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT = "IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT";
-constexpr const char* STRING_VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT     = "IMAGE_USAGE_TRANSIENT_ATTACHMENT";
-constexpr const char* STRING_VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT         = "IMAGE_USAGE_INPUT_ATTACHMENT";
-
-
 constexpr const auto BASE_64_ALPHABET = std::array<char, 65> {{
     'A','B','C','D','E','F','G','H',
     'I','J','K','L','M','N','O','P',
@@ -32,48 +22,6 @@ constexpr const auto BASE_64_ALPHABET = std::array<char, 65> {{
     '4','5','6','7','8','9','+','/',
     '='
 }};
-
-
-auto compareFlagBit = [](const auto& flags, const auto& value) {
-    return ((flags & value) == value);
-};
-
-
-vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector) {
-
-    auto flags = vk::ImageUsageFlags {};
-
-    for (const auto& strFlag : flagsVector) {
-
-        if (strFlag == STRING_VK_IMAGE_USAGE_TRANSFER_SRC_BIT)             flags |= vk::ImageUsageFlagBits::eTransferSrc;
-        if (strFlag == STRING_VK_IMAGE_USAGE_TRANSFER_DST_BIT)             flags |= vk::ImageUsageFlagBits::eTransferDst;
-        if (strFlag == STRING_VK_IMAGE_USAGE_SAMPLED_BIT)                  flags |= vk::ImageUsageFlagBits::eSampled;
-        if (strFlag == STRING_VK_IMAGE_USAGE_STORAGE_BIT)                  flags |= vk::ImageUsageFlagBits::eStorage;
-        if (strFlag == STRING_VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)         flags |= vk::ImageUsageFlagBits::eColorAttachment;
-        if (strFlag == STRING_VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) flags |= vk::ImageUsageFlagBits::eDepthStencilAttachment;
-        if (strFlag == STRING_VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT)     flags |= vk::ImageUsageFlagBits::eTransientAttachment;
-        if (strFlag == STRING_VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)         flags |= vk::ImageUsageFlagBits::eInputAttachment;
-    }
-
-    return flags;
-}
-
-
-std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags) {
-
-    auto flagsVector = std::vector<std::string> {};
-
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eTransferSrc))            flagsVector.push_back(STRING_VK_IMAGE_USAGE_TRANSFER_SRC_BIT);
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eTransferDst))            flagsVector.push_back(STRING_VK_IMAGE_USAGE_TRANSFER_DST_BIT);
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eSampled))                flagsVector.push_back(STRING_VK_IMAGE_USAGE_SAMPLED_BIT);
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eStorage))                flagsVector.push_back(STRING_VK_IMAGE_USAGE_STORAGE_BIT);
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eColorAttachment))        flagsVector.push_back(STRING_VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eDepthStencilAttachment)) flagsVector.push_back(STRING_VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eTransientAttachment))    flagsVector.push_back(STRING_VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT);
-    if (compareFlagBit(flags, vk::ImageUsageFlagBits::eInputAttachment))        flagsVector.push_back(STRING_VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
-
-    return flagsVector;
-}
 
 
 std::string toBase64(const void* ptr, const size_t size) {

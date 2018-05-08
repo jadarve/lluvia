@@ -19,11 +19,6 @@
 namespace ll {
 
 
-// TODO: move to Image.h
-vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector);
-std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags);
-
-
 /**
 @brief      Converts a binary array to base-64 string.
 

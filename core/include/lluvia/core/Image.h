@@ -11,12 +11,16 @@
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
+#include "lluvia/core/impl/enum_utils.h"
 
+#include <vulkan/vulkan.hpp>
 
 #include <array>
 #include <cstdint>
-
-#include <vulkan/vulkan.hpp>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
 
 namespace ll {
@@ -28,6 +32,58 @@ class ImageView;
 class ImageViewDescriptor;
 class Memory;
 class Session;
+
+
+namespace impl {
+
+    /**
+    String values for Vulkan VkImageUsageFlagBits values.
+
+    See @VULKAN_DOC#VkImageUsageFlagBits for more information.
+    */
+    constexpr const std::array<std::tuple<const char*, vk::ImageUsageFlagBits>, 8> VkImageUsageFlagBitsStrings {{
+        {"IMAGE_USAGE_TRANSFER_SRC"             , vk::ImageUsageFlagBits::eTransferSrc},
+        {"IMAGE_USAGE_TRANSFER_DST"             , vk::ImageUsageFlagBits::eTransferDst},
+        {"IMAGE_USAGE_SAMPLED"                  , vk::ImageUsageFlagBits::eSampled},
+        {"IMAGE_USAGE_STORAGE"                  , vk::ImageUsageFlagBits::eStorage},
+        {"IMAGE_USAGE_COLOR_ATTACHMENT"         , vk::ImageUsageFlagBits::eColorAttachment},
+        {"IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT" , vk::ImageUsageFlagBits::eDepthStencilAttachment},
+        {"IMAGE_USAGE_TRANSIENT_ATTACHMENT"     , vk::ImageUsageFlagBits::eTransientAttachment},
+        {"IMAGE_USAGE_INPUT_ATTACHMENT"         , vk::ImageUsageFlagBits::eInputAttachment},
+    }};
+
+} // namespace impl
+
+
+/**
+@brief      Converts from a string vector to Vulkan ImageUsageFlags.
+
+The comparison between string values is case sensitive.
+
+See @VULKAN_DOC#VkImageUsageFlagBits for more information.
+
+@param[in]  flagsVector  The flags vector. Their values must be contained
+                         in impl::VkImageUsageFlagBitsStrings.
+
+@return     The reconstructed Vulkan ImageUsageFlags.
+*/
+inline vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector) noexcept {
+    return impl::vectorStringToFlags<vk::ImageUsageFlags, vk::ImageUsageFlagBits, impl::VkImageUsageFlagBitsStrings.size(), impl::VkImageUsageFlagBitsStrings>(flagsVector);
+}
+
+
+/**
+@brief      Converst from Vulkan ImageUsageFlags to a vector of strings.
+
+See @VULKAN_DOC#VkImageUsageFlagBits for more information.
+
+@param[in]  flags  The Vulkan flags.
+
+@return     A vector of string values. Each element is one of impl::VkImageUsageFlagBitsStrings
+*/
+inline std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags) noexcept {
+    return impl::flagsToVectorString<vk::ImageUsageFlags, vk::ImageUsageFlagBits, impl::VkImageUsageFlagBitsStrings.size(), impl::VkImageUsageFlagBitsStrings>(flags);
+}
 
 
 /**
