@@ -10,10 +10,16 @@
 
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
+#include "lluvia/core/impl/enum_utils.h"
 
 #include <vulkan/vulkan.hpp>
 
+#include <array>
+#include <cstdint>
 #include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
 namespace ll {
 

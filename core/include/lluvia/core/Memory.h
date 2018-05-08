@@ -9,8 +9,8 @@
 #define LLUVIA_CORE_MEMORY_H_
 
 
-#include <algorithm>
 #include <array>
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <tuple>
