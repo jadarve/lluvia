@@ -18,9 +18,6 @@
 
 namespace ll {
 
-// TODO: move to Memory.h
-vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std::string>& flagsVector);
-std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPropertyFlags flags);
 
 // TODO: move to Buffer.h
 vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector);

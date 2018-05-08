@@ -9,13 +9,17 @@
 #define LLUVIA_CORE_MEMORY_H_
 
 
-#include <vector>
+#include <algorithm>
+#include <array>
 #include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
 #include <vulkan/vulkan.hpp>
 
 #include "lluvia/core/impl/MemoryFreeSpaceManager.h"
-
+#include "lluvia/core/impl/enum_utils.h"
 
 namespace ll {
 
@@ -24,6 +28,51 @@ class Buffer;
 class Image;
 class ImageDescriptor;
 class Visitor;
+
+
+namespace impl {
+
+    /**
+    String values for Vulkan VkMemoryPropertyFlagBits values.
+
+    See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
+    */
+    constexpr const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings {{
+        {"DEVICE_LOCAL",     vk::MemoryPropertyFlagBits::eDeviceLocal},
+        {"HOST_CACHED",      vk::MemoryPropertyFlagBits::eHostCached},
+        {"HOST_COHERENT",    vk::MemoryPropertyFlagBits::eHostCoherent},
+        {"HOST_VISIBLE",     vk::MemoryPropertyFlagBits::eHostVisible},
+        {"LAZILY_ALLOCATED", vk::MemoryPropertyFlagBits::eLazilyAllocated}
+    }};
+
+} // namespace impl
+
+
+/**
+@brief      Converts from a string vector to Vulkan MemoryPropertyFlags.
+
+The comparison between string values is case sensitive.
+
+@param[in]  flagsVector  The flags vector. Their values must be contained
+                         in impl::VkMemoryPropertyFlagBitsStrings.
+
+@return     The reconstructed Vulkan MemoryPropertyFlags.
+*/
+inline vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std::string>& flagsVector) noexcept {
+    return impl::vectorStringToFlags<vk::MemoryPropertyFlags, vk::MemoryPropertyFlagBits, impl::VkMemoryPropertyFlagBitsStrings.size(), impl::VkMemoryPropertyFlagBitsStrings>(flagsVector);
+}
+
+
+/**
+@brief      Converst from Vulkan MemoryPropertyFlags to a vector of strings.
+
+@param[in]  flags  The Vulkan flags.
+
+@return     A vector of string values. Each element is one of impl::VkMemoryPropertyFlagBitsStrings
+*/
+inline std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPropertyFlags flags) noexcept {
+    return impl::flagsToVectorString<vk::MemoryPropertyFlags, vk::MemoryPropertyFlagBits, impl::VkMemoryPropertyFlagBitsStrings.size(), impl::VkMemoryPropertyFlagBitsStrings>(flags);
+}
 
 
 /**

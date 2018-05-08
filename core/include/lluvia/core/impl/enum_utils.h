@@ -5,8 +5,9 @@
 #include <array>
 #include <cstdint>
 #include <string>
+#include <tuple>
 #include <typeinfo>
-
+#include <vector>
 
 
 namespace ll {
@@ -31,6 +32,44 @@ inline E stringToEnum(T&& name) {
     }
 
     return static_cast<E>(std::distance(stringValues.cbegin(), it));
+}
+
+
+template<typename E, typename Ebits, std::size_t N, const std::array<std::tuple<const char*, Ebits>, N>& values>
+inline E vectorStringToFlags(const std::vector<std::string>& flagsVector) noexcept {
+
+	auto flags = E {};
+
+	for (const auto& strFlag : flagsVector) {
+
+		for (const auto& flagPair : values) {
+
+			if (std::get<0>(flagPair) == strFlag) {
+				flags |= std::get<1>(flagPair);
+				break;
+			}
+		}
+	}
+
+	return flags;
+}
+
+
+template<typename E, typename Ebits, std::size_t N, const std::array<std::tuple<const char*, Ebits>, N>& values>
+inline std::vector<std::string> flagsToVectorString(E flags) noexcept {
+
+    auto flagsVector = std::vector<std::string> {};
+
+    for (const auto& flagPair : values) {
+
+        const auto& vFlags = std::get<1>(flagPair);
+
+        if ((flags & vFlags) == vFlags) {
+            flagsVector.push_back(std::get<0>(flagPair));
+        }
+    }
+
+    return flagsVector;
 }
 
 

@@ -11,13 +11,6 @@
 namespace ll {
 
 
-constexpr const char* STRING_VK_MEMORY_DEVICE_LOCAL     = "DEVICE_LOCAL";
-constexpr const char* STRING_VK_MEMORY_HOST_CACHED      = "HOST_CACHED";
-constexpr const char* STRING_VK_MEMORY_HOST_COHERENT    = "HOST_COHERENT";
-constexpr const char* STRING_VK_MEMORY_HOST_VISIBLE     = "HOST_VISIBLE";
-constexpr const char* STRING_VK_MEMORY_LAZILY_ALLOCATED = "LAZILY_ALLOCATED";
-
-
 constexpr const char* STRING_VK_BUFFER_USAGE_INDEX_BUFFER         = "INDEX_BUFFER";
 constexpr const char* STRING_VK_BUFFER_USAGE_INDIRECT_BUFFER      = "INDIRECT_BUFFE";
 constexpr const char* STRING_VK_BUFFER_USAGE_STORAGE_BUFFER       = "STORAGE_BUFFER";
@@ -55,38 +48,6 @@ constexpr const auto BASE_64_ALPHABET = std::array<char, 65> {{
 auto compareFlagBit = [](const auto& flags, const auto& value) {
     return ((flags & value) == value);
 };
-
-
-vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std::string>& flagsVector) {
-
-    auto flags = vk::MemoryPropertyFlags {};
-
-    for (const auto& strFlag : flagsVector) {
-
-        if (strFlag == STRING_VK_MEMORY_DEVICE_LOCAL)     flags |= vk::MemoryPropertyFlagBits::eDeviceLocal;
-        if (strFlag == STRING_VK_MEMORY_HOST_CACHED)      flags |= vk::MemoryPropertyFlagBits::eHostCached;
-        if (strFlag == STRING_VK_MEMORY_HOST_COHERENT)    flags |= vk::MemoryPropertyFlagBits::eHostCoherent;
-        if (strFlag == STRING_VK_MEMORY_HOST_VISIBLE)     flags |= vk::MemoryPropertyFlagBits::eHostVisible;
-        if (strFlag == STRING_VK_MEMORY_LAZILY_ALLOCATED) flags |= vk::MemoryPropertyFlagBits::eLazilyAllocated;
-    }
-
-    return flags;
-}
-
-
-std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPropertyFlags flags) {
-
-
-    auto flagsVector = std::vector<std::string> {};
-
-    if (compareFlagBit(flags, vk::MemoryPropertyFlagBits::eDeviceLocal))     flagsVector.push_back(STRING_VK_MEMORY_DEVICE_LOCAL);
-    if (compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCached))      flagsVector.push_back(STRING_VK_MEMORY_HOST_CACHED);
-    if (compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostCoherent))    flagsVector.push_back(STRING_VK_MEMORY_HOST_COHERENT);
-    if (compareFlagBit(flags, vk::MemoryPropertyFlagBits::eHostVisible))     flagsVector.push_back(STRING_VK_MEMORY_HOST_VISIBLE);
-    if (compareFlagBit(flags, vk::MemoryPropertyFlagBits::eLazilyAllocated)) flagsVector.push_back(STRING_VK_MEMORY_LAZILY_ALLOCATED);
-
-    return flagsVector;
-}
 
 
 vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector) {
