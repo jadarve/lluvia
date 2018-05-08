@@ -1,3 +1,10 @@
+/**
+@file       io.cpp
+@brief      utility functions.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/utils.h"
 
 
@@ -32,7 +39,17 @@ constexpr const char* STRING_VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT     = "IMAG
 constexpr const char* STRING_VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT         = "IMAGE_USAGE_INPUT_ATTACHMENT";
 
 
-constexpr const auto BASE_64_ALPHABET = std::array<char, 65> {{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='}};
+constexpr const auto BASE_64_ALPHABET = std::array<char, 65> {{
+    'A','B','C','D','E','F','G','H',
+    'I','J','K','L','M','N','O','P',
+    'Q','R','S','T','U','V','W','X',
+    'Y','Z','a','b','c','d','e','f',
+    'g','h','i','j','k','l','m','n',
+    'o','p','q','r','s','t','u','v',
+    'w','x','y','z','0','1','2','3',
+    '4','5','6','7','8','9','+','/',
+    '='
+}};
 
 
 auto compareFlagBit = [](const auto& flags, const auto& value) {
@@ -218,8 +235,9 @@ std::vector<uint8_t> fromBase64(const std::string& code) {
         if (c >='0' && c <='9') return static_cast<uint32_t>(static_cast<uint32_t>(c) + 4);
         if (c == '+') return uint32_t {62u};
         if (c == '/') return uint32_t {63u};
-
-        return static_cast<uint32_t>('=');
+        if (c == '=') return static_cast<uint32_t>('=');
+        
+        throw std::runtime_error {"unknown character for base 64 parsing: " + std::string{c}};
     };
 
     const auto size = code.size();
