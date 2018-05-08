@@ -39,6 +39,8 @@ std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags
 @param[in]  size  The size of the data in bytes.
 
 @return     the encoded base-64 string.
+
+@sa         ll::fromBase64 Converts a std::string with base-64 characters to binary.
 */
 std::string toBase64(const void* ptr, const size_t size);
 
@@ -51,6 +53,8 @@ std::string toBase64(const void* ptr, const size_t size);
 @return     The decoded base-64 binary array.
 
 @throws     std::runtime_error if any character in \p code does not belong to the base-64 alphabet.
+
+@sa         ll::toBase64 Converts a binary array to base-64 string.
 */
 std::vector<uint8_t> fromBase64(const std::string& code);
 
