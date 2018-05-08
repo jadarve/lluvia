@@ -11,17 +11,6 @@
 namespace ll {
 
 
-constexpr const char* STRING_VK_BUFFER_USAGE_INDEX_BUFFER         = "INDEX_BUFFER";
-constexpr const char* STRING_VK_BUFFER_USAGE_INDIRECT_BUFFER      = "INDIRECT_BUFFE";
-constexpr const char* STRING_VK_BUFFER_USAGE_STORAGE_BUFFER       = "STORAGE_BUFFER";
-constexpr const char* STRING_VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER = "STORAGE_TEXEL_BUFFER";
-constexpr const char* STRING_VK_BUFFER_USAGE_TRANSFER_DST         = "TRANSFER_DST";
-constexpr const char* STRING_VK_BUFFER_USAGE_TRANSFER_SRC         = "TRANSFER_SRC";
-constexpr const char* STRING_VK_BUFFER_USAGE_UNIFORM_BUFFER       = "UNIFORM_BUFFER";
-constexpr const char* STRING_VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER = "UNIFORM_TEXEL_BUFFER";
-constexpr const char* STRING_VK_BUFFER_USAGE_VERTEX_BUFFER        = "VERTEX_BUFFER";
-
-
 constexpr const char* STRING_VK_IMAGE_USAGE_TRANSFER_SRC_BIT             = "IMAGE_USAGE_TRANSFER_SRC";
 constexpr const char* STRING_VK_IMAGE_USAGE_TRANSFER_DST_BIT             = "IMAGE_USAGE_TRANSFER_DST";
 constexpr const char* STRING_VK_IMAGE_USAGE_SAMPLED_BIT                  = "IMAGE_USAGE_SAMPLED";
@@ -48,45 +37,6 @@ constexpr const auto BASE_64_ALPHABET = std::array<char, 65> {{
 auto compareFlagBit = [](const auto& flags, const auto& value) {
     return ((flags & value) == value);
 };
-
-
-vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector) {
-
-    auto flags = vk::BufferUsageFlags {};
-
-    for (const auto& strFlag : flagsVector) {
-
-        if (strFlag == STRING_VK_BUFFER_USAGE_INDEX_BUFFER)         flags |= vk::BufferUsageFlagBits::eIndexBuffer;
-        if (strFlag == STRING_VK_BUFFER_USAGE_INDIRECT_BUFFER)      flags |= vk::BufferUsageFlagBits::eIndirectBuffer;
-        if (strFlag == STRING_VK_BUFFER_USAGE_STORAGE_BUFFER)       flags |= vk::BufferUsageFlagBits::eStorageBuffer;
-        if (strFlag == STRING_VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER) flags |= vk::BufferUsageFlagBits::eStorageTexelBuffer;
-        if (strFlag == STRING_VK_BUFFER_USAGE_TRANSFER_DST)         flags |= vk::BufferUsageFlagBits::eTransferDst;
-        if (strFlag == STRING_VK_BUFFER_USAGE_TRANSFER_SRC)         flags |= vk::BufferUsageFlagBits::eTransferSrc;
-        if (strFlag == STRING_VK_BUFFER_USAGE_UNIFORM_BUFFER)       flags |= vk::BufferUsageFlagBits::eUniformBuffer;
-        if (strFlag == STRING_VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER) flags |= vk::BufferUsageFlagBits::eUniformTexelBuffer;
-        if (strFlag == STRING_VK_BUFFER_USAGE_VERTEX_BUFFER)        flags |= vk::BufferUsageFlagBits::eVertexBuffer;
-    }
-
-    return flags;
-}
-
-
-std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags) {
-
-    auto flagsVector = std::vector<std::string> {};
-
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eIndexBuffer))        flagsVector.push_back(STRING_VK_BUFFER_USAGE_INDEX_BUFFER);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eIndirectBuffer))     flagsVector.push_back(STRING_VK_BUFFER_USAGE_INDIRECT_BUFFER);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eStorageBuffer))      flagsVector.push_back(STRING_VK_BUFFER_USAGE_STORAGE_BUFFER);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eStorageTexelBuffer)) flagsVector.push_back(STRING_VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eTransferDst))        flagsVector.push_back(STRING_VK_BUFFER_USAGE_TRANSFER_DST);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eTransferSrc))        flagsVector.push_back(STRING_VK_BUFFER_USAGE_TRANSFER_SRC);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eUniformBuffer))      flagsVector.push_back(STRING_VK_BUFFER_USAGE_UNIFORM_BUFFER);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eUniformTexelBuffer)) flagsVector.push_back(STRING_VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER);
-    if (compareFlagBit(flags, vk::BufferUsageFlagBits::eVertexBuffer))       flagsVector.push_back(STRING_VK_BUFFER_USAGE_VERTEX_BUFFER);
-    
-    return flagsVector;
-}
 
 
 vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector) {

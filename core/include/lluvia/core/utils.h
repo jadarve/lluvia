@@ -19,11 +19,6 @@
 namespace ll {
 
 
-// TODO: move to Buffer.h
-vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector);
-std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags);
-
-
 // TODO: move to Image.h
 vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector);
 std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags);

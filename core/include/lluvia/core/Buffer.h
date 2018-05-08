@@ -24,6 +24,60 @@ class Memory;
 class Session;
 class Visitor;
 
+
+namespace impl {
+
+    /**
+    String values for Vulkan VkBufferUsageFlagBits values.
+
+    See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
+    */
+    constexpr const std::array<std::tuple<const char*, vk::BufferUsageFlagBits>, 9> VkBufferUsageFlagBitsStrings {{
+        {"INDEX_BUFFER"         , vk::BufferUsageFlagBits::eIndexBuffer},
+        {"INDIRECT_BUFFER"      , vk::BufferUsageFlagBits::eIndirectBuffer},
+        {"STORAGE_BUFFER"       , vk::BufferUsageFlagBits::eStorageBuffer},
+        {"STORAGE_TEXEL_BUFFER" , vk::BufferUsageFlagBits::eStorageTexelBuffer},
+        {"TRANSFER_DST"         , vk::BufferUsageFlagBits::eTransferDst},
+        {"TRANSFER_SRC"         , vk::BufferUsageFlagBits::eTransferSrc},
+        {"UNIFORM_BUFFER"       , vk::BufferUsageFlagBits::eUniformBuffer},
+        {"UNIFORM_TEXEL_BUFFER" , vk::BufferUsageFlagBits::eUniformTexelBuffer},
+        {"VERTEX_BUFFER"        , vk::BufferUsageFlagBits::eVertexBuffer},
+    }};
+
+} // namespace impl
+
+
+/**
+@brief      Converts from a string vector to Vulkan BufferUsageFlags.
+
+The comparison between string values is case sensitive.
+
+See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
+
+@param[in]  flagsVector  The flags vector. Their values must be contained
+                         in impl::VkBufferUsageFlagBitsStrings.
+
+@return     The reconstructed Vulkan BufferUsageFlags.
+*/
+inline vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector) noexcept {
+    return impl::vectorStringToFlags<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flagsVector);
+}
+
+
+/**
+@brief      Converst from Vulkan BufferUsageFlags to a vector of strings.
+
+See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
+
+@param[in]  flags  The Vulkan flags.
+
+@return     A vector of string values. Each element is one of impl::VkBufferUsageFlagBitsStrings
+*/
+inline std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags) noexcept {
+    return impl::flagsToVectorString<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flags);
+}
+
+
 /**
 @brief      Objects to manage raw portions of allocated memory.
 

@@ -53,6 +53,8 @@ namespace impl {
 
 The comparison between string values is case sensitive.
 
+See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
+
 @param[in]  flagsVector  The flags vector. Their values must be contained
                          in impl::VkMemoryPropertyFlagBitsStrings.
 
@@ -65,6 +67,8 @@ inline vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vect
 
 /**
 @brief      Converst from Vulkan MemoryPropertyFlags to a vector of strings.
+
+See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
 
 @param[in]  flags  The Vulkan flags.
 
