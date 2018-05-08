@@ -198,7 +198,22 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setFilteringMode(ll::ImageFilterMode filterMode) noexcept;
+    inline ImageViewDescriptor& setFilteringMode(ll::ImageFilterMode filterMode) noexcept {
+
+        this->filterMode = filterMode;
+        return *this;
+    }
+
+
+    /**
+    @brief      Gets the filter mode.
+    
+    @return     The filter mode.
+    */
+    inline ll::ImageFilterMode getFilterMode() const noexcept {
+
+        return filterMode;
+    }
 
 
     /**
@@ -208,7 +223,13 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode) noexcept;
+    inline ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode) noexcept {
+
+        for (auto& it : this->addressMode) {
+            it = addressMode;
+        }
+        return *this;
+    }
 
 
     /**
@@ -219,7 +240,44 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept;
+    inline ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept {
+
+        this->addressMode[static_cast<uint32_t>(axis)] = addressMode;
+        return *this;
+    }
+
+
+    /**
+    @brief      Gets the address mode for the U axis.
+    
+    @return     The address mode.
+    */
+    inline ll::ImageAddressMode getAddressModeU() const noexcept {
+
+        return addressMode[static_cast<uint32_t>(ll::ImageAxis::U)];
+    }
+
+
+    /**
+    @brief      Gets the address mode for the V axis.
+    
+    @return     The address mode.
+    */
+    inline ll::ImageAddressMode getAddressModeV() const noexcept {
+
+        return addressMode[static_cast<uint32_t>(ll::ImageAxis::V)];
+    }
+
+
+    /**
+    @brief      Gets the address mode for the W axis.
+    
+    @return     The address mode.
+    */
+    inline ll::ImageAddressMode getAddressModeW() const noexcept {
+
+        return addressMode[static_cast<uint32_t>(ll::ImageAxis::W)];
+    }
 
 
     /**
@@ -229,7 +287,22 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates) noexcept;
+    inline ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates) noexcept {
+
+        this->normalizedCoordinates = normalizedCoordinates;
+        return *this;
+    }
+
+
+    /**
+    @brief      Determines if normalized coordinates are used for this image view.
+    
+    @return     True if normalized coordinates, False otherwise.
+    */
+    inline bool isNormalizedCoordinates()  const noexcept {
+
+        return normalizedCoordinates;
+    }
 
 
     /**
@@ -239,7 +312,22 @@ public:
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setIsSampled(bool isSampled) noexcept;
+    inline ImageViewDescriptor& setIsSampled(bool isSampled) noexcept {
+
+        this->_isSampled = isSampled;
+        return *this;
+    }
+
+
+    /**
+    @brief      Determines if the image view is sampled.
+    
+    @return     True if sampled, False otherwise.
+    */
+    inline bool isSampled() const noexcept {
+
+        return _isSampled;
+    }
 
 
     /**
@@ -261,7 +349,7 @@ private:
     std::array<ll::ImageAddressMode, 3> addressMode;
 
     bool normalizedCoordinates {false};
-    bool isSampled             {false};
+    bool _isSampled             {false};
 
 
 friend class ImageView;

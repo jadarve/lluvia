@@ -11,43 +11,6 @@
 namespace ll {
 
 
-ImageViewDescriptor& ImageViewDescriptor::setFilteringMode(ll::ImageFilterMode filterMode) noexcept {
-
-    this->filterMode = filterMode;
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAddressMode addressMode) noexcept {
-
-    for (auto& it : this->addressMode) {
-        it = addressMode;
-    }
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept {
-
-    this->addressMode[static_cast<uint32_t>(axis)] = addressMode;
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setNormalizedCoordinates(bool normalizedCoordinates) noexcept {
-
-    this->normalizedCoordinates = normalizedCoordinates;
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setIsSampled(bool isSampled) noexcept {
-
-    this->isSampled = isSampled;
-    return *this;
-}
-
-
 vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexcept {
 
     auto getVkAddressMode = [](const ll::ImageAddressMode addressModeValue) {

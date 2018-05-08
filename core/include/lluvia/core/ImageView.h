@@ -158,53 +158,17 @@ public:
     
     @return     The parent ll::Image object.
     */
-    std::shared_ptr<ll::Image> getImage()           const noexcept;
+    std::shared_ptr<ll::Image> getImage() const noexcept;
 
 
     /**
-    @brief      Gets the filter mode.
+    @brief      Gets the image view descriptor.
     
-    @return     The filter mode.
+    @return     The descriptor.
     */
-    ll::ImageFilterMode  getFilterMode()            const noexcept;
-
-    /**
-    @brief      Gets the address mode for the U axis.
-    
-    @return     The address mode.
-    */
-    ll::ImageAddressMode getAddressModeU()          const noexcept;
-
-
-    /**
-    @brief      Gets the address mode for the V axis.
-    
-    @return     The address mode.
-    */
-    ll::ImageAddressMode getAddressModeV()          const noexcept;
-
-
-    /**
-    @brief      Gets the address mode for the W axis.
-    
-    @return     The address mode.
-    */
-    ll::ImageAddressMode getAddressModeW()          const noexcept;
-
-    
-    /**
-    @brief      Determines if normalized coordinates are used for this image view.
-    
-    @return     True if normalized coordinates, False otherwise.
-    */
-    bool                 isNormalizedCoordinates()  const noexcept;
-
-    /**
-    @brief      Determines if the image view is sampled.
-    
-    @return     True if sampled, False otherwise.
-    */
-    bool                 isSampled()                const noexcept;
+    inline const ll::ImageViewDescriptor& getDescriptor() const noexcept {
+        return descriptor;
+    }
 
 private:
     ImageView(  vk::Device device,

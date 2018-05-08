@@ -232,7 +232,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
 
-    writeDescSet.setDescriptorType(imgView->isSampled()? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
+    writeDescSet.setDescriptorType(imgView->getDescriptor().isSampled()? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
 
     // update the informacion of the descriptor set
     device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);

@@ -160,15 +160,17 @@ public:
 
         auto j = json {};
 
+        const auto desc = imageView->getDescriptor();
+
         j["name"]                   = name;
         j["type"]                   = ll::objectTypeToString(imageView->getType());
         j["image"]                  = imageName;
-        j["filter_mode"]            = ll::imageFilterModeToString(imageView->getFilterMode());
-        j["address_mode_u"]         = ll::imageAddressModeToString(imageView->getAddressModeU());
-        j["address_mode_v"]         = ll::imageAddressModeToString(imageView->getAddressModeV());
-        j["address_mode_w"]         = ll::imageAddressModeToString(imageView->getAddressModeW());
-        j["normalized_coordinates"] = imageView->isNormalizedCoordinates();
-        j["is_sampled"]             = imageView->isSampled();
+        j["filter_mode"]            = ll::imageFilterModeToString(desc.getFilterMode());
+        j["address_mode_u"]         = ll::imageAddressModeToString(desc.getAddressModeU());
+        j["address_mode_v"]         = ll::imageAddressModeToString(desc.getAddressModeV());
+        j["address_mode_w"]         = ll::imageAddressModeToString(desc.getAddressModeW());
+        j["normalized_coordinates"] = desc.isNormalizedCoordinates();
+        j["is_sampled"]             = desc.isSampled();
 
         obj["objects"].push_back(j);
 
