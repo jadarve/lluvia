@@ -10,7 +10,10 @@
 
 #include "lluvia/core/impl/enum_utils.h"
 
+#include <array>
 #include <cstdint>
+#include <tuple>
+#include <string>
 
 #include <vulkan/vulkan.hpp>
 
@@ -68,9 +71,9 @@ namespace impl {
 
     @sa         ll::ImageFilterMode enum values for this array.
     */
-    constexpr const std::array<const char*, 2> ImageFilterModeStrings {{
-        "NEAREST",
-        "LINEAR"
+    constexpr const std::array<std::tuple<const char*, ll::ImageFilterMode>, 2> ImageFilterModeStrings {{
+        {"NEAREST" , ll::ImageFilterMode::Nearest},
+        {"LINEAR"  , ll::ImageFilterMode::Linear},
     }};
 
 
@@ -79,12 +82,12 @@ namespace impl {
 
     @sa         ll::ImageAddressMode enum values for this array.
     */
-    constexpr const std::array<const char*, 5> ImageAddressModeStrings {{
-        "REPEAT",
-        "MIRRORED_REPEAT",
-        "CLAMP_TO_EDGE",
-        "CLAMP_T_OBORDER",
-        "MIRROR_CLAMP_TO_EDGE"
+    constexpr const std::array<std::tuple<const char*, ll::ImageAddressMode>, 5> ImageAddressModeStrings {{
+        {"REPEAT"               , ll::ImageAddressMode::Repeat},
+        {"MIRRORED_REPEAT"      , ll::ImageAddressMode::MirroredRepeat},
+        {"CLAMP_TO_EDGE"        , ll::ImageAddressMode::ClampToEdge},
+        {"CLAMP_T_OBORDER"      , ll::ImageAddressMode::ClampToBorder},
+        {"MIRROR_CLAMP_TO_EDGE" , ll::ImageAddressMode::MirrorClampToEdge},
     }};
 
 } // namespace impl
@@ -101,7 +104,7 @@ namespace impl {
 @return     Returns the corresponding `std::string` in ll::impl::ImageFilterModeStrings for the enum value.
 */
 template<typename T = std::string>
-inline T imageFilterModeToString(ll::ImageFilterMode&& value) {
+inline T imageFilterModeToString(ll::ImageFilterMode&& value) noexcept {
     return ll::impl::enumToString<ll::ImageFilterMode, impl::ImageFilterModeStrings.size(), impl::ImageFilterModeStrings>(std::forward<ll::ImageFilterMode>(value));
 }
 
@@ -137,7 +140,7 @@ inline ll::ImageFilterMode stringToImageFilterMode(T&& stringValue) {
 @return     Returns the corresponding `std::string` in ll::impl::ImageAddressModeStrings for the enum value.
 */
 template<typename T = std::string>
-inline T imageAddressModeToString(ll::ImageAddressMode&& value) {
+inline T imageAddressModeToString(ll::ImageAddressMode&& value) noexcept {
     return impl::enumToString<ll::ImageAddressMode, ll::impl::ImageAddressModeStrings.size(), ll::impl::ImageAddressModeStrings>(std::forward<ll::ImageAddressMode>(value));
 }
 

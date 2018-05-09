@@ -10,7 +10,11 @@
 
 #include "lluvia/core/impl/enum_utils.h"
 
+#include <array>
+#include <string>
 #include <system_error>
+#include <tuple>
+
 
 namespace ll {
 
@@ -29,9 +33,9 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<const char*, 2> ErrorCodeStrings{{
-        "MemoryMapFailed",
-        "ObjectAllocationError"
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 2> ErrorCodeStrings{{
+        {"MemoryMapFailed"       , ll::ErrorCode::MemoryMapFailed},
+        {"ObjectAllocationError" , ll::ErrorCode::ObjectAllocationError},
     }};
 
 } // namespace impl
@@ -47,7 +51,7 @@ namespace impl {
 @return     Returns the corresponding `std::string` in ll::impl::ErrorCodeStrings for the enum value.
 */
 template<typename T = std::string>
-inline T errorCodeToString(ll::ErrorCode&& value) {
+inline T errorCodeToString(ll::ErrorCode&& value) noexcept {
     return impl::enumToString<ll::ErrorCode, ll::impl::ErrorCodeStrings.size(), ll::impl::ErrorCodeStrings>(std::forward<ll::ErrorCode>(value));
 }
 

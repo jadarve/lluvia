@@ -6,6 +6,7 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <tuple>
 
 #include <vulkan/vulkan.hpp>
 
@@ -25,17 +26,17 @@ enum class ParameterType : uint32_t {
 
 namespace impl {
 
-    constexpr const std::array<const char*, 3> ParameterTypeStrings {{
-        "BUFFER",
-        "IMAGE_VIEW",
-        "SAMPLED_IMAGE_VIEW"
+    constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 3> ParameterTypeStrings {{
+        {"BUFFER"             , ll::ParameterType::Buffer},
+        {"IMAGE_VIEW"         , ll::ParameterType::ImageView},
+        {"SAMPLED_IMAGE_VIEW" , ll::ParameterType::SampledImageView},
     }};
 
 } // namespace impl
 
 
 template<typename T = std::string>
-inline T parameterTypeToString(ll::ParameterType&& value) {
+inline T parameterTypeToString(ll::ParameterType&& value) noexcept {
     return ll::impl::enumToString<ll::ParameterType, ll::impl::ParameterTypeStrings.size(), impl::ParameterTypeStrings>(std::forward<ll::ParameterType>(value));
 }
 

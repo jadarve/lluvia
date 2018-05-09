@@ -10,7 +10,10 @@
 
 #include "lluvia/core/impl/enum_utils.h"
 
+#include <array>
 #include <cstdint>
+#include <string>
+#include <tuple>
 
 #include <vulkan/vulkan.hpp>
 
@@ -48,21 +51,21 @@ namespace impl {
 
     @sa ll::ChannelType enum values for this array.
     */
-    constexpr const std::array<const char*, 11> ChannelTypeStrings {{
-        "UINT8",
-        "INT8",
+    constexpr const std::array<std::tuple<const char*, ll::ChannelType>, 11> ChannelTypeStrings {{
+        {"UINT8"   , ll::ChannelType::Uint8},
+        {"INT8"    , ll::ChannelType::Int8},
 
-        "UINT16",
-        "INT16",
-        "FLOAT16",
+        {"UINT16"  , ll::ChannelType::Uint16},
+        {"INT16"   , ll::ChannelType::Int16},
+        {"FLOAT16" , ll::ChannelType::Float16},
 
-        "UINT32",
-        "INT32",
-        "FLOAT32",
+        {"UINT32"  , ll::ChannelType::Uint32},
+        {"INT32"   , ll::ChannelType::Int32},
+        {"FLOAT32" , ll::ChannelType::Float32},
 
-        "UINT64",
-        "INT64",
-        "FLOAT64"
+        {"UINT64"  , ll::ChannelType::Uint64},
+        {"INT64"   , ll::ChannelType::Int64},
+        {"FLOAT64" , ll::ChannelType::Float64},
     }};
 
 } // namespace impl
