@@ -207,9 +207,9 @@ public:
         j["local_x"]    = node->getLocalX();
         j["local_y"]    = node->getLocalY();
         j["local_z"]    = node->getLocalZ();
-        j["global_x"]   = node->getGlobalX();
-        j["global_y"]   = node->getGlobalY();
-        j["global_z"]   = node->getGlobalZ();
+        j["grid_x"]   = node->getGridX();
+        j["grid_y"]   = node->getGridY();
+        j["grid_z"]   = node->getGridZ();
         j["parameters"] = nullptr; // placeholder
 
         const auto pCount = node->getParameterCount();
@@ -424,9 +424,9 @@ public:
         const auto name         = getValueFromJson<std::string>("name", j);
         const auto functionName = getValueFromJson<std::string>("function", j);
         const auto programName  = getValueFromJson<std::string>("program", j);
-        const auto globalX      = getValueFromJson<uint32_t>("global_x", j);
-        const auto globalY      = getValueFromJson<uint32_t>("global_y", j);
-        const auto globalZ      = getValueFromJson<uint32_t>("global_z", j);
+        const auto globalX      = getValueFromJson<uint32_t>("grid_x", j);
+        const auto globalY      = getValueFromJson<uint32_t>("grid_y", j);
+        const auto globalZ      = getValueFromJson<uint32_t>("grid_z", j);
         const auto localX       = getValueFromJson<uint32_t>("local_x", j);
         const auto localY       = getValueFromJson<uint32_t>("local_y", j);
         const auto localZ       = getValueFromJson<uint32_t>("local_z", j);
@@ -435,9 +435,9 @@ public:
         // can throw std::out_of_range
         auto program = graph->getProgram(programName);
         auto descriptor = ll::ComputeNodeDescriptor()
-                            .setGlobalX(globalX)
-                            .setGlobalY(globalY)
-                            .setGlobalZ(globalZ)
+                            .setGridX(globalX)
+                            .setGridY(globalY)
+                            .setGridZ(globalZ)
                             .setLocalX(localX)
                             .setLocalY(localY)
                             .setLocalZ(localZ)

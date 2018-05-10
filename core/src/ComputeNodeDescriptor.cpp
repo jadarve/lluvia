@@ -1,3 +1,10 @@
+/**
+@file       ComputeNodeDescriptor.cpp
+@brief      ComputeNodeDescriptor class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ComputeNodeDescriptor.h"
 
 #include "lluvia/core/Program.h"
@@ -49,21 +56,21 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterTy
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalX(const uint32_t x) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
     assert(x >= 1);
     globalGroup[0] = x;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalY(const uint32_t y) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcept {
     assert(y >= 1);
     globalGroup[1] = y;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalZ(const uint32_t z) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcept {
     assert(z >= 1);
     globalGroup[2] = z;
     return *this;
@@ -115,7 +122,7 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 }
 
 
-std::array<uint32_t, 3> ComputeNodeDescriptor::getGlobalGroup() const noexcept {
+std::array<uint32_t, 3> ComputeNodeDescriptor::getGridGroup() const noexcept {
     return globalGroup;
 }
 
@@ -125,17 +132,17 @@ std::array<uint32_t, 3> ComputeNodeDescriptor::getLocalGroup() const noexcept {
 }
 
 
-uint32_t ComputeNodeDescriptor::getGlobalX() const noexcept {
+uint32_t ComputeNodeDescriptor::getGridX() const noexcept {
     return globalGroup[0];
 }
 
 
-uint32_t ComputeNodeDescriptor::getGlobalY() const noexcept {
+uint32_t ComputeNodeDescriptor::getGridY() const noexcept {
     return globalGroup[1];
 }
 
 
-uint32_t ComputeNodeDescriptor::getGlobalZ() const noexcept {
+uint32_t ComputeNodeDescriptor::getGridZ() const noexcept {
     return globalGroup[2];
 }
 

@@ -44,9 +44,9 @@ public:
     uint32_t getLocalY() const noexcept;
     uint32_t getLocalZ() const noexcept;
 
-    uint32_t getGlobalX() const noexcept;
-    uint32_t getGlobalY() const noexcept;
-    uint32_t getGlobalZ() const noexcept;
+    uint32_t getGridX() const noexcept;
+    uint32_t getGridY() const noexcept;
+    uint32_t getGridZ() const noexcept;
 
     size_t getParameterCount() const noexcept;
     std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;

@@ -57,17 +57,17 @@ uint32_t ComputeNode::getLocalZ() const noexcept {
 }
 
 
-uint32_t ComputeNode::getGlobalX() const noexcept {
+uint32_t ComputeNode::getGridX() const noexcept {
     return descriptor.globalGroup[0];
 }
 
 
-uint32_t ComputeNode::getGlobalY() const noexcept {
+uint32_t ComputeNode::getGridY() const noexcept {
     return descriptor.globalGroup[1];
 }
 
 
-uint32_t ComputeNode::getGlobalZ() const noexcept {
+uint32_t ComputeNode::getGridZ() const noexcept {
     return descriptor.globalGroup[2];
 }
 
