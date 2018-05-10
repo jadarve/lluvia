@@ -27,9 +27,9 @@ enum class ParameterType : uint32_t {
 namespace impl {
 
     constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 3> ParameterTypeStrings {{
-        {"BUFFER"             , ll::ParameterType::Buffer},
-        {"IMAGE_VIEW"         , ll::ParameterType::ImageView},
-        {"SAMPLED_IMAGE_VIEW" , ll::ParameterType::SampledImageView},
+        std::make_tuple("BUFFER"             , ll::ParameterType::Buffer),
+        std::make_tuple("IMAGE_VIEW"         , ll::ParameterType::ImageView),
+        std::make_tuple("SAMPLED_IMAGE_VIEW" , ll::ParameterType::SampledImageView),
     }};
 
 } // namespace impl

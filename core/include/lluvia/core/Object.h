@@ -41,9 +41,9 @@ namespace impl {
     @sa ll::ObjectType enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ObjectType>, 3> ObjectTypeStrings2 {{
-        {"BUFFER"     , ll::ObjectType::Buffer},
-        {"IMAGE"      , ll::ObjectType::Image},
-        {"IMAGE_VIEW" , ll::ObjectType::ImageView},
+        std::make_tuple("BUFFER"     , ll::ObjectType::Buffer),
+        std::make_tuple("IMAGE"      , ll::ObjectType::Image),
+        std::make_tuple("IMAGE_VIEW" , ll::ObjectType::ImageView),
     }};
 
 } // namespace impl

@@ -52,20 +52,20 @@ namespace impl {
     @sa ll::ChannelType enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ChannelType>, 11> ChannelTypeStrings {{
-        {"UINT8"   , ll::ChannelType::Uint8},
-        {"INT8"    , ll::ChannelType::Int8},
+        std::make_tuple("UINT8"   , ll::ChannelType::Uint8),
+        std::make_tuple("INT8"    , ll::ChannelType::Int8),
 
-        {"UINT16"  , ll::ChannelType::Uint16},
-        {"INT16"   , ll::ChannelType::Int16},
-        {"FLOAT16" , ll::ChannelType::Float16},
+        std::make_tuple("UINT16"  , ll::ChannelType::Uint16),
+        std::make_tuple("INT16"   , ll::ChannelType::Int16),
+        std::make_tuple("FLOAT16" , ll::ChannelType::Float16),
 
-        {"UINT32"  , ll::ChannelType::Uint32},
-        {"INT32"   , ll::ChannelType::Int32},
-        {"FLOAT32" , ll::ChannelType::Float32},
+        std::make_tuple("UINT32"  , ll::ChannelType::Uint32),
+        std::make_tuple("INT32"   , ll::ChannelType::Int32),
+        std::make_tuple("FLOAT32" , ll::ChannelType::Float32),
 
-        {"UINT64"  , ll::ChannelType::Uint64},
-        {"INT64"   , ll::ChannelType::Int64},
-        {"FLOAT64" , ll::ChannelType::Float64},
+        std::make_tuple("UINT64"  , ll::ChannelType::Uint64),
+        std::make_tuple("INT64"   , ll::ChannelType::Int64),
+        std::make_tuple("FLOAT64" , ll::ChannelType::Float64),
     }};
 
 } // namespace impl
@@ -81,7 +81,7 @@ namespace impl {
 @return     Returns the corresponding `std::string` in ll::impl::ChannelTypeStrings for the enum value.
 */
 template<typename T = std::string>
-inline T channelTypeToString(ll::ChannelType&& value) {
+inline T channelTypeToString(ll::ChannelType&& value) noexcept {
     return ll::impl::enumToString<ll::ChannelType, ll::impl::ChannelTypeStrings.size(), impl::ChannelTypeStrings>(std::forward<ll::ChannelType>(value));
 }
 

@@ -72,8 +72,8 @@ namespace impl {
     @sa         ll::ImageFilterMode enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ImageFilterMode>, 2> ImageFilterModeStrings {{
-        {"NEAREST" , ll::ImageFilterMode::Nearest},
-        {"LINEAR"  , ll::ImageFilterMode::Linear},
+        std::make_tuple("NEAREST" , ll::ImageFilterMode::Nearest),
+        std::make_tuple("LINEAR"  , ll::ImageFilterMode::Linear),
     }};
 
 
@@ -83,11 +83,11 @@ namespace impl {
     @sa         ll::ImageAddressMode enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ImageAddressMode>, 5> ImageAddressModeStrings {{
-        {"REPEAT"               , ll::ImageAddressMode::Repeat},
-        {"MIRRORED_REPEAT"      , ll::ImageAddressMode::MirroredRepeat},
-        {"CLAMP_TO_EDGE"        , ll::ImageAddressMode::ClampToEdge},
-        {"CLAMP_T_OBORDER"      , ll::ImageAddressMode::ClampToBorder},
-        {"MIRROR_CLAMP_TO_EDGE" , ll::ImageAddressMode::MirrorClampToEdge},
+        std::make_tuple("REPEAT"               , ll::ImageAddressMode::Repeat),
+        std::make_tuple("MIRRORED_REPEAT"      , ll::ImageAddressMode::MirroredRepeat),
+        std::make_tuple("CLAMP_TO_EDGE"        , ll::ImageAddressMode::ClampToEdge),
+        std::make_tuple("CLAMP_T_OBORDER"      , ll::ImageAddressMode::ClampToBorder),
+        std::make_tuple("MIRROR_CLAMP_TO_EDGE" , ll::ImageAddressMode::MirrorClampToEdge),
     }};
 
 } // namespace impl
