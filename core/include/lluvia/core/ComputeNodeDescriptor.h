@@ -33,7 +33,7 @@ class Program;
 enum class ParameterType : uint32_t {
     Buffer           = 0,   /**< value for ll::Buffer parameter type. */
     ImageView        = 1,   /**< value for ll::ImageView without pixel sampler.*/
-    SampledImageView = 2,   /**< value for ll::ImageView bojects coupled with at pixel sampler. */
+    SampledImageView = 2,   /**< value for ll::ImageView objects coupled with a pixel sampler. */
 };
 
 
@@ -143,7 +143,7 @@ public:
     during the execution of a compute node shader program.
 
     Parameter \p x corresponds to the `groupCountX` parameter in
-    vkCmdDispatch. See https://www.khronos.org/registry/vulkan/specs/1.0/apispec.html#vkCmdDispatch
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
     for more information.
     
     @param[in]  x   The grid size. It must be greater than zero.
@@ -160,7 +160,7 @@ public:
     during the execution of a compute node shader program.
 
     Parameter \p y corresponds to the `groupCountY` parameter in
-    vkCmdDispatch. See https://www.khronos.org/registry/vulkan/specs/1.0/apispec.html#vkCmdDispatch
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
     for more information.
     
     @param[in]  y   The grid size. It must be greater than zero.
@@ -177,7 +177,7 @@ public:
     during the execution of a compute node shader program.
 
     Parameter \p z corresponds to the `groupCountZ` parameter in
-    vkCmdDispatch. See https://www.khronos.org/registry/vulkan/specs/1.0/apispec.html#vkCmdDispatch
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
     for more information.
     
     @param[in]  z   The grid size. It must be greater than zero.
@@ -190,24 +190,83 @@ public:
     /**
     @brief      Sets the local group size in the X axis.
     
-    @param[in]  x     The local group size.
+    @param[in]  x     The local group size. It must be greater than zero.
     
     @return     A reference to this object.
     */
     ComputeNodeDescriptor& setLocalX(const uint32_t x) noexcept;
+
+
+    /**
+    @brief      Sets the local group size in the Y axis.
+    
+    @param[in]  y     The local group size. It must be greater than zero.
+    
+    @return     A reference to this object.
+    */
     ComputeNodeDescriptor& setLocalY(const uint32_t y) noexcept;
+
+
+    /**
+    @brief      Sets the local group size in the Z axis.
+    
+    @param[in]  z     The local group size. It must be greater than zero.
+    
+    @return     A reference to this object.
+    */
     ComputeNodeDescriptor& setLocalZ(const uint32_t z) noexcept;
 
+
+    /**
+    @brief      Gets the Vulkan descriptor pool sizes needed for this compute node.
+
+    The returned vector contains the non-zero pool sizes required for the parameters
+    of this compute node.
+    
+    @return     The descriptor pool sizes.
+    */
     std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
 
+
+    /**
+    @brief      Gets the program associated to this compute node.
+    
+    @return     The program.
+    */
     std::shared_ptr<ll::Program> getProgram() const noexcept;
 
+
+    /**
+    @brief      Gets the function name within the ll::Program object used by this node.
+    
+    @return     The function name.
+    */
     std::string getFunctionName() const noexcept;
     
+
+    /**
+    @brief      Gets the Vulkan parameter bindings associated to this compute node.
+
+    See @VULKAN_DOC#VkDescriptorSetLayoutBinding for more information.
+    
+    @return     The parameter bindings.
+    */
     std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const noexcept;
 
-    std::array<uint32_t, 3> getGridGroup() const noexcept;
-    std::array<uint32_t, 3> getLocalGroup()  const noexcept;
+    /**
+    @brief      Gets the grid size as [X, Y, Z].
+    
+    @return     The grid size.
+    */
+    std::array<uint32_t, 3> getGridSize()  const noexcept;
+
+
+    /**
+    @brief      Gets the local size as [X, Y, Z].
+    
+    @return     The local size.
+    */
+    std::array<uint32_t, 3> getLocalSize() const noexcept;
 
     uint32_t getGridX() const noexcept;
     uint32_t getGridY() const noexcept;
@@ -217,9 +276,35 @@ public:
     uint32_t getLocalY() const noexcept;
     uint32_t getLocalZ() const noexcept;
 
+
+    /**
+    @brief      Returns the number of storage buffers used by the compute node.
+
+    This is the number of times ll::ComputeNodeDescriptor::addParameter is called with ll::ParameterType::Buffer.
+    
+    @return     The storage buffer count.
+    */
     uint32_t getStorageBufferCount()        const noexcept;
-    uint32_t getStoraImageCount()           const noexcept;
-    uint32_t getCombinedImageSamplerCount() const noexcept;
+
+
+    /**
+    @brief      Returns the number of storage images used by the compute node.
+
+    This is the number of times ll::ComputeNodeDescriptor::addParameter is called with ll::ParameterType::ImageView.
+    
+    @return     The storage image count.
+    */
+    uint32_t getStorageImageViewCount()           const noexcept;
+
+
+    /**
+    @brief      Returns the number of storage images used by the compute node.
+
+    This is the number of times ll::ComputeNodeDescriptor::addParameter is called with ll::ParameterType::SampledImageView.
+    
+    @return     The sampled image count.
+    */
+    uint32_t getSampledImageViewCount() const noexcept;
 
 
 private:

@@ -122,12 +122,12 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 }
 
 
-std::array<uint32_t, 3> ComputeNodeDescriptor::getGridGroup() const noexcept {
+std::array<uint32_t, 3> ComputeNodeDescriptor::getGridSize() const noexcept {
     return globalGroup;
 }
 
 
-std::array<uint32_t, 3> ComputeNodeDescriptor::getLocalGroup() const noexcept {
+std::array<uint32_t, 3> ComputeNodeDescriptor::getLocalSize() const noexcept {
     return localGroup;
 }
 
@@ -177,12 +177,12 @@ uint32_t ComputeNodeDescriptor::getStorageBufferCount() const noexcept {
 }
 
 
-uint32_t ComputeNodeDescriptor::getStoraImageCount() const noexcept {
+uint32_t ComputeNodeDescriptor::getStorageImageViewCount() const noexcept {
     return countDescriptorType(vk::DescriptorType::eStorageImage);
 }
 
 
-uint32_t ComputeNodeDescriptor::getCombinedImageSamplerCount() const noexcept {
+uint32_t ComputeNodeDescriptor::getSampledImageViewCount() const noexcept {
     return countDescriptorType(vk::DescriptorType::eCombinedImageSampler);
 }
 
