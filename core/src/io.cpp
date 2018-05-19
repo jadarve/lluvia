@@ -462,26 +462,10 @@ public:
 
             const auto pName       = getValueFromJson<std::string>("name", p);
             const auto pTypeString = getValueFromJson<std::string>("type", p);
-            const auto pType       = ll::stringToObjectType(pTypeString);
-
-            std::cout << pName << " : " << pTypeString << std::endl;
 
             // can throw std::out_of_range
             auto param = graph->getObject(pName);
-            assert(param->getType() == pType);
-
-            switch (pType) {
-                case ll::ObjectType::Buffer:
-                    computeNode->bind(pIndex, std::static_pointer_cast<ll::Buffer>(param));
-                    break;
-
-                case ll::ObjectType::Image:
-                    break;
-
-                case ll::ObjectType::ImageView:
-                    computeNode->bind(pIndex, std::static_pointer_cast<ll::ImageView>(param));
-                    break;
-            }
+            computeNode->bind(pIndex, param);
 
             ++pIndex;
         }

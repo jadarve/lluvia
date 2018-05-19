@@ -12,7 +12,7 @@
             "parameters": [
                 {
                     "name": "sampledImageView",
-                    "type": "IMAGE_VIEW"
+                    "type": "SAMPLED_IMAGE_VIEW"
                 },
                 {
                     "name": "outputBuffer",
