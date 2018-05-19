@@ -1,7 +1,15 @@
+/**
+@file       ComputeNode.cpp
+@brief      ComputeNode class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ComputeNode.h"
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/Object.h"
@@ -19,7 +27,78 @@ ComputeNode::ComputeNode(const vk::Device& device, const ll::ComputeNodeDescript
     device       {device},
     descriptor   {descriptor} {
 
-    init();
+    assert(descriptor.program != nullptr);
+    assert(!descriptor.functionName.empty());
+
+    objects.resize(descriptor.parameterBindings.size());
+
+    /////////////////////////////////////////////
+    // Specialization constants
+    /////////////////////////////////////////////
+
+    const size_t size = sizeof(uint32_t);
+    auto specializationMapEntries = vector<vk::SpecializationMapEntry> {
+        {1, 0*size, size},
+        {2, 1*size, size},
+        {3, 2*size, size}
+    };
+
+    auto specializationInfo = vk::SpecializationInfo()
+        .setMapEntryCount(specializationMapEntries.size())
+        .setPMapEntries(specializationMapEntries.data())
+        .setDataSize(descriptor.localGroup.size()*sizeof(uint32_t))
+        .setPData(&descriptor.localGroup[0]);
+
+    /////////////////////////////////////////////
+    // Pipeline stage info
+    /////////////////////////////////////////////
+    stageInfo = vk::PipelineShaderStageCreateInfo()
+        .setStage(vk::ShaderStageFlagBits::eCompute)
+        .setModule(descriptor.program->getShaderModule())
+        .setPName(descriptor.functionName.c_str())
+        .setPSpecializationInfo(&specializationInfo);
+
+
+    /////////////////////////////////////////////
+    // Descriptor pool and descriptor set
+    /////////////////////////////////////////////
+    auto descLayoutInfo = vk::DescriptorSetLayoutCreateInfo()
+        .setBindingCount(descriptor.parameterBindings.size())
+        .setPBindings(descriptor.parameterBindings.data());
+
+    descriptorSetLayout = device.createDescriptorSetLayout(descLayoutInfo);
+
+    descriptorPoolSizes = descriptor.getDescriptorPoolSizes();
+    descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
+        .setMaxSets(1)
+        .setPoolSizeCount(descriptorPoolSizes.size())
+        .setPPoolSizes(descriptorPoolSizes.data());
+
+    device.createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &descriptorPool);
+
+    // only one descriptor set for this Node object
+    vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
+        .setDescriptorPool(descriptorPool)
+        .setDescriptorSetCount(1)
+        .setPSetLayouts(&descriptorSetLayout);
+
+    device.allocateDescriptorSets(&descSetAllocInfo, &descriptorSet);
+
+
+    /////////////////////////////////////////////
+    // Compute pipeline
+    /////////////////////////////////////////////
+    vk::PipelineLayoutCreateInfo pipeLayoutInfo = vk::PipelineLayoutCreateInfo()
+        .setSetLayoutCount(1)
+        .setPSetLayouts(&descriptorSetLayout);
+
+    pipelineLayout = device.createPipelineLayout(pipeLayoutInfo);
+    vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
+        .setStage(stageInfo)
+        .setLayout(pipelineLayout);
+
+    // create the compute pipeline
+    pipeline = device.createComputePipeline(nullptr, computePipeInfo);
 }
 
 
@@ -98,17 +177,17 @@ void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
             break;
 
         default:
+            // FIXME: throw system_error
             throw std::runtime_error("Unsupported object type: " + ll::objectTypeToString(obj->getType()));
     }
-
 }
 
 
-void ComputeNode::record(const vk::CommandBuffer& commandBufer) const {
+void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 
-    commandBufer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
-    commandBufer.bindDescriptorSets(vk::PipelineBindPoint::eCompute, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
-    commandBufer.dispatch(descriptor.globalGroup[0], descriptor.globalGroup[1], descriptor.globalGroup[2]);
+    commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
+    commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eCompute, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+    commandBuffer.dispatch(descriptor.globalGroup[0], descriptor.globalGroup[1], descriptor.globalGroup[2]);
 }
 
 
@@ -117,86 +196,19 @@ void ComputeNode::accept(ll::Visitor* visitor) {
 }
 
 
-void ComputeNode::init() {
-
-    assert(descriptor.program != nullptr);
-    assert(!descriptor.functionName.empty());
-
-    objects.resize(descriptor.parameterBindings.size());
-
-    /////////////////////////////////////////////
-    // Specialization constants
-    /////////////////////////////////////////////
-
-    const size_t size = sizeof(uint32_t);
-    auto specializationMapEntries = vector<vk::SpecializationMapEntry> {
-        {1, 0*size, size},
-        {2, 1*size, size},
-        {3, 2*size, size}
-    };
-
-    auto specializationInfo = vk::SpecializationInfo()
-        .setMapEntryCount(specializationMapEntries.size())
-        .setPMapEntries(specializationMapEntries.data())
-        .setDataSize(descriptor.localGroup.size()*sizeof(uint32_t))
-        .setPData(&descriptor.localGroup[0]);
-
-    /////////////////////////////////////////////
-    // Pipeline stage info
-    /////////////////////////////////////////////
-    stageInfo = vk::PipelineShaderStageCreateInfo()
-        .setStage(vk::ShaderStageFlagBits::eCompute)
-        .setModule(descriptor.program->getShaderModule())
-        .setPName(descriptor.functionName.c_str())
-        .setPSpecializationInfo(&specializationInfo);
-
-
-    /////////////////////////////////////////////
-    // Descriptor pool and descriptor set
-    /////////////////////////////////////////////
-    auto descLayoutInfo = vk::DescriptorSetLayoutCreateInfo()
-        .setBindingCount(descriptor.parameterBindings.size())
-        .setPBindings(descriptor.parameterBindings.data());
-
-    descriptorSetLayout = device.createDescriptorSetLayout(descLayoutInfo);
-
-    descriptorPoolSizes = descriptor.getDescriptorPoolSizes();
-    descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
-        .setMaxSets(1)
-        .setPoolSizeCount(descriptorPoolSizes.size())
-        .setPPoolSizes(descriptorPoolSizes.data());
-
-    device.createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &descriptorPool);
-
-    // only one descriptor set for this Node object
-    vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
-        .setDescriptorPool(descriptorPool)
-        .setDescriptorSetCount(1)
-        .setPSetLayouts(&descriptorSetLayout);
-
-    device.allocateDescriptorSets(&descSetAllocInfo, &descriptorSet);
-
-
-    /////////////////////////////////////////////
-    // Compute pipeline
-    /////////////////////////////////////////////
-    vk::PipelineLayoutCreateInfo pipeLayoutInfo = vk::PipelineLayoutCreateInfo()
-        .setSetLayoutCount(1)
-        .setPSetLayouts(&descriptorSetLayout);
-
-    pipelineLayout = device.createPipelineLayout(pipeLayoutInfo);
-    vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
-        .setStage(stageInfo)
-        .setLayout(pipelineLayout);
-
-    // create the compute pipeline
-    pipeline = device.createComputePipeline(nullptr, computePipeInfo);
-}
-
-
 void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer) {
 
-    // TODO: check parameter type buffer at index position.
+    // validate that buffer can be bound at index position.
+    const auto& vkBinding = descriptor.parameterBindings[index];
+    const auto  paramType = ll::vkDescriptorTypeToParameterType(vkBinding.descriptorType);
+
+    if (paramType != ll::ParameterType::Buffer) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Buffer cannot be bound at position ["
+            + std::to_string(index) + "] as parameter type is not ll::ParameterType::Buffer");
+    }
+
+
+    // binding
     objects[index] = buffer;
 
     auto descBufferInfo = vk::DescriptorBufferInfo()
@@ -218,7 +230,27 @@ void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& 
 
 void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imgView) {
 
-    // TODO: check parameter type image view at index position.
+    const auto isSampled = imgView->getDescriptor().isSampled();
+
+    // validate that imgView can be bound at index position.
+    const auto& vkBinding = descriptor.parameterBindings[index];
+    const auto  paramType = ll::vkDescriptorTypeToParameterType(vkBinding.descriptorType);
+
+    if (isSampled) {
+        if (paramType != ll::ParameterType::SampledImageView) {
+            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Imageview (sampled) cannot be bound at position ["
+                + std::to_string(index) + "] as parameter type is not ll::ParameterType::SampledImageView");
+        }
+    }
+    else {
+        if (paramType != ll::ParameterType::ImageView) {
+            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Imageview cannot be bound at position ["
+                + std::to_string(index) + "] as parameter type is not ll::ParameterType::ImageView");
+        }
+    }
+
+
+    // binding
     objects[index] = imgView;
 
     auto descImgInfo = vk::DescriptorImageInfo {}
@@ -232,7 +264,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
 
-    writeDescSet.setDescriptorType(imgView->getDescriptor().isSampled()? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
+    writeDescSet.setDescriptorType(isSampled? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
 
     // update the informacion of the descriptor set
     device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);

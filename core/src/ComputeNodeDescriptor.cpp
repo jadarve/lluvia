@@ -7,22 +7,66 @@
 
 #include "lluvia/core/ComputeNodeDescriptor.h"
 
+#include "lluvia/core/error.h"
 #include "lluvia/core/Program.h"
 
 #include <cassert>
+#include <exception>
 #include <vector>
 #include <iostream>
 
 namespace ll {
 
 
+vk::DescriptorType parameterTypeToVkDescriptorType(const ll::ParameterType& param) {
+
+    switch (param) {
+        case ll::ParameterType::Buffer:
+            return vk::DescriptorType::eStorageBuffer;
+
+        case ll::ParameterType::ImageView:
+            return vk::DescriptorType::eStorageImage;
+
+        case ll::ParameterType::SampledImageView:
+            return vk::DescriptorType::eCombinedImageSampler;
+    }
+}
+
+
+ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDescType) {
+
+    switch (vkDescType) {
+        case vk::DescriptorType::eStorageBuffer:
+            return ll::ParameterType::Buffer;
+
+        case vk::DescriptorType::eStorageImage:
+            return ll::ParameterType::ImageView;
+
+        case vk::DescriptorType::eCombinedImageSampler:
+            return ll::ParameterType::SampledImageView;
+
+        case vk::DescriptorType::eSampler:
+        case vk::DescriptorType::eSampledImage:
+        case vk::DescriptorType::eUniformTexelBuffer:
+        case vk::DescriptorType::eStorageTexelBuffer:
+        case vk::DescriptorType::eUniformBuffer:
+        case vk::DescriptorType::eUniformBufferDynamic:
+        case vk::DescriptorType::eStorageBufferDynamic:
+        case vk::DescriptorType::eInputAttachment:
+            throw std::system_error(createErrorCode(ll::ErrorCode::EnumConversionFailed), "cannot convert from Vulkan DescriptorType enum value to ll::ParameterType.");
+    }
+}
+
+
 ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) {
+
     this->program = program;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) {
+
     functionName = name;
     return *this;
 }
@@ -30,26 +74,12 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType param) {
 
-
     auto paramBinding = vk::DescriptorSetLayoutBinding {}
                             .setBinding(static_cast<uint32_t>(parameterBindings.size()))
                             .setDescriptorCount(1)
+                            .setDescriptorType(parameterTypeToVkDescriptorType(param))
                             .setStageFlags(vk::ShaderStageFlagBits::eCompute)
                             .setPImmutableSamplers(nullptr);
-    
-    switch (param) {
-        case ll::ParameterType::Buffer:
-            paramBinding.setDescriptorType(vk::DescriptorType::eStorageBuffer);
-            break;
-
-        case ll::ParameterType::ImageView:
-            paramBinding.setDescriptorType(vk::DescriptorType::eStorageImage);
-            break;
-
-        case ll::ParameterType::SampledImageView:
-            paramBinding.setDescriptorType(vk::DescriptorType::eCombinedImageSampler);
-            break;
-    }
 
     parameterBindings.push_back(paramBinding);
     return *this;
@@ -57,6 +87,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterTy
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
+
     assert(x >= 1);
     globalGroup[0] = x;
     return *this;
@@ -64,6 +95,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcep
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcept {
+
     assert(y >= 1);
     globalGroup[1] = y;
     return *this;
@@ -71,6 +103,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcep
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcept {
+
     assert(z >= 1);
     globalGroup[2] = z;
     return *this;
@@ -78,6 +111,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcep
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexcept {
+
     assert(x >= 1);
     localGroup[0] = x;
     return *this;
@@ -85,6 +119,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexce
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexcept {
+
     assert(y >= 1);
     localGroup[1] = y;
     return *this;
@@ -92,6 +127,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexce
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexcept {
+
     assert(z >= 1);
     localGroup[2] = z;
     return *this;

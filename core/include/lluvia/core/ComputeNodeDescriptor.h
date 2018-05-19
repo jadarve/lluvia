@@ -69,6 +69,30 @@ inline T parameterTypeToString(ll::ParameterType&& value) noexcept {
 
 
 /**
+@brief      Converts from ll::ParamterType enum to Vulkan DescriptorType.
+
+@param[in]  param  The parameter.
+
+@return     The corresponding Vulkan descriptor type for \p param.
+*/
+vk::DescriptorType parameterTypeToVkDescriptorType(const ll::ParameterType& param);
+
+
+/**
+@brief      Converts from Vulkan DescriptorType to ll::ParameterType enum.
+
+@param[in]  vkDescType  The Vulkan description type.
+
+@return     The corresponding ll::ParameterType.
+
+@throws     std::system_error if there is no associated ll::ParameterType value for \p vkDescType.
+                              Using the values returned by ll::parameterTypeToVkDescriptorType is guaranteed
+                              to not throw exception.
+*/
+ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDescType);
+
+
+/**
 @brief      Converts from a string-like object to ll::ParameterType enum.
 
 @param[in]  stringValue  string-like parameter. String literals and `std::string` objects are allowed.
@@ -86,7 +110,7 @@ inline ll::ParameterType stringToParameterType(T&& stringValue) {
 
 
 /**
-@brief      Class for compute node descriptor.
+@brief      Class for describing a compute node node.
 
 Descriptors are used to construct ll::ComputeNode objects.
 */
