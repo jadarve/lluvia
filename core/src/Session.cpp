@@ -15,7 +15,6 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
-#include "lluvia/core/impl/OneTimeSubmitCommandBuffer.h"
 
 #include <algorithm>
 #include <exception>
