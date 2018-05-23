@@ -84,7 +84,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
     // transition all the images to general image layout
     cmdBuffer->end();
-    session->run(cmdBuffer);
+    session->run(*cmdBuffer);
 
 
     initComputeNodes(session);
@@ -93,7 +93,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
 void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 
-    auto getGlobalSize = [](const auto size, const auto localSize) {
+    auto getGridSize = [](const auto size, const auto localSize) {
         return static_cast<uint32_t>(std::ceil(static_cast<double>(size) / static_cast<double>(localSize)));
     };
 
@@ -133,8 +133,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         width /= 2;
 
         auto descX_i = ll::ComputeNodeDescriptor {descX}
-            .setGlobalX(getGlobalSize(width,  descX.getLocalX()))
-            .setGlobalY(getGlobalSize(height, descX.getLocalY()));
+            .setGridX(getGridSize(width,  descX.getLocalX()))
+            .setGridY(getGridSize(height, descX.getLocalY()));
 
         auto nodeX = session->createComputeNode(descX_i);
         nodeX->bind(0, imageViewsY[i]);
@@ -144,8 +144,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         height /= 2;
 
         auto descY_i = ll::ComputeNodeDescriptor {descY}
-            .setGlobalX(getGlobalSize(width,  descY.getLocalX()))
-            .setGlobalY(getGlobalSize(height, descY.getLocalY()));
+            .setGridX(getGridSize(width,  descY.getLocalX()))
+            .setGridY(getGridSize(height, descY.getLocalY()));
 
         auto nodeY = session->createComputeNode(descY_i);
         nodeY->bind(0, imageViewsX[i]);
@@ -155,15 +155,15 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 }
 
 
-void ImagePyramid::record(std::shared_ptr<ll::CommandBuffer> cmdBuffer) {
+void ImagePyramid::record(ll::CommandBuffer& cmdBuffer) {
 
     for (auto i = 0u; i < levels; ++i) {
 
-        cmdBuffer->run(*computeNodesX[i]);
-        cmdBuffer->memoryBarrier();
+        cmdBuffer.run(*computeNodesX[i]);
+        cmdBuffer.memoryBarrier();
 
-        cmdBuffer->run(*computeNodesY[i]);
-        cmdBuffer->memoryBarrier();
+        cmdBuffer.run(*computeNodesY[i]);
+        cmdBuffer.memoryBarrier();
     }
 }
 
@@ -204,7 +204,7 @@ void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_
     cmdBuffer->changeImageLayout(*image, currentLayout);
     cmdBuffer->end();
 
-    session->run(cmdBuffer);
+    session->run(*cmdBuffer);
 
     auto mapPtr = hostImage->map();
     const auto res = stbi_write_jpg(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr, 100);

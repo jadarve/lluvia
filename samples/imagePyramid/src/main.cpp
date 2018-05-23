@@ -91,7 +91,7 @@ int main(int argc, const char** argv) {
     imgCopyCmdBuffer->copyBufferToImage(*stageBuffer, *inputImage);
     imgCopyCmdBuffer->changeImageLayout(*inputImage, vk::ImageLayout::eGeneral);
     imgCopyCmdBuffer->end();
-    session->run(imgCopyCmdBuffer);
+    session->run(*imgCopyCmdBuffer);
     
 
     auto imagePyramid = ImagePyramid {4};
@@ -101,10 +101,10 @@ int main(int argc, const char** argv) {
 
     auto cmdBuffer = session->createCommandBuffer();
     cmdBuffer->begin();
-    imagePyramid.record(cmdBuffer);
+    imagePyramid.record(*cmdBuffer);
     cmdBuffer->end();
 
-    session->run(cmdBuffer);
+    session->run(*cmdBuffer);
 
     imagePyramid.writeAllImages(session);
 }

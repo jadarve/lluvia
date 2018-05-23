@@ -47,7 +47,13 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     hostBuffer->unmap();
 
     // issue the copy command
-    session->copyBuffer(*hostBuffer, *deviceBuffer);
+    auto cmdBuffer1 = session->createCommandBuffer();
+
+    cmdBuffer1->begin();
+    cmdBuffer1->copyBuffer(*hostBuffer, *deviceBuffer);
+    cmdBuffer1->end();
+
+    session->run(*cmdBuffer1);
 
 
     // create a second host memory to copy the deviceBuffer into and check
@@ -58,7 +64,14 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     auto secBuffer = secMemory->createBuffer(bufferSize);
     REQUIRE(secBuffer != nullptr);
 
-    session->copyBuffer(*deviceBuffer, *secBuffer);
+    // session->copyBuffer(*deviceBuffer, *secBuffer);
+    auto cmdBuffer2 = session->createCommandBuffer();
+
+    cmdBuffer2->begin();
+    cmdBuffer2->copyBuffer(*deviceBuffer, *secBuffer);
+    cmdBuffer2->end();
+    
+    session->run(*cmdBuffer2);
 
 
     // compare host and secondary values. If they are equal, then it

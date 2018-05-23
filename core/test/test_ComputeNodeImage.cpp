@@ -88,7 +88,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addParameter(ll::ParameterType::ImageView)
+                            .addParameter(ll::ParameterType::SampledImageView)
                             .addParameter(ll::ParameterType::Buffer);
 
     auto node = session->createComputeNode(nodeDescriptor);
@@ -111,7 +111,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
     cmdBuffer->end();
 
-    session->run(cmdBuffer);
+    session->run(*cmdBuffer);
 
     // END OF EXECUTION
 
@@ -229,7 +229,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
 
     cmdBuffer->end();
 
-    session->run(cmdBuffer);
+    session->run(*cmdBuffer);
 
     // END OF EXECUTION
 

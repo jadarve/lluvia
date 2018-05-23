@@ -1,3 +1,10 @@
+/**
+@file       io.cpp
+@brief      io related classes and methods.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/io.h"
 
 #include "lluvia/core/Buffer.h"
@@ -160,15 +167,17 @@ public:
 
         auto j = json {};
 
+        const auto desc = imageView->getDescriptor();
+
         j["name"]                   = name;
         j["type"]                   = ll::objectTypeToString(imageView->getType());
         j["image"]                  = imageName;
-        j["filter_mode"]            = ll::imageFilterModeToString(imageView->getFilterMode());
-        j["address_mode_u"]         = ll::imageAddressModeToString(imageView->getAddressModeU());
-        j["address_mode_v"]         = ll::imageAddressModeToString(imageView->getAddressModeV());
-        j["address_mode_w"]         = ll::imageAddressModeToString(imageView->getAddressModeW());
-        j["normalized_coordinates"] = imageView->getNormalizedCoordinates();
-        j["is_sampled"]             = imageView->isSampled();
+        j["filter_mode"]            = ll::imageFilterModeToString(desc.getFilterMode());
+        j["address_mode_u"]         = ll::imageAddressModeToString(desc.getAddressModeU());
+        j["address_mode_v"]         = ll::imageAddressModeToString(desc.getAddressModeV());
+        j["address_mode_w"]         = ll::imageAddressModeToString(desc.getAddressModeW());
+        j["normalized_coordinates"] = desc.isNormalizedCoordinates();
+        j["is_sampled"]             = desc.isSampled();
 
         obj["objects"].push_back(j);
 
@@ -198,9 +207,9 @@ public:
         j["local_x"]    = node->getLocalX();
         j["local_y"]    = node->getLocalY();
         j["local_z"]    = node->getLocalZ();
-        j["global_x"]   = node->getGlobalX();
-        j["global_y"]   = node->getGlobalY();
-        j["global_z"]   = node->getGlobalZ();
+        j["grid_x"]   = node->getGridX();
+        j["grid_y"]   = node->getGridY();
+        j["grid_z"]   = node->getGridZ();
         j["parameters"] = nullptr; // placeholder
 
         const auto pCount = node->getParameterCount();
@@ -232,74 +241,78 @@ public:
         this->session = session;
 
         std::ifstream file {filePath, std::ios_base::in};
+        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
-        if (file.is_open()) {
+        auto j = json {};
 
-            auto j = json {};
+        try {
+
             file >> j;
 
-            graph = std::make_shared<ll::ComputeGraph>();
+        } catch (std::exception& e) {
+            throw std::runtime_error {"Error parsing JSON file: " + std::string{e.what()}};
+        }
+        
 
-            const auto& memories = j["memories"];
-            if (!memories.is_null()) {
+        graph = std::make_shared<ll::ComputeGraph>();
 
-                assert(memories.is_array());
-                for (const auto& mem : memories) {
-                    buildMemory(mem);
-                }
+        const auto& memories = j["memories"];
+        if (!memories.is_null()) {
+
+            assert(memories.is_array());
+            for (const auto& mem : memories) {
+                buildMemory(mem);
             }
-
-            const auto& objects = j["objects"];
-            auto imageViewsToBuild = std::vector<json> {};
-            if (!objects.is_null()) {
-
-                assert(objects.is_array());
-                for (const auto& obj : objects) {
-
-                    const auto pTypeString = getValueFromJson<std::string>("type", obj);
-                    const auto pType = ll::stringToObjectType(pTypeString);
-
-                    switch (pType) {
-                        case ll::ObjectType::Buffer:
-                            buildBuffer(obj);
-                            break;
-                        case ll::ObjectType::Image:
-                            buildImage(obj);
-                            break;
-                        case ll::ObjectType::ImageView:
-                            imageViewsToBuild.push_back(obj);
-                            break;
-                    }
-                }
-
-                // build image views
-                for (const auto& obj : imageViewsToBuild) {
-                    buildImageView(obj);
-                }
-            }
-
-            const auto& programs = j["programs"];
-            if (!programs.is_null()) {
-
-                assert(programs.is_array());
-                for (const auto& prog : programs) {
-                    buildProgram(prog);
-                }
-            }
-
-            const auto& nodes = j["compute_nodes"];
-            if (!nodes.is_null()) {
-
-                assert(nodes.is_array());
-                for (const auto& n : nodes) {
-                    buildComputeNode(n);
-                }
-            }
-
-            return graph;
         }
 
-        return nullptr;
+        const auto& objects = j["objects"];
+        auto imageViewsToBuild = std::vector<json> {};
+        if (!objects.is_null()) {
+
+            assert(objects.is_array());
+            for (const auto& obj : objects) {
+
+                const auto pTypeString = getValueFromJson<std::string>("type", obj);
+                const auto pType = ll::stringToObjectType(pTypeString);
+
+                switch (pType) {
+                    case ll::ObjectType::Buffer:
+                        buildBuffer(obj);
+                        break;
+                    case ll::ObjectType::Image:
+                        buildImage(obj);
+                        break;
+                    case ll::ObjectType::ImageView:
+                        imageViewsToBuild.push_back(obj);
+                        break;
+                }
+            }
+
+            // build image views
+            for (const auto& obj : imageViewsToBuild) {
+                buildImageView(obj);
+            }
+        }
+
+        const auto& programs = j["programs"];
+        if (!programs.is_null()) {
+
+            assert(programs.is_array());
+            for (const auto& prog : programs) {
+                buildProgram(prog);
+            }
+        }
+
+        const auto& nodes = j["compute_nodes"];
+        if (!nodes.is_null()) {
+
+            assert(nodes.is_array());
+            for (const auto& n : nodes) {
+                buildComputeNode(n);
+            }
+        }
+
+        return graph;
     }
 
 
@@ -411,9 +424,9 @@ public:
         const auto name         = getValueFromJson<std::string>("name", j);
         const auto functionName = getValueFromJson<std::string>("function", j);
         const auto programName  = getValueFromJson<std::string>("program", j);
-        const auto globalX      = getValueFromJson<uint32_t>("global_x", j);
-        const auto globalY      = getValueFromJson<uint32_t>("global_y", j);
-        const auto globalZ      = getValueFromJson<uint32_t>("global_z", j);
+        const auto globalX      = getValueFromJson<uint32_t>("grid_x", j);
+        const auto globalY      = getValueFromJson<uint32_t>("grid_y", j);
+        const auto globalZ      = getValueFromJson<uint32_t>("grid_z", j);
         const auto localX       = getValueFromJson<uint32_t>("local_x", j);
         const auto localY       = getValueFromJson<uint32_t>("local_y", j);
         const auto localZ       = getValueFromJson<uint32_t>("local_z", j);
@@ -422,9 +435,9 @@ public:
         // can throw std::out_of_range
         auto program = graph->getProgram(programName);
         auto descriptor = ll::ComputeNodeDescriptor()
-                            .setGlobalX(globalX)
-                            .setGlobalY(globalY)
-                            .setGlobalZ(globalZ)
+                            .setGridX(globalX)
+                            .setGridY(globalY)
+                            .setGridZ(globalZ)
                             .setLocalX(localX)
                             .setLocalY(localY)
                             .setLocalZ(localZ)
@@ -449,26 +462,10 @@ public:
 
             const auto pName       = getValueFromJson<std::string>("name", p);
             const auto pTypeString = getValueFromJson<std::string>("type", p);
-            const auto pType       = ll::stringToObjectType(pTypeString);
-
-            std::cout << pName << " : " << pTypeString << std::endl;
 
             // can throw std::out_of_range
             auto param = graph->getObject(pName);
-            assert(param->getType() == pType);
-
-            switch (pType) {
-                case ll::ObjectType::Buffer:
-                    computeNode->bind(pIndex, std::static_pointer_cast<ll::Buffer>(param));
-                    break;
-
-                case ll::ObjectType::Image:
-                    break;
-
-                case ll::ObjectType::ImageView:
-                    computeNode->bind(pIndex, std::static_pointer_cast<ll::ImageView>(param));
-                    break;
-            }
+            computeNode->bind(pIndex, param);
 
             ++pIndex;
         }

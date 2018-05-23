@@ -70,7 +70,15 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     REQUIRE(node != nullptr);
 
     node->bind(0, buffer);
-    session->run(node);
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->run(*node);
+    cmdBuffer->end();
+
+    session->run(*cmdBuffer);
+    
 
     const auto* bufferMap = static_cast<const float*>(buffer->map());
     for (auto i = 0u; i < bufferSize; ++i) {

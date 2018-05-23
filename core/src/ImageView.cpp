@@ -1,3 +1,10 @@
+/**
+@file       ImageView.cpp
+@brief      ImageView class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ImageView.h"
 
 #include "lluvia/core/Image.h"
@@ -29,7 +36,7 @@ ImageView::ImageView(vk::Device device,
     
     vkImageView = device.createImageView(imageViewInfo);
 
-    if (descriptor.isSampled) {
+    if (descriptor.isSampled()) {
         vkSampler = device.createSampler(descriptor.getVkSamplerCreateInfo());
     }
 }
@@ -39,7 +46,7 @@ ImageView::~ImageView() {
 
     device.destroyImageView(vkImageView);
 
-    if (descriptor.isSampled) {
+    if (descriptor.isSampled()) {
         device.destroySampler(vkSampler);
     }
 }
@@ -52,36 +59,6 @@ ll::ObjectType ImageView::getType() const noexcept {
 
 std::shared_ptr<ll::Image> ImageView::getImage() const noexcept {
     return image;
-}
-
-
-ll::ImageFilterMode  ImageView::getFilterMode() const noexcept {
-    return descriptor.filterMode;
-}
-
-
-ll::ImageAddressMode ImageView::getAddressModeU() const noexcept {
-    return descriptor.addressMode[static_cast<uint32_t>(ll::ImageAxis::U)];
-}
-
-
-ll::ImageAddressMode ImageView::getAddressModeV() const noexcept {
-    return descriptor.addressMode[static_cast<uint32_t>(ll::ImageAxis::V)];
-}
-
-
-ll::ImageAddressMode ImageView::getAddressModeW() const noexcept {
-    return descriptor.addressMode[static_cast<uint32_t>(ll::ImageAxis::W)];
-}
-
-
-bool ImageView::getNormalizedCoordinates() const noexcept {
-    return descriptor.normalizedCoordinates;
-}
-
-
-bool ImageView::isSampled() const noexcept {
-    return descriptor.isSampled;
 }
 
 

@@ -1,11 +1,20 @@
+/**
+@file       Memory.cpp
+@brief      Memory class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/Memory.h"
 
 #include "lluvia/core/Buffer.h"
+#include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 
 #include <algorithm>
+#include <exception>
 #include <iostream>
 
 
@@ -72,7 +81,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // check that memRequirements.memoryTypeBits is supported in this memory
     const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
-        throw std::runtime_error("memory " + std::to_string(heapInfo.typeIndex) + " does not support allocationg of buffer objects.");
+        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(heapInfo.typeIndex) + " does not support allocating buffer objects.");
     }
 
     // find or create a new memory page where the buffer can be allocated
@@ -113,7 +122,9 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
     const auto offset = buffer.allocInfo.offset + buffer.allocInfo.leftPadding;
     const auto size   = buffer.allocInfo.size;
 
-    assert(!memoryPageMappingFlags[page]);
+    if (memoryPageMappingFlags[page]) {
+        throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] is already mapped by another object."};
+    }
 
     // set mapping flag for this page to mapped
     memoryPageMappingFlags[page] = true;
@@ -124,6 +135,11 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
 void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
     const auto page = buffer.allocInfo.page;
+
+    if (!memoryPageMappingFlags[page]) {
+        throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] has not been mapped by any object."};
+    }
+
     device.unmapMemory(memoryPages[page]);
 
     // set mapping flag for this page to unmapped
@@ -155,7 +171,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     // check that memRequirements.memoryTypeBits is supported in this memory
     const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
-        throw std::runtime_error("memory " + std::to_string(heapInfo.typeIndex) + " does not support allocationg of image objects.");
+        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(heapInfo.typeIndex) + " does not support allocating image objects.");
     }
 
     // find or create a new memory page where the image can be allocated

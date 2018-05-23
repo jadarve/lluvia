@@ -47,6 +47,8 @@ void CommandBuffer::run(const ll::ComputeNode& node) {
 
 void CommandBuffer::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
 
+    assert(dst.getSize() >= src.getSize());
+
     auto copyInfo = vk::BufferCopy()
         .setSrcOffset(0)
         .setDstOffset(0)

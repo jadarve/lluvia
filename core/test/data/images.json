@@ -2,9 +2,9 @@
     "compute_nodes": [
         {
             "function": "main",
-            "global_x": 1,
-            "global_y": 1,
-            "global_z": 1,
+            "grid_x": 1,
+            "grid_y": 1,
+            "grid_z": 1,
             "local_x": 32,
             "local_y": 32,
             "local_z": 1,
@@ -12,7 +12,7 @@
             "parameters": [
                 {
                     "name": "sampledImageView",
-                    "type": "IMAGE_VIEW"
+                    "type": "SAMPLED_IMAGE_VIEW"
                 },
                 {
                     "name": "outputBuffer",

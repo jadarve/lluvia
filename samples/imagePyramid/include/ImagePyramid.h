@@ -14,7 +14,7 @@ public:
 
     void setInputImage(std::shared_ptr<ll::Image> inputImage);
     void init(std::shared_ptr<ll::Session> session);
-    void record(std::shared_ptr<ll::CommandBuffer> cmdBuffer);
+    void record(ll::CommandBuffer& cmdBuffer);
 
     void writeAllImages(std::shared_ptr<ll::Session> session);
 

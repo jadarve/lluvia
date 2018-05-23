@@ -1,44 +1,14 @@
+/**
+@file       ImageViewDescriptor.cpp
+@brief      ImageViewDescriptor class and related enumerations and methods.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ImageViewDescriptor.h"
 
 
 namespace ll {
-
-
-ImageViewDescriptor& ImageViewDescriptor::setFilteringMode(ll::ImageFilterMode filterMode) {
-
-    this->filterMode = filterMode;
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAddressMode addressMode) {
-
-    for (auto& it : this->addressMode) {
-        it = addressMode;
-    }
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) {
-
-    this->addressMode[static_cast<uint32_t>(axis)] = addressMode;
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setNormalizedCoordinates(bool normalizedCoordinates) {
-
-    this->normalizedCoordinates = normalizedCoordinates;
-    return *this;
-}
-
-
-ImageViewDescriptor& ImageViewDescriptor::setIsSampled(bool isSampled) {
-
-    this->isSampled = isSampled;
-    return *this;
-}
 
 
 vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexcept {

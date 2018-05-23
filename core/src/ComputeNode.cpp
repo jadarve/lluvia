@@ -1,7 +1,15 @@
+/**
+@file       ComputeNode.cpp
+@brief      ComputeNode class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ComputeNode.h"
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/Object.h"
@@ -18,106 +26,6 @@ using namespace std;
 ComputeNode::ComputeNode(const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
     device       {device},
     descriptor   {descriptor} {
-
-    init();
-}
-
-
-ComputeNode::~ComputeNode() {
-
-    device.destroyPipeline(pipeline, nullptr);
-    device.destroyPipelineLayout(pipelineLayout, nullptr);
-    device.destroyDescriptorPool(descriptorPool, nullptr);
-    device.destroyDescriptorSetLayout(descriptorSetLayout);
-}
-
-
-std::string ComputeNode::getFunctionName() const noexcept {
-    return descriptor.functionName;
-}
-
-
-std::shared_ptr<ll::Program> ComputeNode::getProgram() const noexcept{
-    return descriptor.program;
-}
-
-
-uint32_t ComputeNode::getLocalX() const noexcept {
-    return descriptor.localGroup[0];
-}
-
-
-uint32_t ComputeNode::getLocalY() const noexcept {
-    return descriptor.localGroup[1];
-}
-
-
-uint32_t ComputeNode::getLocalZ() const noexcept {
-    return descriptor.localGroup[2];
-}
-
-
-uint32_t ComputeNode::getGlobalX() const noexcept {
-    return descriptor.globalGroup[0];
-}
-
-
-uint32_t ComputeNode::getGlobalY() const noexcept {
-    return descriptor.globalGroup[1];
-}
-
-
-uint32_t ComputeNode::getGlobalZ() const noexcept {
-    return descriptor.globalGroup[2];
-}
-
-
-size_t ComputeNode::getParameterCount() const noexcept {
-    return objects.size();
-}
-
-
-std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexcept {
-    assert(index < objects.size());
-    return objects[index];
-}
-
-
-void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
-
-    // TODO: assert that the type in obj is compatible with the descriptor at index
-    assert(index < objects.size());
-
-    switch (obj->getType()) {
-        case ll::ObjectType::Buffer:
-            bindBuffer(index, std::static_pointer_cast<ll::Buffer>(obj));
-            break;
-
-        case ll::ObjectType::ImageView:
-            bindImageView(index, std::static_pointer_cast<ll::ImageView>(obj));
-            break;
-
-        default:
-            throw std::runtime_error("Unsupported object type: " + ll::objectTypeToString(obj->getType()));
-    }
-
-}
-
-
-void ComputeNode::record(const vk::CommandBuffer& commandBufer) const {
-
-    commandBufer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
-    commandBufer.bindDescriptorSets(vk::PipelineBindPoint::eCompute, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
-    commandBufer.dispatch(descriptor.globalGroup[0], descriptor.globalGroup[1], descriptor.globalGroup[2]);
-}
-
-
-void ComputeNode::accept(ll::Visitor* visitor) {
-    assert(visitor != nullptr);
-}
-
-
-void ComputeNode::init() {
 
     assert(descriptor.program != nullptr);
     assert(!descriptor.functionName.empty());
@@ -194,9 +102,113 @@ void ComputeNode::init() {
 }
 
 
+ComputeNode::~ComputeNode() {
+
+    device.destroyPipeline(pipeline, nullptr);
+    device.destroyPipelineLayout(pipelineLayout, nullptr);
+    device.destroyDescriptorPool(descriptorPool, nullptr);
+    device.destroyDescriptorSetLayout(descriptorSetLayout);
+}
+
+
+std::string ComputeNode::getFunctionName() const noexcept {
+    return descriptor.functionName;
+}
+
+
+std::shared_ptr<ll::Program> ComputeNode::getProgram() const noexcept{
+    return descriptor.program;
+}
+
+
+uint32_t ComputeNode::getLocalX() const noexcept {
+    return descriptor.localGroup[0];
+}
+
+
+uint32_t ComputeNode::getLocalY() const noexcept {
+    return descriptor.localGroup[1];
+}
+
+
+uint32_t ComputeNode::getLocalZ() const noexcept {
+    return descriptor.localGroup[2];
+}
+
+
+uint32_t ComputeNode::getGridX() const noexcept {
+    return descriptor.globalGroup[0];
+}
+
+
+uint32_t ComputeNode::getGridY() const noexcept {
+    return descriptor.globalGroup[1];
+}
+
+
+uint32_t ComputeNode::getGridZ() const noexcept {
+    return descriptor.globalGroup[2];
+}
+
+
+size_t ComputeNode::getParameterCount() const noexcept {
+    return objects.size();
+}
+
+
+std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexcept {
+    assert(index < objects.size());
+    return objects[index];
+}
+
+
+void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
+
+    // TODO: assert that the type in obj is compatible with the descriptor at index
+    assert(index < objects.size());
+
+    switch (obj->getType()) {
+        case ll::ObjectType::Buffer:
+            bindBuffer(index, std::static_pointer_cast<ll::Buffer>(obj));
+            break;
+
+        case ll::ObjectType::ImageView:
+            bindImageView(index, std::static_pointer_cast<ll::ImageView>(obj));
+            break;
+
+        default:
+            // FIXME: throw system_error
+            throw std::runtime_error("Unsupported object type: " + ll::objectTypeToString(obj->getType()));
+    }
+}
+
+
+void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
+
+    commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
+    commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eCompute, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+    commandBuffer.dispatch(descriptor.globalGroup[0], descriptor.globalGroup[1], descriptor.globalGroup[2]);
+}
+
+
+void ComputeNode::accept(ll::Visitor* visitor) {
+    assert(visitor != nullptr);
+}
+
+
 void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer) {
 
-    // TODO: check parameter type buffer at index position.
+    // validate that buffer can be bound at index position.
+    const auto& vkBinding = descriptor.parameterBindings[index];
+    const auto  paramType = ll::vkDescriptorTypeToParameterType(vkBinding.descriptorType);
+
+    if (paramType != ll::ParameterType::Buffer) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Buffer cannot be bound at position ["
+            + std::to_string(index) + "] as parameter type is not ll::ParameterType::Buffer");
+    }
+
+
+    // binding
     objects[index] = buffer;
 
     auto descBufferInfo = vk::DescriptorBufferInfo()
@@ -218,7 +230,27 @@ void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& 
 
 void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imgView) {
 
-    // TODO: check parameter type image view at index position.
+    const auto isSampled = imgView->getDescriptor().isSampled();
+
+    // validate that imgView can be bound at index position.
+    const auto& vkBinding = descriptor.parameterBindings[index];
+    const auto  paramType = ll::vkDescriptorTypeToParameterType(vkBinding.descriptorType);
+
+    if (isSampled) {
+        if (paramType != ll::ParameterType::SampledImageView) {
+            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Imageview (sampled) cannot be bound at position ["
+                + std::to_string(index) + "] as parameter type is not ll::ParameterType::SampledImageView");
+        }
+    }
+    else {
+        if (paramType != ll::ParameterType::ImageView) {
+            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Imageview cannot be bound at position ["
+                + std::to_string(index) + "] as parameter type is not ll::ParameterType::ImageView");
+        }
+    }
+
+
+    // binding
     objects[index] = imgView;
 
     auto descImgInfo = vk::DescriptorImageInfo {}
@@ -232,7 +264,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
 
-    writeDescSet.setDescriptorType(imgView->isSampled()? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
+    writeDescSet.setDescriptorType(isSampled? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
 
     // update the informacion of the descriptor set
     device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);

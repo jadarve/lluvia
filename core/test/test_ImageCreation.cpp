@@ -31,7 +31,14 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     auto image = memory->createImage(desc);
     REQUIRE(image != nullptr);
 
-    session->changeImageLayout(image, vk::ImageLayout::eGeneral);
+    // session->changeImageLayout(image, vk::ImageLayout::eGeneral);
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
+    cmdBuffer->end();
+    
+    session->run(*cmdBuffer);
 
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setFilteringMode(ll::ImageFilterMode::Nearest)

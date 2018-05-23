@@ -1,3 +1,10 @@
+/**
+@file       utils.h
+@brief      utility functions.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #ifndef LLUVIA_CORE_UTILS_H_
 #define LLUVIA_CORE_UTILS_H_
 
@@ -11,16 +18,31 @@
 
 namespace ll {
 
-vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std::string>& flagsVector);
-std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPropertyFlags flags);
 
-vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector);
-std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags);
+/**
+@brief      Converts a binary array to base-64 string.
 
-vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::string>& flagsVector);
-std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags);
+@param[in]  ptr   The pointer to the binary data.
+@param[in]  size  The size of the data in bytes.
 
+@return     the encoded base-64 string.
+
+@sa         ll::fromBase64 Converts a std::string with base-64 characters to binary.
+*/
 std::string toBase64(const void* ptr, const size_t size);
+
+
+/**
+@brief      Converts a std::string with base-64 characters to binary.
+
+@param[in]  code  The base-64 code.
+
+@return     The decoded base-64 binary array.
+
+@throws     std::runtime_error if any character in \p code does not belong to the base-64 alphabet.
+
+@sa         ll::toBase64 Converts a binary array to base-64 string.
+*/
 std::vector<uint8_t> fromBase64(const std::string& code);
 
 } // namespace ll

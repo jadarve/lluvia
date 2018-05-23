@@ -1,21 +1,72 @@
+/**
+@file       ComputeNodeDescriptor.cpp
+@brief      ComputeNodeDescriptor class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/ComputeNodeDescriptor.h"
 
+#include "lluvia/core/error.h"
 #include "lluvia/core/Program.h"
 
 #include <cassert>
+#include <exception>
 #include <vector>
 #include <iostream>
 
 namespace ll {
 
 
+vk::DescriptorType parameterTypeToVkDescriptorType(const ll::ParameterType& param) {
+
+    switch (param) {
+        case ll::ParameterType::Buffer:
+            return vk::DescriptorType::eStorageBuffer;
+
+        case ll::ParameterType::ImageView:
+            return vk::DescriptorType::eStorageImage;
+
+        case ll::ParameterType::SampledImageView:
+            return vk::DescriptorType::eCombinedImageSampler;
+    }
+}
+
+
+ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDescType) {
+
+    switch (vkDescType) {
+        case vk::DescriptorType::eStorageBuffer:
+            return ll::ParameterType::Buffer;
+
+        case vk::DescriptorType::eStorageImage:
+            return ll::ParameterType::ImageView;
+
+        case vk::DescriptorType::eCombinedImageSampler:
+            return ll::ParameterType::SampledImageView;
+
+        case vk::DescriptorType::eSampler:
+        case vk::DescriptorType::eSampledImage:
+        case vk::DescriptorType::eUniformTexelBuffer:
+        case vk::DescriptorType::eStorageTexelBuffer:
+        case vk::DescriptorType::eUniformBuffer:
+        case vk::DescriptorType::eUniformBufferDynamic:
+        case vk::DescriptorType::eStorageBufferDynamic:
+        case vk::DescriptorType::eInputAttachment:
+            throw std::system_error(createErrorCode(ll::ErrorCode::EnumConversionFailed), "cannot convert from Vulkan DescriptorType enum value to ll::ParameterType.");
+    }
+}
+
+
 ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) {
+
     this->program = program;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) {
+
     functionName = name;
     return *this;
 }
@@ -23,47 +74,36 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType param) {
 
-
     auto paramBinding = vk::DescriptorSetLayoutBinding {}
                             .setBinding(static_cast<uint32_t>(parameterBindings.size()))
                             .setDescriptorCount(1)
+                            .setDescriptorType(parameterTypeToVkDescriptorType(param))
                             .setStageFlags(vk::ShaderStageFlagBits::eCompute)
                             .setPImmutableSamplers(nullptr);
-    
-    switch (param) {
-        case ll::ParameterType::Buffer:
-            paramBinding.setDescriptorType(vk::DescriptorType::eStorageBuffer);
-            break;
-
-        case ll::ParameterType::ImageView:
-            paramBinding.setDescriptorType(vk::DescriptorType::eStorageImage);
-            break;
-
-        case ll::ParameterType::SampledImageView:
-            paramBinding.setDescriptorType(vk::DescriptorType::eCombinedImageSampler);
-            break;
-    }
 
     parameterBindings.push_back(paramBinding);
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalX(const uint32_t x) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
+
     assert(x >= 1);
     globalGroup[0] = x;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalY(const uint32_t y) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcept {
+
     assert(y >= 1);
     globalGroup[1] = y;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalZ(const uint32_t z) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcept {
+
     assert(z >= 1);
     globalGroup[2] = z;
     return *this;
@@ -71,6 +111,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGlobalZ(const uint32_t z) noexc
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexcept {
+
     assert(x >= 1);
     localGroup[0] = x;
     return *this;
@@ -78,6 +119,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexce
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexcept {
+
     assert(y >= 1);
     localGroup[1] = y;
     return *this;
@@ -85,6 +127,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexce
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexcept {
+
     assert(z >= 1);
     localGroup[2] = z;
     return *this;
@@ -115,27 +158,27 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 }
 
 
-std::array<uint32_t, 3> ComputeNodeDescriptor::getGlobalGroup() const noexcept {
+std::array<uint32_t, 3> ComputeNodeDescriptor::getGridSize() const noexcept {
     return globalGroup;
 }
 
 
-std::array<uint32_t, 3> ComputeNodeDescriptor::getLocalGroup() const noexcept {
+std::array<uint32_t, 3> ComputeNodeDescriptor::getLocalSize() const noexcept {
     return localGroup;
 }
 
 
-uint32_t ComputeNodeDescriptor::getGlobalX() const noexcept {
+uint32_t ComputeNodeDescriptor::getGridX() const noexcept {
     return globalGroup[0];
 }
 
 
-uint32_t ComputeNodeDescriptor::getGlobalY() const noexcept {
+uint32_t ComputeNodeDescriptor::getGridY() const noexcept {
     return globalGroup[1];
 }
 
 
-uint32_t ComputeNodeDescriptor::getGlobalZ() const noexcept {
+uint32_t ComputeNodeDescriptor::getGridZ() const noexcept {
     return globalGroup[2];
 }
 
@@ -170,12 +213,12 @@ uint32_t ComputeNodeDescriptor::getStorageBufferCount() const noexcept {
 }
 
 
-uint32_t ComputeNodeDescriptor::getStoraImageCount() const noexcept {
+uint32_t ComputeNodeDescriptor::getStorageImageViewCount() const noexcept {
     return countDescriptorType(vk::DescriptorType::eStorageImage);
 }
 
 
-uint32_t ComputeNodeDescriptor::getCombinedImageSamplerCount() const noexcept {
+uint32_t ComputeNodeDescriptor::getSampledImageViewCount() const noexcept {
     return countDescriptorType(vk::DescriptorType::eCombinedImageSampler);
 }
 

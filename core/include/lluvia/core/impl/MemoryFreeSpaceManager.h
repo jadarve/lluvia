@@ -1,3 +1,10 @@
+/**
+@file       MemoryFreeSpaceManager.h
+@brief      MemoryFreeSpaceManager class.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #ifndef LLUVIA_CORE_IMPL_MEMORY_FREE_SPACE_MANAGER_H_
 #define LLUVIA_CORE_IMPL_MEMORY_FREE_SPACE_MANAGER_H_
 
