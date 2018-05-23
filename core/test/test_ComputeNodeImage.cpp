@@ -111,7 +111,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
     cmdBuffer->end();
 
-    session->run(cmdBuffer);
+    session->run(*cmdBuffer);
 
     // END OF EXECUTION
 
@@ -229,7 +229,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
 
     cmdBuffer->end();
 
-    session->run(cmdBuffer);
+    session->run(*cmdBuffer);
 
     // END OF EXECUTION
 

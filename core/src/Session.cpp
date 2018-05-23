@@ -173,83 +173,22 @@ std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNod
 }
 
 
-std::shared_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
+std::unique_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 
-    return std::make_shared<ll::CommandBuffer>(device, commandPool);
+    return std::make_unique<ll::CommandBuffer>(device, commandPool);
 }
 
 
-void Session::run(const std::shared_ptr<ll::ComputeNode>& node) {
+void Session::run(const ll::CommandBuffer& cmdBuffer) {
 
-    assert (node != nullptr);
-
-    impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
-
-    node->record(runner.getCommandBuffer());
-    runner.runAndWait(queue);
-}
-
-
-void Session::run(const std::shared_ptr<ll::CommandBuffer>& cmdBuffer) {
-
-    assert (cmdBuffer != nullptr);
+    // assert (cmdBuffer != nullptr);
 
     vk::SubmitInfo submitInfo = vk::SubmitInfo()
         .setCommandBufferCount(1)
-        .setPCommandBuffers(&cmdBuffer->commandBuffer);
+        .setPCommandBuffers(&cmdBuffer.commandBuffer);
 
     queue.submit(1, &submitInfo, nullptr);
     queue.waitIdle();
-}
-
-
-void Session::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
-
-    assert(dst.getSize() >= src.getSize());
-
-    impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
-
-    auto copyInfo = vk::BufferCopy()
-        .setSrcOffset(0)
-        .setDstOffset(0)
-        .setSize(src.getSize());
-
-    runner.getCommandBuffer().copyBuffer(src.vkBuffer, dst.vkBuffer, 1, &copyInfo);
-
-    runner.runAndWait(queue);
-}
-
-
-void Session::changeImageLayout(const std::shared_ptr<ll::Image>& image, const vk::ImageLayout newLayout) {
-
-    impl::OneTimeSubmitCommandBuffer runner {device, computeQueueFamilyIndex};
-
-    auto barrier = vk::ImageMemoryBarrier {}
-                    .setOldLayout(image->vkLayout)
-                    .setNewLayout(newLayout)
-                    .setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
-                    .setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
-                    .setImage(image->vkImage)
-                    .setSrcAccessMask(vk::AccessFlagBits::eMemoryRead)      // TODO ???
-                    .setDstAccessMask(vk::AccessFlagBits::eMemoryWrite);    // TODO ???
-
-    barrier.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
-    barrier.subresourceRange.setBaseMipLevel(0);
-    barrier.subresourceRange.setLevelCount(1);
-    barrier.subresourceRange.setBaseArrayLayer(0);
-    barrier.subresourceRange.setLayerCount(1);
-
-
-    runner.getCommandBuffer().pipelineBarrier(
-        vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eComputeShader,
-        vk::DependencyFlagBits::eDeviceGroupKHX,
-        0, nullptr,
-        0, nullptr,
-        1, &barrier);
-    
-    runner.runAndWait(queue);
-
-    image->vkLayout = newLayout;
 }
 
 

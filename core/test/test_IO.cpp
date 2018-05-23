@@ -113,7 +113,13 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
     auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
     REQUIRE(image != nullptr);
 
-    session->changeImageLayout(image, vk::ImageLayout::eGeneral);
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
+    cmdBuffer->end();
+
+    session->run(*cmdBuffer);
 
     auto sampledImgViewDesc = ll::ImageViewDescriptor {}
                         .setAddressMode(ll::ImageAddressMode::Repeat)

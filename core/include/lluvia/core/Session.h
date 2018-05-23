@@ -34,17 +34,17 @@ class Session {
 
 public:
     /**
-    @brief      Gets the vulkan instance layer properties available to this machine.
+    @brief      Gets the Vulkan instance layer properties available to this machine.
     
-    @return     The vulkan instance layer properties.
+    @return     The Vulkan instance layer properties.
     */
     static std::vector<vk::LayerProperties>     getVulkanInstanceLayerProperties();
 
 
     /**
-    @brief      Gets the vulkan extension properties available to this machine.
+    @brief      Gets the Vulkan extension properties available to this machine.
     
-    @return     The vulkan extension properties.
+    @return     The Vulkan extension properties.
     */
     static std::vector<vk::ExtensionProperties> getVulkanExtensionProperties();
     
@@ -107,7 +107,7 @@ public:
     
     @return     A new ll::CommandBuffer object.
     */
-    std::shared_ptr<ll::CommandBuffer> createCommandBuffer() const;
+    std::unique_ptr<ll::CommandBuffer> createCommandBuffer() const;
 
     
     /**
@@ -150,44 +150,10 @@ public:
     This is a blocking call. The host thread will wait until execution of
     this command buffer is completed.
     
-    @param[in]  cmdBuffer  The command buffer. It must be different than nullptr.
+    @param[in]  cmdBuffer  The command buffer.
     */
-    void run(const std::shared_ptr<ll::CommandBuffer>& cmdBuffer);
+    void run(const ll::CommandBuffer& cmdBuffer);
 
-    
-    /**
-    @brief      Runs a ll::ComputeNode.
-
-    \b TODO Remove. Do everything thought ll::CommandBuffer objects to simplify the API.
-
-    This is a blocking call. The host thread will wait until execution of
-    this node is completed.
-    
-    @param[in]  node  The node. It should be different than nullptr.
-    */
-    void run(const std::shared_ptr<ll::ComputeNode>& node);
-
-
-    /**
-    @brief      { function_description }
-
-    \b TODO Remove. Do everything thought ll::CommandBuffer objects to simplify the API.
-    
-    @param[in]  src   The source
-    @param[in]  dst   The destination
-    */
-    void copyBuffer(const ll::Buffer& src, const ll::Buffer& dst);
-
-
-    /**
-    @brief      { function_description }
-
-    \b TODO Remove. Do everything thought ll::CommandBuffer objects to simplify the API.
-    
-    @param[in]  image      The image
-    @param[in]  newLayout  The new layout
-    */
-    void changeImageLayout(const std::shared_ptr<ll::Image>& image, const vk::ImageLayout newLayout);
 
 private:
     // Session objects should be created through factory methods
