@@ -80,13 +80,13 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     session->run(*cmdBuffer);
     
 
-    const auto* bufferMap = static_cast<const float*>(buffer->map());
-    for (auto i = 0u; i < bufferSize; ++i) {
+    {
+        auto bufferMap = buffer->map<float[]>();
+        for (auto i = 0u; i < bufferSize; ++i) {
 
-        std::cout << i << ": " << bufferMap[i] << std::endl;;
-    }
-
-    buffer->unmap();
+            std::cout << i << ": " << bufferMap[i] << std::endl;;
+        }
+    } // unamp bufferMap
 }
 
 

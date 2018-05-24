@@ -39,11 +39,8 @@ TEST_CASE("DifferentPage", "test_BufferMapping") {
 
     // calling the two map() in sequence should work as the buffers are allocated
     // in different memory pages
-    auto ptr1 = buffer1->map();
-    auto ptr2 = buffer2->map();
-
-    buffer1->unmap();
-    buffer2->unmap();
+    auto ptr1 = buffer1->map<uint8_t>();
+    auto ptr2 = buffer2->map<uint8_t>();
 }
 
 
@@ -69,9 +66,10 @@ TEST_CASE("SamePage", "test_BufferMapping") {
     // verify that the buffers are allocated in different memory pages
     REQUIRE(buffer1->getAllocationInfo().page == buffer2->getAllocationInfo().page);
 
-    auto ptr1 = buffer1->map();
+    auto ptr1 = buffer1->map<uint8_t>();
 
     // since both buffers are allocated in the same memory page, mapping
     // the second one should throw an exception
-    REQUIRE_THROWS_AS(buffer2->map(), std::system_error);
+    REQUIRE_THROWS_AS(buffer2->map<uint8_t>(), std::system_error);
 }
+

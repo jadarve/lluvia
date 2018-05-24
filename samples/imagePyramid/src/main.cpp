@@ -77,9 +77,10 @@ int main(int argc, const char** argv) {
     auto stageBuffer        = hostMemory->createBuffer(imageSize);
 
     // copy to stage buffer
-    auto mapPtr = stageBuffer->map();
-    std::memcpy(mapPtr, image.data.data(), imageSize);
-    stageBuffer->unmap();
+    {
+        auto mapPtr = stageBuffer->map<uint8_t>();
+        std::memcpy(mapPtr.get(), image.data.data(), imageSize);
+    } // unmap mapPtr
 
 
     // change input image layout to dst optimal

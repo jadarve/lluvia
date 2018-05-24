@@ -39,12 +39,14 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     REQUIRE(deviceBuffer != nullptr);
 
     // fill the host buffer with some values
-    auto hostPtr = static_cast<int*>(hostBuffer->map());
-    REQUIRE(hostPtr != nullptr);
-    for (auto i = 0u; i < length; ++i) {
-        hostPtr[i] = i;
-    }
-    hostBuffer->unmap();
+    // auto hostPtr = static_cast<int*>(hostBuffer->map());
+    {
+        auto hostPtr = hostBuffer->map<int[]>();
+        REQUIRE(hostPtr != nullptr);
+        for (auto i = 0u; i < length; ++i) {
+            hostPtr[i] = i;
+        }
+    } // unmap hostPtr
 
     // issue the copy command
     auto cmdBuffer1 = session->createCommandBuffer();
@@ -76,28 +78,27 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
 
     // compare host and secondary values. If they are equal, then it
     // means that the memory content of deviceBuffer is also equal.
-    hostPtr = static_cast<int*>(hostBuffer->map());
-    auto secPtr = static_cast<int*>(secBuffer->map());
+    {
+        auto hostPtr = hostBuffer->map<int[]>();
+        auto secPtr  = secBuffer->map<int[]>();
 
-    REQUIRE(hostPtr != nullptr);
-    REQUIRE(secPtr != nullptr);
+        REQUIRE(hostPtr != nullptr);
+        REQUIRE(secPtr != nullptr);
 
-    auto areEqual = true;
-    for (auto i = 0u; i < length; ++i) {
+        auto areEqual = true;
+        for (auto i = 0u; i < length; ++i) {
 
-        const auto& hostValue = hostPtr[i];
-        const auto& secValue = secPtr[i];
+            const auto& hostValue = hostPtr[i];
+            const auto& secValue = secPtr[i];
 
-        if (hostValue != secValue) {
-            std::cout << "values not equal at: " << i << ": " << hostPtr[i] << " != " << secPtr[i] << std::endl;
-            areEqual = false;
-            break;    
+            if (hostValue != secValue) {
+                std::cout << "values not equal at: " << i << ": " << hostPtr[i] << " != " << secPtr[i] << std::endl;
+                areEqual = false;
+                break;    
+            }
         }
-    }
 
-    REQUIRE(areEqual == true);
-
-    hostBuffer->unmap();
-    secBuffer->unmap();
+        REQUIRE(areEqual == true);
+    } // unmap hostPtr and secPtr
 }
 

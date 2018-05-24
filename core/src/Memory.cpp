@@ -18,6 +18,8 @@
 #include <iostream>
 
 
+constexpr const uint32_t CAPACITY_INCREASE = 32;
+
 namespace ll {
 
 constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined;
@@ -58,6 +60,16 @@ uint32_t Memory::getPageCount() const noexcept {
 
 bool Memory::isMappable() const noexcept {
     return (heapInfo.flags & vk::MemoryPropertyFlagBits::eHostVisible) == vk::MemoryPropertyFlagBits::eHostVisible;
+}
+
+
+bool Memory::isPageMappable(const uint64_t page) const noexcept {
+
+    if (page < memoryPageMappingFlags.size()) {
+        return isMappable() && !memoryPageMappingFlags[page];
+    }
+    
+    return false;
 }
 
 
@@ -241,15 +253,15 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
 
     // reserve space to store a new memory page and manager.
     if (memoryPages.size() == memoryPages.capacity()) {
-        memoryPages.reserve(memoryPages.capacity() + 1);
+        memoryPages.reserve(memoryPages.capacity() + CAPACITY_INCREASE);
     }
 
     if (pageManagers.size() == pageManagers.capacity()) {
-        pageManagers.reserve(pageManagers.capacity() + 1);
+        pageManagers.reserve(pageManagers.capacity() + CAPACITY_INCREASE);
     }
 
     if (memoryPageMappingFlags.size() == memoryPageMappingFlags.capacity()) {
-        memoryPageMappingFlags.reserve(memoryPageMappingFlags.capacity() + 1);
+        memoryPageMappingFlags.reserve(memoryPageMappingFlags.capacity() + CAPACITY_INCREASE);
     }
 
 
@@ -269,6 +281,7 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
     // push objects to vectors after reserving space
     memoryPages.push_back(memory);
     pageManagers.push_back(std::move(manager));
+    memoryPageMappingFlags.push_back(false);
 
     // this allocation try is guaranteed to work as there is enough
     // free space in the page to fit memRequirements.size.

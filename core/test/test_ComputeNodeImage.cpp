@@ -57,16 +57,16 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize()*sizeof(uint32_t));
 
-    auto bufMapped = static_cast<uint8_t*>(stageBuffer->map());
+    {
+        auto bufMapped = stageBuffer->map<uint8_t[]>();
 
-    // copy image data
-    for (auto row = 0u; row < HEIGHT; ++ row) {
-        for (auto col = 0u; col < WIDTH; ++ col) {
-            bufMapped[row*HEIGHT + col] = std::min(1u, (col + (row % 2)) % 2);
+        // copy image data
+        for (auto row = 0u; row < HEIGHT; ++ row) {
+            for (auto col = 0u; col < WIDTH; ++ col) {
+                bufMapped[row*HEIGHT + col] = std::min(1u, (col + (row % 2)) % 2);
+            }
         }
     }
-    
-    stageBuffer->unmap();
 
     auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
 
@@ -115,21 +115,20 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
     // END OF EXECUTION
 
-    bufMapped = static_cast<uint8_t*>(stageBuffer->map());
-    auto outMapped = static_cast<uint32_t*>(outputBuffer->map());
+    {
+        auto bufMapped = stageBuffer->map<uint8_t[]>();
+        auto outMapped = outputBuffer->map<uint32_t[]>();
 
-    for (auto row = 0u; row < HEIGHT; ++ row) {
-        for (auto col = 0u; col < WIDTH; ++ col) {
-            const auto coord = row*HEIGHT + col;
+        for (auto row = 0u; row < HEIGHT; ++ row) {
+            for (auto col = 0u; col < WIDTH; ++ col) {
+                const auto coord = row*HEIGHT + col;
 
-            REQUIRE(static_cast<uint32_t>(bufMapped[coord]) == outMapped[coord]);
-            std::cout << outMapped[row*HEIGHT + col] << " ";
+                REQUIRE(static_cast<uint32_t>(bufMapped[coord]) == outMapped[coord]);
+                std::cout << outMapped[coord] << " ";
+            }
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
-    }
-
-    outputBuffer->unmap();
-    stageBuffer->unmap();
+    } // unmap bufMapped and outMapped
 
 }
 
@@ -176,16 +175,16 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize()*sizeof(uint32_t));
 
-    auto bufMapped = static_cast<uint8_t*>(stageBuffer->map());
+    {
+        auto bufMapped = stageBuffer->map<uint8_t[]>();
 
-    // copy image data
-    for (auto row = 0u; row < HEIGHT; ++ row) {
-        for (auto col = 0u; col < WIDTH; ++ col) {
-            bufMapped[row*HEIGHT + col] = std::min(1u, (col + (row % 2)) % 2);
+        // copy image data
+        for (auto row = 0u; row < HEIGHT; ++ row) {
+            for (auto col = 0u; col < WIDTH; ++ col) {
+                bufMapped[row*HEIGHT + col] = std::min(1u, (col + (row % 2)) % 2);
+            }
         }
-    }
-    
-    stageBuffer->unmap();
+    } // unamp bufMapped
 
     auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
 
@@ -233,20 +232,19 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
 
     // END OF EXECUTION
 
-    bufMapped = static_cast<uint8_t*>(stageBuffer->map());
-    auto outMapped = static_cast<uint32_t*>(outputBuffer->map());
+    {
+        auto bufMapped = stageBuffer->map<uint8_t[]>();
+        auto outMapped = outputBuffer->map<uint32_t[]>();
 
-    for (auto row = 0u; row < HEIGHT; ++ row) {
-        for (auto col = 0u; col < WIDTH; ++ col) {
-            const auto coord = row*HEIGHT + col;
+        for (auto row = 0u; row < HEIGHT; ++ row) {
+            for (auto col = 0u; col < WIDTH; ++ col) {
+                const auto coord = row*HEIGHT + col;
 
-            REQUIRE(static_cast<uint32_t>(bufMapped[coord]) == outMapped[coord]);
-            std::cout << outMapped[row*HEIGHT + col] << " ";
+                REQUIRE(static_cast<uint32_t>(bufMapped[coord]) == outMapped[coord]);
+                std::cout << outMapped[coord] << " ";
+            }
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
-    }
-
-    outputBuffer->unmap();
-    stageBuffer->unmap();
+    } // unmap bufMapped and outMapped
 
 }
