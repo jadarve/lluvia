@@ -39,7 +39,6 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     REQUIRE(deviceBuffer != nullptr);
 
     // fill the host buffer with some values
-    // auto hostPtr = static_cast<int*>(hostBuffer->map());
     {
         auto hostPtr = hostBuffer->map<int[]>();
         REQUIRE(hostPtr != nullptr);
