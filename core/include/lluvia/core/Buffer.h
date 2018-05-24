@@ -8,6 +8,8 @@
 #ifndef LLUVIA_CORE_BUFFER_H_
 #define LLUVIA_CORE_BUFFER_H_
 
+#include "lluvia/core/error.h"
+#include "lluvia/core/Memory.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/impl/enum_utils.h"
@@ -21,12 +23,12 @@
 #include <tuple>
 #include <vector>
 
+
 namespace ll {
 
 class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
-class Memory;
 class Session;
 class Visitor;
 
@@ -154,11 +156,11 @@ public:
     /**
     @brief      Determines if this buffer is mappable to host-visible memory.
 
-    This function calls ll::Memory::isMappable from the memory this
+    This function calls ll::Memory::isPageMappable from the memory this
     buffer was allocated from.
     
     @return     True if mappable, False otherwise.
-    @sa         ll::Memory::isMappable Determines if this memory is mappable
+    @sa         ll::Memory::isPageMappable Determines if a certain memory page is mappable.
     */
     bool  isMappable() const noexcept;
 
@@ -179,34 +181,48 @@ public:
         
         auto buffer1 = hostMemory->createBuffer(bufferSize);
         
-        auto ptr = buffer->map();
+        {
+            // mapped as a uint8_t [] array
+            auto ptr = buffer->map<uint8_t[]>();
 
-        // read or write data using ptr
-        
-        // release the mapped memory
-        buffer->unmap();
+            for (auto i = 0u; i < bufferSize; ++i) {
+
+                // print the value of ptr at i
+                std::cout << ptr[i] << std::endl;
+            }
+            
+        } // unmap buffer then ptr goes out of scope
     @endcode
 
     Once the returned pointer is no longer needed, the user must call ll::Buffer::unmap
     to release the mapped object.
+
+    @tparam     T     type of the memory mapped. It can be either a normal type
+                      such as int or an array such as int[].
     
-    @return     A pointer to host-visible memory for this buffer.
+    @return     A std::unique_ptr to host-visible memory for this buffer. The buffer
+                is unmapped automatically once this pointer is out of scope.
+                
     @throws     std::system_error if the memory page containing this buffer has been
                 previously mapped by this or any other object.
-    @sa         ll::Buffer::unmap Unmaps this object from host visible memory.
+                
+    @sa         ll::Buffer::isMappable Determines if this buffer is mappable to host-visible memory.
     */
-    void* map();
+    template<typename T>
+    auto map() {
+        
+        if (!memory->isPageMappable(allocInfo.page)) {
+            throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
+        }
 
+        // remove array extend from T if present
+        typedef typename std::conditional<std::is_array<T>::value, typename std::remove_all_extents<T>::type, T>::type baseType;
 
-    /**
-    @brief      Unmaps this object from host visible memory.
+        auto deleter = [this](baseType* ptr) {memory->unmapBuffer(*this);};
 
-    @throws     std::system_error if the memory page containing this buffer has not been
-                previously mapped.
-
-    @sa         ll::Buffer::map Maps the memory content of this object to host-visible memory.
-    */
-    void  unmap();
+        auto ptr = memory->mapBuffer(*this);
+        return std::unique_ptr<T, decltype(deleter)> {static_cast<baseType*>(ptr), deleter};
+    }
 
 
     /**

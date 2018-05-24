@@ -184,9 +184,22 @@ public:
     @brief      Determines if this memory is mappable to host-visible memory.
     
     @return     True if mappable, False otherwise.
-    @sa         ll::Memory::isMappable Determines if this memory is mappable
+    @sa         ll::Memory::isPageMappable Determines if a certain memory page is mappable.
     */
     bool isMappable() const noexcept;
+
+
+    /**
+    @brief      Determines if a certain memory page is mappable.
+
+    This test checks if \p page is available to be mapped to host-memory by a given
+    objects such as a ll::Buffer.
+    
+    @param[in]  page  The page index.
+    
+    @return     True if page mappable, False otherwise.
+    */
+    bool isPageMappable(const uint64_t page) const noexcept;
 
 
     /**
@@ -240,9 +253,9 @@ private:
     impl::MemoryAllocationTryInfo getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements);
     void releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
 
-    void releaseBuffer(const ll::Buffer& buffer);
+    void  releaseBuffer(const ll::Buffer& buffer);
     void* mapBuffer(const ll::Buffer& buffer);
-    void unmapBuffer(const ll::Buffer& buffer);
+    void  unmapBuffer(const ll::Buffer& buffer);
 
     void releaseImage(const ll::Image& image);
 

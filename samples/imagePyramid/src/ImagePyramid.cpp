@@ -206,11 +206,9 @@ void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_
 
     session->run(*cmdBuffer);
 
-    auto mapPtr = hostImage->map();
-    const auto res = stbi_write_jpg(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr, 100);
+    auto mapPtr = hostImage->map<uint8_t>();
+    const auto res = stbi_write_jpg(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr.get(), 100);
 
     std::cout << "stbi_write_jpg result: " << res << std::endl;
-
-    hostImage->unmap();
 }
 
