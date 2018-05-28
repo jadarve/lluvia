@@ -37,13 +37,7 @@ namespace impl {
 
     See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
     */
-    constexpr const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings {{
-        std::make_tuple("DEVICE_LOCAL",     vk::MemoryPropertyFlagBits::eDeviceLocal),
-        std::make_tuple("HOST_CACHED",      vk::MemoryPropertyFlagBits::eHostCached),
-        std::make_tuple("HOST_COHERENT",    vk::MemoryPropertyFlagBits::eHostCoherent),
-        std::make_tuple("HOST_VISIBLE",     vk::MemoryPropertyFlagBits::eHostVisible),
-        std::make_tuple("LAZILY_ALLOCATED", vk::MemoryPropertyFlagBits::eLazilyAllocated),
-    }};
+    extern const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings;
 
 } // namespace impl
 
