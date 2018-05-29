@@ -52,16 +52,16 @@ extensions = list()
 #################################################
 # PURE PYTHON PACKAGES
 #################################################
-py_packages = ['lluvia', 'lluvia.z_impl']
+py_packages = ['lluvia', 'lluvia.core']
 
 # package data include Cython .pxd files
-package_data = {'lluvia.z_impl' : ['*.pxd']}
+package_data = {'lluvia.core' : ['*.pxd']}
 
 #################################################
 # CYTHON EXTENSIONS
 #################################################
-GPUmodulesTable = [('lluvia.z_impl.session', ['lluvia/z_impl/session.pyx']),
-                   ('lluvia.z_impl.memory' , ['lluvia/z_impl/memory.pyx'])]
+GPUmodulesTable = [('lluvia.core.session', ['lluvia/core/session.pyx']),
+                   ('lluvia.core.memory' , ['lluvia/core/memory.pyx'])]
 
 for mod in GPUmodulesTable:
     extList = cythonize(createExtension(mod[0], mod[1]), compiler_directives=cython_directives)
