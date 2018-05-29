@@ -91,7 +91,7 @@ public:
     
     @param[in]  flags            The flags. It should be one of the values returned
                                  by ll::Session::getSupportedMemoryFlags().
-    @param[in]  pageSize         The page size. The size of each page the new memory object
+    @param[in]  pageSize         The page size. The size in bytes of each page the new memory object
                                  will allocate when there is no space for creating new objects.
     @param[in]  exactFlagsMatch  The exact flags match. Tells whether or not \p flags should
                                  match exactly one of the values in ll::Session::getSupportedMemoryFlags()

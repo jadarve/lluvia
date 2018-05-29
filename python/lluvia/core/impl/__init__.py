@@ -1,17 +1,15 @@
 """
-    lluvia.core
-    -----------
+    lluvia.core.impl
+    ----------------
 
     :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-import memory
-import session
 
-from memory import *
-from session import *
+import enum_utils
+
+from enum_utils import *
 
 __all__ = []
-__all__ += session.__all__
-__all__ += memory.__all__
+__all__ += enum_utils.__all__

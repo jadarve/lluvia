@@ -11,6 +11,7 @@ from libc.stdint cimport uint64_t
 from libcpp cimport bool
 from libcpp.memory cimport unique_ptr
 from libcpp.memory cimport shared_ptr
+from libcpp.vector cimport vector
 
 from memory cimport _Memory
 
@@ -23,7 +24,9 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         @staticmethod
         unique_ptr[_Session] create()
 
-        shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch = false) const
+        vector[vk.MemoryPropertyFlags] getSupportedMemoryFlags() const;
+
+        shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const
 
 
 cdef class Session:

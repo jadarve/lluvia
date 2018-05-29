@@ -52,7 +52,7 @@ extensions = list()
 #################################################
 # PURE PYTHON PACKAGES
 #################################################
-py_packages = ['lluvia', 'lluvia.core']
+py_packages = ['lluvia', 'lluvia.core', 'lluvia.core.impl']
 
 # package data include Cython .pxd files
 package_data = {'lluvia.core' : ['*.pxd']}
