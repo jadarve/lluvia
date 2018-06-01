@@ -22,18 +22,6 @@ constexpr const uint32_t CAPACITY_INCREASE = 32;
 
 namespace ll {
 
-namespace impl {
-
-    constexpr const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings {{
-        std::make_tuple("DEVICE_LOCAL",     vk::MemoryPropertyFlagBits::eDeviceLocal),
-        std::make_tuple("HOST_CACHED",      vk::MemoryPropertyFlagBits::eHostCached),
-        std::make_tuple("HOST_COHERENT",    vk::MemoryPropertyFlagBits::eHostCoherent),
-        std::make_tuple("HOST_VISIBLE",     vk::MemoryPropertyFlagBits::eHostVisible),
-        std::make_tuple("LAZILY_ALLOCATED", vk::MemoryPropertyFlagBits::eLazilyAllocated),
-    }};
-
-} // namespace impl
-
 constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined;
 
 

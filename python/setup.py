@@ -61,7 +61,8 @@ package_data = {'lluvia.core' : ['*.pxd']}
 # CYTHON EXTENSIONS
 #################################################
 GPUmodulesTable = [('lluvia.core.session', ['lluvia/core/session.pyx']),
-                   ('lluvia.core.memory' , ['lluvia/core/memory.pyx'])]
+                   ('lluvia.core.memory' , ['lluvia/core/memory.pyx']),
+                   ('lluvia.core.buffer' , ['lluvia/core/buffer.pyx'])]
 
 for mod in GPUmodulesTable:
     extList = cythonize(createExtension(mod[0], mod[1]), compiler_directives=cython_directives)

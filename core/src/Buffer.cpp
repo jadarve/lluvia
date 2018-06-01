@@ -1,8 +1,36 @@
+/**
+@file       Buffer.cpp
+@brief      Buffer class and related enums.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/Buffer.h"
 
 #include "lluvia/core/Memory.h"
 
 namespace ll {
+
+namespace impl {
+
+    /**
+    String values for Vulkan VkBufferUsageFlagBits values.
+
+    See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
+    */
+    constexpr const std::array<std::tuple<const char*, vk::BufferUsageFlagBits>, 9> VkBufferUsageFlagBitsStrings {{
+        std::make_tuple("INDEX_BUFFER"         , vk::BufferUsageFlagBits::eIndexBuffer),
+        std::make_tuple("INDIRECT_BUFFER"      , vk::BufferUsageFlagBits::eIndirectBuffer),
+        std::make_tuple("STORAGE_BUFFER"       , vk::BufferUsageFlagBits::eStorageBuffer),
+        std::make_tuple("STORAGE_TEXEL_BUFFER" , vk::BufferUsageFlagBits::eStorageTexelBuffer),
+        std::make_tuple("TRANSFER_DST"         , vk::BufferUsageFlagBits::eTransferDst),
+        std::make_tuple("TRANSFER_SRC"         , vk::BufferUsageFlagBits::eTransferSrc),
+        std::make_tuple("UNIFORM_BUFFER"       , vk::BufferUsageFlagBits::eUniformBuffer),
+        std::make_tuple("UNIFORM_TEXEL_BUFFER" , vk::BufferUsageFlagBits::eUniformTexelBuffer),
+        std::make_tuple("VERTEX_BUFFER"        , vk::BufferUsageFlagBits::eVertexBuffer),
+    }};
+
+} // namespace impl
 
 
 Buffer::Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,

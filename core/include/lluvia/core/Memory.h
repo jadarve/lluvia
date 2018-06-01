@@ -37,7 +37,13 @@ namespace impl {
 
     See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
     */
-    extern const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings;
+    constexpr const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings {{
+        std::make_tuple("DEVICE_LOCAL",     vk::MemoryPropertyFlagBits::eDeviceLocal),
+        std::make_tuple("HOST_CACHED",      vk::MemoryPropertyFlagBits::eHostCached),
+        std::make_tuple("HOST_COHERENT",    vk::MemoryPropertyFlagBits::eHostCoherent),
+        std::make_tuple("HOST_VISIBLE",     vk::MemoryPropertyFlagBits::eHostVisible),
+        std::make_tuple("LAZILY_ALLOCATED", vk::MemoryPropertyFlagBits::eLazilyAllocated),
+    }};
 
 } // namespace impl
 
@@ -60,7 +66,7 @@ inline vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vect
 
 
 /**
-@brief      Converst from Vulkan MemoryPropertyFlags to a vector of strings.
+@brief      Converts from Vulkan MemoryPropertyFlags to a vector of strings.
 
 See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
 

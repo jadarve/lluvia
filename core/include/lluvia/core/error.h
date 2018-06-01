@@ -35,7 +35,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 4> ErrorCodeStrings{{
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 4> ErrorCodeStrings {{
         std::make_tuple("EnumConversionFailed"  , ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed"       , ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError" , ll::ErrorCode::ObjectAllocationError),

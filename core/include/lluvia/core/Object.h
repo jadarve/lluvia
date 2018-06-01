@@ -40,7 +40,7 @@ namespace impl {
 
     @sa ll::ObjectType enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ObjectType>, 3> ObjectTypeStrings2 {{
+    constexpr const std::array<std::tuple<const char*, ll::ObjectType>, 3> ObjectTypeStrings {{
         std::make_tuple("BUFFER"     , ll::ObjectType::Buffer),
         std::make_tuple("IMAGE"      , ll::ObjectType::Image),
         std::make_tuple("IMAGE_VIEW" , ll::ObjectType::ImageView),
@@ -60,7 +60,7 @@ namespace impl {
 */
 template<typename T = std::string>
 inline T objectTypeToString(ll::ObjectType&& value) noexcept {
-    return impl::enumToString<ll::ObjectType, ll::impl::ObjectTypeStrings2.size(), ll::impl::ObjectTypeStrings2>(std::forward<ll::ObjectType>(value));
+    return impl::enumToString<ll::ObjectType, ll::impl::ObjectTypeStrings.size(), ll::impl::ObjectTypeStrings>(std::forward<ll::ObjectType>(value));
 }
 
 
@@ -81,7 +81,7 @@ corresponding enum value is returned. The comparison is case sensitive.
 */
 template<typename T>
 inline ll::ObjectType stringToObjectType(T&& stringValue) {
-    return impl::stringToEnum<ll::ObjectType, T, ll::impl::ObjectTypeStrings2.size(), ll::impl::ObjectTypeStrings2>(std::forward<T>(stringValue));
+    return impl::stringToEnum<ll::ObjectType, T, ll::impl::ObjectTypeStrings.size(), ll::impl::ObjectTypeStrings>(std::forward<T>(stringValue));
 }
 
 
