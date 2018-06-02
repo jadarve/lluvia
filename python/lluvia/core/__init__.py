@@ -9,9 +9,12 @@
 import memory
 import session
 
+from buffer import *
 from memory import *
 from session import *
 
 __all__ = []
-__all__ += session.__all__
+__all__ += buffer.__all__
 __all__ += memory.__all__
+__all__ += session.__all__
+

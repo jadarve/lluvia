@@ -7,6 +7,8 @@
 """
 
 cimport memory
+
+cimport buffer
 cimport vulkan as vk
 
 from libcpp.string cimport string
@@ -137,3 +139,20 @@ cdef class Memory:
         """
 
         return self.__memory.get().isPageMappable(page)
+
+
+    def createBuffer(self, uint64_t size, usageFlags):
+
+        assert(size > 0)
+
+        if type(usageFlags) is str:
+            usageFlags = [usageFlags]
+
+
+        cdef list flagsList = usageFlags
+        cdef vk.BufferUsageFlags vkUsageFlags = buffer.vectorStringToBufferUsageFLags(flagsList)
+
+        cdef buffer.Buffer buf = buffer.Buffer()
+        buf.__buffer = self.__memory.get().createBuffer(size, vkUsageFlags)
+
+        return buf

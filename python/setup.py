@@ -25,7 +25,7 @@ libs   = ['lluvia-core',
           'stdc++',
           'vulkan']
 
-cflags = ['-std=c++14', '-fPIC']
+cflags = ['-std=c++14', '-fPIC', '-Wno-unused-function']
 
 cython_directives = {'embedsignature' : True}
 
