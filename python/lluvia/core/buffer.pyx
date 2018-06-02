@@ -9,7 +9,18 @@
 cimport buffer
 
 
-__all__ = ['Buffer']
+__all__ = ['Buffer', 'BufferUsageFlags']
+
+
+BufferUsageFlags = ['IndexBuffer',
+                    'IndirectBuffer',
+                    'StorageBuffer',
+                    'StorageTexelBuffer',
+                    'TransferDst',
+                    'TransferSrc',
+                    'UniformBuffer',
+                    'UniformTexelBuffer',
+                    'VertexBuffer']
 
 
 cdef class Buffer:
@@ -43,7 +54,7 @@ cdef class Buffer:
     property size:
         def __get__(self):
             """
-            Page size in bytes.
+            Size in bytes.
             """
             
             return self.__buffer.get().getSize()

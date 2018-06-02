@@ -15,10 +15,12 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
+import  memory
 cimport memory
 from memory cimport Memory, _Memory
 cimport vulkan as vk
 
+from . import impl
 
 __all__ = ['Session']
 
@@ -33,17 +35,20 @@ cdef class Session:
         pass
 
 
-    def getSupportedMemoryFlags(self):
+    def getSupportedMemoryPropertyFlags(self):
         """
-        Returns the supported memory flags for creating memories in this session.
+        Returns the supported memory property flags for creating memories in this session.
 
         The length of the returned vector equals the number of Vulkan memory types
         available for the physical device this session was created from.
 
+        See https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits for more information.
+
+
         Returns
         -------
         supportedMemoryFlags : list of string lists
-            The supported memory flags combinations supported by this session.
+            The supported memory property flags combinations supported by this session.
         """
 
         cdef vector[vk.MemoryPropertyFlags] vkFlags = self.__session.get().getSupportedMemoryFlags()
@@ -66,20 +71,28 @@ cdef class Session:
             import lluvia as ll
 
             session = ll.Session()
-
-            flags = [ll.MemoryFlags.DeviceLocal,
-                     ll.MemoryFlags.HostVisible,
-                     ll.MemoryFlags.HostCoherent]
-
-            memory = session.createMemory(flags, 4096, False)
+            memory = session.createMemory(['HostVisible', 'HostCoherent'], 4096, False)
         ```
+
+        The flags parameter can contain one string or a list of strings
+        specifying the memory property flags the new memory will be created
+        with. The possible string values are defined in lluvia.MemoryPropertyFlags:
+
+        - DeviceLocal
+        - HostCached
+        - HostCoherent
+        - HostVisible
+        - LazilyAllocated
+
+        See https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits for more information.
+
 
         Parameters
         ----------
         flags : string or list of strings.
             Flags to determine the type of memory to be created.
-            Each flag should be one of the strings returned by 
-            lluvia.MemoryFlags.
+            Each flag should be one of the strings in
+            lluvia.MemoryPropertyFlags.
 
         pageSize : uint64_t greater than zero.
             The size in bytes of each page the new memory object
@@ -90,9 +103,16 @@ cdef class Session:
             the values in lluvia.Session.getSupportedMemoryFlags()
             or if it is enough that it contains at least the flags values.
 
+
         Returns
         -------
         memory : a new lluvia.Memory object.
+
+
+        See also
+        --------
+        getSupportedMemoryPropertyFlags : Returns the supported memory property
+            flags for creating memories in this session.
 
         """
         assert(pageSize > 0)
@@ -100,6 +120,9 @@ cdef class Session:
         # converts one string object to a list
         if type(flags) is str:
             flags = [flags]
+
+        # sanitize flags
+        impl.validateFlagStrings(memory.MemoryPropertyFlags, flags)
 
         # convert flags to vk.MemoryPropertyFlags
         cdef list flagsList = flags

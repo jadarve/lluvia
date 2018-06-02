@@ -8,6 +8,7 @@
 
 cimport memory
 
+import  buffer
 cimport buffer
 cimport vulkan as vk
 
@@ -16,32 +17,15 @@ from libcpp.vector cimport vector
 
 from . import impl
 
-__all__ = ['Memory', 'MemoryFlags']
+
+__all__ = ['Memory', 'MemoryPropertyFlags']
 
 
-MemoryFlags = impl.createEnumeration('MemoryFlags', False,
-    DeviceLocal     = 'DEVICE_LOCAL',
-    HostCached      = 'HOST_CACHED',
-    HostCoherent    = 'HOST_COHERENT',
-    HostVisible     = 'HOST_VISIBLE',
-    LazylyAllocated = 'LAZILY_ALLOCATED',
-    __doc__ = """
-        Supported memory flags for creating a ll.Memory object.
-
-        The following enum names are defined
-
-        - DeviceLocal
-        - HostCached
-        - HostCoherent
-        - HostVisible
-        - LazilyAllocated
-
-        See https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits for more information.
-
-        See also
-        --------
-        Session.createMemory() : creates a new memory.
-        """)
+MemoryPropertyFlags = ['DeviceLocal',
+                       'HostCached',
+                       'HostCoherent',
+                       'HostVisible',
+                       'LazylyAllocated']
 
 
 cdef class Memory:
@@ -128,10 +112,12 @@ cdef class Memory:
         This test checks if page is available to be mapped to host-memory by
         a given objects such as a Buffer.
 
+
         Parameters
         ----------
         page : uint64_t
             Page number.
+
 
         Returns
         -------
@@ -142,12 +128,40 @@ cdef class Memory:
 
 
     def createBuffer(self, uint64_t size, usageFlags):
+        """
+        Creates a new buffer allocated into this memory.
+
+
+        Parameters
+        ----------
+        size : uint64_t greater than zero.
+            The size of the buffer in bytes.
+
+        usageFlags : string or list of strings.
+            Usage flags for this buffer. It must be a combination of the
+            values defined in lluvia.BufferUsageFlags:
+                - IndexBuffer
+                - IndirectBuffer
+                - StorageBuffer
+                - StorageTexelBuffer
+                - TransferDst
+                - TransferSrc
+                - UniformBuffer
+                - UniformTexelBuffer
+                - VertexBuffer
+
+
+        Returns
+        -------
+        buf : lluvia.Buffer object.
+        """
 
         assert(size > 0)
 
         if type(usageFlags) is str:
             usageFlags = [usageFlags]
 
+        impl.validateFlagStrings(buffer.BufferUsageFlags, usageFlags)
 
         cdef list flagsList = usageFlags
         cdef vk.BufferUsageFlags vkUsageFlags = buffer.vectorStringToBufferUsageFLags(flagsList)
