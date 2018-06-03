@@ -143,20 +143,16 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath
 
     // workaround for GCC 4.8
     ifstream file {spirvPath, std::ios::ate | std::ios::binary};
+    file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
-    if (file.is_open()) {
-
-        const auto fileSize  = static_cast<size_t>(file.tellg());
+    const auto fileSize  = static_cast<size_t>(file.tellg());
               auto spirvCode = std::vector<uint8_t>(fileSize);
 
-        file.seekg(0);
-        file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
-        file.close();
+    file.seekg(0);
+    file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
+    file.close();
 
-        return std::make_shared<ll::Program>(device, spirvCode);
-    }
-
-    return nullptr;
+    return std::make_shared<ll::Program>(device, spirvCode);
 }
 
 

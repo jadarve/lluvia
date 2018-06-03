@@ -117,7 +117,9 @@ public:
     
     @param[in]  spirvPath  The path to the SPIR-V file containing the program code.
     
-    @return     A new ll::Program object or nullptr if it could not be created.
+    @return     A new ll::Program object.
+
+    @throws     std::ios_base::failure if there is a problem reading the file at spirvPath.
     */
     std::shared_ptr<ll::Program> createProgram(const std::string& spirvPath) const;
 
