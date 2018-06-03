@@ -20,6 +20,9 @@ cimport memory
 from memory cimport Memory, _Memory
 cimport vulkan as vk
 
+import  program
+cimport program
+
 from . import impl
 
 __all__ = ['Session']
@@ -132,3 +135,11 @@ cdef class Session:
         mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, False)
 
         return mem
+
+
+    def createProgram(self, str path):
+
+        cdef program.Program prog = program.Program()
+        prog.__program = self.__session.get().createProgram(path)
+
+        return prog
