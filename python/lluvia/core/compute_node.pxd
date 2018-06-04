@@ -53,8 +53,25 @@ cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
         uint32_t getLocalY() const
         uint32_t getLocalZ() const
 
+
+cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
+    
+    cdef cppclass _ComputeNode 'll::ComputeNode':
+
+        uint32_t getGridX() const
+        uint32_t getGridY() const
+        uint32_t getGridZ() const
+
+        uint32_t getLocalX() const
+        uint32_t getLocalY() const
+        uint32_t getLocalZ() const
         
 
 cdef class ComputeNodeDescriptor:
     
     cdef _ComputeNodeDescriptor __descriptor
+
+
+cdef class ComputeNode:
+    
+    cdef shared_ptr[_ComputeNode] __node

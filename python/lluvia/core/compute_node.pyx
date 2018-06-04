@@ -176,3 +176,15 @@ cdef class ComputeNodeDescriptor:
         cdef string cppString = paramType
         cdef _ParameterType pType = stringToParameterType(cppString)
         self.__descriptor.addParameter(pType)
+
+
+cdef class ComputeNode:
+    
+    def __cinit__(self):
+        pass
+
+
+    def __dealloc__(self):
+        pass
+
+        
