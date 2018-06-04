@@ -138,8 +138,31 @@ cdef class Session:
 
 
     def createProgram(self, str path):
+        """
+        Creates a Program object reading the SPIR-V code from a given file.
+
+        Parameters
+        ----------
+        path : string
+            path to the file where the SPIR-V code is stored.
+
+
+        Returns
+        -------
+        program : lluvia.Program
+
+
+        Raises
+        ------
+        IOError : if there is any problem reading the file at the given path.
+        """
 
         cdef program.Program prog = program.Program()
-        prog.__program = self.__session.get().createProgram(path)
 
-        return prog
+        try:
+            prog.__program = self.__session.get().createProgram(path)
+            return prog
+
+        except IOError as e:
+            raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
+

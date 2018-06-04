@@ -45,9 +45,9 @@ namespace impl {
     @sa ll::ParameterType enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 3> ParameterTypeStrings {{
-        std::make_tuple("BUFFER"             , ll::ParameterType::Buffer),
-        std::make_tuple("IMAGE_VIEW"         , ll::ParameterType::ImageView),
-        std::make_tuple("SAMPLED_IMAGE_VIEW" , ll::ParameterType::SampledImageView),
+        std::make_tuple("Buffer"           , ll::ParameterType::Buffer),
+        std::make_tuple("ImageView"        , ll::ParameterType::ImageView),
+        std::make_tuple("SampledImageView" , ll::ParameterType::SampledImageView),
     }};
 
 } // namespace impl
@@ -282,7 +282,7 @@ public:
     
     @return     The grid size.
     */
-    std::array<uint32_t, 3> getGridSize()  const noexcept;
+    const std::array<uint32_t, 3>& getGridSize()  const noexcept;
 
 
     /**
@@ -290,7 +290,7 @@ public:
     
     @return     The local size.
     */
-    std::array<uint32_t, 3> getLocalSize() const noexcept;
+    const std::array<uint32_t, 3>& getLocalSize() const noexcept;
 
     uint32_t getGridX() const noexcept;
     uint32_t getGridY() const noexcept;
