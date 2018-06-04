@@ -187,4 +187,98 @@ cdef class ComputeNode:
     def __dealloc__(self):
         pass
 
-        
+
+    property grid:
+        def __get__(self):
+            return (self.gridX, self.gridY, self.gridZ)
+
+        # def __set__(self, v):
+        #     assert (len(v) == 3)
+        #     self.gridX, self.gridY, self.gridZ = v
+
+        def __del__(self):
+            pass
+
+
+    property local:
+        def __get__(self):
+            return (self.localX, self.localY, self.localZ)
+
+        # def __set__(self, v):
+        #     assert (len(v) == 3)
+        #     self.localX, self.localY, self.localZ = v
+
+        def __del__(self):
+            pass
+
+
+    property gridX:
+        def __get__(self):
+            return self.__node.get().getGridX()
+
+        # def __set__(self, uint32_t x):
+        #     if x <= 0: raise ValueError('gridX must be greater than zero, got: {0}'.format(x))
+        #     self.__node.get().setGridX(x)
+
+        def __del__(self):
+            pass
+
+
+    property gridY:
+        def __get__(self):
+            return self.__node.get().getGridY()
+
+        # def __set__(self, uint32_t y):
+        #     if y <= 0: raise ValueError('gridY must be greater than zero, got: {0}'.format(y))
+        #     self.__node.get().setGridY(y)
+
+        def __del__(self):
+            pass
+
+
+    property gridZ:
+        def __get__(self):
+            return self.__node.get().getGridZ()
+
+        # def __set__(self, uint32_t z):
+        #     if z <= 0: raise ValueError('gridZ must be greater than zero, got: {0}'.format(z))
+        #     self.__node.get().setGridZ(z)
+
+        def __del__(self):
+            pass
+
+
+    property localX:
+        def __get__(self):
+            return self.__node.get().getLocalX()
+
+        # def __set__(self, uint32_t x):
+        #     if x <= 0: raise ValueError('localX must be greater than zero, got: {0}'.format(x))
+        #     self.__node.get().setLocalX(x)
+
+        def __del__(self):
+            pass
+
+
+    property localY:
+        def __get__(self):
+            return self.__node.get().getLocalY()
+
+        # def __set__(self, uint32_t y):
+        #     if y <= 0: raise ValueError('localY must be greater than zero, got: {0}'.format(y))
+        #     self.__node.get().setLocalY(y)
+
+        def __del__(self):
+            pass
+
+
+    property localZ:
+        def __get__(self):
+            return self.__node.get().getLocalZ()
+
+        # def __set__(self, uint32_t z):
+        #     if z <= 0: raise ValueError('localZ must be greater than zero, got: {0}'.format(z))
+        #     self.__node.get().setLocalZ(z)
+
+        def __del__(self):
+            pass

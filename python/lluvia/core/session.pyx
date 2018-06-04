@@ -23,6 +23,9 @@ cimport vulkan as vk
 import  program
 cimport program
 
+import compute_node
+cimport compute_node
+
 from . import impl
 
 __all__ = ['Session']
@@ -166,3 +169,10 @@ cdef class Session:
         except IOError as e:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
+
+    def createComputeNode(self, compute_node.ComputeNodeDescriptor desc):
+
+        cdef compute_node.ComputeNode node = compute_node.ComputeNode()
+        node.__node = self.__session.get().createComputeNode(desc.__descriptor)
+        
+        return node

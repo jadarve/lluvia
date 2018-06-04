@@ -14,6 +14,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
+from compute_node cimport _ComputeNodeDescriptor, _ComputeNode
 from memory cimport _Memory
 from program cimport _Program
 
@@ -31,6 +32,7 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const
         shared_ptr[_Program] createProgram(const string& spirvPath) except +
 
+        shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) const
 
 cdef class Session:
     
