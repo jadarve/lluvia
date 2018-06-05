@@ -7,7 +7,8 @@
 """
 
 cimport session
-from session cimport _Session
+
+from cython.operator cimport dereference as deref
 
 from cython.operator cimport dereference as deref
 from libc.stdint cimport uint64_t
@@ -276,5 +277,22 @@ cdef class Session:
         cdef compute_node.ComputeNode node = compute_node.ComputeNode()
         
         node.__node = self.__session.get().readComputeNode(filePath)
-        return node        
+        return node
+
+
+    def run(self, obj):
+        """
+        Runs a CommandBuffer or ComputeNode
+        
+        
+        Parameters
+        ----------
+        obj : CommandBuffer or ComputeNode
+        """
+
+        cdef compute_node.ComputeNode node = None
+
+        if type(obj) == compute_node.ComputeNode:
+            node = obj
+            self.__session.get().run(deref(node.__node.get()))
         

@@ -200,6 +200,18 @@ void Session::run(const ll::CommandBuffer& cmdBuffer) {
 }
 
 
+void Session::run(const ll::ComputeNode& node) {
+
+    auto cmdBuffer = createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->run(node);
+    cmdBuffer->end();
+
+    run(*cmdBuffer);
+}
+
+
 bool Session::initInstance() {
     
     auto appInfo = vk::ApplicationInfo()

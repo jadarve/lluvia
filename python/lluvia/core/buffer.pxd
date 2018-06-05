@@ -9,7 +9,7 @@
 from libc.stdint cimport uint64_t
 
 from libcpp cimport bool
-from libcpp.memory cimport shared_ptr
+from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
@@ -28,6 +28,8 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
         uint64_t getSize() const
         vk.BufferUsageFlags getUsageFlags() const
         bool isMappable() const
+
+        unique_ptr[T] map[T]()
         
 
 cdef class Buffer:

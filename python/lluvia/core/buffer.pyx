@@ -8,6 +8,10 @@
 
 cimport buffer
 
+cimport cython
+
+from libcpp.memory cimport unique_ptr
+
 
 __all__ = ['Buffer', 'BufferUsageFlags']
 
@@ -23,6 +27,7 @@ BufferUsageFlags = ['IndexBuffer',
                     'VertexBuffer']
 
 
+@cython.infer_types(True)
 cdef class Buffer:
     
     def __cinit__(self):
@@ -65,3 +70,9 @@ cdef class Buffer:
         def __del__(self):
             # nothing to do
             pass
+
+
+    # @cython.infer_types(True)
+    # def toHost(self):
+
+    #     cdef unique_ptr[int] ptr = self.__buffer.get().map[int]()

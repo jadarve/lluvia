@@ -27,7 +27,8 @@ libs   = ['lluvia-core',
 
 cflags = ['-std=c++14', '-fPIC', '-Wno-unused-function']
 
-cython_directives = {'embedsignature' : True}
+cython_directives = {'embedsignature' : True,
+                     'infer_types' : True}
 
 def createExtension(name, sources):
 

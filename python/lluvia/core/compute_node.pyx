@@ -287,7 +287,7 @@ cdef class ComputeNode:
             Parameter to bind.
         """
 
-        cdef Buffer buf = Buffer()
+        cdef Buffer buf = None
         
         if type(obj) == Buffer:
             buf = obj

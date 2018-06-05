@@ -190,6 +190,30 @@ public:
     void run(const ll::CommandBuffer& cmdBuffer);
 
 
+    /**
+    @brief      Runs a ll::ComputeNode
+
+    Internally, this function creates a ll::CommandBuffer using
+    ll::Session::createCommandBuffer, records the execution of the
+    compute node and submits to the device.
+
+    Calling this function is equivalent to:
+
+    @code
+        auto cmdBuffer = session->createCommandBuffer();
+
+        cmdBuffer->begin();
+        cmdBuffer->run(node);
+        cmdBuffer->end();
+
+        session->run(*cmdBuffer);
+    @endcode
+    
+    @param[in]  node  The node
+    */
+    void run(const ll::ComputeNode& node);
+
+
 private:
     // Session objects should be created through factory methods
     Session();
