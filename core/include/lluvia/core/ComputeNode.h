@@ -69,6 +69,14 @@ public:
 
 
     /**
+    @brief      Gets the descriptor.
+    
+    @return     The descriptor.
+    */
+    const ll::ComputeNodeDescriptor& getDescriptor() const noexcept;
+
+
+    /**
     @brief      Gets the local group size in X dimension.
 
     See ll::ComputeNodeDescriptor::getLocalX for more information.

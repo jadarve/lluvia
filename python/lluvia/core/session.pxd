@@ -34,6 +34,10 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) const
 
+        _ComputeNodeDescriptor readComputeNodeDescriptor(const string& filePath) except +;
+        shared_ptr[_ComputeNode] readComputeNode(const string& filePath) except +;
+
+
 cdef class Session:
     
     cdef unique_ptr[_Session] __session

@@ -250,3 +250,45 @@ TEST_CASE("ReadGraph_ImageAndImageView", "test_IO") {
     REQUIRE(graph->containsObject("sampledImageView"));
     REQUIRE(graph->containsObject("storageImageView"));
 }
+
+
+TEST_CASE("WriteComputeNodeDescriptor", "test_IO") {
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
+    REQUIRE(program != nullptr);
+
+    auto desc = ll::ComputeNodeDescriptor {}
+        .setGridX(16)
+        .setGridY(32)
+        .setGridZ(64)
+        .setLocalX(1)
+        .setLocalY(4)
+        .setLocalZ(8)
+        .setFunctionName("main")
+        .setProgram(program)
+        .addParameter(ll::ParameterType::Buffer);
+
+    ll::writeComputeNodeDescriptor(desc, "WriteComputeNodeDescriptor.json");
+}
+
+
+TEST_CASE("ReadComputeNodeDescriptor", "test_IO") {
+
+    auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
+    REQUIRE(session != nullptr);
+
+    auto desc = ll::readComputeNodeDescriptor(DATA_PATH + "/ComputeNodeDescriptor.json", session);
+
+    REQUIRE(desc.getGridX() == 16);
+    REQUIRE(desc.getGridY() == 32);
+    REQUIRE(desc.getGridZ() == 64);
+    REQUIRE(desc.getLocalX() == 1);
+    REQUIRE(desc.getLocalY() == 4);
+    REQUIRE(desc.getLocalZ() == 8);
+    REQUIRE(desc.getFunctionName() == "main");
+    REQUIRE(desc.getParameterCount() == 1);
+    REQUIRE(desc.getParameterTypeAt(0) == ll::ParameterType::Buffer);
+}

@@ -12,6 +12,7 @@
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/Image.h"
+#include "lluvia/core/io.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
@@ -165,6 +166,18 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& 
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
 
     return std::make_shared<ll::ComputeNode>(device, descriptor);
+}
+
+
+ll::ComputeNodeDescriptor Session::readComputeNodeDescriptor(const std::string& filePath) const {
+
+    return ll::readComputeNodeDescriptor(filePath, *this);
+}
+
+
+std::shared_ptr<ll::ComputeNode> Session::readComputeNode(const std::string& filePath) const {
+
+    return ll::readComputeNode(filePath, *this);
 }
 
 

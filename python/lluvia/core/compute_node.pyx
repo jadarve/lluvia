@@ -8,8 +8,13 @@
 
 cimport compute_node
 
+from buffer import Buffer
+from buffer cimport Buffer
+
 from program import Program
 from program cimport Program, _Program
+
+from impl.stdcpp cimport static_pointer_cast
 
 from libc.stdint cimport uint32_t
 
@@ -204,10 +209,6 @@ cdef class ComputeNode:
         def __get__(self):
             return (self.localX, self.localY, self.localZ)
 
-        # def __set__(self, v):
-        #     assert (len(v) == 3)
-        #     self.localX, self.localY, self.localZ = v
-
         def __del__(self):
             pass
 
@@ -252,10 +253,6 @@ cdef class ComputeNode:
         def __get__(self):
             return self.__node.get().getLocalX()
 
-        # def __set__(self, uint32_t x):
-        #     if x <= 0: raise ValueError('localX must be greater than zero, got: {0}'.format(x))
-        #     self.__node.get().setLocalX(x)
-
         def __del__(self):
             pass
 
@@ -263,10 +260,6 @@ cdef class ComputeNode:
     property localY:
         def __get__(self):
             return self.__node.get().getLocalY()
-
-        # def __set__(self, uint32_t y):
-        #     if y <= 0: raise ValueError('localY must be greater than zero, got: {0}'.format(y))
-        #     self.__node.get().setLocalY(y)
 
         def __del__(self):
             pass
@@ -276,9 +269,26 @@ cdef class ComputeNode:
         def __get__(self):
             return self.__node.get().getLocalZ()
 
-        # def __set__(self, uint32_t z):
-        #     if z <= 0: raise ValueError('localZ must be greater than zero, got: {0}'.format(z))
-        #     self.__node.get().setLocalZ(z)
-
         def __del__(self):
             pass
+
+
+    def bind(self, uint32_t index, obj):
+        """
+        Binds an object as parater to this node.
+
+
+        Parameters
+        ----------
+        index : uint32_t
+            Index of the parameter to bind.
+
+        obj : lluvia.Buffer or lluvia.ImageView
+            Parameter to bind.
+        """
+
+        cdef Buffer buf = Buffer()
+        
+        if type(obj) == Buffer:
+            buf = obj
+            self.__node.get().bind(index, static_pointer_cast[_Object](buf.__buffer))

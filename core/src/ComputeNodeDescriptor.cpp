@@ -86,6 +86,18 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterTy
 }
 
 
+size_t ComputeNodeDescriptor::getParameterCount() const noexcept {
+    return parameterBindings.size();
+}
+
+
+ll::ParameterType ComputeNodeDescriptor::getParameterTypeAt(const size_t& i) const {
+    
+    const auto& binding = parameterBindings.at(i);
+    return ll::vkDescriptorTypeToParameterType(binding.descriptorType);
+}
+
+
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
 
     assert(x >= 1);

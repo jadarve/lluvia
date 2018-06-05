@@ -171,8 +171,110 @@ cdef class Session:
 
 
     def createComputeNode(self, compute_node.ComputeNodeDescriptor desc):
+        """
+        Creates a ComputeNode from a given descriptor.
 
+        Parameters
+        ----------
+        desc : lluvia.ComputeNodeDescriptor
+            Compute node descriptor for this node.
+
+
+        Returns
+        node : lluvia.ComputeNode
+        """
         cdef compute_node.ComputeNode node = compute_node.ComputeNode()
         node.__node = self.__session.get().createComputeNode(desc.__descriptor)
         
         return node
+
+
+    def readComputeNodeDescriptor(self, str filePath):
+        """
+        Reads a ComputeNodeDescriptor from a given file.
+
+        The JSON file must have the following structure:
+
+            {
+                "function": "main",
+                "grid_x": 1,
+                "grid_y": 1,
+                "grid_z": 1,
+                "local_x": 1,
+                "local_y": 1,
+                "local_z": 1,
+                "parameters": [
+                    "Buffer",
+                    "ImageView"
+                    "SampledImageView"
+                ],
+                "spirv": "base 64 SPIR-V code"
+            }
+
+
+        Parameters
+        ----------
+        filePath : string
+            File path to JSON file.
+
+
+        Returns
+        -------
+        desc : lluvia.ComputeNodeDescriptor
+
+
+        Raises
+        ------
+        IOError : if there are problems reading the JSON file.
+        """
+
+        cdef compute_node.ComputeNodeDescriptor desc = compute_node.ComputeNodeDescriptor()
+        
+        desc.__descriptor = self.__session.get().readComputeNodeDescriptor(filePath)
+        return desc
+
+
+    def readComputeNode(self, str filePath):
+        """
+        Reads a ComputeNode from a given file.
+
+        The JSON file must have the following structure:
+
+            {
+                "function": "main",
+                "grid_x": 1,
+                "grid_y": 1,
+                "grid_z": 1,
+                "local_x": 1,
+                "local_y": 1,
+                "local_z": 1,
+                "parameters": [
+                    "Buffer",
+                    "ImageView"
+                    "SampledImageView"
+                ],
+                "spirv": "base 64 SPIR-V code"
+            }
+
+
+        Parameters
+        ----------
+        filePath : string
+            File path to JSON file.
+
+
+        Returns
+        -------
+        desc : lluvia.ComputeNode
+
+
+        Raises
+        ------
+        IOError : if there are problems reading the JSON file.
+        """
+
+        cdef compute_node.ComputeNode node = compute_node.ComputeNode()
+        
+        node.__node = self.__session.get().readComputeNode(filePath)
+        return node        
+        

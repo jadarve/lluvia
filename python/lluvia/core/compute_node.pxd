@@ -12,6 +12,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
+from object cimport _Object
 from program cimport _Program
 
 
@@ -65,6 +66,8 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
         uint32_t getLocalX() const
         uint32_t getLocalY() const
         uint32_t getLocalZ() const
+
+        void bind(uint32_t index, const shared_ptr[_Object]& obj) except +
         
 
 cdef class ComputeNodeDescriptor:

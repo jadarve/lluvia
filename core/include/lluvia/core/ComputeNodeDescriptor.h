@@ -161,6 +161,26 @@ public:
 
 
     /**
+    @brief      Gets the parameter count.
+    
+    @return     The parameter count.
+    */
+    size_t getParameterCount() const noexcept;
+
+
+    /**
+    @brief      Gets the parameter type at index \p i.
+    
+    @param[in]  i     index. It must be greater than 0 and less than ll::ComputeNodeDescriptor::getParameterCount.
+    
+    @return     The parameter type at \p i.
+
+    @throws     std::out_of_range if \p i is not between correct range.
+    */
+    ll::ParameterType getParameterTypeAt(const size_t& i) const;
+
+
+    /**
     @brief      Sets the grid size in the X axis.
 
     The grid size defines the number of local groups to be run

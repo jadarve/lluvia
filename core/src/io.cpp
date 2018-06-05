@@ -121,14 +121,14 @@ public:
         }
 
         auto j = json{};
-        j["name"] = name;
-        j["type"] = ll::objectTypeToString(image->getType());
-        j["width"] = image->getWidth();
-        j["height"] = image->getHeight();
-        j["depth"] = image->getDepth();
+        j["name"]          = name;
+        j["type"]          = ll::objectTypeToString(image->getType());
+        j["width"]         = image->getWidth();
+        j["height"]        = image->getHeight();
+        j["depth"]         = image->getDepth();
         j["channel_count"] = image->getChannelCount();
-        j["channel_type"] = ll::channelTypeToString(image->getChannelType());
-        j["usage"] = ll::ImageUsageFlagsToVectorString(image->getUsageFlags());
+        j["channel_type"]  = ll::channelTypeToString(image->getChannelType());
+        j["usage"]         = ll::ImageUsageFlagsToVectorString(image->getUsageFlags());
 
         // can throw std::out_of_range
         j["memory"] = graph->findMemoryNameForObject(name);
@@ -207,9 +207,9 @@ public:
         j["local_x"]    = node->getLocalX();
         j["local_y"]    = node->getLocalY();
         j["local_z"]    = node->getLocalZ();
-        j["grid_x"]   = node->getGridX();
-        j["grid_y"]   = node->getGridY();
-        j["grid_z"]   = node->getGridZ();
+        j["grid_x"]     = node->getGridX();
+        j["grid_y"]     = node->getGridY();
+        j["grid_z"]     = node->getGridZ();
         j["parameters"] = nullptr; // placeholder
 
         const auto pCount = node->getParameterCount();
@@ -273,7 +273,7 @@ public:
             for (const auto& obj : objects) {
 
                 const auto pTypeString = getValueFromJson<std::string>("type", obj);
-                const auto pType = ll::stringToObjectType(pTypeString);
+                const auto pType       = ll::stringToObjectType(pTypeString);
 
                 switch (pType) {
                     case ll::ObjectType::Buffer:
@@ -492,8 +492,11 @@ void writeComputeGraph(const std::shared_ptr<ll::ComputeGraph>& graph, const std
     visitor.visitComputeGraph(graph);
     graph->accept(&visitor);
 
-    // TODO create ofstream and write pimpl->obj
-    std::cout << std::setw(4) << visitor.obj << std::endl;
+    std::ofstream file {filePath, std::ios_base::out};
+    file.exceptions(std::ofstream::badbit | std::ofstream::failbit);
+
+    file << std::setw(4) << visitor.obj << std::endl;
+    file.close();
 }
 
 
@@ -501,6 +504,112 @@ std::shared_ptr<ll::ComputeGraph> readComputeGraph(const std::string& filePath, 
 
     auto reader = impl::ComputeGraphJsonReader {};
     return reader.build(filePath, session);
+}
+
+
+ll::ComputeNodeDescriptor readComputeNodeDescriptor(const std::string& filePath, const std::shared_ptr<ll::Session>& session) {
+
+    assert(session != nullptr);
+    return readComputeNodeDescriptor(filePath, *session);
+}
+
+
+ll::ComputeNodeDescriptor readComputeNodeDescriptor(const std::string& filePath, const ll::Session& session) {
+
+    std::ifstream file {filePath, std::ios_base::in};
+    file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+
+    auto j = json {};
+
+    try {
+        // json parsing
+        file >> j;
+    } catch (std::exception& e) {
+        throw std::runtime_error {"Error parsing JSON file: " + std::string{e.what()}};
+    }
+
+    // SPIR-V program
+    auto spirv = ll::fromBase64(impl::getValueFromJson<std::string>("spirv", j));
+    auto program = session.createProgram(spirv);
+
+    // Descriptor
+    const auto functionName = impl::getValueFromJson<std::string>("function", j);
+    const auto globalX      = impl::getValueFromJson<uint32_t>("grid_x", j);
+    const auto globalY      = impl::getValueFromJson<uint32_t>("grid_y", j);
+    const auto globalZ      = impl::getValueFromJson<uint32_t>("grid_z", j);
+    const auto localX       = impl::getValueFromJson<uint32_t>("local_x", j);
+    const auto localY       = impl::getValueFromJson<uint32_t>("local_y", j);
+    const auto localZ       = impl::getValueFromJson<uint32_t>("local_z", j);
+    const auto parameters   = impl::getValueFromJson<json>("parameters", j);
+
+    auto descriptor = ll::ComputeNodeDescriptor()
+                            .setGridX(globalX)
+                            .setGridY(globalY)
+                            .setGridZ(globalZ)
+                            .setLocalX(localX)
+                            .setLocalY(localY)
+                            .setLocalZ(localZ)
+                            .setFunctionName(functionName)
+                            .setProgram(program);
+
+    // parameter descriptor
+    for (auto i = 0u; i < parameters.size(); ++i) {
+        const auto pType = parameters[i].get<std::string>();
+        descriptor.addParameter(ll::stringToParameterType(pType));
+    }
+
+    return descriptor;
+}
+
+
+void writeComputeNodeDescriptor(const ComputeNodeDescriptor& descriptor, const std::string& filePath) {
+
+    auto program = descriptor.getProgram();
+
+    auto j = json {};
+    j["function"]   = descriptor.getFunctionName();
+    j["local_x"]    = descriptor.getLocalX();
+    j["local_y"]    = descriptor.getLocalY();
+    j["local_z"]    = descriptor.getLocalZ();
+    j["grid_x"]     = descriptor.getGridX();
+    j["grid_y"]     = descriptor.getGridY();
+    j["grid_z"]     = descriptor.getGridZ();
+    j["spirv"]      = ll::toBase64(program->getSpirV().data(), program->getSpirV().size());
+    j["parameters"] = nullptr; // placeholder
+
+    const auto pCount = descriptor.getParameterCount();
+    for (auto i = 0u; i < pCount; ++i) {
+        j["parameters"].push_back(ll::parameterTypeToString(descriptor.getParameterTypeAt(i)));
+    }
+
+    std::ofstream file {filePath, std::ios_base::out};
+    file.exceptions(std::ofstream::badbit | std::ofstream::failbit);
+    
+    file << std::setw(4) << j << std::endl;
+    file.close();
+}
+
+
+std::shared_ptr<ll::ComputeNode> readComputeNode(const std::string& filePath, const std::shared_ptr<ll::Session>& session) {
+    
+    assert(session != nullptr);
+    return readComputeNode(filePath, *session);
+}
+
+
+std::shared_ptr<ll::ComputeNode> readComputeNode(const std::string& filePath, const ll::Session& session) {
+
+    const auto descriptor = readComputeNodeDescriptor(filePath, session);
+    return session.createComputeNode(descriptor);
+}
+
+
+void writeComputeNode(const std::shared_ptr<ll::ComputeNode>& node, const std::string& filePath) {
+    
+    assert(node != nullptr);
+
+    const auto& descriptor = node->getDescriptor();
+    writeComputeNodeDescriptor(descriptor, filePath);
 }
 
 

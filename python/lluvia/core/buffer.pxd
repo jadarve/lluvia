@@ -13,6 +13,8 @@ from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
+from object cimport _Object
+
 cimport vulkan as vk
 
 cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
@@ -21,7 +23,7 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
     vector[string] bufferUsageFlagsToVectorString(const vk.BufferUsageFlags flags)
 
 
-    cdef cppclass _Buffer 'll::Buffer':
+    cdef cppclass _Buffer 'll::Buffer' (_Object):
 
         uint64_t getSize() const
         vk.BufferUsageFlags getUsageFlags() const
