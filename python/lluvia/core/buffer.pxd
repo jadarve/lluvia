@@ -22,6 +22,8 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
     vk.BufferUsageFlags vectorStringToBufferUsageFLags(const vector[string]& flagsVector)
     vector[string] bufferUsageFlagsToVectorString(const vk.BufferUsageFlags flags)
 
+    cdef cppclass _BufferMapDeleter 'll::Buffer::BufferMapDeleter':
+        pass
 
     cdef cppclass _Buffer 'll::Buffer' (_Object):
 
@@ -29,7 +31,7 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
         vk.BufferUsageFlags getUsageFlags() const
         bool isMappable() const
 
-        unique_ptr[T] map[T]()
+        unique_ptr[T, _BufferMapDeleter] map[T]()
         
 
 cdef class Buffer:
