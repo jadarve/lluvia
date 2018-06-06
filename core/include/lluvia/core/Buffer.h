@@ -18,6 +18,7 @@
 
 #include <array>
 #include <cstdint>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -26,6 +27,7 @@
 
 namespace ll {
 
+class Buffer;
 class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
@@ -166,6 +168,20 @@ public:
 
 
     /**
+    @brief      Deleter for unmapping buffers from host memory.
+    */
+    struct BufferMapDeleter{
+
+        template<typename T>
+        void operator ()(T* ptr) const {
+            buffer->unmap();
+        }
+
+        ll::Buffer* buffer;
+    };
+
+
+    /**
     @brief      Maps the memory content of this object to host-visible memory.
 
     The returned pointer can be used to read or write content from and to this buffer from
@@ -209,8 +225,8 @@ public:
     @sa         ll::Buffer::isMappable Determines if this buffer is mappable to host-visible memory.
     */
     template<typename T>
-    auto map() {
-        
+    std::unique_ptr<T, ll::Buffer::BufferMapDeleter> map() {
+
         if (!memory->isPageMappable(allocInfo.page)) {
             throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
         }
@@ -218,10 +234,12 @@ public:
         // remove array extend from T if present
         typedef typename std::conditional<std::is_array<T>::value, typename std::remove_all_extents<T>::type, T>::type baseType;
 
-        auto deleter = [this](baseType* ptr) {memory->unmapBuffer(*this);};
-
         auto ptr = memory->mapBuffer(*this);
-        return std::unique_ptr<T, decltype(deleter)> {static_cast<baseType*>(ptr), deleter};
+
+        auto deleter = ll::Buffer::BufferMapDeleter {};
+        deleter.buffer = this;
+
+        return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> {static_cast<baseType*>(ptr), deleter};
     }
 
 
@@ -236,6 +254,8 @@ private:
     Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
             const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
             const uint64_t requestedSize);
+
+    void unmap();
 
     vk::Buffer                  vkBuffer;
     vk::BufferUsageFlags        vkUsageFlags;
@@ -258,7 +278,15 @@ friend class ll::ComputeGraph;
 friend class ll::ComputeNode;
 friend class ll::Memory;
 friend class ll::Session;
+
+// friend struct ll::impl::BufferMapDeleter;
 };
+
+
+namespace impl {
+
+    
+}
 
 
 } // namespace ll

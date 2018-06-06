@@ -59,4 +59,9 @@ void Buffer::accept(ll::Visitor *visitor) {
     assert(visitor != nullptr);
 }
 
+
+void Buffer::unmap() {
+    memory->unmapBuffer(*this);
+}
+
 } // namespace ll
