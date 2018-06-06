@@ -8,9 +8,6 @@
 
 cimport buffer
 
-import cython
-from cython.operator cimport dereference as deref
-
 from libc.stdint cimport uint64_t
 from libc.string cimport memcpy
 from libcpp.memory cimport unique_ptr
