@@ -26,9 +26,9 @@ namespace ll {
 
 using namespace std;
 
-std::unique_ptr<ll::Session> Session::create() {
+std::shared_ptr<ll::Session> Session::create() {
 
-    return std::unique_ptr<Session>{new Session()};
+    return std::shared_ptr<Session>{new Session()};
 }
 
 
@@ -132,7 +132,7 @@ std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
             heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
 
             // can throw exception. Invariants of Session are kept.
-            return std::make_shared<ll::Memory>(device, heapInfo, pageSize);
+            return std::make_shared<ll::Memory>(shared_from_this(), device, heapInfo, pageSize);
         }
     }
 

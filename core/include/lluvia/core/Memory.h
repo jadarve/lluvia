@@ -27,6 +27,7 @@ namespace ll {
 class Buffer;
 class Image;
 class ImageDescriptor;
+class Session;
 class Visitor;
 
 
@@ -148,7 +149,7 @@ public:
     @param[in]  heapInfo  The heap information.
     @param[in]  pageSize  The page size in bytes.
     */
-    Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize);
+    Memory(const std::shared_ptr<const ll::Session>& session, const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize);
 
     ~Memory();
 
@@ -267,6 +268,10 @@ private:
     std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
     std::vector<bool>                             memoryPageMappingFlags;
+
+    // Shared pointer to the session this memory was created from
+    // This will keep the session alive until this or any other memory is deleted.
+    std::shared_ptr<const ll::Session>            session;
 
 
 friend class ll::Buffer;

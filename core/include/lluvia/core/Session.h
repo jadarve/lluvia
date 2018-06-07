@@ -30,7 +30,7 @@ class Program;
 /**
 @brief      Class that contains all the state required to run compute operations on a compute device.
 */
-class Session {
+class Session : public std::enable_shared_from_this<ll::Session> {
 
 public:
     /**
@@ -54,7 +54,7 @@ public:
     
     @return     A new session.
     */
-    static std::unique_ptr<ll::Session> create();
+    static std::shared_ptr<ll::Session> create();
 
 
     Session(const Session& session)              = delete;

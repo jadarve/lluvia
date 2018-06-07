@@ -25,7 +25,7 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
     cdef cppclass _Session 'll::Session':
 
         @staticmethod
-        unique_ptr[_Session] create()
+        shared_ptr[_Session] create()
 
         vector[vk.MemoryPropertyFlags] getSupportedMemoryFlags() const
 
@@ -42,5 +42,5 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
 cdef class Session:
     
-    cdef unique_ptr[_Session] __session
+    cdef shared_ptr[_Session] __session
 
