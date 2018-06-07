@@ -23,6 +23,7 @@ class Image;
 class ImageView;
 class Object;
 class Program;
+class Session;
 class Visitor;
 
 
@@ -44,7 +45,7 @@ public:
     @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
                             So this one can be modified after the compute node is constructed.
     */
-    ComputeNode(const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
+    ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
 
     ~ComputeNode();
 
@@ -210,6 +211,10 @@ private:
     // // uint32_t local_x {1};
 
     std::vector<std::shared_ptr<ll::Object>> objects;
+
+    // Shared pointer to the session this node was created from
+    // This will keep the session alive until this or any other node is deleted.
+    std::shared_ptr<const ll::Session>            session;
 };
 
 

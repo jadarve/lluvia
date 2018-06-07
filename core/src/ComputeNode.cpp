@@ -23,9 +23,10 @@ namespace ll {
 using namespace std;
 
 
-ComputeNode::ComputeNode(const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
+ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
     device       {device},
-    descriptor   {descriptor} {
+    descriptor   {descriptor},
+    session      {session} {
 
     assert(descriptor.program != nullptr);
     assert(!descriptor.functionName.empty());
