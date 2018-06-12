@@ -128,7 +128,7 @@ public:
         j["depth"]         = image->getDepth();
         j["channel_count"] = image->getChannelCount();
         j["channel_type"]  = ll::channelTypeToString(image->getChannelType());
-        j["usage"]         = ll::ImageUsageFlagsToVectorString(image->getUsageFlags());
+        j["usage"]         = ll::imageUsageFlagsToVectorString(image->getUsageFlags());
 
         // can throw std::out_of_range
         j["memory"] = graph->findMemoryNameForObject(name);

@@ -213,6 +213,10 @@ public:
     Once the returned pointer is no longer needed, the user must call ll::Buffer::unmap
     to release the mapped object.
 
+    @warning    This buffer object needs to be kept alive during the whole
+                lifetime of the returned mapped pointer. Otherwise, the behavior
+                is undefined when the mapped pointer is deleted.
+
     @tparam     T     type of the memory mapped. It can be either a normal type
                       such as int or an array such as int[].
     

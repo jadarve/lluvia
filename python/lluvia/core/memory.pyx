@@ -10,6 +10,10 @@ cimport memory
 
 import  buffer
 cimport buffer
+
+import  image
+cimport image
+
 cimport vulkan as vk
 
 from libcpp.string cimport string
@@ -170,3 +174,26 @@ cdef class Memory:
         buf.__buffer = self.__memory.get().createBuffer(size, vkUsageFlags)
 
         return buf
+
+
+    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage']):
+        
+        if len(shape) not in [1, 2, 3]:
+            raise ValueError('invalid shape lenght. Expected a ')
+
+
+        cdef uint32_t width  = shape[0]
+        cdef uint32_t height = shape[1] if len(shape) >= 2 else 1
+        cdef uint32_t depth  = shape[2] if len(shape) == 3 else 1
+
+        cdef image._ChannelType cType = image.stringToChannelType(channelType)
+
+        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, channels, cType)
+
+        cdef list flagsList = usageFlags
+        cdef vk.ImageUsageFlags flags = image.vectorStringToImageUsageFlags(flagsList)
+
+        cdef image.Image img = image.Image()
+        img.__image = self.__memory.get().createImage(desc, flags)
+
+        return img

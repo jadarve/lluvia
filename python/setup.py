@@ -63,6 +63,7 @@ package_data = {'lluvia.core' : ['*.pxd']}
 #################################################
 GPUmodulesTable = [('lluvia.core.buffer'  , ['lluvia/core/buffer.pyx']),
                    ('lluvia.core.compute_node'  , ['lluvia/core/compute_node.pyx']),
+                   ('lluvia.core.image'   , ['lluvia/core/image.pyx']),
                    ('lluvia.core.memory'  , ['lluvia/core/memory.pyx']),
                    ('lluvia.core.program' , ['lluvia/core/program.pyx']),
                    ('lluvia.core.session' , ['lluvia/core/session.pyx']),]

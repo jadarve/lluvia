@@ -42,14 +42,14 @@ namespace impl {
     See @VULKAN_DOC#VkImageUsageFlagBits for more information.
     */
     constexpr const std::array<std::tuple<const char*, vk::ImageUsageFlagBits>, 8> VkImageUsageFlagBitsStrings {{
-        std::make_tuple("IMAGE_USAGE_TRANSFER_SRC"             , vk::ImageUsageFlagBits::eTransferSrc),
-        std::make_tuple("IMAGE_USAGE_TRANSFER_DST"             , vk::ImageUsageFlagBits::eTransferDst),
-        std::make_tuple("IMAGE_USAGE_SAMPLED"                  , vk::ImageUsageFlagBits::eSampled),
-        std::make_tuple("IMAGE_USAGE_STORAGE"                  , vk::ImageUsageFlagBits::eStorage),
-        std::make_tuple("IMAGE_USAGE_COLOR_ATTACHMENT"         , vk::ImageUsageFlagBits::eColorAttachment),
-        std::make_tuple("IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT" , vk::ImageUsageFlagBits::eDepthStencilAttachment),
-        std::make_tuple("IMAGE_USAGE_TRANSIENT_ATTACHMENT"     , vk::ImageUsageFlagBits::eTransientAttachment),
-        std::make_tuple("IMAGE_USAGE_INPUT_ATTACHMENT"         , vk::ImageUsageFlagBits::eInputAttachment),
+        std::make_tuple("TransferSrc"            , vk::ImageUsageFlagBits::eTransferSrc),
+        std::make_tuple("TransferDst"            , vk::ImageUsageFlagBits::eTransferDst),
+        std::make_tuple("Sampled"                , vk::ImageUsageFlagBits::eSampled),
+        std::make_tuple("Storage"                , vk::ImageUsageFlagBits::eStorage),
+        std::make_tuple("ColorAttachment"        , vk::ImageUsageFlagBits::eColorAttachment),
+        std::make_tuple("DepthStencilAttachment" , vk::ImageUsageFlagBits::eDepthStencilAttachment),
+        std::make_tuple("TransientAttachment"    , vk::ImageUsageFlagBits::eTransientAttachment),
+        std::make_tuple("InputAttachment"        , vk::ImageUsageFlagBits::eInputAttachment),
     }};
 
 } // namespace impl
@@ -81,7 +81,7 @@ See @VULKAN_DOC#VkImageUsageFlagBits for more information.
 
 @return     A vector of string values. Each element is one of impl::VkImageUsageFlagBitsStrings
 */
-inline std::vector<std::string> ImageUsageFlagsToVectorString(const vk::ImageUsageFlags flags) noexcept {
+inline std::vector<std::string> imageUsageFlagsToVectorString(const vk::ImageUsageFlags flags) noexcept {
     return impl::flagsToVectorString<vk::ImageUsageFlags, vk::ImageUsageFlagBits, impl::VkImageUsageFlagBitsStrings.size(), impl::VkImageUsageFlagBitsStrings>(flags);
 }
 

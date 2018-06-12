@@ -14,6 +14,7 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 
 from buffer cimport _Buffer
+from image cimport _Image, _ImageDescriptor
 
 cimport vulkan as vk
 
@@ -31,7 +32,8 @@ cdef extern from 'lluvia/core/Memory.h' namespace 'll':
         bool isMappable() const
         bool isPageMappable(const uint64_t page) const
 
-        shared_ptr[_Buffer] createBuffer(const uint64_t size, const vk.BufferUsageFlags usageFlags)
+        shared_ptr[_Buffer] createBuffer(const uint64_t size, const vk.BufferUsageFlags usageFlags) except +
+        shared_ptr[_Image] createImage(const _ImageDescriptor& descriptor, const vk.ImageUsageFlags usageFlags) except +
 
 
 cdef class Memory:
