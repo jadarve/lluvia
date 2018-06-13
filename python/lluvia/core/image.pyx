@@ -8,8 +8,16 @@
 
 cimport image
 
+from . import impl
 
-__all__ = ['Image', 'ImageUsageFlags']
+
+__all__ = ['Image',
+           'ImageView',
+           'ImageUsageFlags',
+           'ImageChannelType',
+           'ImageFilterMode',
+           'ImageAddressMode']
+
 
 ImageUsageFlags = ['TransferSrc',
                    'TransferDst',
@@ -32,6 +40,18 @@ ImageChannelType = ['uint8',
                     'uint64',
                     'int64',
                     'float64']
+
+
+ImageFilterMode = ['Nearest',
+                   'Linear']
+
+
+ImageAddressMode = ['Repeat',
+                    'MirroredRepeat',
+                    'ClampToEdge',
+                    'ClampToBorder',
+                    'MirrorClampToEdge']
+
 
 cdef class Image:
     
@@ -122,6 +142,120 @@ cdef class Image:
 
         def __set__(self, value):
             raise RuntimeError('usageFlags cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
+
+
+    def createImageView(self, str filterMode, str addressMode, bool normalizedCoordinates=False, bool sampled=False):
+        """
+        Creates a new image view from this image.
+
+
+        Parameters
+        ----------
+
+
+        Returns
+        -------
+
+
+        Raises
+        ------
+        """
+
+        impl.validateFlagStrings(ImageFilterMode, [filterMode])
+        impl.validateFlagStrings(ImageAddressMode, [addressMode])
+
+        cdef _ImageViewDescriptor desc = _ImageViewDescriptor()
+        desc.setFilterMode(stringToImageFilterMode(filterMode))
+        desc.setAddressMode(stringToImageAddressMode(addressMode))
+        desc.setNormalizedCoordinates(normalizedCoordinates)
+        desc.setIsSampled(sampled)
+
+        cdef ImageView view = ImageView()
+        view.__imageView = self.__image.get().createImageView(desc)
+
+        return view
+
+
+cdef class ImageView:
+
+    def __cinit__(self):
+        pass
+
+
+    def __dealloc__(self):
+        pass
+
+
+    property filterMode:
+        def __get__(self):
+            return imageFilterModeToString(self.__imageView.get().getDescriptor().getFilterMode())
+
+        def __set__(self, value):
+            raise RuntimeError('filterMode cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
+
+
+    property addressModeU:
+        def __get__(self):
+            return imageAddressModeToString(self.__imageView.get().getDescriptor().getAddressModeU())
+
+        def __set__(self, value):
+            raise RuntimeError('addressModeU cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
+
+
+    property addressModeV:
+        def __get__(self):
+            return imageAddressModeToString(self.__imageView.get().getDescriptor().getAddressModeV())
+
+        def __set__(self, value):
+            raise RuntimeError('addressModeV cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
+
+
+    property addressModeW:
+        def __get__(self):
+            return imageAddressModeToString(self.__imageView.get().getDescriptor().getAddressModeW())
+
+        def __set__(self, value):
+            raise RuntimeError('addressModeW cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
+
+
+    property normalizedCoordinates:
+        def __get__(self):
+            return self.__imageView.get().getDescriptor().isNormalizedCoordinates()
+
+        def __set__(self, value):
+            raise RuntimeError('addressModeW cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
+
+
+    property sampled:
+        def __get__(self):
+            return self.__imageView.get().getDescriptor().isSampled()
+
+        def __set__(self, value):
+            raise RuntimeError('addressModeW cannot be set')
 
         def __del__(self):
             # nothing to do

@@ -123,7 +123,7 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
 
     auto sampledImgViewDesc = ll::ImageViewDescriptor {}
                         .setAddressMode(ll::ImageAddressMode::Repeat)
-                        .setFilteringMode(ll::ImageFilterMode::Nearest)
+                        .setFilterMode(ll::ImageFilterMode::Nearest)
                         .setNormalizedCoordinates(false)
                         .setIsSampled(true);
 

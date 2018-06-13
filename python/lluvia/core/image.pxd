@@ -55,7 +55,6 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
         vk.Format getFormat()         const
 
 
-
 cdef extern from 'lluvia/core/Image.h' namespace 'll':
 
     vk.ImageUsageFlags vectorStringToImageUsageFlags(const vector[string]& flagsVector)
@@ -68,14 +67,71 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
         vk.ImageUsageFlags getUsageFlags() const
         vk.ImageLayout     getLayout()     const
 
-        _ChannelType getChannelType() const
+        _ChannelType getChannelType()    const
         uint64_t getChannelTypeSize()    const
         uint32_t getChannelCount()       const
         uint32_t getWidth()              const
         uint32_t getHeight()             const
         uint32_t getDepth()              const
 
+        shared_ptr[_ImageView] createImageView(const _ImageViewDescriptor& descriptor) except +
+
+
+cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
+
+    cdef cppclass _ImageAxis 'll::ImageAxis':
+        pass
+
+
+    cdef cppclass _ImageFilterMode 'll::ImageFilterMode':
+        pass
+
+
+    cdef cppclass _ImageAddressMode 'll::ImageAddressMode':
+        pass
+
+
+    string imageFilterModeToString(_ImageFilterMode&& value)
+    _ImageFilterMode stringToImageFilterMode(string&& stringValue)
+
+    string imageAddressModeToString(_ImageAddressMode&& value)
+    _ImageAddressMode stringToImageAddressMode(string&& stringValue)
+
+
+    cdef cppclass _ImageViewDescriptor 'll::ImageViewDescriptor':
+
+        _ImageViewDescriptor()
+
+        _ImageViewDescriptor& setFilterMode(_ImageFilterMode filterMode)
+        _ImageFilterMode getFilterMode() const
+
+        _ImageViewDescriptor& setAddressMode(_ImageAddressMode addressMode)
+        _ImageViewDescriptor& setAddressMode(_ImageAxis axis, _ImageAddressMode addressMode)
+    
+        _ImageAddressMode getAddressModeU() const
+        _ImageAddressMode getAddressModeV() const
+        _ImageAddressMode getAddressModeW() const
+
+        _ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates)
+        bool isNormalizedCoordinates() const
+
+        _ImageViewDescriptor& setIsSampled(bool isSampled)
+        bool isSampled() const
+
+
+cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
+    
+    cdef cppclass _ImageView 'll::ImageView':
+
+        shared_ptr[_Image] getImage() const
+        _ImageViewDescriptor& getDescriptor() const
+
 
 cdef class Image:
     
     cdef shared_ptr[_Image] __image
+
+
+cdef class ImageView:
+
+    cdef shared_ptr[_ImageView] __imageView

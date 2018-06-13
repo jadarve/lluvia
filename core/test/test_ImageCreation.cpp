@@ -41,7 +41,7 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     session->run(*cmdBuffer);
 
     auto imgViewDesc = ll::ImageViewDescriptor {}
-                        .setFilteringMode(ll::ImageFilterMode::Nearest)
+                        .setFilterMode(ll::ImageFilterMode::Nearest)
                         .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                         .setNormalizedCoordinates(false);
 

@@ -390,7 +390,7 @@ public:
         auto viewDesc = ll::ImageViewDescriptor {}
                             .setNormalizedCoordinates(normalizedCoords)
                             .setIsSampled(isSampled)
-                            .setFilteringMode(filterMode)
+                            .setFilterMode(filterMode)
                             .setAddressMode(ll::ImageAxis::U, addrModeU)
                             .setAddressMode(ll::ImageAxis::V, addrModeV)
                             .setAddressMode(ll::ImageAxis::W, addrModeW);

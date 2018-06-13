@@ -74,7 +74,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
                         .setNormalizedCoordinates(false)
                         .setIsSampled(true)
                         .setAddressMode(ll::ImageAddressMode::Repeat)
-                        .setFilteringMode(ll::ImageFilterMode::Nearest);
+                        .setFilterMode(ll::ImageFilterMode::Nearest);
 
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
