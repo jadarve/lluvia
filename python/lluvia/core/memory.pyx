@@ -176,10 +176,15 @@ cdef class Memory:
         return buf
 
 
-    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage']):
+    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags='Storage'):
         
         if len(shape) not in [1, 2, 3]:
             raise ValueError('invalid shape lenght. Expected a ')
+
+        if type(usageFlags) is str:
+            usageFlags = [usageFlags]
+
+        impl.validateFlagStrings(image.ImageUsageFlags, usageFlags)
 
 
         cdef uint32_t width  = shape[0]
