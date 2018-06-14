@@ -13,8 +13,11 @@ from cython.operator cimport dereference as deref
 from cython.operator cimport dereference as deref
 from libc.stdint cimport uint64_t
 from libcpp cimport bool
+from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
+
+from command_buffer cimport CommandBuffer, _CommandBuffer
 
 import  memory
 cimport memory
@@ -278,6 +281,28 @@ cdef class Session:
         
         node.__node = self.__session.get().readComputeNode(filePath)
         return node
+
+
+    def createCommandBuffer(self):
+        """
+        Creates a command buffer object.
+
+        Command buffers are used to record commands to be executed
+        by the device. Once the recording finishes, the command buffer
+        can be sent for execution using the `run` method.
+
+        Raises
+        ------
+        ValueError : if the command buffer cannot be created.
+        """
+
+        cdef CommandBuffer cmdBuffer = CommandBuffer()
+        cdef unique_ptr[_CommandBuffer] cmdBufferPtr
+        # cmdBuffer.reset(self.__session.get().createCommandBuffer().get())
+        # cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](self.__session.get().createCommandBuffer())
+
+        return cmdBuffer
+
 
 
     def run(self, obj):

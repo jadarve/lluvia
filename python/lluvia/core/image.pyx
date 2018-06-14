@@ -147,22 +147,61 @@ cdef class Image:
             # nothing to do
             pass
 
+    
+    property size:
+        def __get__(self):
+            return self.__image.get().getSize()
 
-    def createImageView(self, str filterMode, str addressMode, bool normalizedCoordinates=False, bool sampled=False):
+        def __set__(self, value):
+            raise RuntimeError('size cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass            
+
+
+    def createImageView(self, str filterMode, str addressMode='Repeat', bool normalizedCoordinates=False, bool sampled=False):
         """
         Creates a new image view from this image.
 
 
         Parameters
         ----------
+        filterMode : str.
+            Filtering more for reading pixels within a shader. Possible
+            values are defined in lluvia.ImageFilterMode:
+                - Nearest
+                - Linear
+
+        addressMode : str. Defaults to 'Repeat'.
+            Addressing mode for reading pixels that are outside of the image
+            boundaries. Possible values are defined in lluvia.ImageAddressMode:
+                - Repeat
+                - MirroredRepeat
+                - ClampToEdge
+                - ClampToBorder
+                - MirrorClampToEdge
+
+        normalizedCoordinates : bool. Defaults to False.
+            Tells whether or not to use normalized coordinates to read
+            pixels within a shader.
+
+        sampled : bool. Defaults to False.
+            Tells whether or not to use a sampler object for reading
+            pixels within a shader.
 
 
         Returns
         -------
+        imgView : lluvia.ImageView
+            Image view object.
 
 
         Raises
         ------
+        ValueError : if either filterMode or addressMode parameter have incorrect values.
+
+        RuntimeError : if the image view cannot be created.
         """
 
         impl.validateFlagStrings(ImageFilterMode, [filterMode])

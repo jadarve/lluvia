@@ -14,6 +14,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
+from command_buffer cimport _CommandBuffer
 from compute_node cimport _ComputeNodeDescriptor, _ComputeNode
 from memory cimport _Memory
 from program cimport _Program
@@ -34,8 +35,10 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) const
 
-        _ComputeNodeDescriptor readComputeNodeDescriptor(const string& filePath) except +;
-        shared_ptr[_ComputeNode] readComputeNode(const string& filePath) except +;
+        _ComputeNodeDescriptor readComputeNodeDescriptor(const string& filePath) except +
+        shared_ptr[_ComputeNode] readComputeNode(const string& filePath) except +
+
+        unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
         void run(const _ComputeNode& node)
 
@@ -43,4 +46,3 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 cdef class Session:
     
     cdef shared_ptr[_Session] __session
-

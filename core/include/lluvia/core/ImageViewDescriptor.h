@@ -344,15 +344,17 @@ public:
 
 private:
 
-    ll::ImageFilterMode filterMode;
+    ll::ImageFilterMode filterMode {ll::ImageFilterMode::Nearest};
 
     /**
      * Address mode for U, V, W axes
      */
-    std::array<ll::ImageAddressMode, 3> addressMode;
+    std::array<ll::ImageAddressMode, 3> addressMode {{ll::ImageAddressMode::Repeat,
+                                                      ll::ImageAddressMode::Repeat,
+                                                      ll::ImageAddressMode::Repeat}};
 
     bool normalizedCoordinates {false};
-    bool _isSampled             {false};
+    bool _isSampled            {false};
 
 
 friend class ImageView;

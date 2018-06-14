@@ -252,8 +252,8 @@ public:
     /**
     @brief      Gets the size in bytes required to store the image.
 
-    This value does not include any row padding needed to align the one
-    row row of data to the required size by the device.
+    This value does not include any row padding needed to align one
+    row of data to the required size by the device.
     
     @return     The size of the image in bytes.
     */
