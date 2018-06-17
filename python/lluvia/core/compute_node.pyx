@@ -11,6 +11,9 @@ cimport compute_node
 from buffer import Buffer
 from buffer cimport Buffer
 
+from image import ImageView
+from image cimport ImageView
+
 from program import Program
 from program cimport Program, _Program
 
@@ -287,8 +290,13 @@ cdef class ComputeNode:
             Parameter to bind.
         """
 
-        cdef Buffer buf = None
+        cdef Buffer    buf     = None
+        cdef ImageView imgView = None
         
         if type(obj) == Buffer:
             buf = obj
             self.__node.get().bind(index, static_pointer_cast[_Object](buf.__buffer))
+
+        if type(obj) == ImageView:
+            imgView = obj
+            self.__node.get().bind(index, static_pointer_cast[_Object](imgView.__imageView))

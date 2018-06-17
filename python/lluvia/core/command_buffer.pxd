@@ -38,6 +38,11 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
         void memoryBarrier()
 
 
+cdef extern from "<utility>" namespace "std":
+
+     unique_ptr[_CommandBuffer] move(unique_ptr[_CommandBuffer]&& ptr)
+
+
 cdef class CommandBuffer:
     
     cdef shared_ptr[_CommandBuffer] __commandBuffer

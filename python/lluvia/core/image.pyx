@@ -53,6 +53,21 @@ ImageAddressMode = ['Repeat',
                     'MirrorClampToEdge']
 
 
+ImageLayout      = ['Undefined',
+                    'General',
+                    'ColorAttachmentOptimal',
+                    'DepthStencilAttachmentOptimal',
+                    'DepthStencilReadOnlyOptimal',
+                    'ShaderReadOnlyOptimal',
+                    'TransferSrcOptimal',
+                    'TransferDstOptimal',
+                    'Preinitialized',
+                    'PresentSrcKHR',
+                    'SharedPresentKHR',
+                    'DepthReadOnlyStencilAttachmentOptimalKHR',
+                    'DepthAttachmentStencilReadOnlyOptimalKHR']
+
+
 cdef class Image:
     
     def __cinit__(self):

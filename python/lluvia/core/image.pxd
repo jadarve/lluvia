@@ -26,7 +26,7 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
 
     uint64_t getChannelTypeSize(_ChannelType type)
     string channelTypeToString(_ChannelType&& value)
-    _ChannelType stringToChannelType(string&& stringValue)
+    _ChannelType stringToChannelType(string&& stringValue) except +
 
 
     cdef cppclass _ImageDescriptor 'll::ImageDescriptor':
@@ -59,6 +59,9 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
 
     vk.ImageUsageFlags vectorStringToImageUsageFlags(const vector[string]& flagsVector)
     vector[string] imageUsageFlagsToVectorString(const vk.ImageUsageFlags flags)
+
+    string imageLayoutToString(vk.ImageLayout&& layout)
+    vk.ImageLayout stringToImageLayout(string&& stringValue) except +
 
     cdef cppclass _Image 'll::Image' (_Object):
 

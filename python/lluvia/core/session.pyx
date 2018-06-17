@@ -10,14 +10,13 @@ cimport session
 
 from cython.operator cimport dereference as deref
 
-from cython.operator cimport dereference as deref
 from libc.stdint cimport uint64_t
 from libcpp cimport bool
 from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from command_buffer cimport CommandBuffer, _CommandBuffer
+from command_buffer cimport CommandBuffer, _CommandBuffer, move
 
 import  memory
 cimport memory
@@ -293,13 +292,11 @@ cdef class Session:
 
         Raises
         ------
-        ValueError : if the command buffer cannot be created.
+        RuntimeError : if the command buffer cannot be created.
         """
 
         cdef CommandBuffer cmdBuffer = CommandBuffer()
-        cdef unique_ptr[_CommandBuffer] cmdBufferPtr
-        # cmdBuffer.reset(self.__session.get().createCommandBuffer().get())
-        # cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](self.__session.get().createCommandBuffer())
+        cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer()))
 
         return cmdBuffer
 
@@ -316,8 +313,13 @@ cdef class Session:
         """
 
         cdef compute_node.ComputeNode node = None
+        cdef CommandBuffer cmdBuffer = None
 
         if type(obj) == compute_node.ComputeNode:
             node = obj
             self.__session.get().run(deref(node.__node.get()))
+
+        elif type(obj) == CommandBuffer:
+            cmdBuffer = obj
+            self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
         

@@ -28,8 +28,14 @@ ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, cons
     descriptor   {descriptor},
     session      {session} {
 
-    assert(descriptor.program != nullptr);
-    assert(!descriptor.functionName.empty());
+    
+    if (descriptor.program == nullptr) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::InvalidShaderProgram), "Shader program cannot be null.");
+    }
+
+    if (descriptor.functionName.empty()) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::InvalidShaderFunctionName), "Shader function name must be different than empty string.");
+    }
 
     objects.resize(descriptor.parameterBindings.size());
 

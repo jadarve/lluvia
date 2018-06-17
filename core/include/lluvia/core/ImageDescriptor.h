@@ -97,9 +97,9 @@ corresponding enum value is returned. The comparison is case sensitive.
 
 @tparam     T            \p stringValue type. \p T must satisfies `std::is_convertible<T, std::string>()`
 
-@return     ll::ChannelType value corresponding to stringValue
+@return     ll::ChannelType value corresponding to stringValue.
  
-@throws std::out_of_range if \p stringValue is not found in ll::ObjectTypeStrings.
+@throws std::out_of_range if \p stringValue is not found in ll::impl::ObjectTypeStrings.
 */
 template<typename T>
 inline ll::ChannelType stringToChannelType(T&& stringValue) {

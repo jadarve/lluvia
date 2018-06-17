@@ -52,6 +52,23 @@ namespace impl {
         std::make_tuple("InputAttachment"        , vk::ImageUsageFlagBits::eInputAttachment),
     }};
 
+
+    constexpr const std::array<std::tuple<const char*, vk::ImageLayout>, 13> VkImageLayoutStrings {{
+        std::make_tuple("Undefined"                                , vk::ImageLayout::eUndefined),
+        std::make_tuple("General"                                  , vk::ImageLayout::eGeneral),
+        std::make_tuple("ColorAttachmentOptimal"                   , vk::ImageLayout::eColorAttachmentOptimal),
+        std::make_tuple("DepthStencilAttachmentOptimal"            , vk::ImageLayout::eDepthStencilAttachmentOptimal),
+        std::make_tuple("DepthStencilReadOnlyOptimal"              , vk::ImageLayout::eDepthStencilReadOnlyOptimal),
+        std::make_tuple("ShaderReadOnlyOptimal"                    , vk::ImageLayout::eShaderReadOnlyOptimal),
+        std::make_tuple("TransferSrcOptimal"                       , vk::ImageLayout::eTransferSrcOptimal),
+        std::make_tuple("TransferDstOptimal"                       , vk::ImageLayout::eTransferDstOptimal),
+        std::make_tuple("Preinitialized"                           , vk::ImageLayout::ePreinitialized),
+        std::make_tuple("PresentSrcKHR"                            , vk::ImageLayout::ePresentSrcKHR),
+        std::make_tuple("SharedPresentKHR"                         , vk::ImageLayout::eSharedPresentKHR),
+        std::make_tuple("DepthReadOnlyStencilAttachmentOptimalKHR" , vk::ImageLayout::eDepthReadOnlyStencilAttachmentOptimalKHR),
+        std::make_tuple("DepthAttachmentStencilReadOnlyOptimalKHR" , vk::ImageLayout::eDepthAttachmentStencilReadOnlyOptimalKHR),
+    }};
+
 } // namespace impl
 
 
@@ -83,6 +100,42 @@ See @VULKAN_DOC#VkImageUsageFlagBits for more information.
 */
 inline std::vector<std::string> imageUsageFlagsToVectorString(const vk::ImageUsageFlags flags) noexcept {
     return impl::flagsToVectorString<vk::ImageUsageFlags, vk::ImageUsageFlagBits, impl::VkImageUsageFlagBitsStrings.size(), impl::VkImageUsageFlagBitsStrings>(flags);
+}
+
+
+/**
+@brief      Converts from vk::ImageLayout enum value to string
+
+@param[in]  layout  Vulkan image layout enum.
+
+@tparam     T          function return type. Defaults to std::string-
+
+@return     Returns the corresponding `std::string` in ll::impl::VkImageLayoutStrings for the enum value.
+*/
+template<typename T = std::string>
+inline T imageLayoutToString(vk::ImageLayout&& layout) noexcept {
+    return impl::enumToString<vk::ImageLayout, ll::impl::VkImageLayoutStrings.size(), ll::impl::VkImageLayoutStrings>(std::forward<vk::ImageLayout>(layout));
+}
+
+
+/**
+@brief      Converst from a string-like object to vk::ImageLayout.
+
+This function can be used either with string literals, const char* or `std::string` objects.
+\p stringValue parameter is compared against the values in ll::impl::VkImageLayoutStrings and the
+corresponding enum value is returned. The comparison is case sensitive.
+
+@param[in]  stringValue  string-like parameter. String literals and `std::string` objects are allowed.
+
+@tparam     T          \p stringValue type. \p T must satisfies `std::is_convertible<T, std::string>()`
+
+@return     vk::ImageLayout value corresponding to stringValue.
+
+@throws std::out_of_range if \p stringValue is not found in ll::impl::VkImageLayoutStrings.
+*/
+template<typename T>
+inline vk::ImageLayout stringToImageLayout(T&& stringValue) {
+    return impl::stringToEnum<vk::ImageLayout, T, ll::impl::VkImageLayoutStrings.size(), ll::impl::VkImageLayoutStrings>(std::forward<T>(stringValue));
 }
 
 

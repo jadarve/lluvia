@@ -33,7 +33,7 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const
         shared_ptr[_Program] createProgram(const string& spirvPath) except +
 
-        shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) const
+        shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) except +
 
         _ComputeNodeDescriptor readComputeNodeDescriptor(const string& filePath) except +
         shared_ptr[_ComputeNode] readComputeNode(const string& filePath) except +
@@ -41,6 +41,7 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
         void run(const _ComputeNode& node)
+        void run(const _CommandBuffer& cmdBuffer)
 
 
 cdef class Session:

@@ -44,6 +44,13 @@ public:
     @param[in]  device      The Vulkan device where this node will run.
     @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
                             So this one can be modified after the compute node is constructed.
+
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
+                                  if desc.getFunctionName() is empty string.
+    
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
+                                  if desc.getProgram is nullptr.
+
     */
     ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
 
