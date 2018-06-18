@@ -1,11 +1,11 @@
 {
     "function": "main",
-    "grid_x": 1024,
-    "grid_y": 1,
-    "grid_z": 1,
+    "grid_x": 16,
+    "grid_y": 32,
+    "grid_z": 64,
     "local_x": 1,
-    "local_y": 1,
-    "local_z": 1,
+    "local_y": 4,
+    "local_z": 8,
     "parameters": [
         "Buffer"
     ],

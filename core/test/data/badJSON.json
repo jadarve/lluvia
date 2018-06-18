@@ -2,8 +2,8 @@
     "memories": [
         {
             "flags": [
-                "HOST_COHERENT",
-                "HOST_VISIBLE"
+                "HostCoherent",
+                "HostVisible"
             ],
             "name": "hostMemory",
             "page_size": 4096
@@ -15,12 +15,12 @@
             "memory": "hostMemory",
             "name": "hostBuffer_0",
             "size": 1024,
-            "type": "BUFFER",
+            "type": "Buffer",
 
             "usage": [
-                "STORAGE_BUFFER",
-                "TRANSFER_DST",
-                "TRANSFER_SRC"
+                "StorageBuffer",
+                "TransferDst",
+                "TransferSrc"
             ]
         }
     ],
