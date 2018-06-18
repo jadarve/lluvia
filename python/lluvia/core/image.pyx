@@ -172,7 +172,19 @@ cdef class Image:
 
         def __del__(self):
             # nothing to do
-            pass            
+            pass
+
+
+    property layout:
+        def __get__(self):
+            return imageLayoutToString(self.__image.get().getLayout())
+
+        def __set__(self, value):
+            raise RuntimeError('layout cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
 
 
     def createImageView(self, str filterMode, str addressMode='Repeat', bool normalizedCoordinates=False, bool sampled=False):
