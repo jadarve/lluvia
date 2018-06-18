@@ -41,6 +41,7 @@ public:
     /**
     @brief      Constructs the object.
     
+    @param[in]  session     The session this node was created from.
     @param[in]  device      The Vulkan device where this node will run.
     @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
                             So this one can be modified after the compute node is constructed.

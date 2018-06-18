@@ -145,6 +145,7 @@ public:
     /**
     @brief      Constructs a new ll::Memory object.
     
+    @param[in]  session   The session this node was created from.
     @param[in]  device    The Vulkan device used for the construction.
     @param[in]  heapInfo  The heap information.
     @param[in]  pageSize  The page size in bytes.

@@ -43,6 +43,7 @@ public:
     /**
     @brief      Constructs the object from a Vulkan device and SPIR-V code.
     
+    @param[in]  session    The session this node was created from.
     @param[in]  device     The Vulkan device.
     @param[in]  spirvCode  The SPIR-V code.
     */
