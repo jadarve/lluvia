@@ -47,7 +47,10 @@ void CommandBuffer::run(const ll::ComputeNode& node) {
 
 void CommandBuffer::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
 
-    assert(dst.getSize() >= src.getSize());
+    if (dst.getSize() < src.getSize()) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::BufferCopyError), "destination size must be greater or equal than source: got " + std::to_string(dst.getSize()) + " expected: " + std::to_string(src.getSize()));
+    }
+    
 
     auto copyInfo = vk::BufferCopy()
         .setSrcOffset(0)

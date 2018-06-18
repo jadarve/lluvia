@@ -147,7 +147,7 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath
     file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
     const auto fileSize  = static_cast<size_t>(file.tellg());
-              auto spirvCode = std::vector<uint8_t>(fileSize);
+          auto spirvCode = std::vector<uint8_t>(fileSize);
 
     file.seekg(0);
     file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);

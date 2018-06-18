@@ -29,7 +29,7 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
 
         void run(const _ComputeNode& node)
 
-        void copyBuffer(const _Buffer& src, const _Buffer& dst)
+        void copyBuffer(const _Buffer& src, const _Buffer& dst) except +
         void copyBufferToImage(const _Buffer& src, const _Image& dst)
         void copyImageToBuffer(const _Image& src, const _Buffer& dst)
 
