@@ -298,6 +298,9 @@ cdef class Session:
         cdef CommandBuffer cmdBuffer = CommandBuffer()
         cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer()))
 
+        # hold a reference to this session to avoid deleting it before the command buffer
+        cmdBuffer.__session = self
+
         return cmdBuffer
 
 

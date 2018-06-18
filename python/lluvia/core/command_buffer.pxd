@@ -16,6 +16,7 @@ from libcpp.string cimport string
 from buffer cimport _Buffer
 from image cimport _Image
 from compute_node cimport _ComputeNode
+from session cimport Session
 
 cimport vulkan as vk
 
@@ -46,3 +47,4 @@ cdef extern from "<utility>" namespace "std":
 cdef class CommandBuffer:
     
     cdef shared_ptr[_CommandBuffer] __commandBuffer
+    cdef Session __session
