@@ -27,6 +27,7 @@ namespace ll {
 class Buffer;
 class Image;
 class ImageDescriptor;
+class Session;
 class Visitor;
 
 
@@ -38,11 +39,11 @@ namespace impl {
     See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
     */
     constexpr const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings {{
-        std::make_tuple("DEVICE_LOCAL",     vk::MemoryPropertyFlagBits::eDeviceLocal),
-        std::make_tuple("HOST_CACHED",      vk::MemoryPropertyFlagBits::eHostCached),
-        std::make_tuple("HOST_COHERENT",    vk::MemoryPropertyFlagBits::eHostCoherent),
-        std::make_tuple("HOST_VISIBLE",     vk::MemoryPropertyFlagBits::eHostVisible),
-        std::make_tuple("LAZILY_ALLOCATED", vk::MemoryPropertyFlagBits::eLazilyAllocated),
+        std::make_tuple("DeviceLocal"     , vk::MemoryPropertyFlagBits::eDeviceLocal),
+        std::make_tuple("HostCached"      , vk::MemoryPropertyFlagBits::eHostCached),
+        std::make_tuple("HostCoherent"    , vk::MemoryPropertyFlagBits::eHostCoherent),
+        std::make_tuple("HostVisible"     , vk::MemoryPropertyFlagBits::eHostVisible),
+        std::make_tuple("LazilyAllocated" , vk::MemoryPropertyFlagBits::eLazilyAllocated),
     }};
 
 } // namespace impl
@@ -66,7 +67,7 @@ inline vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vect
 
 
 /**
-@brief      Converst from Vulkan MemoryPropertyFlags to a vector of strings.
+@brief      Converts from Vulkan MemoryPropertyFlags to a vector of strings.
 
 See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
 
@@ -144,11 +145,12 @@ public:
     /**
     @brief      Constructs a new ll::Memory object.
     
+    @param[in]  session   The session this node was created from.
     @param[in]  device    The Vulkan device used for the construction.
     @param[in]  heapInfo  The heap information.
     @param[in]  pageSize  The page size in bytes.
     */
-    Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize);
+    Memory(const std::shared_ptr<const ll::Session>& session, const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize);
 
     ~Memory();
 
@@ -267,6 +269,10 @@ private:
     std::vector<vk::DeviceMemory>                 memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
     std::vector<bool>                             memoryPageMappingFlags;
+
+    // Shared pointer to the session this memory was created from
+    // This will keep the session alive until this or any other memory is deleted.
+    std::shared_ptr<const ll::Session>            session;
 
 
 friend class ll::Buffer;

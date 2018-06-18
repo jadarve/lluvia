@@ -72,8 +72,8 @@ namespace impl {
     @sa         ll::ImageFilterMode enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ImageFilterMode>, 2> ImageFilterModeStrings {{
-        std::make_tuple("NEAREST" , ll::ImageFilterMode::Nearest),
-        std::make_tuple("LINEAR"  , ll::ImageFilterMode::Linear),
+        std::make_tuple("Nearest" , ll::ImageFilterMode::Nearest),
+        std::make_tuple("Linear"  , ll::ImageFilterMode::Linear),
     }};
 
 
@@ -83,11 +83,11 @@ namespace impl {
     @sa         ll::ImageAddressMode enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ImageAddressMode>, 5> ImageAddressModeStrings {{
-        std::make_tuple("REPEAT"               , ll::ImageAddressMode::Repeat),
-        std::make_tuple("MIRRORED_REPEAT"      , ll::ImageAddressMode::MirroredRepeat),
-        std::make_tuple("CLAMP_TO_EDGE"        , ll::ImageAddressMode::ClampToEdge),
-        std::make_tuple("CLAMP_T_OBORDER"      , ll::ImageAddressMode::ClampToBorder),
-        std::make_tuple("MIRROR_CLAMP_TO_EDGE" , ll::ImageAddressMode::MirrorClampToEdge),
+        std::make_tuple("Repeat"            , ll::ImageAddressMode::Repeat),
+        std::make_tuple("MirroredRepeat"    , ll::ImageAddressMode::MirroredRepeat),
+        std::make_tuple("ClampToEdge"       , ll::ImageAddressMode::ClampToEdge),
+        std::make_tuple("ClampToBorder"     , ll::ImageAddressMode::ClampToBorder),
+        std::make_tuple("MirrorClampToEdge" , ll::ImageAddressMode::MirrorClampToEdge),
     }};
 
 } // namespace impl
@@ -178,7 +178,7 @@ for pixels outside the image boundaries.
                         .setNormalizedCoordinates(false)
                         .setIsSampled(true)
                         .setAddressMode(ll::ImageAddressMode::Repeat)
-                        .setFilteringMode(ll::ImageFilterMode::Nearest);
+                        .setFilterMode(ll::ImageFilterMode::Nearest);
 @endcode
 */
 class ImageViewDescriptor {
@@ -201,7 +201,7 @@ public:
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setFilteringMode(ll::ImageFilterMode filterMode) noexcept {
+    inline ImageViewDescriptor& setFilterMode(ll::ImageFilterMode filterMode) noexcept {
 
         this->filterMode = filterMode;
         return *this;
@@ -344,15 +344,17 @@ public:
 
 private:
 
-    ll::ImageFilterMode filterMode;
+    ll::ImageFilterMode filterMode {ll::ImageFilterMode::Nearest};
 
     /**
      * Address mode for U, V, W axes
      */
-    std::array<ll::ImageAddressMode, 3> addressMode;
+    std::array<ll::ImageAddressMode, 3> addressMode {{ll::ImageAddressMode::Repeat,
+                                                      ll::ImageAddressMode::Repeat,
+                                                      ll::ImageAddressMode::Repeat}};
 
     bool normalizedCoordinates {false};
-    bool _isSampled             {false};
+    bool _isSampled            {false};
 
 
 friend class ImageView;

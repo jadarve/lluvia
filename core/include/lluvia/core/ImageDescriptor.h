@@ -52,20 +52,20 @@ namespace impl {
     @sa ll::ChannelType enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ChannelType>, 11> ChannelTypeStrings {{
-        std::make_tuple("UINT8"   , ll::ChannelType::Uint8),
-        std::make_tuple("INT8"    , ll::ChannelType::Int8),
+        std::make_tuple("uint8"   , ll::ChannelType::Uint8),
+        std::make_tuple("int8"    , ll::ChannelType::Int8),
 
-        std::make_tuple("UINT16"  , ll::ChannelType::Uint16),
-        std::make_tuple("INT16"   , ll::ChannelType::Int16),
-        std::make_tuple("FLOAT16" , ll::ChannelType::Float16),
+        std::make_tuple("uint16"  , ll::ChannelType::Uint16),
+        std::make_tuple("int16"   , ll::ChannelType::Int16),
+        std::make_tuple("float16" , ll::ChannelType::Float16),
 
-        std::make_tuple("UINT32"  , ll::ChannelType::Uint32),
-        std::make_tuple("INT32"   , ll::ChannelType::Int32),
-        std::make_tuple("FLOAT32" , ll::ChannelType::Float32),
+        std::make_tuple("uint32"  , ll::ChannelType::Uint32),
+        std::make_tuple("int32"   , ll::ChannelType::Int32),
+        std::make_tuple("float32" , ll::ChannelType::Float32),
 
-        std::make_tuple("UINT64"  , ll::ChannelType::Uint64),
-        std::make_tuple("INT64"   , ll::ChannelType::Int64),
-        std::make_tuple("FLOAT64" , ll::ChannelType::Float64),
+        std::make_tuple("uint64"  , ll::ChannelType::Uint64),
+        std::make_tuple("int64"   , ll::ChannelType::Int64),
+        std::make_tuple("float64" , ll::ChannelType::Float64),
     }};
 
 } // namespace impl
@@ -97,9 +97,9 @@ corresponding enum value is returned. The comparison is case sensitive.
 
 @tparam     T            \p stringValue type. \p T must satisfies `std::is_convertible<T, std::string>()`
 
-@return     ll::ChannelType value corresponding to stringValue
+@return     ll::ChannelType value corresponding to stringValue.
  
-@throws std::out_of_range if \p stringValue is not found in ll::ObjectTypeStrings.
+@throws std::out_of_range if \p stringValue is not found in ll::impl::ObjectTypeStrings.
 */
 template<typename T>
 inline ll::ChannelType stringToChannelType(T&& stringValue) {
@@ -252,8 +252,8 @@ public:
     /**
     @brief      Gets the size in bytes required to store the image.
 
-    This value does not include any row padding needed to align the one
-    row row of data to the required size by the device.
+    This value does not include any row padding needed to align one
+    row of data to the required size by the device.
     
     @return     The size of the image in bytes.
     */

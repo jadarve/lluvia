@@ -16,8 +16,7 @@ endfunction()
 set(LL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(LL_LINK_LIBRARIES stdc++ json vulkan)
 
-
-add_library (lluvia-core SHARED
+set(_SRCS
     src/Buffer.cpp
     src/CommandBuffer.cpp
     src/ComputeGraph.cpp
@@ -37,6 +36,9 @@ add_library (lluvia-core SHARED
     src/utils.cpp
 )
 
+
+add_library (lluvia-core        STATIC ${_SRCS})
+set_property(TARGET lluvia-core PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(lluvia-core
     PUBLIC ${LL_INCLUDE_DIRS}

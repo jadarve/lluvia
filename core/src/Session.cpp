@@ -12,6 +12,7 @@
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/Image.h"
+#include "lluvia/core/io.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
@@ -25,9 +26,9 @@ namespace ll {
 
 using namespace std;
 
-std::unique_ptr<ll::Session> Session::create() {
+std::shared_ptr<ll::Session> Session::create() {
 
-    return std::unique_ptr<Session>{new Session()};
+    return std::shared_ptr<Session>{new Session()};
 }
 
 
@@ -131,7 +132,7 @@ std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
             heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
 
             // can throw exception. Invariants of Session are kept.
-            return std::make_shared<ll::Memory>(device, heapInfo, pageSize);
+            return std::make_shared<ll::Memory>(shared_from_this(), device, heapInfo, pageSize);
         }
     }
 
@@ -143,32 +144,40 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath
 
     // workaround for GCC 4.8
     ifstream file {spirvPath, std::ios::ate | std::ios::binary};
+    file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
-    if (file.is_open()) {
+    const auto fileSize  = static_cast<size_t>(file.tellg());
+          auto spirvCode = std::vector<uint8_t>(fileSize);
 
-        const auto fileSize  = static_cast<size_t>(file.tellg());
-              auto spirvCode = std::vector<uint8_t>(fileSize);
+    file.seekg(0);
+    file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
+    file.close();
 
-        file.seekg(0);
-        file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
-        file.close();
-
-        return std::make_shared<ll::Program>(device, spirvCode);
-    }
-
-    return nullptr;
+    return std::make_shared<ll::Program>(shared_from_this(), device, spirvCode);
 }
 
 
 std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& spirv) const {
 
-    return std::make_shared<ll::Program>(device, spirv);
+    return std::make_shared<ll::Program>(shared_from_this(), device, spirv);
 }
 
 
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
 
-    return std::make_shared<ll::ComputeNode>(device, descriptor);
+    return std::make_shared<ll::ComputeNode>(shared_from_this(), device, descriptor);
+}
+
+
+ll::ComputeNodeDescriptor Session::readComputeNodeDescriptor(const std::string& filePath) const {
+
+    return ll::readComputeNodeDescriptor(filePath, *this);
+}
+
+
+std::shared_ptr<ll::ComputeNode> Session::readComputeNode(const std::string& filePath) const {
+
+    return ll::readComputeNode(filePath, *this);
 }
 
 
@@ -188,6 +197,18 @@ void Session::run(const ll::CommandBuffer& cmdBuffer) {
 
     queue.submit(1, &submitInfo, nullptr);
     queue.waitIdle();
+}
+
+
+void Session::run(const ll::ComputeNode& node) {
+
+    auto cmdBuffer = createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->run(node);
+    cmdBuffer->end();
+
+    run(*cmdBuffer);
 }
 
 

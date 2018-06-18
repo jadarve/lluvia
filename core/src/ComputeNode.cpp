@@ -23,12 +23,19 @@ namespace ll {
 using namespace std;
 
 
-ComputeNode::ComputeNode(const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
+ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
     device       {device},
-    descriptor   {descriptor} {
+    descriptor   {descriptor},
+    session      {session} {
 
-    assert(descriptor.program != nullptr);
-    assert(!descriptor.functionName.empty());
+    
+    if (descriptor.program == nullptr) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::InvalidShaderProgram), "Shader program cannot be null.");
+    }
+
+    if (descriptor.functionName.empty()) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::InvalidShaderFunctionName), "Shader function name must be different than empty string.");
+    }
 
     objects.resize(descriptor.parameterBindings.size());
 
@@ -121,6 +128,11 @@ std::shared_ptr<ll::Program> ComputeNode::getProgram() const noexcept{
 }
 
 
+const ll::ComputeNodeDescriptor& ComputeNode::getDescriptor() const noexcept {
+    return descriptor;
+}
+
+
 uint32_t ComputeNode::getLocalX() const noexcept {
     return descriptor.localGroup[0];
 }
@@ -141,13 +153,28 @@ uint32_t ComputeNode::getGridX() const noexcept {
 }
 
 
+void ComputeNode::setGridX(const uint32_t x) noexcept {
+    descriptor.globalGroup[0] = x;
+}
+
+
 uint32_t ComputeNode::getGridY() const noexcept {
     return descriptor.globalGroup[1];
 }
 
 
+void ComputeNode::setGridY(const uint32_t y) noexcept {
+    descriptor.globalGroup[1] = y;
+}
+
+
 uint32_t ComputeNode::getGridZ() const noexcept {
     return descriptor.globalGroup[2];
+}
+
+
+void ComputeNode::setGridZ(const uint32_t z) noexcept {
+    descriptor.globalGroup[2] = z;
 }
 
 
@@ -164,9 +191,6 @@ std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexce
 
 void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
 
-    // TODO: assert that the type in obj is compatible with the descriptor at index
-    assert(index < objects.size());
-
     switch (obj->getType()) {
         case ll::ObjectType::Buffer:
             bindBuffer(index, std::static_pointer_cast<ll::Buffer>(obj));
@@ -177,8 +201,8 @@ void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
             break;
 
         default:
-            // FIXME: throw system_error
-            throw std::runtime_error("Unsupported object type: " + ll::objectTypeToString(obj->getType()));
+            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError),
+                "Unsupported object type: " + ll::objectTypeToString(obj->getType()));
     }
 }
 
@@ -199,7 +223,7 @@ void ComputeNode::accept(ll::Visitor* visitor) {
 void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer) {
 
     // validate that buffer can be bound at index position.
-    const auto& vkBinding = descriptor.parameterBindings[index];
+    const auto& vkBinding = descriptor.parameterBindings.at(index);
     const auto  paramType = ll::vkDescriptorTypeToParameterType(vkBinding.descriptorType);
 
     if (paramType != ll::ParameterType::Buffer) {
@@ -233,7 +257,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
     const auto isSampled = imgView->getDescriptor().isSampled();
 
     // validate that imgView can be bound at index position.
-    const auto& vkBinding = descriptor.parameterBindings[index];
+    const auto& vkBinding = descriptor.parameterBindings.at(index);
     const auto  paramType = ll::vkDescriptorTypeToParameterType(vkBinding.descriptorType);
 
     if (isSampled) {

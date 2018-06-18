@@ -1,3 +1,10 @@
+/**
+@file       Buffer.cpp
+@brief      Buffer class and related enums.
+@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
 #include "lluvia/core/Buffer.h"
 
 #include "lluvia/core/Memory.h"
@@ -50,6 +57,11 @@ bool Buffer::isMappable() const noexcept {
 
 void Buffer::accept(ll::Visitor *visitor) {
     assert(visitor != nullptr);
+}
+
+
+void Buffer::unmap() {
+    memory->unmapBuffer(*this);
 }
 
 } // namespace ll

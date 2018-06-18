@@ -23,10 +23,13 @@ namespace ll {
 @brief      Error codes
 */
 enum class ErrorCode : int32_t {
-    EnumConversionFailed  = 0,      /**< Conversion between enum types failed */
-    MemoryMapFailed       = 1,      /**< Memory mapping operation (map or unmap) failed */
-    ObjectAllocationError = 2,      /**< Error trying to allocate objects in a memory */
-    ParameterBindingError = 3,      /**< Error binding a parameter in a ll::ComputeNode */
+    EnumConversionFailed      = 0,      /**< Conversion between enum types failed */
+    MemoryMapFailed           = 1,      /**< Memory mapping operation (map or unmap) failed */
+    ObjectAllocationError     = 2,      /**< Error trying to allocate objects in a memory */
+    ParameterBindingError     = 3,      /**< Error binding a parameter in a ll::ComputeNode */
+    InvalidShaderFunctionName = 5,      /**< Shader function name has invalid name, such as empty string */
+    InvalidShaderProgram      = 6,      /**< Shader program is not valid*/
+    BufferCopyError           = 7,      /**< Error copying data between buffers*/
 };
 
 
@@ -35,11 +38,14 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 4> ErrorCodeStrings{{
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 7> ErrorCodeStrings {{
         std::make_tuple("EnumConversionFailed"  , ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed"       , ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError" , ll::ErrorCode::ObjectAllocationError),
         std::make_tuple("ParameterBindingError" , ll::ErrorCode::ParameterBindingError),
+        std::make_tuple("InvalidShaderFunctionName" , ll::ErrorCode::InvalidShaderFunctionName),
+        std::make_tuple("InvalidShaderProgram"  , ll::ErrorCode::InvalidShaderProgram),
+        std::make_tuple("BufferCopyError"       , ll::ErrorCode::BufferCopyError),
     }};
 
 } // namespace impl

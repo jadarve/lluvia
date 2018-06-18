@@ -18,6 +18,7 @@
 
 #include <array>
 #include <cstdint>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -26,6 +27,7 @@
 
 namespace ll {
 
+class Buffer;
 class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
@@ -41,15 +43,15 @@ namespace impl {
     See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
     */
     constexpr const std::array<std::tuple<const char*, vk::BufferUsageFlagBits>, 9> VkBufferUsageFlagBitsStrings {{
-        std::make_tuple("INDEX_BUFFER"         , vk::BufferUsageFlagBits::eIndexBuffer),
-        std::make_tuple("INDIRECT_BUFFER"      , vk::BufferUsageFlagBits::eIndirectBuffer),
-        std::make_tuple("STORAGE_BUFFER"       , vk::BufferUsageFlagBits::eStorageBuffer),
-        std::make_tuple("STORAGE_TEXEL_BUFFER" , vk::BufferUsageFlagBits::eStorageTexelBuffer),
-        std::make_tuple("TRANSFER_DST"         , vk::BufferUsageFlagBits::eTransferDst),
-        std::make_tuple("TRANSFER_SRC"         , vk::BufferUsageFlagBits::eTransferSrc),
-        std::make_tuple("UNIFORM_BUFFER"       , vk::BufferUsageFlagBits::eUniformBuffer),
-        std::make_tuple("UNIFORM_TEXEL_BUFFER" , vk::BufferUsageFlagBits::eUniformTexelBuffer),
-        std::make_tuple("VERTEX_BUFFER"        , vk::BufferUsageFlagBits::eVertexBuffer),
+        std::make_tuple("IndexBuffer"        , vk::BufferUsageFlagBits::eIndexBuffer),
+        std::make_tuple("IndirectBuffer"     , vk::BufferUsageFlagBits::eIndirectBuffer),
+        std::make_tuple("StorageBuffer"      , vk::BufferUsageFlagBits::eStorageBuffer),
+        std::make_tuple("StorageTexelBuffer" , vk::BufferUsageFlagBits::eStorageTexelBuffer),
+        std::make_tuple("TransferDst"        , vk::BufferUsageFlagBits::eTransferDst),
+        std::make_tuple("TransferSrc"        , vk::BufferUsageFlagBits::eTransferSrc),
+        std::make_tuple("UniformBuffer"      , vk::BufferUsageFlagBits::eUniformBuffer),
+        std::make_tuple("UniformTexelBuffer" , vk::BufferUsageFlagBits::eUniformTexelBuffer),
+        std::make_tuple("VertexBuffer"       , vk::BufferUsageFlagBits::eVertexBuffer),
     }};
 
 } // namespace impl
@@ -166,6 +168,20 @@ public:
 
 
     /**
+    @brief      Deleter for unmapping buffers from host memory.
+    */
+    struct BufferMapDeleter{
+
+        template<typename T>
+        void operator ()(T* ptr) const {
+            buffer->unmap();
+        }
+
+        ll::Buffer* buffer;
+    };
+
+
+    /**
     @brief      Maps the memory content of this object to host-visible memory.
 
     The returned pointer can be used to read or write content from and to this buffer from
@@ -197,6 +213,10 @@ public:
     Once the returned pointer is no longer needed, the user must call ll::Buffer::unmap
     to release the mapped object.
 
+    @warning    This buffer object needs to be kept alive during the whole
+                lifetime of the returned mapped pointer. Otherwise, the behavior
+                is undefined when the mapped pointer is deleted.
+
     @tparam     T     type of the memory mapped. It can be either a normal type
                       such as int or an array such as int[].
     
@@ -209,8 +229,8 @@ public:
     @sa         ll::Buffer::isMappable Determines if this buffer is mappable to host-visible memory.
     */
     template<typename T>
-    auto map() {
-        
+    std::unique_ptr<T, ll::Buffer::BufferMapDeleter> map() {
+
         if (!memory->isPageMappable(allocInfo.page)) {
             throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
         }
@@ -218,10 +238,12 @@ public:
         // remove array extend from T if present
         typedef typename std::conditional<std::is_array<T>::value, typename std::remove_all_extents<T>::type, T>::type baseType;
 
-        auto deleter = [this](baseType* ptr) {memory->unmapBuffer(*this);};
-
         auto ptr = memory->mapBuffer(*this);
-        return std::unique_ptr<T, decltype(deleter)> {static_cast<baseType*>(ptr), deleter};
+
+        auto deleter = ll::Buffer::BufferMapDeleter {};
+        deleter.buffer = this;
+
+        return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> {static_cast<baseType*>(ptr), deleter};
     }
 
 
@@ -236,6 +258,8 @@ private:
     Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
             const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
             const uint64_t requestedSize);
+
+    void unmap();
 
     vk::Buffer                  vkBuffer;
     vk::BufferUsageFlags        vkUsageFlags;
@@ -258,7 +282,15 @@ friend class ll::ComputeGraph;
 friend class ll::ComputeNode;
 friend class ll::Memory;
 friend class ll::Session;
+
+// friend struct ll::impl::BufferMapDeleter;
 };
+
+
+namespace impl {
+
+    
+}
 
 
 } // namespace ll

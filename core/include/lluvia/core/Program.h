@@ -17,6 +17,7 @@
 namespace ll {
 
 // forward declarations
+class Session;
 class Visitor;
 
 
@@ -42,10 +43,11 @@ public:
     /**
     @brief      Constructs the object from a Vulkan device and SPIR-V code.
     
+    @param[in]  session    The session this node was created from.
     @param[in]  device     The Vulkan device.
     @param[in]  spirvCode  The SPIR-V code.
     */
-    Program(const vk::Device& device, const std::vector<uint8_t>& spirvCode);
+    Program(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const std::vector<uint8_t>& spirvCode);
 
     ~Program();
 
@@ -80,6 +82,10 @@ private:
     vk::Device           device;
     vk::ShaderModule     module;
     std::vector<uint8_t> spirvCode;
+
+    // Shared pointer to the session this program was created from
+    // This will keep the session alive until this or any other program is deleted.
+    std::shared_ptr<const ll::Session> session;
 };
 
 } // namespace ll

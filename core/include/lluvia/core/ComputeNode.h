@@ -23,6 +23,7 @@ class Image;
 class ImageView;
 class Object;
 class Program;
+class Session;
 class Visitor;
 
 
@@ -40,11 +41,19 @@ public:
     /**
     @brief      Constructs the object.
     
+    @param[in]  session     The session this node was created from.
     @param[in]  device      The Vulkan device where this node will run.
     @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
                             So this one can be modified after the compute node is constructed.
+
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
+                                  if desc.getFunctionName() is empty string.
+    
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
+                                  if desc.getProgram is nullptr.
+
     */
-    ComputeNode(const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
+    ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
 
     ~ComputeNode();
 
@@ -66,6 +75,14 @@ public:
     @return     The program.
     */
     std::shared_ptr<ll::Program> getProgram() const noexcept;
+
+
+    /**
+    @brief      Gets the descriptor.
+    
+    @return     The descriptor.
+    */
+    const ll::ComputeNodeDescriptor& getDescriptor() const noexcept;
 
 
     /**
@@ -109,6 +126,23 @@ public:
 
 
     /**
+    @brief      Sets the grid size in the X axis.
+
+    The grid size defines the number of local groups to be run
+    during the execution of a compute node shader program.
+
+    Parameter \p x corresponds to the `groupCountX` parameter in
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
+    for more information.
+    
+    @param[in]  x   The grid size. It must be greater than zero.
+    
+    @return     A reference to this object.
+    */
+    void setGridX(const uint32_t x) noexcept;
+
+
+    /**
     @brief      Gets the grid size in Y dimension.
 
     See ll::ComputeNodeDescriptor::getGridY for more information.
@@ -119,6 +153,23 @@ public:
 
 
     /**
+    @brief      Sets the grid size in the Y axis.
+
+    The grid size defines the number of local groups to be run
+    during the execution of a compute node shader program.
+
+    Parameter \p y corresponds to the `groupCountY` parameter in
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
+    for more information.
+    
+    @param[in]  y   The grid size. It must be greater than zero.
+    
+    @return     A reference to this object.
+    */
+    void setGridY(const uint32_t y) noexcept;
+
+
+    /**
     @brief      Gets the grid size in Z dimension.
 
     See ll::ComputeNodeDescriptor::getGridZ for more information.
@@ -126,6 +177,23 @@ public:
     @return     The grid size in Z.
     */
     uint32_t getGridZ() const noexcept;
+
+
+    /**
+    @brief      Sets the grid size in the Z axis.
+
+    The grid size defines the number of local groups to be run
+    during the execution of a compute node shader program.
+
+    Parameter \p z corresponds to the `groupCountZ` parameter in
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
+    for more information.
+    
+    @param[in]  z   The grid size. It must be greater than zero.
+    
+    @return     A reference to this object.
+    */
+    void setGridZ(const uint32_t z) noexcept;
 
 
     /**
@@ -202,6 +270,10 @@ private:
     // // uint32_t local_x {1};
 
     std::vector<std::shared_ptr<ll::Object>> objects;
+
+    // Shared pointer to the session this node was created from
+    // This will keep the session alive until this or any other node is deleted.
+    std::shared_ptr<const ll::Session>            session;
 };
 
 

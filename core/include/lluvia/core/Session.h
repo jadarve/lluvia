@@ -30,7 +30,7 @@ class Program;
 /**
 @brief      Class that contains all the state required to run compute operations on a compute device.
 */
-class Session {
+class Session : public std::enable_shared_from_this<ll::Session> {
 
 public:
     /**
@@ -54,7 +54,7 @@ public:
     
     @return     A new session.
     */
-    static std::unique_ptr<ll::Session> create();
+    static std::shared_ptr<ll::Session> create();
 
 
     Session(const Session& session)              = delete;
@@ -72,6 +72,7 @@ public:
     @return     The physical device memory properties.
     */
     vk::PhysicalDeviceMemoryProperties getPhysicalDeviceMemoryProperties() const;
+
 
     /**
     @brief      Gets the supported memory flags.
@@ -91,7 +92,7 @@ public:
     
     @param[in]  flags            The flags. It should be one of the values returned
                                  by ll::Session::getSupportedMemoryFlags().
-    @param[in]  pageSize         The page size. The size of each page the new memory object
+    @param[in]  pageSize         The page size. The size in bytes of each page the new memory object
                                  will allocate when there is no space for creating new objects.
     @param[in]  exactFlagsMatch  The exact flags match. Tells whether or not \p flags should
                                  match exactly one of the values in ll::Session::getSupportedMemoryFlags()
@@ -117,7 +118,9 @@ public:
     
     @param[in]  spirvPath  The path to the SPIR-V file containing the program code.
     
-    @return     A new ll::Program object or nullptr if it could not be created.
+    @return     A new ll::Program object.
+
+    @throws     std::ios_base::failure if there is a problem reading the file at spirvPath.
     */
     std::shared_ptr<ll::Program> createProgram(const std::string& spirvPath) const;
 
@@ -145,6 +148,38 @@ public:
 
 
     /**
+    @brief      Reads a compute node descriptor from a file.
+    
+    @param[in]  filePath  The file path.
+
+    @return     a compute node descriptor.
+
+    @throws     std::ifstream::failure if \p filePath does not exist.
+    @throws     std::runtime_error if there is a problem parsing the file.
+
+    @sa         ll::readComputeNodeDescriptor   Reads a compute node descriptor from a file.
+    @sa         ll::writeComputeNodeDescriptor  Writes a compute node descriptor to a file.
+    */
+    ll::ComputeNodeDescriptor readComputeNodeDescriptor(const std::string& filePath) const;
+
+
+    /**
+    @brief      Reads a compute node from a file.
+    
+    @param[in]  filePath  The file path.
+    
+    @return     a compute node.
+
+    @throws     std::ifstream::failure if \p filePath does not exist.
+    @throws     std::runtime_error if there is a problem parsing the file.
+
+    @sa         ll::readComputeNode     Reads a compute node from a file.
+    @sa         ll::writeComputeNode    Writes a compute node to a file.
+    */
+    std::shared_ptr<ll::ComputeNode> readComputeNode(const std::string& filePath) const;
+
+
+    /**
     @brief      Runs a ll::CommandBuffer.
 
     This is a blocking call. The host thread will wait until execution of
@@ -153,6 +188,30 @@ public:
     @param[in]  cmdBuffer  The command buffer.
     */
     void run(const ll::CommandBuffer& cmdBuffer);
+
+
+    /**
+    @brief      Runs a ll::ComputeNode
+
+    Internally, this function creates a ll::CommandBuffer using
+    ll::Session::createCommandBuffer, records the execution of the
+    compute node and submits to the device.
+
+    Calling this function is equivalent to:
+
+    @code
+        auto cmdBuffer = session->createCommandBuffer();
+
+        cmdBuffer->begin();
+        cmdBuffer->run(node);
+        cmdBuffer->end();
+
+        session->run(*cmdBuffer);
+    @endcode
+    
+    @param[in]  node  The node
+    */
+    void run(const ll::ComputeNode& node);
 
 
 private:

@@ -25,10 +25,11 @@ namespace ll {
 constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined;
 
 
-Memory::Memory(const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
+Memory::Memory(const std::shared_ptr<const ll::Session>& session, const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
     device              {device},
     heapInfo            (heapInfo),
-    pageSize            {pageSize} {
+    pageSize            {pageSize},
+    session             {session} {
     
     // this prevents shifting outside the range of memoryTypeBits
     assert(heapInfo.typeIndex <= 32u);

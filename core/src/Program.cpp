@@ -10,9 +10,10 @@
 
 namespace ll {
 
-Program::Program(const vk::Device& device, const std::vector<uint8_t>& spirvCode):
+Program::Program(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const std::vector<uint8_t>& spirvCode):
     device    {device},
-    spirvCode {spirvCode} {
+    spirvCode {spirvCode},
+    session   {session} {
 
     vk::ShaderModuleCreateInfo moduleCreateInfo = vk::ShaderModuleCreateInfo()
             .setCodeSize(spirvCode.size())

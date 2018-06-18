@@ -19,8 +19,7 @@ TEST_CASE("NullProgram", "[test_ProgramCreation]") {
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    auto program = session->createProgram("noExist.spv");
-    REQUIRE(program == nullptr);
+    REQUIRE_THROWS_AS(session->createProgram("noExist.spv"), std::system_error);
 }
 
 

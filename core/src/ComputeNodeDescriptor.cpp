@@ -86,6 +86,18 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterTy
 }
 
 
+size_t ComputeNodeDescriptor::getParameterCount() const noexcept {
+    return parameterBindings.size();
+}
+
+
+ll::ParameterType ComputeNodeDescriptor::getParameterTypeAt(const size_t& i) const {
+    
+    const auto& binding = parameterBindings.at(i);
+    return ll::vkDescriptorTypeToParameterType(binding.descriptorType);
+}
+
+
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
 
     assert(x >= 1);
@@ -158,12 +170,12 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 }
 
 
-std::array<uint32_t, 3> ComputeNodeDescriptor::getGridSize() const noexcept {
+const std::array<uint32_t, 3>& ComputeNodeDescriptor::getGridSize() const noexcept {
     return globalGroup;
 }
 
 
-std::array<uint32_t, 3> ComputeNodeDescriptor::getLocalSize() const noexcept {
+const std::array<uint32_t, 3>& ComputeNodeDescriptor::getLocalSize() const noexcept {
     return localGroup;
 }
 

@@ -12,11 +12,11 @@
             "parameters": [
                 {
                     "name": "sampledImageView",
-                    "type": "SAMPLED_IMAGE_VIEW"
+                    "type": "SampledImageView"
                 },
                 {
                     "name": "outputBuffer",
-                    "type": "BUFFER"
+                    "type": "Buffer"
                 }
             ],
             "program": "imgToBuffer"
@@ -25,23 +25,23 @@
     "memories": [
         {
             "flags": [
-                "DEVICE_LOCAL"
+                "DeviceLocal"
             ],
             "name": "deviceMemory",
             "page_size": 4194304
         },
         {
             "flags": [
-                "HOST_COHERENT",
-                "HOST_VISIBLE"
+                "HostCoherent",
+                "HostVisible"
             ],
             "name": "hostOutputMemory",
             "page_size": 4194304
         },
         {
             "flags": [
-                "HOST_COHERENT",
-                "HOST_VISIBLE"
+                "HostCoherent",
+                "HostVisible"
             ],
             "name": "hostMemory",
             "page_size": 4194304
@@ -52,60 +52,60 @@
             "memory": "hostOutputMemory",
             "name": "outputBuffer",
             "size": 4096,
-            "type": "BUFFER",
+            "type": "Buffer",
             "usage": [
-                "STORAGE_BUFFER",
-                "TRANSFER_DST",
-                "TRANSFER_SRC"
+                "StorageBuffer",
+                "TransferDst",
+                "TransferSrc"
             ]
         },
         {
             "channel_count": 1,
-            "channel_type": "UINT8",
+            "channel_type": "uint8",
             "depth": 1,
             "height": 32,
             "memory": "deviceMemory",
             "name": "image",
-            "type": "IMAGE",
+            "type": "Image",
             "usage": [
-                "IMAGE_USAGE_TRANSFER_DST",
-                "IMAGE_USAGE_SAMPLED",
-                "IMAGE_USAGE_STORAGE"
+                "TransferDst",
+                "Sampled",
+                "Storage"
             ],
             "width": 32
         },
         {
-            "address_mode_u": "REPEAT",
-            "address_mode_v": "REPEAT",
-            "address_mode_w": "REPEAT",
-            "filter_mode": "NEAREST",
+            "address_mode_u": "Repeat",
+            "address_mode_v": "Repeat",
+            "address_mode_w": "Repeat",
+            "filter_mode": "Nearest",
             "image": "image",
             "is_sampled": false,
             "name": "storageImageView",
             "normalized_coordinates": false,
-            "type": "IMAGE_VIEW"
+            "type": "ImageView"
         },
         {
             "memory": "hostMemory",
             "name": "stageBuffer",
             "size": 1024,
-            "type": "BUFFER",
+            "type": "Buffer",
             "usage": [
-                "STORAGE_BUFFER",
-                "TRANSFER_DST",
-                "TRANSFER_SRC"
+                "StorageBuffer",
+                "TransferDst",
+                "TransferSrc"
             ]
         },
         {
-            "address_mode_u": "REPEAT",
-            "address_mode_v": "REPEAT",
-            "address_mode_w": "REPEAT",
-            "filter_mode": "NEAREST",
+            "address_mode_u": "Repeat",
+            "address_mode_v": "Repeat",
+            "address_mode_w": "Repeat",
+            "filter_mode": "Nearest",
             "image": "image",
             "is_sampled": true,
             "name": "sampledImageView",
             "normalized_coordinates": false,
-            "type": "IMAGE_VIEW"
+            "type": "ImageView"
         }
     ],
     "programs": [

@@ -46,7 +46,7 @@ Image views are created from a ll::Image object provided a ll::ImageViewDescript
                         .setNormalizedCoordinates(false)
                         .setIsSampled(true)
                         .setAddressMode(ll::ImageAddressMode::Repeat)
-                        .setFilteringMode(ll::ImageFilterMode::Nearest);
+                        .setFilterMode(ll::ImageFilterMode::Nearest);
 
     auto imageView = image->createImageView(imgViewDesc);
 @endcode
@@ -116,7 +116,7 @@ ImageView objects are mapped to GLSL objects as follows:
                         .setNormalizedCoordinates(false)
                         .setIsSampled(true)
                         .setAddressMode(ll::ImageAddressMode::Repeat)
-                        .setFilteringMode(ll::ImageFilterMode::Nearest);
+                        .setFilterMode(ll::ImageFilterMode::Nearest);
 
         auto imageView = image->createImageView(imgViewDesc);
     @endcode

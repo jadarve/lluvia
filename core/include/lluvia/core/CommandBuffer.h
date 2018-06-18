@@ -66,7 +66,7 @@ public:
     CommandBuffer& operator = (CommandBuffer&& cmdBuffer)      = delete;
 
     /**
-    @brief      begin recording.
+    @brief      begins recording.
 
     This method should be called before any record operation. Otherwise
     the behaviour is undefined.
@@ -75,7 +75,7 @@ public:
 
 
     /**
-    @brief      ends the recording.
+    @brief      ends recording.
 
     Any following call to recording methods after this call have undefined
     behavior.
@@ -98,6 +98,8 @@ public:
     
     @param[in]  src   The source buffer.
     @param[in]  dst   The destination buffer.
+
+    @throws     std::system_erro with error code ll::ErrorCode::BufferCopyError if `dst.getSize() < src.getSize()`.
     */
     void copyBuffer(const ll::Buffer& src, const ll::Buffer& dst);
 
