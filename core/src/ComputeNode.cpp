@@ -153,13 +153,28 @@ uint32_t ComputeNode::getGridX() const noexcept {
 }
 
 
+void ComputeNode::setGridX(const uint32_t x) noexcept {
+    descriptor.globalGroup[0] = x;
+}
+
+
 uint32_t ComputeNode::getGridY() const noexcept {
     return descriptor.globalGroup[1];
 }
 
 
+void ComputeNode::setGridY(const uint32_t y) noexcept {
+    descriptor.globalGroup[1] = y;
+}
+
+
 uint32_t ComputeNode::getGridZ() const noexcept {
     return descriptor.globalGroup[2];
+}
+
+
+void ComputeNode::setGridZ(const uint32_t z) noexcept {
+    descriptor.globalGroup[2] = z;
 }
 
 

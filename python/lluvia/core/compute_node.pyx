@@ -200,9 +200,9 @@ cdef class ComputeNode:
         def __get__(self):
             return (self.gridX, self.gridY, self.gridZ)
 
-        # def __set__(self, v):
-        #     assert (len(v) == 3)
-        #     self.gridX, self.gridY, self.gridZ = v
+        def __set__(self, v):
+            assert (len(v) == 3)
+            self.gridX, self.gridY, self.gridZ = v
 
         def __del__(self):
             pass
@@ -220,9 +220,9 @@ cdef class ComputeNode:
         def __get__(self):
             return self.__node.get().getGridX()
 
-        # def __set__(self, uint32_t x):
-        #     if x <= 0: raise ValueError('gridX must be greater than zero, got: {0}'.format(x))
-        #     self.__node.get().setGridX(x)
+        def __set__(self, uint32_t x):
+            if x <= 0: raise ValueError('gridX must be greater than zero, got: {0}'.format(x))
+            self.__node.get().setGridX(x)
 
         def __del__(self):
             pass
@@ -232,9 +232,9 @@ cdef class ComputeNode:
         def __get__(self):
             return self.__node.get().getGridY()
 
-        # def __set__(self, uint32_t y):
-        #     if y <= 0: raise ValueError('gridY must be greater than zero, got: {0}'.format(y))
-        #     self.__node.get().setGridY(y)
+        def __set__(self, uint32_t y):
+            if y <= 0: raise ValueError('gridY must be greater than zero, got: {0}'.format(y))
+            self.__node.get().setGridY(y)
 
         def __del__(self):
             pass
@@ -244,9 +244,9 @@ cdef class ComputeNode:
         def __get__(self):
             return self.__node.get().getGridZ()
 
-        # def __set__(self, uint32_t z):
-        #     if z <= 0: raise ValueError('gridZ must be greater than zero, got: {0}'.format(z))
-        #     self.__node.get().setGridZ(z)
+        def __set__(self, uint32_t z):
+            if z <= 0: raise ValueError('gridZ must be greater than zero, got: {0}'.format(z))
+            self.__node.get().setGridZ(z)
 
         def __del__(self):
             pass

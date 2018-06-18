@@ -63,6 +63,10 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
         uint32_t getGridY() const
         uint32_t getGridZ() const
 
+        void setGridX(uint32_t x)
+        void setGridY(uint32_t y)
+        void setGridZ(uint32_t z)
+
         uint32_t getLocalX() const
         uint32_t getLocalY() const
         uint32_t getLocalZ() const
