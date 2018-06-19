@@ -80,7 +80,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
                                       .setSharingMode(vk::SharingMode::eExclusive)
                                       .setSize(size)
                                       .setUsage(usageFlags)
-                                      .setQueueFamilyIndexCount(heapInfo.familyQueueIndices.size())
+                                      .setQueueFamilyIndexCount(static_cast<uint32_t>(heapInfo.familyQueueIndices.size()))
                                       .setPQueueFamilyIndices(heapInfo.familyQueueIndices.data());
 
     // It's safe to not guard this call with a try-catch. If an

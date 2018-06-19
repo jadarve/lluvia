@@ -18,7 +18,7 @@ include (Modules/llAddShader)
 
 message(STATUS "Configuring for Unix system")
 set (CMAKE_CXX_COMPILER         "clang")
-set (CMAKE_CXX_FLAGS            "-std=c++14 -O0 -Wall")
+set (CMAKE_CXX_FLAGS            "-std=c++14 -O0 -Werror -Wall -Wshorten-64-to-32")
 
 
 #################################################

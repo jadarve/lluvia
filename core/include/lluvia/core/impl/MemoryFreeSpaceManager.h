@@ -43,8 +43,8 @@ public:
 
     friend std::ostream& operator << (std::ostream& out, const MemoryFreeSpaceManager& manager);
 
-    uint64_t getSize()      const noexcept;
-    int getFreeSpaceCount() const noexcept;
+    uint64_t getSize()           const noexcept;
+    uint64_t getFreeSpaceCount() const noexcept;
 
     std::vector<uint64_t> getOffsetVector() const noexcept;
     std::vector<uint64_t> getSizeVector()   const noexcept;

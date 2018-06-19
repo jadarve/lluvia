@@ -51,7 +51,7 @@ ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, cons
     };
 
     auto specializationInfo = vk::SpecializationInfo()
-        .setMapEntryCount(specializationMapEntries.size())
+        .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
         .setPMapEntries(specializationMapEntries.data())
         .setDataSize(descriptor.localGroup.size()*sizeof(uint32_t))
         .setPData(&descriptor.localGroup[0]);
@@ -70,7 +70,7 @@ ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, cons
     // Descriptor pool and descriptor set
     /////////////////////////////////////////////
     auto descLayoutInfo = vk::DescriptorSetLayoutCreateInfo()
-        .setBindingCount(descriptor.parameterBindings.size())
+        .setBindingCount(static_cast<uint32_t>(descriptor.parameterBindings.size()))
         .setPBindings(descriptor.parameterBindings.data());
 
     descriptorSetLayout = device.createDescriptorSetLayout(descLayoutInfo);
@@ -78,7 +78,7 @@ ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, cons
     descriptorPoolSizes = descriptor.getDescriptorPoolSizes();
     descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
         .setMaxSets(1)
-        .setPoolSizeCount(descriptorPoolSizes.size())
+        .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
         .setPPoolSizes(descriptorPoolSizes.data());
 
     device.createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &descriptorPool);

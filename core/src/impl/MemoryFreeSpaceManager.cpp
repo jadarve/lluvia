@@ -42,7 +42,7 @@ uint64_t MemoryFreeSpaceManager::getSize() const noexcept {
 }
 
 
-int MemoryFreeSpaceManager::getFreeSpaceCount() const noexcept {
+uint64_t MemoryFreeSpaceManager::getFreeSpaceCount() const noexcept {
     return offsetVector.size();
 }
 
