@@ -48,7 +48,7 @@ void getPhysicalDeviceMemoryProperties(const vk::PhysicalDeviceMemoryProperties&
         jsonHeap["size"] = heap.size;
         jsonHeap["flags"] = {
                 {"device_local", ((heap.flags & vk::MemoryHeapFlagBits::eDeviceLocal) == vk::MemoryHeapFlagBits::eDeviceLocal)},
-                {"multi_instance", ((heap.flags & vk::MemoryHeapFlagBits::eMultiInstanceKHX) == vk::MemoryHeapFlagBits::eMultiInstanceKHX)}
+                {"multi_instance", ((heap.flags & vk::MemoryHeapFlagBits::eMultiInstanceKHR) == vk::MemoryHeapFlagBits::eMultiInstanceKHR)}
             };
         jsonHeaps.push_back(jsonHeap);
     }

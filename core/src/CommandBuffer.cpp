@@ -121,7 +121,7 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
 
     commandBuffer.pipelineBarrier(
         vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
-        vk::DependencyFlagBits::eDeviceGroupKHX,
+        vk::DependencyFlagBits::eDeviceGroupKHR,
         0, nullptr,
         0, nullptr,
         1, &barrier);
@@ -140,7 +140,7 @@ void CommandBuffer::memoryBarrier() {
 
     commandBuffer.pipelineBarrier(
         vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
-        vk::DependencyFlagBits::eDeviceGroupKHX,
+        vk::DependencyFlagBits::eDeviceGroupKHR,
         1, &barrier,
         0, nullptr,
         0, nullptr);
