@@ -2,8 +2,7 @@
 
 # Build Instructions
 
-* [Linux.](https://github.com/jadarve/lluvia/wiki/Linux-Build)
-* [Mac OSX.](https://github.com/jadarve/lluvia/wiki/OSX-Build)
+* [Linux and Mac OSX](https://github.com/jadarve/lluvia/wiki/Linux-and-Mac-OSX-Build).
 
 
 # License
