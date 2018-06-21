@@ -7,6 +7,7 @@
 """
 
 import os
+import numpy as np
 from distutils.core import setup, Extension
 from Cython.Build import cythonize
 
@@ -14,7 +15,8 @@ VULKAN_SDK = os.environ['VULKAN_SDK']
 
 # TODO: Vulkan SDK include path
 incDirs = ['../core/include',
-           os.path.join(VULKAN_SDK, 'include')]
+           os.path.join(VULKAN_SDK, 'include'),
+           np.get_include()]
 
 # path to build
 libDirs = ['../build/core/lib',
@@ -43,7 +45,7 @@ def createExtension(name, sources):
                     include_dirs=incDirs,
                     library_dirs=libDirs,
                     libraries=libs,
-                    runtime_library_dirs=libs,
+                    runtime_library_dirs=libDirs,
                     language='c++',
                     extra_compile_args=cflags)
 
