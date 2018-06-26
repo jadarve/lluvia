@@ -139,7 +139,8 @@ cdef class Session:
 
         cdef Memory mem = Memory()
         mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, False)
-
+        mem.__session = self
+        
         return mem
 
 

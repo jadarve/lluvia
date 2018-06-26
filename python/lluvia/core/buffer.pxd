@@ -14,6 +14,7 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 
 from object cimport _Object
+from session cimport Session
 
 cimport vulkan as vk
 
@@ -36,4 +37,5 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
 
 cdef class Buffer:
     
+    cdef Session             __session
     cdef shared_ptr[_Buffer] __buffer

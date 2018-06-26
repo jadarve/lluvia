@@ -8,6 +8,12 @@
 
 cimport memory
 
+from libcpp.string cimport string
+from libcpp.vector cimport vector
+
+cimport numpy as np
+import numpy as np
+
 import  buffer
 cimport buffer
 
@@ -15,9 +21,6 @@ import  image
 cimport image
 
 cimport vulkan as vk
-
-from libcpp.string cimport string
-from libcpp.vector cimport vector
 
 from . import impl
 
@@ -35,7 +38,8 @@ MemoryPropertyFlags = ['DeviceLocal',
 cdef class Memory:
 
     def __cinit__(self):
-        pass
+        
+        self.__session = None
 
 
     def __dealloc__(self):
@@ -131,7 +135,7 @@ cdef class Memory:
         return self.__memory.get().isPageMappable(page)
 
 
-    def createBuffer(self, uint64_t size, usageFlags):
+    def createBuffer(self, uint64_t size, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
         """
         Creates a new buffer allocated into this memory.
 
@@ -142,6 +146,7 @@ cdef class Memory:
             The size of the buffer in bytes.
 
         usageFlags : string or list of strings.
+            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst']
             Usage flags for this buffer. It must be a combination of the
             values defined in lluvia.BufferUsageFlags:
                 - IndexBuffer
@@ -171,7 +176,8 @@ cdef class Memory:
         cdef vk.BufferUsageFlags vkUsageFlags = buffer.vectorStringToBufferUsageFLags(flagsList)
 
         cdef buffer.Buffer buf = buffer.Buffer()
-        buf.__buffer = self.__memory.get().createBuffer(size, vkUsageFlags)
+        buf.__buffer  = self.__memory.get().createBuffer(size, vkUsageFlags)
+        buf.__session = self.__session
 
         return buf
 
@@ -203,7 +209,7 @@ cdef class Memory:
         Returns
         -------
         image : new Image object.
-        
+
 
         Raises
         ------
@@ -235,3 +241,48 @@ cdef class Memory:
         img.__image = self.__memory.get().createImage(desc, flags)
 
         return img
+
+
+    def createBufferFromHost(self, np.ndarray arr, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
+        """
+        Creates a buffer from a numpy array.
+
+
+        Parameters
+        ----------
+        arr : np.ndarray.
+            Numpy array from which the buffer will be created from. The content
+            of the array will be copied into the buffer.
+
+        usageFlags : string or list of strings.
+            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst'].
+            Usage flags for this buffer. It must be a combination of the
+            values defined in lluvia.BufferUsageFlags:
+                - IndexBuffer
+                - IndirectBuffer
+                - StorageBuffer
+                - StorageTexelBuffer
+                - TransferDst
+                - TransferSrc
+                - UniformBuffer
+                - UniformTexelBuffer
+                - VertexBuffer
+
+
+        Returns
+        -------
+        buffer : Buffer.
+            Buffer object with the same content as the input array parameter.
+        """
+
+        # cdef uint64_t size = arr.nbytes
+        cdef buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
+        buf.fromHost(arr)
+        return buf
+
+
+    def createImageFromHost(self, np.ndarray arr):
+
+        # some memories do not support the creation of images.
+
+        pass

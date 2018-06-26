@@ -15,6 +15,7 @@ from libcpp.string cimport string
 
 from buffer cimport _Buffer
 from image cimport _Image, _ImageDescriptor
+from session cimport Session
 
 cimport vulkan as vk
 
@@ -38,4 +39,5 @@ cdef extern from 'lluvia/core/Memory.h' namespace 'll':
 
 cdef class Memory:
     
+    cdef Session             __session
     cdef shared_ptr[_Memory] __memory
