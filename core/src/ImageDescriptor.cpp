@@ -40,16 +40,12 @@ ImageDescriptor::ImageDescriptor(const uint32_t width,
                                  const uint32_t depth,
                                  const uint32_t channelCount,
                                  ll::ChannelType channelType):
-    channelType  {channelType},
-    channelCount {channelCount},
-    width        {width},
-    height       {height},
-    depth        {depth} {
+    channelType  {channelType} {
 
-    assert(width  > 0);
-    assert(height > 0);
-    assert(depth  > 0);
-    assert(channelCount >= 1 && channelCount <= 4);
+    setWidth(width);
+    setHeight(height);
+    setDepth(depth);
+    setChannelCount(channelCount);
 }
 
 
@@ -62,15 +58,12 @@ ImageDescriptor& ImageDescriptor::setChannelType(const ll::ChannelType type) noe
 
 ImageDescriptor& ImageDescriptor::setChannelCount(const uint32_t count) noexcept {
 
-    assert(count > 0 && count <= 4);
-
     channelCount = count;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setWidth(const uint32_t width) noexcept {
-    assert(width > 0);
 
     this->width = width;
     return *this;
@@ -78,7 +71,6 @@ ImageDescriptor& ImageDescriptor::setWidth(const uint32_t width) noexcept {
 
 
 ImageDescriptor& ImageDescriptor::setHeight(const uint32_t height) noexcept {
-    assert(height > 0);
 
     this->height = height;
     return *this;
@@ -86,7 +78,6 @@ ImageDescriptor& ImageDescriptor::setHeight(const uint32_t height) noexcept {
 
 
 ImageDescriptor& ImageDescriptor::setDepth(const uint32_t depth) noexcept {
-    assert(depth > 0);
 
     this->depth = depth;
     return *this;

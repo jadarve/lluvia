@@ -162,7 +162,22 @@ void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
 std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descriptor, const vk::ImageUsageFlags usageFlags) {
 
-    // TODO: check that image witdh, height and depth are within supported range of the device
+    if (descriptor.getWidth() == 0) {
+        throw std::invalid_argument("Image width must be greater than zero, got: " + std::to_string(descriptor.getWidth()));
+    }
+
+    if (descriptor.getHeight() == 0) {
+        throw std::invalid_argument("Image height must be greater than zero, got: " + std::to_string(descriptor.getHeight()));
+    }
+
+    if (descriptor.getDepth() == 0) {
+        throw std::invalid_argument("Image depth must be greater than zero, got: " + std::to_string(descriptor.getDepth()));
+    }
+
+    if (descriptor.getChannelCount() == 0 || descriptor.getChannelCount() > 4) {
+        throw std::invalid_argument("Image channel count must be in range [1, 4], got: " + std::to_string(descriptor.getChannelCount()));
+    }
+
 
     auto imgInfo = vk::ImageCreateInfo {}
                     .setExtent({descriptor.getWidth(), descriptor.getHeight(), descriptor.getDepth()})

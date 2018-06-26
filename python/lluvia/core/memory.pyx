@@ -177,15 +177,48 @@ cdef class Memory:
 
 
     def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags='Storage'):
+        """
+        Creates a new image allocated in this memory.
+
+
+        Parameters
+        ----------
+        shape : list or tuple of length 1, 2 or 3.
+            Shape of the image (width, height , depth). Each dimension
+            must be greater than zero. If one or more dimensions are missing,
+            they are set to 1 by default.
+
+        channels : uint32. Defaults to 1.
+            Number of channels in each pixel location. The value
+            must be in the range [1, 4].
+
+        channelType : str. Defaults to 'uint8'.
+            Channel type. It must be one of the strings in lluvia.ImageChannelType.
+
+        usageFlags : string or list of strings. Defaults to 'Storage'.
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags.
+
+
+        Returns
+        -------
+        image : new Image object.
         
+
+        Raises
+        ------
+        ValueError : if any parameter is not within its required range.
+        """
+
         if len(shape) not in [1, 2, 3]:
-            raise ValueError('invalid shape lenght. Expected a ')
+            raise ValueError('invalid shape length. Expected a ')
 
         if type(usageFlags) is str:
             usageFlags = [usageFlags]
 
         impl.validateFlagStrings(image.ImageUsageFlags, usageFlags)
 
+        impl.validateFlagStrings(image.ImageChannelType, [channelType])
 
         cdef uint32_t width  = shape[0]
         cdef uint32_t height = shape[1] if len(shape) >= 2 else 1
