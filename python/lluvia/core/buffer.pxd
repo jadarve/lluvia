@@ -13,6 +13,7 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
+from memory cimport Memory
 from object cimport _Object
 from session cimport Session
 
@@ -37,5 +38,6 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
 
 cdef class Buffer:
     
+    cdef Memory              __memory
     cdef Session             __session
     cdef shared_ptr[_Buffer] __buffer

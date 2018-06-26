@@ -227,3 +227,40 @@ cdef class Buffer:
         cmdBuffer.end()
 
         self.__session.run(cmdBuffer)
+
+
+    def copy(self, Buffer output = None):
+        """
+        Copies the content of this buffer into output.
+
+        If output is None, a new buffer is created in the same memory
+        as this one and with the same usage flags.
+
+
+        Parameters
+        ----------
+        output : Buffer. Defaults to None.
+            Buffer where the content of this buffer will be copied to.
+            Its size must be equal as this buffer.
+
+
+        Returns
+        -------
+        output : Buffer.
+            If output parameter is None, returns a new Buffer object,
+            otherwise returns the same output object.
+        """
+
+        if output is None:
+            output = self.__memory.createBuffer(self.size, self.usageFlags)
+
+
+        cmdBuffer = self.__session.createCommandBuffer()
+        
+        cmdBuffer.begin()
+        cmdBuffer.copyBuffer(self, output)
+        cmdBuffer.end()
+
+        self.__session.run(cmdBuffer)
+
+        return output

@@ -177,12 +177,13 @@ cdef class Memory:
 
         cdef buffer.Buffer buf = buffer.Buffer()
         buf.__buffer  = self.__memory.get().createBuffer(size, vkUsageFlags)
+        buf.__memory  = self
         buf.__session = self.__session
 
         return buf
 
 
-    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags='Storage'):
+    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
         """
         Creates a new image allocated in this memory.
 
@@ -201,7 +202,8 @@ cdef class Memory:
         channelType : str. Defaults to 'uint8'.
             Channel type. It must be one of the strings in lluvia.ImageChannelType.
 
-        usageFlags : string or list of strings. Defaults to 'Storage'.
+        usageFlags : string or list of strings.
+            Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
             Image usage flags. It must be a combination of th strings defined
             in lluvia.ImageUsageFlags.
 
