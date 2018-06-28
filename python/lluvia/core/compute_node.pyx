@@ -300,3 +300,12 @@ cdef class ComputeNode:
         if type(obj) == ImageView:
             imgView = obj
             self.__node.get().bind(index, static_pointer_cast[_Object](imgView.__imageView))
+
+
+    def run(self):
+        """
+        Runs this node
+        """
+
+        self.__session.run(self)
+        

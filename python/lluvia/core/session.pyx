@@ -188,7 +188,8 @@ cdef class Session:
         node : lluvia.ComputeNode
         """
         cdef compute_node.ComputeNode node = compute_node.ComputeNode()
-        node.__node = self.__session.get().createComputeNode(desc.__descriptor)
+        node.__session = self
+        node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
         
         return node
 
@@ -277,10 +278,8 @@ cdef class Session:
         IOError : if there are problems reading the JSON file.
         """
 
-        cdef compute_node.ComputeNode node = compute_node.ComputeNode()
-        
-        node.__node = self.__session.get().readComputeNode(filePath)
-        return node
+        desc = self.readComputeNodeDescriptor(filePath)
+        return self.createComputeNode(desc)
 
 
     def createCommandBuffer(self):

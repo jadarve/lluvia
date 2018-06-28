@@ -14,6 +14,7 @@ from libcpp.string cimport string
 
 from object cimport _Object
 from program cimport _Program
+from session cimport Session
 
 
 cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
@@ -81,4 +82,5 @@ cdef class ComputeNodeDescriptor:
 
 cdef class ComputeNode:
     
+    cdef Session                  __session
     cdef shared_ptr[_ComputeNode] __node

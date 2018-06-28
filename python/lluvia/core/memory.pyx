@@ -277,7 +277,6 @@ cdef class Memory:
             Buffer object with the same content as the input array parameter.
         """
 
-        # cdef uint64_t size = arr.nbytes
         cdef buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
         buf.fromHost(arr)
         return buf
@@ -287,4 +286,4 @@ cdef class Memory:
 
         # some memories do not support the creation of images.
 
-        pass
+        raise RuntimeError('Not implemented yet!')
