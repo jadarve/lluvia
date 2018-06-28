@@ -153,12 +153,12 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath
     file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
     file.close();
 
-    return std::make_shared<ll::Program>(shared_from_this(), device, spirvCode);
+    return createProgram(spirvCode);
 }
 
 
 std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& spirv) const {
-
+    
     return std::make_shared<ll::Program>(shared_from_this(), device, spirv);
 }
 

@@ -5,6 +5,7 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
+#include "lluvia/core/error.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/Visitor.h"
 
@@ -14,6 +15,10 @@ Program::Program(const std::shared_ptr<const ll::Session>& session, const vk::De
     device    {device},
     spirvCode {spirvCode},
     session   {session} {
+
+    if (spirvCode.empty()) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::ProgramCompilationError), "Zero size SPIR-V code.");
+    }
 
     vk::ShaderModuleCreateInfo moduleCreateInfo = vk::ShaderModuleCreateInfo()
             .setCodeSize(spirvCode.size())
