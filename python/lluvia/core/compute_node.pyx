@@ -170,8 +170,10 @@ cdef class ComputeNodeDescriptor:
         Parameters
         ----------
         paramType : string.
-            Parameter type. It must be one of the values stored in lluvia.ParameterType.
-
+            Parameter type. It must be one of the values in lluvia.ParameterType:
+                - Buffer
+                - ImageView
+                - SampledImageView
 
         Raises
         ------
