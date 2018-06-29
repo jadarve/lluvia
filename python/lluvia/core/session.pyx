@@ -75,7 +75,7 @@ cdef class Session:
         return supportedMemoryFlags
 
 
-    def createMemory(self, flags, uint64_t pageSize, bool exactFlagsMatch = False):
+    def createMemory(self, flags = 'DeviceLocal', uint64_t pageSize = 33554432L, bool exactFlagsMatch = False):
         """
         Creates a new memory.
 
@@ -101,12 +101,12 @@ cdef class Session:
 
         Parameters
         ----------
-        flags : string or list of strings.
+        flags : string or list of strings. Defaults to 'DeviceLocal'
             Flags to determine the type of memory to be created.
             Each flag should be one of the strings in
             lluvia.MemoryPropertyFlags.
 
-        pageSize : uint64_t greater than zero.
+        pageSize : uint64_t. Defaults to 32MB (33554432L).
             The size in bytes of each page the new memory object
             will allocate when there is no space for creating new objects.
 
