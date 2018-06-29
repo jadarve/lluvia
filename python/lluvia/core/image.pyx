@@ -8,6 +8,9 @@
 
 cimport image
 
+import  numpy as np
+cimport numpy as np
+
 from . import impl
 
 
@@ -15,6 +18,7 @@ __all__ = ['Image',
            'ImageView',
            'ImageUsageFlags',
            'ImageChannelType',
+           'ImageChannelTypeNumpyMap',
            'ImageFilterMode',
            'ImageAddressMode']
 
@@ -40,6 +44,19 @@ ImageChannelType = ['uint8',
                     'uint64',
                     'int64',
                     'float64']
+
+
+ImageChannelTypeNumpyMap = {np.uint8   : 'uint8',
+                            np.int8    : 'int8',
+                            np.uint16  : 'uint16',
+                            np.int16   : 'int16',
+                            np.float16 : 'float16',
+                            np.uint32  : 'uint32',
+                            np.int32   : 'int32',
+                            np.float32 : 'float32',
+                            np.uint64  : 'uint64',
+                            np.int64   : 'int64',
+                            np.float64 : 'float64'}
 
 
 ImageFilterMode = ['Nearest',
@@ -187,14 +204,26 @@ cdef class Image:
             pass
 
 
-    def createImageView(self, str filterMode, str addressMode='Repeat', bool normalizedCoordinates=False, bool sampled=False):
+    def fromHost(self, np.ndarray arr):
+
+        # TODO
+        pass
+
+
+    def toHost(self, np.ndarray output=None):
+        
+        # TODO
+        return output
+
+
+    def createImageView(self, str filterMode='Nearest', str addressMode='Repeat', bool normalizedCoordinates=False, bool sampled=False):
         """
         Creates a new image view from this image.
 
 
         Parameters
         ----------
-        filterMode : str.
+        filterMode : str. Defaults to 'Nearest'.
             Filtering more for reading pixels within a shader. Possible
             values are defined in lluvia.ImageFilterMode:
                 - Nearest

@@ -205,8 +205,15 @@ cdef class Memory:
         usageFlags : string or list of strings.
             Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
             Image usage flags. It must be a combination of th strings defined
-            in lluvia.ImageUsageFlags.
-
+            in lluvia.ImageUsageFlags:
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
 
         Returns
         -------
@@ -282,8 +289,69 @@ cdef class Memory:
         return buf
 
 
-    def createImageFromHost(self, np.ndarray arr):
+    def createImageFromHost(self, np.ndarray arr, usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
+        """
+        Creates a lluvia.Image object from a Numpy array.
 
-        # some memories do not support the creation of images.
+        The numpy array can have between 1 and 4 dimensions. Images
+        can be 1D, 2D or 3D and can have up to 4 color channels. The
+        width, height, depth and channels of the image are resolved
+        as follows.
 
-        raise RuntimeError('Not implemented yet!')
+        if arr.ndim is 1: create a 1D image
+        if arr.ndim is 2: create a 2D image with one color channel.
+        if arr.ndim is 3: create a 2D image with the number of channels
+            given by the length of the third dimension.
+        if arr.ndim is 4: create a 3D image with the number of channels
+            given by the length of the fourth dimension.
+
+        Notice that for creating 1D images with several color channels,
+        one needs to specify the 4 dimensions [length, 1, 1, channels].
+
+        The image's channel type is deduced from arr.dtype.
+
+
+        Parameters
+        ----------
+        arr : Numpy array.
+
+        usageFlags : string or list of strings.
+            Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
+
+
+        Returns
+        -------
+        img : lluvia.Image
+            A new Image object.
+
+
+        Raises
+        ------
+        RuntimeError : if the image cannot be created from this memory.
+        """
+
+        ndim = arr.ndim
+
+        width    = arr.shape[0]
+        height   = arr.shape[1] if ndim >  1 else 1
+        depth    = arr.shape[2] if ndim == 4 else 1
+        channels = arr.shape[2] if ndim == 3 else arr.shape[3] if ndim == 4 else 1
+
+        channelType = image.ImageChannelTypeNumpyMap[arr.dtype]
+
+        img = self.createImage((width, height, depth), channels, channelType, usageFlags)
+
+        # TODO: copy the content of arr to img
+        img.fromHost(arr)
+        
+        return img
