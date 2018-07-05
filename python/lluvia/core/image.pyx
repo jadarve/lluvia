@@ -205,15 +205,106 @@ cdef class Image:
 
 
     def fromHost(self, np.ndarray arr):
+        """
+        Copies the content of a numpy array to this image.
 
-        # TODO
-        pass
+        The shape of the array must comply with the following rules.
+
+        * If arr.ndim == 1, then this image must be 1D
+            (height, depth and channels equal to 1) and img.width == arr.shape[0]
+
+        * If arr.ndim == 2, then this image must be 2D
+            (depth and channels equal to 1) and
+            img.height == arr.shape[0] and img.width == arr.shape[1].
+
+        * If arr.ndim == 3, then this image must be 2D (depth equal to 1)
+            with the number of channels equal to arr.shape[2].
+
+        * If arr.ndim == 4, then this image must be 3D and
+            img.depth == arr.shape[0] and img.height == arr.shape[1] and
+            img.width == arr.shape[2] and img.chhanels == arr.chape[3]
+
+
+        Parameters
+        ----------
+        arr : numpy.ndarray.
+
+
+        Raises
+        ------
+        ValueError : if arr does not match this image shape.
+        """
+
+        self.__validateNumpyShape(arr)
+
+        currentLayout = self.layout
+        stageBuffer   = self.__memory.createBufferFromHost(arr)
+        cmdBuffer     = self.__session.createCommandBuffer()
+
+        cmdBuffer.begin()
+        cmdBuffer.changeImageLayout(self, 'TransferDstOptimal')
+        cmdBuffer.copyBufferToImage(stageBuffer, self)
+        cmdBuffer.changeImageLayout(self, currentLayout)
+        cmdBuffer.end()
+
+        self.__session.run(cmdBuffer)
 
 
     def toHost(self, np.ndarray output=None):
+        """
+        Copies the content of this image into a numpy host array.
+
+
+        Parameters
+        ----------
+        output : numpy.ndarray. Defaults to None.
+
+
+        Raises
+        ------
+        ValueError : if output is different than None and does not match this image shape.
+        """
         
-        # TODO
-        return output
+        if output is None:
+            
+            h1 = self.height   == 1
+            d1 = self.depth    == 1
+            c1 = self.channels == 1
+
+            shape = None
+
+            if h1 and d1 and c1:
+                shape = [self.width]
+
+            elif not h1 and d1 and c1:
+                shape = [self.height, self.width]
+
+            elif not h1 and d1 and not c1:
+                shape = [self.height, self.width, self.channels]
+
+            else:
+                shape = [self.depth, self.height, self.width, self.channels]
+
+
+            output = np.zeros(shape, dtype=ImageChannelTypeNumpyMap[self.channelType])
+
+        else:
+            self.__validateNumpyShape(output)
+        
+        
+        currentLayout = self.layout
+        stageBuffer   = self.__memory.createBuffer(self.size, ['StorageBuffer', 'TransferSrc', 'TransferDst'])
+        cmdBuffer     = self.__session.createCommandBuffer()
+
+        cmdBuffer.begin()
+        cmdBuffer.changeImageLayout(self, 'TransferDstOptimal')
+        cmdBuffer.copyImageToBuffer(self, stageBuffer)
+        cmdBuffer.changeImageLayout(self, currentLayout)
+        cmdBuffer.end()
+
+        self.__session.run(cmdBuffer)
+
+        return stageBuffer.toHost(output)
 
 
     def createImageView(self, str filterMode='Nearest', str addressMode='Repeat', bool normalizedCoordinates=False, bool sampled=False):
@@ -270,9 +361,34 @@ cdef class Image:
         desc.setIsSampled(sampled)
 
         cdef ImageView view = ImageView()
+        view.__image     = self
         view.__imageView = self.__image.get().createImageView(desc)
 
         return view
+
+
+    def __validateNumpyShape(self, arr):
+
+        shape = arr.shape
+
+        # 1D
+        if arr.ndim is 1 and shape[0] != self.width and self.height != 1 and self.depth != 1 and self.channels != 1:
+            raise ValueError('arr parameter must be a 1D array of length {0}, got length: {1}'.format(self.width, shape[0]))
+
+        # 2D with channels == 1
+        elif arr.ndim is 2 and shape[0] != self.height and shape[1] != self.width and self.channels != 1 and self.depth != 1:
+            raise ValueError('arr parameter must be a 2D array of shape [{0}, {1}], got shape: [{2}, {3}]'.format(self.height, self.width, shape[0], shape[1]))
+
+        # 2D with channels != 1
+        elif arr.ndim is 3 and shape[0] != self.height and shape[1] != self.width and self.channels != shape[2] and self.depth != 1:
+            raise ValueError('arr parameter must be a 3D array of shape [{0}, {1}, {2}], got shape: [{3}, {4}, {5}]'.format(self.height, self.width, self.channels, shape[0], shape[1], shape[2]))
+
+        # 3D
+        elif arr.ndim is 4 and shape[0] != self.depth and shape[1] != self.height and shape[2] != self.width and self.channels != shape[3]:
+            raise ValueError('arr parameter must be a 4D array of shape [{0}, {1}, {2}, {3}], got shape: [{4}, {5}, {6}, {7}]'.format(self.depth, self.height, self.width, self.channels, shape[0], shape[1], shape[2], shape[3]))
+
+        else:
+            raise ValueError('arr parameter must have between 1 to 4 dimensions, got: {0}'.format(arr.ndim))
 
 
 cdef class ImageView:
@@ -355,3 +471,55 @@ cdef class ImageView:
         def __del__(self):
             # nothing to do
             pass
+
+
+    def fromHost(self, np.ndarray arr):
+        """
+        Copies the content of a numpy array to this image view.
+
+        The shape of the array must comply with the following rules.
+
+        * If arr.ndim == 1, then this image must be 1D
+            (height, depth and channels equal to 1) and img.width == arr.shape[0]
+
+        * If arr.ndim == 2, then this image must be 2D
+            (depth and channels equal to 1) and
+            img.height == arr.shape[0] and img.width == arr.shape[1].
+
+        * If arr.ndim == 3, then this image must be 2D (depth equal to 1)
+            with the number of channels equal to arr.shape[2].
+
+        * If arr.ndim == 4, then this image must be 3D and
+            img.depth == arr.shape[0] and img.height == arr.shape[1] and
+            img.width == arr.shape[2] and img.chhanels == arr.chape[3]
+
+
+        Parameters
+        ----------
+        arr : numpy.ndarray.
+
+
+        Raises
+        ------
+        ValueError : if arr does not match this image shape.
+        """
+
+        self.__image.fromHost(arr)
+
+
+    def toHost(self, np.ndarray output=None):
+        """
+        Copies the content of this image view into a numpy host array.
+
+
+        Parameters
+        ----------
+        output : numpy.ndarray. Defaults to None.
+
+
+        Raises
+        ------
+        ValueError : if output is different than None and does not match this image shape.
+        """
+        
+        return self.__image.toHost(output)

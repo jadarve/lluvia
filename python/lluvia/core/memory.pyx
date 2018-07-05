@@ -247,7 +247,9 @@ cdef class Memory:
         cdef vk.ImageUsageFlags flags = image.vectorStringToImageUsageFlags(flagsList)
 
         cdef image.Image img = image.Image()
-        img.__image = self.__memory.get().createImage(desc, flags)
+        img.__memory  = self
+        img.__session = self.__session
+        img.__image   = self.__memory.get().createImage(desc, flags)
 
         return img
 
@@ -350,8 +352,6 @@ cdef class Memory:
         channelType = image.ImageChannelTypeNumpyMap[arr.dtype]
 
         img = self.createImage((width, height, depth), channels, channelType, usageFlags)
-
-        # TODO: copy the content of arr to img
         img.fromHost(arr)
         
         return img

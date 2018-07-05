@@ -13,7 +13,9 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
+from memory cimport Memory
 from object cimport _Object
+from session cimport Session
 
 cimport vulkan as vk
 
@@ -132,9 +134,12 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
 
 cdef class Image:
     
+    cdef Memory             __memory
+    cdef Session            __session
     cdef shared_ptr[_Image] __image
 
 
 cdef class ImageView:
 
+    cdef Image                  __image
     cdef shared_ptr[_ImageView] __imageView
