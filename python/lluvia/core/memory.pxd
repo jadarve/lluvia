@@ -13,7 +13,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from buffer cimport _Buffer
+from core_buffer cimport _Buffer
 from image cimport _Image, _ImageDescriptor
 from session cimport Session
 

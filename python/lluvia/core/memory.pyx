@@ -14,8 +14,8 @@ from libcpp.vector cimport vector
 cimport numpy as np
 import numpy as np
 
-import  buffer
-cimport buffer
+import  core_buffer
+cimport core_buffer
 
 import  image
 cimport image
@@ -170,12 +170,12 @@ cdef class Memory:
         if type(usageFlags) is str:
             usageFlags = [usageFlags]
 
-        impl.validateFlagStrings(buffer.BufferUsageFlags, usageFlags)
+        impl.validateFlagStrings(core_buffer.BufferUsageFlags, usageFlags)
 
         cdef list flagsList = usageFlags
-        cdef vk.BufferUsageFlags vkUsageFlags = buffer.vectorStringToBufferUsageFLags(flagsList)
+        cdef vk.BufferUsageFlags vkUsageFlags = core_buffer.vectorStringToBufferUsageFLags(flagsList)
 
-        cdef buffer.Buffer buf = buffer.Buffer()
+        cdef core_buffer.Buffer buf = core_buffer.Buffer()
         buf.__buffer  = self.__memory.get().createBuffer(size, vkUsageFlags)
         buf.__memory  = self
         buf.__session = self.__session
@@ -286,7 +286,7 @@ cdef class Memory:
             Buffer object with the same content as the input array parameter.
         """
 
-        cdef buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
+        cdef core_buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
         buf.fromHost(arr)
         return buf
 

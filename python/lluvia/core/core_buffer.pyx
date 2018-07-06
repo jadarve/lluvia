@@ -1,12 +1,10 @@
 """
-    lluvia.core.buffer
+    lluvia.core.core_buffer
     ------------------
 
     :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
 """
-
-cimport buffer
 
 from libc.stdint cimport uint64_t
 from libc.string cimport memcpy

@@ -10,15 +10,16 @@ cimport command_buffer
 
 from cython.operator cimport dereference as deref
 
-from buffer cimport Buffer
-from buffer import  Buffer
+from core_buffer cimport Buffer
+from core_buffer import  Buffer
 
 from compute_node cimport ComputeNode
 from compute_node import  ComputeNode
 
 cimport image
+import image
 from image cimport Image
-from image import  Image, ImageLayout
+from image import  Image
 
 import impl
 
@@ -150,7 +151,7 @@ cdef class CommandBuffer:
                 - DepthReadOnlyStencilAttachmentOptimalKHR
                 - DepthAttachmentStencilReadOnlyOptimalKHR
         """
-        impl.validateFlagStrings(ImageLayout, newLayout)
+        impl.validateFlagStrings(image.ImageLayout, newLayout)
 
         cdef vk.ImageLayout vkLayout = image.stringToImageLayout(newLayout)
         self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), vkLayout)

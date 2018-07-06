@@ -8,8 +8,8 @@
 
 cimport compute_node
 
-from buffer import Buffer
-from buffer cimport Buffer
+from core_buffer import Buffer
+from core_buffer cimport Buffer
 
 from image import ImageView
 from image cimport ImageView

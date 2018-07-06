@@ -14,7 +14,7 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 
 from memory cimport Memory
-from object cimport _Object
+from core_object cimport _Object
 from session cimport Session
 
 cimport vulkan as vk
