@@ -46,17 +46,17 @@ ImageChannelType = ['uint8',
                     'float64']
 
 
-ImageChannelTypeNumpyMap = {np.uint8   : 'uint8',
-                            np.int8    : 'int8',
-                            np.uint16  : 'uint16',
-                            np.int16   : 'int16',
-                            np.float16 : 'float16',
-                            np.uint32  : 'uint32',
-                            np.int32   : 'int32',
-                            np.float32 : 'float32',
-                            np.uint64  : 'uint64',
-                            np.int64   : 'int64',
-                            np.float64 : 'float64'}
+ImageChannelTypeNumpyMap = {'uint8'   : np.uint8,
+                            'int8'    : np.int8,
+                            'uint16'  : np.uint16,
+                            'int16'   : np.int16,
+                            'float16' : np.float16,
+                            'uint32'  : np.uint32,
+                            'int32'   : np.int32,
+                            'float32' : np.float32,
+                            'uint64'  : np.uint64,
+                            'int64'   : np.int64,
+                            'float64' : np.float64}
 
 
 ImageFilterMode = ['Nearest',
@@ -149,6 +149,18 @@ cdef class Image:
 
         def __set__(self, value):
             raise RuntimeError('channels cannot be set')
+
+        def __del__(self):
+            # nothing to do
+            pass
+
+
+    property shape:
+        def __get__(self):
+            return (self.depth, self.height, self.width, self.channels)
+
+        def __set__(self, value):
+            raise RuntimeError('shape cannot be set')
 
         def __del__(self):
             # nothing to do
@@ -372,20 +384,24 @@ cdef class Image:
         shape = arr.shape
 
         # 1D
-        if arr.ndim is 1 and shape[0] != self.width and self.height != 1 and self.depth != 1 and self.channels != 1:
-            raise ValueError('arr parameter must be a 1D array of length {0}, got length: {1}'.format(self.width, shape[0]))
+        if arr.ndim is 1:
+            if shape[0] != self.width and self.height != 1 and self.depth != 1 and self.channels != 1:
+                raise ValueError('arr parameter must be a 1D array of length {0}, got length: {1}'.format(self.width, shape[0]))
 
         # 2D with channels == 1
-        elif arr.ndim is 2 and shape[0] != self.height and shape[1] != self.width and self.channels != 1 and self.depth != 1:
-            raise ValueError('arr parameter must be a 2D array of shape [{0}, {1}], got shape: [{2}, {3}]'.format(self.height, self.width, shape[0], shape[1]))
+        elif arr.ndim is 2:
+            if shape[0] != self.height and shape[1] != self.width and self.channels != 1 and self.depth != 1:
+                raise ValueError('arr parameter must be a 2D array of shape [{0}, {1}], got shape: [{2}, {3}]'.format(self.height, self.width, shape[0], shape[1]))
 
         # 2D with channels != 1
-        elif arr.ndim is 3 and shape[0] != self.height and shape[1] != self.width and self.channels != shape[2] and self.depth != 1:
-            raise ValueError('arr parameter must be a 3D array of shape [{0}, {1}, {2}], got shape: [{3}, {4}, {5}]'.format(self.height, self.width, self.channels, shape[0], shape[1], shape[2]))
+        elif arr.ndim is 3:
+            if shape[0] != self.height and shape[1] != self.width and self.channels != shape[2] and self.depth != 1:
+                raise ValueError('arr parameter must be a 3D array of shape [{0}, {1}, {2}], got shape: [{3}, {4}, {5}]'.format(self.height, self.width, self.channels, shape[0], shape[1], shape[2]))
 
         # 3D
-        elif arr.ndim is 4 and shape[0] != self.depth and shape[1] != self.height and shape[2] != self.width and self.channels != shape[3]:
-            raise ValueError('arr parameter must be a 4D array of shape [{0}, {1}, {2}, {3}], got shape: [{4}, {5}, {6}, {7}]'.format(self.depth, self.height, self.width, self.channels, shape[0], shape[1], shape[2], shape[3]))
+        elif arr.ndim is 4:
+            if shape[0] != self.depth and shape[1] != self.height and shape[2] != self.width and self.channels != shape[3]:
+                raise ValueError('arr parameter must be a 4D array of shape [{0}, {1}, {2}, {3}], got shape: [{4}, {5}, {6}, {7}]'.format(self.depth, self.height, self.width, self.channels, shape[0], shape[1], shape[2], shape[3]))
 
         else:
             raise ValueError('arr parameter must have between 1 to 4 dimensions, got: {0}'.format(arr.ndim))

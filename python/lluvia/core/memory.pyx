@@ -344,12 +344,14 @@ cdef class Memory:
 
         ndim = arr.ndim
 
+        # FIXME
         width    = arr.shape[0]
         height   = arr.shape[1] if ndim >  1 else 1
         depth    = arr.shape[2] if ndim == 4 else 1
         channels = arr.shape[2] if ndim == 3 else arr.shape[3] if ndim == 4 else 1
 
-        channelType = image.ImageChannelTypeNumpyMap[arr.dtype]
+        # channelType = image.ImageChannelTypeNumpyMap[arr.dtype]
+        channelType = str(arr.dtype)
 
         img = self.createImage((width, height, depth), channels, channelType, usageFlags)
         img.fromHost(arr)
