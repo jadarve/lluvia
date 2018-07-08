@@ -344,13 +344,39 @@ cdef class Memory:
 
         ndim = arr.ndim
 
-        # FIXME
-        width    = arr.shape[0]
-        height   = arr.shape[1] if ndim >  1 else 1
-        depth    = arr.shape[2] if ndim == 4 else 1
-        channels = arr.shape[2] if ndim == 3 else arr.shape[3] if ndim == 4 else 1
+        width    = 0
+        height   = 0
+        depth    = 0
+        channels = 0
 
-        # channelType = image.ImageChannelTypeNumpyMap[arr.dtype]
+        if ndim is 1:
+            width    = arr.shape[0]
+            height   = 1
+            depth    = 1
+            channels = 1
+
+        elif ndim is 2:
+            width    = arr.shape[1]
+            height   = arr.shape[0]
+            depth    = 1
+            channels = 1
+
+        elif ndim is 3:
+            width    = arr.shape[1]
+            height   = arr.shape[0]
+            depth    = 1
+            channels = arr.shape[2]
+
+        elif ndim is 4:
+            width    = arr.shape[2]
+            height   = arr.shape[1]
+            depth    = arr.shape[0]
+            channels = arr.shape[3]
+
+        else:
+            raise ValueError('arr parameter must have between 1 to 4 dimensions, got: {0}'.format(ndim))
+
+
         channelType = str(arr.dtype)
 
         img = self.createImage((width, height, depth), channels, channelType, usageFlags)

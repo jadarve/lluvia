@@ -305,7 +305,7 @@ cdef class Image:
         
         
         currentLayout = self.layout
-        stageBuffer   = self.__memory.createBuffer(self.size, ['StorageBuffer', 'TransferSrc', 'TransferDst'])
+        stageBuffer   = self.__memory.createBuffer(output.size, ['StorageBuffer', 'TransferSrc', 'TransferDst'])
         cmdBuffer     = self.__session.createCommandBuffer()
 
         cmdBuffer.begin()
