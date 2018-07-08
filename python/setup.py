@@ -8,7 +8,10 @@
 
 import os
 import numpy as np
-from distutils.core import setup, Extension
+from setuptools import setup
+from distutils.core import Extension
+
+
 from Cython.Build import cythonize
 
 VULKAN_SDK = os.environ['VULKAN_SDK']
@@ -90,4 +93,7 @@ setup(name='lluvia',
     license='Apache-2',
     packages=py_packages,
     ext_modules=extensions,
-    package_data=package_data)
+    package_data=package_data,
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest"]
+    )
