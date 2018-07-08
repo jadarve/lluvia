@@ -92,7 +92,7 @@ layout(binding = 2) buffer out0 {int C[]; };
 
 void main() {
 
-    const uint index = gl_GlobalInvocationID.x;;
+    const uint index = gl_GlobalInvocationID.x;
     C[index] = A[index] + B[index];
 }
 """
