@@ -16,7 +16,6 @@ from Cython.Build import cythonize
 
 VULKAN_SDK = os.environ['VULKAN_SDK']
 
-# TODO: Vulkan SDK include path
 incDirs = ['../core/include',
            os.path.join(VULKAN_SDK, 'include'),
            np.get_include()]
@@ -94,6 +93,6 @@ setup(name='lluvia',
     packages=py_packages,
     ext_modules=extensions,
     package_data=package_data,
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest"]
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest', 'imageio']
     )

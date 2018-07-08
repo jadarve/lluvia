@@ -191,9 +191,27 @@ cdef class Memory:
         Parameters
         ----------
         shape : list or tuple of length 1, 2 or 3.
-            Shape of the image (width, height , depth). Each dimension
+            Shape of the image (depth, height , width). Each dimension
             must be greater than zero. If one or more dimensions are missing,
             they are set to 1 by default.
+
+            The shape is interpreted as follows:
+
+                if len(shape) is 1:
+                    depth  = 1
+                    height = 1
+                    width  = shape[0]
+
+                elif len(shape) is 2:
+                    depth  = 1
+                    height = shape[0]
+                    width  = shape[1]
+
+                else:
+                    depth  = shape[0]
+                    height = shape[1]
+                    width  = shape[2]
+
 
         channels : uint32. Defaults to 1.
             Number of channels in each pixel location. The value
@@ -206,6 +224,7 @@ cdef class Memory:
             Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
             Image usage flags. It must be a combination of th strings defined
             in lluvia.ImageUsageFlags:
+
                 - TransferSrc
                 - TransferDst
                 - Sampled
@@ -232,12 +251,28 @@ cdef class Memory:
             usageFlags = [usageFlags]
 
         impl.validateFlagStrings(image.ImageUsageFlags, usageFlags)
+        impl.validateFlagStrings(image.ImageChannelType, channelType)
 
-        impl.validateFlagStrings(image.ImageChannelType, [channelType])
+        
+        cdef uint32_t width  = 0
+        cdef uint32_t height = 0
+        cdef uint32_t depth  = 0
 
-        cdef uint32_t width  = shape[0]
-        cdef uint32_t height = shape[1] if len(shape) >= 2 else 1
-        cdef uint32_t depth  = shape[2] if len(shape) == 3 else 1
+        ndim = len(shape)
+        if ndim is 1:
+            depth  = 1
+            height = 1
+            width  = shape[0]
+
+        elif ndim is 2:
+            depth  = 1
+            height = shape[0]
+            width  = shape[1]
+
+        else:
+            depth  = shape[0]
+            height = shape[1]
+            width  = shape[2]
 
         cdef image._ChannelType cType = image.stringToChannelType(channelType)
 
@@ -350,27 +385,27 @@ cdef class Memory:
         channels = 0
 
         if ndim is 1:
-            width    = arr.shape[0]
-            height   = 1
             depth    = 1
+            height   = 1
+            width    = arr.shape[0]
             channels = 1
 
         elif ndim is 2:
-            width    = arr.shape[1]
-            height   = arr.shape[0]
             depth    = 1
+            height   = arr.shape[0]
+            width    = arr.shape[1]
             channels = 1
 
         elif ndim is 3:
-            width    = arr.shape[1]
-            height   = arr.shape[0]
             depth    = 1
+            height   = arr.shape[0]
+            width    = arr.shape[1]
             channels = arr.shape[2]
 
         elif ndim is 4:
-            width    = arr.shape[2]
-            height   = arr.shape[1]
             depth    = arr.shape[0]
+            height   = arr.shape[1]
+            width    = arr.shape[2]
             channels = arr.shape[3]
 
         else:
@@ -379,7 +414,7 @@ cdef class Memory:
 
         channelType = str(arr.dtype)
 
-        img = self.createImage((width, height, depth), channels, channelType, usageFlags)
+        img = self.createImage((depth, height, width), channels, channelType, usageFlags)
         img.fromHost(arr)
         
         return img

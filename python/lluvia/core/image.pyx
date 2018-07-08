@@ -250,13 +250,14 @@ cdef class Image:
         self.__validateNumpyShape(arr)
 
         currentLayout = self.layout
+        nextLayout    = currentLayout if currentLayout not in ['Undefined', 'Preinitialized'] else 'General'
         stageBuffer   = self.__memory.createBufferFromHost(arr)
         cmdBuffer     = self.__session.createCommandBuffer()
 
         cmdBuffer.begin()
         cmdBuffer.changeImageLayout(self, 'TransferDstOptimal')
         cmdBuffer.copyBufferToImage(stageBuffer, self)
-        cmdBuffer.changeImageLayout(self, currentLayout)
+        cmdBuffer.changeImageLayout(self, nextLayout)
         cmdBuffer.end()
 
         self.__session.run(cmdBuffer)
@@ -305,13 +306,14 @@ cdef class Image:
         
         
         currentLayout = self.layout
+        nextLayout    = currentLayout if currentLayout not in ['Undefined', 'Preinitialized'] else 'General'
         stageBuffer   = self.__memory.createBuffer(output.size, ['StorageBuffer', 'TransferSrc', 'TransferDst'])
         cmdBuffer     = self.__session.createCommandBuffer()
 
         cmdBuffer.begin()
-        cmdBuffer.changeImageLayout(self, 'TransferDstOptimal')
+        cmdBuffer.changeImageLayout(self, 'TransferSrcOptimal')
         cmdBuffer.copyImageToBuffer(self, stageBuffer)
-        cmdBuffer.changeImageLayout(self, currentLayout)
+        cmdBuffer.changeImageLayout(self, nextLayout)
         cmdBuffer.end()
 
         self.__session.run(cmdBuffer)
