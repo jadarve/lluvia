@@ -60,3 +60,9 @@ local
 
 # Vulkan
 *.spv
+
+# Python
+*.pyc
+*.eggs
+*.pytest_cache
+*.egg-info
