@@ -183,77 +183,6 @@ cdef class Memory:
         return buf
 
 
-    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
-        """
-        Creates a new image allocated in this memory.
-
-
-        Parameters
-        ----------
-        shape : list or tuple of length 1, 2 or 3.
-            Shape of the image (width, height , depth). Each dimension
-            must be greater than zero. If one or more dimensions are missing,
-            they are set to 1 by default.
-
-        channels : uint32. Defaults to 1.
-            Number of channels in each pixel location. The value
-            must be in the range [1, 4].
-
-        channelType : str. Defaults to 'uint8'.
-            Channel type. It must be one of the strings in lluvia.ImageChannelType.
-
-        usageFlags : string or list of strings.
-            Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
-            Image usage flags. It must be a combination of th strings defined
-            in lluvia.ImageUsageFlags:
-                - TransferSrc
-                - TransferDst
-                - Sampled
-                - Storage
-                - ColorAttachment
-                - DepthStencilAttachment
-                - TransientAttachment
-                - InputAttachment
-
-        Returns
-        -------
-        image : new Image object.
-
-
-        Raises
-        ------
-        ValueError : if any parameter is not within its required range.
-        """
-
-        if len(shape) not in [1, 2, 3]:
-            raise ValueError('invalid shape length. Expected a ')
-
-        if type(usageFlags) is str:
-            usageFlags = [usageFlags]
-
-        impl.validateFlagStrings(image.ImageUsageFlags, usageFlags)
-
-        impl.validateFlagStrings(image.ImageChannelType, [channelType])
-
-        cdef uint32_t width  = shape[0]
-        cdef uint32_t height = shape[1] if len(shape) >= 2 else 1
-        cdef uint32_t depth  = shape[2] if len(shape) == 3 else 1
-
-        cdef image._ChannelType cType = image.stringToChannelType(channelType)
-
-        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, channels, cType)
-
-        cdef list flagsList = usageFlags
-        cdef vk.ImageUsageFlags flags = image.vectorStringToImageUsageFlags(flagsList)
-
-        cdef image.Image img = image.Image()
-        img.__memory  = self
-        img.__session = self.__session
-        img.__image   = self.__memory.get().createImage(desc, flags)
-
-        return img
-
-
     def createBufferFromHost(self, np.ndarray arr, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
         """
         Creates a buffer from a numpy array.
@@ -289,6 +218,154 @@ cdef class Memory:
         cdef core_buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
         buf.fromHost(arr)
         return buf
+
+
+    def createBufferLike(self, other, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
+        """
+        Creates a Buffer with the same size in bytes as the other parameter
+
+        The memory allocated to this buffer is not filled with any value
+        at the moment of creation.
+
+        Parameters
+        ----------
+        other : Numpy ndarray or lluvia Buffer or Image.
+
+        usageFlags : string or list of strings.
+            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst'].
+            Usage flags for this buffer. It must be a combination of the
+            values defined in lluvia.BufferUsageFlags:
+                - IndexBuffer
+                - IndirectBuffer
+                - StorageBuffer
+                - StorageTexelBuffer
+                - TransferDst
+                - TransferSrc
+                - UniformBuffer
+                - UniformTexelBuffer
+                - VertexBuffer
+
+
+        Returns
+        -------
+        buf : lluvia.Buffer object.
+        """
+
+        sizeBytes = 0
+
+        if type(other) is np.ndarray:
+            sizeBytes = other.nbytes
+
+        else:
+            sizeBytes = other.size
+
+        return self.createBuffer(sizeBytes, usageFlags)
+
+
+    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
+        """
+        Creates a new image allocated in this memory.
+
+
+        Parameters
+        ----------
+        shape : list or tuple of length 1, 2 or 3.
+            Shape of the image (depth, height , width). Each dimension
+            must be greater than zero. If one or more dimensions are missing,
+            they are set to 1 by default.
+
+            The shape is interpreted as follows:
+
+                if len(shape) is 1:
+                    depth  = 1
+                    height = 1
+                    width  = shape[0]
+
+                elif len(shape) is 2:
+                    depth  = 1
+                    height = shape[0]
+                    width  = shape[1]
+
+                else:
+                    depth  = shape[0]
+                    height = shape[1]
+                    width  = shape[2]
+
+
+        channels : uint32. Defaults to 1.
+            Number of channels in each pixel location. The value
+            must be in the range [1, 4].
+
+        channelType : str. Defaults to 'uint8'.
+            Channel type. It must be one of the strings in lluvia.ImageChannelType.
+
+        usageFlags : string or list of strings.
+            Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
+
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
+
+        Returns
+        -------
+        image : new Image object.
+
+
+        Raises
+        ------
+        ValueError : if any parameter is not within its required range.
+        """
+
+        if len(shape) not in [1, 2, 3]:
+            raise ValueError('invalid shape length. Expected a ')
+
+        if type(usageFlags) is str:
+            usageFlags = [usageFlags]
+
+        impl.validateFlagStrings(image.ImageUsageFlags, usageFlags)
+        impl.validateFlagStrings(image.ImageChannelType, channelType)
+
+        
+        cdef uint32_t width  = 0
+        cdef uint32_t height = 0
+        cdef uint32_t depth  = 0
+
+        ndim = len(shape)
+        if ndim is 1:
+            depth  = 1
+            height = 1
+            width  = shape[0]
+
+        elif ndim is 2:
+            depth  = 1
+            height = shape[0]
+            width  = shape[1]
+
+        else:
+            depth  = shape[0]
+            height = shape[1]
+            width  = shape[2]
+
+        cdef image._ChannelType cType = image.stringToChannelType(channelType)
+
+        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, channels, cType)
+
+        cdef list flagsList = usageFlags
+        cdef vk.ImageUsageFlags flags = image.vectorStringToImageUsageFlags(flagsList)
+
+        cdef image.Image img = image.Image()
+        img.__memory  = self
+        img.__session = self.__session
+        img.__image   = self.__memory.get().createImage(desc, flags)
+
+        return img
 
 
     def createImageFromHost(self, np.ndarray arr, usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
@@ -350,27 +427,27 @@ cdef class Memory:
         channels = 0
 
         if ndim is 1:
-            width    = arr.shape[0]
-            height   = 1
             depth    = 1
+            height   = 1
+            width    = arr.shape[0]
             channels = 1
 
         elif ndim is 2:
-            width    = arr.shape[1]
-            height   = arr.shape[0]
             depth    = 1
+            height   = arr.shape[0]
+            width    = arr.shape[1]
             channels = 1
 
         elif ndim is 3:
-            width    = arr.shape[1]
-            height   = arr.shape[0]
             depth    = 1
+            height   = arr.shape[0]
+            width    = arr.shape[1]
             channels = arr.shape[2]
 
         elif ndim is 4:
-            width    = arr.shape[2]
-            height   = arr.shape[1]
             depth    = arr.shape[0]
+            height   = arr.shape[1]
+            width    = arr.shape[2]
             channels = arr.shape[3]
 
         else:
@@ -379,7 +456,7 @@ cdef class Memory:
 
         channelType = str(arr.dtype)
 
-        img = self.createImage((width, height, depth), channels, channelType, usageFlags)
+        img = self.createImage((depth, height, width), channels, channelType, usageFlags)
         img.fromHost(arr)
         
         return img
