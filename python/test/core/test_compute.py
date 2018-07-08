@@ -44,7 +44,7 @@ def test_compile():
 
     A = memory.createBufferFromHost(A_host)
     B = memory.createBufferFromHost(B_host)
-    C = memory.createBufferFromHost(np.zeros(length, dtype=dtype))
+    C = memory.createBufferLike(A_host)
 
     node = session.compileComputeNode(shaderCode,
         ['Buffer', 'Buffer', 'Buffer'],
@@ -57,5 +57,4 @@ def test_compile():
     node.run()
 
     C_copy = C.toHost(dtype=dtype)
-    print(C_copy)
     assert((C_copy == C_host).all())

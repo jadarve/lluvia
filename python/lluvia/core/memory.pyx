@@ -183,6 +183,85 @@ cdef class Memory:
         return buf
 
 
+    def createBufferFromHost(self, np.ndarray arr, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
+        """
+        Creates a buffer from a numpy array.
+
+
+        Parameters
+        ----------
+        arr : np.ndarray.
+            Numpy array from which the buffer will be created from. The content
+            of the array will be copied into the buffer.
+
+        usageFlags : string or list of strings.
+            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst'].
+            Usage flags for this buffer. It must be a combination of the
+            values defined in lluvia.BufferUsageFlags:
+                - IndexBuffer
+                - IndirectBuffer
+                - StorageBuffer
+                - StorageTexelBuffer
+                - TransferDst
+                - TransferSrc
+                - UniformBuffer
+                - UniformTexelBuffer
+                - VertexBuffer
+
+
+        Returns
+        -------
+        buffer : Buffer.
+            Buffer object with the same content as the input array parameter.
+        """
+
+        cdef core_buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
+        buf.fromHost(arr)
+        return buf
+
+
+    def createBufferLike(self, other, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
+        """
+        Creates a Buffer with the same size in bytes as the other parameter
+
+        The memory allocated to this buffer is not filled with any value
+        at the moment of creation.
+
+        Parameters
+        ----------
+        other : Numpy ndarray or lluvia Buffer or Image.
+
+        usageFlags : string or list of strings.
+            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst'].
+            Usage flags for this buffer. It must be a combination of the
+            values defined in lluvia.BufferUsageFlags:
+                - IndexBuffer
+                - IndirectBuffer
+                - StorageBuffer
+                - StorageTexelBuffer
+                - TransferDst
+                - TransferSrc
+                - UniformBuffer
+                - UniformTexelBuffer
+                - VertexBuffer
+
+
+        Returns
+        -------
+        buf : lluvia.Buffer object.
+        """
+
+        sizeBytes = 0
+
+        if type(other) is np.ndarray:
+            sizeBytes = other.nbytes
+
+        else:
+            sizeBytes = other.size
+
+        return self.createBuffer(sizeBytes, usageFlags)
+
+
     def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
         """
         Creates a new image allocated in this memory.
@@ -287,43 +366,6 @@ cdef class Memory:
         img.__image   = self.__memory.get().createImage(desc, flags)
 
         return img
-
-
-    def createBufferFromHost(self, np.ndarray arr, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
-        """
-        Creates a buffer from a numpy array.
-
-
-        Parameters
-        ----------
-        arr : np.ndarray.
-            Numpy array from which the buffer will be created from. The content
-            of the array will be copied into the buffer.
-
-        usageFlags : string or list of strings.
-            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst'].
-            Usage flags for this buffer. It must be a combination of the
-            values defined in lluvia.BufferUsageFlags:
-                - IndexBuffer
-                - IndirectBuffer
-                - StorageBuffer
-                - StorageTexelBuffer
-                - TransferDst
-                - TransferSrc
-                - UniformBuffer
-                - UniformTexelBuffer
-                - VertexBuffer
-
-
-        Returns
-        -------
-        buffer : Buffer.
-            Buffer object with the same content as the input array parameter.
-        """
-
-        cdef core_buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
-        buf.fromHost(arr)
-        return buf
 
 
     def createImageFromHost(self, np.ndarray arr, usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
