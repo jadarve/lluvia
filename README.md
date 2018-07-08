@@ -13,8 +13,6 @@ layout(binding = 0) buffer in0  {int A[]; };
 layout(binding = 1) buffer in1  {int B[]; };
 layout(binding = 2) buffer out0 {int C[]; };
 
-const uint OUTPUT_WIDTH = 32;
-
 void main() {
 
     const uint index = LL_GLOBAL_COORDS_1D;
@@ -85,31 +83,38 @@ The Python API shares most of the classes defined for the C++ API but simplifies
 import numpy as np
 import lluvia as ll
 
-length    = 32
-sizeBytes = 4 * length
+code = """
+#version 450
+
+layout(binding = 0) buffer in0  {int A[]; };
+layout(binding = 1) buffer in1  {int B[]; };
+layout(binding = 2) buffer out0 {int C[]; };
+
+void main() {
+
+    const uint index = gl_GlobalInvocationID.x;;
+    C[index] = A[index] + B[index];
+}
+"""
+
+length = 32
+dtype  = np.int32
 
 session = ll.Session()
+memory = session.createMemory()
 
-hostMemory = session.createMemory(['HostVisible', 'HostCoherent'], length)
+A = memory.createBufferFromHost(np.arange(0, length, dtype=dtype))
+B = memory.createBufferFromHost(np.arange(0, length, dtype=dtype))
+C = memory.createBufferFromHost(np.zeros(length, dtype=dtype))
 
-A = hostMemory.createBuffer(sizeBytes)
-B = hostMemory.createBuffer(sizeBytes)
-C = hostMemory.createBuffer(sizeBytes)
-
-npArr = np.arange(length, dtype=np.int32)
-
-A.fromHost(npArr)
-B.fromHost(2*npArr)
-
-node = session.readComputeNode('add.json')
+node = session.compileComputeNode(code, ['Buffer', 'Buffer', 'Buffer'])
+node.grid = (length, 1, 1)
 node.bind(0, A)
 node.bind(1, B)
 node.bind(2, C)
+node.run()
 
-session.run(node)
-
-result = C.toHost()
-print(result)
+print(C.toHost(dtype=np.int32))
 ```
 
 # Build Instructions
