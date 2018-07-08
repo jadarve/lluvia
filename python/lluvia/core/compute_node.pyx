@@ -8,8 +8,8 @@
 
 cimport compute_node
 
-from buffer import Buffer
-from buffer cimport Buffer
+from core_buffer import Buffer
+from core_buffer cimport Buffer
 
 from image import ImageView
 from image cimport ImageView
@@ -170,8 +170,10 @@ cdef class ComputeNodeDescriptor:
         Parameters
         ----------
         paramType : string.
-            Parameter type. It must be one of the values stored in lluvia.ParameterType.
-
+            Parameter type. It must be one of the values in lluvia.ParameterType:
+                - Buffer
+                - ImageView
+                - SampledImageView
 
         Raises
         ------
@@ -300,3 +302,12 @@ cdef class ComputeNode:
         if type(obj) == ImageView:
             imgView = obj
             self.__node.get().bind(index, static_pointer_cast[_Object](imgView.__imageView))
+
+
+    def run(self):
+        """
+        Runs this node
+        """
+
+        self.__session.run(self)
+        

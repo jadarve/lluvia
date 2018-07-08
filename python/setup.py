@@ -65,7 +65,7 @@ package_data = {'lluvia.core' : ['*.pxd']}
 #################################################
 # CYTHON EXTENSIONS
 #################################################
-GPUmodulesTable = [('lluvia.core.buffer'         , ['lluvia/core/buffer.pyx']),
+GPUmodulesTable = [('lluvia.core.core_buffer'    , ['lluvia/core/core_buffer.pyx']),
                    ('lluvia.core.command_buffer' , ['lluvia/core/command_buffer.pyx']),
                    ('lluvia.core.compute_node'   , ['lluvia/core/compute_node.pyx']),
                    ('lluvia.core.image'          , ['lluvia/core/image.pyx']),

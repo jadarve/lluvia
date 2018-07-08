@@ -8,6 +8,9 @@
 
 cimport session
 
+import subprocess
+import tempfile
+
 from cython.operator cimport dereference as deref
 
 from libc.stdint cimport uint64_t
@@ -72,7 +75,7 @@ cdef class Session:
         return supportedMemoryFlags
 
 
-    def createMemory(self, flags, uint64_t pageSize, bool exactFlagsMatch = False):
+    def createMemory(self, flags = 'DeviceLocal', uint64_t pageSize = 33554432L, bool exactFlagsMatch = False):
         """
         Creates a new memory.
 
@@ -98,12 +101,12 @@ cdef class Session:
 
         Parameters
         ----------
-        flags : string or list of strings.
+        flags : string or list of strings. Defaults to 'DeviceLocal'
             Flags to determine the type of memory to be created.
             Each flag should be one of the strings in
             lluvia.MemoryPropertyFlags.
 
-        pageSize : uint64_t greater than zero.
+        pageSize : uint64_t. Defaults to 32MB (33554432L).
             The size in bytes of each page the new memory object
             will allocate when there is no space for creating new objects.
 
@@ -124,7 +127,6 @@ cdef class Session:
             flags for creating memories in this session.
 
         """
-        assert(pageSize > 0)
 
         # converts one string object to a list
         if type(flags) is str:
@@ -139,7 +141,8 @@ cdef class Session:
 
         cdef Memory mem = Memory()
         mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, False)
-
+        mem.__session = self
+        
         return mem
 
 
@@ -187,7 +190,8 @@ cdef class Session:
         node : lluvia.ComputeNode
         """
         cdef compute_node.ComputeNode node = compute_node.ComputeNode()
-        node.__node = self.__session.get().createComputeNode(desc.__descriptor)
+        node.__session = self
+        node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
         
         return node
 
@@ -276,10 +280,8 @@ cdef class Session:
         IOError : if there are problems reading the JSON file.
         """
 
-        cdef compute_node.ComputeNode node = compute_node.ComputeNode()
-        
-        node.__node = self.__session.get().readComputeNode(filePath)
-        return node
+        desc = self.readComputeNodeDescriptor(filePath)
+        return self.createComputeNode(desc)
 
 
     def createCommandBuffer(self):
@@ -304,7 +306,6 @@ cdef class Session:
         return cmdBuffer
 
 
-
     def run(self, obj):
         """
         Runs a CommandBuffer or ComputeNode
@@ -325,4 +326,140 @@ cdef class Session:
         elif type(obj) == CommandBuffer:
             cmdBuffer = obj
             self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
-        
+    
+
+    def compileProgram(self, shaderCode, includeDirs=None, compileFlags=['-Werror']):
+        """
+        Compiles a Program from GLSL shader code.
+
+        This method assumes that glslc command is avialable in the system.
+
+
+        Parameters
+        ----------
+        shaderCode : file or str.
+            If file, it must contain the GLSL code of the shader to compile. The
+            file is not closed during the execution of this method.
+            
+            If str,  it must be valid GLSL code. A temporal file is created and
+            its path is passed to glslc for compilation.
+
+        includeDirs : list of strings. Defaults to None.
+            List of include directories to pass to glslc through -I flag.
+
+        compileFlags : list of strings. Defaults to ['-Werror'].
+            Extra compile flags to pass to glslc.
+
+
+        Returns
+        -------
+        program : lluvia.Program.
+            Compiled program.
+
+
+        Raises
+        ------
+        RuntimeError : if the compilation fails.
+        """
+
+        shaderFile = None
+
+        if type(shaderCode) is file:
+            shaderFile = shaderCode
+
+        else:
+            shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
+            shaderFile.file.writelines(shaderCode)
+            shaderFile.file.flush()
+
+        # temp file for SPIR-V output
+        with tempfile.NamedTemporaryFile(suffix='.spv') as outputFile:
+
+            command = ['glslc', '-o', outputFile.name] + compileFlags
+
+            if includeDirs is not None:
+                for incDir in includeDirs:
+                    command += ['-I', incDir]
+            
+            command.append(shaderFile.name)
+            command = ' '.join(command)
+            
+            proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            proc.wait()
+            
+            if proc.returncode != 0:
+                raise RuntimeError(proc.stderr.read())
+
+            return self.createProgram(outputFile.name)
+
+
+    def compileComputeNode( self,
+                            shaderCode,
+                            parameters,
+                            localSize    = (1, 1, 1),
+                            gridSize     = (1, 1, 1),
+                            includeDirs  = None,
+                            compileFlags = ['-Werror']):
+        """
+        Compiles a ComputeNode from GLSL shader code.
+
+        This method assumes that glslc command is avialable in the system.
+
+        Parameters
+        ----------
+        shaderCode : file or str.
+            If file, it must contain the GLSL code of the shader to compile. The
+            file is not closed during the execution of this method.
+
+            If str,  it must be valid GLSL code. A temporal file is created and
+            its path is passed to glslc for compilation.
+
+        parameters : list of strings.
+            List of parameters the compute node receives. Each string
+            must be one of the values defined in lluvia.ParameterType:
+                - Buffer
+                - ImageView
+                - SampledImageView
+
+        localSize : list or tuple of length 3. Defaults to (1, 1, 1).
+            Local group size for each XYZ dimension. Each value
+            must be greater or equal to 1.
+
+        gridSize : list or tuple of length 3. Defaults to (1, 1, 1).
+            Grid size for each XYZ dimension. The grid size defines
+            the number of local groups in each dimension. Each value
+            must be greater or equal to 1.
+
+        includeDirs : list of strings. Defaults to None.
+            List of include directories to pass to glslc through -I flag.
+
+        compileFlags : list of strings. Defaults to ['-Werror'].
+            Extra compile flags to pass to glslc.
+
+
+        Returns
+        -------
+        node : lluvia.ComputeNode.
+            Compiled node.
+
+
+        Raises
+        ------
+        RuntimeError : if the compilation fails.
+
+
+        See also
+        --------
+        compileProgram : Compiles a Program from GLSL shader code.
+        """
+
+        desc = compute_node.ComputeNodeDescriptor()
+        desc.program      = self.compileProgram(shaderCode, includeDirs, compileFlags)
+        desc.functionName = 'main'
+        desc.grid         = gridSize
+        desc.local        = localSize
+
+        for param in parameters:
+            desc.addParameter(param)
+
+        return self.createComputeNode(desc)

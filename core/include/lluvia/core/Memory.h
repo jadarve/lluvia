@@ -238,6 +238,10 @@ public:
 
     @throws     std::system_error if the Vulkan memory does not support allocating image objects.
 
+    @throws     std::invalid_argument if the image size in the descriptor is not valid.
+                                      This happens if the width, height or depth are zero
+                                      or if the channel count ins not in the rante [1, 4].
+
     @return     A new ll::Image object.
     */
     std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor,
@@ -250,6 +254,7 @@ public:
     @param      visitor  The visitor
     */
     void accept(ll::Visitor* visitor);
+
 
 private:
     impl::MemoryAllocationTryInfo getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements);

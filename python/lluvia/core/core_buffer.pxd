@@ -1,5 +1,5 @@
 """
-    lluvia.core.buffer
+    lluvia.core.core_buffer
     ------------------
 
     :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
@@ -13,7 +13,9 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from object cimport _Object
+from memory cimport Memory
+from core_object cimport _Object
+from session cimport Session
 
 cimport vulkan as vk
 
@@ -36,4 +38,6 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
 
 cdef class Buffer:
     
+    cdef Memory              __memory
+    cdef Session             __session
     cdef shared_ptr[_Buffer] __buffer
