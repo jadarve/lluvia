@@ -62,6 +62,7 @@ local
 *.spv
 
 # Python
+__pycache__
 *.pyc
 *.eggs
 *.pytest_cache
