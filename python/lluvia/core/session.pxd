@@ -40,8 +40,8 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
-        void run(const _ComputeNode& node)
-        void run(const _CommandBuffer& cmdBuffer)
+        void run(const _ComputeNode& node) except +
+        void run(const _CommandBuffer& cmdBuffer) except +
 
 
 cdef class Session:
