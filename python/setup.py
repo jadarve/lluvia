@@ -71,6 +71,7 @@ GPUmodulesTable = [('lluvia.core.core_buffer'    , ['lluvia/core/core_buffer.pyx
                    ('lluvia.core.command_buffer' , ['lluvia/core/command_buffer.pyx']),
                    ('lluvia.core.compute_node'   , ['lluvia/core/compute_node.pyx']),
                    ('lluvia.core.image'          , ['lluvia/core/image.pyx']),
+                   ('lluvia.core.io'             , ['lluvia/core/io.pyx']),
                    ('lluvia.core.memory'         , ['lluvia/core/memory.pyx']),
                    ('lluvia.core.program'        , ['lluvia/core/program.pyx']),
                    ('lluvia.core.session'        , ['lluvia/core/session.pyx']),]

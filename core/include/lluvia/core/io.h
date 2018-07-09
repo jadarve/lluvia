@@ -153,8 +153,7 @@ std::shared_ptr<ll::ComputeNode> readComputeNode(const std::string& filePath, co
 
 This is equivalent to:
 @code
-    const auto& descriptor = node->getDescriptor();
-    ll::writeComputeNodeDescriptor(descriptor, filePath);
+    ll::writeComputeNodeDescriptor(node.getDescriptor(), filePath);
 @endcode
 
 See ll::writeComputeNodeDescriptor for the description of the JSON file
@@ -165,7 +164,7 @@ written to file.
 
 @sa ll::readComputeNode     Reads a compute node from a file.
 */
-void writeComputeNode(const std::shared_ptr<ll::ComputeNode>& node, const std::string& filePath);
+void writeComputeNode(const ll::ComputeNode& node, const std::string& filePath);
 
 } // namespace ll
 

@@ -21,6 +21,8 @@ from libcpp.vector cimport vector
 
 from command_buffer cimport CommandBuffer, _CommandBuffer, move
 
+import io
+
 import  memory
 cimport memory
 from memory cimport Memory, _Memory
@@ -29,8 +31,7 @@ cimport vulkan as vk
 import  program
 cimport program
 
-import compute_node
-cimport compute_node
+from compute_node cimport ComputeNode, ComputeNodeDescriptor
 
 from . import impl
 
@@ -176,7 +177,7 @@ cdef class Session:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
 
-    def createComputeNode(self, compute_node.ComputeNodeDescriptor desc):
+    def createComputeNode(self, ComputeNodeDescriptor desc):
         """
         Creates a ComputeNode from a given descriptor.
 
@@ -189,7 +190,7 @@ cdef class Session:
         Returns
         node : lluvia.ComputeNode
         """
-        cdef compute_node.ComputeNode node = compute_node.ComputeNode()
+        cdef ComputeNode node = ComputeNode()
         node.__session = self
         node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
         
@@ -235,10 +236,80 @@ cdef class Session:
         IOError : if there are problems reading the JSON file.
         """
 
-        cdef compute_node.ComputeNodeDescriptor desc = compute_node.ComputeNodeDescriptor()
+        cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
         
         desc.__descriptor = self.__session.get().readComputeNodeDescriptor(filePath)
         return desc
+
+
+    def writeComputeNodeDescriptor(self, ComputeNodeDescriptor desc, str filePath):
+        """
+        Write a compute node descriptor as a JSON file.
+
+        The JSON file has the following structure:
+
+            {
+                "function"   : "function name",
+                "grid_x"     : int,
+                "grid_y"     : int,
+                "grid_z"     : int,
+                "local_x"    : int,
+                "local_y"    : int,
+                "local_z"    : int,
+                "parameters" : [
+                    "Buffer",
+                    "ImageView",
+                    "SampledImageView",
+                    ...
+                ],
+                "spirv"      : "base 64 SPIR-V code"
+            }
+
+        Parameters
+        ----------
+        desc : ComputeNodeDescriptor.
+            The descriptor to write
+
+        filePath : str
+            The file path.
+        """
+
+        io.writeComputeNodeDescriptor(desc, filePath)
+
+
+    def writeComputeNode(self, ComputeNode node, str filePath):
+        """
+        Write a compute node as a JSON file.
+
+        The JSON file has the following structure:
+
+            {
+                "function"   : "function name",
+                "grid_x"     : int,
+                "grid_y"     : int,
+                "grid_z"     : int,
+                "local_x"    : int,
+                "local_y"    : int,
+                "local_z"    : int,
+                "parameters" : [
+                    "Buffer",
+                    "ImageView",
+                    "SampledImageView",
+                    ...
+                ],
+                "spirv"      : "base 64 SPIR-V code"
+            }
+
+        Parameters
+        ----------
+        desc : ComputeNodeDescriptor.
+            The descriptor to write
+
+        filePath : str
+            The file path.
+        """
+
+        io.writeComputeNode(node, filePath)
 
 
     def readComputeNode(self, str filePath):
@@ -316,10 +387,10 @@ cdef class Session:
         obj : CommandBuffer or ComputeNode
         """
 
-        cdef compute_node.ComputeNode node = None
+        cdef ComputeNode node = None
         cdef CommandBuffer cmdBuffer = None
 
-        if type(obj) == compute_node.ComputeNode:
+        if type(obj) == ComputeNode:
             node = obj
             self.__session.get().run(deref(node.__node.get()))
 
@@ -453,7 +524,7 @@ cdef class Session:
         compileProgram : Compiles a Program from GLSL shader code.
         """
 
-        desc = compute_node.ComputeNodeDescriptor()
+        desc = ComputeNodeDescriptor()
         desc.program      = self.compileProgram(shaderCode, includeDirs, compileFlags)
         desc.functionName = 'main'
         desc.grid         = gridSize

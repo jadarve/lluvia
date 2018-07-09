@@ -604,12 +604,9 @@ std::shared_ptr<ll::ComputeNode> readComputeNode(const std::string& filePath, co
 }
 
 
-void writeComputeNode(const std::shared_ptr<ll::ComputeNode>& node, const std::string& filePath) {
+void writeComputeNode(const ll::ComputeNode& node, const std::string& filePath) {
     
-    assert(node != nullptr);
-
-    const auto& descriptor = node->getDescriptor();
-    writeComputeNodeDescriptor(descriptor, filePath);
+    writeComputeNodeDescriptor(node.getDescriptor(), filePath);
 }
 
 
