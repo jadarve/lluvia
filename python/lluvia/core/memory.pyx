@@ -262,7 +262,7 @@ cdef class Memory:
         return self.createBuffer(sizeBytes, usageFlags)
 
 
-    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
+    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage', 'Sampled', 'TransferSrc', 'TransferDst']):
         """
         Creates a new image allocated in this memory.
 
@@ -300,7 +300,7 @@ cdef class Memory:
             Channel type. It must be one of the strings in lluvia.ImageChannelType.
 
         usageFlags : string or list of strings.
-            Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
             Image usage flags. It must be a combination of th strings defined
             in lluvia.ImageUsageFlags:
 
@@ -365,10 +365,11 @@ cdef class Memory:
         img.__session = self.__session
         img.__image   = self.__memory.get().createImage(desc, flags)
 
+        img.changeLayout('General')
         return img
 
 
-    def createImageFromHost(self, np.ndarray arr, usageFlags=['Storage', 'TransferSrc', 'TransferDst']):
+    def createImageFromHost(self, np.ndarray arr, usageFlags=['Storage', 'Sampled', 'TransferSrc', 'TransferDst']):
         """
         Creates a lluvia.Image object from a Numpy array.
 
@@ -395,7 +396,7 @@ cdef class Memory:
         arr : Numpy array.
 
         usageFlags : string or list of strings.
-            Defaults to ['Storage', 'TransferSrc', 'TransferDst'].
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
             Image usage flags. It must be a combination of th strings defined
             in lluvia.ImageUsageFlags:
                 - TransferSrc

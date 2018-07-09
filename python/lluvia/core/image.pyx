@@ -216,6 +216,41 @@ cdef class Image:
             pass
 
 
+    def changeLayout(self, str newLayout):
+        """
+        Changes image layout.
+
+
+        Parameters
+        ----------
+        newLayout : str.
+            The new layout. Its value must be one of the strings defined in lluvia.ImageLayout:
+                - Undefined
+                - General
+                - ColorAttachmentOptimal
+                - DepthStencilAttachmentOptimal
+                - DepthStencilReadOnlyOptimal
+                - ShaderReadOnlyOptimal
+                - TransferSrcOptimal
+                - TransferDstOptimal
+                - Preinitialized
+                - PresentSrcKHR
+                - SharedPresentKHR
+                - DepthReadOnlyStencilAttachmentOptimalKHR
+                - DepthAttachmentStencilReadOnlyOptimalKHR
+        """
+
+        impl.validateFlagStrings(ImageLayout, newLayout)
+
+        cmdBuffer = self.__session.createCommandBuffer()
+
+        cmdBuffer.begin()
+        cmdBuffer.changeImageLayout(self, newLayout)
+        cmdBuffer.end()
+
+        self.__session.run(cmdBuffer)
+
+
     def fromHost(self, np.ndarray arr):
         """
         Copies the content of a numpy array to this image.

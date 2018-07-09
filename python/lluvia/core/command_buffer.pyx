@@ -135,7 +135,7 @@ cdef class CommandBuffer:
         img : Image.
             The image.
 
-        newLayout : std.
+        newLayout : str.
             The new layout. Its value must be one of the strings defined in lluvia.ImageLayout:
                 - Undefined
                 - General
