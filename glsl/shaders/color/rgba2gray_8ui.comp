@@ -1,5 +1,5 @@
 /**
-rgba2gray_uint8.comp
+rgba2gray_8ui.comp
 
 RGBA to Gray color conversion.
 
@@ -20,11 +20,10 @@ outputImage : r8ui uimage2D.
 #version 450
 
 #include <lluvia/core.glsl>
+#include <lluvia/core/color.glsl>
 
 layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
 layout(binding = 1, r8ui)    uniform uimage2D outputImage;
-
-const vec4 weight = vec4(0.29899999, 0.58700001, 0.114, 0.0);
 
 void main() {
 
@@ -35,9 +34,8 @@ void main() {
         return;
     }
 
-    // RGBA value as floating point
-    const vec4 RGBA   = imageLoad(inputImage, coords);
+    const uvec4 RGBA = imageLoad(inputImage, coords);
+    const uint  gray = rgba2gray(RGBA);
 
-    const float gray = dot(RGBA, weight);
     imageStore(outputImage, coords, uvec4(gray));
 }
