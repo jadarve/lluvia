@@ -1,0 +1,69 @@
+/**
+rgba2hsva_uint8.comp
+
+RGBA 2 HSVA color space conversion.
+
+The HSV values are computed as:
+
+V = max(R, G, B);
+S = V == 0.0? 0 : (V - min(R, G, B)) / V;
+
+
+H = V == R ?       60*(G - B) / (V - min(R, G, B)) :
+    V == G ? 120 + 60*(B - R) / (V - min(R, G, B)) :
+             240 + 60*(R - G) / (V - min(R, G, B));
+
+The alpha channel is passed through to the output without
+modifiations.
+
+
+Parameters
+----------
+inputImage : rgba8ui uimage2D.
+    input image.
+
+outputImage : rgba8ui uimage2D.
+    output image storing the HSVA color components.
+        - outputImage.r = H
+        - outputImage.g = S
+        - outputImage.b = V
+        - outputImage.a = A
+*/
+
+#version 450
+
+#include <lluvia/core.glsl>
+
+layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
+layout(binding = 1, rgba8ui) uniform uimage2D outputImage;
+
+void main() {
+
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
+    const ivec2 imgSize = imageSize(outputImage);
+
+    if (coords.x > imgSize.x || coords.y > imgSize.y) {
+        return;
+    }
+
+    // RGBA value as normalized floating point
+    const vec4 RGBA   = imageLoad(inputImage, coords);
+    const float R = RGBA.r / 255.0;
+    const float G = RGBA.g / 255.0;
+    const float B = RGBA.b / 255.0;
+    const float A = RGBA.a;
+    
+    const float minRGB = min(R, min(G, B));
+    
+    const float V = max(R, max(G, B));
+    const float S = V == 0.0? 0 : (V - minRGB) / V;
+    
+    const float denominator = V - minRGB;
+    
+    const float H = V == R ?       60*(G - B) / denominator :
+                    V == G ? 120 + 60*(B - R) / denominator :
+                             240 + 60*(R - G) / denominator;
+    
+    const uvec4 HSVA = uvec4(0.5*H, 255.0*S, 255.0*V, A);
+    imageStore(outputImage, coords, HSVA);
+}
