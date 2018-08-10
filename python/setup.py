@@ -14,7 +14,7 @@ from distutils.core import Extension
 
 from Cython.Build import cythonize
 
-VULKAN_SDK = os.environ['VULKAN_SDK']
+VULKAN_SDK = os.environ['VULKAN_SDK'] if os.environ.has_key('VULKAN_SDK') else ''
 
 incDirs = ['../core/include',
            os.path.join(VULKAN_SDK, 'include'),
@@ -63,18 +63,19 @@ py_packages = ['lluvia', 'lluvia.core', 'lluvia.core.impl']
 
 # package data include Cython .pxd files
 package_data = {'lluvia.core' : ['*.pxd']}
+package_dir = {'lluvia': 'src/lluvia'}
 
 #################################################
 # CYTHON EXTENSIONS
 #################################################
-GPUmodulesTable = [('lluvia.core.core_buffer'    , ['lluvia/core/core_buffer.pyx']),
-                   ('lluvia.core.command_buffer' , ['lluvia/core/command_buffer.pyx']),
-                   ('lluvia.core.compute_node'   , ['lluvia/core/compute_node.pyx']),
-                   ('lluvia.core.image'          , ['lluvia/core/image.pyx']),
-                   ('lluvia.core.io'             , ['lluvia/core/io.pyx']),
-                   ('lluvia.core.memory'         , ['lluvia/core/memory.pyx']),
-                   ('lluvia.core.program'        , ['lluvia/core/program.pyx']),
-                   ('lluvia.core.session'        , ['lluvia/core/session.pyx']),]
+GPUmodulesTable = [('lluvia.core.core_buffer'    , ['src/lluvia/core/core_buffer.pyx']),
+                   ('lluvia.core.command_buffer' , ['src/lluvia/core/command_buffer.pyx']),
+                   ('lluvia.core.compute_node'   , ['src/lluvia/core/compute_node.pyx']),
+                   ('lluvia.core.image'          , ['src/lluvia/core/image.pyx']),
+                   ('lluvia.core.io'             , ['src/lluvia/core/io.pyx']),
+                   ('lluvia.core.memory'         , ['src/lluvia/core/memory.pyx']),
+                   ('lluvia.core.program'        , ['src/lluvia/core/program.pyx']),
+                   ('lluvia.core.session'        , ['src/lluvia/core/session.pyx']),]
 
 for mod in GPUmodulesTable:
     extList = cythonize(createExtension(mod[0], mod[1]), compiler_directives=cython_directives)
@@ -94,6 +95,7 @@ setup(name='lluvia',
     packages=py_packages,
     ext_modules=extensions,
     package_data=package_data,
+    package_dir=package_dir,
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'imageio']
     )
