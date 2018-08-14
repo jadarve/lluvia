@@ -454,6 +454,58 @@ cdef class ImageView:
         pass
 
 
+    property width:
+        def __get__(self)        : return self.__image.width
+        def __set__(self, value) : raise RuntimeError('width cannot be set')
+        def __del__(self)        : pass
+
+    property height:
+        def __get__(self)        : return self.__image.height
+        def __set__(self, value) : raise RuntimeError('height cannot be set')
+        def __del__(self)        : pass
+
+    property depth:
+        def __get__(self)        : return self.__image.depth
+        def __set__(self, value) : raise RuntimeError('depth cannot be set')
+        def __del__(self)        : pass
+
+
+    property channels:
+        def __get__(self)        : return self.__image.channels
+        def __set__(self, value) : raise RuntimeError('channels cannot be set')
+        def __del__(self)        : pass
+
+
+    property shape:
+        def __get__(self)        : return self.__image.shape
+        def __set__(self, value) : raise RuntimeError('shape cannot be set')
+        def __del__(self)        : pass
+        
+
+    property channelType:
+        def __get__(self)        : return self.__image.channelType
+        def __set__(self, value) : raise RuntimeError('channelType cannot be set')
+        def __del__(self)        : pass
+
+
+    property usageFlags:
+        def __get__(self)        : return self.__image.usageFlags
+        def __set__(self, value) : raise RuntimeError('usageFlags cannot be set')
+        def __del__(self)        : pass
+
+    
+    property size:
+        def __get__(self)        : return self.__image.size
+        def __set__(self, value) : raise RuntimeError('size cannot be set')
+        def __del__(self)        : pass
+
+
+    property layout:
+        def __get__(self)        : self.__image.layout
+        def __set__(self, value) : raise RuntimeError('layout cannot be set')
+        def __del__(self)        : pass
+
+
     property filterMode:
         def __get__(self):
             return imageFilterModeToString(self.__imageView.get().getDescriptor().getFilterMode())

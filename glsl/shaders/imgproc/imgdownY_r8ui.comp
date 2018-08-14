@@ -1,5 +1,5 @@
 /**
-imgdownY_rgba8ui.comp
+imgdownY_r8ui.comp
 
 Downsample inputImage along the Y axis to half the height.
 
@@ -19,10 +19,10 @@ same height.
 
 Parameters
 ----------
-inputImage : rgba8ui uimage2D.
+inputImage : r8ui uimage2D.
     Input image of size (width, 2 * height).
 
-outputImage : rgba8ui uimage2D.
+outputImage : r8ui uimage2D.
     Output image of size (width, height).
 
 */
@@ -31,8 +31,8 @@ outputImage : rgba8ui uimage2D.
 
 #include <lluvia/core.glsl>
 
-layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
-layout(binding = 1, rgba8ui) uniform uimage2D outputImage;
+layout(binding = 0, r8ui) uniform uimage2D inputImage;
+layout(binding = 1, r8ui) uniform uimage2D outputImage;
 
 void main() {
 
@@ -49,13 +49,13 @@ void main() {
 
     const ivec2 inputImgCoords = ivec2(coords.x, 2*coords.y);
 
-    const uvec4 img_0 = imageLoad(inputImage, inputImgCoords);
+    const uint img_0 = imageLoad(inputImage, inputImgCoords).r;
 
-    const uvec4 img_m = topBorder    ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(0, -1));
-    const uvec4 img_p = bottomBorder ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(0, +1));    
+    const uint img_m = topBorder    ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(0, -1)).r;
+    const uint img_p = bottomBorder ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(0, +1)).r;    
 
     // this is equivalent to 0.5*img_0 + 0.25*(img_m + img_p)
-    const uvec4 filterValue = (img_0 >> 1) + ((img_m + img_p) >> 2);
+    const uint filterValue = (img_0 >> 1) + ((img_m + img_p) >> 2);
 
-    imageStore(outputImage, coords, filterValue);
+    imageStore(outputImage, coords, uvec4(filterValue));
 }

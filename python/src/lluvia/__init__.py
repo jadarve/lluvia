@@ -7,10 +7,14 @@
 """
 
 import core
+import util
 
 from core import *
+from .util import *
 
 __all__ = []
 __all__ += core.__all__
+__all__ += util.__all__
 
 del core
+del util

@@ -449,6 +449,10 @@ cdef class Session:
             command = ['glslc', '-o', outputFile.name] + compileFlags
 
             if includeDirs is not None:
+
+                if type(includeDirs) is str:
+                    includeDirs = [includeDirs]
+
                 for incDir in includeDirs:
                     command += ['-I', incDir]
             
