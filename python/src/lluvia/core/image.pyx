@@ -342,7 +342,7 @@ cdef class Image:
         
         currentLayout = self.layout
         nextLayout    = currentLayout if currentLayout not in ['Undefined', 'Preinitialized'] else 'General'
-        stageBuffer   = self.__memory.createBuffer(output.size, ['StorageBuffer', 'TransferSrc', 'TransferDst'])
+        stageBuffer   = self.__memory.createBuffer(output.nbytes, ['StorageBuffer', 'TransferSrc', 'TransferDst'])
         cmdBuffer     = self.__session.createCommandBuffer()
 
         cmdBuffer.begin()
