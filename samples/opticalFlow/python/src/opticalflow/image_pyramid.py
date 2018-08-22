@@ -99,6 +99,9 @@ class ImagePyramid(object):
 		levels : int.
 			Number of pyramid levels. It must be greater or equal 1.
 
+		compileOptions : dict.
+			Compile options for GLSL.
+
 		"""
 
 		self.session    = kwargs['session']
@@ -109,9 +112,9 @@ class ImagePyramid(object):
 		# The output of the pyramid are the images and image views in the
 		# Y axis.
 		self.imageX          = list()
-		self.imageOutput     = list()
+		self.outputImage     = list()
 		self.imageViewX      = list()
-		self.imageViewOutput = list()
+		self.outputImageView = list()
 
 		self.computeNodesX = list()
 		self.computeNodesY = list()
@@ -140,15 +143,15 @@ class ImagePyramid(object):
 
 	def __initImages(self):
 
-		self.imageOutput.append(self.inputImage)
-		self.imageViewOutput.append(self.inputImage.createImageView('Nearest', 'Repeat', False, False))
+		self.outputImage.append(self.inputImage)
+		self.outputImageView.append(self.inputImage.createImageView('Nearest', 'Repeat', False, False))
 
 		channels = self.inputImage.channels
 		channelType = self.inputImage.channelType
 
 		for h in range(1, self.levels):
 
-			_, height, width, _ = self.imageOutput[h-1].shape
+			_, height, width, _ = self.outputImage[h-1].shape
 
 			imgX = self.memory.createImage((height, int(width/2)), channels, channelType)
 
@@ -156,15 +159,15 @@ class ImagePyramid(object):
 			self.imageViewX.append(imgX.createImageView('Nearest', 'Repeat', False, False))
 
 			imgY = self.memory.createImage((int(height/2), int(width/2)), channels, channelType)
-			self.imageOutput.append(imgY)
-			self.imageViewOutput.append(imgY.createImageView('Nearest', 'Repeat', False, False))
+			self.outputImage.append(imgY)
+			self.outputImageView.append(imgY.createImageView('Nearest', 'Repeat', False, False))
 
 
 	def __initComputeNodes(self, compileOptions):
 
 		if self.levels == 1:
 			# nothing to compute, the outut of the pyramid is
-			# self.imageOutput[0] and self.imageViewOutput[0]
+			# self.outputImage[0] and self.outputImageView[0]
 			return
 
 		programX = self.session.compileProgram(imgdownX_r8ui, includeDirs=compileOptions['includeDirs'])
@@ -186,13 +189,13 @@ class ImagePyramid(object):
 		descY.addParameter('ImageView')
 		descY.addParameter('ImageView')
 
-		prevImageView = self.imageViewOutput[0]
+		prevImageView = self.outputImageView[0]
 
 		for h in range(self.levels -1):
 
 			imgViewX     = self.imageViewX[h]
-			imgViewY_in  = self.imageViewOutput[h]
-			imgViewY_out = self.imageViewOutput[h + 1]
+			imgViewY_in  = self.outputImageView[h]
+			imgViewY_out = self.outputImageView[h + 1]
 
 			print('level: {0}'.format(h))
 			print('\timgViewX.shape: {0}'.format(imgViewX.shape))
