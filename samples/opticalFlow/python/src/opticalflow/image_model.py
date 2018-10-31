@@ -91,8 +91,8 @@ class ImageModel(object):
         # 4 channels floating point (4 bytes)
         self.memory = self.session.createMemory('DeviceLocal', 4*4*self.inputImage.size)
         
-        _, height, width, _ = self.inputImage.shape
-        self.outputImage       = self.memory.createImage((height, width), 4, 'float32')
+        _, height, width, _  = self.inputImage.shape
+        self.outputImage     = self.memory.createImage((height, width, 4), 'float32')
         self.outputImageView = self.outputImage.createImageView('Nearest', 'Repeat', False, False)
 
 

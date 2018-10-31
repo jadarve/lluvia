@@ -153,12 +153,12 @@ class ImagePyramid(object):
 
 			_, height, width, _ = self.outputImage[h-1].shape
 
-			imgX = self.memory.createImage((height, int(width/2)), channels, channelType)
+			imgX = self.memory.createImage((height, int(width/2), channels), channelType)
 
 			self.imageX.append(imgX)
 			self.imageViewX.append(imgX.createImageView('Nearest', 'Repeat', False, False))
 
-			imgY = self.memory.createImage((int(height/2), int(width/2)), channels, channelType)
+			imgY = self.memory.createImage((int(height/2), int(width/2), channels), channelType)
 			self.outputImage.append(imgY)
 			self.outputImageView.append(imgY.createImageView('Nearest', 'Repeat', False, False))
 
