@@ -15,7 +15,7 @@ __all__ = [ 'writeComputeNode',
             'writeComputeNodeDescriptor']
 
 
-def writeComputeNodeDescriptor(ComputeNodeDescriptor desc, str filePath):
+def writeComputeNodeDescriptor(ComputeNodeDescriptor desc, filePath):
     """
     Write a compute node descriptor as a JSON file.
 
@@ -47,10 +47,11 @@ def writeComputeNodeDescriptor(ComputeNodeDescriptor desc, str filePath):
         The file path.
     """
 
+    filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
     _writeComputeNodeDescriptor(desc.__descriptor, filePath)
 
 
-def writeComputeNode(ComputeNode node, str filePath):
+def writeComputeNode(ComputeNode node, filePath):
     """
     Write a compute node as a JSON file.
 
@@ -82,4 +83,5 @@ def writeComputeNode(ComputeNode node, str filePath):
         The file path.
     """
 
+    filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
     _writeComputeNode(deref(node.__node.get()), filePath)

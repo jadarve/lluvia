@@ -28,11 +28,11 @@ from . import impl
 __all__ = ['Memory', 'MemoryPropertyFlags']
 
 
-MemoryPropertyFlags = ['DeviceLocal',
-                       'HostCached',
-                       'HostCoherent',
-                       'HostVisible',
-                       'LazylyAllocated']
+MemoryPropertyFlags = [b'DeviceLocal',
+                       b'HostCached',
+                       b'HostCoherent',
+                       b'HostVisible',
+                       b'LazylyAllocated']
 
 
 cdef class Memory:
@@ -167,10 +167,7 @@ cdef class Memory:
 
         assert(size > 0)
 
-        if type(usageFlags) is str:
-            usageFlags = [usageFlags]
-
-        impl.validateFlagStrings(core_buffer.BufferUsageFlags, usageFlags)
+        usageFlags = impl.validateFlagStrings(core_buffer.BufferUsageFlags, usageFlags, forceList=True)
 
         cdef list flagsList = usageFlags
         cdef vk.BufferUsageFlags vkUsageFlags = core_buffer.vectorStringToBufferUsageFLags(flagsList)
@@ -330,12 +327,8 @@ cdef class Memory:
         if len(shape) not in [1, 2, 3, 4]:
             raise ValueError('invalid shape length. Expected 1, 2, 3 or 4')
 
-        if type(usageFlags) is str:
-            usageFlags = [usageFlags]
-
-        impl.validateFlagStrings(image.ImageUsageFlags, usageFlags)
-        impl.validateFlagStrings(image.ImageChannelType, channelType)
-
+        usageFlags = impl.validateFlagStrings(image.ImageUsageFlags, usageFlags, forceList=True)
+        channelTypeBytes = impl.validateFlagStrings(image.ImageChannelType, channelType)
         
         cdef uint32_t width    = 0
         cdef uint32_t height   = 0
@@ -367,7 +360,7 @@ cdef class Memory:
             width    = shape[2]
             channels = shape[3]
 
-        cdef image._ChannelType cType = image.stringToChannelType(channelType)
+        cdef image._ChannelType cType = image.stringToChannelType(channelTypeBytes)
 
         cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, channels, cType)
 

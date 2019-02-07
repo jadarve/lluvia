@@ -23,66 +23,66 @@ __all__ = ['Image',
            'ImageAddressMode']
 
 
-ImageUsageFlags = ['TransferSrc',
-                   'TransferDst',
-                   'Sampled',
-                   'Storage',
-                   'ColorAttachment',
-                   'DepthStencilAttachment',
-                   'TransientAttachment',
-                   'InputAttachment']
+ImageUsageFlags = [b'TransferSrc',
+                   b'TransferDst',
+                   b'Sampled',
+                   b'Storage',
+                   b'ColorAttachment',
+                   b'DepthStencilAttachment',
+                   b'TransientAttachment',
+                   b'InputAttachment']
 
 
-ImageChannelType = ['uint8',
-                    'int8',
-                    'uint16',
-                    'int16',
-                    'float16',
-                    'uint32',
-                    'int32',
-                    'float32',
-                    'uint64',
-                    'int64',
-                    'float64']
+ImageChannelType = [b'uint8',
+                    b'int8',
+                    b'uint16',
+                    b'int16',
+                    b'float16',
+                    b'uint32',
+                    b'int32',
+                    b'float32',
+                    b'uint64',
+                    b'int64',
+                    b'float64']
 
 
-ImageChannelTypeNumpyMap = {'uint8'   : np.uint8,
-                            'int8'    : np.int8,
-                            'uint16'  : np.uint16,
-                            'int16'   : np.int16,
-                            'float16' : np.float16,
-                            'uint32'  : np.uint32,
-                            'int32'   : np.int32,
-                            'float32' : np.float32,
-                            'uint64'  : np.uint64,
-                            'int64'   : np.int64,
-                            'float64' : np.float64}
+ImageChannelTypeNumpyMap = {b'uint8'   : np.uint8,
+                            b'int8'    : np.int8,
+                            b'uint16'  : np.uint16,
+                            b'int16'   : np.int16,
+                            b'float16' : np.float16,
+                            b'uint32'  : np.uint32,
+                            b'int32'   : np.int32,
+                            b'float32' : np.float32,
+                            b'uint64'  : np.uint64,
+                            b'int64'   : np.int64,
+                            b'float64' : np.float64}
 
 
-ImageFilterMode = ['Nearest',
-                   'Linear']
+ImageFilterMode = [b'Nearest',
+                   b'Linear']
 
 
-ImageAddressMode = ['Repeat',
-                    'MirroredRepeat',
-                    'ClampToEdge',
-                    'ClampToBorder',
-                    'MirrorClampToEdge']
+ImageAddressMode = [b'Repeat',
+                    b'MirroredRepeat',
+                    b'ClampToEdge',
+                    b'ClampToBorder',
+                    b'MirrorClampToEdge']
 
 
-ImageLayout      = ['Undefined',
-                    'General',
-                    'ColorAttachmentOptimal',
-                    'DepthStencilAttachmentOptimal',
-                    'DepthStencilReadOnlyOptimal',
-                    'ShaderReadOnlyOptimal',
-                    'TransferSrcOptimal',
-                    'TransferDstOptimal',
-                    'Preinitialized',
-                    'PresentSrcKHR',
-                    'SharedPresentKHR',
-                    'DepthReadOnlyStencilAttachmentOptimalKHR',
-                    'DepthAttachmentStencilReadOnlyOptimalKHR']
+ImageLayout      = [b'Undefined',
+                    b'General',
+                    b'ColorAttachmentOptimal',
+                    b'DepthStencilAttachmentOptimal',
+                    b'DepthStencilReadOnlyOptimal',
+                    b'ShaderReadOnlyOptimal',
+                    b'TransferSrcOptimal',
+                    b'TransferDstOptimal',
+                    b'Preinitialized',
+                    b'PresentSrcKHR',
+                    b'SharedPresentKHR',
+                    b'DepthReadOnlyStencilAttachmentOptimalKHR',
+                    b'DepthAttachmentStencilReadOnlyOptimalKHR']
 
 
 cdef class Image:
@@ -216,7 +216,7 @@ cdef class Image:
             pass
 
 
-    def changeLayout(self, str newLayout):
+    def changeLayout(self, newLayout):
         """
         Changes image layout.
 
@@ -240,12 +240,12 @@ cdef class Image:
                 - DepthAttachmentStencilReadOnlyOptimalKHR
         """
 
-        impl.validateFlagStrings(ImageLayout, newLayout)
+        newLayoutFlag = impl.validateFlagStrings(ImageLayout, newLayout)
 
         cmdBuffer = self.__session.createCommandBuffer()
 
         cmdBuffer.begin()
-        cmdBuffer.changeImageLayout(self, newLayout)
+        cmdBuffer.changeImageLayout(self, newLayoutFlag)
         cmdBuffer.end()
 
         self.__session.run(cmdBuffer)
@@ -400,12 +400,12 @@ cdef class Image:
         RuntimeError : if the image view cannot be created.
         """
 
-        impl.validateFlagStrings(ImageFilterMode, [filterMode])
-        impl.validateFlagStrings(ImageAddressMode, [addressMode])
+        filterModeFlag = impl.validateFlagStrings(ImageFilterMode, filterMode)
+        addressModeFlag = impl.validateFlagStrings(ImageAddressMode, addressMode)
 
         cdef _ImageViewDescriptor desc = _ImageViewDescriptor()
-        desc.setFilterMode(stringToImageFilterMode(filterMode))
-        desc.setAddressMode(stringToImageAddressMode(addressMode))
+        desc.setFilterMode(stringToImageFilterMode(filterModeFlag))
+        desc.setAddressMode(stringToImageAddressMode(addressModeFlag))
         desc.setNormalizedCoordinates(normalizedCoordinates)
         desc.setIsSampled(sampled)
 

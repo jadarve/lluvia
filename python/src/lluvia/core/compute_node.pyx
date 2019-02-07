@@ -26,7 +26,9 @@ from libcpp.string cimport string
 
 __all__ = ['ComputeNodeDescriptor', 'ParameterType']
 
-ParameterType = ["Buffer", "ImageView", "SampledImageView"]
+ParameterType = [b'Buffer', 
+                 b'ImageView', 
+                 b'SampledImageView']
 
 
 cdef class ComputeNodeDescriptor:
@@ -58,7 +60,7 @@ cdef class ComputeNodeDescriptor:
             return self.__descriptor.getFunctionName()
 
         def __set__(self, str functionName):
-            self.__descriptor.setFunctionName(functionName)
+            self.__descriptor.setFunctionName(bytes(functionName, 'utf-8'))
 
         def __del__(self):
             pass
@@ -160,7 +162,7 @@ cdef class ComputeNodeDescriptor:
             pass
 
 
-    def addParameter(self, str paramType):
+    def addParameter(self, paramType):
         """
         Adds a parameter to the descriptor.
 
@@ -180,11 +182,12 @@ cdef class ComputeNodeDescriptor:
         ValueError : if paramType is not found in lluvia.ParameterType.
         """
 
+        paramType = bytes(paramType, 'utf-8') if type(paramType) is str else paramType
+
         if paramType not in ParameterType:
             raise ValueError('Unknown parameter type \'{0}\', expecting one of: {1}'.format(paramType, ParameterType))
 
-        cdef string cppString = paramType
-        cdef _ParameterType pType = stringToParameterType(cppString)
+        cdef _ParameterType pType = stringToParameterType(paramType)
         self.__descriptor.addParameter(pType)
 
 

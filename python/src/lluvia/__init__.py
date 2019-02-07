@@ -6,10 +6,10 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-import core
-import util
+from . import core
+from . import util
 
-from core import *
+from .core import *
 from .util import *
 
 __all__ = []

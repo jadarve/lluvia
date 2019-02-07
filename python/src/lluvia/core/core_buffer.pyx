@@ -20,15 +20,15 @@ from memory import Memory
 __all__ = ['Buffer', 'BufferUsageFlags']
 
 
-BufferUsageFlags = ['IndexBuffer',
-                    'IndirectBuffer',
-                    'StorageBuffer',
-                    'StorageTexelBuffer',
-                    'TransferDst',
-                    'TransferSrc',
-                    'UniformBuffer',
-                    'UniformTexelBuffer',
-                    'VertexBuffer']
+BufferUsageFlags = [b'IndexBuffer',
+                    b'IndirectBuffer',
+                    b'StorageBuffer',
+                    b'StorageTexelBuffer',
+                    b'TransferDst',
+                    b'TransferSrc',
+                    b'UniformBuffer',
+                    b'UniformTexelBuffer',
+                    b'VertexBuffer']
 
 
 cdef class Buffer:

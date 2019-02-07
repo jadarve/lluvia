@@ -7,9 +7,9 @@
 """
 
 
-import enum_utils
+from . import enum_utils
 
-from enum_utils import *
+from .enum_utils import *
 
 __all__ = []
 __all__ += enum_utils.__all__

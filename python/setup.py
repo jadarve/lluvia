@@ -11,10 +11,10 @@ import numpy as np
 from setuptools import setup
 from distutils.core import Extension
 
-
 from Cython.Build import cythonize
 
-VULKAN_SDK = os.environ['VULKAN_SDK'] if os.environ.has_key('VULKAN_SDK') else ''
+
+VULKAN_SDK = os.environ['VULKAN_SDK'] if 'VULKAN_SDK' in os.environ.keys() else ''
 
 incDirs = ['../core/include',
            os.path.join(VULKAN_SDK, 'include'),
