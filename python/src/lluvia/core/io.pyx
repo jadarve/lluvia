@@ -10,6 +10,8 @@ from cython.operator cimport dereference as deref
 
 from compute_node cimport ComputeNode, ComputeNodeDescriptor
 
+from . import impl
+
 
 __all__ = [ 'writeComputeNode',
             'writeComputeNodeDescriptor']
@@ -47,7 +49,7 @@ def writeComputeNodeDescriptor(ComputeNodeDescriptor desc, filePath):
         The file path.
     """
 
-    filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
+    filePath = impl.encodeString(filePath)
     _writeComputeNodeDescriptor(desc.__descriptor, filePath)
 
 
@@ -83,5 +85,5 @@ def writeComputeNode(ComputeNode node, filePath):
         The file path.
     """
 
-    filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
+    filePath = impl.encodeString(filePath)
     _writeComputeNode(deref(node.__node.get()), filePath)

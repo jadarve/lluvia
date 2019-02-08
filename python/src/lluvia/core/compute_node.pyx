@@ -8,6 +8,8 @@
 
 cimport compute_node
 
+import sys
+
 from core_buffer import Buffer
 from core_buffer cimport Buffer
 
@@ -23,6 +25,9 @@ from libc.stdint cimport uint32_t
 
 from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
+
+from . import impl
+
 
 __all__ = ['ComputeNodeDescriptor', 'ParameterType']
 
@@ -60,7 +65,7 @@ cdef class ComputeNodeDescriptor:
             return self.__descriptor.getFunctionName()
 
         def __set__(self, str functionName):
-            self.__descriptor.setFunctionName(bytes(functionName, 'utf-8'))
+            self.__descriptor.setFunctionName(impl.encodeString(functionName))
 
         def __del__(self):
             pass
@@ -182,8 +187,7 @@ cdef class ComputeNodeDescriptor:
         ValueError : if paramType is not found in lluvia.ParameterType.
         """
 
-        paramType = bytes(paramType, 'utf-8') if type(paramType) is str else paramType
-
+        paramType = impl.encodeString(paramType)
         if paramType not in ParameterType:
             raise ValueError('Unknown parameter type \'{0}\', expecting one of: {1}'.format(paramType, ParameterType))
 

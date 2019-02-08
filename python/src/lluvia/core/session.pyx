@@ -10,6 +10,7 @@ cimport session
 
 import subprocess
 import tempfile
+import sys
 
 from cython.operator cimport dereference as deref
 
@@ -170,7 +171,7 @@ cdef class Session:
         cdef program.Program prog = program.Program()
 
         try:
-            prog.__program = self.__session.get().createProgram(bytes(path, 'utf-8'))
+            prog.__program = self.__session.get().createProgram(impl.encodeString(path))
             return prog
 
         except IOError as e:
@@ -238,7 +239,7 @@ cdef class Session:
 
         cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
         
-        filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
+        filePath = impl.encodeString(filePath)
         desc.__descriptor = self.__session.get().readComputeNodeDescriptor(filePath)
         return desc
 
@@ -275,7 +276,7 @@ cdef class Session:
             The file path.
         """
 
-        filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
+        filePath = impl.encodeString(filePath)
         io.writeComputeNodeDescriptor(desc, filePath)
 
 
@@ -311,7 +312,7 @@ cdef class Session:
             The file path.
         """
 
-        filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
+        filePath = impl.encodeString(filePath)
         io.writeComputeNode(node, filePath)
 
 
@@ -354,7 +355,7 @@ cdef class Session:
         IOError : if there are problems reading the JSON file.
         """
 
-        filePath = bytes(filePath, 'utf-8') if type(filePath) is str else filePath
+        filePath = impl.encodeString(filePath)
         desc = self.readComputeNodeDescriptor(filePath)
         return self.createComputeNode(desc)
 
@@ -444,7 +445,7 @@ cdef class Session:
 
         else:
             shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
-            shaderFile.file.write(bytes(shaderCode, 'utf-8'))
+            shaderFile.file.write(impl.encodeString(shaderCode))
             shaderFile.file.flush()
 
         # temp file for SPIR-V output
