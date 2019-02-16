@@ -70,7 +70,7 @@ TEST_CASE("WriteGraph_MemoryAndBuffers", "test_IO") {
     graph->addComputeNode("node_0", node);
 
 
-    ll::writeComputeGraph(graph, "WriteGraph_MemoryAndBuffers");
+    ll::writeComputeGraph(graph, "WriteGraph_MemoryAndBuffers.json");
 }
 
 
@@ -170,7 +170,7 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
     graph->addProgram("imgToBuffer", program);
     graph->addComputeNode("node", node);
 
-    ll::writeComputeGraph(graph, "WriteGraph_ImageAndImageView");
+    ll::writeComputeGraph(graph, "WriteGraph_ImageAndImageView.json");
 }
 
 

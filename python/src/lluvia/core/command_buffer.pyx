@@ -118,7 +118,7 @@ cdef class CommandBuffer:
             deref(dst.__buffer.get()))
 
 
-    def changeImageLayout(self, Image img, str newLayout):
+    def changeImageLayout(self, Image img, newLayout):
         """
         Changes image layout.
 
@@ -151,9 +151,9 @@ cdef class CommandBuffer:
                 - DepthReadOnlyStencilAttachmentOptimalKHR
                 - DepthAttachmentStencilReadOnlyOptimalKHR
         """
-        impl.validateFlagStrings(image.ImageLayout, newLayout)
+        newLayoutFlag = impl.validateFlagStrings(image.ImageLayout, newLayout)
 
-        cdef vk.ImageLayout vkLayout = image.stringToImageLayout(newLayout)
+        cdef vk.ImageLayout vkLayout = image.stringToImageLayout(newLayoutFlag)
         self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), vkLayout)
 
 

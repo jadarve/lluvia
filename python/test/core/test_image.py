@@ -18,7 +18,7 @@ def test_creation():
     flags  = ['TransferSrc', 'TransferDst', 'Storage', 'Sampled']
     channelType = 'uint8'
 
-    img = mem.createImage([height, width], 1, channelType, flags)
+    img = mem.createImage([height, width, 1], channelType, flags)
 
     assert(img.width       == width)
     assert(img.height      == height)
@@ -44,7 +44,7 @@ def test_incorrectFlags():
     channelType = 'uint8'
 
     with pytest.raises(ValueError):
-        img = mem.createImage([height, width], 1, channelType, flags)
+        img = mem.createImage([height, width, 1], channelType, flags)
 
 
 def test_incorrectSize():
@@ -69,7 +69,7 @@ def test_incorrectSize():
     with pytest.raises(ValueError):
 
         for shape in shapes:
-            img = mem.createImage(shape[:3], shape[3], channelType)
+            img = mem.createImage(shape, channelType)
 
 
 def test_imageFromHost():

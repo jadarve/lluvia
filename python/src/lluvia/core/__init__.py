@@ -6,16 +6,16 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-import memory
-import session
+from . import memory
+from . import session
 
-from core_buffer import *
-from compute_node import *
-from image import *
-from io import *
-from memory import *
-from program import *
-from session import *
+from .core_buffer import *
+from .compute_node import *
+from .image import *
+from .io import *
+from .memory import *
+from .program import *
+from .session import *
 
 __all__ = []
 __all__ += core_buffer.__all__

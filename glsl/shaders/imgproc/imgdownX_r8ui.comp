@@ -1,0 +1,62 @@
+/**
+imgdownX_r8ui.comp
+
+Downsample inputImage along the X axis to half the width.
+
+The downsampled value at pixel p = (x, y) in the outputImage is computed
+as:
+
+outputImage(p) =   0.5*inputImage(2*p.x, p.y)
+                + 0.25*inputImage(2*p.x - 1, p.y)
+                + 0.25*inputImage(2*p.x + 1, p.y)
+
+
+The calculations of shader local and grid sizes must be performed
+in terms of the width and height of the output image. Parameter
+inputImage must have twice the width than the outputImage and the
+same height.
+
+
+Parameters
+----------
+inputImage : r8ui uimage2D.
+    Input image of size (2 * width, height).
+
+outputImage : r8ui uimage2D.
+    Output image of size (width, height).
+
+*/
+
+#version 450
+
+#include <lluvia/core.glsl>
+
+layout(binding = 0, r8ui) uniform uimage2D inputImage;
+layout(binding = 1, r8ui) uniform uimage2D outputImage;
+
+void main() {
+
+    // this coordinates are relative to outputImage size
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
+    const ivec2 imgSize = imageSize(outputImage);
+
+    if (coords.x > imgSize.x || coords.y > imgSize.y) {
+        return;
+    }
+
+    const bool leftBorder  = coords.x == 0;
+    const bool rightBorder = coords.x == imgSize.x - 1;
+
+    // image coordinates for inputImage (twice the width of outputImage)
+    const ivec2 inputImgCoords = ivec2(2*coords.x, coords.y);
+
+    const uint img_0 = imageLoad(inputImage, inputImgCoords).r;
+
+    const uint img_m = leftBorder  ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(-1, 0)).r;
+    const uint img_p = rightBorder ? img_0 : imageLoad(inputImage, inputImgCoords + ivec2(+1, 0)).r;    
+
+    // this is equivalent to 0.5*img_0 + 0.25*(img_m + img_p)
+    const uint filterValue = (img_0 >> 1) + ((img_m + img_p) >> 2);
+
+    imageStore(outputImage, coords, uvec4(filterValue));
+}

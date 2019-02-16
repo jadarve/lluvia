@@ -28,11 +28,11 @@ from . import impl
 __all__ = ['Memory', 'MemoryPropertyFlags']
 
 
-MemoryPropertyFlags = ['DeviceLocal',
-                       'HostCached',
-                       'HostCoherent',
-                       'HostVisible',
-                       'LazylyAllocated']
+MemoryPropertyFlags = [b'DeviceLocal',
+                       b'HostCached',
+                       b'HostCoherent',
+                       b'HostVisible',
+                       b'LazylyAllocated']
 
 
 cdef class Memory:
@@ -167,10 +167,7 @@ cdef class Memory:
 
         assert(size > 0)
 
-        if type(usageFlags) is str:
-            usageFlags = [usageFlags]
-
-        impl.validateFlagStrings(core_buffer.BufferUsageFlags, usageFlags)
+        usageFlags = impl.validateFlagStrings(core_buffer.BufferUsageFlags, usageFlags, forceList=True)
 
         cdef list flagsList = usageFlags
         cdef vk.BufferUsageFlags vkUsageFlags = core_buffer.vectorStringToBufferUsageFLags(flagsList)
@@ -262,39 +259,43 @@ cdef class Memory:
         return self.createBuffer(sizeBytes, usageFlags)
 
 
-    def createImage(self, shape, uint32_t channels=1, str channelType='uint8', usageFlags=['Storage', 'Sampled', 'TransferSrc', 'TransferDst']):
+    def createImage(self, shape, str channelType='uint8', usageFlags=['Storage', 'Sampled', 'TransferSrc', 'TransferDst']):
         """
         Creates a new image allocated in this memory.
 
 
         Parameters
         ----------
-        shape : list or tuple of length 1, 2 or 3.
-            Shape of the image (depth, height , width). Each dimension
-            must be greater than zero. If one or more dimensions are missing,
-            they are set to 1 by default.
+        shape : list or tuple of length 1, 2, 3 or 4.
+            Shape of the image (depth, height , width, channels). Each dimension
+            must be greater than zero. The number of channels must in the range [1, 4].
+            If one or more dimensions are missing, they are set to 1 by default.
 
             The shape is interpreted as follows:
 
                 if len(shape) is 1:
-                    depth  = 1
-                    height = 1
-                    width  = shape[0]
+                    depth    = 1
+                    height   = 1
+                    width    = shape[0]
+                    channels = 1
 
                 elif len(shape) is 2:
-                    depth  = 1
-                    height = shape[0]
-                    width  = shape[1]
+                    depth    = 1
+                    height   = shape[0]
+                    width    = shape[1]
+                    channels = 1
+
+                elif len(shape) is 3:
+                    depth    = 1
+                    height   = shape[0]
+                    width    = shape[1]
+                    channels = shape[2]
 
                 else:
-                    depth  = shape[0]
-                    height = shape[1]
-                    width  = shape[2]
-
-
-        channels : uint32. Defaults to 1.
-            Number of channels in each pixel location. The value
-            must be in the range [1, 4].
+                    depth    = shape[0]
+                    height   = shape[1]
+                    width    = shape[2]
+                    channels = shape[3]
 
         channelType : str. Defaults to 'uint8'.
             Channel type. It must be one of the strings in lluvia.ImageChannelType.
@@ -323,37 +324,43 @@ cdef class Memory:
         ValueError : if any parameter is not within its required range.
         """
 
-        if len(shape) not in [1, 2, 3]:
-            raise ValueError('invalid shape length. Expected a ')
+        if len(shape) not in [1, 2, 3, 4]:
+            raise ValueError('invalid shape length. Expected 1, 2, 3 or 4')
 
-        if type(usageFlags) is str:
-            usageFlags = [usageFlags]
-
-        impl.validateFlagStrings(image.ImageUsageFlags, usageFlags)
-        impl.validateFlagStrings(image.ImageChannelType, channelType)
-
+        usageFlags = impl.validateFlagStrings(image.ImageUsageFlags, usageFlags, forceList=True)
+        channelTypeBytes = impl.validateFlagStrings(image.ImageChannelType, channelType)
         
-        cdef uint32_t width  = 0
-        cdef uint32_t height = 0
-        cdef uint32_t depth  = 0
+        cdef uint32_t width    = 0
+        cdef uint32_t height   = 0
+        cdef uint32_t depth    = 0
+        cdef uint32_t channels = 0
 
         ndim = len(shape)
         if ndim is 1:
-            depth  = 1
-            height = 1
-            width  = shape[0]
+            depth    = 1
+            height   = 1
+            width    = shape[0]
+            channels = 1
 
         elif ndim is 2:
-            depth  = 1
-            height = shape[0]
-            width  = shape[1]
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = 1
+
+        elif ndim is 3:
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = shape[2]
 
         else:
-            depth  = shape[0]
-            height = shape[1]
-            width  = shape[2]
+            depth    = shape[0]
+            height   = shape[1]
+            width    = shape[2]
+            channels = shape[3]
 
-        cdef image._ChannelType cType = image.stringToChannelType(channelType)
+        cdef image._ChannelType cType = image.stringToChannelType(channelTypeBytes)
 
         cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, channels, cType)
 
@@ -457,7 +464,7 @@ cdef class Memory:
 
         channelType = str(arr.dtype)
 
-        img = self.createImage((depth, height, width), channels, channelType, usageFlags)
+        img = self.createImage((depth, height, width, channels), channelType, usageFlags)
         img.fromHost(arr)
         
         return img

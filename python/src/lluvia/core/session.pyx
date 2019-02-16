@@ -10,6 +10,7 @@ cimport session
 
 import subprocess
 import tempfile
+import sys
 
 from cython.operator cimport dereference as deref
 
@@ -134,7 +135,7 @@ cdef class Session:
             flags = [flags]
 
         # sanitize flags
-        impl.validateFlagStrings(memory.MemoryPropertyFlags, flags)
+        flags = impl.validateFlagStrings(memory.MemoryPropertyFlags, flags, forceList=True)
 
         # convert flags to vk.MemoryPropertyFlags
         cdef list flagsList = flags
@@ -170,7 +171,7 @@ cdef class Session:
         cdef program.Program prog = program.Program()
 
         try:
-            prog.__program = self.__session.get().createProgram(path)
+            prog.__program = self.__session.get().createProgram(impl.encodeString(path))
             return prog
 
         except IOError as e:
@@ -197,7 +198,7 @@ cdef class Session:
         return node
 
 
-    def readComputeNodeDescriptor(self, str filePath):
+    def readComputeNodeDescriptor(self, filePath):
         """
         Reads a ComputeNodeDescriptor from a given file.
 
@@ -238,11 +239,12 @@ cdef class Session:
 
         cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
         
+        filePath = impl.encodeString(filePath)
         desc.__descriptor = self.__session.get().readComputeNodeDescriptor(filePath)
         return desc
 
 
-    def writeComputeNodeDescriptor(self, ComputeNodeDescriptor desc, str filePath):
+    def writeComputeNodeDescriptor(self, ComputeNodeDescriptor desc, filePath):
         """
         Write a compute node descriptor as a JSON file.
 
@@ -274,10 +276,11 @@ cdef class Session:
             The file path.
         """
 
+        filePath = impl.encodeString(filePath)
         io.writeComputeNodeDescriptor(desc, filePath)
 
 
-    def writeComputeNode(self, ComputeNode node, str filePath):
+    def writeComputeNode(self, ComputeNode node, filePath):
         """
         Write a compute node as a JSON file.
 
@@ -309,10 +312,11 @@ cdef class Session:
             The file path.
         """
 
+        filePath = impl.encodeString(filePath)
         io.writeComputeNode(node, filePath)
 
 
-    def readComputeNode(self, str filePath):
+    def readComputeNode(self, filePath):
         """
         Reads a ComputeNode from a given file.
 
@@ -351,6 +355,7 @@ cdef class Session:
         IOError : if there are problems reading the JSON file.
         """
 
+        filePath = impl.encodeString(filePath)
         desc = self.readComputeNodeDescriptor(filePath)
         return self.createComputeNode(desc)
 
@@ -435,12 +440,12 @@ cdef class Session:
 
         shaderFile = None
 
-        if type(shaderCode) is file:
+        if type(shaderCode) is not str:
             shaderFile = shaderCode
 
         else:
             shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
-            shaderFile.file.writelines(shaderCode)
+            shaderFile.file.write(impl.encodeString(shaderCode))
             shaderFile.file.flush()
 
         # temp file for SPIR-V output
@@ -449,12 +454,16 @@ cdef class Session:
             command = ['glslc', '-o', outputFile.name] + compileFlags
 
             if includeDirs is not None:
+
+                if type(includeDirs) is str:
+                    includeDirs = [includeDirs]
+
                 for incDir in includeDirs:
                     command += ['-I', incDir]
             
             command.append(shaderFile.name)
             command = ' '.join(command)
-            
+
             proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             proc.wait()
             
