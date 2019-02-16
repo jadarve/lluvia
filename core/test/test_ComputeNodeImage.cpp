@@ -52,7 +52,8 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
                     .setWidth(WIDTH)
                     .setHeight(HEIGHT)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(1);
+                    .setChannelCount(1)
+                    .setUsageFlags(imgUsageFlags);
 
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize()*sizeof(uint32_t));
@@ -68,7 +69,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
         }
     }
 
-    auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
+    auto image = deviceMemory->createImage(imgDesc);
 
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setNormalizedCoordinates(false)
@@ -170,7 +171,8 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
                     .setWidth(WIDTH)
                     .setHeight(HEIGHT)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(1);
+                    .setChannelCount(1)
+                    .setUsageFlags(imgUsageFlags);
 
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize()*sizeof(uint32_t));
@@ -186,7 +188,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
         }
     } // unamp bufMapped
 
-    auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
+    auto image = deviceMemory->createImage(imgDesc);
 
     // image view descriptor for a storage image
     auto imgViewDesc = ll::ImageViewDescriptor {}

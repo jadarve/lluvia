@@ -39,8 +39,10 @@ ImageDescriptor::ImageDescriptor(const uint32_t width,
                                  const uint32_t height,
                                  const uint32_t depth,
                                  const uint32_t channelCount,
-                                 ll::ChannelType channelType):
-    channelType  {channelType} {
+                                 const ll::ChannelType channelType,
+                                 const vk::ImageUsageFlags usageFlags):
+    channelType  {channelType},
+    usageFlags   {usageFlags} {
 
     setWidth(width);
     setHeight(height);
@@ -83,6 +85,12 @@ ImageDescriptor& ImageDescriptor::setDepth(const uint32_t depth) noexcept {
     return *this;
 }
 
+ImageDescriptor& ImageDescriptor::setUsageFlags(const vk::ImageUsageFlags flags) noexcept {
+
+    this->usageFlags = flags;
+    return *this;
+}
+
 
 ll::ChannelType ImageDescriptor::getChannelType() const noexcept {
     return channelType;
@@ -122,6 +130,7 @@ vk::ImageType ImageDescriptor::getImageType() const noexcept {
 
     return vk::ImageType::e3D;
 }
+
 
 vk::Format ImageDescriptor::getFormat() const noexcept {
 
@@ -194,6 +203,11 @@ vk::Format ImageDescriptor::getFormat() const noexcept {
 
     // this code should not be reached.
     throw std::runtime_error("channel count must be between 1 and 4, got: " + std::to_string(channelCount));
+}
+
+
+vk::ImageUsageFlags ImageDescriptor::getUsageFlags() const noexcept {
+    return usageFlags;
 }
 
 } // namespace ll

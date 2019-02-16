@@ -291,8 +291,7 @@ private:
           const ll::ImageDescriptor& descriptor,
           const std::shared_ptr<ll::Memory>& memory,
           const ll::MemoryAllocationInfo& allocInfo,
-          const vk::ImageLayout layout,
-          const vk::ImageUsageFlags usageFlags);
+          const vk::ImageLayout layout);
 
     ll::ImageDescriptor descriptor;
     ll::MemoryAllocationInfo allocInfo;
@@ -300,7 +299,6 @@ private:
     vk::Device          device;
     vk::Image           vkImage;
     vk::ImageLayout     vkLayout;
-    vk::ImageUsageFlags vkUsageFlags;
 
     // Shared pointer to the memory this image was created from
     // This will keep the memory alive until this image is deleted

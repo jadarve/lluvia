@@ -104,13 +104,14 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
                     .setWidth(WIDTH)
                     .setHeight(HEIGHT)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(1);
+                    .setChannelCount(1)
+                    .setUsageFlags(imgUsageFlags);
 
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize()*sizeof(uint32_t));
 
 
-    auto image = deviceMemory->createImage(imgDesc, imgUsageFlags);
+    auto image = deviceMemory->createImage(imgDesc);
     REQUIRE(image != nullptr);
 
     auto cmdBuffer = session->createCommandBuffer();

@@ -233,8 +233,6 @@ public:
     the image is deleted.
     
     @param[in]  descriptor  The image descriptor.
-    @param[in]  usageFlags  The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
-                See @VULKAN_DOC#VkBufferUsageFlagBits
 
     @throws     std::system_error if the Vulkan memory does not support allocating image objects.
 
@@ -244,9 +242,7 @@ public:
 
     @return     A new ll::Image object.
     */
-    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor,
-        const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
-                                                | vk::ImageUsageFlagBits::eSampled});
+    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor);
     
     /**
     @brief      Accepts a visitor to this memory.

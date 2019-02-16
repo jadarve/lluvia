@@ -61,15 +61,16 @@ int main(int argc, const char** argv) {
 
     auto memory = session->createMemory(inputImageMemFlags, imageSize, false);
 
+    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc;
+    
     auto imgDesc = ll::ImageDescriptor {static_cast<uint32_t>(image.width),
                                         static_cast<uint32_t>(image.height),
                                         1,
                                         static_cast<uint32_t>(image.channels),
-                                        channelType};
-    
-    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc;
+                                        channelType,
+                                        imgFlags};
 
-    auto inputImage = memory->createImage(imgDesc, imgFlags);
+    auto inputImage = memory->createImage(imgDesc);
 
     // stage buffer
     const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;

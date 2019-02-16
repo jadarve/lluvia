@@ -45,7 +45,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
     // create downsampled images
     const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferSrc;
-    auto imgDesc = ll::ImageDescriptor {width, height, 1, channels, channelType};
+    auto imgDesc = ll::ImageDescriptor {width, height, 1, channels, channelType, imgFlags};
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setIsSampled(false)
                         .setNormalizedCoordinates(false);
@@ -62,7 +62,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         width /= 2;
         imgDesc.setWidth(width);
 
-        auto imgDownX = memory->createImage(imgDesc, imgFlags);
+        auto imgDownX = memory->createImage(imgDesc);
         auto imgViewDownX = imgDownX->createImageView(imgViewDesc);
         imageViewsX.push_back(imgViewDownX);
         cmdBuffer->changeImageLayout(*imgDownX, vk::ImageLayout::eGeneral);
@@ -73,7 +73,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         height /= 2;
         imgDesc.setHeight(height);
 
-        auto imgDownY = memory->createImage(imgDesc, imgFlags);
+        auto imgDownY = memory->createImage(imgDesc);
         auto imgViewDownY = imgDownY->createImageView(imgViewDesc);
         imageViewsY.push_back(imgViewDownY);
         cmdBuffer->changeImageLayout(*imgDownY, vk::ImageLayout::eGeneral);
