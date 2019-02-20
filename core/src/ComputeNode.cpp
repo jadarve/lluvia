@@ -53,8 +53,8 @@ ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, cons
     auto specializationInfo = vk::SpecializationInfo()
         .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
         .setPMapEntries(specializationMapEntries.data())
-        .setDataSize(descriptor.localGroup.size()*sizeof(uint32_t))
-        .setPData(&descriptor.localGroup[0]);
+        .setDataSize(sizeof(ll::vec3ui))
+        .setPData(&descriptor.localGroup);
 
     /////////////////////////////////////////////
     // Pipeline stage info
@@ -134,47 +134,59 @@ const ll::ComputeNodeDescriptor& ComputeNode::getDescriptor() const noexcept {
 
 
 uint32_t ComputeNode::getLocalX() const noexcept {
-    return descriptor.localGroup[0];
+    return descriptor.getLocalX();
 }
 
 
 uint32_t ComputeNode::getLocalY() const noexcept {
-    return descriptor.localGroup[1];
+    return descriptor.getLocalY();
 }
 
 
 uint32_t ComputeNode::getLocalZ() const noexcept {
-    return descriptor.localGroup[2];
+    return descriptor.getLocalZ();
+}
+
+ll::vec3ui ComputeNode::getLocalShape() const noexcept {
+    return descriptor.getLocalShape();
 }
 
 
 uint32_t ComputeNode::getGridX() const noexcept {
-    return descriptor.globalGroup[0];
+    return descriptor.getGridX();
 }
 
 
 void ComputeNode::setGridX(const uint32_t x) noexcept {
-    descriptor.globalGroup[0] = x;
+    descriptor.setGridX(x);
 }
 
 
 uint32_t ComputeNode::getGridY() const noexcept {
-    return descriptor.globalGroup[1];
+    return descriptor.getGridY();
 }
 
 
 void ComputeNode::setGridY(const uint32_t y) noexcept {
-    descriptor.globalGroup[1] = y;
+    descriptor.setGridY(y);
 }
 
 
 uint32_t ComputeNode::getGridZ() const noexcept {
-    return descriptor.globalGroup[2];
+    return descriptor.getGridZ();
 }
 
 
 void ComputeNode::setGridZ(const uint32_t z) noexcept {
-    descriptor.globalGroup[2] = z;
+    descriptor.setGridZ(z);
+}
+
+void ComputeNode::setGridShape(const ll::vec3ui& shape) noexcept {
+    descriptor.setGridShape(shape);
+}
+
+ll::vec3ui ComputeNode::getGridShape() const noexcept {
+    return descriptor.getGridShape();
 }
 
 
@@ -210,8 +222,18 @@ void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
 void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
-    commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eCompute, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
-    commandBuffer.dispatch(descriptor.globalGroup[0], descriptor.globalGroup[1], descriptor.globalGroup[2]);
+    
+    commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eCompute,
+                                     pipelineLayout,
+                                     0,
+                                     1,
+                                     &descriptorSet,
+                                     0,
+                                     nullptr);
+
+    commandBuffer.dispatch(descriptor.globalGroup.x,
+                           descriptor.globalGroup.y,
+                           descriptor.globalGroup.z);
 }
 
 

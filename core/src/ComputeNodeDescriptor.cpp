@@ -101,7 +101,7 @@ ll::ParameterType ComputeNodeDescriptor::getParameterTypeAt(const size_t& i) con
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
 
     assert(x >= 1);
-    globalGroup[0] = x;
+    globalGroup.x = x;
     return *this;
 }
 
@@ -109,7 +109,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcep
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcept {
 
     assert(y >= 1);
-    globalGroup[1] = y;
+    globalGroup.y = y;
     return *this;
 }
 
@@ -117,7 +117,17 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcep
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcept {
 
     assert(z >= 1);
-    globalGroup[2] = z;
+    globalGroup.z = z;
+    return *this;
+}
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridShape(const ll::vec3ui& shape) noexcept {
+
+    assert(shape.x >= 1);
+    assert(shape.y >= 1);
+    assert(shape.z >= 1);
+
+    globalGroup = shape;
     return *this;
 }
 
@@ -125,7 +135,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcep
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexcept {
 
     assert(x >= 1);
-    localGroup[0] = x;
+    localGroup.x = x;
     return *this;
 }
 
@@ -133,7 +143,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexce
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexcept {
 
     assert(y >= 1);
-    localGroup[1] = y;
+    localGroup.y = y;
     return *this;
 }
 
@@ -141,10 +151,20 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexce
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexcept {
 
     assert(z >= 1);
-    localGroup[2] = z;
+    localGroup.z = z;
     return *this;
 }
 
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalShape(const ll::vec3ui& shape) noexcept {
+
+    assert(shape.x >= 1);
+    assert(shape.y >= 1);
+    assert(shape.z >= 1);
+
+    localGroup = shape;
+    return *this;
+}
 
 std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
@@ -170,43 +190,43 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 }
 
 
-const std::array<uint32_t, 3>& ComputeNodeDescriptor::getGridSize() const noexcept {
+ll::vec3ui ComputeNodeDescriptor::getGridShape() const noexcept {
     return globalGroup;
 }
 
 
-const std::array<uint32_t, 3>& ComputeNodeDescriptor::getLocalSize() const noexcept {
+ll::vec3ui ComputeNodeDescriptor::getLocalShape() const noexcept {
     return localGroup;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridX() const noexcept {
-    return globalGroup[0];
+    return globalGroup.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridY() const noexcept {
-    return globalGroup[1];
+    return globalGroup.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridZ() const noexcept {
-    return globalGroup[2];
+    return globalGroup.z;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalX() const noexcept {
-    return localGroup[0];
+    return localGroup.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalY() const noexcept {
-    return localGroup[1];
+    return localGroup.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalZ() const noexcept {
-    return localGroup[2];
+    return localGroup.z;
 }
 
 

@@ -114,6 +114,13 @@ public:
     */
     uint32_t getLocalZ() const noexcept;
 
+    /**
+    @brief      Gets the local group shape.
+    
+    @return     The local shape.
+    */
+    ll::vec3ui getLocalShape() const noexcept;
+
 
     /**
     @brief      Gets the grid size in X dimension.
@@ -195,6 +202,30 @@ public:
     */
     void setGridZ(const uint32_t z) noexcept;
 
+    /**
+    @brief      Sets the grid shape.
+
+    The grid size defines the number of local groups to be run
+    during the execution of a compute node shader program.
+
+    Parameter \p z corresponds to the `groupCountZ` parameter in
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
+    for more information.
+    
+    @param[in]  shape  The grid shape. Each XYZ component must be greater than zero.
+    
+    @return     A reference to this object.
+    */
+    void setGridShape(const ll::vec3ui& shape) noexcept;
+
+    /**
+    @brief      Gets the grid shape.
+    
+    See ll::ComputeNodeDescriptor::getGridShape for more information.
+
+    @return     The grid shape.
+    */
+    ll::vec3ui getGridShape() const noexcept;
 
     /**
     @brief      Gets the parameter count for this node.
@@ -202,7 +233,6 @@ public:
     @return     The parameter count.
     */
     size_t getParameterCount() const noexcept;
-
 
     /**
     @brief      Returns the object associated to parameter \p index.
