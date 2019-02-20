@@ -9,6 +9,7 @@
 #define LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
 
 #include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/types.h"
 
 #include <array>
 #include <cstdint>
@@ -214,6 +215,20 @@ public:
     */
     ImageDescriptor& setDepth(const uint32_t depth)             noexcept;
 
+    /**
+    @brief      Sets the image shape.
+    
+    @param[in]  shape  The shape. The components of this vector
+        must be interpreted as:
+        
+            x : width
+            y : height
+            z : depth
+    
+    @return     A reference to this object.
+    */
+    ImageDescriptor& setShape(const ll::vec3ui& shape)          noexcept;
+
 
     /**
     @brief      Sets the usage flags.
@@ -273,6 +288,19 @@ public:
     uint64_t getSize()               const noexcept;
 
     /**
+    @brief      Gets the shape of the image.
+    
+    The vec3ui object returned must be interpreted as follows:
+
+        x : width
+        y : height
+        z : depth
+
+    @return     The shape.
+    */
+    ll::vec3ui getShape() const noexcept;
+
+    /**
     @brief      Gets the Vulkan image type.
 
     It is implemented as:
@@ -312,9 +340,11 @@ private:
     ll::ChannelType channelType  {ll::ChannelType::Uint8};
     uint32_t channelCount        {1};
 
-    uint32_t width  {1};
-    uint32_t height {1};
-    uint32_t depth  {1};
+    // dimensions along each axis
+    // x : width
+    // y : height
+    // z : depth
+    ll::vec3ui shape             {1, 1, 1};
 
     vk::ImageUsageFlags usageFlags;
 };

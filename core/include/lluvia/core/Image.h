@@ -9,9 +9,10 @@
 #define LLUVIA_CORE_IMAGE_H_
 
 #include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
-#include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/types.h"
 
 #include <vulkan/vulkan.hpp>
 
@@ -275,6 +276,18 @@ public:
     */
     uint32_t getDepth()              const noexcept;
 
+    /**
+    @brief      Gets the shape of the image.
+    
+    The vec3ui object returned must be interpreted as follows:
+
+        x : width
+        y : height
+        z : depth
+
+    @return     The shape.
+    */
+    ll::vec3ui getShape() const noexcept;
 
     /**
     @brief      Creates an image view from this image.

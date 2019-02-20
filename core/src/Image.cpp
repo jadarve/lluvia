@@ -88,6 +88,10 @@ uint32_t Image::getDepth() const noexcept {
     return descriptor.getDepth();
 }
 
+ll::vec3ui Image::getShape() const noexcept {
+    return descriptor.getShape();
+}
+
 std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescriptor& descriptor) {
 
     return std::shared_ptr<ll::ImageView> {new ll::ImageView {device, shared_from_this(), descriptor}};

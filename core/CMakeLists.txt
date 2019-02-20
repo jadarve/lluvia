@@ -63,6 +63,7 @@ add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp      
 add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp               lluvia-core)
 add_catchTest (test_ComputeNodeImage         test/test_ComputeNodeImage.cpp          lluvia-core)
 add_catchTest (test_IO                       test/test_IO.cpp                        lluvia-core)
+add_catchTest (test_utils                    test/test_utils.cpp                     lluvia-core)
 
 
 # store variables in the cache
