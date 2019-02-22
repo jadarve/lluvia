@@ -7,6 +7,9 @@
 
 #include "lluvia/core/utils.h"
 
+#include <algorithm>
+#include <cmath>
+
 
 namespace ll {
 

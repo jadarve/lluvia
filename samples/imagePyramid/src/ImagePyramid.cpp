@@ -67,7 +67,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         imageViewsX.push_back(imgViewDownX);
         cmdBuffer->changeImageLayout(*imgDownX, vk::ImageLayout::eGeneral);
 
-        std::cout << "X: " << imgDownX->getAllocationInfo() << std::endl;
+        std::cout << "X: [" << imgDownX->getWidth() << ", " << imgDownX->getHeight() << ", " << imgDownX->getChannelCount() << "]: " << imgDownX->getAllocationInfo() << std::endl;
 
 
         height /= 2;
@@ -78,7 +78,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         imageViewsY.push_back(imgViewDownY);
         cmdBuffer->changeImageLayout(*imgDownY, vk::ImageLayout::eGeneral);
 
-        std::cout << "Y: " << imgDownY->getAllocationInfo() << std::endl;
+        std::cout << "Y: [" << imgDownY->getWidth() << ", " << imgDownY->getHeight() << "]: " << imgDownY->getAllocationInfo() << std::endl;
     }
 
 
@@ -92,10 +92,6 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
 
 void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
-
-    auto getGridSize = [](const auto size, const auto localSize) {
-        return static_cast<uint32_t>(std::ceil(static_cast<double>(size) / static_cast<double>(localSize)));
-    };
 
     // Shader parameters
     //
@@ -111,16 +107,14 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
     auto descX = ll::ComputeNodeDescriptor {}
         .setProgram(programX)
         .setFunctionName("main")
-        .setLocalX(32)
-        .setLocalY(32)
+        .setLocalShape({32, 32, 1})
         .addParameter(ll::ParameterType::ImageView)
         .addParameter(ll::ParameterType::ImageView);
 
     auto descY = ll::ComputeNodeDescriptor {}
         .setProgram(programY)
         .setFunctionName("main")
-        .setLocalX(32)
-        .setLocalY(32)
+        .setLocalShape({32, 32, 1})
         .addParameter(ll::ParameterType::ImageView)
         .addParameter(ll::ParameterType::ImageView);
 
@@ -133,8 +127,7 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         width /= 2;
 
         auto descX_i = ll::ComputeNodeDescriptor {descX}
-            .setGridX(getGridSize(width,  descX.getLocalX()))
-            .setGridY(getGridSize(height, descX.getLocalY()));
+            .configureGridShape({width, height, 1});
 
         auto nodeX = session->createComputeNode(descX_i);
         nodeX->bind(0, imageViewsY[i]);
@@ -144,8 +137,7 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         height /= 2;
 
         auto descY_i = ll::ComputeNodeDescriptor {descY}
-            .setGridX(getGridSize(width,  descY.getLocalX()))
-            .setGridY(getGridSize(height, descY.getLocalY()));
+            .configureGridShape({width, height, 1});
 
         auto nodeY = session->createComputeNode(descY_i);
         nodeY->bind(0, imageViewsX[i]);
@@ -173,14 +165,14 @@ void ImagePyramid::writeAllImages(std::shared_ptr<ll::Session> session) {
     auto i = 0u;
     for (auto imgViewX : imageViewsX) {
 
-        writeImage(session, imgViewX->getImage(), "imgX_" + std::to_string(i) + ".jpg");
+        writeImage(session, imgViewX->getImage(), "imgX_" + std::to_string(i) + ".bmp");
         ++ i;
     }
 
     i = 0u;
     for (auto imgViewY : imageViewsY) {
 
-        writeImage(session, imgViewY->getImage(), "imgY_" + std::to_string(i) + ".jpg");
+        writeImage(session, imgViewY->getImage(), "imgY_" + std::to_string(i) + ".bmp");
         ++ i;
     }
 }
@@ -207,8 +199,8 @@ void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_
     session->run(*cmdBuffer);
 
     auto mapPtr = hostImage->map<uint8_t>();
-    const auto res = stbi_write_jpg(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr.get(), 100);
+    const auto res = stbi_write_bmp(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr.get());
 
-    std::cout << "stbi_write_jpg result: " << res << std::endl;
+    std::cout << "stbi_write_bmp result: " << res << std::endl;
 }
 

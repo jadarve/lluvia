@@ -112,6 +112,26 @@ inline std::error_code createErrorCode(ll::ErrorCode errorCode) {
     return std::error_code {static_cast<int>(errorCode), ErrorCategory::getInstance()};
 }
 
+
+/**
+@brief      Throws exception E if condition is not fulfilled.
+
+@param[in]  condition  The condition
+@param      msg        The message
+
+@tparam     E          { exception type }
+@tparam     T          { error message }
+*/
+template<typename E, typename  T>
+void throwIfNot(bool condition, T&& msg) {
+
+    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
+
+    if(!condition) {
+        throw E {msg};
+    }
+}
+
 } // namespace ll
 
 #endif // LLUVIA_CORE_ERROR_H_

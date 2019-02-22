@@ -8,10 +8,12 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 
 #include "lluvia/core/error.h"
+#include "lluvia/core/utils.h"
 #include "lluvia/core/Program.h"
 
 #include <cassert>
 #include <exception>
+#include <stdexcept>
 #include <vector>
 #include <iostream>
 
@@ -98,71 +100,76 @@ ll::ParameterType ComputeNodeDescriptor::getParameterTypeAt(const size_t& i) con
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) {
 
-    assert(x >= 1);
-    globalGroup.x = x;
+    ll::throwIfNot<std::invalid_argument>(x >= 1, "ComputeNodeDescriptor::setGridX(): x must be greater than 1");
+    gridShape.x = x;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) {
 
-    assert(y >= 1);
-    globalGroup.y = y;
+    ll::throwIfNot<std::invalid_argument>(y >= 1, "ComputeNodeDescriptor::setGridY(): y must be greater than 1");
+    gridShape.y = y;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) {
 
-    assert(z >= 1);
-    globalGroup.z = z;
+    ll::throwIfNot<std::invalid_argument>(z >= 1, "ComputeNodeDescriptor::setGridZ(): z must be greater than 1");
+    gridShape.z = z;
     return *this;
 }
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setGridShape(const ll::vec3ui& shape) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridShape(const ll::vec3ui& shape) {
 
-    assert(shape.x >= 1);
-    assert(shape.y >= 1);
-    assert(shape.z >= 1);
+    ll::throwIfNot<std::invalid_argument>(shape.x >= 1, "ComputeNodeDescriptor::setGridShape(): x must be greater than 1");
+    ll::throwIfNot<std::invalid_argument>(shape.y >= 1, "ComputeNodeDescriptor::setGridShape(): y must be greater than 1");
+    ll::throwIfNot<std::invalid_argument>(shape.z >= 1, "ComputeNodeDescriptor::setGridShape(): z must be greater than 1");
 
-    globalGroup = shape;
+    gridShape = shape;
     return *this;
 }
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::configureGridShape(const ll::vec3ui& globalShape) {
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexcept {
-
-    assert(x >= 1);
-    localGroup.x = x;
+    gridShape = ll::configureGridShape(localShape, globalShape);
     return *this;
 }
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) {
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexcept {
-
-    assert(y >= 1);
-    localGroup.y = y;
-    return *this;
-}
-
-
-ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexcept {
-
-    assert(z >= 1);
-    localGroup.z = z;
+    ll::throwIfNot<std::invalid_argument>(x >= 1, "ComputeNodeDescriptor::setLocalX(): x must be greater than 1");
+    localShape.x = x;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalShape(const ll::vec3ui& shape) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) {
 
-    assert(shape.x >= 1);
-    assert(shape.y >= 1);
-    assert(shape.z >= 1);
+    ll::throwIfNot<std::invalid_argument>(y >= 1, "ComputeNodeDescriptor::setLocalY(): y must be greater than 1");
+    localShape.y = y;
+    return *this;
+}
 
-    localGroup = shape;
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) {
+
+    ll::throwIfNot<std::invalid_argument>(z >= 1, "ComputeNodeDescriptor::setLocalZ(): z must be greater than 1");
+    localShape.z = z;
+    return *this;
+}
+
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalShape(const ll::vec3ui& shape) {
+
+    ll::throwIfNot<std::invalid_argument>(shape.x >= 1, "ComputeNodeDescriptor::setLocalShape(): x must be greater than 1");
+    ll::throwIfNot<std::invalid_argument>(shape.y >= 1, "ComputeNodeDescriptor::setLocalShape(): y must be greater than 1");
+    ll::throwIfNot<std::invalid_argument>(shape.z >= 1, "ComputeNodeDescriptor::setLocalShape(): z must be greater than 1");
+
+    localShape = shape;
     return *this;
 }
 
@@ -191,42 +198,44 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 
 
 ll::vec3ui ComputeNodeDescriptor::getGridShape() const noexcept {
-    return globalGroup;
+    return gridShape;
 }
 
 
+
+
 ll::vec3ui ComputeNodeDescriptor::getLocalShape() const noexcept {
-    return localGroup;
+    return localShape;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridX() const noexcept {
-    return globalGroup.x;
+    return gridShape.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridY() const noexcept {
-    return globalGroup.y;
+    return gridShape.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridZ() const noexcept {
-    return globalGroup.z;
+    return gridShape.z;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalX() const noexcept {
-    return localGroup.x;
+    return localShape.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalY() const noexcept {
-    return localGroup.y;
+    return localShape.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalZ() const noexcept {
-    return localGroup.z;
+    return localShape.z;
 }
 
 

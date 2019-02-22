@@ -195,7 +195,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridX(const uint32_t x) noexcept;
+    ComputeNodeDescriptor& setGridX(const uint32_t x);
 
 
     /**
@@ -212,7 +212,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridY(const uint32_t y) noexcept;
+    ComputeNodeDescriptor& setGridY(const uint32_t y);
 
 
     /**
@@ -229,7 +229,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridZ(const uint32_t z) noexcept;
+    ComputeNodeDescriptor& setGridZ(const uint32_t z);
 
     /**
     @brief      Sets the grid shape.
@@ -245,7 +245,10 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridShape(const ll::vec3ui& shape) noexcept;
+    ComputeNodeDescriptor& setGridShape(const ll::vec3ui& shape);
+
+
+    ComputeNodeDescriptor& configureGridShape(const ll::vec3ui& globalShape);
 
 
     /**
@@ -255,7 +258,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalX(const uint32_t x) noexcept;
+    ComputeNodeDescriptor& setLocalX(const uint32_t x);
 
 
     /**
@@ -265,7 +268,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalY(const uint32_t y) noexcept;
+    ComputeNodeDescriptor& setLocalY(const uint32_t y);
 
 
     /**
@@ -275,7 +278,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalZ(const uint32_t z) noexcept;
+    ComputeNodeDescriptor& setLocalZ(const uint32_t z);
 
 
     /**
@@ -285,7 +288,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalShape(const ll::vec3ui& shape) noexcept;
+    ComputeNodeDescriptor& setLocalShape(const ll::vec3ui& shape);
 
     /**
     @brief      Gets the Vulkan descriptor pool sizes needed for this compute node.
@@ -384,8 +387,8 @@ private:
     std::vector<vk::DescriptorSetLayoutBinding> parameterBindings;
 
     // local and global work group
-    ll::vec3ui localGroup  {1, 1, 1};
-    ll::vec3ui globalGroup {1, 1, 1};
+    ll::vec3ui localShape {1, 1, 1};
+    ll::vec3ui gridShape  {1, 1, 1};
 
 
 friend class ComputeNode;

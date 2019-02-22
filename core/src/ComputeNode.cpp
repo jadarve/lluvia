@@ -54,7 +54,7 @@ ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, cons
         .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
         .setPMapEntries(specializationMapEntries.data())
         .setDataSize(sizeof(ll::vec3ui))
-        .setPData(&descriptor.localGroup);
+        .setPData(&descriptor.localShape);
 
     /////////////////////////////////////////////
     // Pipeline stage info
@@ -231,9 +231,9 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
                                      0,
                                      nullptr);
 
-    commandBuffer.dispatch(descriptor.globalGroup.x,
-                           descriptor.globalGroup.y,
-                           descriptor.globalGroup.z);
+    commandBuffer.dispatch(descriptor.gridShape.x,
+                           descriptor.gridShape.y,
+                           descriptor.gridShape.z);
 }
 
 
