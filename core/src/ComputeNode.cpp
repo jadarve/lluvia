@@ -17,6 +17,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <stdexcept>
 
 namespace ll {
 
@@ -36,6 +37,10 @@ ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, cons
     if (descriptor.functionName.empty()) {
         throw std::system_error(createErrorCode(ll::ErrorCode::InvalidShaderFunctionName), "Shader function name must be different than empty string.");
     }
+
+    ll::throwIfNot<std::invalid_argument>(descriptor.localShape.x > 0, "ComputeNode::ComputeNode(): descriptor local shape X must be greater than zero");
+    ll::throwIfNot<std::invalid_argument>(descriptor.localShape.y > 0, "ComputeNode::ComputeNode(): descriptor local shape Y must be greater than zero");
+    ll::throwIfNot<std::invalid_argument>(descriptor.localShape.z > 0, "ComputeNode::ComputeNode(): descriptor local shape Z must be greater than zero");
 
     objects.resize(descriptor.parameterBindings.size());
 
@@ -220,6 +225,10 @@ void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
 
 
 void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
+
+    ll::throwIfNot<std::invalid_argument>(descriptor.gridShape.x > 0, "ComputeNode::record(): descriptor grid shape X must be greater than zero");
+    ll::throwIfNot<std::invalid_argument>(descriptor.gridShape.y > 0, "ComputeNode::record(): descriptor grid shape Y must be greater than zero");
+    ll::throwIfNot<std::invalid_argument>(descriptor.gridShape.z > 0, "ComputeNode::record(): descriptor grid shape Z must be greater than zero");
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
     

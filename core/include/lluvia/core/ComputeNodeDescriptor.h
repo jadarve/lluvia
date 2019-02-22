@@ -195,7 +195,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridX(const uint32_t x);
+    ComputeNodeDescriptor& setGridX(const uint32_t x) noexcept;
 
 
     /**
@@ -212,7 +212,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridY(const uint32_t y);
+    ComputeNodeDescriptor& setGridY(const uint32_t y) noexcept;
 
 
     /**
@@ -229,7 +229,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridZ(const uint32_t z);
+    ComputeNodeDescriptor& setGridZ(const uint32_t z) noexcept;
 
     /**
     @brief      Sets the grid shape.
@@ -245,10 +245,10 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setGridShape(const ll::vec3ui& shape);
+    ComputeNodeDescriptor& setGridShape(const ll::vec3ui& shape) noexcept;
 
 
-    ComputeNodeDescriptor& configureGridShape(const ll::vec3ui& globalShape);
+    ComputeNodeDescriptor& configureGridShape(const ll::vec3ui& globalShape) noexcept;
 
 
     /**
@@ -258,7 +258,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalX(const uint32_t x);
+    ComputeNodeDescriptor& setLocalX(const uint32_t x) noexcept;
 
 
     /**
@@ -268,7 +268,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalY(const uint32_t y);
+    ComputeNodeDescriptor& setLocalY(const uint32_t y) noexcept;
 
 
     /**
@@ -278,7 +278,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalZ(const uint32_t z);
+    ComputeNodeDescriptor& setLocalZ(const uint32_t z) noexcept;
 
 
     /**
@@ -288,7 +288,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setLocalShape(const ll::vec3ui& shape);
+    ComputeNodeDescriptor& setLocalShape(const ll::vec3ui& shape) noexcept;
 
     /**
     @brief      Gets the Vulkan descriptor pool sizes needed for this compute node.
