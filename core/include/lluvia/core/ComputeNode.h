@@ -213,10 +213,15 @@ public:
     for more information.
     
     @param[in]  shape  The grid shape. Each XYZ component must be greater than zero.
-    
-    @return     A reference to this object.
     */
     void setGridShape(const ll::vec3ui& shape) noexcept;
+
+    /**
+    @brief      Configures the grid shape given a global shape.
+    
+    @param[in]  globalShape  The global shape.
+    */
+    void configureGridShape(const ll::vec3ui& globalShape) noexcept;
 
     /**
     @brief      Gets the grid shape.

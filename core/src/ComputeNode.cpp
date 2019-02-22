@@ -186,9 +186,16 @@ void ComputeNode::setGridZ(const uint32_t z) noexcept {
     descriptor.setGridZ(z);
 }
 
+
 void ComputeNode::setGridShape(const ll::vec3ui& shape) noexcept {
     descriptor.setGridShape(shape);
 }
+
+
+void ComputeNode::configureGridShape(const ll::vec3ui& globalShape) noexcept {
+    descriptor.configureGridShape(globalShape);
+}
+
 
 ll::vec3ui ComputeNode::getGridShape() const noexcept {
     return descriptor.getGridShape();

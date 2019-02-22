@@ -105,18 +105,14 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 
 
     auto descX = ll::ComputeNodeDescriptor {}
-        .setProgram(programX)
-        .setFunctionName("main")
+        .setProgram(programX, "main")
         .setLocalShape({32, 32, 1})
-        .addParameter(ll::ParameterType::ImageView)
-        .addParameter(ll::ParameterType::ImageView);
+        .addParameters({ll::ParameterType::ImageView, ll::ParameterType::ImageView});
 
     auto descY = ll::ComputeNodeDescriptor {}
-        .setProgram(programY)
-        .setFunctionName("main")
+        .setProgram(programY, "main")
         .setLocalShape({32, 32, 1})
-        .addParameter(ll::ParameterType::ImageView)
-        .addParameter(ll::ParameterType::ImageView);
+        .addParameters({ll::ParameterType::ImageView, ll::ParameterType::ImageView});
 
 
     auto width  = inputImage->getWidth();
@@ -129,6 +125,9 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         auto descX_i = ll::ComputeNodeDescriptor {descX}
             .configureGridShape({width, height, 1});
 
+        std::cout << i << ": grid  X: [" << descX_i.getGridX() << ", " << descX_i.getGridY() << ", " << descX_i.getGridZ() << "]" << std::endl;
+        std::cout << i << ": local X: [" << descX_i.getLocalX() << ", " << descX_i.getLocalY() << ", " << descX_i.getLocalZ() << "]" << std::endl;
+
         auto nodeX = session->createComputeNode(descX_i);
         nodeX->bind(0, imageViewsY[i]);
         nodeX->bind(1, imageViewsX[i]);
@@ -139,10 +138,15 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         auto descY_i = ll::ComputeNodeDescriptor {descY}
             .configureGridShape({width, height, 1});
 
+        std::cout << i << ": grid  Y: [" << descY_i.getGridX() << ", " << descY_i.getGridY() << ", " << descY_i.getGridZ() << "]" << std::endl;
+        std::cout << i << ": local Y: [" << descY_i.getLocalX() << ", " << descY_i.getLocalY() << ", " << descY_i.getLocalZ() << "]" << std::endl;
+
         auto nodeY = session->createComputeNode(descY_i);
         nodeY->bind(0, imageViewsX[i]);
         nodeY->bind(1, imageViewsY[i + 1]);
         computeNodesY.push_back(nodeY);
+
+        std::cout << std::endl;
     }
 }
 

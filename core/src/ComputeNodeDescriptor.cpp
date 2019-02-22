@@ -55,19 +55,27 @@ ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDe
         case vk::DescriptorType::eUniformBufferDynamic:
         case vk::DescriptorType::eStorageBufferDynamic:
         case vk::DescriptorType::eInputAttachment:
+        default: // to cover descriptor types added by extension
             throw std::system_error(createErrorCode(ll::ErrorCode::EnumConversionFailed), "cannot convert from Vulkan DescriptorType enum value to ll::ParameterType.");
     }
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) noexcept {
 
     this->program = program;
     return *this;
 }
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program, const std::string& functionName) noexcept {
+    
+    setProgram(program);
+    setFunctionName(functionName);
+    return *this;
+}
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) {
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) noexcept {
 
     functionName = name;
     return *this;
@@ -84,6 +92,16 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterTy
                             .setPImmutableSamplers(nullptr);
 
     parameterBindings.push_back(paramBinding);
+    return *this;
+}
+
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::addParameters(const std::initializer_list<ll::ParameterType>& parameters) {
+
+    for(const auto param : parameters) {
+        addParameter(param);
+    }
+
     return *this;
 }
 
@@ -179,8 +197,6 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 ll::vec3ui ComputeNodeDescriptor::getGridShape() const noexcept {
     return gridShape;
 }
-
-
 
 
 ll::vec3ui ComputeNodeDescriptor::getLocalShape() const noexcept {

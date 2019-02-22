@@ -135,7 +135,21 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program);
+    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program) noexcept;
+
+
+    /**
+    @brief      Sets the program object and function name.
+    
+    @param[in]  program       The program.
+    @param[in]  functionName  The function name.
+    
+    @return     A reference to this object.
+
+    @sa ll::ComputeNodeDescriptor::setProgram       sets the program object.
+    @sa ll::ComputeNodeDescriptor::setFunctionName  sets the function name.
+    */
+    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program, const std::string& functionName) noexcept;
 
 
     /**
@@ -145,7 +159,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setFunctionName(const std::string& name);
+    ComputeNodeDescriptor& setFunctionName(const std::string& name) noexcept;
 
 
     /**
@@ -159,6 +173,18 @@ public:
     @return     A reference to this object.
     */
     ComputeNodeDescriptor& addParameter(const ll::ParameterType param);
+
+
+    /**
+    @brief      Adds a list of parameters to the descriptor.
+    
+    @param[in]  param  List of parameters to add.
+    
+    @return     A reference to this object.
+
+    @sa         ll::ComputeNodeDescriptor::addParameter Adds a parameter to the descriptor.
+    */
+    ComputeNodeDescriptor& addParameters(const std::initializer_list<ll::ParameterType>& parameters);
 
 
     /**
@@ -248,6 +274,13 @@ public:
     ComputeNodeDescriptor& setGridShape(const ll::vec3ui& shape) noexcept;
 
 
+    /**
+    @brief      Configures the grid shape given a global shape.
+    
+    @param[in]  globalShape  The global shape.
+    
+    @return     A reference to this object
+    */
     ComputeNodeDescriptor& configureGridShape(const ll::vec3ui& globalShape) noexcept;
 
 
