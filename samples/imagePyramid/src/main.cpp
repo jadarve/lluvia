@@ -9,6 +9,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -106,7 +107,15 @@ int main(int argc, const char** argv) {
     imagePyramid.record(*cmdBuffer);
     cmdBuffer->end();
 
-    session->run(*cmdBuffer);
+    for (auto n = 0u; n < 1000; ++n) {
+        const auto start = std::chrono::high_resolution_clock::now();
+        session->run(*cmdBuffer);
+        const auto end = std::chrono::high_resolution_clock::now();
+
+        const auto diff = std::chrono::duration<float, std::micro> {end - start};
+        std::cout << diff.count() << std::endl;
+    }
+    
 
     imagePyramid.writeAllImages(session);
 }
