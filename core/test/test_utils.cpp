@@ -13,27 +13,6 @@
 using memflags = vk::MemoryPropertyFlagBits;
 
 
-std::shared_ptr<ll::Image> createInitImage(
-    std::shared_ptr<ll::Session>& session,
-    std::shared_ptr<ll::Memory>& memory,
-    const ll::ImageDescriptor& desc,
-    const vk::ImageLayout initialLayout) {
-    
-    std::shared_ptr<ll::Image> image = memory->createImage(desc);
-
-    {
-        auto cmdBuffer = session->createCommandBuffer();
-
-        cmdBuffer->begin();
-        cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
-        cmdBuffer->end();
-
-        session->run(*cmdBuffer);
-    }
-
-    return image;
-}
-
 struct binding {
 
     binding(const uint32_t index, const std::shared_ptr<ll::Object>& object) :
@@ -73,7 +52,7 @@ TEST_CASE("createInitImage", "test_utils") {
     auto memory = session->createMemory(memoryFlags, 0);
 
     // could create several images at the same time
-    auto image = createInitImage(session, memory, imgDesc, vk::ImageLayout::eGeneral);
+    auto image = ll::createAndInitImage(session, memory, imgDesc, vk::ImageLayout::eGeneral);
 }
 
 
@@ -98,8 +77,6 @@ TEST_CASE("configureGraph", "test_utils") {
     const auto grayDesc = ll::ImageDescriptor(imgDesc).setChannelCount(1);
 
     // TOTHINK: Could initialiaze both images with a single command buffer. More efficient.
-    // auto RGBA = createInitImage(session, memory, RGBADesc, vk::ImageLayout::eGeneral);
-    // auto gray = createInitImage(session, memory, grayDesc, vk::ImageLayout::eGeneral);
     auto RGBA = ll::createAndInitImage(session, memory, RGBADesc, vk::ImageLayout::eGeneral);
     auto gray = ll::createAndInitImage(session, memory, grayDesc, vk::ImageLayout::eGeneral);
 
