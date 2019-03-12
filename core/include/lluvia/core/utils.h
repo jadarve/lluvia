@@ -22,6 +22,11 @@
 
 namespace ll {
 
+class Image;
+class ImageDescriptor;
+class Memory;
+class Session;
+
 
 /**
 @brief      Converts a binary array to base-64 string.
@@ -81,6 +86,13 @@ ll::vec3ui configureGridShape(const vec3ui& localShape, const vec3ui& globalShap
         static_cast<uint32_t>(std::ceil(static_cast<F>(globalShape.z) / static_cast<F>(localShape.z)))
     };
 }
+
+
+std::shared_ptr<ll::Image> createAndInitImage(
+    std::shared_ptr<ll::Session>& session,
+    std::shared_ptr<ll::Memory>& memory,
+    const ll::ImageDescriptor& desc,
+    const vk::ImageLayout initialLayout=vk::ImageLayout::eGeneral);
 
 } // namespace ll
 

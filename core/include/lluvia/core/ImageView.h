@@ -9,7 +9,10 @@
 #define LLUVIA_CORE_IMAGE_VIEW_H_
 
 #include "lluvia/core/Object.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/ImageViewDescriptor.h"
+#include "lluvia/core/MemoryAllocationInfo.h"
 
 #include <memory>
 
@@ -159,6 +162,131 @@ public:
     @return     The parent ll::Image object.
     */
     std::shared_ptr<ll::Image> getImage() const noexcept;
+
+
+    /**
+    @brief      Gets the allocation information of the underlying ll::Image object.
+    
+    @return     The allocation information.
+    */
+    inline ll::MemoryAllocationInfo getAllocationInfo() const noexcept {
+        return this->image->getAllocationInfo();
+    }
+
+
+    /**
+    @brief      Gets the memory allocation size in bytes.
+
+    This methods is equivalent to calling `getAllocationInfo().size`.
+    
+    @return     The image size in bytes.
+    */
+    inline uint64_t getSize() const noexcept {
+        return this->image->getSize();
+    }
+
+
+    /**
+    @brief      Gets the Vulkan image usage flags.
+    
+    See @VULKAN_DOC#VkImageUsageFlagBits
+    for more information.
+
+    @return     The usage flags.
+    */
+    inline vk::ImageUsageFlags getUsageFlags() const noexcept {
+        return this->image->getUsageFlags();
+    }
+
+
+    /**
+    @brief      Gets the Vulkan image layout.
+
+    The layout is changed through invocations of Session::changeImageLayout
+    or CommandBuffer::changeImageLayout.
+
+    See @VULKAN_DOC#_vkimagelayout_3
+    
+    @return     The image layout.
+    */
+    inline vk::ImageLayout getLayout() const noexcept {
+        return this->image->getLayout();
+    }
+
+
+    /**
+    @brief      Gets the channel type.
+    
+    @return     The channel type.
+    */
+    inline ll::ChannelType getChannelType() const noexcept {
+        return this->image->getChannelType();
+    }
+
+
+    /**
+    @brief      Gets the channel type size.
+    
+    @return     The channel type size.
+    */
+    inline uint64_t getChannelTypeSize() const noexcept {
+        return this->image->getChannelTypeSize();
+    }
+
+
+    /**
+    @brief      Gets the channel count.
+    
+    @return     The channel count. Number between 1 and 4.
+    */
+    inline uint32_t getChannelCount() const noexcept {
+        return this->image->getChannelCount();
+    }
+
+
+    /**
+    @brief      Gets the image view  width in pixels.
+    
+    @return     The image view width in pixels.
+    */
+    inline uint32_t getWidth() const noexcept {
+        return this->image->getWidth();
+    }
+
+
+    /**
+    @brief      Gets the image view height in pixels.
+    
+    @return     The image view height in pixels.
+    */
+    inline uint32_t getHeight() const noexcept {
+        return this->image->getHeight();
+    }
+
+
+    /**
+    @brief      Gets the image view depth in pixels.
+    
+    @return     The image view depth in pixels.
+    */
+    inline uint32_t getDepth() const noexcept {
+        return this->image->getDepth();
+    }
+
+    /**
+    @brief      Gets the shape of the image view.
+    
+    The vec3ui object returned must be interpreted as follows:
+
+        x : width
+        y : height
+        z : depth
+
+    @return     The shape.
+    */
+    inline ll::vec3ui getShape() const noexcept {
+        return this->image->getShape();
+    }
 
 
     /**

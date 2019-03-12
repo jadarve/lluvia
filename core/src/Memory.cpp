@@ -11,6 +11,8 @@
 #include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/ImageView.h"
+#include "lluvia/core/ImageViewDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 
 #include <algorithm>
@@ -224,6 +226,15 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
         device.destroyImage(vkImage);
         throw;  // rethrow
     }
+}
+
+
+std::shared_ptr<ll::ImageView> Memory::createImageView(
+        const ll::ImageDescriptor& imgDescriptor,
+        const ll::ImageViewDescriptor& viewDescriptor) {
+
+    auto image = this->createImage(imgDescriptor);
+    return image->createImageView(viewDescriptor);
 }
 
 
