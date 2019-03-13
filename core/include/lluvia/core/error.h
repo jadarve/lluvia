@@ -31,6 +31,8 @@ enum class ErrorCode : int32_t {
     InvalidShaderProgram      = 6,      /**< Shader program is not valid*/
     BufferCopyError           = 7,      /**< Error copying data between buffers*/
     ProgramCompilationError   = 8,      /**< Error compiling shader module for program*/
+    InvalidLocalShape         = 9,      /**< Local shape passed to a Compute node is invalid*/
+    InvalidGridShape          = 10      /**< Grid shape for a ComputeNode is invalid */
 };
 
 
@@ -39,7 +41,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 9> ErrorCodeStrings {{
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 11> ErrorCodeStrings {{
         std::make_tuple("EnumConversionFailed"      , ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed"           , ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError"     , ll::ErrorCode::ObjectAllocationError),
@@ -48,6 +50,8 @@ namespace impl {
         std::make_tuple("InvalidShaderProgram"      , ll::ErrorCode::InvalidShaderProgram),
         std::make_tuple("BufferCopyError"           , ll::ErrorCode::BufferCopyError),
         std::make_tuple("ProgramCompilationError"   , ll::ErrorCode::ProgramCompilationError),
+        std::make_tuple("InvalidLocalShape"         , ll::ErrorCode::InvalidLocalShape),
+        std::make_tuple("InvalidGridShape"          , ll::ErrorCode::InvalidGridShape),
     }};
 
 } // namespace impl
@@ -114,21 +118,21 @@ inline std::error_code createErrorCode(ll::ErrorCode errorCode) {
 
 
 /**
-@brief      Throws exception E if condition is not fulfilled.
+@brief      Throws a std::system_error exception if the condition passed is true.
 
-@param[in]  condition  The condition
-@param      msg        The message
+@param[in]  condition  The condition.
+@param[in]  errorCode  The error code.
+@param      msg        The error message.
 
-@tparam     E          { exception type }
-@tparam     T          { error message }
+@tparam     T          Type of the error message. It must be convertible to std::string.
 */
-template<typename E, typename  T>
-void throwIfNot(bool condition, T&& msg) {
+template<typename T>
+void throwSystemErrorIf(bool condition, ll::ErrorCode errorCode, T&& msg) {
 
-    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
+    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");    
 
-    if(!condition) {
-        throw E {msg};
+    if (condition) {
+        throw std::system_error(createErrorCode(errorCode), msg);
     }
 }
 
