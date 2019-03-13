@@ -52,6 +52,8 @@ public:
     @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
                                   if desc.getProgram is nullptr.
 
+    @throws     std::invalid_argument If any of the components of descriptor.localShape is zero.
+
     */
     ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
 
@@ -268,6 +270,8 @@ public:
     This method is called by ll::CommandBuffer objects when they are called as
     
     @param[in]  commandBuffer  The command buffer.
+
+    @throws     std::invalid_argument If any of the components of getGridShape() is zero.
     */
     void record(const vk::CommandBuffer& commandBuffer) const;
 
