@@ -24,6 +24,8 @@ namespace ll {
 
 class Image;
 class ImageDescriptor;
+class ImageView;
+class ImageViewDescriptor;
 class Memory;
 class Session;
 
@@ -88,10 +90,39 @@ ll::vec3ui configureGridShape(const vec3ui& localShape, const vec3ui& globalShap
 }
 
 
+/**
+@brief      Creates and initialize a ll::Image object.
+
+@param      session        The session used for initiliazing the image.
+@param      memory         The memory the image will be create from.
+@param[in]  desc           The image descriptor.
+@param[in]  initialLayout  The initial layout. Defaults to vk::ImageLayout::eGeneral
+
+@return     A new ll::Image object.
+*/
 std::shared_ptr<ll::Image> createAndInitImage(
     std::shared_ptr<ll::Session>& session,
     std::shared_ptr<ll::Memory>& memory,
     const ll::ImageDescriptor& desc,
+    const vk::ImageLayout initialLayout=vk::ImageLayout::eGeneral);
+
+
+/**
+@brief      Creates and initialize a ll::ImageView object.
+
+@param      session         The session used for initiliazing the underlying ll::Image object.
+@param      memory          The memory used for allocating the image.
+@param[in]  imgDescriptor   The image descriptor.
+@param[in]  viewDescriptor  The view descriptor.
+@param[in]  initialLayout   The initial layout. Defaults to vk::ImageLayout::eGeneral.
+
+@return     A new ll::ImageViewObject.
+*/
+std::shared_ptr<ll::ImageView> createAndInitImageView(
+    std::shared_ptr<ll::Session>& session,
+    std::shared_ptr<ll::Memory>& memory,
+    const ll::ImageDescriptor& imgDescriptor,
+    const ll::ImageViewDescriptor& viewDescriptor,
     const vk::ImageLayout initialLayout=vk::ImageLayout::eGeneral);
 
 } // namespace ll

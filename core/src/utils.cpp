@@ -152,4 +152,17 @@ std::shared_ptr<ll::Image> createAndInitImage(
     return image;
 }
 
+
+std::shared_ptr<ll::ImageView> createAndInitImageView(
+    std::shared_ptr<ll::Session>& session,
+    std::shared_ptr<ll::Memory>& memory,
+    const ll::ImageDescriptor& imgDescriptor,
+    const ll::ImageViewDescriptor& viewDescriptor,
+    const vk::ImageLayout initialLayout) {
+
+    auto image = createAndInitImage(session, memory, imgDescriptor, initialLayout);
+    
+    return image->createImageView(viewDescriptor);
+}
+
 } // namespace ll
