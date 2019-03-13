@@ -362,15 +362,15 @@ cdef class Memory:
 
         cdef image._ChannelType cType = image.stringToChannelType(channelTypeBytes)
 
-        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, channels, cType)
-
         cdef list flagsList = usageFlags
         cdef vk.ImageUsageFlags flags = image.vectorStringToImageUsageFlags(flagsList)
+
+        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, channels, cType, flags)
 
         cdef image.Image img = image.Image()
         img.__memory  = self
         img.__session = self.__session
-        img.__image   = self.__memory.get().createImage(desc, flags)
+        img.__image   = self.__memory.get().createImage(desc)
 
         img.changeLayout('General')
         return img

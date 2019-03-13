@@ -39,8 +39,10 @@ ImageDescriptor::ImageDescriptor(const uint32_t width,
                                  const uint32_t height,
                                  const uint32_t depth,
                                  const uint32_t channelCount,
-                                 ll::ChannelType channelType):
-    channelType  {channelType} {
+                                 const ll::ChannelType channelType,
+                                 const vk::ImageUsageFlags usageFlags):
+    channelType  {channelType},
+    usageFlags   {usageFlags} {
 
     setWidth(width);
     setHeight(height);
@@ -65,21 +67,35 @@ ImageDescriptor& ImageDescriptor::setChannelCount(const uint32_t count) noexcept
 
 ImageDescriptor& ImageDescriptor::setWidth(const uint32_t width) noexcept {
 
-    this->width = width;
+    shape.x = width;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setHeight(const uint32_t height) noexcept {
 
-    this->height = height;
+    shape.y = height;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setDepth(const uint32_t depth) noexcept {
 
-    this->depth = depth;
+    shape.z = depth;
+    return *this;
+}
+
+
+ImageDescriptor& ImageDescriptor::setShape(const ll::vec3ui& shape) noexcept {
+    
+    this->shape = shape;
+    return *this;
+}
+
+
+ImageDescriptor& ImageDescriptor::setUsageFlags(const vk::ImageUsageFlags flags) noexcept {
+
+    this->usageFlags = flags;
     return *this;
 }
 
@@ -95,33 +111,42 @@ uint32_t ImageDescriptor::getChannelCount() const noexcept {
 
 
 uint32_t ImageDescriptor::getWidth() const noexcept {
-    return width;
+    return shape.x;
 }
 
 
 uint32_t ImageDescriptor::getHeight() const noexcept {
-    return height;
+    return shape.y;
 }
 
 
 uint32_t ImageDescriptor::getDepth() const noexcept {
-    return depth;
+    return shape.z;
 }
 
 
 uint64_t ImageDescriptor::getSize() const noexcept {
 
-    return width*height*depth*channelCount*getChannelTypeSize(channelType);
+    auto w = uint64_t {shape.x};
+    auto h = uint64_t {shape.y};
+    auto d = uint64_t {shape.z};
+    return w*h*d*channelCount*getChannelTypeSize(channelType);
+}
+
+ll::vec3ui ImageDescriptor::getShape() const noexcept {
+
+    return shape;
 }
 
 
 vk::ImageType ImageDescriptor::getImageType() const noexcept {
 
-    if (height == 1) return vk::ImageType::e1D;
-    if (depth == 1)  return vk::ImageType::e2D;
+    if (getHeight() == 1) return vk::ImageType::e1D;
+    if (getDepth()  == 1) return vk::ImageType::e2D;
 
     return vk::ImageType::e3D;
 }
+
 
 vk::Format ImageDescriptor::getFormat() const noexcept {
 
@@ -194,6 +219,11 @@ vk::Format ImageDescriptor::getFormat() const noexcept {
 
     // this code should not be reached.
     throw std::runtime_error("channel count must be between 1 and 4, got: " + std::to_string(channelCount));
+}
+
+
+vk::ImageUsageFlags ImageDescriptor::getUsageFlags() const noexcept {
+    return usageFlags;
 }
 
 } // namespace ll

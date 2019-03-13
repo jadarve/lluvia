@@ -9,9 +9,10 @@
 #define LLUVIA_CORE_IMAGE_H_
 
 #include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
-#include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/types.h"
 
 #include <vulkan/vulkan.hpp>
 
@@ -275,6 +276,18 @@ public:
     */
     uint32_t getDepth()              const noexcept;
 
+    /**
+    @brief      Gets the shape of the image.
+    
+    The vec3ui object returned must be interpreted as follows:
+
+        x : width
+        y : height
+        z : depth
+
+    @return     The shape.
+    */
+    ll::vec3ui getShape() const noexcept;
 
     /**
     @brief      Creates an image view from this image.
@@ -291,8 +304,7 @@ private:
           const ll::ImageDescriptor& descriptor,
           const std::shared_ptr<ll::Memory>& memory,
           const ll::MemoryAllocationInfo& allocInfo,
-          const vk::ImageLayout layout,
-          const vk::ImageUsageFlags usageFlags);
+          const vk::ImageLayout layout);
 
     ll::ImageDescriptor descriptor;
     ll::MemoryAllocationInfo allocInfo;
@@ -300,7 +312,6 @@ private:
     vk::Device          device;
     vk::Image           vkImage;
     vk::ImageLayout     vkLayout;
-    vk::ImageUsageFlags vkUsageFlags;
 
     // Shared pointer to the memory this image was created from
     // This will keep the memory alive until this image is deleted

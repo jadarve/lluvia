@@ -3,6 +3,7 @@
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/Image.h"
+#include "lluvia/core/ImageView.h"
 
 namespace ll {
 
@@ -128,6 +129,11 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
 
     // FIXME: this should be set only after the pipelineBarrier is executed
     image.vkLayout = newLayout;
+}
+
+void CommandBuffer::changeImageLayout(ll::ImageView& imageView, const vk::ImageLayout newLayout) {
+
+    this->changeImageLayout(*(imageView.getImage()), newLayout);
 }
 
 

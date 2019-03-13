@@ -9,6 +9,7 @@
 #define LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
 
 #include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/types.h"
 
 #include <array>
 #include <cstdint>
@@ -147,12 +148,17 @@ public:
     @param[in]  depth         The depth. It must be greater than zero.
     @param[in]  channelCount  The channel count. It must be between 1 and 4.
     @param[in]  channelType   The channel type.
+    @param[in]  usageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
+                              See @VULKAN_DOC#VkBufferUsageFlagBits
     */
     ImageDescriptor(const uint32_t width,
                     const uint32_t height,
                     const uint32_t depth,
                     const uint32_t channelCount,
-                    ll::ChannelType channelType);
+                    const ll::ChannelType channelType,
+                    const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
+                                                            | vk::ImageUsageFlagBits::eSampled}
+                    );
 
     ~ImageDescriptor()                                              = default;
     
@@ -209,6 +215,28 @@ public:
     */
     ImageDescriptor& setDepth(const uint32_t depth)             noexcept;
 
+    /**
+    @brief      Sets the image shape.
+    
+    @param[in]  shape  The shape. The components of this vector
+        must be interpreted as:
+        
+            x : width
+            y : height
+            z : depth
+    
+    @return     A reference to this object.
+    */
+    ImageDescriptor& setShape(const ll::vec3ui& shape)          noexcept;
+
+
+    /**
+    @brief      Sets the usage flags.
+    
+    @return     The usage flags.
+    */
+    ImageDescriptor& setUsageFlags(const vk::ImageUsageFlags flags) noexcept;
+
 
     /**
     @brief      Gets the channel type.
@@ -260,6 +288,19 @@ public:
     uint64_t getSize()               const noexcept;
 
     /**
+    @brief      Gets the shape of the image.
+    
+    The vec3ui object returned must be interpreted as follows:
+
+        x : width
+        y : height
+        z : depth
+
+    @return     The shape.
+    */
+    ll::vec3ui getShape() const noexcept;
+
+    /**
     @brief      Gets the Vulkan image type.
 
     It is implemented as:
@@ -285,13 +326,27 @@ public:
     */
     vk::Format getFormat() const noexcept;
 
+    /**
+    @brief      Gets the Vulkan image usage flags.
+    
+    See @VULKAN_DOC#VkImageUsageFlagBits
+    for more information.
+
+    @return     The usage flags.
+    */
+    vk::ImageUsageFlags getUsageFlags() const noexcept;
+
 private:
     ll::ChannelType channelType  {ll::ChannelType::Uint8};
     uint32_t channelCount        {1};
 
-    uint32_t width  {1};
-    uint32_t height {1};
-    uint32_t depth  {1};
+    // dimensions along each axis
+    // x : width
+    // y : height
+    // z : depth
+    ll::vec3ui shape             {1, 1, 1};
+
+    vk::ImageUsageFlags usageFlags;
 };
 
 

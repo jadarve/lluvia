@@ -52,6 +52,8 @@ public:
     @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
                                   if desc.getProgram is nullptr.
 
+    @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
+                                  if any of the components of descriptor.localShape is zero.
     */
     ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
 
@@ -113,6 +115,13 @@ public:
     @return     The local group size in Z.
     */
     uint32_t getLocalZ() const noexcept;
+
+    /**
+    @brief      Gets the local group shape.
+    
+    @return     The local shape.
+    */
+    ll::vec3ui getLocalShape() const noexcept;
 
 
     /**
@@ -195,6 +204,35 @@ public:
     */
     void setGridZ(const uint32_t z) noexcept;
 
+    /**
+    @brief      Sets the grid shape.
+
+    The grid size defines the number of local groups to be run
+    during the execution of a compute node shader program.
+
+    Parameter \p z corresponds to the `groupCountZ` parameter in
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
+    for more information.
+    
+    @param[in]  shape  The grid shape. Each XYZ component must be greater than zero.
+    */
+    void setGridShape(const ll::vec3ui& shape) noexcept;
+
+    /**
+    @brief      Configures the grid shape given a global shape.
+    
+    @param[in]  globalShape  The global shape.
+    */
+    void configureGridShape(const ll::vec3ui& globalShape) noexcept;
+
+    /**
+    @brief      Gets the grid shape.
+    
+    See ll::ComputeNodeDescriptor::getGridShape for more information.
+
+    @return     The grid shape.
+    */
+    ll::vec3ui getGridShape() const noexcept;
 
     /**
     @brief      Gets the parameter count for this node.
@@ -202,7 +240,6 @@ public:
     @return     The parameter count.
     */
     size_t getParameterCount() const noexcept;
-
 
     /**
     @brief      Returns the object associated to parameter \p index.
@@ -233,6 +270,9 @@ public:
     This method is called by ll::CommandBuffer objects when they are called as
     
     @param[in]  commandBuffer  The command buffer.
+
+    @throws     std::system_error With error code ll::ErrorCode::InvalidGridShape
+                                  if any of the components of getGridShape() is zero.
     */
     void record(const vk::CommandBuffer& commandBuffer) const;
 

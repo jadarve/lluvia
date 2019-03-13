@@ -8,7 +8,7 @@ function(add_catchTest NAME SRCS)
     
     add_executable (${NAME} ${SRCS})
     target_include_directories(${NAME} PRIVATE ${_TEST_INCLUDE_DIR})
-    target_link_libraries (${NAME} Catch vulkan stdc++ ${ARGV2})
+    target_link_libraries (${NAME} m Catch vulkan stdc++ ${ARGV2})
     add_test (NAME ${NAME}  COMMAND ${NAME})
 
 endfunction()
@@ -63,6 +63,7 @@ add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp      
 add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp               lluvia-core)
 add_catchTest (test_ComputeNodeImage         test/test_ComputeNodeImage.cpp          lluvia-core)
 add_catchTest (test_IO                       test/test_IO.cpp                        lluvia-core)
+add_catchTest (test_utils                    test/test_utils.cpp                     lluvia-core)
 
 
 # store variables in the cache

@@ -365,12 +365,13 @@ public:
                         .setHeight(height)
                         .setDepth(depth)
                         .setChannelCount(channelCount)
-                        .setChannelType(channelType);
+                        .setChannelType(channelType)
+                        .setUsageFlags(usageFlags);
 
         // can throw std::out_of_range
         auto memory = graph->getMemory(memName);
 
-        auto image = memory->createImage(imgDesc, usageFlags);
+        auto image = memory->createImage(imgDesc);
         graph->addObject(name, image);
     }
 

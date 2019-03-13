@@ -22,11 +22,16 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     auto memory = session->createMemory(memoryFlags, 1024*1024*4, false);
     REQUIRE(memory != nullptr);
 
+    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
+                                              | vk::ImageUsageFlagBits::eSampled
+                                              | vk::ImageUsageFlagBits::eTransferDst};
+
     auto desc = ll::ImageDescriptor{}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(4);
+                    .setChannelCount(4)
+                    .setUsageFlags(imgUsageFlags);
 
     auto image = memory->createImage(desc);
     REQUIRE(image != nullptr);
@@ -60,10 +65,16 @@ TEST_CASE("InvalidImageSize", "test_ImageCreation") {
     auto memory = session->createMemory(memoryFlags, 1024*1024*4, false);
     REQUIRE(memory != nullptr);
 
-    auto desc = ll::ImageDescriptor{};
+    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
+                                              | vk::ImageUsageFlagBits::eSampled
+                                              | vk::ImageUsageFlagBits::eTransferDst};
+
+    auto desc = ll::ImageDescriptor{}.setUsageFlags(imgUsageFlags);
     
     // create image from default constructed descriptor
     REQUIRE_NOTHROW(memory->createImage(desc));
+
+    
 
     // valid dimensions
     desc.setWidth(32)

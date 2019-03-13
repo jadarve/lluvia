@@ -45,7 +45,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
     // create downsampled images
     const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferSrc;
-    auto imgDesc = ll::ImageDescriptor {width, height, 1, channels, channelType};
+    auto imgDesc = ll::ImageDescriptor {width, height, 1, channels, channelType, imgFlags};
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setIsSampled(false)
                         .setNormalizedCoordinates(false);
@@ -62,23 +62,21 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         width /= 2;
         imgDesc.setWidth(width);
 
-        auto imgDownX = memory->createImage(imgDesc, imgFlags);
-        auto imgViewDownX = imgDownX->createImageView(imgViewDesc);
+        auto imgViewDownX = memory->createImageView(imgDesc, imgViewDesc);
         imageViewsX.push_back(imgViewDownX);
-        cmdBuffer->changeImageLayout(*imgDownX, vk::ImageLayout::eGeneral);
+        cmdBuffer->changeImageLayout(*imgViewDownX, vk::ImageLayout::eGeneral);
 
-        std::cout << "X: " << imgDownX->getAllocationInfo() << std::endl;
+        std::cout << "X: [" << imgViewDownX->getWidth() << ", " << imgViewDownX->getHeight() << ", " << imgViewDownX->getChannelCount() << "]: " << imgViewDownX->getAllocationInfo() << std::endl;
 
 
         height /= 2;
         imgDesc.setHeight(height);
 
-        auto imgDownY = memory->createImage(imgDesc, imgFlags);
-        auto imgViewDownY = imgDownY->createImageView(imgViewDesc);
+        auto imgViewDownY = memory->createImageView(imgDesc, imgViewDesc);
         imageViewsY.push_back(imgViewDownY);
-        cmdBuffer->changeImageLayout(*imgDownY, vk::ImageLayout::eGeneral);
+        cmdBuffer->changeImageLayout(*imgViewDownY, vk::ImageLayout::eGeneral);
 
-        std::cout << "Y: " << imgDownY->getAllocationInfo() << std::endl;
+        std::cout << "Y: [" << imgViewDownY->getWidth() << ", " << imgViewDownY->getHeight() << "]: " << imgViewDownY->getAllocationInfo() << std::endl;
     }
 
 
@@ -93,10 +91,6 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
 void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 
-    auto getGridSize = [](const auto size, const auto localSize) {
-        return static_cast<uint32_t>(std::ceil(static_cast<double>(size) / static_cast<double>(localSize)));
-    };
-
     // Shader parameters
     //
     // layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
@@ -109,20 +103,14 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 
 
     auto descX = ll::ComputeNodeDescriptor {}
-        .setProgram(programX)
-        .setFunctionName("main")
-        .setLocalX(32)
-        .setLocalY(32)
-        .addParameter(ll::ParameterType::ImageView)
-        .addParameter(ll::ParameterType::ImageView);
+        .setProgram(programX, "main")
+        .setLocalShape({32, 32, 1})
+        .addParameters({ll::ParameterType::ImageView, ll::ParameterType::ImageView});
 
     auto descY = ll::ComputeNodeDescriptor {}
-        .setProgram(programY)
-        .setFunctionName("main")
-        .setLocalX(32)
-        .setLocalY(32)
-        .addParameter(ll::ParameterType::ImageView)
-        .addParameter(ll::ParameterType::ImageView);
+        .setProgram(programY, "main")
+        .setLocalShape({32, 32, 1})
+        .addParameters({ll::ParameterType::ImageView, ll::ParameterType::ImageView});
 
 
     auto width  = inputImage->getWidth();
@@ -133,8 +121,10 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         width /= 2;
 
         auto descX_i = ll::ComputeNodeDescriptor {descX}
-            .setGridX(getGridSize(width,  descX.getLocalX()))
-            .setGridY(getGridSize(height, descX.getLocalY()));
+            .configureGridShape({width, height, 1});
+
+        std::cout << i << ": grid  X: [" << descX_i.getGridX() << ", " << descX_i.getGridY() << ", " << descX_i.getGridZ() << "]" << std::endl;
+        std::cout << i << ": local X: [" << descX_i.getLocalX() << ", " << descX_i.getLocalY() << ", " << descX_i.getLocalZ() << "]" << std::endl;
 
         auto nodeX = session->createComputeNode(descX_i);
         nodeX->bind(0, imageViewsY[i]);
@@ -144,13 +134,17 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         height /= 2;
 
         auto descY_i = ll::ComputeNodeDescriptor {descY}
-            .setGridX(getGridSize(width,  descY.getLocalX()))
-            .setGridY(getGridSize(height, descY.getLocalY()));
+            .configureGridShape({width, height, 1});
+
+        std::cout << i << ": grid  Y: [" << descY_i.getGridX() << ", " << descY_i.getGridY() << ", " << descY_i.getGridZ() << "]" << std::endl;
+        std::cout << i << ": local Y: [" << descY_i.getLocalX() << ", " << descY_i.getLocalY() << ", " << descY_i.getLocalZ() << "]" << std::endl;
 
         auto nodeY = session->createComputeNode(descY_i);
         nodeY->bind(0, imageViewsX[i]);
         nodeY->bind(1, imageViewsY[i + 1]);
         computeNodesY.push_back(nodeY);
+
+        std::cout << std::endl;
     }
 }
 
@@ -173,14 +167,14 @@ void ImagePyramid::writeAllImages(std::shared_ptr<ll::Session> session) {
     auto i = 0u;
     for (auto imgViewX : imageViewsX) {
 
-        writeImage(session, imgViewX->getImage(), "imgX_" + std::to_string(i) + ".jpg");
+        writeImage(session, imgViewX->getImage(), "imgX_" + std::to_string(i) + ".bmp");
         ++ i;
     }
 
     i = 0u;
     for (auto imgViewY : imageViewsY) {
 
-        writeImage(session, imgViewY->getImage(), "imgY_" + std::to_string(i) + ".jpg");
+        writeImage(session, imgViewY->getImage(), "imgY_" + std::to_string(i) + ".bmp");
         ++ i;
     }
 }
@@ -207,8 +201,8 @@ void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_
     session->run(*cmdBuffer);
 
     auto mapPtr = hostImage->map<uint8_t>();
-    const auto res = stbi_write_jpg(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr.get(), 100);
+    const auto res = stbi_write_bmp(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr.get());
 
-    std::cout << "stbi_write_jpg result: " << res << std::endl;
+    std::cout << "stbi_write_bmp result: " << res << std::endl;
 }
 

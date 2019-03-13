@@ -9,6 +9,7 @@
 #define LLUVIA_CORE_COMPUTE_DESCRIPTOR_NODE_H_
 
 #include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/types.h"
 
 #include <array>
 #include <memory>
@@ -134,7 +135,21 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program);
+    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program) noexcept;
+
+
+    /**
+    @brief      Sets the program object and function name.
+    
+    @param[in]  program       The program.
+    @param[in]  functionName  The function name.
+    
+    @return     A reference to this object.
+
+    @sa ll::ComputeNodeDescriptor::setProgram       sets the program object.
+    @sa ll::ComputeNodeDescriptor::setFunctionName  sets the function name.
+    */
+    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program, const std::string& functionName) noexcept;
 
 
     /**
@@ -144,7 +159,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setFunctionName(const std::string& name);
+    ComputeNodeDescriptor& setFunctionName(const std::string& name) noexcept;
 
 
     /**
@@ -158,6 +173,18 @@ public:
     @return     A reference to this object.
     */
     ComputeNodeDescriptor& addParameter(const ll::ParameterType param);
+
+
+    /**
+    @brief      Adds a list of parameters to the descriptor.
+    
+    @param[in]  param  List of parameters to add.
+    
+    @return     A reference to this object.
+
+    @sa         ll::ComputeNodeDescriptor::addParameter Adds a parameter to the descriptor.
+    */
+    ComputeNodeDescriptor& addParameters(const std::initializer_list<ll::ParameterType>& parameters);
 
 
     /**
@@ -230,6 +257,32 @@ public:
     */
     ComputeNodeDescriptor& setGridZ(const uint32_t z) noexcept;
 
+    /**
+    @brief      Sets the grid shape.
+
+    The grid size defines the number of local groups to be run
+    during the execution of a compute node shader program.
+
+    Parameter \p z corresponds to the `groupCountZ` parameter in
+    vkCmdDispatch. See @VULKAN_DOC#vkCmdDispatch
+    for more information.
+    
+    @param[in]  shape  The grid shape. Each XYZ component must be greater than zero.
+    
+    @return     A reference to this object.
+    */
+    ComputeNodeDescriptor& setGridShape(const ll::vec3ui& shape) noexcept;
+
+
+    /**
+    @brief      Configures the grid shape given a global shape.
+    
+    @param[in]  globalShape  The global shape.
+    
+    @return     A reference to this object
+    */
+    ComputeNodeDescriptor& configureGridShape(const ll::vec3ui& globalShape) noexcept;
+
 
     /**
     @brief      Sets the local group size in the X axis.
@@ -260,6 +313,15 @@ public:
     */
     ComputeNodeDescriptor& setLocalZ(const uint32_t z) noexcept;
 
+
+    /**
+    @brief      Sets the local group shape.
+    
+    @param[in]  shape  The shape. Each XYZ component must be greater than zero.
+    
+    @return     A reference to this object.
+    */
+    ComputeNodeDescriptor& setLocalShape(const ll::vec3ui& shape) noexcept;
 
     /**
     @brief      Gets the Vulkan descriptor pool sizes needed for this compute node.
@@ -298,19 +360,18 @@ public:
     std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const noexcept;
 
     /**
-    @brief      Gets the grid size as [X, Y, Z].
+    @brief      Gets the grid shape.
     
-    @return     The grid size.
+    @return     The grid shape.
     */
-    const std::array<uint32_t, 3>& getGridSize()  const noexcept;
-
+    ll::vec3ui getGridShape()  const noexcept;
 
     /**
-    @brief      Gets the local size as [X, Y, Z].
+    @brief      Gets the local group shape.
     
-    @return     The local size.
+    @return     The local group shape.
     */
-    const std::array<uint32_t, 3>& getLocalSize() const noexcept;
+    ll::vec3ui getLocalShape() const noexcept;
 
     uint32_t getGridX() const noexcept;
     uint32_t getGridY() const noexcept;
@@ -359,8 +420,8 @@ private:
     std::vector<vk::DescriptorSetLayoutBinding> parameterBindings;
 
     // local and global work group
-    std::array<uint32_t, 3> localGroup  {{1, 1, 1}};
-    std::array<uint32_t, 3> globalGroup {{1, 1, 1}};
+    ll::vec3ui localShape {1, 1, 1};
+    ll::vec3ui gridShape  {1, 1, 1};
 
 
 friend class ComputeNode;

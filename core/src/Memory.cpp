@@ -11,6 +11,8 @@
 #include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/ImageView.h"
+#include "lluvia/core/ImageViewDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 
 #include <algorithm>
@@ -160,7 +162,7 @@ void Memory::unmapBuffer(const ll::Buffer& buffer) {
 }
 
 
-std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descriptor, const vk::ImageUsageFlags usageFlags) {
+std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descriptor) {
 
     if (descriptor.getWidth() == 0) {
         throw std::invalid_argument("Image width must be greater than zero, got: " + std::to_string(descriptor.getWidth()));
@@ -187,7 +189,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setTiling(vk::ImageTiling::eOptimal)
                     .setSamples(vk::SampleCountFlagBits::e1)
                     .setSharingMode(vk::SharingMode::eExclusive)
-                    .setUsage(usageFlags)
+                    .setUsage(descriptor.getUsageFlags())
                     .setFormat(descriptor.getFormat())
                     .setInitialLayout(InitialImageLayout);
 
@@ -214,8 +216,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                                                                 descriptor,
                                                                 shared_from_this(),
                                                                 tryInfo.allocInfo,
-                                                                InitialImageLayout,
-                                                                usageFlags}};
+                                                                InitialImageLayout}};
                                                                 
         pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return image;
@@ -225,6 +226,15 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
         device.destroyImage(vkImage);
         throw;  // rethrow
     }
+}
+
+
+std::shared_ptr<ll::ImageView> Memory::createImageView(
+        const ll::ImageDescriptor& imgDescriptor,
+        const ll::ImageViewDescriptor& viewDescriptor) {
+
+    auto image = this->createImage(imgDescriptor);
+    return image->createImageView(viewDescriptor);
 }
 
 

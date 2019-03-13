@@ -16,14 +16,13 @@ namespace ll {
 
 Image::Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
               const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-              const vk::ImageLayout layout, const vk::ImageUsageFlags usageFlags) :
+              const vk::ImageLayout layout) :
 
     descriptor   {descriptor},
     allocInfo    (allocInfo),
     device       {device},
     vkImage      {vkImage},
     vkLayout     {layout},
-    vkUsageFlags {usageFlags},
     memory       {memory} {
 
 }
@@ -51,7 +50,7 @@ uint64_t Image::getSize() const noexcept {
 
 
 vk::ImageUsageFlags Image::getUsageFlags()const noexcept {
-    return vkUsageFlags;
+    return descriptor.getUsageFlags();
 }
 
 
@@ -87,6 +86,10 @@ uint32_t Image::getHeight() const noexcept {
 
 uint32_t Image::getDepth() const noexcept {
     return descriptor.getDepth();
+}
+
+ll::vec3ui Image::getShape() const noexcept {
+    return descriptor.getShape();
 }
 
 std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescriptor& descriptor) {

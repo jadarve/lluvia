@@ -16,6 +16,7 @@ namespace ll {
 class Buffer;
 class ComputeNode;
 class Image;
+class ImageView;
 class Session;
 
 
@@ -140,6 +141,21 @@ public:
     @param[in]  newLayout  The new layout
     */
     void changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout);
+
+    /**
+    @brief      Change \p imageView underlying image layout.
+
+    The actual change in image layout is performed when this command buffer
+    is submitted to execution. However, calling `imageView.getImage()->getLayout()` right after
+    this call will return the new layout value.
+
+    This is necessary to keep track of the current image layout of \p image parameter
+    after this call.
+    
+    @param      imageView  The image view.
+    @param[in]  newLayout  The new layout
+    */
+    void changeImageLayout(ll::ImageView& imageView, const vk::ImageLayout newLayout);
 
 
     /**

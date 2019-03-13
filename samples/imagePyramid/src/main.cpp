@@ -9,6 +9,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -61,15 +62,16 @@ int main(int argc, const char** argv) {
 
     auto memory = session->createMemory(inputImageMemFlags, imageSize, false);
 
+    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc;
+    
     auto imgDesc = ll::ImageDescriptor {static_cast<uint32_t>(image.width),
                                         static_cast<uint32_t>(image.height),
                                         1,
                                         static_cast<uint32_t>(image.channels),
-                                        channelType};
-    
-    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc;
+                                        channelType,
+                                        imgFlags};
 
-    auto inputImage = memory->createImage(imgDesc, imgFlags);
+    auto inputImage = memory->createImage(imgDesc);
 
     // stage buffer
     const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
@@ -105,7 +107,15 @@ int main(int argc, const char** argv) {
     imagePyramid.record(*cmdBuffer);
     cmdBuffer->end();
 
-    session->run(*cmdBuffer);
+    for (auto n = 0u; n < 1000; ++n) {
+        const auto start = std::chrono::high_resolution_clock::now();
+        session->run(*cmdBuffer);
+        const auto end = std::chrono::high_resolution_clock::now();
+
+        const auto diff = std::chrono::duration<float, std::micro> {end - start};
+        std::cout << diff.count() << std::endl;
+    }
+    
 
     imagePyramid.writeAllImages(session);
 }

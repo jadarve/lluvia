@@ -8,10 +8,12 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 
 #include "lluvia/core/error.h"
+#include "lluvia/core/utils.h"
 #include "lluvia/core/Program.h"
 
 #include <cassert>
 #include <exception>
+#include <stdexcept>
 #include <vector>
 #include <iostream>
 
@@ -53,19 +55,27 @@ ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDe
         case vk::DescriptorType::eUniformBufferDynamic:
         case vk::DescriptorType::eStorageBufferDynamic:
         case vk::DescriptorType::eInputAttachment:
+        default: // to cover descriptor types added by extension
             throw std::system_error(createErrorCode(ll::ErrorCode::EnumConversionFailed), "cannot convert from Vulkan DescriptorType enum value to ll::ParameterType.");
     }
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) noexcept {
 
     this->program = program;
     return *this;
 }
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program, const std::string& functionName) noexcept {
+    
+    setProgram(program);
+    setFunctionName(functionName);
+    return *this;
+}
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) {
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) noexcept {
 
     functionName = name;
     return *this;
@@ -86,6 +96,16 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterTy
 }
 
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::addParameters(const std::initializer_list<ll::ParameterType>& parameters) {
+
+    for(const auto param : parameters) {
+        addParameter(param);
+    }
+
+    return *this;
+}
+
+
 size_t ComputeNodeDescriptor::getParameterCount() const noexcept {
     return parameterBindings.size();
 }
@@ -99,52 +119,56 @@ ll::ParameterType ComputeNodeDescriptor::getParameterTypeAt(const size_t& i) con
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
-
-    assert(x >= 1);
-    globalGroup[0] = x;
+    gridShape.x = x;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcept {
-
-    assert(y >= 1);
-    globalGroup[1] = y;
+    gridShape.y = y;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcept {
-
-    assert(z >= 1);
-    globalGroup[2] = z;
+    gridShape.z = z;
     return *this;
 }
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::setGridShape(const ll::vec3ui& shape) noexcept {
+
+    gridShape = shape;
+    return *this;
+}
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::configureGridShape(const ll::vec3ui& globalShape) noexcept {
+
+    gridShape = ll::configureGridShape(localShape, globalShape);
+    return *this;
+}
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexcept {
-
-    assert(x >= 1);
-    localGroup[0] = x;
+    localShape.x = x;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexcept {
-
-    assert(y >= 1);
-    localGroup[1] = y;
+    localShape.y = y;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexcept {
-
-    assert(z >= 1);
-    localGroup[2] = z;
+    localShape.z = z;
     return *this;
 }
 
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalShape(const ll::vec3ui& shape) noexcept {
+    localShape = shape;
+    return *this;
+}
 
 std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
@@ -170,43 +194,43 @@ std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
 }
 
 
-const std::array<uint32_t, 3>& ComputeNodeDescriptor::getGridSize() const noexcept {
-    return globalGroup;
+ll::vec3ui ComputeNodeDescriptor::getGridShape() const noexcept {
+    return gridShape;
 }
 
 
-const std::array<uint32_t, 3>& ComputeNodeDescriptor::getLocalSize() const noexcept {
-    return localGroup;
+ll::vec3ui ComputeNodeDescriptor::getLocalShape() const noexcept {
+    return localShape;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridX() const noexcept {
-    return globalGroup[0];
+    return gridShape.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridY() const noexcept {
-    return globalGroup[1];
+    return gridShape.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridZ() const noexcept {
-    return globalGroup[2];
+    return gridShape.z;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalX() const noexcept {
-    return localGroup[0];
+    return localShape.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalY() const noexcept {
-    return localGroup[1];
+    return localShape.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalZ() const noexcept {
-    return localGroup[2];
+    return localShape.z;
 }
 
 

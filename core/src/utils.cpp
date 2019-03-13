@@ -7,6 +7,15 @@
 
 #include "lluvia/core/utils.h"
 
+#include "lluvia/core/CommandBuffer.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/Memory.h"
+#include "lluvia/core/Session.h"
+
+#include <algorithm>
+#include <cmath>
+
 
 namespace ll {
 
@@ -120,6 +129,40 @@ std::vector<uint8_t> fromBase64(const std::string& code) {
     }
 
     return binary;
+}
+
+std::shared_ptr<ll::Image> createAndInitImage(
+    std::shared_ptr<ll::Session>& session,
+    std::shared_ptr<ll::Memory>& memory,
+    const ll::ImageDescriptor& desc,
+    const vk::ImageLayout initialLayout) {
+
+    std::shared_ptr<ll::Image> image = memory->createImage(desc);
+
+    {
+        auto cmdBuffer = session->createCommandBuffer();
+
+        cmdBuffer->begin();
+        cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
+        cmdBuffer->end();
+
+        session->run(*cmdBuffer);
+    }
+
+    return image;
+}
+
+
+std::shared_ptr<ll::ImageView> createAndInitImageView(
+    std::shared_ptr<ll::Session>& session,
+    std::shared_ptr<ll::Memory>& memory,
+    const ll::ImageDescriptor& imgDescriptor,
+    const ll::ImageViewDescriptor& viewDescriptor,
+    const vk::ImageLayout initialLayout) {
+
+    auto image = createAndInitImage(session, memory, imgDescriptor, initialLayout);
+    
+    return image->createImageView(viewDescriptor);
 }
 
 } // namespace ll

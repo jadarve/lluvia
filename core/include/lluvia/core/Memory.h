@@ -27,6 +27,8 @@ namespace ll {
 class Buffer;
 class Image;
 class ImageDescriptor;
+class ImageView;
+class ImageViewDescriptor;
 class Session;
 class Visitor;
 
@@ -233,8 +235,6 @@ public:
     the image is deleted.
     
     @param[in]  descriptor  The image descriptor.
-    @param[in]  usageFlags  The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
-                See @VULKAN_DOC#VkBufferUsageFlagBits
 
     @throws     std::system_error if the Vulkan memory does not support allocating image objects.
 
@@ -244,9 +244,28 @@ public:
 
     @return     A new ll::Image object.
     */
-    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor,
-        const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
-                                                | vk::ImageUsageFlagBits::eSampled});
+    std::shared_ptr<ll::Image> createImage(const ll::ImageDescriptor& descriptor);
+
+
+    /**
+    @brief      Creates an image view.
+
+    This method is equivalent to
+
+    @code
+        auto image = memory->createImage(imgDescriptor);
+        auto imageView = image->createImageView(videDescriptor);
+    @endcode
+    
+    @param[in]  imgDescriptor   The underlying ll::Image descriptor.
+    @param[in]  viewDescriptor  The image view descriptor.
+    
+    @return     A new ImageView with the underlying image storage created in thise memory.
+    */
+    std::shared_ptr<ll::ImageView> createImageView(
+        const ll::ImageDescriptor& imgDescriptor,
+        const ll::ImageViewDescriptor& viewDescriptor);
+    
     
     /**
     @brief      Accepts a visitor to this memory.

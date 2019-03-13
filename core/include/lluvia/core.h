@@ -23,6 +23,7 @@
 #include "core/MemoryAllocationInfo.h"
 #include "core/Program.h"
 #include "core/Session.h"
+#include "core/types.h"
 #include "core/utils.h"
 #include "core/Visitor.h"
 
