@@ -62,23 +62,21 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         width /= 2;
         imgDesc.setWidth(width);
 
-        auto imgDownX = memory->createImage(imgDesc);
-        auto imgViewDownX = imgDownX->createImageView(imgViewDesc);
+        auto imgViewDownX = memory->createImageView(imgDesc, imgViewDesc);
         imageViewsX.push_back(imgViewDownX);
-        cmdBuffer->changeImageLayout(*imgDownX, vk::ImageLayout::eGeneral);
+        cmdBuffer->changeImageLayout(*imgViewDownX, vk::ImageLayout::eGeneral);
 
-        std::cout << "X: [" << imgDownX->getWidth() << ", " << imgDownX->getHeight() << ", " << imgDownX->getChannelCount() << "]: " << imgDownX->getAllocationInfo() << std::endl;
+        std::cout << "X: [" << imgViewDownX->getWidth() << ", " << imgViewDownX->getHeight() << ", " << imgViewDownX->getChannelCount() << "]: " << imgViewDownX->getAllocationInfo() << std::endl;
 
 
         height /= 2;
         imgDesc.setHeight(height);
 
-        auto imgDownY = memory->createImage(imgDesc);
-        auto imgViewDownY = imgDownY->createImageView(imgViewDesc);
+        auto imgViewDownY = memory->createImageView(imgDesc, imgViewDesc);
         imageViewsY.push_back(imgViewDownY);
-        cmdBuffer->changeImageLayout(*imgDownY, vk::ImageLayout::eGeneral);
+        cmdBuffer->changeImageLayout(*imgViewDownY, vk::ImageLayout::eGeneral);
 
-        std::cout << "Y: [" << imgDownY->getWidth() << ", " << imgDownY->getHeight() << "]: " << imgDownY->getAllocationInfo() << std::endl;
+        std::cout << "Y: [" << imgViewDownY->getWidth() << ", " << imgViewDownY->getHeight() << "]: " << imgViewDownY->getAllocationInfo() << std::endl;
     }
 
 
