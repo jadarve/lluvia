@@ -57,6 +57,7 @@ build_eclipse
 
 # local stuff
 local
+thirdparty
 
 # Vulkan
 *.spv
