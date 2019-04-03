@@ -66,7 +66,7 @@ bool Memory::isMappable() const noexcept {
 }
 
 
-bool Memory::isPageMappable(const uint64_t page) const noexcept {
+bool Memory::isPageMappable(const uint32_t page) const noexcept {
 
     if (page < memoryPageMappingFlags.size()) {
         return isMappable() && !memoryPageMappingFlags[page];

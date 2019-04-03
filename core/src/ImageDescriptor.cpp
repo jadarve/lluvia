@@ -148,7 +148,7 @@ vk::ImageType ImageDescriptor::getImageType() const noexcept {
 }
 
 
-vk::Format ImageDescriptor::getFormat() const noexcept {
+vk::Format ImageDescriptor::getFormat() const {
 
     switch (channelCount) {
 

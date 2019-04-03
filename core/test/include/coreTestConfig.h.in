@@ -3,7 +3,7 @@
 
 #include <string>
 
-const auto SHADER_PATH = std::string {"${LL_SHADER_OUTPUT_DIR}"};
+const auto SHADER_PATH = std::string {"${LL_GLSL_OUTPUT_DIR}"};
 const auto DATA_PATH   = std::string {"${LL_CORE_TEST_DATA_DIR}"};
 
 

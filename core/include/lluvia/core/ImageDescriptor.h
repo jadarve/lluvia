@@ -324,7 +324,7 @@ public:
     
     @return     The format.
     */
-    vk::Format getFormat() const noexcept;
+    vk::Format getFormat() const;
 
     /**
     @brief      Gets the Vulkan image usage flags.

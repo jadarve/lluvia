@@ -13,5 +13,4 @@ foreach (_src ${_GLSL_SRCS})
 endforeach ()
 
 set (LL_GLSL_SRCS ${LL_GLSL_SRCS} PARENT_SCOPE)
-
 set (LL_GLSL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include" PARENT_SCOPE)

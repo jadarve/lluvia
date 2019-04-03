@@ -203,7 +203,7 @@ public:
     
     @return     True if page mappable, False otherwise.
     */
-    bool isPageMappable(const uint64_t page) const noexcept;
+    bool isPageMappable(const uint32_t page) const noexcept;
 
 
     /**
