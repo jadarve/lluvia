@@ -38,7 +38,7 @@ message(STATUS "-------------------------------------------------")
 #################################################
 # LIBRARY SETTINGS
 #################################################
-set(LIBRARY_OUTPUT_PATH   "lib")
+set(LIBRARY_OUTPUT_PATH   "lib/${CMAKE_SYSTEM_NAME}/${CMAKE_SYSTEM_PROCESSOR}")
 
 
 #################################################
