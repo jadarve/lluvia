@@ -359,12 +359,13 @@ public:
 
         const auto usageFlags = ll::vectorStringToImageUsageFlags(usageVector);
 
+        const auto channelCountEnum = ll::castChannelCount(channelCount);
 
         auto imgDesc = ll::ImageDescriptor {}
                         .setWidth(width)
                         .setHeight(height)
                         .setDepth(depth)
-                        .setChannelCount(channelCount)
+                        .setChannelCount(channelCountEnum)
                         .setChannelType(channelType)
                         .setUsageFlags(usageFlags);
 

@@ -34,11 +34,81 @@ uint64_t getChannelTypeSize(ll::ChannelType type) {
     }
 }
 
+vk::Format getVulkanImageFormat(ll::ChannelCount channelCount, ll::ChannelType channelType) noexcept {
+
+    switch (channelCount) {
+
+        case ll::ChannelCount::C1:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16Sint;
+                case ChannelType::Float16: return vk::Format::eR16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32Sint;
+                case ChannelType::Float32: return vk::Format::eR32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64Sint;
+                case ChannelType::Float64: return vk::Format::eR64Sfloat;
+            }
+        break;
+
+        case ll::ChannelCount::C2:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8G8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8G8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16G16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16G16Sint;
+                case ChannelType::Float16: return vk::Format::eR16G16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32G32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32G32Sint;
+                case ChannelType::Float32: return vk::Format::eR32G32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64G64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64G64Sint;
+                case ChannelType::Float64: return vk::Format::eR64G64Sfloat;
+            }
+        break;
+
+        case ll::ChannelCount::C3:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8G8B8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8G8B8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16G16B16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16G16B16Sint;
+                case ChannelType::Float16: return vk::Format::eR16G16B16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32G32B32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32G32B32Sint;
+                case ChannelType::Float32: return vk::Format::eR32G32B32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64G64B64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64G64B64Sint;
+                case ChannelType::Float64: return vk::Format::eR64G64B64Sfloat;
+            }
+        break;
+
+        case ll::ChannelCount::C4:
+            switch (channelType) {
+                case ChannelType::Uint8:   return vk::Format::eR8G8B8A8Uint;
+                case ChannelType::Int8:    return vk::Format::eR8G8B8A8Sint;
+                case ChannelType::Uint16:  return vk::Format::eR16G16B16A16Uint;
+                case ChannelType::Int16:   return vk::Format::eR16G16B16A16Sint;
+                case ChannelType::Float16: return vk::Format::eR16G16B16A16Sfloat;
+                case ChannelType::Uint32:  return vk::Format::eR32G32B32A32Uint;
+                case ChannelType::Int32:   return vk::Format::eR32G32B32A32Sint;
+                case ChannelType::Float32: return vk::Format::eR32G32B32A32Sfloat;
+                case ChannelType::Uint64:  return vk::Format::eR64G64B64A64Uint;
+                case ChannelType::Int64:   return vk::Format::eR64G64B64A64Sint;
+                case ChannelType::Float64: return vk::Format::eR64G64B64A64Sfloat;
+            }
+        break;
+    }
+}
+
 
 ImageDescriptor::ImageDescriptor(const uint32_t width,
                                  const uint32_t height,
                                  const uint32_t depth,
-                                 const uint32_t channelCount,
+                                 const ll::ChannelCount channelCount,
                                  const ll::ChannelType channelType,
                                  const vk::ImageUsageFlags usageFlags):
     channelType  {channelType},
@@ -58,7 +128,7 @@ ImageDescriptor& ImageDescriptor::setChannelType(const ll::ChannelType type) noe
 }
 
 
-ImageDescriptor& ImageDescriptor::setChannelCount(const uint32_t count) noexcept {
+ImageDescriptor& ImageDescriptor::setChannelCount(const ll::ChannelCount count) noexcept {
 
     channelCount = count;
     return *this;
@@ -105,11 +175,6 @@ ll::ChannelType ImageDescriptor::getChannelType() const noexcept {
 }
 
 
-uint32_t ImageDescriptor::getChannelCount() const noexcept {
-    return channelCount;
-}
-
-
 uint32_t ImageDescriptor::getWidth() const noexcept {
     return shape.x;
 }
@@ -130,7 +195,8 @@ uint64_t ImageDescriptor::getSize() const noexcept {
     auto w = uint64_t {shape.x};
     auto h = uint64_t {shape.y};
     auto d = uint64_t {shape.z};
-    return w*h*d*channelCount*getChannelTypeSize(channelType);
+    auto c = static_cast<uint64_t>(channelCount);
+    return w*h*d*c*getChannelTypeSize(channelType);
 }
 
 ll::vec3ui ImageDescriptor::getShape() const noexcept {
@@ -148,77 +214,9 @@ vk::ImageType ImageDescriptor::getImageType() const noexcept {
 }
 
 
-vk::Format ImageDescriptor::getFormat() const {
+vk::Format ImageDescriptor::getFormat() const noexcept {
 
-    switch (channelCount) {
-
-        case 1:
-            switch (channelType) {
-                case ChannelType::Uint8:   return vk::Format::eR8Uint;
-                case ChannelType::Int8:    return vk::Format::eR8Sint;
-                case ChannelType::Uint16:  return vk::Format::eR16Uint;
-                case ChannelType::Int16:   return vk::Format::eR16Sint;
-                case ChannelType::Float16: return vk::Format::eR16Sfloat;
-                case ChannelType::Uint32:  return vk::Format::eR32Uint;
-                case ChannelType::Int32:   return vk::Format::eR32Sint;
-                case ChannelType::Float32: return vk::Format::eR32Sfloat;
-                case ChannelType::Uint64:  return vk::Format::eR64Uint;
-                case ChannelType::Int64:   return vk::Format::eR64Sint;
-                case ChannelType::Float64: return vk::Format::eR64Sfloat;
-            }
-        break;
-
-        case 2:
-            switch (channelType) {
-                case ChannelType::Uint8:   return vk::Format::eR8G8Uint;
-                case ChannelType::Int8:    return vk::Format::eR8G8Sint;
-                case ChannelType::Uint16:  return vk::Format::eR16G16Uint;
-                case ChannelType::Int16:   return vk::Format::eR16G16Sint;
-                case ChannelType::Float16: return vk::Format::eR16G16Sfloat;
-                case ChannelType::Uint32:  return vk::Format::eR32G32Uint;
-                case ChannelType::Int32:   return vk::Format::eR32G32Sint;
-                case ChannelType::Float32: return vk::Format::eR32G32Sfloat;
-                case ChannelType::Uint64:  return vk::Format::eR64G64Uint;
-                case ChannelType::Int64:   return vk::Format::eR64G64Sint;
-                case ChannelType::Float64: return vk::Format::eR64G64Sfloat;
-            }
-        break;
-
-        case 3:
-            switch (channelType) {
-                case ChannelType::Uint8:   return vk::Format::eR8G8B8Uint;
-                case ChannelType::Int8:    return vk::Format::eR8G8B8Sint;
-                case ChannelType::Uint16:  return vk::Format::eR16G16B16Uint;
-                case ChannelType::Int16:   return vk::Format::eR16G16B16Sint;
-                case ChannelType::Float16: return vk::Format::eR16G16B16Sfloat;
-                case ChannelType::Uint32:  return vk::Format::eR32G32B32Uint;
-                case ChannelType::Int32:   return vk::Format::eR32G32B32Sint;
-                case ChannelType::Float32: return vk::Format::eR32G32B32Sfloat;
-                case ChannelType::Uint64:  return vk::Format::eR64G64B64Uint;
-                case ChannelType::Int64:   return vk::Format::eR64G64B64Sint;
-                case ChannelType::Float64: return vk::Format::eR64G64B64Sfloat;
-            }
-        break;
-
-        case 4:
-            switch (channelType) {
-                case ChannelType::Uint8:   return vk::Format::eR8G8B8A8Uint;
-                case ChannelType::Int8:    return vk::Format::eR8G8B8A8Sint;
-                case ChannelType::Uint16:  return vk::Format::eR16G16B16A16Uint;
-                case ChannelType::Int16:   return vk::Format::eR16G16B16A16Sint;
-                case ChannelType::Float16: return vk::Format::eR16G16B16A16Sfloat;
-                case ChannelType::Uint32:  return vk::Format::eR32G32B32A32Uint;
-                case ChannelType::Int32:   return vk::Format::eR32G32B32A32Sint;
-                case ChannelType::Float32: return vk::Format::eR32G32B32A32Sfloat;
-                case ChannelType::Uint64:  return vk::Format::eR64G64B64A64Uint;
-                case ChannelType::Int64:   return vk::Format::eR64G64B64A64Sint;
-                case ChannelType::Float64: return vk::Format::eR64G64B64A64Sfloat;
-            }
-        break;
-    }
-
-    // this code should not be reached.
-    throw std::runtime_error("channel count must be between 1 and 4, got: " + std::to_string(channelCount));
+    return getVulkanImageFormat(channelCount, channelType);
 }
 
 

@@ -67,7 +67,7 @@ int main(int argc, const char** argv) {
     auto imgDesc = ll::ImageDescriptor {static_cast<uint32_t>(image.width),
                                         static_cast<uint32_t>(image.height),
                                         1,
-                                        static_cast<uint32_t>(image.channels),
+                                        ll::castChannelCount(image.channels),
                                         channelType,
                                         imgFlags};
 

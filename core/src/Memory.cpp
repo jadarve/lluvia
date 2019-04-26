@@ -176,11 +176,6 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
         throw std::invalid_argument("Image depth must be greater than zero, got: " + std::to_string(descriptor.getDepth()));
     }
 
-    if (descriptor.getChannelCount() == 0 || descriptor.getChannelCount() > 4) {
-        throw std::invalid_argument("Image channel count must be in range [1, 4], got: " + std::to_string(descriptor.getChannelCount()));
-    }
-
-
     auto imgInfo = vk::ImageCreateInfo {}
                     .setExtent({descriptor.getWidth(), descriptor.getHeight(), descriptor.getDepth()})
                     .setImageType(descriptor.getImageType())

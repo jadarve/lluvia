@@ -32,7 +32,8 @@ enum class ErrorCode : int32_t {
     BufferCopyError           = 7,      /**< Error copying data between buffers*/
     ProgramCompilationError   = 8,      /**< Error compiling shader module for program*/
     InvalidLocalShape         = 9,      /**< Local shape passed to a Compute node is invalid*/
-    InvalidGridShape          = 10      /**< Grid shape for a ComputeNode is invalid */
+    InvalidGridShape          = 10,     /**< Grid shape for a ComputeNode is invalid */
+    BadEnumCasting            = 11      /**< Bad casting of integral value to enum type */
 };
 
 
@@ -52,6 +53,7 @@ namespace impl {
         std::make_tuple("ProgramCompilationError"   , ll::ErrorCode::ProgramCompilationError),
         std::make_tuple("InvalidLocalShape"         , ll::ErrorCode::InvalidLocalShape),
         std::make_tuple("InvalidGridShape"          , ll::ErrorCode::InvalidGridShape),
+        std::make_tuple("BadEnumCasting"            , ll::ErrorCode::BadEnumCasting),
     }};
 
 } // namespace impl

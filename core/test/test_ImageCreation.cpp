@@ -30,7 +30,7 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(4)
+                    .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
     auto image = memory->createImage(desc);
@@ -80,41 +80,27 @@ TEST_CASE("InvalidImageSize", "test_ImageCreation") {
     desc.setWidth(32)
         .setHeight(32)
         .setDepth(32)
-        .setChannelCount(1);
+        .setChannelCount(ll::ChannelCount::C1);
     REQUIRE_NOTHROW(memory->createImage(desc));    
 
     // invalid width
     desc.setWidth(0)
         .setHeight(32)
         .setDepth(32)
-        .setChannelCount(1);
+        .setChannelCount(ll::ChannelCount::C1);
     REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
 
     // invalid height
     desc.setWidth(32)
         .setHeight(0)
         .setDepth(32)
-        .setChannelCount(1);
+        .setChannelCount(ll::ChannelCount::C1);
     REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
 
     // invalid depth
     desc.setWidth(32)
         .setHeight(32)
         .setDepth(0)
-        .setChannelCount(1);
-    REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
-
-    // invalid channel count lower bound
-    desc.setWidth(32)
-        .setHeight(32)
-        .setDepth(32)
-        .setChannelCount(0);
-    REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
-
-    // invalid channel count lower bound
-    desc.setWidth(32)
-        .setHeight(32)
-        .setDepth(32)
-        .setChannelCount(5);
+        .setChannelCount(ll::ChannelCount::C1);
     REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
 }

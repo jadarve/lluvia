@@ -16,6 +16,8 @@
 #include <tuple>
 #include <vector>
 
+#include "lluvia/core/ImageDescriptor.h"
+
 
 namespace ll {
 
@@ -83,6 +85,9 @@ public:
     @return     The supported memory flags.
     */
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
+
+
+    bool isImageFormatSupported(const ll::ChannelCount channelCount, const ll::ChannelType channelType) const;
 
 
     /**

@@ -57,7 +57,8 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
     for (auto i = 0u; i < levels; ++i) {
 
-        std::cout << "    width: " << width << " height: " << height << " channels: " << channels << std::endl;
+        std::cout << "    width: " << width << " height: " << height << " channels: " << 
+            static_cast<std::underlying_type_t<ll::ChannelCount>>(channels) << std::endl;
 
         width /= 2;
         imgDesc.setWidth(width);
@@ -66,7 +67,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
         imageViewsX.push_back(imgViewDownX);
         cmdBuffer->changeImageLayout(*imgViewDownX, vk::ImageLayout::eGeneral);
 
-        std::cout << "X: [" << imgViewDownX->getWidth() << ", " << imgViewDownX->getHeight() << ", " << imgViewDownX->getChannelCount() << "]: " << imgViewDownX->getAllocationInfo() << std::endl;
+        std::cout << "X: [" << imgViewDownX->getWidth() << ", " << imgViewDownX->getHeight() << ", " << imgViewDownX->getChannelCount<uint32_t>() << "]: " << imgViewDownX->getAllocationInfo() << std::endl;
 
 
         height /= 2;
@@ -201,7 +202,11 @@ void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_
     session->run(*cmdBuffer);
 
     auto mapPtr = hostImage->map<uint8_t>();
-    const auto res = stbi_write_bmp(filename.c_str(), image->getWidth(), image->getHeight(), image->getChannelCount(), mapPtr.get());
+    const auto res = stbi_write_bmp(filename.c_str(),
+        image->getWidth(),
+        image->getHeight(),
+        image->getChannelCount<uint32_t>(),
+        mapPtr.get());
 
     std::cout << "stbi_write_bmp result: " << res << std::endl;
 }

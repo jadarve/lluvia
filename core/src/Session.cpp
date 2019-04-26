@@ -12,6 +12,7 @@
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/Image.h"
+#include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/io.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
@@ -107,6 +108,20 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
     }
 
     return memoryFlags;
+}
+
+
+bool Session::isImageFormatSupported(const ll::ChannelCount channelCount,
+    const ll::ChannelType channelType) const {
+
+    const auto vkFormat = ll::getVulkanImageFormat(channelCount, channelType);
+
+    const auto formatProp = physicalDevice.getFormatProperties(vkFormat);
+    const auto& linearTiling = formatProp.linearTilingFeatures;
+    const auto& optimalTiling = formatProp.optimalTilingFeatures;
+
+    return (linearTiling & vk::FormatFeatureFlagBits::eSampledImage)  &&
+           (optimalTiling & vk::FormatFeatureFlagBits::eSampledImage);
 }
 
 
@@ -248,7 +263,8 @@ bool Session::initDevice() {
                               .setQueueFamilyIndex(computeQueueFamilyIndex)
                               .setPQueuePriorities(&queuePriority);
 
-    assert(physicalDevice.getFeatures().shaderStorageImageExtendedFormats);
+    // FIXME
+    //assert(physicalDevice.getFeatures().shaderStorageImageExtendedFormats);
 
     auto desiredFeatures = vk::PhysicalDeviceFeatures {}
         .setShaderStorageImageExtendedFormats(true);
