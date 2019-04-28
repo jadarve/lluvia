@@ -21,7 +21,7 @@ incDirs = ['../core/include',
            np.get_include()]
 
 # path to build
-libDirs = ['../build/core/lib',
+libDirs = ['../build/core/lib/Linux',
            os.path.join(VULKAN_SDK, 'lib')]
 
 

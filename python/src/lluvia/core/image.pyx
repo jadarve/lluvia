@@ -8,6 +8,8 @@
 
 cimport image
 
+from libc.stdint cimport uint32_t
+
 import  numpy as np
 cimport numpy as np
 
@@ -145,7 +147,7 @@ cdef class Image:
 
     property channels:
         def __get__(self):
-            return self.__image.get().getChannelCount()
+            return self.__image.get().getChannelCount[uint32_t]()
 
         def __set__(self, value):
             raise RuntimeError('channels cannot be set')

@@ -22,10 +22,13 @@ cimport vulkan as vk
 
 cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
     
+    cdef cppclass _ChannelCount 'll::ChannelCount':
+        pass
+
     cdef cppclass _ChannelType 'll::ChannelType':
         pass
 
-
+    _ChannelCount castChannelCount[T](T c)
     uint64_t getChannelTypeSize(_ChannelType type)
     string channelTypeToString(_ChannelType&& value)
     _ChannelType stringToChannelType(string&& stringValue) except +
@@ -37,19 +40,19 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
         _ImageDescriptor(const uint32_t width,
                     const uint32_t height,
                     const uint32_t depth,
-                    const uint32_t channelCount,
+                    _ChannelCount channelCount,
                     _ChannelType channelType,
                      const vk.ImageUsageFlags usageFlags)
 
 
         _ImageDescriptor& setChannelType(const _ChannelType type)
-        _ImageDescriptor& setChannelCount(const uint32_t count)
+        _ImageDescriptor& setChannelCount(const _ChannelCount count)
         _ImageDescriptor& setWidth(const uint32_t width)
         _ImageDescriptor& setHeight(const uint32_t height)
         _ImageDescriptor& setDepth(const uint32_t depth)
 
         _ChannelType getChannelType() const
-        uint32_t getChannelCount()    const
+        T getChannelCount[T]()        const
         uint32_t getWidth()           const
         uint32_t getHeight()          const
         uint32_t getDepth()           const
@@ -75,7 +78,7 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
 
         _ChannelType getChannelType()    const
         uint64_t getChannelTypeSize()    const
-        uint32_t getChannelCount()       const
+        T getChannelCount[T]()           const
         uint32_t getWidth()              const
         uint32_t getHeight()             const
         uint32_t getDepth()              const
