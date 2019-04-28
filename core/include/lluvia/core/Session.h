@@ -87,7 +87,20 @@ public:
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
 
-    bool isImageFormatSupported(const ll::ChannelCount channelCount, const ll::ChannelType channelType) const;
+    // bool isImageFormatSupported(const ll::ChannelCount channelCount, const ll::ChannelType channelType) const;
+
+
+    /**
+    @brief      Determines if parameters in image descriptor are supported for image creation.
+
+    This method tests whether or not the combination of image shape, tiling
+    and usage flags is supported by the physical device.
+    
+    @param[in]  descriptor  The descriptor
+    
+    @return     True if image descriptor is supported, False otherwise.
+    */
+    bool isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept;
 
 
     /**

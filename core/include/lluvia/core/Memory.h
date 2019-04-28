@@ -259,6 +259,12 @@ public:
     
     @param[in]  imgDescriptor   The underlying ll::Image descriptor.
     @param[in]  viewDescriptor  The image view descriptor.
+
+    @throws     std::system_error if the Vulkan memory does not support allocating image objects.
+
+    @throws     std::invalid_argument if the image size in the descriptor is not valid.
+                                      This happens if the width, height or depth are zero
+                                      or if the channel count ins not in the rante [1, 4].
     
     @return     A new ImageView with the underlying image storage created in thise memory.
     */

@@ -192,7 +192,8 @@ public:
     @param[in]  channelCount  The channel count. It must be between 1 and 4.
     @param[in]  channelType   The channel type.
     @param[in]  usageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
-                              See @VULKAN_DOC#VkBufferUsageFlagBits
+                              See @VULKAN_DOC#VkBufferUsageFlagBits.
+    @param[in]  tiling        The image tiling. Defaults to `vk::ImageTiling::eOptimal`.
     */
     ImageDescriptor(const uint32_t width,
                     const uint32_t height,
@@ -200,7 +201,8 @@ public:
                     const ll::ChannelCount channelCount,
                     const ll::ChannelType channelType,
                     const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
-                                                            | vk::ImageUsageFlagBits::eSampled}
+                                                            | vk::ImageUsageFlagBits::eSampled},
+                    const vk::ImageTiling tiling = vk::ImageTiling::eOptimal
                     );
 
     ~ImageDescriptor()                                              = default;
@@ -279,6 +281,16 @@ public:
     @return     The usage flags.
     */
     ImageDescriptor& setUsageFlags(const vk::ImageUsageFlags flags) noexcept;
+
+
+    /**
+    @brief      Sets the vulkan image tiling.
+    
+    @param[in]  tiling  The tiling
+    
+    @return     A reference to this object.
+    */
+    ImageDescriptor& setTiling(const vk::ImageTiling tiling) noexcept;
 
 
     /**
@@ -384,6 +396,13 @@ public:
     */
     vk::ImageUsageFlags getUsageFlags() const noexcept;
 
+    /**
+    @brief      Gets the vulkan image tiling.
+    
+    @return     The image tiling.
+    */
+    vk::ImageTiling getTiling() const noexcept;
+
 private:
     ll::ChannelType channelType   {ll::ChannelType::Uint8};
     ll::ChannelCount channelCount {ll::ChannelCount::C1};
@@ -394,6 +413,7 @@ private:
     // z : depth
     ll::vec3ui shape              {1, 1, 1};
 
+    vk::ImageTiling tiling        {vk::ImageTiling::eOptimal};
     vk::ImageUsageFlags usageFlags;
 };
 

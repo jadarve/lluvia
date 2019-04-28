@@ -110,8 +110,10 @@ ImageDescriptor::ImageDescriptor(const uint32_t width,
                                  const uint32_t depth,
                                  const ll::ChannelCount channelCount,
                                  const ll::ChannelType channelType,
-                                 const vk::ImageUsageFlags usageFlags):
+                                 const vk::ImageUsageFlags usageFlags,
+                                 const vk::ImageTiling tiling):
     channelType  {channelType},
+    tiling       {tiling},
     usageFlags   {usageFlags} {
 
     setWidth(width);
@@ -170,6 +172,13 @@ ImageDescriptor& ImageDescriptor::setUsageFlags(const vk::ImageUsageFlags flags)
 }
 
 
+ImageDescriptor& ImageDescriptor::setTiling(const vk::ImageTiling tiling) noexcept {
+
+    this->tiling = tiling;
+    return *this;
+}
+
+
 ll::ChannelType ImageDescriptor::getChannelType() const noexcept {
     return channelType;
 }
@@ -222,6 +231,11 @@ vk::Format ImageDescriptor::getFormat() const noexcept {
 
 vk::ImageUsageFlags ImageDescriptor::getUsageFlags() const noexcept {
     return usageFlags;
+}
+
+
+vk::ImageTiling ImageDescriptor::getTiling() const noexcept {
+    return tiling;
 }
 
 } // namespace ll

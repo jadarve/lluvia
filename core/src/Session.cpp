@@ -111,17 +111,43 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-bool Session::isImageFormatSupported(const ll::ChannelCount channelCount,
-    const ll::ChannelType channelType) const {
+// bool Session::isImageFormatSupported(const ll::ChannelCount channelCount,
+//     const ll::ChannelType channelType) const {
 
-    const auto vkFormat = ll::getVulkanImageFormat(channelCount, channelType);
+//     const auto vkFormat = ll::getVulkanImageFormat(channelCount, channelType);
 
-    const auto formatProp = physicalDevice.getFormatProperties(vkFormat);
-    const auto& linearTiling = formatProp.linearTilingFeatures;
-    const auto& optimalTiling = formatProp.optimalTilingFeatures;
+//     const auto formatProp = physicalDevice.getFormatProperties(vkFormat);
+//     const auto& linearTiling = formatProp.linearTilingFeatures;
+//     const auto& optimalTiling = formatProp.optimalTilingFeatures;
 
-    return (linearTiling & vk::FormatFeatureFlagBits::eSampledImage)  &&
-           (optimalTiling & vk::FormatFeatureFlagBits::eSampledImage);
+//     return (linearTiling & vk::FormatFeatureFlagBits::eSampledImage)  &&
+//            (optimalTiling & vk::FormatFeatureFlagBits::eSampledImage);
+// }
+
+
+bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept {
+
+    auto formatProperties = vk::ImageFormatProperties {};
+
+    auto result = physicalDevice.getImageFormatProperties(descriptor.getFormat(),
+        descriptor.getImageType(), 
+        descriptor.getTiling(), 
+        descriptor.getUsageFlags(),
+        vk::ImageCreateFlags {},
+        &formatProperties);
+
+    if (result != vk::Result::eSuccess) {
+        return false;
+    }
+
+    // check extend
+    if (descriptor.getWidth() > formatProperties.maxExtent.width ||
+        descriptor.getHeight() > formatProperties.maxExtent.height ||
+        descriptor.getDepth() > formatProperties.maxExtent.depth) {
+        return false;
+    }
+
+    return true;
 }
 
 
