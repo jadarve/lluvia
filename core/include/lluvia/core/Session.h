@@ -55,6 +55,10 @@ public:
     @brief      Creates a new ll::Session object.
     
     @return     A new session.
+
+    @throws     std::system_error with error code ll::ErrorCode::PhysicalDevicesNotFound
+                if not physical devices are available.
+
     */
     static std::shared_ptr<ll::Session> create();
 

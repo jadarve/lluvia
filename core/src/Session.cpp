@@ -271,6 +271,10 @@ bool Session::initInstance() {
         throw std::system_error(std::error_code(), "Incompatible driver");
     }
 
+    const auto physicalDevices = instance.enumeratePhysicalDevices();
+    ll::throwSystemErrorIf(physicalDevices.size() == 0,
+        ll::ErrorCode::PhysicalDevicesNotFound, "No physical devices found in the system");
+
     // TODO: let user to choose physical device
     physicalDevice = instance.enumeratePhysicalDevices()[0];
 
@@ -289,11 +293,10 @@ bool Session::initDevice() {
                               .setQueueFamilyIndex(computeQueueFamilyIndex)
                               .setPQueuePriorities(&queuePriority);
 
-    // FIXME
-    //assert(physicalDevice.getFeatures().shaderStorageImageExtendedFormats);
+    const auto supportedFeatures = physicalDevice.getFeatures();
 
     auto desiredFeatures = vk::PhysicalDeviceFeatures {}
-        .setShaderStorageImageExtendedFormats(true);
+        .setShaderStorageImageExtendedFormats(supportedFeatures.shaderStorageImageExtendedFormats);
 
     auto devCreateInfo = vk::DeviceCreateInfo()
                          .setQueueCreateInfoCount(1)
