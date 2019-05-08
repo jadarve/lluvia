@@ -35,8 +35,7 @@ CMakeFiles
 *.app
 
 # Build directory
-build
-build_eclipse
+build*/
 
 # SublimeText
 *.sublime-project
