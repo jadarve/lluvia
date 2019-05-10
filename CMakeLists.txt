@@ -1,36 +1,51 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.7)
 project(lluvia)
+
 
 #################################################
 # CMAKE SETTINGS
 #################################################
-
-# variable to control de verbosity of the custom functions
-set (LL_CMAKE_VERBOSE TRUE)
-set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include (Modules/download_file)
 include (Modules/llAddShader)
 
 
 #################################################
+# GLOBAL VARIABLES
+#################################################
+
+# Controls de verbosity of the custom functions
+set(LL_CMAKE_VERBOSE TRUE)
+
+# GLSL source files and include paths
+set(LL_GLSL_SRCS)
+set(LL_GLSL_INCLUDE_DIRS)
+set(LL_GLSL_OUTPUT_DIR ${CMAKE_BINARY_DIR}/glsl)
+
+
+#################################################
 # COMPILER SETTINGS
 #################################################
+message(STATUS "-------------------------------------------------")
+message(STATUS "Configuring compiler")
 
-message(STATUS "Configuring for Unix system")
-set (CMAKE_CXX_COMPILER         "clang")
-set (CMAKE_CXX_FLAGS            "-std=c++14 -O0 -Werror -Wall -Wshorten-64-to-32")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -O0 -Werror -Wall -Wshorten-64-to-32")
+message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
+message(STATUS "Flags    : ${CMAKE_CXX_FLAGS}")
+message(STATUS "-------------------------------------------------")
 
 
 #################################################
-# CATCH SETTINGS
+# LIBRARY SETTINGS
 #################################################
-enable_testing()
-include(cmake/thirdparty/Catch.cmake)
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 
 
 #################################################
 # THIRD PARTY SETTINGS
 #################################################
+enable_testing()
+include(cmake/thirdparty/Catch.cmake)
 include(cmake/thirdparty/JSON.cmake)
 include(cmake/thirdparty/STB.cmake)
 
@@ -38,33 +53,32 @@ include(cmake/thirdparty/STB.cmake)
 #################################################
 # GLSL COMPILER SETTINGS
 #################################################
-set (LLC_COMMAND ${CMAKE_BINARY_DIR}/tools/llc/llc)
-message (STATUS "LLC_COMMAND: ${LLC_COMMAND}")
-
-#################################################
-# VULKAN SETTINGS
-#################################################
-include_directories($ENV{VULKAN_SDK}/include)
-link_directories($ENV{VULKAN_SDK}/lib)
+set(LLC_COMMAND ${CMAKE_BINARY_DIR}/tools/llc/llc)
+message(STATUS "LLC_COMMAND: ${LLC_COMMAND}")
 
 
 #################################################
-# LIBRARY SETTINGS
+# TARGET SYSTEM SETTINGS
 #################################################
-set(LIBRARY_OUTPUT_PATH   "lib")
+message(STATUS "-------------------------------------------------")
+message(STATUS "Configuring for target system: ${CMAKE_SYSTEM_NAME}")
+
+include(cmake/platforms/${CMAKE_SYSTEM_NAME}.cmake)
+
+message(STATUS "-------------------------------------------------")
 
 
-# TODO: Set this type of variables together in a code block
-set (LL_SHADER_OUTPUT_DIR ${CMAKE_BINARY_DIR}/glsl)
+#################################################
+# GLSL SETTINGS
+#################################################
+# creates the list of GLSL shaders to build. The list is stored in LL_GLSL_SRCS.
+add_subdirectory(glsl)
 
 
 #################################################
 # SOURCE FILES SETTINGS
 #################################################
 add_subdirectory(core)
-
-# creates the list of GLSL shaders to build. The list is stored in LL_GLSL_SRCS variable.
-add_subdirectory(glsl)
 add_subdirectory(tools)
 add_subdirectory(samples)
 

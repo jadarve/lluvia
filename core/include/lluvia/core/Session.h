@@ -16,6 +16,8 @@
 #include <tuple>
 #include <vector>
 
+#include "lluvia/core/ImageDescriptor.h"
+
 
 namespace ll {
 
@@ -53,6 +55,10 @@ public:
     @brief      Creates a new ll::Session object.
     
     @return     A new session.
+
+    @throws     std::system_error with error code ll::ErrorCode::PhysicalDevicesNotFound
+                if not physical devices are available.
+
     */
     static std::shared_ptr<ll::Session> create();
 
@@ -83,6 +89,19 @@ public:
     @return     The supported memory flags.
     */
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
+
+
+    /**
+    @brief      Determines if parameters in image descriptor are supported for image creation.
+
+    This method tests whether or not the combination of image shape, tiling
+    and usage flags is supported by the physical device.
+    
+    @param[in]  descriptor  The descriptor
+    
+    @return     True if image descriptor is supported, False otherwise.
+    */
+    bool isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept;
 
 
     /**

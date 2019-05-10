@@ -52,7 +52,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
                     .setWidth(WIDTH)
                     .setHeight(HEIGHT)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(1)
+                    .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
@@ -171,7 +171,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
                     .setWidth(WIDTH)
                     .setHeight(HEIGHT)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(1)
+                    .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());

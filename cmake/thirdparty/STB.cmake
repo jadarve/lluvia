@@ -6,7 +6,7 @@ set (_STB_FILE_LIST
     "stb_image_write.h"
 )
 
-set (_STB_FILE_PATH "${CMAKE_BINARY_DIR}/thirdparty/stb")
+set (_STB_FILE_PATH "${CMAKE_SOURCE_DIR}/thirdparty/stb")
 
 foreach(_FILE ${_STB_FILE_LIST})
 
@@ -23,7 +23,7 @@ foreach(_FILE ${_STB_FILE_LIST})
 
 endforeach(_FILE)
 
-set (STB_INCLUDE_DIR "${CMAKE_BINARY_DIR}/thirdparty/stb")
+set (STB_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/thirdparty/stb")
 add_library (STB INTERFACE)
 target_include_directories (STB INTERFACE ${STB_INCLUDE_DIR})
 

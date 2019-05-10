@@ -8,6 +8,7 @@
 #ifndef LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
 #define LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
 
+#include "lluvia/core/error.h"
 #include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/types.h"
 
@@ -15,6 +16,7 @@
 #include <cstdint>
 #include <string>
 #include <tuple>
+#include <type_traits>
 
 #include <vulkan/vulkan.hpp>
 
@@ -42,6 +44,17 @@ enum class ChannelType : uint32_t {
     Uint64  = 8,    /**< 64-bit unsigned int. */
     Int64   = 9,    /**< 64-bit signed int. */
     Float64 = 10    /**< 64-bit floating point. */
+};
+
+
+/**
+@brief      Supported image channel count.
+*/
+enum class ChannelCount : uint32_t {
+    C1 = 1,
+    C2 = 2,
+    C3 = 3,
+    C4 = 4
 };
 
 
@@ -108,6 +121,25 @@ inline ll::ChannelType stringToChannelType(T&& stringValue) {
 }
 
 
+template<typename T=uint32_t>
+ll::ChannelCount castChannelCount(T c) {
+    static_assert(std::is_integral<T>::value, "T must be an integral type.");
+
+    const auto casted = static_cast<std::underlying_type<ll::ChannelCount>::type>(c);
+
+    constexpr const auto minValue = static_cast<std::underlying_type<ll::ChannelCount>::type>(ll::ChannelCount::C1);
+    constexpr const auto maxValue = static_cast<std::underlying_type<ll::ChannelCount>::type>(ll::ChannelCount::C4);
+
+    ll::throwSystemErrorIf(
+        casted < minValue || casted > maxValue,
+        ll::ErrorCode::BadEnumCasting,
+        "Error casting integral value " + std::to_string(c) + " to ll::ChannelCount. " +
+        "Expected value must be within range [" + std::to_string(minValue) + ", " + std::to_string(maxValue) + "].");
+
+    return static_cast<ll::ChannelCount>(c);
+}
+
+
 /**
 @brief      Gets size in bytes of a given channel type.
 
@@ -116,6 +148,17 @@ inline ll::ChannelType stringToChannelType(T&& stringValue) {
 @return     The channel type size in bytes.
 */
 uint64_t getChannelTypeSize(ll::ChannelType type);
+
+
+/**
+@brief      Gets the vulkan image format for a given channel count and type.
+
+@param[in]  channels  The channel count
+@param[in]  type      The channel type
+
+@return     The vulkan image format.
+*/
+vk::Format getVulkanImageFormat(ll::ChannelCount channelCount, ll::ChannelType channelType) noexcept;
 
 
 /**
@@ -149,15 +192,17 @@ public:
     @param[in]  channelCount  The channel count. It must be between 1 and 4.
     @param[in]  channelType   The channel type.
     @param[in]  usageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
-                              See @VULKAN_DOC#VkBufferUsageFlagBits
+                              See @VULKAN_DOC#VkBufferUsageFlagBits.
+    @param[in]  tiling        The image tiling. Defaults to `vk::ImageTiling::eOptimal`.
     */
     ImageDescriptor(const uint32_t width,
                     const uint32_t height,
                     const uint32_t depth,
-                    const uint32_t channelCount,
+                    const ll::ChannelCount channelCount,
                     const ll::ChannelType channelType,
                     const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
-                                                            | vk::ImageUsageFlagBits::eSampled}
+                                                            | vk::ImageUsageFlagBits::eSampled},
+                    const vk::ImageTiling tiling = vk::ImageTiling::eOptimal
                     );
 
     ~ImageDescriptor()                                              = default;
@@ -183,7 +228,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageDescriptor& setChannelCount(const uint32_t count)      noexcept;
+    ImageDescriptor& setChannelCount(const ll::ChannelCount count)      noexcept;
 
 
     /**
@@ -239,6 +284,16 @@ public:
 
 
     /**
+    @brief      Sets the vulkan image tiling.
+    
+    @param[in]  tiling  The tiling
+    
+    @return     A reference to this object.
+    */
+    ImageDescriptor& setTiling(const vk::ImageTiling tiling) noexcept;
+
+
+    /**
     @brief      Gets the channel type.
     
     @return     The channel type.
@@ -249,9 +304,14 @@ public:
     /**
     @brief      Gets the channel count.
     
-    @return     The channel count. Number between 1 and 4.
+    @tparam     T     Type of the return value. Defaults to ll::ChannelCount.
+    
+    @return     The channel count.
     */
-    uint32_t getChannelCount()       const noexcept;
+    template<typename T=ll::ChannelCount>
+    T getChannelCount() const noexcept {
+        return static_cast<T>(channelCount);
+    }
 
 
     /**
@@ -336,16 +396,24 @@ public:
     */
     vk::ImageUsageFlags getUsageFlags() const noexcept;
 
+    /**
+    @brief      Gets the vulkan image tiling.
+    
+    @return     The image tiling.
+    */
+    vk::ImageTiling getTiling() const noexcept;
+
 private:
-    ll::ChannelType channelType  {ll::ChannelType::Uint8};
-    uint32_t channelCount        {1};
+    ll::ChannelType channelType   {ll::ChannelType::Uint8};
+    ll::ChannelCount channelCount {ll::ChannelCount::C1};
 
     // dimensions along each axis
     // x : width
     // y : height
     // z : depth
-    ll::vec3ui shape             {1, 1, 1};
+    ll::vec3ui shape              {1, 1, 1};
 
+    vk::ImageTiling tiling        {vk::ImageTiling::eOptimal};
     vk::ImageUsageFlags usageFlags;
 };
 

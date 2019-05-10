@@ -69,11 +69,6 @@ uint64_t Image::getChannelTypeSize() const noexcept {
 }
 
 
-uint32_t Image::getChannelCount() const noexcept {
-    return descriptor.getChannelCount();
-}
-
-
 uint32_t Image::getWidth() const noexcept {
     return descriptor.getWidth();
 }

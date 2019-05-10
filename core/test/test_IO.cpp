@@ -104,7 +104,7 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
                     .setWidth(WIDTH)
                     .setHeight(HEIGHT)
                     .setChannelType(ll::ChannelType::Uint8)
-                    .setChannelCount(1)
+                    .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());

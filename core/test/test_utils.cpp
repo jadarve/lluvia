@@ -45,7 +45,7 @@ TEST_CASE("createInitImage", "test_utils") {
                                               | vk::ImageUsageFlagBits::eSampled
                                               | vk::ImageUsageFlagBits::eTransferDst};
 
-    const auto imgDesc = ll::ImageDescriptor {width, height, 1, 1, ll::ChannelType::Uint8, imgUsageFlags};
+    const auto imgDesc = ll::ImageDescriptor {width, height, 1, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags};
 
 
     auto session = ll::Session::create();
@@ -68,13 +68,13 @@ TEST_CASE("configureGraph", "test_utils") {
                                               | vk::ImageUsageFlagBits::eSampled
                                               | vk::ImageUsageFlagBits::eTransferDst};
 
-    const auto imgDesc = ll::ImageDescriptor {width, height, 1, 1, ll::ChannelType::Uint8, imgUsageFlags};
+    const auto imgDesc = ll::ImageDescriptor {width, height, 1, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags};
 
     auto session = ll::Session::create();
     auto memory = session->createMemory(memoryFlags, 0);
 
-    const auto RGBADesc = ll::ImageDescriptor(imgDesc).setChannelCount(4);
-    const auto grayDesc = ll::ImageDescriptor(imgDesc).setChannelCount(1);
+    const auto RGBADesc = ll::ImageDescriptor(imgDesc).setChannelCount(ll::ChannelCount::C4);
+    const auto grayDesc = ll::ImageDescriptor(imgDesc).setChannelCount(ll::ChannelCount::C1);
 
     // TOTHINK: Could initialiaze both images with a single command buffer. More efficient.
     auto RGBA = ll::createAndInitImage(session, memory, RGBADesc, vk::ImageLayout::eGeneral);

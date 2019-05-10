@@ -1,6 +1,14 @@
 # Low Level Unified VIsion Algorithms (LLUVIA)
 
-Lluvia is a computer vision engine designed for real-time applications. It is coded in C++14 and uses the Vulkan graphics and compute API. Compute kernels are coded in GLSL and can be dispatched to the GPU either using the C++ or Python.
+# Supported Platforms
+
+* [Linux and Mac OSX](https://github.com/jadarve/lluvia/wiki/Linux-and-Mac-OSX-Build).
+* [Android](https://github.com/jadarve/lluvia/wiki/Android-build).
+
+
+# Overview
+
+Lluvia is a computer vision engine designed for real-time applications. It is coded in C++14 and uses the Vulkan graphics and compute API. Compute kernels are coded in GLSL and can be dispatched to the GPU either using C++ or Python.
 
 For instance, the following compute shader computes the sum of two arrays `C = A + B`
 
@@ -116,10 +124,6 @@ node.run()
 
 print(C.toHost(dtype=np.int32))
 ```
-
-# Build Instructions
-
-* [Linux and Mac OSX](https://github.com/jadarve/lluvia/wiki/Linux-and-Mac-OSX-Build).
 
 
 # License

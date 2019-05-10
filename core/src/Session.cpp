@@ -12,6 +12,7 @@
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/Image.h"
+#include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/io.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
@@ -107,6 +108,32 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
     }
 
     return memoryFlags;
+}
+
+
+bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept {
+
+    auto formatProperties = vk::ImageFormatProperties {};
+
+    auto result = physicalDevice.getImageFormatProperties(descriptor.getFormat(),
+        descriptor.getImageType(), 
+        descriptor.getTiling(), 
+        descriptor.getUsageFlags(),
+        vk::ImageCreateFlags {},
+        &formatProperties);
+
+    if (result != vk::Result::eSuccess) {
+        return false;
+    }
+
+    // check extend
+    if (descriptor.getWidth() > formatProperties.maxExtent.width ||
+        descriptor.getHeight() > formatProperties.maxExtent.height ||
+        descriptor.getDepth() > formatProperties.maxExtent.depth) {
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -230,6 +257,10 @@ bool Session::initInstance() {
         throw std::system_error(std::error_code(), "Incompatible driver");
     }
 
+    const auto physicalDevices = instance.enumeratePhysicalDevices();
+    ll::throwSystemErrorIf(physicalDevices.size() == 0,
+        ll::ErrorCode::PhysicalDevicesNotFound, "No physical devices found in the system");
+
     // TODO: let user to choose physical device
     physicalDevice = instance.enumeratePhysicalDevices()[0];
 
@@ -248,10 +279,10 @@ bool Session::initDevice() {
                               .setQueueFamilyIndex(computeQueueFamilyIndex)
                               .setPQueuePriorities(&queuePriority);
 
-    assert(physicalDevice.getFeatures().shaderStorageImageExtendedFormats);
+    const auto supportedFeatures = physicalDevice.getFeatures();
 
     auto desiredFeatures = vk::PhysicalDeviceFeatures {}
-        .setShaderStorageImageExtendedFormats(true);
+        .setShaderStorageImageExtendedFormats(supportedFeatures.shaderStorageImageExtendedFormats);
 
     auto devCreateInfo = vk::DeviceCreateInfo()
                          .setQueueCreateInfoCount(1)

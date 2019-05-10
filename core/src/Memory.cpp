@@ -14,6 +14,7 @@
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/ImageViewDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/Session.h"
 
 #include <algorithm>
 #include <exception>
@@ -66,7 +67,7 @@ bool Memory::isMappable() const noexcept {
 }
 
 
-bool Memory::isPageMappable(const uint64_t page) const noexcept {
+bool Memory::isPageMappable(const uint32_t page) const noexcept {
 
     if (page < memoryPageMappingFlags.size()) {
         return isMappable() && !memoryPageMappingFlags[page];
@@ -176,17 +177,19 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
         throw std::invalid_argument("Image depth must be greater than zero, got: " + std::to_string(descriptor.getDepth()));
     }
 
-    if (descriptor.getChannelCount() == 0 || descriptor.getChannelCount() > 4) {
-        throw std::invalid_argument("Image channel count must be in range [1, 4], got: " + std::to_string(descriptor.getChannelCount()));
+    // checks if the combination of image shape, tiling and flags can be used.
+    if (!this->session->isImageDescriptorSupported(descriptor)) {
+        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError),
+            "physical device does not support allocation of image objects with the provided "
+            "combination of shape, tiling and usageFlags.");
     }
-
 
     auto imgInfo = vk::ImageCreateInfo {}
                     .setExtent({descriptor.getWidth(), descriptor.getHeight(), descriptor.getDepth()})
                     .setImageType(descriptor.getImageType())
                     .setArrayLayers(1)
                     .setMipLevels(1)
-                    .setTiling(vk::ImageTiling::eOptimal)
+                    .setTiling(descriptor.getTiling())
                     .setSamples(vk::SampleCountFlagBits::e1)
                     .setSharingMode(vk::SharingMode::eExclusive)
                     .setUsage(descriptor.getUsageFlags())
@@ -201,6 +204,8 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     // check that memRequirements.memoryTypeBits is supported in this memory
     const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
+
+        device.destroyImage(vkImage);
         throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(heapInfo.typeIndex) + " does not support allocating image objects.");
     }
 

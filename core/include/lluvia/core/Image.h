@@ -245,12 +245,17 @@ public:
     uint64_t getChannelTypeSize()    const noexcept;
 
 
-    /**
+   /**
     @brief      Gets the channel count.
     
-    @return     The channel count. Number between 1 and 4.
+    @tparam     T     Type of the return value. Defaults to ll::ChannelCount.
+    
+    @return     The channel count.
     */
-    uint32_t getChannelCount()       const noexcept;
+    template<typename T=ll::ChannelCount>
+    T getChannelCount() const noexcept {
+        return descriptor.getChannelCount<T>();
+    }
 
 
     /**

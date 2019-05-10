@@ -237,10 +237,13 @@ public:
     /**
     @brief      Gets the channel count.
     
-    @return     The channel count. Number between 1 and 4.
+    @tparam     T     Type of the return value. Defaults to ll::ChannelCount.
+    
+    @return     The channel count.
     */
-    inline uint32_t getChannelCount() const noexcept {
-        return this->image->getChannelCount();
+    template<typename T=ll::ChannelCount>
+    T getChannelCount() const noexcept {
+        return this->image->getChannelCount<T>();
     }
 
 

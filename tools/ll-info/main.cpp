@@ -77,6 +77,38 @@ void getPhysicalDeviceMemoryProperties(const vk::PhysicalDeviceMemoryProperties&
 }
 
 
+void getCompatibleImageFormats(std::shared_ptr<ll::Session>& session, json& jsonParent) {
+
+    auto formats = json {};
+
+    // constexpr const auto channelCountValues = std::array<ll::ChannelCount, 4> {{
+    //     ll::ChannelCount::C1,
+    //     ll::ChannelCount::C2,
+    //     ll::ChannelCount::C3,
+    //     ll::ChannelCount::C4
+    // }};
+
+    // for (const auto c : channelCountValues) {
+
+    //     auto channelFormats = json {};
+    //     channelFormats["channels"] = static_cast<int32_t>(c);
+
+
+    //     for (auto& cType : ll::impl::ChannelTypeStrings) {
+
+    //         if (session->isImageFormatSupported(c, std::get<1>(cType))) {
+    //             channelFormats["formats"].push_back(std::get<0>(cType));
+    //         }
+
+    //     }
+
+    //     formats.push_back(channelFormats);
+    // }
+
+    jsonParent["image_formats"] = formats;
+}
+
+
 int main() {
 
     auto j = json {};
@@ -85,6 +117,7 @@ int main() {
 
     getLayerProperties(j);
     getPhysicalDeviceMemoryProperties(session->getPhysicalDeviceMemoryProperties(), j);
+    getCompatibleImageFormats(session, j);
 
     cout << std::setw(2) << j << std::endl;
 

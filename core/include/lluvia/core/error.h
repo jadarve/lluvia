@@ -32,7 +32,9 @@ enum class ErrorCode : int32_t {
     BufferCopyError           = 7,      /**< Error copying data between buffers*/
     ProgramCompilationError   = 8,      /**< Error compiling shader module for program*/
     InvalidLocalShape         = 9,      /**< Local shape passed to a Compute node is invalid*/
-    InvalidGridShape          = 10      /**< Grid shape for a ComputeNode is invalid */
+    InvalidGridShape          = 10,     /**< Grid shape for a ComputeNode is invalid */
+    BadEnumCasting            = 11,     /**< Bad casting of integral value to enum type */
+    PhysicalDevicesNotFound   = 12      /**< No physical devices found */
 };
 
 
@@ -41,7 +43,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 11> ErrorCodeStrings {{
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 12> ErrorCodeStrings {{
         std::make_tuple("EnumConversionFailed"      , ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed"           , ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError"     , ll::ErrorCode::ObjectAllocationError),
@@ -52,6 +54,8 @@ namespace impl {
         std::make_tuple("ProgramCompilationError"   , ll::ErrorCode::ProgramCompilationError),
         std::make_tuple("InvalidLocalShape"         , ll::ErrorCode::InvalidLocalShape),
         std::make_tuple("InvalidGridShape"          , ll::ErrorCode::InvalidGridShape),
+        std::make_tuple("BadEnumCasting"            , ll::ErrorCode::BadEnumCasting),
+        std::make_tuple("PhysicalDevicesNotFound"   , ll::ErrorCode::PhysicalDevicesNotFound),
     }};
 
 } // namespace impl

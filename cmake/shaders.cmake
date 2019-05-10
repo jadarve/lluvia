@@ -4,7 +4,7 @@ set (_SHADERS_OUTPUT_LIST)
 foreach (_SRC ${LL_GLSL_SRCS})
 
     set (_GLSL_OUTPUT "_GLSL_OUTPUT")
-    llAddShader(${_SRC} ${LL_SHADER_OUTPUT_DIR} ${_GLSL_OUTPUT})
+    llAddShader(${_SRC} ${LL_GLSL_OUTPUT_DIR} ${_GLSL_OUTPUT})
 
     list (APPEND _SHADERS_OUTPUT_LIST ${_GLSL_OUTPUT})
 

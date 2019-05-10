@@ -28,7 +28,7 @@ struct MemoryAllocationInfo {
     uint64_t leftPadding;
 
     /** @brief page number within memory */
-    uint64_t page;
+    uint32_t page;
 };
 
 } // namespace ll
