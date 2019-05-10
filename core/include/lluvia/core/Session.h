@@ -91,9 +91,6 @@ public:
     std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
 
-    // bool isImageFormatSupported(const ll::ChannelCount channelCount, const ll::ChannelType channelType) const;
-
-
     /**
     @brief      Determines if parameters in image descriptor are supported for image creation.
 

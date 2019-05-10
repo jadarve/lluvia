@@ -111,20 +111,6 @@ std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
-// bool Session::isImageFormatSupported(const ll::ChannelCount channelCount,
-//     const ll::ChannelType channelType) const {
-
-//     const auto vkFormat = ll::getVulkanImageFormat(channelCount, channelType);
-
-//     const auto formatProp = physicalDevice.getFormatProperties(vkFormat);
-//     const auto& linearTiling = formatProp.linearTilingFeatures;
-//     const auto& optimalTiling = formatProp.optimalTilingFeatures;
-
-//     return (linearTiling & vk::FormatFeatureFlagBits::eSampledImage)  &&
-//            (optimalTiling & vk::FormatFeatureFlagBits::eSampledImage);
-// }
-
-
 bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept {
 
     auto formatProperties = vk::ImageFormatProperties {};
