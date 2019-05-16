@@ -1,5 +1,11 @@
 # Low Level Unified VIsion Algorithms (LLUVIA)
 
+|    |    |
+|----|----|
+| Cirrus CI | [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/jadarv/lluvia.svg)](https://cirrus-ci.com/github/jadarve/lluvia)  |
+
+
+
 # Supported Platforms
 
 * [Linux and Mac OSX](https://github.com/jadarve/lluvia/wiki/Linux-and-Mac-OSX-Build).
