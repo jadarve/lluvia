@@ -2,7 +2,7 @@
 
 |    |    |
 |----|----|
-| Cirrus CI | [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/jadarv/lluvia.svg)](https://cirrus-ci.com/github/jadarve/lluvia)  |
+| Cirrus CI | [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/jadarve/lluvia.svg)](https://cirrus-ci.com/github/jadarve/lluvia)  |
 
 
 
