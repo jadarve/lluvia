@@ -15,9 +15,9 @@ using memflags = vk::MemoryPropertyFlagBits;
 
 struct binding {
 
-    binding(const uint32_t index, const std::shared_ptr<ll::Object>& object) :
-        index  {index},
-        object {object} {
+    binding(const uint32_t tIndex, const std::shared_ptr<ll::Object>& tObject) :
+        index  {tIndex},
+        object {tObject} {
 
     }
 
@@ -25,9 +25,10 @@ struct binding {
     const std::shared_ptr<ll::Object>& object;
 };
 
-void configureComputeNode(std::shared_ptr<ll::ComputeNode>& node,
-    const ll::vec3ui&& globalSize,
-    std::initializer_list<std::pair<uint32_t, const std::shared_ptr<ll::Object>&> > bindings
+void configureComputeNode(
+    __attribute__((unused)) std::shared_ptr<ll::ComputeNode>& node,
+    __attribute__((unused)) const ll::vec3ui&& globalSize,
+    __attribute__((unused)) std::initializer_list<std::pair<uint32_t, const std::shared_ptr<ll::Object>&> > bindings
     ) {
 
 }

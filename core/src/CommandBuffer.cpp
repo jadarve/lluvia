@@ -7,8 +7,8 @@
 
 namespace ll {
 
-CommandBuffer::CommandBuffer(const vk::Device& device, const vk::CommandPool& cmdPool):
-    device {device},
+CommandBuffer::CommandBuffer(const vk::Device& tDevice, const vk::CommandPool& cmdPool):
+    device {tDevice},
     commandPool {cmdPool} {
 
     const auto allocInfo = vk::CommandBufferAllocateInfo()

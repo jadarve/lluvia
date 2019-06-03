@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-ImagePyramid::ImagePyramid(const uint32_t levels):
-    levels {levels},
+ImagePyramid::ImagePyramid(const uint32_t tLevels):
+    levels {tLevels},
     inputImage {nullptr},
     memory {nullptr} {
 
@@ -13,10 +13,10 @@ ImagePyramid::ImagePyramid(const uint32_t levels):
 }
 
 
-void ImagePyramid::setInputImage(std::shared_ptr<ll::Image> inputImage) {
+void ImagePyramid::setInputImage(std::shared_ptr<ll::Image> tInputImage) {
     assert(inputImage != nullptr);
 
-    this->inputImage = inputImage;
+    inputImage = tInputImage;
 }
 
 

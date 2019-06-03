@@ -14,12 +14,12 @@
 
 namespace ll {
 
-ImageView::ImageView(vk::Device device, 
-                     std::shared_ptr<ll::Image> image,
-                     const ll::ImageViewDescriptor& descriptor) :
-    descriptor {descriptor},
-    device {device},
-    image  {image} {
+ImageView::ImageView(vk::Device tDevice, 
+                     std::shared_ptr<ll::Image> tImage,
+                     const ll::ImageViewDescriptor& tDescriptor) :
+    descriptor {tDescriptor},
+    device {tDevice},
+    image  {tImage} {
 
     auto imageViewInfo = vk::ImageViewCreateInfo {}
                             .setViewType(vk::ImageViewType::e2D)        // TODO: set according to image extend

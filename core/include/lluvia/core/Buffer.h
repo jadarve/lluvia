@@ -173,7 +173,7 @@ public:
     struct BufferMapDeleter{
 
         template<typename T>
-        void operator ()(T* ptr) const {
+        void operator ()(__attribute__((unused)) T* ptr) const {
             buffer->unmap();
         }
 
@@ -255,9 +255,9 @@ public:
     void accept(ll::Visitor* visitor);
 
 private:
-    Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-            const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-            const uint64_t requestedSize);
+    Buffer( const vk::Buffer tVkBuffer, const vk::BufferUsageFlags tVkUsageFlags,
+            const std::shared_ptr<ll::Memory>& tMemory, const ll::MemoryAllocationInfo& tAllocInfo,
+            const uint64_t tRequestedSize);
 
     void unmap();
 

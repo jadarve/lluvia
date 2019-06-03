@@ -68,7 +68,7 @@ TEST_CASE("A", "test_MemoryFreeSpaceManager") {
     auto allocA = MemoryAllocationInfo{};
     auto boolA = manager.allocate(sizeA, allocA);
     
-    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA, 0, 0});
     checkMemory(manager, offsetVector, sizeVector);
 }
 
@@ -89,7 +89,7 @@ TEST_CASE("AR_fullSize", "test_MemoryFreeSpaceManager") {
     auto allocA = MemoryAllocationInfo{};
     auto boolA = manager.allocate(sizeA, allocA);
     
-    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA, 0, 0});
     checkMemory(manager, offsetVector, sizeVector);
 
     manager.release(allocA);
@@ -120,9 +120,9 @@ TEST_CASE("AAA", "test_MemoryFreeSpaceManager") {
     auto boolB = manager.allocate(sizeB, allocB);
     auto boolC = manager.allocate(sizeC, allocC);
 
-    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
-    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB});
-    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC});
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA, 0, 0});
+    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB, 0, 0});
+    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC, 0, 0});
 
     auto offsetVector = std::vector<uint64_t>{sizeA + sizeB + sizeC};
     auto sizeVector = std::vector<uint64_t>{size - (sizeA + sizeB + sizeC)};
@@ -152,9 +152,9 @@ TEST_CASE("AAARRR_fifo", "test_MemoryFreeSpaceManager") {
     auto boolB = manager.allocate(sizeB, allocB);
     auto boolC = manager.allocate(sizeC, allocC);
 
-    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
-    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB});
-    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC});
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA, 0, 0});
+    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB, 0, 0});
+    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC, 0, 0});
 
     manager.release(allocA);
     manager.release(allocB);
@@ -188,9 +188,9 @@ TEST_CASE("AAARRR_lifo", "test_MemoryFreeSpaceManager") {
     auto boolB = manager.allocate(sizeB, allocB);
     auto boolC = manager.allocate(sizeC, allocC);
 
-    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
-    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB});
-    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC});
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA, 0, 0});
+    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB, 0, 0});
+    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC, 0, 0});
 
     manager.release(allocC);
     manager.release(allocB);
@@ -224,9 +224,9 @@ TEST_CASE("AAARRR_simultaneousMerge", "test_MemoryFreeSpaceManager") {
     auto boolB = manager.allocate(sizeB, allocB);
     auto boolC = manager.allocate(sizeC, allocC);
 
-    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA});
-    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB});
-    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC});
+    checkAllocation(true, boolA, allocA, MemoryAllocationInfo{0, sizeA, 0, 0});
+    checkAllocation(true, boolB, allocB, MemoryAllocationInfo{sizeA, sizeB, 0, 0});
+    checkAllocation(true, boolC, allocC, MemoryAllocationInfo{sizeA + sizeB, sizeC, 0, 0});
 
     manager.release(allocA);
     manager.release(allocC);
@@ -255,15 +255,15 @@ TEST_CASE("AARA", "test_MemoryFreeSpaceManager") {
     auto allocC = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{sizeA, sizeB}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{sizeA, sizeB, 0, 0}, allocB);
 
     manager.release(allocA);
 
     auto boolC = manager.allocate(sizeC, allocC);
-    checkAllocation(true, boolC, MemoryAllocationInfo{0, sizeC}, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{0, sizeC, 0, 0}, allocC);
 
 
     auto offsetVector = std::vector<uint64_t>{sizeC, sizeA + sizeB};
@@ -291,15 +291,15 @@ TEST_CASE("AARAR", "test_MemoryFreeSpaceManager") {
     auto allocC = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{sizeA, sizeB}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{sizeA, sizeB, 0, 0}, allocB);
 
     manager.release(allocA);
 
     auto boolC = manager.allocate(sizeC, allocC);
-    checkAllocation(true, boolC, MemoryAllocationInfo{0, sizeC}, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{0, sizeC, 0, 0}, allocC);
 
     manager.release(allocB);
 
@@ -321,7 +321,7 @@ TEST_CASE("offset_A", "test_MemoryFreeSpaceManager") {
     auto allocA = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0, 0}, allocA);
 
     auto offsetVector = std::vector<uint64_t>{sizeA};
     auto sizeVector = std::vector<uint64_t>{size - sizeA};
@@ -344,10 +344,10 @@ TEST_CASE("offset_AA", "test_MemoryFreeSpaceManager") {
     auto allocB = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, alignment, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, 6u}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, 6u, 0}, allocB);
 
     auto offsetVector = std::vector<uint64_t>{offsetB + sizeB};
     auto sizeVector = std::vector<uint64_t>{size - (sizeA + 6 + sizeB)};
@@ -370,10 +370,10 @@ TEST_CASE("offset_AAR", "test_MemoryFreeSpaceManager") {
     auto allocB = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, 0, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, alignment, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, 6u}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, 6u, 0}, allocB);
 
     manager.release(allocB);
 
@@ -405,13 +405,13 @@ TEST_CASE("offset_AAA", "test_MemoryFreeSpaceManager") {
     auto allocC = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, alignment, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB, 0}, allocB);
 
     auto boolC = manager.allocate(sizeC, alignment, allocC);
-    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC, 0}, allocC);
 
     auto offsetVector = std::vector<uint64_t>{offsetC + sizeC};
     auto sizeVector = std::vector<uint64_t>{size - (sizeA + paddingB + sizeB + paddingC + sizeC)};
@@ -446,13 +446,13 @@ TEST_CASE("offset_AAARRR_fifo", "test_MemoryFreeSpaceManager") {
     auto allocC = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, alignment, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB, 0}, allocB);
 
     auto boolC = manager.allocate(sizeC, alignment, allocC);
-    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC, 0}, allocC);
 
     manager.release(allocA);
     manager.release(allocB);
@@ -491,13 +491,13 @@ TEST_CASE("offset_AAARRR_lifo", "test_MemoryFreeSpaceManager") {
     auto allocC = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, alignment, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB, 0}, allocB);
 
     auto boolC = manager.allocate(sizeC, alignment, allocC);
-    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC, 0}, allocC);
 
     manager.release(allocC);
     manager.release(allocB);
@@ -536,15 +536,15 @@ TEST_CASE("offset_AARAR", "test_MemoryFreeSpaceManager") {
     auto allocC = MemoryAllocationInfo{};
 
     auto boolA = manager.allocate(sizeA, alignment, allocA);
-    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA}, allocA);
+    checkAllocation(true, boolA, MemoryAllocationInfo{0, sizeA, paddingA, 0}, allocA);
 
     auto boolB = manager.allocate(sizeB, alignment, allocB);
-    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB}, allocB);
+    checkAllocation(true, boolB, MemoryAllocationInfo{offsetB, sizeB, paddingB, 0}, allocB);
 
     manager.release(allocA);
 
     auto boolC = manager.allocate(sizeC, alignment, allocC);
-    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC}, allocC);
+    checkAllocation(true, boolC, MemoryAllocationInfo{offsetC, sizeC, paddingC, 0}, allocC);
 
     manager.release(allocB);
 

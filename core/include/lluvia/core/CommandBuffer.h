@@ -59,7 +59,7 @@ public:
     CommandBuffer(const CommandBuffer& cmdBuffer)   = delete;
     CommandBuffer(CommandBuffer&& cmdBuffer)        = delete;
 
-    CommandBuffer(const vk::Device& device, const vk::CommandPool& cmdPool);
+    CommandBuffer(const vk::Device& tDevice, const vk::CommandPool& cmdPool);
 
     ~CommandBuffer();
 

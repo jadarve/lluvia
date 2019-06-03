@@ -16,10 +16,10 @@ namespace impl {
 constexpr const size_t CAPACITY_INCREASE = 512u;
 
 
-MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t size) :
-    size            {size},
+MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t tSize) :
+    size            {tSize},
     offsetVector    {0},
-    sizeVector      {size} {
+    sizeVector      {tSize} {
 
     offsetVector.reserve(CAPACITY_INCREASE);
     sizeVector.reserve(CAPACITY_INCREASE);
@@ -57,11 +57,11 @@ std::vector<uint64_t> MemoryFreeSpaceManager::getSizeVector() const noexcept {
 }
 
 
-bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept {
+bool MemoryFreeSpaceManager::allocate(uint64_t tSize, ll::MemoryAllocationInfo& out) noexcept {
 
     auto tryInfo = MemoryAllocationTryInfo{};
 
-    if (tryAllocate(size, tryInfo)) {
+    if (tryAllocate(tSize, tryInfo)) {
 
         if (reserveManagerSpace()) {
             out = tryInfo.allocInfo;
@@ -74,11 +74,11 @@ bool MemoryFreeSpaceManager::allocate(uint64_t size, ll::MemoryAllocationInfo& o
 }
 
 
-bool MemoryFreeSpaceManager::allocate(uint64_t size, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept {
+bool MemoryFreeSpaceManager::allocate(uint64_t tSize, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept {
 
     auto tryInfo = MemoryAllocationTryInfo{};
 
-    if (tryAllocate(size, alignment, tryInfo)) {
+    if (tryAllocate(tSize, alignment, tryInfo)) {
 
         if (reserveManagerSpace()) {
             out = tryInfo.allocInfo;
@@ -228,13 +228,13 @@ bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 }
 
 
-bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept {
+bool MemoryFreeSpaceManager::tryAllocate(uint64_t tSize, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept {
 
-    return tryAllocate(size, 0u, tryInfoOut);
+    return tryAllocate(tSize, 0u, tryInfoOut);
 }
 
 
-bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept {
+bool MemoryFreeSpaceManager::tryAllocate(uint64_t tSize, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept {
 
     auto offsetMask  = uint64_t{0};
     auto maskCounter = alignment;
@@ -251,10 +251,10 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t size, uint64_t alignment, ll::
         auto offsetModulus = offset & offsetMask;
         auto leftPadding   = (alignment - offsetModulus) & offsetMask;
 
-        if ((size + leftPadding) <= s) {
+        if ((tSize + leftPadding) <= s) {
 
             tryInfoOut.allocInfo.offset      = offset + leftPadding;
-            tryInfoOut.allocInfo.size        = size;
+            tryInfoOut.allocInfo.size        = tSize;
             tryInfoOut.allocInfo.leftPadding = leftPadding;
             tryInfoOut.index                 = position;
 

@@ -297,19 +297,19 @@ public:
     /**
     @brief      Creates an image view from this image.
     
-    @param[in]  descriptor  The image view descriptor
+    @param[in]  tDescriptor  The image view descriptor
     
     @return     A new image view object.
     */
-    std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor);
+    std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& tDescriptor);
 
 private:
-    Image(const vk::Device& device,
-          const vk::Image& vkImage,
-          const ll::ImageDescriptor& descriptor,
-          const std::shared_ptr<ll::Memory>& memory,
-          const ll::MemoryAllocationInfo& allocInfo,
-          const vk::ImageLayout layout);
+    Image(const vk::Device& tDevice,
+          const vk::Image& tVkImage,
+          const ll::ImageDescriptor& tDescriptor,
+          const std::shared_ptr<ll::Memory>& tMemory,
+          const ll::MemoryAllocationInfo& tAllocInfo,
+          const vk::ImageLayout tLayout);
 
     ll::ImageDescriptor descriptor;
     ll::MemoryAllocationInfo allocInfo;

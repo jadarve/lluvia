@@ -302,9 +302,9 @@ public:
     }
 
 private:
-    ImageView(  vk::Device device,
-                std::shared_ptr<ll::Image> image,
-                const ll::ImageViewDescriptor& descriptor);
+    ImageView(  vk::Device tDevice,
+                std::shared_ptr<ll::Image> tImage,
+                const ll::ImageViewDescriptor& tDescriptor);
     
     ll::ImageViewDescriptor descriptor;
 

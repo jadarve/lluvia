@@ -11,10 +11,14 @@
 
 namespace ll {
 
-Program::Program(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const std::vector<uint8_t>& spirvCode):
-    device    {device},
-    spirvCode {spirvCode},
-    session   {session} {
+Program::Program(
+    const std::shared_ptr<const ll::Session>& tSession,
+    const vk::Device& tDevice,
+    const std::vector<uint8_t>& tSpirvCode):
+
+    device    {tDevice},
+    spirvCode {tSpirvCode},
+    session   {tSession} {
 
     if (spirvCode.empty()) {
         throw std::system_error(createErrorCode(ll::ErrorCode::ProgramCompilationError), "Zero size SPIR-V code.");
@@ -43,8 +47,8 @@ const std::vector<uint8_t>& Program::getSpirV() const noexcept {
 }
 
 
-void Program::accept(ll::Visitor* visitor) {
-    assert(visitor != nullptr);
+void Program::accept(__attribute__((unused)) ll::Visitor* visitor) {
+    
 }
 
 } // namespace ll

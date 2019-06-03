@@ -197,13 +197,13 @@ public:
     /**
     @brief      Sets the filtering mode.
     
-    @param[in]  filterMode  The filter mode
+    @param[in]  tFilterMode  The filter mode
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setFilterMode(ll::ImageFilterMode filterMode) noexcept {
+    inline ImageViewDescriptor& setFilterMode(ll::ImageFilterMode tFilterMode) noexcept {
 
-        this->filterMode = filterMode;
+        this->filterMode = tFilterMode;
         return *this;
     }
 
@@ -222,14 +222,14 @@ public:
     /**
     @brief      Sets the address mode to all image axes.
     
-    @param[in]  addressMode  The address mode
+    @param[in]  tAddressMode  The address mode
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode) noexcept {
+    inline ImageViewDescriptor& setAddressMode(ll::ImageAddressMode tAddressMode) noexcept {
 
         for (auto& it : this->addressMode) {
-            it = addressMode;
+            it = tAddressMode;
         }
         return *this;
     }
@@ -238,14 +238,14 @@ public:
     /**
     @brief      Sets the address mode to a given image axis.
     
-    @param[in]  axis         The axis
-    @param[in]  addressMode  The address mode
+    @param[in]  axis           The axis
+    @param[in]  tAddressMode   The address mode
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept {
+    inline ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode tAddressMode) noexcept {
 
-        this->addressMode[static_cast<uint32_t>(axis)] = addressMode;
+        this->addressMode[static_cast<uint32_t>(axis)] = tAddressMode;
         return *this;
     }
 
@@ -286,13 +286,13 @@ public:
     /**
     @brief      Sets whether or not the image view will use normalized coordinates.
     
-    @param[in]  normalizedCoordinates  The normalized coordinates.
+    @param[in]  tNormalizedCoordinates  The normalized coordinates.
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates) noexcept {
+    inline ImageViewDescriptor& setNormalizedCoordinates(bool tNormalizedCoordinates) noexcept {
 
-        this->normalizedCoordinates = normalizedCoordinates;
+        this->normalizedCoordinates = tNormalizedCoordinates;
         return *this;
     }
 

@@ -41,10 +41,10 @@ public:
     /**
     @brief      Constructs the object.
     
-    @param[in]  session     The session this node was created from.
-    @param[in]  device      The Vulkan device where this node will run.
-    @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
-                            So this one can be modified after the compute node is constructed.
+    @param[in]  tSession     The session this node was created from.
+    @param[in]  tDevice      The Vulkan device where this node will run.
+    @param[in]  tDescriptor  The descriptor. A copy of this descriptor is kept within this object.
+                             So this one can be modified after the compute node is constructed.
 
     @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
                                   if desc.getFunctionName() is empty string.
@@ -55,7 +55,10 @@ public:
     @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
                                   if any of the components of descriptor.localShape is zero.
     */
-    ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
+    ComputeNode(
+        const std::shared_ptr<const ll::Session>& tSession,
+        const vk::Device& tDevice,
+        const ll::ComputeNodeDescriptor& tDescriptor);
 
     ~ComputeNode();
 

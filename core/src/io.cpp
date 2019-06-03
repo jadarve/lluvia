@@ -62,10 +62,10 @@ U getValueFromJson(T&& name, const json& j) {
 class ComputeGraphFileWriterImpl : public ll::Visitor {
 
 public:
-    void visitComputeGraph(const std::shared_ptr<ll::ComputeGraph>& graph, const std::string& name = {}) override {
-        assert(graph != nullptr);
+    void visitComputeGraph(const std::shared_ptr<ll::ComputeGraph>& tGraph,
+        __attribute__((unused)) const std::string& name = {}) override {
 
-        this->graph = graph;
+        this->graph = tGraph;
 
         // placeholders
         obj["memories"]      = nullptr;
@@ -235,10 +235,10 @@ class ComputeGraphJsonReader {
 
 public:
 
-    std::shared_ptr<ll::ComputeGraph> build(const std::string& filePath, const std::shared_ptr<ll::Session>& session) {
+    std::shared_ptr<ll::ComputeGraph> build(const std::string& filePath,
+        const std::shared_ptr<ll::Session>& tSession) {
 
-        assert(session != nullptr);
-        this->session = session;
+        this->session = tSession;
 
         std::ifstream file {filePath, std::ios_base::in};
         file.exceptions(std::ifstream::badbit | std::ifstream::failbit);

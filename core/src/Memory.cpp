@@ -28,11 +28,16 @@ namespace ll {
 constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined;
 
 
-Memory::Memory(const std::shared_ptr<const ll::Session>& session, const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
-    device              {device},
-    heapInfo            (heapInfo),
-    pageSize            {pageSize},
-    session             {session} {
+Memory::Memory(
+    const std::shared_ptr<const ll::Session>& tSession,
+    const vk::Device tDevice,
+    const ll::VkHeapInfo& tHeapInfo,
+    const uint64_t tPageSize):
+
+    device              {tDevice},
+    heapInfo            (tHeapInfo),
+    pageSize            {tPageSize},
+    session             {tSession} {
     
     // this prevents shifting outside the range of memoryTypeBits
     assert(heapInfo.typeIndex <= 32u);
@@ -250,9 +255,8 @@ void Memory::releaseImage(const ll::Image& image) {
 }
 
 
-void Memory::accept(ll::Visitor* visitor) {
-    assert(visitor != nullptr);
-    // nothing to visit
+void Memory::accept(__attribute__((unused)) ll::Visitor* visitor) {
+    
 }
 
 

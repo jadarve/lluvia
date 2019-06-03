@@ -24,10 +24,14 @@ namespace ll {
 using namespace std;
 
 
-ComputeNode::ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor):
-    device       {device},
-    descriptor   {descriptor},
-    session      {session} {
+ComputeNode::ComputeNode(
+    const std::shared_ptr<const ll::Session>& tSession,
+    const vk::Device& tDevice,
+    const ll::ComputeNodeDescriptor& tDescriptor):
+
+    device       {tDevice},
+    descriptor   {tDescriptor},
+    session      {tSession} {
 
     ll::throwSystemErrorIf(descriptor.program == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
     ll::throwSystemErrorIf(descriptor.functionName.empty(), ll::ErrorCode::InvalidShaderFunctionName, "Shader function name must be different than empty string.");
@@ -246,8 +250,8 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 }
 
 
-void ComputeNode::accept(ll::Visitor* visitor) {
-    assert(visitor != nullptr);
+void ComputeNode::accept(__attribute__((unused)) ll::Visitor* visitor) {
+
 }
 
 

@@ -34,7 +34,7 @@ public:
     MemoryFreeSpaceManager()                                = default;
     MemoryFreeSpaceManager(const MemoryFreeSpaceManager& m) = default;
     MemoryFreeSpaceManager(MemoryFreeSpaceManager&& m)      = default;
-    MemoryFreeSpaceManager(const uint64_t size);
+    MemoryFreeSpaceManager(const uint64_t tSize);
 
     ~MemoryFreeSpaceManager()                               = default;
 
@@ -49,13 +49,13 @@ public:
     std::vector<uint64_t> getOffsetVector() const noexcept;
     std::vector<uint64_t> getSizeVector()   const noexcept;
 
-    bool allocate(uint64_t size, ll::MemoryAllocationInfo& out) noexcept;
-    bool allocate(uint64_t size, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept;
+    bool allocate(uint64_t tSize, ll::MemoryAllocationInfo& out) noexcept;
+    bool allocate(uint64_t tSize, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept;
     void release(const ll::MemoryAllocationInfo& info) noexcept;
 
     bool reserveManagerSpace() noexcept;
-    bool tryAllocate(uint64_t size, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept;
-    bool tryAllocate(uint64_t size, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept;
+    bool tryAllocate(uint64_t tSize, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept;
+    bool tryAllocate(uint64_t tSize, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept;
     void commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
 
 private:

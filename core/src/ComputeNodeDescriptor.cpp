@@ -61,16 +61,16 @@ ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDe
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& tProgram) noexcept {
 
-    this->program = program;
+    this->program = tProgram;
     return *this;
 }
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program, const std::string& functionName) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept {
     
-    setProgram(program);
-    setFunctionName(functionName);
+    setProgram(tProgram);
+    setFunctionName(tFunctionName);
     return *this;
 }
 

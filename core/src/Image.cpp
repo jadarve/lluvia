@@ -14,16 +14,20 @@
 namespace ll {
 
 
-Image::Image( const vk::Device& device, const vk::Image& vkImage, const ll::ImageDescriptor& descriptor,
-              const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-              const vk::ImageLayout layout) :
+Image::Image(
+    const vk::Device& tDevice,
+    const vk::Image& tVkImage,
+    const ll::ImageDescriptor& tDescriptor,
+    const std::shared_ptr<ll::Memory>& tMemory,
+    const ll::MemoryAllocationInfo& tAllocInfo,
+    const vk::ImageLayout tLayout) :
 
-    descriptor   {descriptor},
-    allocInfo    (allocInfo),
-    device       {device},
-    vkImage      {vkImage},
-    vkLayout     {layout},
-    memory       {memory} {
+    descriptor   {tDescriptor},
+    allocInfo    (tAllocInfo),
+    device       {tDevice},
+    vkImage      {tVkImage},
+    vkLayout     {tLayout},
+    memory       {tMemory} {
 
 }
 
@@ -87,9 +91,9 @@ ll::vec3ui Image::getShape() const noexcept {
     return descriptor.getShape();
 }
 
-std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescriptor& descriptor) {
+std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescriptor& tDescriptor) {
 
-    return std::shared_ptr<ll::ImageView> {new ll::ImageView {device, shared_from_this(), descriptor}};
+    return std::shared_ptr<ll::ImageView> {new ll::ImageView {device, shared_from_this(), tDescriptor}};
 }
 
 } // namespace ll

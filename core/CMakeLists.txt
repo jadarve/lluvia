@@ -43,6 +43,7 @@ set_property(TARGET lluvia-core PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(lluvia-core
     PUBLIC ${LL_INCLUDE_DIRS}
     PUBLIC ${JSON_INCLUDE_DIR}
+    PUBLIC ${CHAISCRIPT_INCLUDE_DIR}
 )
 
 target_link_libraries(lluvia-core ${LL_LINK_LIBRARIES})

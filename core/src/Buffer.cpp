@@ -12,14 +12,14 @@
 namespace ll {
 
 
-Buffer::Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-                const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-                const uint64_t requestedSize):
-    vkBuffer         {vkBuffer},
-    vkUsageFlags     {vkUsageFlags},
-    allocInfo        (allocInfo),
-    requestedSize    {requestedSize},
-    memory           {memory} {
+Buffer::Buffer( const vk::Buffer tVkBuffer, const vk::BufferUsageFlags tVkUsageFlags,
+                const std::shared_ptr<ll::Memory>& tMemory, const ll::MemoryAllocationInfo& tAllocInfo,
+                const uint64_t tRequestedSize):
+    vkBuffer         {tVkBuffer},
+    vkUsageFlags     {tVkUsageFlags},
+    allocInfo        (tAllocInfo),
+    requestedSize    {tRequestedSize},
+    memory           {tMemory} {
 
     assert(memory != nullptr);
 }
@@ -55,8 +55,7 @@ bool Buffer::isMappable() const noexcept {
 }
 
 
-void Buffer::accept(ll::Visitor *visitor) {
-    assert(visitor != nullptr);
+void Buffer::accept(__attribute__((unused)) ll::Visitor *visitor) {
 }
 
 

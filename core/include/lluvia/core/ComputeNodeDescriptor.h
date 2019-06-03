@@ -131,25 +131,25 @@ public:
     /**
     @brief      Sets the program object.
     
-    @param[in]  program  The program.
+    @param[in]  tProgram  The program.
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program) noexcept;
+    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& tProgram) noexcept;
 
 
     /**
     @brief      Sets the program object and function name.
     
-    @param[in]  program       The program.
-    @param[in]  functionName  The function name.
+    @param[in]  tProgram       The program.
+    @param[in]  tFunctionName  The function name.
     
     @return     A reference to this object.
 
     @sa ll::ComputeNodeDescriptor::setProgram       sets the program object.
     @sa ll::ComputeNodeDescriptor::setFunctionName  sets the function name.
     */
-    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& program, const std::string& functionName) noexcept;
+    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept;
 
 
     /**

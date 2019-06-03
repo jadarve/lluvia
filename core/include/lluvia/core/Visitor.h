@@ -42,7 +42,9 @@ public:
     @param[in]  graph  The graph
     @param[in]  name   The graph's name. Defaults to empty string.
     */
-    virtual void visitComputeGraph(const std::shared_ptr<ll::ComputeGraph>& graph, const std::string& name = {}) {}
+    virtual void visitComputeGraph(
+        __attribute__((unused)) const std::shared_ptr<ll::ComputeGraph>& graph,
+        __attribute__((unused)) const std::string& name = {}) {}
 
 
     /**
@@ -51,7 +53,9 @@ public:
     @param[in]  memory  The memory.
     @param[in]  name    The memory's name.  Defaults to empty string.
     */
-    virtual void visitMemory(const std::shared_ptr<ll::Memory>& memory, const std::string& name = {}) {}
+    virtual void visitMemory(
+        __attribute__((unused)) const std::shared_ptr<ll::Memory>& memory,
+        __attribute__((unused)) const std::string& name = {}) {}
 
 
     /**
@@ -60,7 +64,9 @@ public:
     @param[in]  buffer  The buffer.
     @param[in]  name    The buffer's name. Defaults to empty string.
     */
-    virtual void visitBuffer(const std::shared_ptr<ll::Buffer>& buffer, const std::string& name = {}) {}
+    virtual void visitBuffer(
+        __attribute__((unused)) const std::shared_ptr<ll::Buffer>& buffer,
+        __attribute__((unused)) const std::string& name = {}) {}
 
 
     /**
@@ -69,7 +75,9 @@ public:
     @param[in]  image  The image.
     @param[in]  name   The image's name.
     */
-    virtual void visitImage(const std::shared_ptr<ll::Image>& image, const std::string& name = {}) {}
+    virtual void visitImage(
+        __attribute__((unused)) const std::shared_ptr<ll::Image>& image,
+        __attribute__((unused)) const std::string& name = {}) {}
 
 
     /**
@@ -78,7 +86,9 @@ public:
     @param[in]  imageView  The image view
     @param[in]  name       The image view's name. Defaults to empty string.
     */
-    virtual void visitImageView(const std::shared_ptr<ll::ImageView>& imageView, const std::string& name = {}) {}
+    virtual void visitImageView(
+        __attribute__((unused)) const std::shared_ptr<ll::ImageView>& imageView,
+        __attribute__((unused)) const std::string& name = {}) {}
 
 
     /**
@@ -87,7 +97,9 @@ public:
     @param[in]  program  The program
     @param[in]  name     The program's name. Defaults to empty string.
     */
-    virtual void visitProgram(const std::shared_ptr<ll::Program>& program, const std::string& name = {}) {}
+    virtual void visitProgram(
+        __attribute__((unused)) const std::shared_ptr<ll::Program>& program,
+        __attribute__((unused)) const std::string& name = {}) {}
 
 
     /**
@@ -96,7 +108,9 @@ public:
     @param[in]  node  The node
     @param[in]  name  The node's name. Defaults to empty string.
     */
-    virtual void visitComputeNode(const std::shared_ptr<ll::ComputeNode>& node, const std::string& name = {}) {}
+    virtual void visitComputeNode(
+        __attribute__((unused)) const std::shared_ptr<ll::ComputeNode>& node,
+        __attribute__((unused)) const std::string& name = {}) {}
 };
 
 } // namespace ll

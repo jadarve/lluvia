@@ -117,9 +117,9 @@ TEST_CASE("FromSPIRV_empty", "test_ProgramCreation") {
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    std::vector<uint8_t> spirv {};
+    std::vector<uint8_t> emptySpirv {};
 
-    REQUIRE_THROWS_AS(session->createProgram(spirv), std::system_error);
+    REQUIRE_THROWS_AS(session->createProgram(emptySpirv), std::system_error);
 }
 
 

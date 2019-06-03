@@ -139,8 +139,8 @@ bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) 
 
 std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const {
     
-    auto compareFlags = [](const auto& flags, const auto& value, bool exactFlagsMatch) {
-        return exactFlagsMatch? flags == value : (flags & value) == value;
+    auto compareFlags = [](const auto& tFlags, const auto& value, bool tExactFlagsMatch) {
+        return tExactFlagsMatch? tFlags == value : (tFlags & value) == value;
     };
     
     const auto memProperties = physicalDevice.getMemoryProperties();
