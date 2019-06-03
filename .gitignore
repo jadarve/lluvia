@@ -55,8 +55,8 @@ build*/
 *.bak
 
 # local stuff
-local
-thirdparty
+/local
+/thirdparty
 
 # Vulkan
 *.spv
