@@ -282,16 +282,7 @@ friend class ll::ComputeGraph;
 friend class ll::ComputeNode;
 friend class ll::Memory;
 friend class ll::Session;
-
-// friend struct ll::impl::BufferMapDeleter;
 };
-
-
-namespace impl {
-
-    
-}
-
 
 } // namespace ll
 

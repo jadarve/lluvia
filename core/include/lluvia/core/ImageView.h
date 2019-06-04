@@ -22,6 +22,7 @@
 namespace ll {
 
 class Image;
+class ComputeNode;
 
 
 /**

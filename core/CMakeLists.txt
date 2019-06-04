@@ -27,10 +27,13 @@ set(_SRCS
     src/ImageDescriptor.cpp
     src/ImageView.cpp
     src/ImageViewDescriptor.cpp
+    src/impl/Interpreter.cpp
     src/impl/MemoryFreeSpaceManager.cpp
     src/io.cpp
     src/Memory.cpp
     src/MemoryAllocationInfo.cpp
+    src/new/ComputeNode.cpp
+    src/new/Node.cpp
     src/Program.cpp
     src/Session.cpp
     src/utils.cpp
