@@ -11,6 +11,7 @@ RUN apt-get update \
         clang \
         python3-pip \
         python-pip \
+        unzip \
     && rm -rf /var/lib/apt/lists/*
 
 
