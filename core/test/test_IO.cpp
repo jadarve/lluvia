@@ -83,8 +83,6 @@ TEST_CASE("WriteGraph_ImageAndImageView", "test_IO") {
                                               | vk::ImageUsageFlagBits::eSampled
                                               | vk::ImageUsageFlagBits::eTransferDst};
 
-    using memflags = vk::MemoryPropertyFlagBits;
-
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
