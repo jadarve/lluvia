@@ -5,20 +5,22 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_IMPL_INTERPRETER_H_
-#define LLUVIA_CORE_IMPL_INTERPRETER_H_
+#ifndef LLUVIA_CORE_SCRIPTING_INTERPRETER_H_
+#define LLUVIA_CORE_SCRIPTING_INTERPRETER_H_
+
+#include <chaiscript/chaiscript.hpp>
 
 #include <memory>
 
-namespace chaiscript {
+// namespace chaiscript {
 
-class ChaiScript;
+// class ChaiScript;
 
-} // namespace chaiscript
+// } // namespace chaiscript
 
 
 namespace ll {
-namespace impl {
+namespace scripting {
 
 
 class Interpreter {
@@ -30,7 +32,7 @@ private:
     std::unique_ptr<chaiscript::ChaiScript> chai;
 };
 
-} // namesace impl
+} // namesace scripting
 } // namespace ll
 
-#endif // LLUVIA_CORE_IMPL_INTERPRETER_H_
+#endif // LLUVIA_CORE_SCRIPTING_INTERPRETER_H_

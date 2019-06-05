@@ -27,7 +27,6 @@ set(_SRCS
     src/ImageDescriptor.cpp
     src/ImageView.cpp
     src/ImageViewDescriptor.cpp
-    src/impl/Interpreter.cpp
     src/impl/MemoryFreeSpaceManager.cpp
     src/io.cpp
     src/Memory.cpp
@@ -35,6 +34,7 @@ set(_SRCS
     src/new/ComputeNode.cpp
     src/new/Node.cpp
     src/Program.cpp
+    src/scripting/Interpreter.cpp
     src/Session.cpp
     src/utils.cpp
 )
@@ -68,6 +68,7 @@ add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp          
 add_catchTest (test_ComputeNodeImage         test/test_ComputeNodeImage.cpp          lluvia-core)
 add_catchTest (test_IO                       test/test_IO.cpp                        lluvia-core)
 add_catchTest (test_utils                    test/test_utils.cpp                     lluvia-core)
+add_catchTest (test_scripting                test/test_scripting.cpp                 lluvia-core)
 
 
 # store variables in the cache

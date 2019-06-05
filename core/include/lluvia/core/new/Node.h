@@ -57,6 +57,7 @@ public:
     virtual void record(const vk::CommandBuffer& commandBuffer) const = 0;
 
 protected:
+    // FIXME: what should I provide to the node to initialize?
     virtual void onInit() = 0;
 
     std::shared_ptr<ll::impl::Interpreter> interpreter;
