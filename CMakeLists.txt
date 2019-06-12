@@ -48,6 +48,8 @@ enable_testing()
 include(cmake/thirdparty/Catch.cmake)
 include(cmake/thirdparty/JSON.cmake)
 include(cmake/thirdparty/STB.cmake)
+include(cmake/thirdparty/Lua.cmake)
+include(cmake/thirdparty/Sol2.cmake)
 
 
 #################################################
