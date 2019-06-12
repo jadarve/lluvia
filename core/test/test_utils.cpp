@@ -81,11 +81,11 @@ TEST_CASE("configureGraph", "test_utils") {
     auto RGBA = ll::createAndInitImage(session, memory, RGBADesc, vk::ImageLayout::eGeneral);
     auto gray = ll::createAndInitImage(session, memory, grayDesc, vk::ImageLayout::eGeneral);
 
-    auto rgba2GrayNode = session->readComputeNode("/home/jadarve/git/lluvia/local/nodes/RGBA2Gray.json");
-    configureComputeNode(rgba2GrayNode,
-                         RGBA->getShape(),
-                         {{0, RGBA}, {1, gray}} // grid
-                        );
+    // auto rgba2GrayNode = session->readComputeNode("/home/jadarve/git/lluvia/local/nodes/RGBA2Gray.json");
+    // configureComputeNode(rgba2GrayNode,
+    //                      RGBA->getShape(),
+    //                      {{0, RGBA}, {1, gray}} // grid
+    //                     );
 
     // {RGBA->getWidth(), RGBA->getHeight(), RGBA->getDepth()}
 }

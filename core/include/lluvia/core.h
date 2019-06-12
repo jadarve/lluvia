@@ -10,7 +10,6 @@
 
 #include "core/Buffer.h"
 #include "core/CommandBuffer.h"
-#include "core/ComputeGraph.h"
 #include "core/ComputeNode.h"
 #include "core/ComputeNodeDescriptor.h"
 #include "core/error.h"
@@ -18,7 +17,6 @@
 #include "core/ImageDescriptor.h"
 #include "core/ImageView.h"
 #include "core/ImageViewDescriptor.h"
-#include "core/io.h"
 #include "core/Memory.h"
 #include "core/MemoryAllocationInfo.h"
 #include "core/Program.h"

@@ -167,38 +167,6 @@ public:
 
 
     /**
-    @brief      Reads a compute node descriptor from a file.
-    
-    @param[in]  filePath  The file path.
-
-    @return     a compute node descriptor.
-
-    @throws     std::ifstream::failure if \p filePath does not exist.
-    @throws     std::runtime_error if there is a problem parsing the file.
-
-    @sa         ll::readComputeNodeDescriptor   Reads a compute node descriptor from a file.
-    @sa         ll::writeComputeNodeDescriptor  Writes a compute node descriptor to a file.
-    */
-    ll::ComputeNodeDescriptor readComputeNodeDescriptor(const std::string& filePath) const;
-
-
-    /**
-    @brief      Reads a compute node from a file.
-    
-    @param[in]  filePath  The file path.
-    
-    @return     a compute node.
-
-    @throws     std::ifstream::failure if \p filePath does not exist.
-    @throws     std::runtime_error if there is a problem parsing the file.
-
-    @sa         ll::readComputeNode     Reads a compute node from a file.
-    @sa         ll::writeComputeNode    Writes a compute node to a file.
-    */
-    std::shared_ptr<ll::ComputeNode> readComputeNode(const std::string& filePath) const;
-
-
-    /**
     @brief      Runs a ll::CommandBuffer.
 
     This is a blocking call. The host thread will wait until execution of

@@ -46,7 +46,6 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 #################################################
 enable_testing()
 include(cmake/thirdparty/Catch.cmake)
-include(cmake/thirdparty/ChaiScript.cmake)
 include(cmake/thirdparty/JSON.cmake)
 include(cmake/thirdparty/STB.cmake)
 
