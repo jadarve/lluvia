@@ -29,8 +29,7 @@ set(_SRCS
     src/impl/MemoryFreeSpaceManager.cpp
     src/Memory.cpp
     src/MemoryAllocationInfo.cpp
-    src/new/ComputeNode.cpp
-    src/new/Node.cpp
+    src/Node.cpp
     src/Program.cpp
     src/Session.cpp
     src/utils.cpp

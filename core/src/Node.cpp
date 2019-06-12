@@ -5,37 +5,36 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#include "lluvia/core/new/Node.h"
+#include "lluvia/core/Node.h"
 
 #include <exception>
 
 namespace ll {
-namespace news {
 
-void Node::setState(const ll::news::NodeState tState) {
+void Node::setState(const ll::NodeState tState) {
 
     // state transition
     switch(state) {
-        case ll::news::NodeState::Created:
+        case ll::NodeState::Created:
         
             switch(tState) {
-                case ll::news::NodeState::Created:
+                case ll::NodeState::Created:
                     // do nothing
                 break;
-                case ll::news::NodeState::Init:
+                case ll::NodeState::Init:
                     state = tState;
                     onInit();
                 break;
             }
         break;
 
-        case ll::news::NodeState::Init:
+        case ll::NodeState::Init:
 
             switch(state) {
-                case ll::news::NodeState::Created:
+                case ll::NodeState::Created:
                     // TODO: what to do?
                 break;
-                case ll::news::NodeState::Init:
+                case ll::NodeState::Init:
                     // TODO: throw exception, node already in init state
                     throw std::runtime_error("Node alread in init state");
                 break;
@@ -45,9 +44,8 @@ void Node::setState(const ll::news::NodeState tState) {
 
 }
 
-ll::news::NodeState Node::getState() const noexcept {
+ll::NodeState Node::getState() const noexcept {
     return state;
 }
 
-} // namespace news
 } // namespace ll

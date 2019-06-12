@@ -5,19 +5,18 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_NEW_COMPUTE_NODE_H_
-#define LLUVIA_CORE_NEW_COMPUTE_NODE_H_
+#ifndef LLUVIA_CORE_COMPUTE_NODE_H_
+#define LLUVIA_CORE_COMPUTE_NODE_H_
 
-#include "lluvia/core/new/Node.h"
+#include "lluvia/core/Node.h"
 
 
 namespace ll {
-namespace news {
 
-class ContainerNode : public news::Node {
+class ContainerNode : public Node {
 
 public:
-    ll::news::NodeType getType() const noexcept override;
+    ll::NodeType getType() const noexcept override;
 
 protected:
     void onInit() override;
@@ -26,7 +25,6 @@ private:
     
 };
 
-} // namespace news
 } // namespace ll
 
-#endif // LLUVIA_CORE_NEW_COMPUTE_NODE_H_
+#endif // LLUVIA_CORE_COMPUTE_NODE_H_
