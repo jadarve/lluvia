@@ -9,7 +9,7 @@ import sys
 def main():
 
     parser = argparse.ArgumentParser(description='Android build script')
-    parser.add_argument('--type', type=str, choices=['debug', 'release'], default='debug', help='Build type.')
+    parser.add_argument('--type', type=str, choices=['Debug', 'Release'], default='debug', help='Build type.')
     parser.add_argument('out_folder', type=str, help='output folder path.')
 
     args = parser.parse_args()
@@ -43,6 +43,7 @@ def main():
         cmakeCmd = 'cmake -DCMAKE_SYSTEM_NAME=Android' +\
                 ' -DCMAKE_TOOLCHAIN_FILE={0}'.format(toolchainFilePath) +\
                 ' -DCMAKE_SYSTEM_VERSION=24' +\
+                ' -DCMAKE_BUILD_TYPE={0}'.format(args.type) +\
                 ' -DANDROID_PLATFORM=24' +\
                 ' -DANDROID_ABI={0}'.format(abi) +\
                 ' -S {0}'.format(basepath) +\
