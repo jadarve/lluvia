@@ -289,12 +289,16 @@ public:
     @param      visitor  The visitor
     */
     void accept(ll::Visitor* visitor);
+    
 
 private:
     void initParameterBindings();
     
     void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer);
     void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imageView);
+
+    std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
+    uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
 
     vk::Device                          m_device;
 

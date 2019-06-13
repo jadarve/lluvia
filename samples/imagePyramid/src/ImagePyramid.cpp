@@ -106,12 +106,18 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
     auto descX = ll::ComputeNodeDescriptor {}
         .setProgram(programX, "main")
         .setLocalShape({32, 32, 1})
-        .addParameters({ll::ParameterType::ImageView, ll::ParameterType::ImageView});
+        .addPorts({
+            {0, "in_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
+            {1, "out_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
+        });
 
     auto descY = ll::ComputeNodeDescriptor {}
         .setProgram(programY, "main")
         .setLocalShape({32, 32, 1})
-        .addParameters({ll::ParameterType::ImageView, ll::ParameterType::ImageView});
+        .addPorts({
+            {0, "in_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
+            {1, "out_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
+        });
 
 
     auto width  = inputImage->getWidth();

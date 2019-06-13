@@ -164,7 +164,6 @@ public:
 //     virtual void onInit() = 0;
 
 private:
-    
     ll::NodeState state {ll::NodeState::Created};
 
 };

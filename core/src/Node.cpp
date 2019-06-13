@@ -67,7 +67,7 @@ void Node::setState(const ll::NodeState tState) {
                 break;
                 case ll::NodeState::Init:
                     state = tState;
-                    onInit();
+                    // onInit();
                 break;
             }
         break;

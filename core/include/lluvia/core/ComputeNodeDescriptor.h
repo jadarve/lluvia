@@ -87,6 +87,7 @@ public:
     */
     ComputeNodeDescriptor& addPort(const ll::PortDescriptor& port);
 
+
     /**
     @brief      Adds a list of ports to the descriptor.
     
@@ -95,14 +96,6 @@ public:
     @return     A reference to this object.
     */
     ComputeNodeDescriptor& addPorts(const std::initializer_list<ll::PortDescriptor>& ports);
-
-
-    /**
-    @brief      Gets the parameter count.
-    
-    @return     The parameter count.
-    */
-    size_t getParameterCount() const noexcept;
 
 
     /**
@@ -221,16 +214,6 @@ public:
     */
     ComputeNodeDescriptor& setLocalShape(const ll::vec3ui& shape) noexcept;
 
-    /**
-    @brief      Gets the Vulkan descriptor pool sizes needed for this compute node.
-
-    The returned vector contains the non-zero pool sizes required for the parameters
-    of this compute node.
-    
-    @return     The descriptor pool sizes.
-    */
-    std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
-
 
     /**
     @brief      Gets the program associated to this compute node.
@@ -246,16 +229,7 @@ public:
     @return     The function name.
     */
     std::string getFunctionName() const noexcept;
-    
 
-    /**
-    @brief      Gets the Vulkan parameter bindings associated to this compute node.
-
-    See @VULKAN_DOC#VkDescriptorSetLayoutBinding for more information.
-    
-    @return     The parameter bindings.
-    */
-    std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const noexcept;
 
     /**
     @brief      Gets the grid shape.
@@ -279,45 +253,9 @@ public:
     uint32_t getLocalY() const noexcept;
     uint32_t getLocalZ() const noexcept;
 
-
-    /**
-    @brief      Returns the number of storage buffers used by the compute node.
-
-    This is the number of times ll::ComputeNodeDescriptor::addParameter is called with ll::ParameterType::Buffer.
-    
-    @return     The storage buffer count.
-    */
-    uint32_t getStorageBufferCount()        const noexcept;
-
-
-    /**
-    @brief      Returns the number of storage images used by the compute node.
-
-    This is the number of times ll::ComputeNodeDescriptor::addParameter is called with ll::ParameterType::ImageView.
-    
-    @return     The storage image count.
-    */
-    uint32_t getStorageImageViewCount()           const noexcept;
-
-
-    /**
-    @brief      Returns the number of storage images used by the compute node.
-
-    This is the number of times ll::ComputeNodeDescriptor::addParameter is called with ll::ParameterType::SampledImageView.
-    
-    @return     The sampled image count.
-    */
-    uint32_t getSampledImageViewCount() const noexcept;
-
-
 private:
-    uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
-
     std::shared_ptr<ll::Program>                m_program;
     std::string                                 m_functionName;
-
-    // FIXME: really needed?
-    std::vector<vk::DescriptorSetLayoutBinding> m_parameterBindings;
 
     // local and global work group
     ll::vec3ui m_localShape {1, 1, 1};
@@ -328,19 +266,6 @@ private:
 
 friend class ComputeNode;
 };
-
-
-// using ComputeNodeDescriptor = struct {
-
-//     std::shared_ptr<ll::Program>    program;
-//     std::string                     functionName;
-
-//     // local and global work group
-//     ll::vec3ui                      localShape    {1, 1, 1};
-//     ll::vec3ui                      gridShape     {1, 1, 1};
-
-//     std::vector<ll::PortDescriptor> ports;
-// };
 
 
 } // namespace ll
