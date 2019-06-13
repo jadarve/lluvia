@@ -90,6 +90,68 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
 }
 
 
+TEST_CASE("BufferAssignment", "test_ComputeNode") {
+
+    using memflags = vk::MemoryPropertyFlagBits;
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
+    auto hostMemory = session->createMemory(hostMemFlags, 1024*4, false);
+    REQUIRE(hostMemory != nullptr);
+
+    const auto bufferSize = 128;
+    auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
+
+    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
+    REQUIRE(program != nullptr);
+
+    auto nodeDescriptor = ll::ComputeNodeDescriptor()
+                            .setProgram(program)
+                            .setFunctionName("main")
+                            .setLocalX(bufferSize)
+                            .addPort({0, "in_buffer", ll::PortDirection::IN, ll::PortType::Buffer})
+                            .addPorts({
+                                {0, "in_buffer", ll::PortDirection::IN, ll::PortType::Buffer},
+                                {1, "out_buffer", ll::PortDirection::OUT, ll::PortType::Buffer}
+                            });
+
+    // auto nodeDescriptor = {
+    //     program,
+    //     "main",
+    //     {bufferSize, 1, 1},
+    //     {1, 1, 1},
+    //     {
+    //         {0, "in_buffer", ll::PortDirection::IN, ll::PortType::Buffer},
+    //         {1, "out_buffer", ll::PortDirection::OUT, ll::PortType::Buffer}
+    //     }
+    // };
+
+    auto node = session->createComputeNode(nodeDescriptor);
+    REQUIRE(node != nullptr);
+
+    node->bind(0, buffer);
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->run(*node);
+    cmdBuffer->end();
+
+    session->run(*cmdBuffer);
+    
+
+    {
+        auto bufferMap = buffer->map<float[]>();
+        for (auto i = 0u; i < bufferSize; ++i) {
+
+            std::cout << i << ": " << bufferMap[i] << std::endl;;
+        }
+    } // unamp bufferMap
+}
+
+
 TEST_CASE("ConstructionCommandBuffer", "test_ComputeNode") {
 
     // auto session = ll::Session::create();

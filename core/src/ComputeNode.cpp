@@ -29,17 +29,18 @@ ComputeNode::ComputeNode(
     const vk::Device& tDevice,
     const ll::ComputeNodeDescriptor& tDescriptor):
 
-    device       {tDevice},
-    descriptor   {tDescriptor},
-    session      {tSession} {
+    m_device       {tDevice},
+    m_descriptor   {tDescriptor},
+    m_session      {tSession} {
 
-    ll::throwSystemErrorIf(descriptor.program == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
-    ll::throwSystemErrorIf(descriptor.functionName.empty(), ll::ErrorCode::InvalidShaderFunctionName, "Shader function name must be different than empty string.");
-    ll::throwSystemErrorIf(descriptor.localShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape X must be greater than zero");
-    ll::throwSystemErrorIf(descriptor.localShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Y must be greater than zero");
-    ll::throwSystemErrorIf(descriptor.localShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Z must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.program == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
+    ll::throwSystemErrorIf(m_descriptor.functionName.empty(), ll::ErrorCode::InvalidShaderFunctionName, "Shader function name must be different than empty string.");
+    ll::throwSystemErrorIf(m_descriptor.localShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape X must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.localShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Y must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.localShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Z must be greater than zero");
 
-    objects.resize(descriptor.parameterBindings.size());
+    // TODO: compute parameter bindings
+    m_objects.resize(m_descriptor.parameterBindings.size());
 
     /////////////////////////////////////////////
     // Specialization constants
@@ -56,15 +57,15 @@ ComputeNode::ComputeNode(
         .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
         .setPMapEntries(specializationMapEntries.data())
         .setDataSize(sizeof(ll::vec3ui))
-        .setPData(&descriptor.localShape);
+        .setPData(&m_descriptor.localShape);
 
     /////////////////////////////////////////////
     // Pipeline stage info
     /////////////////////////////////////////////
-    stageInfo = vk::PipelineShaderStageCreateInfo()
+    m_stageInfo = vk::PipelineShaderStageCreateInfo()
         .setStage(vk::ShaderStageFlagBits::eCompute)
-        .setModule(descriptor.program->getShaderModule())
-        .setPName(descriptor.functionName.c_str())
+        .setModule(m_descriptor.program->getShaderModule())
+        .setPName(m_descriptor.functionName.c_str())
         .setPSpecializationInfo(&specializationInfo);
 
 
@@ -75,23 +76,23 @@ ComputeNode::ComputeNode(
         .setBindingCount(static_cast<uint32_t>(descriptor.parameterBindings.size()))
         .setPBindings(descriptor.parameterBindings.data());
 
-    descriptorSetLayout = device.createDescriptorSetLayout(descLayoutInfo);
+    m_descriptorSetLayout = m_device.createDescriptorSetLayout(descLayoutInfo);
 
-    descriptorPoolSizes = descriptor.getDescriptorPoolSizes();
-    descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
+    m_descriptorPoolSizes = m_descriptor.getDescriptorPoolSizes();
+    m_descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
         .setMaxSets(1)
         .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
-        .setPPoolSizes(descriptorPoolSizes.data());
+        .setPPoolSizes(m_descriptorPoolSizes.data());
 
-    device.createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &descriptorPool);
+    m_device.createDescriptorPool(&m_descriptorPoolCreateInfo, nullptr, &m_descriptorPool);
 
     // only one descriptor set for this Node object
     vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
-        .setDescriptorPool(descriptorPool)
+        .setDescriptorPool(m_descriptorPool)
         .setDescriptorSetCount(1)
-        .setPSetLayouts(&descriptorSetLayout);
+        .setPSetLayouts(&m_descriptorSetLayout);
 
-    device.allocateDescriptorSets(&descSetAllocInfo, &descriptorSet);
+    m_device.allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet);
 
 
     /////////////////////////////////////////////
@@ -99,114 +100,143 @@ ComputeNode::ComputeNode(
     /////////////////////////////////////////////
     vk::PipelineLayoutCreateInfo pipeLayoutInfo = vk::PipelineLayoutCreateInfo()
         .setSetLayoutCount(1)
-        .setPSetLayouts(&descriptorSetLayout);
+        .setPSetLayouts(&m_descriptorSetLayout);
 
-    pipelineLayout = device.createPipelineLayout(pipeLayoutInfo);
+    m_pipelineLayout = m_device.createPipelineLayout(pipeLayoutInfo);
     vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
-        .setStage(stageInfo)
-        .setLayout(pipelineLayout);
+        .setStage(m_stageInfo)
+        .setLayout(m_pipelineLayout);
 
     // create the compute pipeline
-    pipeline = device.createComputePipeline(nullptr, computePipeInfo);
+    m_pipeline = m_device.createComputePipeline(nullptr, computePipeInfo);
 }
-
 
 ComputeNode::~ComputeNode() {
 
-    device.destroyPipeline(pipeline, nullptr);
-    device.destroyPipelineLayout(pipelineLayout, nullptr);
-    device.destroyDescriptorPool(descriptorPool, nullptr);
-    device.destroyDescriptorSetLayout(descriptorSetLayout);
+    m_device.destroyPipeline(m_pipeline, nullptr);
+    m_device.destroyPipelineLayout(m_pipelineLayout, nullptr);
+    m_device.destroyDescriptorPool(m_descriptorPool, nullptr);
+    m_device.destroyDescriptorSetLayout(m_descriptorSetLayout);
+}
+
+// ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType param) {
+
+//     auto paramBinding = vk::DescriptorSetLayoutBinding {}
+//                             .setBinding(static_cast<uint32_t>(parameterBindings.size()))
+//                             .setDescriptorCount(1)
+//                             .setDescriptorType(parameterTypeToVkDescriptorType(param))
+//                             .setStageFlags(vk::ShaderStageFlagBits::eCompute)
+//                             .setPImmutableSamplers(nullptr);
+
+//     parameterBindings.push_back(paramBinding);
+//     return *this;
+// }
+// 
+void ComputeNode::initParameterBindings() {
+
+    for(const auto& port : m_descriptor.ports) {
+        auto binding = vk::DescriptorSetLayoutBinding {}
+                        .setBinding(port.binding)
+                        .setDescriptorCount(1)
+                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
+                        .setStageFlags(vk::ShaderStageFlagBits::eCompute)
+                        .setPImmutableSamplers(nullptr);
+        m_parameterBindings.push_back(binding);
+    }
+
+}
+
+ll::NodeType ComputeNode::getType() const noexcept {
+    return ll::NodeType::Compute;
 }
 
 
 std::string ComputeNode::getFunctionName() const noexcept {
-    return descriptor.functionName;
+    return m_descriptor.functionName;
 }
 
 
 std::shared_ptr<ll::Program> ComputeNode::getProgram() const noexcept{
-    return descriptor.program;
+    return m_descriptor.program;
 }
 
 
 const ll::ComputeNodeDescriptor& ComputeNode::getDescriptor() const noexcept {
-    return descriptor;
+    return m_descriptor;
 }
 
 
 uint32_t ComputeNode::getLocalX() const noexcept {
-    return descriptor.getLocalX();
+    return m_descriptor.localShape.x;
 }
 
 
 uint32_t ComputeNode::getLocalY() const noexcept {
-    return descriptor.getLocalY();
+    return m_descriptor.localShape.y;
 }
 
 
 uint32_t ComputeNode::getLocalZ() const noexcept {
-    return descriptor.getLocalZ();
+    return m_descriptor.localShape.z;
 }
 
 ll::vec3ui ComputeNode::getLocalShape() const noexcept {
-    return descriptor.getLocalShape();
+    return m_descriptor.localShape;
 }
 
 
 uint32_t ComputeNode::getGridX() const noexcept {
-    return descriptor.getGridX();
+    return m_descriptor.gridShape.x;
 }
 
 
 void ComputeNode::setGridX(const uint32_t x) noexcept {
-    descriptor.setGridX(x);
+    m_descriptor.gridShape.x = x;
 }
 
 
 uint32_t ComputeNode::getGridY() const noexcept {
-    return descriptor.getGridY();
+    return m_descriptor.gridShape.y;
 }
 
 
 void ComputeNode::setGridY(const uint32_t y) noexcept {
-    descriptor.setGridY(y);
+    m_descriptor.gridShape.y = y;
 }
 
 
 uint32_t ComputeNode::getGridZ() const noexcept {
-    return descriptor.getGridZ();
+    return m_descriptor.gridShape.z;
 }
 
 
 void ComputeNode::setGridZ(const uint32_t z) noexcept {
-    descriptor.setGridZ(z);
+    m_descriptor.gridShape.z = z;
 }
 
 
 void ComputeNode::setGridShape(const ll::vec3ui& shape) noexcept {
-    descriptor.setGridShape(shape);
+    m_descriptor.gridShape = shape;
 }
 
 
 void ComputeNode::configureGridShape(const ll::vec3ui& globalShape) noexcept {
-    descriptor.configureGridShape(globalShape);
+    m_descriptor.configureGridShape(globalShape);
 }
 
 
 ll::vec3ui ComputeNode::getGridShape() const noexcept {
-    return descriptor.getGridShape();
+    return m_descriptor.gridShape;
 }
 
 
 size_t ComputeNode::getParameterCount() const noexcept {
-    return objects.size();
+    return m_objects.size();
 }
 
 
 std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexcept {
-    assert(index < objects.size());
-    return objects[index];
+    return m_objects[index];
 }
 
 
@@ -230,23 +260,23 @@ void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
 
 void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 
-    ll::throwSystemErrorIf(descriptor.gridShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape X must be greater than zero");
-    ll::throwSystemErrorIf(descriptor.gridShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Y must be greater than zero");
-    ll::throwSystemErrorIf(descriptor.gridShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Z must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.gridShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape X must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.gridShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Y must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.gridShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Z must be greater than zero");
 
-    commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, pipeline);
+    commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, m_pipeline);
     
     commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eCompute,
-                                     pipelineLayout,
+                                     m_pipelineLayout,
                                      0,
                                      1,
-                                     &descriptorSet,
+                                     &m_descriptorSet,
                                      0,
                                      nullptr);
 
-    commandBuffer.dispatch(descriptor.gridShape.x,
-                           descriptor.gridShape.y,
-                           descriptor.gridShape.z);
+    commandBuffer.dispatch(m_descriptor.gridShape.x,
+                           m_descriptor.gridShape.y,
+                           m_descriptor.gridShape.z);
 }
 
 
@@ -292,7 +322,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
     const auto isSampled = imgView->getDescriptor().isSampled();
 
     // validate that imgView can be bound at index position.
-    const auto& vkBinding = descriptor.parameterBindings.at(index);
+    const auto& vkBinding = m_descriptor.parameterBindings.at(index);
     const auto  paramType = ll::vkDescriptorTypeToParameterType(vkBinding.descriptorType);
 
     if (isSampled) {
@@ -310,7 +340,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
 
 
     // binding
-    objects[index] = imgView;
+    m_objects[index] = imgView;
 
     auto descImgInfo = vk::DescriptorImageInfo {}
         .setSampler(imgView->vkSampler)
@@ -318,7 +348,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
         .setImageLayout(imgView->image->vkLayout);
 
     auto writeDescSet = vk::WriteDescriptorSet()
-        .setDstSet(descriptorSet)
+        .setDstSet(m_descriptorSet)
         .setDstBinding(index)
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
@@ -326,7 +356,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
     writeDescSet.setDescriptorType(isSampled? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
 
     // update the informacion of the descriptor set
-    device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
+    m_device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
 }
 
 

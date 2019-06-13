@@ -9,6 +9,7 @@
 #define LLUVIA_CORE_COMPUTE_NODE_H_
 
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Node.h"
 
 #include <cstdint>
 #include <memory>
@@ -30,7 +31,7 @@ class Visitor;
 /**
 @brief      Class representing compute nodes.
 */
-class ComputeNode {
+class ComputeNode : public Node {
 
 public:
     ComputeNode()                                     = delete;
@@ -60,10 +61,12 @@ public:
         const vk::Device& tDevice,
         const ll::ComputeNodeDescriptor& tDescriptor);
 
-    ~ComputeNode();
+    virtual ~ComputeNode();
 
     ComputeNode& operator = (const ComputeNode& node) = delete;
     ComputeNode& operator = (ComputeNode&& node)      = delete;
+
+    ll::NodeType getType() const noexcept override;
 
 
     /**
@@ -288,35 +291,39 @@ public:
     void accept(ll::Visitor* visitor);
 
 private:
+    void initParameterBindings();
+    
     void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer);
     void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imageView);
 
-    vk::Device                          device;
+    vk::Device                          m_device;
 
-    vk::DescriptorSetLayout             descriptorSetLayout;
-    vk::PipelineShaderStageCreateInfo   stageInfo;
+    vk::DescriptorSetLayout             m_descriptorSetLayout;
+    vk::PipelineShaderStageCreateInfo   m_stageInfo;
 
-    std::vector<vk::DescriptorPoolSize> descriptorPoolSizes;
-    vk::DescriptorPoolCreateInfo        descriptorPoolCreateInfo;
+    std::vector<vk::DescriptorPoolSize> m_descriptorPoolSizes;
+    vk::DescriptorPoolCreateInfo        m_descriptorPoolCreateInfo;
 
-    vk::PipelineLayout                  pipelineLayout;
-    vk::Pipeline                        pipeline;
+    vk::PipelineLayout                  m_pipelineLayout;
+    vk::Pipeline                        m_pipeline;
 
-    vk::DescriptorSet                   descriptorSet;
-    vk::DescriptorPool                  descriptorPool;
+    vk::DescriptorSet                   m_descriptorSet;
+    vk::DescriptorPool                  m_descriptorPool;
 
-    ll::ComputeNodeDescriptor           descriptor;
+    ll::ComputeNodeDescriptor           m_descriptor;
+
+    std::vector<vk::DescriptorSetLayoutBinding> m_parameterBindings;
 
     // specialization constants
     // vk::SpecializationInfo specializationInfo;
     // std::vector<vk::SpecializationMapEntry> specializationMapEntries;
     // // uint32_t local_x {1};
 
-    std::vector<std::shared_ptr<ll::Object>> objects;
+    std::vector<std::shared_ptr<ll::Object>> m_objects;
 
     // Shared pointer to the session this node was created from
     // This will keep the session alive until this or any other node is deleted.
-    std::shared_ptr<const ll::Session>            session;
+    std::shared_ptr<const ll::Session>            m_session;
 };
 
 

@@ -10,6 +10,7 @@
 
 #include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/types.h"
+#include "lluvia/core/Node.h"
 
 #include <array>
 #include <memory>
@@ -23,91 +24,6 @@ namespace ll {
 
 class ComputeNode;
 class Program;
-
-
-/**
-@brief      Compute node parameter types.
-
-
-@sa ll::impl::ParameterTypeStrings string values for this enum.
-*/
-enum class ParameterType : uint32_t {
-    Buffer           = 0,   /**< value for ll::Buffer parameter type. */
-    ImageView        = 1,   /**< value for ll::ImageView without pixel sampler.*/
-    SampledImageView = 2,   /**< value for ll::ImageView objects coupled with a pixel sampler. */
-};
-
-
-namespace impl {
-
-    /**
-    @brief Parameter type string values used for converting ll::ParameterType to std::string and vice-versa.
-
-    @sa ll::ParameterType enum values for this array.
-    */
-    constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 3> ParameterTypeStrings {{
-        std::make_tuple("Buffer"           , ll::ParameterType::Buffer),
-        std::make_tuple("ImageView"        , ll::ParameterType::ImageView),
-        std::make_tuple("SampledImageView" , ll::ParameterType::SampledImageView),
-    }};
-
-} // namespace impl
-
-
-/**
-@brief      Converts from ll::ParameterType enum value to string.
-
-@param[in]  value
-
-@tparam     T          function return type. Defaults to std::string.
-
-@return     Returns the corresponding std::string in ll::impl::ParameterTypeStrings for the enum value.
-*/
-template<typename T = std::string>
-inline T parameterTypeToString(ll::ParameterType&& value) noexcept {
-    return ll::impl::enumToString<ll::ParameterType, ll::impl::ParameterTypeStrings.size(), impl::ParameterTypeStrings>(std::forward<ll::ParameterType>(value));
-}
-
-
-/**
-@brief      Converts from ll::ParamterType enum to Vulkan DescriptorType.
-
-@param[in]  param  The parameter.
-
-@return     The corresponding Vulkan descriptor type for \p param.
-*/
-vk::DescriptorType parameterTypeToVkDescriptorType(const ll::ParameterType& param);
-
-
-/**
-@brief      Converts from Vulkan DescriptorType to ll::ParameterType enum.
-
-@param[in]  vkDescType  The Vulkan description type.
-
-@return     The corresponding ll::ParameterType.
-
-@throws     std::system_error if there is no associated ll::ParameterType value for \p vkDescType.
-                              Using the values returned by ll::parameterTypeToVkDescriptorType is guaranteed
-                              to not throw exception.
-*/
-ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDescType);
-
-
-/**
-@brief      Converts from a string-like object to ll::ParameterType enum.
-
-@param[in]  stringValue  string-like parameter. String literals and `std::string` objects are allowed.
-
-@tparam     T            \p stringValue type. \p T must satisfies `std::is_convertible<T, std::string>()`
-
-@return     ll::ParameterType value corresponding to stringValue
- 
-@throws std::out_of_range if \p stringValue is not found in ll::impl::ObjectTypeStrings.
-*/
-template<typename T>
-inline ll::ParameterType stringToParameterType(T&& stringValue) {
-    return impl::stringToEnum<ll::ParameterType, T, ll::impl::ParameterTypeStrings.size(), impl::ParameterTypeStrings>(std::forward<T>(stringValue));
-}
 
 
 /**
@@ -163,28 +79,22 @@ public:
 
 
     /**
-    @brief      Adds a parameter to the descriptor.
-
-    Parameters are stored in a vector. Each call to this function
-    adds \p param at the end of such vector.
+    @brief      Adds a port to the descriptor.
     
-    @param[in]  param  The parameter.
+    @param[in]  port  The port
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& addParameter(const ll::ParameterType param);
-
+    ComputeNodeDescriptor& addPort(const ll::PortDescriptor& port);
 
     /**
-    @brief      Adds a list of parameters to the descriptor.
+    @brief      Adds a list of ports to the descriptor.
     
-    @param[in]  param  List of parameters to add.
+    @param[in]  ports  The ports
     
     @return     A reference to this object.
-
-    @sa         ll::ComputeNodeDescriptor::addParameter Adds a parameter to the descriptor.
     */
-    ComputeNodeDescriptor& addParameters(const std::initializer_list<ll::ParameterType>& parameters);
+    ComputeNodeDescriptor& addPorts(const std::initializer_list<ll::PortDescriptor>& ports);
 
 
     /**
@@ -193,18 +103,6 @@ public:
     @return     The parameter count.
     */
     size_t getParameterCount() const noexcept;
-
-
-    /**
-    @brief      Gets the parameter type at index \p i.
-    
-    @param[in]  i     index. It must be greater than 0 and less than ll::ComputeNodeDescriptor::getParameterCount.
-    
-    @return     The parameter type at \p i.
-
-    @throws     std::out_of_range if \p i is not between correct range.
-    */
-    ll::ParameterType getParameterTypeAt(const size_t& i) const;
 
 
     /**
@@ -415,17 +313,34 @@ public:
 private:
     uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
 
-    std::shared_ptr<ll::Program>                program;
-    std::string                                 functionName;
-    std::vector<vk::DescriptorSetLayoutBinding> parameterBindings;
+    std::shared_ptr<ll::Program>                m_program;
+    std::string                                 m_functionName;
+
+    // FIXME: really needed?
+    std::vector<vk::DescriptorSetLayoutBinding> m_parameterBindings;
 
     // local and global work group
-    ll::vec3ui localShape {1, 1, 1};
-    ll::vec3ui gridShape  {1, 1, 1};
+    ll::vec3ui m_localShape {1, 1, 1};
+    ll::vec3ui m_gridShape  {1, 1, 1};
+
+    std::vector<ll::PortDescriptor> m_ports;
 
 
 friend class ComputeNode;
 };
+
+
+// using ComputeNodeDescriptor = struct {
+
+//     std::shared_ptr<ll::Program>    program;
+//     std::string                     functionName;
+
+//     // local and global work group
+//     ll::vec3ui                      localShape    {1, 1, 1};
+//     ll::vec3ui                      gridShape     {1, 1, 1};
+
+//     std::vector<ll::PortDescriptor> ports;
+// };
 
 
 } // namespace ll
