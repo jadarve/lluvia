@@ -269,6 +269,9 @@ public:
     void bind(uint32_t index, const std::shared_ptr<ll::Object>& obj);
 
 
+    void link(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
+
+
     /**
     @brief      Records the operations required to run this compute node in a Vulkan command buffer.
 

@@ -64,12 +64,15 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
                             .setProgram(program)
                             .setFunctionName("main")
                             .setLocalX(bufferSize)
-                            .addPort({0, "buffer", ll::PortDirection::IN, ll::PortType::Buffer});
+                            .addPort({0, "out_buffer", ll::PortDirection::OUT, ll::PortType::Buffer});
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
 
     node->bind(0, buffer);
+
+    // TODO: aqui voy!
+    node->link("out_buffer", buffer);
 
     auto cmdBuffer = session->createCommandBuffer();
 

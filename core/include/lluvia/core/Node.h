@@ -155,7 +155,7 @@ public:
 
     virtual ll::NodeType getType() const noexcept = 0;
 
-    // virtual void link(const std::string& name, const std::shared_ptr<ll::Object>& obj) = 0;
+    virtual void link(const std::string& name, const std::shared_ptr<ll::Object>& obj) = 0;
 
     // virtual void record(const vk::CommandBuffer& commandBuffer) const = 0;
 

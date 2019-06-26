@@ -254,6 +254,13 @@ void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
 }
 
 
+void ComputeNode::link(__attribute__((unused)) const std::string& name,
+    __attribute__((unused)) const std::shared_ptr<ll::Object>& obj) {
+
+    // TODO: implement
+}
+
+
 void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 
     ll::throwSystemErrorIf(m_descriptor.m_gridShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape X must be greater than zero");
