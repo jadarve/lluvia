@@ -293,6 +293,7 @@ public:
 
 private:
     void initParameterBindings();
+    void initPipeline();
     
     void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer);
     void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imageView);
@@ -303,10 +304,6 @@ private:
     vk::Device                          m_device;
 
     vk::DescriptorSetLayout             m_descriptorSetLayout;
-    vk::PipelineShaderStageCreateInfo   m_stageInfo;
-
-    std::vector<vk::DescriptorPoolSize> m_descriptorPoolSizes;
-    vk::DescriptorPoolCreateInfo        m_descriptorPoolCreateInfo;
 
     vk::PipelineLayout                  m_pipelineLayout;
     vk::Pipeline                        m_pipeline;

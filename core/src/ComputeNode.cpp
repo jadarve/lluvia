@@ -40,9 +40,37 @@ ComputeNode::ComputeNode(
     ll::throwSystemErrorIf(m_descriptor.m_localShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Z must be greater than zero");
 
     initParameterBindings();
+    initPipeline();
 
-    
+    // FIXME: needed?
     m_objects.resize(m_parameterBindings.size());
+}
+
+
+ComputeNode::~ComputeNode() {
+
+    m_device.destroyPipeline(m_pipeline, nullptr);
+    m_device.destroyPipelineLayout(m_pipelineLayout, nullptr);
+    m_device.destroyDescriptorPool(m_descriptorPool, nullptr);
+    m_device.destroyDescriptorSetLayout(m_descriptorSetLayout);
+}
+
+
+void ComputeNode::initParameterBindings() {
+
+    for(const auto& port : m_descriptor.m_ports) {
+        auto binding = vk::DescriptorSetLayoutBinding {}
+                        .setBinding(port.binding)
+                        .setDescriptorCount(1)
+                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
+                        .setStageFlags(vk::ShaderStageFlagBits::eCompute)
+                        .setPImmutableSamplers(nullptr);
+        m_parameterBindings.push_back(binding);
+    }
+}
+
+
+void ComputeNode::initPipeline() {
 
     /////////////////////////////////////////////
     // Specialization constants
@@ -64,7 +92,7 @@ ComputeNode::ComputeNode(
     /////////////////////////////////////////////
     // Pipeline stage info
     /////////////////////////////////////////////
-    m_stageInfo = vk::PipelineShaderStageCreateInfo()
+    auto stageInfo = vk::PipelineShaderStageCreateInfo()
         .setStage(vk::ShaderStageFlagBits::eCompute)
         .setModule(m_descriptor.m_program->getShaderModule())
         .setPName(m_descriptor.m_functionName.c_str())
@@ -80,13 +108,13 @@ ComputeNode::ComputeNode(
 
     m_descriptorSetLayout = m_device.createDescriptorSetLayout(descLayoutInfo);
 
-    m_descriptorPoolSizes = getDescriptorPoolSizes();
-    m_descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
+    auto descriptorPoolSizes = getDescriptorPoolSizes();
+    auto descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
         .setMaxSets(1)
-        .setPoolSizeCount(static_cast<uint32_t>(m_descriptorPoolSizes.size()))
-        .setPPoolSizes(m_descriptorPoolSizes.data());
+        .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
+        .setPPoolSizes(descriptorPoolSizes.data());
 
-    m_device.createDescriptorPool(&m_descriptorPoolCreateInfo, nullptr, &m_descriptorPool);
+    m_device.createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool);
 
     // only one descriptor set for this Node object
     vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
@@ -106,32 +134,11 @@ ComputeNode::ComputeNode(
 
     m_pipelineLayout = m_device.createPipelineLayout(pipeLayoutInfo);
     vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
-        .setStage(m_stageInfo)
+        .setStage(stageInfo)
         .setLayout(m_pipelineLayout);
 
     // create the compute pipeline
     m_pipeline = m_device.createComputePipeline(nullptr, computePipeInfo);
-}
-
-ComputeNode::~ComputeNode() {
-
-    m_device.destroyPipeline(m_pipeline, nullptr);
-    m_device.destroyPipelineLayout(m_pipelineLayout, nullptr);
-    m_device.destroyDescriptorPool(m_descriptorPool, nullptr);
-    m_device.destroyDescriptorSetLayout(m_descriptorSetLayout);
-}
-
-void ComputeNode::initParameterBindings() {
-
-    for(const auto& port : m_descriptor.m_ports) {
-        auto binding = vk::DescriptorSetLayoutBinding {}
-                        .setBinding(port.binding)
-                        .setDescriptorCount(1)
-                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
-                        .setStageFlags(vk::ShaderStageFlagBits::eCompute)
-                        .setPImmutableSamplers(nullptr);
-        m_parameterBindings.push_back(binding);
-    }
 }
 
 
