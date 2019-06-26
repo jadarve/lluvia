@@ -30,7 +30,6 @@ class ImageDescriptor;
 class ImageView;
 class ImageViewDescriptor;
 class Session;
-class Visitor;
 
 
 namespace impl {
@@ -275,14 +274,6 @@ public:
     std::shared_ptr<ll::ImageView> createImageView(
         const ll::ImageDescriptor& imgDescriptor,
         const ll::ImageViewDescriptor& viewDescriptor);
-    
-    
-    /**
-    @brief      Accepts a visitor to this memory.
-    
-    @param      visitor  The visitor
-    */
-    void accept(ll::Visitor* visitor);
 
 
 private:

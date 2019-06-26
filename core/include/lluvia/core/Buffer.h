@@ -32,7 +32,6 @@ class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
 class Session;
-class Visitor;
 
 
 namespace impl {
@@ -246,13 +245,6 @@ public:
         return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> {static_cast<baseType*>(ptr), deleter};
     }
 
-
-    /**
-    @brief      Accepts a visitor to this buffer.
-    
-    @param      visitor  The visitor
-    */
-    void accept(ll::Visitor* visitor);
 
 private:
     Buffer( const vk::Buffer tVkBuffer, const vk::BufferUsageFlags tVkUsageFlags,

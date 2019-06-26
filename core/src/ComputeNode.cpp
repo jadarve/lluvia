@@ -276,11 +276,6 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 }
 
 
-void ComputeNode::accept(__attribute__((unused)) ll::Visitor* visitor) {
-
-}
-
-
 void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer) {
 
     // validate that buffer can be bound at index position.

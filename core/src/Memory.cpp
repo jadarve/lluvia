@@ -255,11 +255,6 @@ void Memory::releaseImage(const ll::Image& image) {
 }
 
 
-void Memory::accept(__attribute__((unused)) ll::Visitor* visitor) {
-    
-}
-
-
 impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements) {
 
     auto tryInfo = impl::MemoryAllocationTryInfo {};

@@ -18,7 +18,6 @@ namespace ll {
 
 // forward declarations
 class Session;
-class Visitor;
 
 
 /**
@@ -72,14 +71,6 @@ public:
     @return     The SPIR-V code.
     */
     const std::vector<uint8_t>& getSpirV() const noexcept;
-
-
-    /**
-    @brief      Accepts a visitor to this program.
-    
-    @param      visitor  The visitor
-    */
-    void accept(ll::Visitor* visitor);
 
 private:
     vk::Device           device;

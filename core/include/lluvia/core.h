@@ -25,6 +25,5 @@
 #include "core/Session.h"
 #include "core/types.h"
 #include "core/utils.h"
-#include "core/Visitor.h"
 
 #endif // LLUVIA_CORE_H_

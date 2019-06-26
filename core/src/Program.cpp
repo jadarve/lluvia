@@ -7,7 +7,6 @@
 
 #include "lluvia/core/error.h"
 #include "lluvia/core/Program.h"
-#include "lluvia/core/Visitor.h"
 
 namespace ll {
 
@@ -46,9 +45,5 @@ const std::vector<uint8_t>& Program::getSpirV() const noexcept {
     return spirvCode;
 }
 
-
-void Program::accept(__attribute__((unused)) ll::Visitor* visitor) {
-    
-}
 
 } // namespace ll

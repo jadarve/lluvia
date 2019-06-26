@@ -55,10 +55,6 @@ bool Buffer::isMappable() const noexcept {
 }
 
 
-void Buffer::accept(__attribute__((unused)) ll::Visitor *visitor) {
-}
-
-
 void Buffer::unmap() {
     memory->unmapBuffer(*this);
 }

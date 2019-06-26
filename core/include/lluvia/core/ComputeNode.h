@@ -25,7 +25,6 @@ class ImageView;
 class Object;
 class Program;
 class Session;
-class Visitor;
 
 
 /**
@@ -281,14 +280,6 @@ public:
                                   if any of the components of getGridShape() is zero.
     */
     void record(const vk::CommandBuffer& commandBuffer) const;
-
-
-    /**
-    @brief      Accepts a visitor to this compute node.
-    
-    @param      visitor  The visitor
-    */
-    void accept(ll::Visitor* visitor);
     
 
 private:
