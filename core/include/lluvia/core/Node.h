@@ -136,7 +136,7 @@ inline ll::PortType stringToPortType(T&& stringValue) {
 
 using PortDescriptor = struct {
     /**
-    Binding number withing shader program.
+    Binding number within shader program.
     */
     uint32_t binding;
     std::string name;
@@ -155,9 +155,26 @@ public:
 
     virtual ll::NodeType getType() const noexcept = 0;
 
-    virtual void link(const std::string& name, const std::shared_ptr<ll::Object>& obj) = 0;
+    /**
+    @brief      Binds a ll::Object as port \p index for this node.
+    
+    @param[in]  name   The port name.
+    @param[in]  obj    The object to bind.
 
-    // virtual void record(const vk::CommandBuffer& commandBuffer) const = 0;
+    @throws     std::system_error if \p obj cannot be mapped as a port at position \p index.
+    */
+    virtual void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) = 0;
+
+    /**
+    @brief      Records the operations required to run this node in a Vulkan command buffer.
+
+    This method is called by ll::CommandBuffer objects when they are called as
+    
+    @param[in]  commandBuffer  The Vulkan command buffer.
+
+    @throws     std::system_error with corresponding error code and message.
+    */
+    virtual void record(const vk::CommandBuffer& commandBuffer) const = 0;
 
 // protected:
 //     // FIXME: what should I provide to the node to initialize?

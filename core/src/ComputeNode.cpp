@@ -42,7 +42,7 @@ ComputeNode::ComputeNode(
     initParameterBindings();
     initPipeline();
 
-    // FIXME: needed?
+    // FIXME: resize needed?
     m_objects.resize(m_parameterBindings.size());
 }
 
@@ -58,7 +58,9 @@ ComputeNode::~ComputeNode() {
 
 void ComputeNode::initParameterBindings() {
 
-    for(const auto& port : m_descriptor.m_ports) {
+    for(const auto keyValue : m_descriptor.m_ports) {
+
+        const auto& port = keyValue.second;
         auto binding = vk::DescriptorSetLayoutBinding {}
                         .setBinding(port.binding)
                         .setDescriptorCount(1)
@@ -236,28 +238,29 @@ std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexce
 }
 
 
-void ComputeNode::bind(uint32_t index, const std::shared_ptr<ll::Object>& obj) {
+void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
 
+    const auto it = m_descriptor.m_ports.find(name);
+
+    ll::throwSystemErrorIf(it == m_descriptor.m_ports.end(), ll::ErrorCode::PortNotFound,
+        "Port [" + name + "] not found");
+
+    const auto& port = it->second;
+
+    // bind obj according to its type
     switch (obj->getType()) {
         case ll::ObjectType::Buffer:
-            bindBuffer(index, std::static_pointer_cast<ll::Buffer>(obj));
+            bindBuffer(port.binding, std::static_pointer_cast<ll::Buffer>(obj));
             break;
 
         case ll::ObjectType::ImageView:
-            bindImageView(index, std::static_pointer_cast<ll::ImageView>(obj));
+            bindImageView(port.binding, std::static_pointer_cast<ll::ImageView>(obj));
             break;
 
         default:
-            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError),
+            throw std::system_error(createErrorCode(ll::ErrorCode::PortBindingError),
                 "Unsupported object type: " + ll::objectTypeToString(obj->getType()));
     }
-}
-
-
-void ComputeNode::link(__attribute__((unused)) const std::string& name,
-    __attribute__((unused)) const std::shared_ptr<ll::Object>& obj) {
-
-    // TODO: implement
 }
 
 
@@ -289,11 +292,10 @@ void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& 
     const auto& vkBinding = m_parameterBindings.at(index);
     const auto  paramType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
 
-    if (paramType != ll::PortType::Buffer) {
-        throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Buffer cannot be bound at position ["
-            + std::to_string(index) + "] as parameter type is not ll::ParameterType::Buffer");
-    }
-
+    ll::throwSystemErrorIf(paramType != ll::PortType::Buffer,
+        ll::ErrorCode::PortBindingError,
+        "Parameter of type ll::Buffer cannot be bound at position ["
+        + std::to_string(index) + "] as parameter type is not ll::ParameterType::Buffer");
 
     // binding
     m_objects[index] = buffer;
@@ -324,18 +326,15 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
     const auto  paramType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
 
     if (isSampled) {
-        if (paramType != ll::PortType::SampledImageView) {
-            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Imageview (sampled) cannot be bound at position ["
-                + std::to_string(index) + "] as parameter type is not ll::PortType::SampledImageView");
-        }
+        ll::throwSystemErrorIf(paramType != ll::PortType::SampledImageView, ll::ErrorCode::PortBindingError,
+            "Parameter of type ll::Imageview (sampled) cannot be bound at position ["
+            + std::to_string(index) + "] as parameter type is not ll::PortType::SampledImageView");
     }
     else {
-        if (paramType != ll::PortType::ImageView) {
-            throw std::system_error(createErrorCode(ll::ErrorCode::ParameterBindingError), "Parameter of type ll::Imageview cannot be bound at position ["
-                + std::to_string(index) + "] as parameter type is not ll::PortType::ImageView");
-        }
+        ll::throwSystemErrorIf(paramType != ll::PortType::ImageView, ll::ErrorCode::PortBindingError,
+            "Parameter of type ll::Imageview cannot be bound at position ["
+            + std::to_string(index) + "] as parameter type is not ll::PortType::ImageView");
     }
-
 
     // binding
     m_objects[index] = imgView;

@@ -105,8 +105,8 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
     // the image view can only be bound after the underlying
     // image is in the correct layout.
-    node->bind(0, imageView);
-    node->bind(1, outputBuffer);
+    node->bind("in", imageView);
+    node->bind("out", outputBuffer);
 
     cmdBuffer->run(*node);
 
@@ -223,8 +223,8 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
 
     // the image view can only be bound after the underlying
     // image is in the correct layout.
-    node->bind(0, imageView);
-    node->bind(1, outputBuffer);
+    node->bind("in", imageView);
+    node->bind("out", outputBuffer);
 
     cmdBuffer->run(*node);
 

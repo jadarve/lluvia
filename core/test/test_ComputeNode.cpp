@@ -69,10 +69,10 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
 
-    node->bind(0, buffer);
+    node->bind("out_buffer", buffer);
 
     // TODO: aqui voy!
-    node->link("out_buffer", buffer);
+    // node->link("out_buffer", buffer);
 
     auto cmdBuffer = session->createCommandBuffer();
 

@@ -134,8 +134,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         std::cout << i << ": local X: [" << descX_i.getLocalX() << ", " << descX_i.getLocalY() << ", " << descX_i.getLocalZ() << "]" << std::endl;
 
         auto nodeX = session->createComputeNode(descX_i);
-        nodeX->bind(0, imageViewsY[i]);
-        nodeX->bind(1, imageViewsX[i]);
+        nodeX->bind("in_RGBA", imageViewsY[i]);
+        nodeX->bind("out_RGBA", imageViewsX[i]);
         computeNodesX.push_back(nodeX);
 
         height /= 2;
@@ -147,8 +147,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         std::cout << i << ": local Y: [" << descY_i.getLocalX() << ", " << descY_i.getLocalY() << ", " << descY_i.getLocalZ() << "]" << std::endl;
 
         auto nodeY = session->createComputeNode(descY_i);
-        nodeY->bind(0, imageViewsX[i]);
-        nodeY->bind(1, imageViewsY[i + 1]);
+        nodeY->bind("in_RGBA", imageViewsX[i]);
+        nodeY->bind("out_RGBA", imageViewsY[i + 1]);
         computeNodesY.push_back(nodeY);
 
         std::cout << std::endl;

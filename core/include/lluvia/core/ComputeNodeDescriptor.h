@@ -16,6 +16,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <map>
 
 #include <vulkan/vulkan.hpp>
 
@@ -261,7 +262,7 @@ private:
     ll::vec3ui m_localShape {1, 1, 1};
     ll::vec3ui m_gridShape  {1, 1, 1};
 
-    std::vector<ll::PortDescriptor> m_ports;
+    std::map<std::string, ll::PortDescriptor> m_ports;
 
 
 friend class ComputeNode;

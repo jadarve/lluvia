@@ -256,33 +256,11 @@ public:
     */
     std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;
 
-
-    /**
-    @brief      Binds a ll::Object as parameter \p index for this node.
     
-    @param[in]  index  The parameter index.
-                       It must be less than the value returned by ll::ComputeNode::getParameterCount.
-    @param[in]  obj    The object to bind.
-
-    @throws     std::system_error if \p obj cannot be mapped as a parameter at position \p index.
-    */
-    void bind(uint32_t index, const std::shared_ptr<ll::Object>& obj);
+    void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
 
-    void link(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
-
-
-    /**
-    @brief      Records the operations required to run this compute node in a Vulkan command buffer.
-
-    This method is called by ll::CommandBuffer objects when they are called as
-    
-    @param[in]  commandBuffer  The command buffer.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidGridShape
-                                  if any of the components of getGridShape() is zero.
-    */
-    void record(const vk::CommandBuffer& commandBuffer) const;
+    void record(const vk::CommandBuffer& commandBuffer) const override;
     
 
 private:

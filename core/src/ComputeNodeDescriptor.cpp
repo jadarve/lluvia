@@ -43,7 +43,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::addPort(const ll::PortDescriptor& port) {
 
-    m_ports.push_back(port);
+    m_ports[port.name] = port;
     return *this;
 }
 
