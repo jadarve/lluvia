@@ -153,7 +153,25 @@ public:
     void setState(const ll::NodeState tState);
     ll::NodeState getState() const noexcept;
 
+    void init();
+
+    /**
+    @brief      Gets the node type.
+    
+    @return     The type.
+
+    @sa ll::NodeType
+    */
     virtual ll::NodeType getType() const noexcept = 0;
+
+    /**
+    @brief      Returns the object associated to a port \p name
+                
+    @param[in]  name  The name of the port.
+    
+    @return     The port object or nullptr if the port does not exists.
+    */
+    virtual std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept = 0;
 
     /**
     @brief      Binds a ll::Object as port \p index for this node.
@@ -176,9 +194,8 @@ public:
     */
     virtual void record(const vk::CommandBuffer& commandBuffer) const = 0;
 
-// protected:
-//     // FIXME: what should I provide to the node to initialize?
-//     virtual void onInit() = 0;
+protected:
+    virtual void onInit() = 0;
 
 private:
     ll::NodeState state {ll::NodeState::Created};

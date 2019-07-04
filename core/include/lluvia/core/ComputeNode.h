@@ -12,6 +12,7 @@
 #include "lluvia/core/Node.h"
 
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -239,36 +240,21 @@ public:
     */
     ll::vec3ui getGridShape() const noexcept;
 
-    /**
-    @brief      Gets the parameter count for this node.
-    
-    @return     The parameter count.
-    */
-    size_t getParameterCount() const noexcept;
-
-    /**
-    @brief      Returns the object associated to parameter \p index.
-    
-    @param[in]  index  The index of this parameter.
-                       It must be less than the value returned by ll::ComputeNode::getParameterCount.
-    
-    @return     The parameter.
-    */
-    std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;
-
+    std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept override;
     
     void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
-
     void record(const vk::CommandBuffer& commandBuffer) const override;
-    
+
+protected:
+    void onInit() override;    
 
 private:
-    void initParameterBindings();
+    void initPortBindings();
     void initPipeline();
     
-    void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer);
-    void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imageView);
+    void bindBuffer(const ll::PortDescriptor& port, const std::shared_ptr<ll::Buffer>& buffer);
+    void bindImageView(const ll::PortDescriptor& port, const std::shared_ptr<ll::ImageView>& imageView);
 
     std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
     uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
@@ -292,7 +278,8 @@ private:
     // std::vector<vk::SpecializationMapEntry> specializationMapEntries;
     // // uint32_t local_x {1};
 
-    std::vector<std::shared_ptr<ll::Object>> m_objects;
+    // std::vector<std::shared_ptr<ll::Object>> m_objects;
+    std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
 
     // Shared pointer to the session this node was created from
     // This will keep the session alive until this or any other node is deleted.

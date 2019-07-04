@@ -107,6 +107,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     // image is in the correct layout.
     node->bind("in", imageView);
     node->bind("out", outputBuffer);
+    node->init();
 
     cmdBuffer->run(*node);
 
@@ -225,6 +226,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     // image is in the correct layout.
     node->bind("in", imageView);
     node->bind("out", outputBuffer);
+    node->setState(ll::NodeState::Init);
 
     cmdBuffer->run(*node);
 

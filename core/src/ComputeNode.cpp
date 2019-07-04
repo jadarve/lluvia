@@ -16,7 +16,6 @@
 #include "lluvia/core/Program.h"
 
 #include <algorithm>
-#include <iostream>
 #include <stdexcept>
 
 namespace ll {
@@ -39,11 +38,7 @@ ComputeNode::ComputeNode(
     ll::throwSystemErrorIf(m_descriptor.m_localShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Y must be greater than zero");
     ll::throwSystemErrorIf(m_descriptor.m_localShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Z must be greater than zero");
 
-    initParameterBindings();
-    initPipeline();
-
-    // FIXME: resize needed?
-    m_objects.resize(m_parameterBindings.size());
+    initPortBindings();
 }
 
 
@@ -56,7 +51,7 @@ ComputeNode::~ComputeNode() {
 }
 
 
-void ComputeNode::initParameterBindings() {
+void ComputeNode::initPortBindings() {
 
     for(const auto keyValue : m_descriptor.m_ports) {
 
@@ -69,37 +64,10 @@ void ComputeNode::initParameterBindings() {
                         .setPImmutableSamplers(nullptr);
         m_parameterBindings.push_back(binding);
     }
-}
 
-
-void ComputeNode::initPipeline() {
-
-    /////////////////////////////////////////////
-    // Specialization constants
-    /////////////////////////////////////////////
-
-    const size_t size = sizeof(uint32_t);
-    auto specializationMapEntries = vector<vk::SpecializationMapEntry> {
-        {1, 0*size, size},
-        {2, 1*size, size},
-        {3, 2*size, size}
-    };
-
-    auto specializationInfo = vk::SpecializationInfo()
-        .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
-        .setPMapEntries(specializationMapEntries.data())
-        .setDataSize(sizeof(ll::vec3ui))
-        .setPData(&m_descriptor.m_localShape);
-
-    /////////////////////////////////////////////
-    // Pipeline stage info
-    /////////////////////////////////////////////
-    auto stageInfo = vk::PipelineShaderStageCreateInfo()
-        .setStage(vk::ShaderStageFlagBits::eCompute)
-        .setModule(m_descriptor.m_program->getShaderModule())
-        .setPName(m_descriptor.m_functionName.c_str())
-        .setPSpecializationInfo(&specializationInfo);
-
+    // resize the objects vector so that class to bind() can be done
+    // out of order
+    // m_objects.resize(m_parameterBindings.size());
 
     /////////////////////////////////////////////
     // Descriptor pool and descriptor set
@@ -125,7 +93,32 @@ void ComputeNode::initPipeline() {
         .setPSetLayouts(&m_descriptorSetLayout);
 
     m_device.allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet);
+}
 
+
+void ComputeNode::initPipeline() {
+
+    /////////////////////////////////////////////
+    // Specialization constants
+    /////////////////////////////////////////////
+    const size_t size = sizeof(uint32_t);
+    auto specializationMapEntries = vector<vk::SpecializationMapEntry> {
+        {1, 0*size, size},
+        {2, 1*size, size},
+        {3, 2*size, size}
+    };
+
+    auto specializationInfo = vk::SpecializationInfo()
+        .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
+        .setPMapEntries(specializationMapEntries.data())
+        .setDataSize(sizeof(ll::vec3ui))
+        .setPData(&m_descriptor.m_localShape);
+
+    auto stageInfo = vk::PipelineShaderStageCreateInfo()
+        .setStage(vk::ShaderStageFlagBits::eCompute)
+        .setModule(m_descriptor.m_program->getShaderModule())
+        .setPName(m_descriptor.m_functionName.c_str())
+        .setPSpecializationInfo(&specializationInfo);
 
     /////////////////////////////////////////////
     // Compute pipeline
@@ -228,13 +221,11 @@ ll::vec3ui ComputeNode::getGridShape() const noexcept {
 }
 
 
-size_t ComputeNode::getParameterCount() const noexcept {
-    return m_objects.size();
-}
+std::shared_ptr<ll::Object> ComputeNode::getPort(const std::string& name) const noexcept {
 
-
-std::shared_ptr<ll::Object> ComputeNode::getParameter(size_t index) const noexcept {
-    return m_objects[index];
+    const auto it = m_objects.find(name);
+    
+    return it == m_objects.end()? nullptr : it->second;
 }
 
 
@@ -250,11 +241,11 @@ void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object
     // bind obj according to its type
     switch (obj->getType()) {
         case ll::ObjectType::Buffer:
-            bindBuffer(port.binding, std::static_pointer_cast<ll::Buffer>(obj));
+            bindBuffer(port, std::static_pointer_cast<ll::Buffer>(obj));
             break;
 
         case ll::ObjectType::ImageView:
-            bindImageView(port.binding, std::static_pointer_cast<ll::ImageView>(obj));
+            bindImageView(port, std::static_pointer_cast<ll::ImageView>(obj));
             break;
 
         default:
@@ -286,20 +277,29 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 }
 
 
-void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer) {
+void ComputeNode::onInit() {
 
-    // validate that buffer can be bound at index position.
-    const auto& vkBinding = m_parameterBindings.at(index);
+    // TODO: run scripts here!
+
+    initPipeline();
+}
+
+void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_ptr<ll::Buffer>& buffer) {
+
+    // validate that buffer can be bound at index position
+    // in the vulkan descriptor set
+    const auto& vkBinding = m_parameterBindings.at(port.binding);
     const auto  paramType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
 
     ll::throwSystemErrorIf(paramType != ll::PortType::Buffer,
         ll::ErrorCode::PortBindingError,
         "Parameter of type ll::Buffer cannot be bound at position ["
-        + std::to_string(index) + "] as parameter type is not ll::ParameterType::Buffer");
+        + std::to_string(port.binding) + "] as parameter type is not ll::ParameterType::Buffer");
 
-    // binding
-    m_objects[index] = buffer;
+    // holds a reference to the object
+    m_objects[port.name] = buffer;
 
+    // update the informacion of the descriptor set
     auto descBufferInfo = vk::DescriptorBufferInfo()
         .setOffset(0)
         .setRange(VK_WHOLE_SIZE)
@@ -308,36 +308,35 @@ void ComputeNode::bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& 
     auto writeDescSet = vk::WriteDescriptorSet()
         .setDescriptorType(vk::DescriptorType::eStorageBuffer)
         .setDstSet(m_descriptorSet)
-        .setDstBinding(index)
+        .setDstBinding(port.binding)
         .setDescriptorCount(1)
         .setPBufferInfo(&descBufferInfo);
 
-    // update the informacion of the descriptor set
     m_device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
 }
 
 
-void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imgView) {
+void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::shared_ptr<ll::ImageView>& imgView) {
 
     const auto isSampled = imgView->getDescriptor().isSampled();
 
     // validate that imgView can be bound at index position.
-    const auto& vkBinding = m_parameterBindings.at(index);
+    const auto& vkBinding = m_parameterBindings.at(port.binding);
     const auto  paramType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
 
     if (isSampled) {
         ll::throwSystemErrorIf(paramType != ll::PortType::SampledImageView, ll::ErrorCode::PortBindingError,
             "Parameter of type ll::Imageview (sampled) cannot be bound at position ["
-            + std::to_string(index) + "] as parameter type is not ll::PortType::SampledImageView");
+            + std::to_string(port.binding) + "] as parameter type is not ll::PortType::SampledImageView");
     }
     else {
         ll::throwSystemErrorIf(paramType != ll::PortType::ImageView, ll::ErrorCode::PortBindingError,
             "Parameter of type ll::Imageview cannot be bound at position ["
-            + std::to_string(index) + "] as parameter type is not ll::PortType::ImageView");
+            + std::to_string(port.binding) + "] as parameter type is not ll::PortType::ImageView");
     }
 
     // binding
-    m_objects[index] = imgView;
+    m_objects[port.name] = imgView;
 
     auto descImgInfo = vk::DescriptorImageInfo {}
         .setSampler(imgView->vkSampler)
@@ -346,7 +345,7 @@ void ComputeNode::bindImageView(uint32_t index, const std::shared_ptr<ll::ImageV
 
     auto writeDescSet = vk::WriteDescriptorSet()
         .setDstSet(m_descriptorSet)
-        .setDstBinding(index)
+        .setDstBinding(port.binding)
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
 

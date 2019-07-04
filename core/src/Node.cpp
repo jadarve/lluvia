@@ -67,7 +67,7 @@ void Node::setState(const ll::NodeState tState) {
                 break;
                 case ll::NodeState::Init:
                     state = tState;
-                    // onInit();
+                    onInit();
                 break;
             }
         break;
@@ -80,7 +80,7 @@ void Node::setState(const ll::NodeState tState) {
                 break;
                 case ll::NodeState::Init:
                     // TODO: throw exception, node already in init state
-                    throw std::runtime_error("Node alread in init state");
+                    throw std::runtime_error("Node already in init state");
                 break;
             }
         break;
@@ -90,6 +90,11 @@ void Node::setState(const ll::NodeState tState) {
 
 ll::NodeState Node::getState() const noexcept {
     return state;
+}
+
+
+void Node::init() {
+    setState(ll::NodeState::Init);
 }
 
 } // namespace ll

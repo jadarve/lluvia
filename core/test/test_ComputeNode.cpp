@@ -60,19 +60,24 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto program = session->createProgram(SHADER_PATH + "/assign.spv");
     REQUIRE(program != nullptr);
 
+    // TOTHINK: set script in the descriptor, not in the node
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
                             .setProgram(program)
                             .setFunctionName("main")
                             .setLocalX(bufferSize)
                             .addPort({0, "out_buffer", ll::PortDirection::OUT, ll::PortType::Buffer});
 
+    // at this point, the node's port binding table and
+    // vulkan descriptor set is created. So, it is possible
+    // to bind objects to the ports before calling node->init()
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
 
     node->bind("out_buffer", buffer);
 
-    // TODO: aqui voy!
-    // node->link("out_buffer", buffer);
+    // these are equivalent
+    node->init();
+    // node->setState(ll::NodeState::Init);
 
     auto cmdBuffer = session->createCommandBuffer();
 
