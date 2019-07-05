@@ -24,6 +24,13 @@ class Interpreter {
 
 public:
     Interpreter();
+    Interpreter(const Interpreter& interpreter) = default;
+    Interpreter(Interpreter&& interpreter)      = default;
+
+    ~Interpreter() = default;
+
+    Interpreter& operator = (const Interpreter& interpreter) = default;
+    Interpreter& operator = (Interpreter&& interpreter)      = default;
 
     template<typename T>
     void run(T&& code) {

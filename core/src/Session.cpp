@@ -13,6 +13,7 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/Interpreter.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
@@ -69,6 +70,8 @@ Session::Session() {
         // rethrow
         throw;
     }
+
+    m_interpreter = std::make_unique<ll::Interpreter>();
 }
 
 
@@ -77,6 +80,11 @@ Session::~Session() {
     device.destroyCommandPool(commandPool);
     device.destroy();
     instance.destroy();
+}
+
+
+const std::unique_ptr<ll::Interpreter>& Session::getInterpreter() const noexcept {
+    return m_interpreter;
 }
 
 

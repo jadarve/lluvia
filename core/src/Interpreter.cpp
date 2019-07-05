@@ -11,7 +11,7 @@ namespace ll {
 
 Interpreter::Interpreter() {
 
-    // default libraries
+    // load default libraries
     m_lua.open_libraries(sol::lib::base, sol::lib::math);
 }
 

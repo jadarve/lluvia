@@ -12,8 +12,10 @@
 #include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageView.h"
+#include "lluvia/core/Interpreter.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/Session.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -280,6 +282,11 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 void ComputeNode::onInit() {
 
     // TODO: run scripts here!
+
+    const auto& interpreter = m_session->getInterpreter();
+    interpreter->run(R"(
+        print('hello from lua!')
+        )");
 
     initPipeline();
 }

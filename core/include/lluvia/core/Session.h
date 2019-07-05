@@ -26,6 +26,7 @@ class CommandBuffer;
 class ComputeNode;
 class ComputeNodeDescriptor;
 class Image;
+class Interpreter;
 class Memory;
 class Program;
 
@@ -70,6 +71,9 @@ public:
 
     Session& operator = (const Session& session) = delete;
     Session& operator = (Session&& session)      = delete;
+
+
+    const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
     
     
     /**
@@ -217,6 +221,8 @@ private:
     vk::Queue            queue;
     vk::CommandPool      commandPool;
     uint32_t             computeQueueFamilyIndex;
+
+    std::unique_ptr<ll::Interpreter> m_interpreter;
 };
 
 } // namespace ll
