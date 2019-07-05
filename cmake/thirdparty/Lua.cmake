@@ -63,4 +63,9 @@ target_link_libraries(lua
     dl
 )
 
+target_include_directories(lua
+    INTERFACE
+    ${LUA_INCLUDE_DIR}
+)
+
 message (STATUS "-------------------------------------------------")

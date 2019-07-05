@@ -14,7 +14,7 @@ function(add_catchTest NAME SRCS)
 endfunction()
 
 set(LL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(LL_LINK_LIBRARIES stdc++ json vulkan)
+set(LL_LINK_LIBRARIES stdc++ json vulkan m dl lua)
 
 set(_SRCS
     src/Buffer.cpp
@@ -27,6 +27,7 @@ set(_SRCS
     src/ImageView.cpp
     src/ImageViewDescriptor.cpp
     src/impl/MemoryFreeSpaceManager.cpp
+    src/Interpreter.cpp
     src/Memory.cpp
     src/MemoryAllocationInfo.cpp
     src/Node.cpp
