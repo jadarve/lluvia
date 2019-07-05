@@ -58,6 +58,11 @@ add_library (lua STATIC
     ${LUA_INCLUDE_DIR}/linit.c
 )
 
+target_compile_definitions(lua
+    PUBLIC
+    LUA_USE_LINUX
+)
+
 target_link_libraries(lua
     m
     dl
