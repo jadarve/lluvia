@@ -73,6 +73,11 @@ public:
     Session& operator = (Session&& session)      = delete;
 
 
+    /**
+     * @brief      Gets the Lua interpreter.
+     *
+     * @return     The interpreter.
+     */
     const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
     
     

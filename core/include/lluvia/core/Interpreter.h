@@ -8,14 +8,18 @@
 #ifndef LLUVIA_CORE_INTERPRETER_H_
 #define LLUVIA_CORE_INTERPRETER_H_
 
-#include <cstdlib>
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <type_traits>
 
-#define SOL_ALL_SAFETIES_ON 1
-#include "sol/sol.hpp"
+
+namespace sol {
+class state;
+
+} // namespace sol;
 
 namespace ll {
 
@@ -27,25 +31,15 @@ public:
     Interpreter(const Interpreter& interpreter) = default;
     Interpreter(Interpreter&& interpreter)      = default;
 
-    ~Interpreter() = default;
+    ~Interpreter();
 
     Interpreter& operator = (const Interpreter& interpreter) = default;
     Interpreter& operator = (Interpreter&& interpreter)      = default;
 
-    template<typename T>
-    void run(T&& code) {
-        static_assert(std::is_convertible<T, std::string>::value, "typename T must be convertible to std::string");
-        m_lua.script(code);
-    }
-
-    template<typename T, typename S>
-    T get(S&& name) {
-        static_assert(std::is_convertible<S, std::string>::value, "typename S must be convertible to std::string");
-        return static_cast<T>(m_lua[name]);
-    }
+    void run(const std::string& code);
 
 private:
-    sol::state m_lua;
+    std::unique_ptr<sol::state> m_lua;
 };
 
 
