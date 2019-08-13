@@ -40,6 +40,8 @@ ComputeNode::ComputeNode(
     ll::throwSystemErrorIf(m_descriptor.m_localShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Y must be greater than zero");
     ll::throwSystemErrorIf(m_descriptor.m_localShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Z must be greater than zero");
 
+    // TODO: call the script onNodeCreated()
+
     initPortBindings();
 }
 
@@ -281,11 +283,12 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 
 void ComputeNode::onInit() {
 
-    // TODO: run scripts here!
+    // TODO: call the script onNodeInit
 
     const auto& interpreter = m_session->getInterpreter();
     interpreter->run(R"(
         print('hello from lua!')
+        print(math.sin(1.5))
         )");
 
     initPipeline();
