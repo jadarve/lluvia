@@ -82,6 +82,19 @@ namespace impl {
         std::make_tuple("float64" , ll::ChannelType::Float64),
     }};
 
+
+    /**
+    @brief Channel type string values used for converting ll::ChannelType to std::string and vice-versa.
+
+    @sa ll::ChannelType enum values for this array.
+    */
+    constexpr const std::array<std::tuple<const char*, ll::ChannelCount>, 4> ChannelCountStrings {{
+        std::make_tuple("C1", ll::ChannelCount::C1),
+        std::make_tuple("C2", ll::ChannelCount::C2),
+        std::make_tuple("C3", ll::ChannelCount::C3),
+        std::make_tuple("C4", ll::ChannelCount::C4)
+    }};
+
 } // namespace impl
 
 

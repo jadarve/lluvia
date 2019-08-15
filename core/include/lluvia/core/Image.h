@@ -54,6 +54,10 @@ namespace impl {
     }};
 
 
+    /**
+     String values for Vulkan VkImageLayout.
+     See @VULKAN_DOC#VkImageLayout for more information.
+     */
     constexpr const std::array<std::tuple<const char*, vk::ImageLayout>, 13> VkImageLayoutStrings {{
         std::make_tuple("Undefined"                                , vk::ImageLayout::eUndefined),
         std::make_tuple("General"                                  , vk::ImageLayout::eGeneral),

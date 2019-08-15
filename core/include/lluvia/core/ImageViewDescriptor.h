@@ -67,6 +67,17 @@ enum class ImageAddressMode : uint32_t {
 namespace impl {
 
     /**
+    @brief Image axis strings used for converting ll::ImageAxis to std::string and vice-versa.
+
+    @sa         ll::ImageAxis enum values for this array.
+    */
+    constexpr const std::array<std::tuple<const char*, ll::ImageAxis>, 3> ImageAxisStrings {{
+        std::make_tuple("U" , ll::ImageAxis::U),
+        std::make_tuple("V"  , ll::ImageAxis::V),
+        std::make_tuple("W"  , ll::ImageAxis::W),
+    }};
+
+    /**
     @brief Image filter mode strings used for converting ll::ImageFilterMode to std::string and vice-versa.
 
     @sa         ll::ImageFilterMode enum values for this array.
