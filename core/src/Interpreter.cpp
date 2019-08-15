@@ -25,6 +25,7 @@ namespace ll {
 void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::vec3ui>("vec3ui",
+        sol::constructors<ll::vec3ui(), ll::vec3ui(const uint32_t&), ll::vec3ui(const uint32_t&, const uint32_t&, const uint32_t&)>(),
         "x", &ll::vec3ui::x,
         "y", &ll::vec3ui::y,
         "z", &ll::vec3ui::z);
@@ -54,8 +55,12 @@ Interpreter::~Interpreter() {
 
 
 void Interpreter::run(const std::string& code) {
-
     m_lua->script(code);
+}
+
+
+void Interpreter::runFile(const std::string& filename) {
+    m_lua->script_file(filename);
 }
 
 } // namespace ll

@@ -37,6 +37,7 @@ public:
     Interpreter& operator = (Interpreter&& interpreter)      = default;
 
     void run(const std::string& code);
+    void runFile(const std::string& filename);
 
 private:
     std::unique_ptr<sol::state> m_lua;

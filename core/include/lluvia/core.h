@@ -18,6 +18,7 @@
 #include "core/ImageDescriptor.h"
 #include "core/ImageView.h"
 #include "core/ImageViewDescriptor.h"
+#include "core/Interpreter.h"
 #include "core/Memory.h"
 #include "core/MemoryAllocationInfo.h"
 #include "core/Node.h"
