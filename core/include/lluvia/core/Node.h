@@ -45,8 +45,8 @@ enum class NodeType : uint32_t {
 @brief      Class for port direction.
 */
 enum class PortDirection : uint32_t {
-    IN  = 0, /**< The port is an input to this node. */
-    OUT = 1  /**< The port is an output to this node. */
+    In  = 0, /**< The port is an input to this node. */
+    Out = 1  /**< The port is an output to this node. */
 };
 
 
@@ -63,6 +63,27 @@ enum class PortType : uint32_t {
 
 
 namespace impl {
+
+    /**
+     @brief Node state string values used for converting ll::NodeState to std::string and vice-versa.
+
+     @sa ll::NodeState enum values for this array.
+     */
+    constexpr const std::array<std::tuple<const char*, ll::NodeState>, 2> NodeStateStrings {{
+        std::make_tuple("Created" , ll::NodeState::Created),
+        std::make_tuple("Init"    , ll::NodeState::Init)
+    }};
+
+
+    /**
+     @brief Port direction string values used for converting ll::PortDirection to std::string and vice-versa.
+
+     @sa ll::PortDirection enum values for this array.
+     */
+    constexpr const std::array<std::tuple<const char*, ll::PortDirection>, 2> PortDirectionStrings {{
+        std::make_tuple("In"  , ll::PortDirection::In),
+        std::make_tuple("Out" , ll::PortDirection::Out)
+    }};
 
     /**
     @brief Port type string values used for converting ll::PortType to std::string and vice-versa.
@@ -134,14 +155,26 @@ inline ll::PortType stringToPortType(T&& stringValue) {
 }
 
 
-using PortDescriptor = struct {
+// using PortDescriptor = struct {
+struct PortDescriptor {
+
+    PortDescriptor() {}
+    PortDescriptor(uint32_t pBinding,
+                   const std::string& pName,
+                   ll::PortDirection pDirection,
+                   ll::PortType pType) :
+        binding {pBinding},
+        name {pName},
+        direction {pDirection},
+        type {pType} {}
+
     /**
     Binding number within shader program.
     */
-    uint32_t binding;
-    std::string name;
-    ll::PortDirection direction;
-    ll::PortType type;
+    uint32_t binding                {0};
+    std::string name                {};
+    ll::PortDirection direction     {ll::PortDirection::In};
+    ll::PortType type               {ll::PortType::Buffer};
 };
 
 

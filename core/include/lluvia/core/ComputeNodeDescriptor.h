@@ -66,7 +66,7 @@ public:
     @sa ll::ComputeNodeDescriptor::setProgram       sets the program object.
     @sa ll::ComputeNodeDescriptor::setFunctionName  sets the function name.
     */
-    ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept;
+    ComputeNodeDescriptor& setProgramAndFunctionName(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept;
 
 
     /**

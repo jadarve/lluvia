@@ -89,8 +89,8 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addPort({0, "in", ll::PortDirection::IN, ll::PortType::SampledImageView})
-                            .addPort({1, "out", ll::PortDirection::OUT, ll::PortType::Buffer});
+                            .addPort({0, "in", ll::PortDirection::In, ll::PortType::SampledImageView})
+                            .addPort({1, "out", ll::PortDirection::Out, ll::PortType::Buffer});
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
@@ -208,8 +208,8 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addPort({0, "in", ll::PortDirection::IN, ll::PortType::ImageView})
-                            .addPort({1, "out", ll::PortDirection::OUT, ll::PortType::Buffer});
+                            .addPort({0, "in", ll::PortDirection::In, ll::PortType::ImageView})
+                            .addPort({1, "out", ll::PortDirection::Out, ll::PortType::Buffer});
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);

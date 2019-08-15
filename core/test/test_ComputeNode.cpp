@@ -65,7 +65,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
                             .setProgram(program)
                             .setFunctionName("main")
                             .setLocalX(bufferSize)
-                            .addPort({0, "out_buffer", ll::PortDirection::OUT, ll::PortType::Buffer});
+                            .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
 
     // at this point, the node's port binding table and
     // vulkan descriptor set is created. So, it is possible

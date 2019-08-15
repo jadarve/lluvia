@@ -104,19 +104,19 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
 
 
     auto descX = ll::ComputeNodeDescriptor {}
-        .setProgram(programX, "main")
+        .setProgramAndFunctionName(programX, "main")
         .setLocalShape({32, 32, 1})
         .addPorts({
-            {0, "in_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
-            {1, "out_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
+            {0, "in_RGBA", ll::PortDirection::In, ll::PortType::ImageView},
+            {1, "out_RGBA", ll::PortDirection::Out, ll::PortType::ImageView},
         });
 
     auto descY = ll::ComputeNodeDescriptor {}
-        .setProgram(programY, "main")
+        .setProgramAndFunctionName(programY, "main")
         .setLocalShape({32, 32, 1})
         .addPorts({
-            {0, "in_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
-            {1, "out_RGBA", ll::PortDirection::IN, ll::PortType::ImageView},
+            {0, "in_RGBA", ll::PortDirection::In, ll::PortType::ImageView},
+            {1, "out_RGBA", ll::PortDirection::Out, ll::PortType::ImageView},
         });
 
 
