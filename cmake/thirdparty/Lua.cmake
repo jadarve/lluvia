@@ -15,7 +15,7 @@ if (NOT EXISTS ${LUA_INCLUDE_DIR})
     )
 
     # untar and remove tar file
-    execute_process(COMMAND tar -xvf ${LUA_ZIP_PATH}
+    execute_process(COMMAND tar -xf ${LUA_ZIP_PATH}
                     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/thirdparty")
     execute_process(COMMAND rm ${LUA_ZIP_PATH})
 
