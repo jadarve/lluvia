@@ -9,6 +9,8 @@
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Node.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
@@ -16,6 +18,7 @@
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/ImageViewDescriptor.h"
 #include "lluvia/core/Image.h"
+#include "lluvia/core/ImageView.h"
 
 
 #pragma clang diagnostic push
@@ -35,6 +38,7 @@ namespace ll {
 template<typename T, std::size_t N, const std::array<std::tuple<const char*, T>, N>& values>
 void registerEnum(sol::table& lib, const std::string& enumName) {
 
+    // TODO: make table read only and not able to add new elements
     auto table = lib.create(enumName);
     for (const auto& kv : values) {
         table[std::get<0>(kv)] = std::get<1>(kv);
@@ -68,17 +72,17 @@ void registerTypes(sol::table& lib) {
         "y", &ll::vec3ui::y,
         "z", &ll::vec3ui::z);
 
-
-    ///////////////////////////////////////////////////////
-    // Objects
-    ///////////////////////////////////////////////////////
-    lib.new_usertype<ll::Object>("Object"
+    lib.new_usertype<ll::MemoryAllocationInfo>("MemoryAllocationInfo",
+        "offset", &ll::MemoryAllocationInfo::offset,
+        "size", &ll::MemoryAllocationInfo::size,
+        "leftPadding", &ll::MemoryAllocationInfo::leftPadding,
+        "page", &ll::MemoryAllocationInfo::page
         );
 
-    lib.new_usertype<ll::Buffer>("Buffer",
-        "size", sol::property(&ll::Buffer::getSize),
-        "isMappable", sol::property(&ll::Buffer::isMappable)
-        );
+
+    ///////////////////////////////////////////////////////
+    // Descriptors
+    ///////////////////////////////////////////////////////
 
     // TODO: usageFlags, tiling
     lib.new_usertype<ll::ImageDescriptor>("ImageDescriptor",
@@ -89,18 +93,6 @@ void registerTypes(sol::table& lib) {
         "height", sol::property(&ll::ImageDescriptor::getHeight, &ll::ImageDescriptor::setHeight),
         "depth", sol::property(&ll::ImageDescriptor::getDepth, &ll::ImageDescriptor::setDepth),
         "shape", sol::property(&ll::ImageDescriptor::getShape, &ll::ImageDescriptor::setShape)
-        );
-
-    // TODO: layout, usageFlags, createImageView
-    lib.new_usertype<ll::Image>("Image",
-        sol::constructors<>(),
-        "size", sol::property(&ll::Image::getSize),
-        "channelType", sol::property(&ll::Image::getChannelType),
-        "channelCount", sol::property(&ll::Image::getChannelCount<ll::ChannelCount>),
-        "width", sol::property(&ll::Image::getWidth),
-        "height", sol::property(&ll::Image::getHeight),
-        "depth", sol::property(&ll::Image::getDepth),
-        "shape", sol::property(&ll::Image::getShape)
         );
 
     lib.new_usertype<ll::ImageViewDescriptor>("ImageViewDescriptor",
@@ -117,10 +109,6 @@ void registerTypes(sol::table& lib) {
             )
         );
 
-
-    ///////////////////////////////////////////////////////
-    // Nodes
-    ///////////////////////////////////////////////////////
     lib.new_usertype<ll::PortDescriptor>("PortDescriptor",
         sol::constructors<ll::PortDescriptor(), ll::PortDescriptor(uint32_t, const std::string&, ll::PortDirection, ll::PortType)>(),
         "binding"   , &ll::PortDescriptor::binding,
@@ -128,8 +116,6 @@ void registerTypes(sol::table& lib) {
         "direction" , &ll::PortDescriptor::direction,
         "type"      , &ll::PortDescriptor::type
         );
-
-    lib.new_usertype<ll::Program>("Program");
 
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",
         "functionName", sol::property(&ll::ComputeNodeDescriptor::getFunctionName, &ll::ComputeNodeDescriptor::setFunctionName),
@@ -140,6 +126,70 @@ void registerTypes(sol::table& lib) {
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
         "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape
+        );
+
+    ///////////////////////////////////////////////////////
+    // Objects
+    ///////////////////////////////////////////////////////
+    lib.new_usertype<ll::Object>("Object"
+        );
+
+    lib.new_usertype<ll::Buffer>("Buffer",
+        "size", sol::property(&ll::Buffer::getSize),
+        "isMappable", sol::property(&ll::Buffer::isMappable),
+        "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo)
+        );
+
+    // TODO: layout, usageFlags, createImageView
+    lib.new_usertype<ll::Image>("Image",
+        sol::constructors<>(),
+        "size", sol::property(&ll::Image::getSize),
+        "allocationInfo", sol::property(&ll::Image::getAllocationInfo),
+        "channelType", sol::property(&ll::Image::getChannelType),
+        "channelCount", sol::property(&ll::Image::getChannelCount<ll::ChannelCount>),
+        "width", sol::property(&ll::Image::getWidth),
+        "height", sol::property(&ll::Image::getHeight),
+        "depth", sol::property(&ll::Image::getDepth),
+        "shape", sol::property(&ll::Image::getShape)
+        );
+
+    // TODO: usage flags, layout
+    lib.new_usertype<ll::ImageView>("ImageView",
+        sol::constructors<>(),
+        "image", sol::property(&ll::ImageView::getImage),
+        "size", sol::property(&ll::ImageView::getSize),
+        "allocationInfo", sol::property(&ll::ImageView::getAllocationInfo),
+        "channelType", sol::property(&ll::ImageView::getChannelType),
+        "channelCount", sol::property(&ll::ImageView::getChannelCount<ll::ChannelCount>),
+        "width", sol::property(&ll::ImageView::getWidth),
+        "height", sol::property(&ll::ImageView::getHeight),
+        "depth", sol::property(&ll::ImageView::getDepth),
+        "shape", sol::property(&ll::ImageView::getShape)
+        );
+
+
+    ///////////////////////////////////////////////////////
+    // Nodes
+    ///////////////////////////////////////////////////////
+    lib.new_usertype<ll::Program>("Program");
+
+    lib.new_usertype<ll::ComputeNode>("ComputeNode",
+        sol::constructors<>(),
+        "type", sol::property(&ll::ComputeNode::getType),
+        "functionName", sol::property(&ll::ComputeNode::getFunctionName),
+        "program", sol::property(&ll::ComputeNode::getProgram),
+        "descriptor", sol::property(&ll::ComputeNode::getDescriptor),
+        "localX", sol::property(&ll::ComputeNode::getLocalX),
+        "localY", sol::property(&ll::ComputeNode::getLocalY),
+        "localZ", sol::property(&ll::ComputeNode::getLocalZ),
+        "localShape", sol::property(&ll::ComputeNode::getLocalShape),
+        "gridX", sol::property(&ll::ComputeNode::getGridX, &ll::ComputeNode::getGridX),
+        "gridY", sol::property(&ll::ComputeNode::getGridY, &ll::ComputeNode::setGridY),
+        "gridZ", sol::property(&ll::ComputeNode::getGridZ, &ll::ComputeNode::setGridZ),
+        "gridShape", sol::property(&ll::ComputeNode::getGridShape, &ll::ComputeNode::setGridShape),
+        "configureGridShape", &ll::ComputeNode::configureGridShape,
+        "getPort", &ll::ComputeNode::getPort,
+        "bind", &ll::ComputeNode::bind
         );
 }
 

@@ -199,7 +199,7 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& 
 
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
 
-    return std::make_shared<ll::ComputeNode>(shared_from_this(), device, descriptor);
+    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {shared_from_this(), device, descriptor}};
 }
 
 
