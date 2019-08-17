@@ -198,7 +198,7 @@ Interpreter::Interpreter() :
     m_lua {std::make_unique<sol::state>()} {
 
     // load default libraries
-    m_lua->open_libraries(sol::lib::base, sol::lib::math);
+    m_lua->open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
     // library namespace
     auto lib = (*m_lua)["ll"].get_or_create<sol::table>();
