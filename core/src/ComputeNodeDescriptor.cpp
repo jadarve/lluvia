@@ -26,7 +26,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<l
     return *this;
 }
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgramAndFunctionName(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept {
     
     setProgram(tProgram);
     setFunctionName(tFunctionName);

@@ -237,13 +237,7 @@ public:
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setAddressMode(ll::ImageAddressMode tAddressMode) noexcept {
-
-        for (auto& it : this->addressMode) {
-            it = tAddressMode;
-        }
-        return *this;
-    }
+    ImageViewDescriptor& setAddressMode(ll::ImageAddressMode tAddressMode) noexcept;
 
 
     /**
@@ -254,11 +248,7 @@ public:
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode tAddressMode) noexcept {
-
-        this->addressMode[static_cast<uint32_t>(axis)] = tAddressMode;
-        return *this;
-    }
+    ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode tAddressMode) noexcept;
 
 
     /**

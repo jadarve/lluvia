@@ -103,10 +103,18 @@ void registerTypes(sol::table& lib) {
         "shape", sol::property(&ll::Image::getShape)
         );
 
-    // TODO
     lib.new_usertype<ll::ImageViewDescriptor>("ImageViewDescriptor",
         sol::constructors<ll::ImageViewDescriptor()>(),
-        "filterMode", sol::property(&ll::ImageViewDescriptor::getFilterMode, &ll::ImageViewDescriptor::setFilterMode)
+        "filterMode", sol::property(&ll::ImageViewDescriptor::getFilterMode, &ll::ImageViewDescriptor::setFilterMode),
+        "addressModeU", sol::property(&ll::ImageViewDescriptor::getAddressModeU),
+        "addressModeV", sol::property(&ll::ImageViewDescriptor::getAddressModeV),
+        "addressModeW", sol::property(&ll::ImageViewDescriptor::getAddressModeW),
+        "normalizedCoordinates", sol::property(&ll::ImageViewDescriptor::isNormalizedCoordinates, &ll::ImageViewDescriptor::setNormalizedCoordinates),
+        "isSampled", sol::property(&ll::ImageViewDescriptor::isSampled, &ll::ImageViewDescriptor::setIsSampled),
+        "setAddressMode", sol::overload(
+            (ll::ImageViewDescriptor& (ll::ImageViewDescriptor::*)(ll::ImageAddressMode) noexcept) &ll::ImageViewDescriptor::setAddressMode,
+            (ll::ImageViewDescriptor& (ll::ImageViewDescriptor::*)(ll::ImageAxis, ll::ImageAddressMode) noexcept) &ll::ImageViewDescriptor::setAddressMode
+            )
         );
 
 
@@ -125,7 +133,9 @@ void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",
         "functionName", sol::property(&ll::ComputeNodeDescriptor::getFunctionName, &ll::ComputeNodeDescriptor::setFunctionName),
-        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram, &ll::ComputeNodeDescriptor::setProgram),
+        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram,
+                                 (ComputeNodeDescriptor& (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program>&, const std::string&) noexcept) &ll::ComputeNodeDescriptor::setProgram
+                                ),
         "localShape", sol::property(&ll::ComputeNodeDescriptor::getLocalShape, &ll::ComputeNodeDescriptor::setLocalShape),
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
