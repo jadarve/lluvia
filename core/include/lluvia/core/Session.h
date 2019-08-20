@@ -11,6 +11,7 @@
 #include <vulkan/vulkan.hpp>
 
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -166,6 +167,28 @@ public:
 
 
     /**
+     @brief      Sets a program with a given name into the registry.
+     
+     @param[in]  name     The name
+     @param[in]  program  The program
+     
+     @sa ll::Session::getProgram Gets a program given its name in the registry.
+     */
+    void setProgram(const std::string& name, const std::shared_ptr<ll::Program>& program);
+
+    /**
+     @brief      Gets a program given its name in the registry.
+     
+     @param[in]  name  The name.
+     
+     @return     The program.
+
+     @sa ll::Session::setProgram Sets a program with a given name into the registry.
+     */
+    std::shared_ptr<ll::Program> getProgram(const std::string& name) const;
+
+
+    /**
     @brief      Creates a compute node.
     
     @param[in]  descriptor  The node's descriptor
@@ -228,6 +251,8 @@ private:
     uint32_t             computeQueueFamilyIndex;
 
     std::unique_ptr<ll::Interpreter> m_interpreter;
+
+    std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
 };
 
 } // namespace ll

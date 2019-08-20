@@ -197,6 +197,23 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& 
 }
 
 
+void Session::setProgram(const std::string& name, const std::shared_ptr<ll::Program>& program) {
+
+    m_programRegistry.insert_or_assign(name, program);
+}
+
+
+std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const {
+
+    auto iter = m_programRegistry.find(name);
+    if (iter == m_programRegistry.cend()) {
+        return nullptr;
+    }
+
+    return iter->second;
+}
+
+
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
 
     return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {shared_from_this(), device, descriptor}};
