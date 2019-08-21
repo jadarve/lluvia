@@ -27,8 +27,7 @@ namespace ll {
 using namespace std;
 
 std::shared_ptr<ll::Session> Session::create() {
-
-    return std::shared_ptr<Session>{new Session()};
+    return std::shared_ptr<Session>{new Session()};;
 }
 
 
@@ -71,6 +70,10 @@ Session::Session() {
     }
 
     m_interpreter = std::make_unique<ll::Interpreter>();
+
+    // by sending a raw pointer, I avoid a circular reference
+    // of shared pointers between the interpreter and this session.
+    m_interpreter->setActiveSession(this);
 }
 
 
@@ -205,7 +208,9 @@ void Session::setProgram(const std::string& name, const std::shared_ptr<ll::Prog
 std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const {
 
     auto iter = m_programRegistry.find(name);
+
     if (iter == m_programRegistry.cend()) {
+        // FIXME: what to do?
         return nullptr;
     }
 
@@ -235,6 +240,7 @@ ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string
         local builder = ll.getNodeBuilder(builderName)
         return builder.newDescriptor()
     )";
+
     auto load = m_interpreter->load(lua);
 
     return load(builderName);

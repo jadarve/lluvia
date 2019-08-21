@@ -1,6 +1,6 @@
 
 ll['nodeBuilders'] = {}
-
+ll['activeSession'] = nil
 
 function ll.class(base)
 
@@ -35,11 +35,22 @@ end
 function ll.castObject(obj)
 
     castTable = {
-        [ll.ObjectType.Buffer] = ll.impl.castBuffer,
-        [ll.ObjectType.Image] = ll.impl.castImage,
+        [ll.ObjectType.Buffer]    = ll.impl.castBuffer,
+        [ll.ObjectType.Image]     = ll.impl.castImage,
         [ll.ObjectType.ImageView] = ll.impl.castImageView
     }
+
     return castTable[obj.type](obj)
+end
+
+
+function ll.getProgram(name)
+    
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:getProgram(name)
 end
 
 

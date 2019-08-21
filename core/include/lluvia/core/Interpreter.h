@@ -24,13 +24,9 @@
 #pragma clang diagnostic pop
 
 
-// namespace sol {
-// class state;
-// struct load_result;
-
-// } // namespace sol;
-
 namespace ll {
+
+class Session;
 
 
 class Interpreter {
@@ -50,8 +46,12 @@ public:
 
     sol::load_result load(const std::string& code);
 
+    void setActiveSession(ll::Session* session);
+
 private:
     std::unique_ptr<sol::state> m_lua;
+    sol::table                  m_lib;
+    sol::table                  m_libImpl;
 };
 
 

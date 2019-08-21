@@ -8,17 +8,18 @@
 #include "lluvia/core/Interpreter.h"
 
 #include "lluvia/core/Buffer.h"
-#include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Image.h"
+#include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/ImageView.h"
+#include "lluvia/core/ImageViewDescriptor.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Node.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/Session.h"
 #include "lluvia/core/types.h"
-#include "lluvia/core/ImageDescriptor.h"
-#include "lluvia/core/ImageViewDescriptor.h"
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageView.h"
 
 #include "lluvia/core/impl/LuaLibrary.h"
 
@@ -114,7 +115,7 @@ void registerTypes(sol::table& lib) {
         "functionName", sol::property(&ll::ComputeNodeDescriptor::getFunctionName, &ll::ComputeNodeDescriptor::setFunctionName),
         "builderName", sol::property(&ll::ComputeNodeDescriptor::getBuilderName, &ll::ComputeNodeDescriptor::setBuilderName),
         "program", sol::property(&ll::ComputeNodeDescriptor::getProgram,
-                                 (ComputeNodeDescriptor& (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program>&, const std::string&) noexcept) &ll::ComputeNodeDescriptor::setProgram
+                                 (ComputeNodeDescriptor& (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program>&) noexcept) &ll::ComputeNodeDescriptor::setProgram
                                 ),
         "localShape", sol::property(&ll::ComputeNodeDescriptor::getLocalShape, &ll::ComputeNodeDescriptor::setLocalShape),
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
@@ -171,7 +172,9 @@ void registerTypes(sol::table& lib) {
     ///////////////////////////////////////////////////////
     // Nodes
     ///////////////////////////////////////////////////////
-    lib.new_usertype<ll::Program>("Program");
+    lib.new_usertype<ll::Program>("Program",
+        sol::no_constructor
+        );
 
     lib.new_usertype<ll::ComputeNode>("ComputeNode",
         sol::no_constructor,
@@ -191,6 +194,12 @@ void registerTypes(sol::table& lib) {
         "getPort", &ll::ComputeNode::getPort,
         "bind", &ll::ComputeNode::bind
         );
+
+    lib.new_usertype<ll::Session>("Session",
+        sol::no_constructor,
+        "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
+        "getProgram", &ll::Session::getProgram
+        );
 }
 
 
@@ -201,14 +210,14 @@ Interpreter::Interpreter() :
     m_lua->open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
     // ll and impl namespaces
-    auto lib = (*m_lua)["ll"].get_or_create<sol::table>();
-    auto impl = lib["impl"].get_or_create<sol::table>();
+    m_lib = (*m_lua)["ll"].get_or_create<sol::table>();
+    m_libImpl = m_lib["impl"].get_or_create<sol::table>();
 
-    registerTypes(lib);
+    registerTypes(m_lib);
     
-    impl["castBuffer"]    = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Buffer>(obj);};
-    impl["castImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
-    impl["castImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
+    m_libImpl["castBuffer"]    = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Buffer>(obj);};
+    m_libImpl["castImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
+    m_libImpl["castImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }
@@ -231,6 +240,11 @@ void Interpreter::runFile(const std::string& filename) {
 
 sol::load_result Interpreter::load(const std::string& code) {
     return m_lua->load(code);
+}
+
+
+void Interpreter::setActiveSession(ll::Session* session) {
+    m_lib["activeSession"] = session;
 }
 
 } // namespace ll
