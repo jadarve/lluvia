@@ -22,15 +22,6 @@
 
 #include "lluvia/core/impl/LuaLibrary.h"
 
-
-// #pragma clang diagnostic push
-// #pragma clang diagnostic ignored "-Wunused-lambda-capture"
-
-// #define SOL_ALL_SAFETIES_ON 1
-// #include "sol/sol.hpp"
-
-// #pragma clang diagnostic pop
-
 #include <vulkan/vulkan.hpp>
 
 #include <iostream>
@@ -209,16 +200,15 @@ Interpreter::Interpreter() :
     // load default libraries
     m_lua->open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
-    // library namespace
+    // ll and impl namespaces
     auto lib = (*m_lua)["ll"].get_or_create<sol::table>();
+    auto impl = lib["impl"].get_or_create<sol::table>();
 
     registerTypes(lib);
-
-    // TODO: It works, but it's ugly!
-    lib["castBuffer"] = [](std::shared_ptr<ll::Object> obj) {
-        std::cout << "ll.castObject: " << static_cast<uint32_t>(obj->getType()) << std::endl;
-        return std::static_pointer_cast<ll::Buffer>(obj);
-     };
+    
+    impl["castBuffer"]    = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Buffer>(obj);};
+    impl["castImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
+    impl["castImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }

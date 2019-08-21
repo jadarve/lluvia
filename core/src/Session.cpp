@@ -17,16 +17,6 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
-
-// #pragma clang diagnostic push
-// #pragma clang diagnostic ignored "-Wunused-lambda-capture"
-
-// #define SOL_ALL_SAFETIES_ON 1
-// #include "sol/sol.hpp"
-
-// #pragma clang diagnostic pop
-
-
 #include <algorithm>
 #include <exception>
 #include <fstream>

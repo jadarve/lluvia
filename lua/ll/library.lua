@@ -1,6 +1,7 @@
 
 ll['nodeBuilders'] = {}
 
+
 function ll.class(base)
 
     local c = {}
@@ -30,6 +31,16 @@ function ll.getNodeBuilder(name)
     return ll.nodeBuilders[name]
 end
 
+
+function ll.castObject(obj)
+
+    castTable = {
+        [ll.ObjectType.Buffer] = ll.impl.castBuffer,
+        [ll.ObjectType.Image] = ll.impl.castImage,
+        [ll.ObjectType.ImageView] = ll.impl.castImageView
+    }
+    return castTable[obj.type](obj)
+end
 
 
 ll.ComputeNodeBuilder = ll.class()
