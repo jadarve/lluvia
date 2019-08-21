@@ -213,40 +213,20 @@ ll.registerNodeBuilder('assign', builder)
     std::cout << "node grid: " << node->getGridX() << ", " << node->getGridY() << ", " << node->getGridZ() << std::endl;
 
 
+    auto cmdBuffer = session->createCommandBuffer();
 
-    // // TOTHINK: set script in the descriptor, not in the node
-    // auto nodeDescriptor = ll::ComputeNodeDescriptor()
-    //                         .setProgram(program)
-    //                         .setFunctionName("main")
-    //                         .setLocalX(bufferSize)
-    //                         .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
+    cmdBuffer->begin();
+    cmdBuffer->run(*node);
+    cmdBuffer->end();
 
-    // // at this point, the node's port binding table and
-    // // vulkan descriptor set is created. So, it is possible
-    // // to bind objects to the ports before calling node->init()
-    // auto node = session->createComputeNode(nodeDescriptor);
-    // REQUIRE(node != nullptr);
-
-    // node->bind("out_buffer", buffer);
-
-    // // these are equivalent
-    // node->init();
-    // // node->setState(ll::NodeState::Init);
-
-    // auto cmdBuffer = session->createCommandBuffer();
-
-    // cmdBuffer->begin();
-    // cmdBuffer->run(*node);
-    // cmdBuffer->end();
-
-    // session->run(*cmdBuffer);
+    session->run(*cmdBuffer);
     
 
-    // {
-    //     auto bufferMap = buffer->map<float[]>();
-    //     for (auto i = 0u; i < bufferSize; ++i) {
+    {
+        auto bufferMap = buffer->map<float[]>();
+        for (auto i = 0u; i < bufferSize; ++i) {
 
-    //         std::cout << i << ": " << bufferMap[i] << std::endl;;
-    //     }
-    // } // unamp bufferMap
+            std::cout << i << ": " << bufferMap[i] << std::endl;;
+        }
+    } // unamp bufferMap
 }
