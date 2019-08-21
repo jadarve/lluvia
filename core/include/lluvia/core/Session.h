@@ -201,7 +201,7 @@ public:
     /**
     @brief      Creates a compute node given its builder name.
 
-    Builder can be registered by running Lua scripts using ll::Session::script method.
+    Builders can be registered by running Lua scripts using ll::Session::script method.
     
     @param[in]  builderName  The builder name.
     
@@ -210,6 +210,15 @@ public:
     std::shared_ptr<ll::ComputeNode> createComputeNode(const std::string& builderName) const;
 
     
+    /**
+    @brief      Creates a compute node descriptor given its builder name.
+    
+    Builders can be registered by running Lua scripts using ll::Session::script method.
+    
+    @param[in]  builderName  The builder name.
+    
+    @return     { description_of_the_return_value }
+    */
     ll::ComputeNodeDescriptor createComputeNodeDescriptor(const std::string& builderName) const;
 
 
