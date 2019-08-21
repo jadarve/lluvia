@@ -20,6 +20,8 @@
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageView.h"
 
+#include "lluvia/core/impl/LuaLibrary.h"
+
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-lambda-capture"
@@ -204,6 +206,8 @@ Interpreter::Interpreter() :
     auto lib = (*m_lua)["ll"].get_or_create<sol::table>();
 
     registerTypes(lib);
+
+    m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }
 
 

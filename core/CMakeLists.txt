@@ -3,7 +3,6 @@ set (LL_CORE_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test/data)
 
 set (_TEST_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test/include)
 
-
 function(add_catchTest NAME SRCS)
     
     add_executable (${NAME} ${SRCS})
@@ -15,6 +14,14 @@ endfunction()
 
 set(LL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(LL_LINK_LIBRARIES stdc++ json vulkan m dl lua)
+
+###########################################################
+# Header files configuration
+###########################################################
+
+file(READ ${CMAKE_SOURCE_DIR}/lua/ll/library.lua LL_LUA_LIBRARY_SRC)
+configure_file(${LL_INCLUDE_DIRS}/lluvia/core/impl/LuaLibrary.h.in ${LL_INCLUDE_DIRS}/lluvia/core/impl/LuaLibrary.h)
+
 
 set(_SRCS
     src/Buffer.cpp
