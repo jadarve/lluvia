@@ -42,14 +42,14 @@ public:
     /**
     @brief      Constructs the object from a Vulkan device and SPIR-V code.
     
-    @param[in]  tSession    The session this node was created from.
-    @param[in]  tDevice     The Vulkan device.
-    @param[in]  tSpirvCode  The SPIR-V code.
+    @param[in]  session    The session this node was created from.
+    @param[in]  device     The Vulkan device.
+    @param[in]  spirvCode  The SPIR-V code.
     */
     Program(
-        const std::shared_ptr<const ll::Session>& tSession,
-        const vk::Device& tDevice,
-        const std::vector<uint8_t>& tSpirvCode);
+        const std::shared_ptr<const ll::Session>& session,
+        const vk::Device& device,
+        const std::vector<uint8_t>& spirvCode);
 
     ~Program();
 
@@ -73,13 +73,13 @@ public:
     const std::vector<uint8_t>& getSpirV() const noexcept;
 
 private:
-    vk::Device           device;
-    vk::ShaderModule     module;
-    std::vector<uint8_t> spirvCode;
+    vk::Device           m_device;
+    vk::ShaderModule     m_module;
+    std::vector<uint8_t> m_spirvCode;
 
     // Shared pointer to the session this program was created from
     // This will keep the session alive until this or any other program is deleted.
-    std::shared_ptr<const ll::Session> session;
+    std::shared_ptr<const ll::Session> m_session;
 };
 
 } // namespace ll

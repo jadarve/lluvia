@@ -11,38 +11,38 @@
 namespace ll {
 
 Program::Program(
-    const std::shared_ptr<const ll::Session>& tSession,
-    const vk::Device& tDevice,
-    const std::vector<uint8_t>& tSpirvCode):
+    const std::shared_ptr<const ll::Session>& session,
+    const vk::Device& device,
+    const std::vector<uint8_t>& spirvCode):
 
-    device    {tDevice},
-    spirvCode {tSpirvCode},
-    session   {tSession} {
+    m_device    {device},
+    m_spirvCode {spirvCode},
+    m_session   {session} {
 
-    if (spirvCode.empty()) {
+    if (m_spirvCode.empty()) {
         throw std::system_error(createErrorCode(ll::ErrorCode::ProgramCompilationError), "Zero size SPIR-V code.");
     }
 
     vk::ShaderModuleCreateInfo moduleCreateInfo = vk::ShaderModuleCreateInfo()
-            .setCodeSize(spirvCode.size())
-            .setPCode(reinterpret_cast<const uint32_t*>(spirvCode.data()));
+            .setCodeSize(m_spirvCode.size())
+            .setPCode(reinterpret_cast<const uint32_t*>(m_spirvCode.data()));
 
-    module = device.createShaderModule(moduleCreateInfo);
+    m_module = m_device.createShaderModule(moduleCreateInfo);
 }
 
 
 Program::~Program() {
-    device.destroyShaderModule(module);
+    m_device.destroyShaderModule(m_module);
 }
 
 
 vk::ShaderModule Program::getShaderModule() const noexcept {
-    return module;
+    return m_module;
 }
 
 
 const std::vector<uint8_t>& Program::getSpirV() const noexcept {
-    return spirvCode;
+    return m_spirvCode;
 }
 
 
