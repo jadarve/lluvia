@@ -31,7 +31,7 @@ class Session;
 /**
 @brief      Class representing compute nodes.
 */
-class ComputeNode : public Node {
+class ComputeNode : public Node, public std::enable_shared_from_this<ll::ComputeNode> {
 
 public:
     ComputeNode()                                     = delete;

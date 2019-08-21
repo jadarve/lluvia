@@ -134,10 +134,14 @@ void registerTypes(sol::table& lib) {
     ///////////////////////////////////////////////////////
     // Objects
     ///////////////////////////////////////////////////////
-    lib.new_usertype<ll::Object>("Object"
+    lib.new_usertype<ll::Object>("Object",
+        sol::no_constructor,
+        "type", sol::property(&ll::Object::getType)
         );
 
     lib.new_usertype<ll::Buffer>("Buffer",
+        sol::no_constructor,
+        sol::base_classes, sol::bases<ll::Object>(),
         "size", sol::property(&ll::Buffer::getSize),
         "isMappable", sol::property(&ll::Buffer::isMappable),
         "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo)
@@ -145,7 +149,8 @@ void registerTypes(sol::table& lib) {
 
     // TODO: layout, usageFlags, createImageView
     lib.new_usertype<ll::Image>("Image",
-        sol::constructors<>(),
+        sol::no_constructor,
+        sol::base_classes, sol::bases<ll::Object>(),
         "size", sol::property(&ll::Image::getSize),
         "allocationInfo", sol::property(&ll::Image::getAllocationInfo),
         "channelType", sol::property(&ll::Image::getChannelType),
@@ -158,7 +163,8 @@ void registerTypes(sol::table& lib) {
 
     // TODO: usage flags, layout
     lib.new_usertype<ll::ImageView>("ImageView",
-        sol::constructors<>(),
+        sol::no_constructor,
+        sol::base_classes, sol::bases<ll::Object>(),
         "image", sol::property(&ll::ImageView::getImage),
         "size", sol::property(&ll::ImageView::getSize),
         "allocationInfo", sol::property(&ll::ImageView::getAllocationInfo),
@@ -177,7 +183,7 @@ void registerTypes(sol::table& lib) {
     lib.new_usertype<ll::Program>("Program");
 
     lib.new_usertype<ll::ComputeNode>("ComputeNode",
-        sol::constructors<>(),
+        sol::no_constructor,
         "type", sol::property(&ll::ComputeNode::getType),
         "functionName", sol::property(&ll::ComputeNode::getFunctionName),
         "program", sol::property(&ll::ComputeNode::getProgram),
@@ -207,6 +213,12 @@ Interpreter::Interpreter() :
     auto lib = (*m_lua)["ll"].get_or_create<sol::table>();
 
     registerTypes(lib);
+
+    // TODO: It works, but it's ugly!
+    lib["castBuffer"] = [](std::shared_ptr<ll::Object> obj) {
+        std::cout << "ll.castObject: " << static_cast<uint32_t>(obj->getType()) << std::endl;
+        return std::static_pointer_cast<ll::Buffer>(obj);
+     };
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }

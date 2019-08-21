@@ -283,7 +283,6 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 
 void ComputeNode::onInit() {
 
-    // TODO: call the script onNodeInit
     const auto& builderName = m_descriptor.m_builderName;
     if (!builderName.empty()) {
 
@@ -294,7 +293,7 @@ void ComputeNode::onInit() {
         )";
 
         auto load = m_session->getInterpreter()->load(lua);
-        load(builderName, *this);
+        load(builderName, shared_from_this());
     }
 
     initPipeline();
