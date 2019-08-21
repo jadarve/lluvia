@@ -199,6 +199,21 @@ public:
 
 
     /**
+    @brief      Creates a compute node given its builder name.
+
+    Builder can be registered by running Lua scripts using ll::Session::script method.
+    
+    @param[in]  builderName  The builder name.
+    
+    @return     A new ll::ComputeNode object
+    */
+    std::shared_ptr<ll::ComputeNode> createComputeNode(const std::string& builderName) const;
+
+    
+    ll::ComputeNodeDescriptor createComputeNodeDescriptor(const std::string& builderName) const;
+
+
+    /**
     @brief      Runs a ll::CommandBuffer.
 
     This is a blocking call. The host thread will wait until execution of
@@ -231,6 +246,14 @@ public:
     @param[in]  node  The node
     */
     void run(const ll::ComputeNode& node);
+
+
+    /**
+    @brief      Runs Lua script code into the session's internal interpreter
+
+    @param[in]  code  The Lua code
+    */
+    void script(const std::string& code);
 
 
 private:

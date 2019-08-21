@@ -284,12 +284,18 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
 void ComputeNode::onInit() {
 
     // TODO: call the script onNodeInit
+    const auto& builderName = m_descriptor.m_builderName;
+    if (!builderName.empty()) {
 
-    const auto& interpreter = m_session->getInterpreter();
-    interpreter->run(R"(
-        print('hello from lua!')
-        print(math.sin(1.5))
-        )");
+        constexpr const auto lua = R"(
+            local builderName, node = ...
+            local builder = ll.getNodeBuilder(builderName)
+            builder.onNodeInit(node)
+        )";
+
+        auto load = m_session->getInterpreter()->load(lua);
+        load(builderName, *this);
+    }
 
     initPipeline();
 }

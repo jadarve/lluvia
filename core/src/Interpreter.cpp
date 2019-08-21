@@ -23,13 +23,13 @@
 #include "lluvia/core/impl/LuaLibrary.h"
 
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-lambda-capture"
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wunused-lambda-capture"
 
-#define SOL_ALL_SAFETIES_ON 1
-#include "sol/sol.hpp"
+// #define SOL_ALL_SAFETIES_ON 1
+// #include "sol/sol.hpp"
 
-#pragma clang diagnostic pop
+// #pragma clang diagnostic pop
 
 #include <vulkan/vulkan.hpp>
 
@@ -121,6 +121,7 @@ void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",
         "functionName", sol::property(&ll::ComputeNodeDescriptor::getFunctionName, &ll::ComputeNodeDescriptor::setFunctionName),
+        "builderName", sol::property(&ll::ComputeNodeDescriptor::getBuilderName, &ll::ComputeNodeDescriptor::setBuilderName),
         "program", sol::property(&ll::ComputeNodeDescriptor::getProgram,
                                  (ComputeNodeDescriptor& (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program>&, const std::string&) noexcept) &ll::ComputeNodeDescriptor::setProgram
                                 ),
@@ -223,6 +224,11 @@ void Interpreter::run(const std::string& code) {
 
 void Interpreter::runFile(const std::string& filename) {
     m_lua->script_file(filename);
+}
+
+
+sol::load_result Interpreter::load(const std::string& code) {
+    return m_lua->load(code);
 }
 
 } // namespace ll

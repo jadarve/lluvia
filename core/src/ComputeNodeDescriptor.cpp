@@ -41,6 +41,12 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string&
 }
 
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::setBuilderName(const std::string& name) noexcept {
+    m_builderName = name;
+    return *this;
+}
+
+
 ComputeNodeDescriptor& ComputeNodeDescriptor::addPort(const ll::PortDescriptor& port) {
 
     m_ports[port.name] = port;
@@ -113,6 +119,11 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalShape(const ll::vec3ui& sh
 
 std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
     return m_functionName;
+}
+
+
+std::string ComputeNodeDescriptor::getBuilderName() const noexcept {
+    return m_builderName;
 }
 
 

@@ -18,6 +18,15 @@
 #include "lluvia/core/Program.h"
 
 
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wunused-lambda-capture"
+
+// #define SOL_ALL_SAFETIES_ON 1
+// #include "sol/sol.hpp"
+
+// #pragma clang diagnostic pop
+
+
 #include <algorithm>
 #include <exception>
 #include <fstream>
@@ -220,6 +229,28 @@ std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNod
 }
 
 
+std::shared_ptr<ll::ComputeNode> Session::createComputeNode(__attribute__((unused)) const std::string& builderName) const {
+
+    // create a ComputeNodeDescriptor using the builder
+    // call Session::createComputeNode using that descriptor
+    // TOTHINK: How to handle Lua errors?
+    return nullptr;
+}
+
+
+ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string& builderName) const {
+
+    constexpr auto lua = R"(
+        local builderName = ...
+        local builder = ll.getNodeBuilder(builderName)
+        return builder.newDescriptor()
+    )";
+    auto load = m_interpreter->load(lua);
+
+    return load(builderName);
+}
+
+
 std::unique_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 
     return std::make_unique<ll::CommandBuffer>(device, commandPool);
@@ -248,6 +279,11 @@ void Session::run(const ll::ComputeNode& node) {
     cmdBuffer->end();
 
     run(*cmdBuffer);
+}
+
+
+void Session::script(const std::string &code) {
+    m_interpreter->run(code);
 }
 
 

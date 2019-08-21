@@ -80,6 +80,16 @@ public:
 
 
     /**
+    @brief      Sets the builder name this descriptor refers to within the Lua interpreter.
+    
+    @param[in]  name  The builder name.
+    
+    @return     A reference to this object.
+    */
+    ComputeNodeDescriptor& setBuilderName(const std::string& name) noexcept;
+
+
+    /**
     @brief      Adds a port to the descriptor.
     
     @param[in]  port  The port
@@ -233,6 +243,14 @@ public:
 
 
     /**
+    @brief      Gets the builder name within the Lua interpreter.
+    
+    @return     The builder name.
+    */
+    std::string getBuilderName() const noexcept;
+
+
+    /**
     @brief      Gets the grid shape.
     
     @return     The grid shape.
@@ -257,6 +275,7 @@ public:
 private:
     std::shared_ptr<ll::Program>                m_program;
     std::string                                 m_functionName;
+    std::string                                 m_builderName;
 
     // local and global work group
     ll::vec3ui m_localShape {1, 1, 1};

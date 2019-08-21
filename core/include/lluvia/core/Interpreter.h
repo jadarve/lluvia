@@ -15,11 +15,20 @@
 #include <string>
 #include <type_traits>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-lambda-capture"
 
-namespace sol {
-class state;
+#define SOL_ALL_SAFETIES_ON 1
+#include "sol/sol.hpp"
 
-} // namespace sol;
+#pragma clang diagnostic pop
+
+
+// namespace sol {
+// class state;
+// struct load_result;
+
+// } // namespace sol;
 
 namespace ll {
 
@@ -38,6 +47,8 @@ public:
 
     void run(const std::string& code);
     void runFile(const std::string& filename);
+
+    sol::load_result load(const std::string& code);
 
 private:
     std::unique_ptr<sol::state> m_lua;
