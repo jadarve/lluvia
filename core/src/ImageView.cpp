@@ -62,4 +62,8 @@ std::shared_ptr<ll::Image> ImageView::getImage() const noexcept {
 }
 
 
+const ll::ImageDescriptor& ImageView::getImageDescriptor() const noexcept {
+    return image->getDescriptor();
+}
+
 } // namespace ll

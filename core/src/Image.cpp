@@ -53,6 +53,11 @@ uint64_t Image::getSize() const noexcept {
 }
 
 
+const ll::ImageDescriptor& Image::getDescriptor() const noexcept {
+    return descriptor;
+}
+
+
 vk::ImageUsageFlags Image::getUsageFlags()const noexcept {
     return descriptor.getUsageFlags();
 }

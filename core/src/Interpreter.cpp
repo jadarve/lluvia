@@ -80,7 +80,7 @@ void registerTypes(sol::table& lib) {
 
     // TODO: usageFlags, tiling
     lib.new_usertype<ll::ImageDescriptor>("ImageDescriptor",
-        sol::constructors<ll::ImageDescriptor()>(),
+        sol::constructors<ll::ImageDescriptor(), ll::ImageDescriptor(const ll::ImageDescriptor&)>(),
         "channelType", sol::property(&ll::ImageDescriptor::getChannelType, &ll::ImageDescriptor::setChannelType),
         "channelCount", sol::property(&ll::ImageDescriptor::getChannelCount<ll::ChannelCount>, &ll::ImageDescriptor::setChannelCount),
         "width", sol::property(&ll::ImageDescriptor::getWidth, &ll::ImageDescriptor::setWidth),
@@ -90,7 +90,7 @@ void registerTypes(sol::table& lib) {
         );
 
     lib.new_usertype<ll::ImageViewDescriptor>("ImageViewDescriptor",
-        sol::constructors<ll::ImageViewDescriptor()>(),
+        sol::constructors<ll::ImageViewDescriptor(), ll::ImageViewDescriptor(const ll::ImageViewDescriptor&)>(),
         "filterMode", sol::property(&ll::ImageViewDescriptor::getFilterMode, &ll::ImageViewDescriptor::setFilterMode),
         "addressModeU", sol::property(&ll::ImageViewDescriptor::getAddressModeU),
         "addressModeV", sol::property(&ll::ImageViewDescriptor::getAddressModeV),
@@ -144,6 +144,7 @@ void registerTypes(sol::table& lib) {
         sol::no_constructor,
         sol::base_classes, sol::bases<ll::Object>(),
         "size", sol::property(&ll::Image::getSize),
+        "descriptor", sol::property(&ll::Image::getDescriptor),
         "allocationInfo", sol::property(&ll::Image::getAllocationInfo),
         "channelType", sol::property(&ll::Image::getChannelType),
         "channelCount", sol::property(&ll::Image::getChannelCount<ll::ChannelCount>),
@@ -159,6 +160,8 @@ void registerTypes(sol::table& lib) {
         sol::base_classes, sol::bases<ll::Object>(),
         "image", sol::property(&ll::ImageView::getImage),
         "size", sol::property(&ll::ImageView::getSize),
+        "descriptor", sol::property(&ll::ImageView::getDescriptor),
+        "imageDescriptor", sol::property(&ll::ImageView::getImageDescriptor),
         "allocationInfo", sol::property(&ll::ImageView::getAllocationInfo),
         "channelType", sol::property(&ll::ImageView::getChannelType),
         "channelCount", sol::property(&ll::ImageView::getChannelCount<ll::ChannelCount>),

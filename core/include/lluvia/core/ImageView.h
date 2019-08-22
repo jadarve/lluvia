@@ -188,6 +188,14 @@ public:
 
 
     /**
+    @brief      Gets the image descriptor.
+    
+    @return     The image descriptor.
+    */
+    const ll::ImageDescriptor& getImageDescriptor() const noexcept;
+
+
+    /**
     @brief      Gets the Vulkan image usage flags.
     
     See @VULKAN_DOC#VkImageUsageFlagBits
