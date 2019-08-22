@@ -21,8 +21,9 @@
 
 namespace ll {
 
-class Image;
 class ComputeNode;
+class Image;
+class Memory;
 
 
 /**
@@ -162,7 +163,15 @@ public:
     
     @return     The parent ll::Image object.
     */
-    std::shared_ptr<ll::Image> getImage() const noexcept;
+    const std::shared_ptr<ll::Image>& getImage() const noexcept;
+
+
+    /**
+    @brief      Gets the memory the underlying ll::Image was allocated from.
+    
+    @return     The memory.
+    */
+    const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
 
 
     /**
@@ -170,9 +179,7 @@ public:
     
     @return     The allocation information.
     */
-    inline ll::MemoryAllocationInfo getAllocationInfo() const noexcept {
-        return this->image->getAllocationInfo();
-    }
+    ll::MemoryAllocationInfo getAllocationInfo() const noexcept;
 
 
     /**
@@ -182,9 +189,7 @@ public:
     
     @return     The image size in bytes.
     */
-    inline uint64_t getSize() const noexcept {
-        return this->image->getSize();
-    }
+    uint64_t getSize() const noexcept;
 
 
     /**
@@ -203,9 +208,7 @@ public:
 
     @return     The usage flags.
     */
-    inline vk::ImageUsageFlags getUsageFlags() const noexcept {
-        return this->image->getUsageFlags();
-    }
+    vk::ImageUsageFlags getUsageFlags() const noexcept;
 
 
     /**
@@ -218,9 +221,7 @@ public:
     
     @return     The image layout.
     */
-    inline vk::ImageLayout getLayout() const noexcept {
-        return this->image->getLayout();
-    }
+    vk::ImageLayout getLayout() const noexcept;
 
 
     /**
@@ -228,9 +229,7 @@ public:
     
     @return     The channel type.
     */
-    inline ll::ChannelType getChannelType() const noexcept {
-        return this->image->getChannelType();
-    }
+    ll::ChannelType getChannelType() const noexcept;
 
 
     /**
@@ -238,9 +237,7 @@ public:
     
     @return     The channel type size.
     */
-    inline uint64_t getChannelTypeSize() const noexcept {
-        return this->image->getChannelTypeSize();
-    }
+    uint64_t getChannelTypeSize() const noexcept;
 
 
     /**
@@ -252,7 +249,7 @@ public:
     */
     template<typename T=ll::ChannelCount>
     T getChannelCount() const noexcept {
-        return this->image->getChannelCount<T>();
+        return this->m_image->getChannelCount<T>();
     }
 
 
@@ -261,9 +258,7 @@ public:
     
     @return     The image view width in pixels.
     */
-    inline uint32_t getWidth() const noexcept {
-        return this->image->getWidth();
-    }
+    uint32_t getWidth() const noexcept;
 
 
     /**
@@ -271,9 +266,7 @@ public:
     
     @return     The image view height in pixels.
     */
-    inline uint32_t getHeight() const noexcept {
-        return this->image->getHeight();
-    }
+    uint32_t getHeight() const noexcept;
 
 
     /**
@@ -281,9 +274,7 @@ public:
     
     @return     The image view depth in pixels.
     */
-    inline uint32_t getDepth() const noexcept {
-        return this->image->getDepth();
-    }
+    uint32_t getDepth() const noexcept;
 
     /**
     @brief      Gets the shape of the image view.
@@ -296,9 +287,7 @@ public:
 
     @return     The shape.
     */
-    inline ll::vec3ui getShape() const noexcept {
-        return this->image->getShape();
-    }
+    ll::vec3ui getShape() const noexcept;
 
 
     /**
@@ -306,22 +295,20 @@ public:
     
     @return     The descriptor.
     */
-    inline const ll::ImageViewDescriptor& getDescriptor() const noexcept {
-        return descriptor;
-    }
+    const ll::ImageViewDescriptor& getDescriptor() const noexcept;
 
 private:
     ImageView(  vk::Device tDevice,
                 std::shared_ptr<ll::Image> tImage,
                 const ll::ImageViewDescriptor& tDescriptor);
     
-    ll::ImageViewDescriptor descriptor;
+    ll::ImageViewDescriptor m_descriptor;
 
-    vk::Device    device;
-    vk::ImageView vkImageView;
-    vk::Sampler   vkSampler;
+    vk::Device    m_device;
+    vk::ImageView m_vkImageView;
+    vk::Sampler   m_vkSampler;
 
-    std::shared_ptr<ll::Image> image;
+    std::shared_ptr<ll::Image> m_image;
 
 
 friend class Image;

@@ -17,14 +17,14 @@ namespace ll {
 ImageView::ImageView(vk::Device tDevice, 
                      std::shared_ptr<ll::Image> tImage,
                      const ll::ImageViewDescriptor& tDescriptor) :
-    descriptor {tDescriptor},
-    device {tDevice},
-    image  {tImage} {
+    m_descriptor {tDescriptor},
+    m_device {tDevice},
+    m_image  {tImage} {
 
     auto imageViewInfo = vk::ImageViewCreateInfo {}
                             .setViewType(vk::ImageViewType::e2D)        // TODO: set according to image extend
-                            .setFormat(image->getDescriptor().getFormat())
-                            .setImage(image->m_vkImage);
+                            .setFormat(m_image->getDescriptor().getFormat())
+                            .setImage(m_image->m_vkImage);
 
     // TODO
     imageViewInfo.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
@@ -34,20 +34,20 @@ ImageView::ImageView(vk::Device tDevice,
     imageViewInfo.subresourceRange.setLayerCount(1);
 
     
-    vkImageView = device.createImageView(imageViewInfo);
+    m_vkImageView = m_device.createImageView(imageViewInfo);
 
-    if (descriptor.isSampled()) {
-        vkSampler = device.createSampler(descriptor.getVkSamplerCreateInfo());
+    if (m_descriptor.isSampled()) {
+        m_vkSampler = m_device.createSampler(m_descriptor.getVkSamplerCreateInfo());
     }
 }
 
 
 ImageView::~ImageView() {
 
-    device.destroyImageView(vkImageView);
+    m_device.destroyImageView(m_vkImageView);
 
-    if (descriptor.isSampled()) {
-        device.destroySampler(vkSampler);
+    if (m_descriptor.isSampled()) {
+        m_device.destroySampler(m_vkSampler);
     }
 }
 
@@ -57,13 +57,73 @@ ll::ObjectType ImageView::getType() const noexcept {
 }
 
 
-std::shared_ptr<ll::Image> ImageView::getImage() const noexcept {
-    return image;
+const std::shared_ptr<ll::Image>& ImageView::getImage() const noexcept {
+    return m_image;
+}
+
+
+const std::shared_ptr<ll::Memory>& ImageView::getMemory() const noexcept {
+    return m_image->getMemory();
+}
+
+
+ll::MemoryAllocationInfo ImageView::getAllocationInfo() const noexcept {
+    return m_image->getAllocationInfo();
+}
+
+
+uint64_t ImageView::getSize() const noexcept {
+    return m_image->getSize();
 }
 
 
 const ll::ImageDescriptor& ImageView::getImageDescriptor() const noexcept {
-    return image->getDescriptor();
+    return m_image->getDescriptor();
+}
+
+
+vk::ImageUsageFlags ImageView::getUsageFlags() const noexcept {
+    return m_image->getUsageFlags();
+}
+
+
+vk::ImageLayout ImageView::getLayout() const noexcept {
+    return m_image->getLayout();
+}
+
+
+ll::ChannelType ImageView::getChannelType() const noexcept {
+    return m_image->getChannelType();
+}
+
+
+uint64_t ImageView::getChannelTypeSize() const noexcept {
+    return m_image->getChannelTypeSize();
+}
+
+
+uint32_t ImageView::getWidth() const noexcept {
+    return m_image->getWidth();
+}
+
+
+uint32_t ImageView::getHeight() const noexcept {
+    return m_image->getHeight();
+}
+
+
+uint32_t ImageView::getDepth() const noexcept {
+    return m_image->getDepth();
+}
+
+
+ll::vec3ui ImageView::getShape() const noexcept {
+    return m_image->getShape();
+}
+
+
+const ll::ImageViewDescriptor& ImageView::getDescriptor() const noexcept {
+    return m_descriptor;
 }
 
 } // namespace ll
