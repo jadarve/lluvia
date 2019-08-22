@@ -250,8 +250,8 @@ std::shared_ptr<ll::ImageView> Memory::createImageView(
 
 void Memory::releaseImage(const ll::Image& image) {
 
-    releaseMemoryAllocation(image.allocInfo);
-    device.destroyImage(image.vkImage);
+    releaseMemoryAllocation(image.getAllocationInfo());
+    device.destroyImage(image.m_vkImage);
 }
 
 

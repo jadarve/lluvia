@@ -23,8 +23,8 @@ ImageView::ImageView(vk::Device tDevice,
 
     auto imageViewInfo = vk::ImageViewCreateInfo {}
                             .setViewType(vk::ImageViewType::e2D)        // TODO: set according to image extend
-                            .setFormat(image->descriptor.getFormat())
-                            .setImage(image->vkImage);
+                            .setFormat(image->getDescriptor().getFormat())
+                            .setImage(image->m_vkImage);
 
     // TODO
     imageViewInfo.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);

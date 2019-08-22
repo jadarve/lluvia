@@ -43,6 +43,11 @@ uint64_t Buffer::getSize() const noexcept {
 }
 
 
+const std::shared_ptr<ll::Memory>& Buffer::getMemory() const noexcept {
+    return m_memory;
+}
+
+
 vk::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
     return m_vkUsageFlags;
 }

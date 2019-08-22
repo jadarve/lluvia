@@ -131,6 +131,14 @@ public:
 
 
     /**
+    @brief      Gets the memory this buffer was allocated from.
+    
+    @return     The memory.
+    */
+    const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
+
+
+    /**
     @brief      Gets the size of the buffer in bytes.
     
     The size returned corresponds to the size requested by the user through

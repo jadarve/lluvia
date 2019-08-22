@@ -78,7 +78,7 @@ void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({dst.getWidth(), dst.getHeight(), dst.getDepth()});
 
-    commandBuffer.copyBufferToImage(src.m_vkBuffer, dst.vkImage, dst.vkLayout, 1, &copyInfo);
+    commandBuffer.copyBufferToImage(src.m_vkBuffer, dst.m_vkImage, dst.m_vkLayout, 1, &copyInfo);
 }
 
 
@@ -98,18 +98,18 @@ void CommandBuffer::copyImageToBuffer(const ll::Image& src, const ll::Buffer& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({src.getWidth(), src.getHeight(), src.getDepth()});
 
-    commandBuffer.copyImageToBuffer(src.vkImage, src.vkLayout, dst.m_vkBuffer, 1, &copyInfo);
+    commandBuffer.copyImageToBuffer(src.m_vkImage, src.m_vkLayout, dst.m_vkBuffer, 1, &copyInfo);
 }
 
 
 void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout) {
 
     auto barrier = vk::ImageMemoryBarrier {}
-                    .setOldLayout(image.vkLayout)
+                    .setOldLayout(image.m_vkLayout)
                     .setNewLayout(newLayout)
                     .setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
                     .setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
-                    .setImage(image.vkImage)
+                    .setImage(image.m_vkImage)
                     .setSrcAccessMask(vk::AccessFlagBits::eMemoryRead)      // TODO ???
                     .setDstAccessMask(vk::AccessFlagBits::eMemoryWrite);    // TODO ???
 
@@ -128,7 +128,7 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
         1, &barrier);
 
     // FIXME: this should be set only after the pipelineBarrier is executed
-    image.vkLayout = newLayout;
+    image.m_vkLayout = newLayout;
 }
 
 void CommandBuffer::changeImageLayout(ll::ImageView& imageView, const vk::ImageLayout newLayout) {

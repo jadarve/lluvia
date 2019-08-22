@@ -200,6 +200,14 @@ public:
 
 
     /**
+    @brief      Gets the memory this image was allocated from.
+    
+    @return     The memory.
+    */
+    const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
+
+
+    /**
     @brief      Gets the memory allocation size in bytes.
 
     This methods is equivalent to calling `getAllocationInfo().size`.
@@ -266,7 +274,7 @@ public:
     */
     template<typename T=ll::ChannelCount>
     T getChannelCount() const noexcept {
-        return descriptor.getChannelCount<T>();
+        return m_descriptor.getChannelCount<T>();
     }
 
 
@@ -323,17 +331,17 @@ private:
           const ll::MemoryAllocationInfo& tAllocInfo,
           const vk::ImageLayout tLayout);
 
-    ll::ImageDescriptor descriptor;
-    ll::MemoryAllocationInfo allocInfo;
+    ll::ImageDescriptor m_descriptor;
+    ll::MemoryAllocationInfo m_allocInfo;
 
-    vk::Device          device;
-    vk::Image           vkImage;
-    vk::ImageLayout     vkLayout;
+    vk::Device          m_device;
+    vk::Image           m_vkImage;
+    vk::ImageLayout     m_vkLayout;
 
     // Shared pointer to the memory this image was created from
     // This will keep the memory alive until this image is deleted
     // avoiding reference to a corrupted memory location.
-    std::shared_ptr<ll::Memory> memory;
+    std::shared_ptr<ll::Memory> m_memory;
 
 friend class ll::CommandBuffer;
 friend class ll::ComputeNode;
