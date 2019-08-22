@@ -58,7 +58,7 @@ void CommandBuffer::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
         .setDstOffset(0)
         .setSize(src.getSize());
 
-    commandBuffer.copyBuffer(src.vkBuffer, dst.vkBuffer, 1, &copyInfo);
+    commandBuffer.copyBuffer(src.m_vkBuffer, dst.m_vkBuffer, 1, &copyInfo);
 }
 
 
@@ -78,7 +78,7 @@ void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({dst.getWidth(), dst.getHeight(), dst.getDepth()});
 
-    commandBuffer.copyBufferToImage(src.vkBuffer, dst.vkImage, dst.vkLayout, 1, &copyInfo);
+    commandBuffer.copyBufferToImage(src.m_vkBuffer, dst.vkImage, dst.vkLayout, 1, &copyInfo);
 }
 
 
@@ -98,7 +98,7 @@ void CommandBuffer::copyImageToBuffer(const ll::Image& src, const ll::Buffer& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({src.getWidth(), src.getHeight(), src.getDepth()});
 
-    commandBuffer.copyImageToBuffer(src.vkImage, src.vkLayout, dst.vkBuffer, 1, &copyInfo);
+    commandBuffer.copyImageToBuffer(src.vkImage, src.vkLayout, dst.m_vkBuffer, 1, &copyInfo);
 }
 
 

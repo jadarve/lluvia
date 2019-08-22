@@ -132,16 +132,16 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
 
 void Memory::releaseBuffer(const ll::Buffer& buffer) {
 
-    releaseMemoryAllocation(buffer.allocInfo);
-    device.destroyBuffer(buffer.vkBuffer);
+    releaseMemoryAllocation(buffer.m_allocInfo);
+    device.destroyBuffer(buffer.m_vkBuffer);
 }
 
 
 void* Memory::mapBuffer(const ll::Buffer& buffer) {
 
-    const auto page   = buffer.allocInfo.page;
-    const auto offset = buffer.allocInfo.offset + buffer.allocInfo.leftPadding;
-    const auto size   = buffer.allocInfo.size;
+    const auto page   = buffer.m_allocInfo.page;
+    const auto offset = buffer.m_allocInfo.offset + buffer.m_allocInfo.leftPadding;
+    const auto size   = buffer.m_allocInfo.size;
 
     if (memoryPageMappingFlags[page]) {
         throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] is already mapped by another object."};
@@ -155,7 +155,7 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
 
 void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
-    const auto page = buffer.allocInfo.page;
+    const auto page = buffer.m_allocInfo.page;
 
     if (!memoryPageMappingFlags[page]) {
         throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] has not been mapped by any object."};

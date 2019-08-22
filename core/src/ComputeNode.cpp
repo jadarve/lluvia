@@ -318,7 +318,7 @@ void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_p
     auto descBufferInfo = vk::DescriptorBufferInfo()
         .setOffset(0)
         .setRange(VK_WHOLE_SIZE)
-        .setBuffer(buffer->vkBuffer);
+        .setBuffer(buffer->m_vkBuffer);
 
     auto writeDescSet = vk::WriteDescriptorSet()
         .setDescriptorType(vk::DescriptorType::eStorageBuffer)

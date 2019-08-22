@@ -230,14 +230,14 @@ public:
     template<typename T>
     std::unique_ptr<T, ll::Buffer::BufferMapDeleter> map() {
 
-        if (!memory->isPageMappable(allocInfo.page)) {
-            throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
+        if (!m_memory->isPageMappable(m_allocInfo.page)) {
+            throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(m_allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
         }
 
         // remove array extend from T if present
         typedef typename std::conditional<std::is_array<T>::value, typename std::remove_all_extents<T>::type, T>::type baseType;
 
-        auto ptr = memory->mapBuffer(*this);
+        auto ptr = m_memory->mapBuffer(*this);
 
         auto deleter = ll::Buffer::BufferMapDeleter {};
         deleter.buffer = this;
@@ -253,20 +253,20 @@ private:
 
     void unmap();
 
-    vk::Buffer                  vkBuffer;
-    vk::BufferUsageFlags        vkUsageFlags;
+    vk::Buffer                  m_vkBuffer;
+    vk::BufferUsageFlags        m_vkUsageFlags;
 
-    ll::MemoryAllocationInfo    allocInfo;
+    ll::MemoryAllocationInfo    m_allocInfo;
 
     // the size requested for the buffer. It can
     // be less than allocInfo.size due to alignment
     // and size requirements for the given memory.
-    uint64_t                    requestedSize;
+    uint64_t                    m_requestedSize;
 
     // Shared pointer to the memory this buffer was created from
     // This will keep the memory alive until this buffer is deleted
     // avoiding reference to a corrupted memory location.
-    std::shared_ptr<ll::Memory> memory;
+    std::shared_ptr<ll::Memory> m_memory;
 
 
 friend class ll::CommandBuffer;
