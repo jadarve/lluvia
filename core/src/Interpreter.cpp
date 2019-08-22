@@ -14,6 +14,7 @@
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/ImageViewDescriptor.h"
+#include "lluvia/core/Memory.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Node.h"
 #include "lluvia/core/Object.h"
@@ -136,7 +137,8 @@ void registerTypes(sol::table& lib) {
         sol::base_classes, sol::bases<ll::Object>(),
         "size", sol::property(&ll::Buffer::getSize),
         "isMappable", sol::property(&ll::Buffer::isMappable),
-        "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo)
+        "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo),
+        "memory", sol::property(&ll::Buffer::getMemory)
         );
 
     // TODO: layout, usageFlags, createImageView
@@ -146,6 +148,7 @@ void registerTypes(sol::table& lib) {
         "size", sol::property(&ll::Image::getSize),
         "descriptor", sol::property(&ll::Image::getDescriptor),
         "allocationInfo", sol::property(&ll::Image::getAllocationInfo),
+        "memory", sol::property(&ll::Image::getMemory),
         "channelType", sol::property(&ll::Image::getChannelType),
         "channelCount", sol::property(&ll::Image::getChannelCount<ll::ChannelCount>),
         "width", sol::property(&ll::Image::getWidth),
@@ -163,6 +166,7 @@ void registerTypes(sol::table& lib) {
         "descriptor", sol::property(&ll::ImageView::getDescriptor),
         "imageDescriptor", sol::property(&ll::ImageView::getImageDescriptor),
         "allocationInfo", sol::property(&ll::ImageView::getAllocationInfo),
+        "memory", sol::property(&ll::ImageView::getMemory),
         "channelType", sol::property(&ll::ImageView::getChannelType),
         "channelCount", sol::property(&ll::ImageView::getChannelCount<ll::ChannelCount>),
         "width", sol::property(&ll::ImageView::getWidth),
@@ -202,6 +206,17 @@ void registerTypes(sol::table& lib) {
         sol::no_constructor,
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram
+        );
+
+    lib.new_usertype<ll::Memory>("Memory",
+        sol::no_constructor,
+        "pageSize", sol::property(&ll::Memory::getPageSize),
+        "pageCount", sol::property(&ll::Memory::getPageCount),
+        "isMappable", sol::property(&ll::Memory::isMappable),
+        "isPageMappable", &ll::Memory::isPageMappable,
+        "createBuffer", &ll::Memory::createBuffer,
+        "createImage", &ll::Memory::createImage,
+        "createImageView", &ll::Memory::createImageView
         );
 }
 
