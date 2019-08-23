@@ -58,7 +58,7 @@ ll::PortType vkDescriptorTypeToPortType(const vk::DescriptorType& vkDescType) {
 void Node::setState(const ll::NodeState tState) {
 
     // state transition
-    switch(state) {
+    switch(m_state) {
         case ll::NodeState::Created:
         
             switch(tState) {
@@ -66,7 +66,7 @@ void Node::setState(const ll::NodeState tState) {
                     // do nothing
                 break;
                 case ll::NodeState::Init:
-                    state = tState;
+                    m_state = tState;
                     onInit();
                 break;
             }
@@ -74,7 +74,7 @@ void Node::setState(const ll::NodeState tState) {
 
         case ll::NodeState::Init:
 
-            switch(state) {
+            switch(m_state) {
                 case ll::NodeState::Created:
                     // TODO: what to do?
                 break;
@@ -89,7 +89,7 @@ void Node::setState(const ll::NodeState tState) {
 }
 
 ll::NodeState Node::getState() const noexcept {
-    return state;
+    return m_state;
 }
 
 

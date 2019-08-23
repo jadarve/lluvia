@@ -231,7 +231,7 @@ protected:
     virtual void onInit() = 0;
 
 private:
-    ll::NodeState state {ll::NodeState::Created};
+    ll::NodeState m_state {ll::NodeState::Created};
 
 };
 
