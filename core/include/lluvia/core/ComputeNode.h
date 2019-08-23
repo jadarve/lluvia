@@ -21,6 +21,7 @@
 namespace ll {
 
 class Buffer;
+class CommandBuffer;
 class Image;
 class ImageView;
 class Object;
@@ -221,7 +222,7 @@ public:
     
     void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
-    void record(const vk::CommandBuffer& commandBuffer) const override;
+    void record(ll::CommandBuffer& commandBuffer) const override;
 
 protected:
     void onInit() override;    

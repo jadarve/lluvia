@@ -265,6 +265,14 @@ public:
     void script(const std::string& code);
 
 
+    /**
+     * @brief      Runs a Lua script file into the the session's internal interpreter
+     *
+     * @param[in]  filename  The filename.
+     */
+    void scriptFile(const std::string& filename);
+
+
 private:
     // Session objects should be created through factory methods
     Session();

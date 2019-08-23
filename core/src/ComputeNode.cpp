@@ -8,6 +8,7 @@
 #include "lluvia/core/ComputeNode.h"
 
 #include "lluvia/core/Buffer.h"
+#include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
@@ -258,15 +259,17 @@ void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object
 }
 
 
-void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
+void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
+
+    auto vkCommandBuffer = commandBuffer.getVkCommandBuffer();
 
     ll::throwSystemErrorIf(m_descriptor.m_gridShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape X must be greater than zero");
     ll::throwSystemErrorIf(m_descriptor.m_gridShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Y must be greater than zero");
     ll::throwSystemErrorIf(m_descriptor.m_gridShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Z must be greater than zero");
 
-    commandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, m_pipeline);
+    vkCommandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, m_pipeline);
     
-    commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eCompute,
+    vkCommandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eCompute,
                                      m_pipelineLayout,
                                      0,
                                      1,
@@ -274,7 +277,7 @@ void ComputeNode::record(const vk::CommandBuffer& commandBuffer) const {
                                      0,
                                      nullptr);
 
-    commandBuffer.dispatch(m_descriptor.m_gridShape.x,
+    vkCommandBuffer.dispatch(m_descriptor.m_gridShape.x,
                            m_descriptor.m_gridShape.y,
                            m_descriptor.m_gridShape.z);
 }

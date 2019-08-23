@@ -17,7 +17,9 @@
 
 namespace ll {
 
+class CommandBuffer;
 class Session;
+
 
 class ContainerNode : public Node {
 
@@ -29,7 +31,7 @@ public:
 
     void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override = 0;
 
-    void record(const vk::CommandBuffer& commandBuffer) const override = 0;
+    void record(ll::CommandBuffer& commandBuffer) const override = 0;
 
 protected:
     void onInit() override = 0;

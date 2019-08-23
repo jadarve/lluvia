@@ -22,11 +22,34 @@ void ImagePyramid::bind(__attribute__((unused)) const std::string& name,
 }
 
 
-void ImagePyramid::record(__attribute__((unused)) const vk::CommandBuffer& commandBuffer) const {
+void ImagePyramid::record(ll::CommandBuffer& commandBuffer) const {
 
+    for (const auto& node : m_nodes) {
+        node->record(commandBuffer);
+        commandBuffer.memoryBarrier();
+    }
 }
 
 void ImagePyramid::onInit() {
 
-    // I need a session to init stuff!
+    auto in_RGBA = getPort("in_RGBA");
+    std::static_pointer_cast<ll::ImageView>(in_RGBA)->changeImageLayout(vk::ImageLayout::eGeneral);
+
+    for (auto h = 0u; h < 4; ++h) {
+
+        auto downX = m_session->createComputeNode("imageDownsampleX");
+        auto downY = m_session->createComputeNode("imageDownsampleY");
+
+        downX->bind("in_RGBA", in_RGBA);
+        downX->init();
+
+        downY->bind("in_RGBA", downX->getPort("out_RGBA"));
+        downY->init();
+
+        // the input to the next level will be the output of downY
+        in_RGBA = downY->getPort("out_RGBA");
+
+        m_nodes.push_back(downX);
+        m_nodes.push_back(downY);
+    }
 }

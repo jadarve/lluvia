@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 
 class ImagePyramid : public ll::ContainerNode {
@@ -13,17 +14,19 @@ class ImagePyramid : public ll::ContainerNode {
 public:
     ImagePyramid(const std::shared_ptr<ll::Session>& session);
 
-    std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept override = 0;
+    std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept override;
 
-    void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override = 0;
+    void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
-    void record(const vk::CommandBuffer& commandBuffer) const override = 0;
+    void record(ll::CommandBuffer& commandBuffer) const override;
 
 protected:
-    void onInit() override = 0;
+    void onInit() override;
 
 private:
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
+
+    std::vector<std::shared_ptr<ll::Node>> m_nodes;
 
     std::shared_ptr<ll::Session> m_session;
 };

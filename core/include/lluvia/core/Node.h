@@ -19,6 +19,7 @@
 namespace ll {
 
 class Object;
+class CommandBuffer;
 
 
 /**
@@ -217,15 +218,13 @@ public:
     virtual void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) = 0;
 
     /**
-    @brief      Records the operations required to run this node in a Vulkan command buffer.
-
-    This method is called by ll::CommandBuffer objects when they are called as
+    @brief      Records the operations required to run this node in a ll::CommandBuffer.
     
-    @param[in]  commandBuffer  The Vulkan command buffer.
+    @param[in]  commandBuffer  The command buffer.
 
     @throws     std::system_error with corresponding error code and message.
     */
-    virtual void record(const vk::CommandBuffer& commandBuffer) const = 0;
+    virtual void record(ll::CommandBuffer& commandBuffer) const = 0;
 
 protected:
     virtual void onInit() = 0;

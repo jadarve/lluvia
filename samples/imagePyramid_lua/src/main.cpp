@@ -1,5 +1,7 @@
 
-#include "lluvia/core.h"
+#include <lluvia/core.h>
+
+#include "ImagePyramid.h"
 
 #include "CLI11/CLI11.hpp"
 
@@ -23,6 +25,17 @@ int main(int argc, char const* argv[])
     }
 
     std::cout << "filename: " << filename << std::endl;
+
+    auto session = ll::Session::create();
+
+    // register programs and node builders
+    session->setProgram("imageDownsampleX", session->createProgram("imageDownsampleX.spv"));
+    session->setProgram("imageDownsampleY", session->createProgram("imageDownsampleY.spv"));
+
+    session->scriptFile("imageDownsampleX.lua");
+    session->scriptFile("imageDownsampleY.lua");
+
+    auto pyramid = ImagePyramid {session};
 
     return EXIT_SUCCESS;
 }

@@ -259,7 +259,7 @@ void Session::run(const ll::CommandBuffer& cmdBuffer) {
 
     vk::SubmitInfo submitInfo = vk::SubmitInfo()
         .setCommandBufferCount(1)
-        .setPCommandBuffers(&cmdBuffer.commandBuffer);
+        .setPCommandBuffers(&cmdBuffer.m_commandBuffer);
 
     queue.submit(1, &submitInfo, nullptr);
     queue.waitIdle();
@@ -280,6 +280,11 @@ void Session::run(const ll::ComputeNode& node) {
 
 void Session::script(const std::string &code) {
     m_interpreter->run(code);
+}
+
+
+void Session::scriptFile(const std::string& filename) {
+    m_interpreter->runFile(filename);
 }
 
 
