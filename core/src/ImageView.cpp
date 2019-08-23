@@ -15,7 +15,7 @@
 namespace ll {
 
 ImageView::ImageView(vk::Device tDevice, 
-                     std::shared_ptr<ll::Image> tImage,
+                     const std::shared_ptr<ll::Image>& tImage,
                      const ll::ImageViewDescriptor& tDescriptor) :
     m_descriptor {tDescriptor},
     m_device {tDevice},
@@ -124,6 +124,11 @@ ll::vec3ui ImageView::getShape() const noexcept {
 
 const ll::ImageViewDescriptor& ImageView::getDescriptor() const noexcept {
     return m_descriptor;
+}
+
+
+void ImageView::changeImageLayout(const vk::ImageLayout newLayout) {
+    m_image->changeImageLayout(newLayout);
 }
 
 } // namespace ll

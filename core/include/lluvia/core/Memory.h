@@ -152,7 +152,7 @@ public:
     @param[in]  tPageSize  The page size in bytes.
     */
     Memory(
-        const std::shared_ptr<const ll::Session>& tSession,
+        const std::shared_ptr<ll::Session>& tSession,
         const vk::Device tDevice,
         const ll::VkHeapInfo& tHeapInfo,
         const uint64_t tPageSize);
@@ -161,6 +161,14 @@ public:
 
     Memory& operator = (const Memory& memory) = delete;
     Memory& operator = (Memory&& memory)      = delete;
+
+
+    /**
+    @brief      Gets the session this memory was created from.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -297,7 +305,7 @@ private:
 
     // Shared pointer to the session this memory was created from
     // This will keep the session alive until this or any other memory is deleted.
-    std::shared_ptr<const ll::Session>            session;
+    std::shared_ptr<ll::Session>            session;
 
 
 friend class ll::Buffer;

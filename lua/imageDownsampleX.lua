@@ -34,6 +34,7 @@ function builder.onNodeInit(node)
     out_RGBA = memory:createImageView(imgDesc, imgViewDesc)
 
     -- need to change image layout before binding
+    out_RGBA:changeImageLayout(ll.ImageLayout.General)
 
     node:bind('out_RGBA', out_RGBA)
     node:configureGridShape(ll.vec3ui.new(outWidth, in_RGBA.height, 1))

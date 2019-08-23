@@ -154,7 +154,8 @@ void registerTypes(sol::table& lib) {
         "width", sol::property(&ll::Image::getWidth),
         "height", sol::property(&ll::Image::getHeight),
         "depth", sol::property(&ll::Image::getDepth),
-        "shape", sol::property(&ll::Image::getShape)
+        "shape", sol::property(&ll::Image::getShape),
+        "changeImageLayout", &ll::Image::changeImageLayout
         );
 
     // TODO: usage flags, layout
@@ -172,7 +173,8 @@ void registerTypes(sol::table& lib) {
         "width", sol::property(&ll::ImageView::getWidth),
         "height", sol::property(&ll::ImageView::getHeight),
         "depth", sol::property(&ll::ImageView::getDepth),
-        "shape", sol::property(&ll::ImageView::getShape)
+        "shape", sol::property(&ll::ImageView::getShape),
+        "changeImageLayout", &ll::ImageView::changeImageLayout
         );
 
 

@@ -1,6 +1,13 @@
 
 #include "ImagePyramid.h"
 
+
+ImagePyramid::ImagePyramid(const std::shared_ptr<ll::Session>& session) :
+    m_session {session} {
+
+}
+
+
 std::shared_ptr<ll::Object> ImagePyramid::getPort(const std::string& name) const noexcept {
 
     const auto it = m_objects.find(name);

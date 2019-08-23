@@ -129,7 +129,7 @@ public:
     
     @return     A new ll::Memory object or nullptr if it could not be created.
     */
-    std::shared_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch = false) const;
+    std::shared_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch = false);
 
     
     /**

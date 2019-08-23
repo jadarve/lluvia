@@ -54,6 +54,16 @@ function ll.getProgram(name)
 end
 
 
+function ll.changeImageLayout(img, newLayout)
+    
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    -- create command buffer and run it
+end
+
+
 ll.ComputeNodeBuilder = ll.class()
 
 function ll.ComputeNodeBuilder.newDescriptor()

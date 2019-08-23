@@ -297,9 +297,21 @@ public:
     */
     const ll::ImageViewDescriptor& getDescriptor() const noexcept;
 
+
+    /**
+    @brief      Immediately changes the layout of the underlying ll::Image object.
+    
+    This method creates a command buffer and submits it to change
+    the layout of the image. Execution is blocked until the layout
+    change is completed. 
+    
+    @param[in]  newLayout  The new layout
+    */
+    void changeImageLayout(const vk::ImageLayout newLayout);
+
 private:
     ImageView(  vk::Device tDevice,
-                std::shared_ptr<ll::Image> tImage,
+                const std::shared_ptr<ll::Image>& tImage,
                 const ll::ImageViewDescriptor& tDescriptor);
     
     ll::ImageViewDescriptor m_descriptor;

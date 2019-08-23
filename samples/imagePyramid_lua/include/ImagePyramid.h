@@ -11,7 +11,7 @@
 class ImagePyramid : public ll::ContainerNode {
 
 public:
-    ImagePyramid();
+    ImagePyramid(const std::shared_ptr<ll::Session>& session);
 
     std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept override = 0;
 
@@ -24,6 +24,8 @@ protected:
 
 private:
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
+
+    std::shared_ptr<ll::Session> m_session;
 };
 
 #endif // IMAGE_PYRAMID_H_

@@ -323,6 +323,18 @@ public:
     */
     std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& tDescriptor);
 
+
+    /**
+    @brief      Immediately changes the image layout.
+    
+    This method creates a command buffer and submits it to change
+    the layout of the image. Execution is blocked until the layout
+    change is completed. 
+    
+    @param[in]  newLayout  The new layout
+    */
+    void changeImageLayout(const vk::ImageLayout newLayout);
+
 private:
     Image(const vk::Device& tDevice,
           const vk::Image& tVkImage,

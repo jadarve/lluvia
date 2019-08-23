@@ -6,10 +6,12 @@
 */
 
 #include "lluvia/core/Image.h"
+
+#include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/ImageViewDescriptor.h"
-
 #include "lluvia/core/Memory.h"
+#include "lluvia/core/Session.h"
 
 namespace ll {
 
@@ -102,8 +104,20 @@ ll::vec3ui Image::getShape() const noexcept {
 }
 
 std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescriptor& tDescriptor) {
-
     return std::shared_ptr<ll::ImageView> {new ll::ImageView {m_device, shared_from_this(), tDescriptor}};
+}
+
+void Image::changeImageLayout(const vk::ImageLayout newLayout) {
+
+    const auto& session = m_memory->getSession();
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*this, newLayout);
+    cmdBuffer->end();
+    session->run(*cmdBuffer);
+
 }
 
 } // namespace ll

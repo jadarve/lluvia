@@ -29,7 +29,7 @@ constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined
 
 
 Memory::Memory(
-    const std::shared_ptr<const ll::Session>& tSession,
+    const std::shared_ptr<ll::Session>& tSession,
     const vk::Device tDevice,
     const ll::VkHeapInfo& tHeapInfo,
     const uint64_t tPageSize):
@@ -49,6 +49,11 @@ Memory::~Memory() {
     for (auto& memory : memoryPages) {
         device.freeMemory(memory);
     }
+}
+
+
+const std::shared_ptr<ll::Session>& Memory::getSession() const noexcept {
+    return session;
 }
 
 
