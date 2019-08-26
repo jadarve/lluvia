@@ -96,6 +96,7 @@ int main(int argc, const char** argv) {
     imgCopyCmdBuffer->end();
     session->run(*imgCopyCmdBuffer);
     
+    std::cout << "input image: [" << inputImage->getWidth() << ", " << inputImage->getHeight() << "]" << std::endl;
 
     auto imagePyramid = ImagePyramid {4};
     imagePyramid.setInputImage(inputImage);

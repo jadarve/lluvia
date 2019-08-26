@@ -14,8 +14,6 @@ ImagePyramid::ImagePyramid(const uint32_t tLevels):
 
 
 void ImagePyramid::setInputImage(std::shared_ptr<ll::Image> tInputImage) {
-    assert(inputImage != nullptr);
-
     inputImage = tInputImage;
 }
 
@@ -136,6 +134,7 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         auto nodeX = session->createComputeNode(descX_i);
         nodeX->bind("in_RGBA", imageViewsY[i]);
         nodeX->bind("out_RGBA", imageViewsX[i]);
+        nodeX->init();
         computeNodesX.push_back(nodeX);
 
         height /= 2;
@@ -149,6 +148,7 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
         auto nodeY = session->createComputeNode(descY_i);
         nodeY->bind("in_RGBA", imageViewsX[i]);
         nodeY->bind("out_RGBA", imageViewsY[i + 1]);
+        nodeY->init();
         computeNodesY.push_back(nodeY);
 
         std::cout << std::endl;
