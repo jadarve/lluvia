@@ -132,7 +132,7 @@ int main(int argc, char const* argv[])
     pyramid.record(*cmdBuffer);
     cmdBuffer->end();
 
-    for (auto n = 0u; n < 1000; ++n) {
+    for (auto n = 0u; n < 10; ++n) {
         const auto start = std::chrono::high_resolution_clock::now();
         session->run(*cmdBuffer);
         const auto end = std::chrono::high_resolution_clock::now();
