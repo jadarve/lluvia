@@ -55,7 +55,6 @@ void ImagePyramid::onInit() {
         downX->bind("in_RGBA", in_RGBA);
         downX->init();
         
-        auto out_RGBA = downX->getPort("out_RGBA");
         downY->bind("in_RGBA", downX->getPort("out_RGBA"));
         downY->init();
 
