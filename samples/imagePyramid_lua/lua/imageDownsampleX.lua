@@ -26,18 +26,23 @@ function builder.onNodeInit(node)
     memory = in_RGBA.memory
 
     -- out_RGBA descriptors
-    imgDesc = in_RGBA.imageDescriptor
+    imgDesc = ll.ImageDescriptor.new(in_RGBA.imageDescriptor)
     imgDesc.width = outWidth
 
-    imgViewDesc = in_RGBA.imageViewDescriptor
-
+    imgViewDesc = ll.ImageViewDescriptor.new(in_RGBA.descriptor)
+    
     out_RGBA = memory:createImageView(imgDesc, imgViewDesc)
 
     -- need to change image layout before binding
     out_RGBA:changeImageLayout(ll.ImageLayout.General)
 
-    node:bind('out_RGBA', out_RGBA)
-    node:configureGridShape(ll.vec3ui.new(outWidth, in_RGBA.height, 1))
+    -- node:bind('out_RGBA', out_RGBA)
+    ll.bindImageView(node, 'out_RGBA', out_RGBA)
+
+    ll.logd('imageDownsampleX', 'in_RGBA ', string.format('[%d, %d]', in_RGBA.width, in_RGBA.height)
+                              , 'out_RGBA', string.format('[%d, %d]', out_RGBA.width, out_RGBA.height))
+
+    node:configureGridShape(ll.vec3ui.new(out_RGBA.width, out_RGBA.height, 1))
 end
 
 ll.registerNodeBuilder('imageDownsampleX', builder)

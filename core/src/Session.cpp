@@ -224,12 +224,14 @@ std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNod
 }
 
 
-std::shared_ptr<ll::ComputeNode> Session::createComputeNode(__attribute__((unused)) const std::string& builderName) const {
+std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const std::string& builderName) const {
 
     // create a ComputeNodeDescriptor using the builder
     // call Session::createComputeNode using that descriptor
     // TOTHINK: How to handle Lua errors?
-    return nullptr;
+    
+    const auto descriptor = createComputeNodeDescriptor(builderName);
+    return createComputeNode(descriptor);
 }
 
 

@@ -2,6 +2,12 @@
 ll['nodeBuilders'] = {}
 ll['activeSession'] = nil
 
+
+function ll.logd(tag, msg, ...)
+    print(tag, msg, ...)
+end
+
+
 function ll.class(base)
 
     local c = {}

@@ -21,6 +21,15 @@ foreach (_SHADER ${_SHADER_LIST})
 
 endforeach ()
 
+
+set (_LUA_LIST
+    imageDownsampleX.lua
+    imageDownsampleY.lua
+)
+foreach(_LUA ${_LUA_LIST})
+    file(COPY lua/${_LUA} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/lua)
+endforeach()
+
 add_custom_target (imagePyramidShaders_lua ALL DEPENDS ${_SHADERS_OUTPUT_LIST})
 add_dependencies (imagePyramid_lua imagePyramidShaders_lua)
 

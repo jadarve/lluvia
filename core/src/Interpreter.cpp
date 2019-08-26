@@ -239,6 +239,8 @@ Interpreter::Interpreter() :
     m_libImpl["castImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
     m_libImpl["castImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
 
+    m_lib["bindImageView"] = [](std::shared_ptr<ll::ComputeNode> node, const std::string& name, std::shared_ptr<ll::ImageView> view) {node->bind(name, view);};
+
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }
 
@@ -249,12 +251,23 @@ Interpreter::~Interpreter() {
 
 
 void Interpreter::run(const std::string& code) {
-    m_lua->script(code);
+    
+    auto result = m_lua->script(code);
+
+    if (!result.valid()) {
+        auto err = static_cast<sol::error>(result);
+        std::cerr << "Interpreter::run(): " << err.what() << std::endl;
+    }
 }
 
 
 void Interpreter::runFile(const std::string& filename) {
-    m_lua->script_file(filename);
+    auto result = m_lua->script_file(filename);
+
+    if (!result.valid()) {
+        auto err = static_cast<sol::error>(result);
+        std::cerr << "Interpreter::run(): " << err.what() << std::endl;
+    }
 }
 
 

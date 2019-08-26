@@ -20,6 +20,9 @@ public:
 
     void record(ll::CommandBuffer& commandBuffer) const override;
 
+    void writeAllImages(std::shared_ptr<ll::Session> session);
+    void writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> image, const std::string& filename);
+
 protected:
     void onInit() override;
 
