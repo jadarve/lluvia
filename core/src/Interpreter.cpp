@@ -200,8 +200,8 @@ void registerTypes(sol::table& lib) {
         "gridZ", sol::property(&ll::ComputeNode::getGridZ, &ll::ComputeNode::setGridZ),
         "gridShape", sol::property(&ll::ComputeNode::getGridShape, &ll::ComputeNode::setGridShape),
         "configureGridShape", &ll::ComputeNode::configureGridShape,
-        "getPort", &ll::ComputeNode::getPort,
-        "bind", &ll::ComputeNode::bind
+        "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
+        "__bind", &ll::ComputeNode::bind  // user facing bind() implemented in library.lua
         );
 
     lib.new_usertype<ll::Session>("Session",
@@ -239,7 +239,9 @@ Interpreter::Interpreter() :
     m_libImpl["castImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
     m_libImpl["castImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
 
-    m_lib["bindImageView"] = [](std::shared_ptr<ll::ComputeNode> node, const std::string& name, std::shared_ptr<ll::ImageView> view) {node->bind(name, view);};
+    m_libImpl["castBufferToObject"] = [](std::shared_ptr<ll::Buffer> buffer) {return std::static_pointer_cast<ll::Object>(buffer);};
+    m_libImpl["castImageToObject"] = [](std::shared_ptr<ll::Image> image) {return std::static_pointer_cast<ll::Object>(image);};
+    m_libImpl["castImageViewToObject"] = [](std::shared_ptr<ll::ImageView> imageView) {return std::static_pointer_cast<ll::Object>(imageView);};
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }

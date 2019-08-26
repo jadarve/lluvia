@@ -3,8 +3,8 @@ ll['nodeBuilders'] = {}
 ll['activeSession'] = nil
 
 
-function ll.logd(tag, msg, ...)
-    print(tag, msg, ...)
+function ll.logd(tag, ...)
+    print(tag, ...)
 end
 
 
@@ -60,6 +60,9 @@ function ll.getProgram(name)
 end
 
 
+-----------------------------------------------------------
+--                 ComputeNodeBuilder
+-----------------------------------------------------------
 ll.ComputeNodeBuilder = ll.class()
 
 function ll.ComputeNodeBuilder.newDescriptor()
@@ -69,4 +72,24 @@ end
 function ll.ComputeNodeBuilder.onNodeInit(node)
     print('ll.ComputeNodeBuilder.onNodeInit')
     -- do nothing
+end
+
+
+-----------------------------------------------------------
+--                     ComputeNode
+-----------------------------------------------------------
+function ll.ComputeNode:getPort(name)
+    return ll.castObject(self:__getPort(name))
+end
+
+
+function ll.ComputeNode:bind(name, obj)
+
+    castTable = {
+        [ll.ObjectType.Buffer]    = ll.impl.castBufferToObject,
+        [ll.ObjectType.Image]     = ll.impl.castImageToObject,
+        [ll.ObjectType.ImageView] = ll.impl.castImageViewToObject
+    }
+
+    self:__bind(name, castTable[obj.type](obj))
 end

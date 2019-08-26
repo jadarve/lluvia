@@ -18,7 +18,8 @@ end
 
 function builder.onNodeInit(node)
 
-    in_RGBA = ll.castObject(node:getPort('in_RGBA'))
+    -- in_RGBA = ll.castObject(node:getPort('in_RGBA'))
+    in_RGBA = node:getPort('in_RGBA')
 
     outHeight = in_RGBA.height // 2
 
@@ -36,8 +37,8 @@ function builder.onNodeInit(node)
     -- need to change image layout before binding
     out_RGBA:changeImageLayout(ll.ImageLayout.General)
 
-    -- node:bind('out_RGBA', out_RGBA)
-    ll.bindImageView(node, 'out_RGBA', out_RGBA)
+    node:bind('out_RGBA', out_RGBA)
+    -- ll.bindImageView(node, 'out_RGBA', out_RGBA)
 
     ll.logd('imageDownsampleY', 'in_RGBA ', string.format('[%d, %d]', in_RGBA.width, in_RGBA.height)
                               , 'out_RGBA', string.format('[%d, %d]', out_RGBA.width, out_RGBA.height))

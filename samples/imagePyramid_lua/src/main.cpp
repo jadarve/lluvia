@@ -6,6 +6,7 @@
 #include "CLI11/CLI11.hpp"
 
 #include <iostream>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -131,7 +132,14 @@ int main(int argc, char const* argv[])
     pyramid.record(*cmdBuffer);
     cmdBuffer->end();
 
-    session->run(*cmdBuffer);
+    for (auto n = 0u; n < 1000; ++n) {
+        const auto start = std::chrono::high_resolution_clock::now();
+        session->run(*cmdBuffer);
+        const auto end = std::chrono::high_resolution_clock::now();
+
+        const auto diff = std::chrono::duration<float, std::micro> {end - start};
+        std::cout << diff.count() << std::endl;
+    }
 
     pyramid.writeAllImages(session);
 
