@@ -29,6 +29,7 @@ set(_SRCS
     src/ComputeNode.cpp
     src/ComputeNodeDescriptor.cpp
     src/ContainerNode.cpp
+    src/ContainerNodeDescriptor.cpp
     src/error.cpp
     src/Image.cpp
     src/ImageDescriptor.cpp

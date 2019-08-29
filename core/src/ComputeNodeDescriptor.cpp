@@ -56,7 +56,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::addPort(const ll::PortDescriptor& 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::addPorts(const std::initializer_list<ll::PortDescriptor>& ports) {
 
-    for(const auto port : ports) {
+    for(const auto& port : ports) {
         addPort(port);
     }
 

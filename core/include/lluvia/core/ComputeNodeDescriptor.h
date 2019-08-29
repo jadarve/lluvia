@@ -9,16 +9,14 @@
 #define LLUVIA_CORE_COMPUTE_DESCRIPTOR_NODE_H_
 
 #include "lluvia/core/impl/enum_utils.h"
-#include "lluvia/core/types.h"
 #include "lluvia/core/Node.h"
+#include "lluvia/core/types.h"
 
 #include <array>
+#include <map>
 #include <memory>
 #include <string>
 #include <tuple>
-#include <map>
-
-#include <vulkan/vulkan.hpp>
 
 
 namespace ll {

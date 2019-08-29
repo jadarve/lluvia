@@ -40,8 +40,8 @@ function builder.onNodeInit(node)
             node:bind('out_RGBA', downY:getPort('out_RGBA'))
         end
 
-        node:addNode(string.format('downX_%d', i), downX)
-        node:addNode(string.format('downY_%d', i), downY)
+        node:bind(string.format('downX_%d', i), downX)
+        node:bind(string.format('downY_%d', i), downY)
 
         node:addObject(string.format('out_RGBA_downX_%d', i), downX:getPort('out_RGBA'))
         node:addObject(string.format('out_RGBA_downY_%d', i), downY:getPort('out_RGBA'))

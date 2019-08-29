@@ -8,28 +8,20 @@
 
 
 ImagePyramid::ImagePyramid(const std::shared_ptr<ll::Session>& session) :
-    m_session {session} {
-
-}
-
-
-std::shared_ptr<ll::Object> ImagePyramid::getPort(const std::string& name) const noexcept {
-
-    const auto it = m_objects.find(name);
-    return it == m_objects.end()? nullptr : it->second;
-}
-
-
-void ImagePyramid::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
-
-    m_objects[name] = obj;
+    ll::ContainerNode(session) {
 }
 
 
 void ImagePyramid::record(ll::CommandBuffer& commandBuffer) const {
 
-    for (const auto& node : m_nodes) {
-        node->record(commandBuffer);
+    for (auto h = 0u; h < 4; ++h) {
+        auto downX = getNode("downX_" + std::to_string(h));
+        auto downY = getNode("downY_" + std::to_string(h));
+
+        downX->record(commandBuffer);
+        commandBuffer.memoryBarrier();
+
+        downY->record(commandBuffer);
         commandBuffer.memoryBarrier();
     }
 }
@@ -40,7 +32,7 @@ void ImagePyramid::onInit() {
     auto in_RGBA = getPort("in_RGBA");
 
     // insert in_RGBA again as pyramid_0
-    m_objects["pyramid_0"] = in_RGBA;
+    bind("pyramid_0", in_RGBA);
 
     std::cout << "changing layout" << std::endl;
     std::static_pointer_cast<ll::ImageView>(in_RGBA)->changeImageLayout(vk::ImageLayout::eGeneral);
@@ -60,10 +52,10 @@ void ImagePyramid::onInit() {
 
         // the input to the next level will be the output of downY
         in_RGBA = downY->getPort("out_RGBA");
-        m_objects["pyramid_" + std::to_string(h + 1)] = in_RGBA;
+        bind("pyramid_" + std::to_string(h + 1), in_RGBA);
 
-        m_nodes.push_back(downX);
-        m_nodes.push_back(downY);
+        bindNode("downX_" + std::to_string(h), downX);
+        bindNode("downY_" + std::to_string(h), downY);
     }
 }
 
