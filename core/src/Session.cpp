@@ -11,6 +11,8 @@
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/ContainerNode.h"
+#include "lluvia/core/ContainerNodeDescriptor.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/Interpreter.h"
@@ -237,6 +239,35 @@ std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const std::string& b
 
 ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string& builderName) const {
 
+    // FIXME: need to distinguish between Compute and Container builders
+    constexpr auto lua = R"(
+        local builderName = ...
+        local builder = ll.getNodeBuilder(builderName)
+        return builder.newDescriptor()
+    )";
+
+    auto load = m_interpreter->load(lua);
+
+    return load(builderName);
+}
+
+
+std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const ll::ContainerNodeDescriptor& descriptor) const {
+
+    return std::shared_ptr<ll::ContainerNode> {new ll::ContainerNode {shared_from_this(), descriptor}};
+}
+
+
+std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const std::string& builderName) const {
+
+    const auto descriptor = createContainerNodeDescriptor(builderName);
+    return createContainerNode(descriptor);
+}
+
+
+ll::ContainerNodeDescriptor Session::createContainerNodeDescriptor(const std::string& builderName) const {
+
+    // FIXME: need to distinguish between Compute and Container builders
     constexpr auto lua = R"(
         local builderName = ...
         local builder = ll.getNodeBuilder(builderName)

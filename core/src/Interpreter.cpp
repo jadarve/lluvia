@@ -8,8 +8,11 @@
 #include "lluvia/core/Interpreter.h"
 
 #include "lluvia/core/Buffer.h"
+#include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/ContainerNode.h"
+#include "lluvia/core/ContainerNodeDescriptor.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/ImageView.h"
@@ -51,6 +54,7 @@ void registerTypes(sol::table& lib) {
     registerEnum<ll::ImageAxis, ll::impl::ImageAxisStrings.size(), ll::impl::ImageAxisStrings>(lib, "ImageAxis");
     registerEnum<ll::ImageFilterMode, ll::impl::ImageFilterModeStrings.size(), ll::impl::ImageFilterModeStrings>(lib, "ImageFilterMode");
     registerEnum<ll::NodeState, ll::impl::NodeStateStrings.size(), ll::impl::NodeStateStrings>(lib, "NodeState");
+    registerEnum<ll::NodeType, ll::impl::NodeTypeStrings.size(), ll::impl::NodeTypeStrings>(lib, "NodeType");
     registerEnum<ll::ObjectType, ll::impl::ObjectTypeStrings.size(), ll::impl::ObjectTypeStrings>(lib, "ObjectType");
     registerEnum<ll::PortDirection, ll::impl::PortDirectionStrings.size(), ll::impl::PortDirectionStrings>(lib, "PortDirection");
     registerEnum<ll::PortType, ll::impl::PortTypeStrings.size(), ll::impl::PortTypeStrings>(lib, "PortType");
@@ -122,6 +126,11 @@ void registerTypes(sol::table& lib) {
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
         "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape
+        );
+
+    lib.new_usertype<ll::ContainerNodeDescriptor>("ContainerNodeDescriptor",
+        "builderName", sol::property(&ll::ContainerNodeDescriptor::getBuilderName, &ll::ContainerNodeDescriptor::setBuilderName),
+        "addPort", &ll::ContainerNodeDescriptor::addPort
         );
 
     ///////////////////////////////////////////////////////
@@ -200,8 +209,20 @@ void registerTypes(sol::table& lib) {
         "gridZ", sol::property(&ll::ComputeNode::getGridZ, &ll::ComputeNode::setGridZ),
         "gridShape", sol::property(&ll::ComputeNode::getGridShape, &ll::ComputeNode::setGridShape),
         "configureGridShape", &ll::ComputeNode::configureGridShape,
+        "record", &ll::ComputeNode::record,
         "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
-        "__bind", &ll::ComputeNode::bind  // user facing bind() implemented in library.lua
+        "__bind", &ll::ComputeNode::bind        // user facing bind() implemented in library.lua
+        );
+
+    lib.new_usertype<ll::ContainerNode>("ContainerNode",
+        sol::no_constructor,
+        "type", sol::property(&ll::ContainerNode::getType),
+        "descriptor", sol::property(&ll::ContainerNode::getDescriptor),
+        "record", &ll::ContainerNode::record,
+        "__getPort", &ll::ContainerNode::getPort,   // user facing getPort() implemented in library.lua
+        "__bind", &ll::ContainerNode::bind,         // user facing bind() implemented in library.lua
+        "__bindNode", &ll::ContainerNode::bindNode, // user facing bindNode() implemented in library.lua 
+        "__getNode", &ll::ContainerNode::getNode    // user facing getNode() implemented in library.lua
         );
 
     lib.new_usertype<ll::Session>("Session",
@@ -235,13 +256,19 @@ Interpreter::Interpreter() :
 
     registerTypes(m_lib);
     
-    m_libImpl["castBuffer"]    = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Buffer>(obj);};
-    m_libImpl["castImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
-    m_libImpl["castImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
+    m_libImpl["castObjectToBuffer"]    = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Buffer>(obj);};
+    m_libImpl["castObjectToImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
+    m_libImpl["castObjectToImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
 
     m_libImpl["castBufferToObject"] = [](std::shared_ptr<ll::Buffer> buffer) {return std::static_pointer_cast<ll::Object>(buffer);};
     m_libImpl["castImageToObject"] = [](std::shared_ptr<ll::Image> image) {return std::static_pointer_cast<ll::Object>(image);};
     m_libImpl["castImageViewToObject"] = [](std::shared_ptr<ll::ImageView> imageView) {return std::static_pointer_cast<ll::Object>(imageView);};
+
+    m_libImpl["castComputeNodeToNode"] = [](std::shared_ptr<ll::ComputeNode> node) {return std::static_pointer_cast<ll::Node>(node);};
+    m_libImpl["castContainerNodeToNode"] = [](std::shared_ptr<ll::ContainerNode> node) {return std::static_pointer_cast<ll::Node>(node);};
+
+    m_libImpl["castNodeToComputeNode"] = [](std::shared_ptr<ll::Node> node) {return std::static_pointer_cast<ll::Node>(node);};
+    m_libImpl["castNodeToContainerNode"] = [](std::shared_ptr<ll::Node> node) {return std::static_pointer_cast<ll::ContainerNode>(node);};
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }

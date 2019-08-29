@@ -77,6 +77,17 @@ namespace impl {
 
 
     /**
+     @brief Node type string values used for converting ll::NodeType to std::string and vice-versa.
+
+     @sa ll::NodeType enum values for this array.
+     */
+    constexpr const std::array<std::tuple<const char*, ll::NodeType>, 2> NodeTypeStrings {{
+        std::make_tuple("Compute"   , ll::NodeType::Compute),
+        std::make_tuple("Container" , ll::NodeType::Container)
+    }};
+
+
+    /**
      @brief Port direction string values used for converting ll::PortDirection to std::string and vice-versa.
 
      @sa ll::PortDirection enum values for this array.

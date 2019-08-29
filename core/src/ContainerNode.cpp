@@ -28,6 +28,11 @@ ContainerNode::ContainerNode(const std::shared_ptr<const ll::Session>& session,
 }
 
 
+const ll::ContainerNodeDescriptor& ContainerNode::getDescriptor() const noexcept {
+    return m_descriptor;
+}
+
+
 std::shared_ptr<ll::Object> ContainerNode::getPort(const std::string& name) const noexcept {
 
     const auto it = m_objects.find(name);

@@ -43,6 +43,8 @@ public:
         return ll::NodeType::Container;
     }
 
+    const ll::ContainerNodeDescriptor& getDescriptor() const noexcept;
+
     std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept override;
 
     void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;

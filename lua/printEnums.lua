@@ -18,6 +18,7 @@ enums = {
     'ImageAxis',
     'ImageFilterMode',
     'NodeState',
+    'NodeType',
     'ObjectType',
     'PortDirection',
     'PortType',

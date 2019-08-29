@@ -41,12 +41,23 @@ end
 function ll.castObject(obj)
 
     castTable = {
-        [ll.ObjectType.Buffer]    = ll.impl.castBuffer,
-        [ll.ObjectType.Image]     = ll.impl.castImage,
-        [ll.ObjectType.ImageView] = ll.impl.castImageView
+        [ll.ObjectType.Buffer]    = ll.impl.castObjectToBuffer,
+        [ll.ObjectType.Image]     = ll.impl.castObjectToImage,
+        [ll.ObjectType.ImageView] = ll.impl.castObjectToImageView
     }
 
     return castTable[obj.type](obj)
+end
+
+
+function ll.castNode(node)
+
+    castTable = {
+        [ll.NodeType.Compute]    = ll.impl.castNodeToComputeNode,
+        [ll.NodeType.Container]  = ll.impl.castNodeToContainerNode
+    }
+
+    return castTable[node.type](node)
 end
 
 
@@ -70,7 +81,24 @@ function ll.ComputeNodeBuilder.newDescriptor()
 end
 
 function ll.ComputeNodeBuilder.onNodeInit(node)
-    print('ll.ComputeNodeBuilder.onNodeInit')
+    -- do nothing
+end
+
+
+-----------------------------------------------------------
+--                 ContainerNodeBuilder
+-----------------------------------------------------------
+ll.ContainerNodeBuilder = ll.class()
+
+function ll.ContainerNodeBuilder.newDescriptor()
+    error('newDescriptor must be implemented by child classes')
+end
+
+function ll.ContainerNodeBuilder.onNodeInit(node)
+    -- do nothing
+end
+
+function ll.ContainerNodeBuilder.onNodeRecord(node, cmdBuffer)
     -- do nothing
 end
 
@@ -92,4 +120,40 @@ function ll.ComputeNode:bind(name, obj)
     }
 
     self:__bind(name, castTable[obj.type](obj))
+end
+
+
+-----------------------------------------------------------
+--                     ContainerNode
+-----------------------------------------------------------
+function ll.ContainerNode:getPort(name)
+    return ll.castObject(self:__getPort(name))
+end
+
+
+function ll.ContainerNode:bind(name, obj)
+
+    castTable = {
+        [ll.ObjectType.Buffer]    = ll.impl.castBufferToObject,
+        [ll.ObjectType.Image]     = ll.impl.castImageToObject,
+        [ll.ObjectType.ImageView] = ll.impl.castImageViewToObject
+    }
+
+    self:__bind(name, castTable[obj.type](obj))
+end
+
+
+function ll.ContainerNode:getNode(name)
+    return ll.castNode(self:__getNode(name))
+end
+
+
+function ll.ContainerNode:bindNode(name, node)
+
+    castTable = {
+        [ll.NodeType.Compute]   = ll.impl.castComputeNodeToNode,
+        [ll.NodeType.Container] = ll.impl.castContainerNodeToNode
+    }
+
+    self:__bindNode(name, castTable[node.type](node))
 end
