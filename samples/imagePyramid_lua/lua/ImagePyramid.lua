@@ -25,8 +25,9 @@ function builder.onNodeInit(node)
 
     -- in_RGBA should have been bound before calling init()
     in_RGBA = node:getPort('in_RGBA')
+    node:bind(string.format('out_RGBA_downY_0', i), in_RGBA)
 
-    for i = 0, levels -1 do
+    for i = 1, levels -1 do
         ll.logd('ImagePyramid', 'onNodeInit: level:', i)
         
         downX = ll.createComputeNode('ImageDownsampleX')
@@ -60,7 +61,7 @@ function builder.onNodeRecord(node, cmdBuffer)
     -- levels = node.descriptor:getParameter('levels')
     levels = 4
 
-    for i = 0, levels -1 do
+    for i = 1, levels -1 do
         ll.logd('ImagePyramid', 'onNodeRecord: level:', i)
 
         downX = node:getNode(string.format('downX_%d', i))
