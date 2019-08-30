@@ -3,15 +3,16 @@ local builder = ll.class(ll.ContainerNodeBuilder)
 
 function builder.newDescriptor()
 
+    ll.logd('ImagePyramid', 'newDescriptor')
     local desc = ll.ContainerNodeDescriptor.new()
 
-    desc:builderName = 'imagePyramid'
+    desc.builderName = 'ImagePyramid'
 
     desc:addPort(ll.PortDescriptor.new(0, 'in_RGBA', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_RGBA', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:addParameter(ll.ParameterDescriptor.new('levels', ll.ParameterType.Int, 0))
+    -- desc:addParameter(ll.ParameterDescriptor.new('levels', ll.ParameterType.Int, 0))
 
     return desc
 end
@@ -19,15 +20,17 @@ end
 
 function builder.onNodeInit(node)
 
-    levels = node.descriptor:getParameter('levels')
+    -- levels = node.descriptor:getParameter('levels')
+    levels = 4
 
     -- in_RGBA should have been bound before calling init()
     in_RGBA = node:getPort('in_RGBA')
 
     for i = 0, levels -1 do
+        ll.logd('ImagePyramid', 'onNodeInit: level:', i)
         
-        downX = ll.createComputeNode('imageDownsampleX')
-        downY = ll.createComputeNode('imageDownsampleX')
+        downX = ll.createComputeNode('ImageDownsampleX')
+        downY = ll.createComputeNode('ImageDownsampleY')
 
         downX:bind('in_RGBA', in_RGBA)
         downX:init()
@@ -35,16 +38,18 @@ function builder.onNodeInit(node)
         downY:bind('in_RGBA', downX:getPort('out_RGBA'))
         downY:init()
 
+        in_RGBA = downY:getPort('out_RGBA')
+
         -- bind the output
         if i == levels -1 then
             node:bind('out_RGBA', downY:getPort('out_RGBA'))
         end
 
-        node:bind(string.format('downX_%d', i), downX)
-        node:bind(string.format('downY_%d', i), downY)
+        node:bindNode(string.format('downX_%d', i), downX)
+        node:bindNode(string.format('downY_%d', i), downY)
 
-        node:addObject(string.format('out_RGBA_downX_%d', i), downX:getPort('out_RGBA'))
-        node:addObject(string.format('out_RGBA_downY_%d', i), downY:getPort('out_RGBA'))
+        node:bind(string.format('out_RGBA_downX_%d', i), downX:getPort('out_RGBA'))
+        node:bind(string.format('out_RGBA_downY_%d', i), downY:getPort('out_RGBA'))
     end
 
 end
@@ -52,19 +57,21 @@ end
 
 function builder.onNodeRecord(node, cmdBuffer)
 
-    levels = node.descriptor:getParameter('levels')
+    -- levels = node.descriptor:getParameter('levels')
+    levels = 4
 
     for i = 0, levels -1 do
-        
+        ll.logd('ImagePyramid', 'onNodeRecord: level:', i)
+
         downX = node:getNode(string.format('downX_%d', i))
         downY = node:getNode(string.format('downY_%d', i))
 
-        cmdBuffer:run(downX)
+        downX:record(cmdBuffer)
         cmdBuffer:memoryBarrier()
-        cmdBuffer:run(downY)
+        downY:record(cmdBuffer)
         cmdBuffer:memoryBarrier()
     end
 end
 
 
-ll.registerNodeBuilder(builder)
+ll.registerNodeBuilder('ImagePyramid', builder)

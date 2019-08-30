@@ -194,9 +194,20 @@ void registerTypes(sol::table& lib) {
         sol::no_constructor
         );
 
+    lib.new_usertype<ll::Node>("Node",
+        sol::no_constructor,
+        "type", sol::property(&ll::Node::getType),
+        "state", sol::property(&ll::Node::getState),
+        "init", &ll::Node::init,
+        "record", &ll::Node::record,
+        "__getPort", &ll::Node::getPort, // user facing getPort() implemented in library.lua
+        "__bind", &ll::Node::bind        // user facing bind() implemented in library.lua
+        );
+
     lib.new_usertype<ll::ComputeNode>("ComputeNode",
         sol::no_constructor,
         "type", sol::property(&ll::ComputeNode::getType),
+        "state", sol::property(&ll::ComputeNode::getState),
         "functionName", sol::property(&ll::ComputeNode::getFunctionName),
         "program", sol::property(&ll::ComputeNode::getProgram),
         "descriptor", sol::property(&ll::ComputeNode::getDescriptor),
@@ -209,6 +220,7 @@ void registerTypes(sol::table& lib) {
         "gridZ", sol::property(&ll::ComputeNode::getGridZ, &ll::ComputeNode::setGridZ),
         "gridShape", sol::property(&ll::ComputeNode::getGridShape, &ll::ComputeNode::setGridShape),
         "configureGridShape", &ll::ComputeNode::configureGridShape,
+        "init", &ll::ComputeNode::init,
         "record", &ll::ComputeNode::record,
         "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::ComputeNode::bind        // user facing bind() implemented in library.lua
@@ -217,7 +229,9 @@ void registerTypes(sol::table& lib) {
     lib.new_usertype<ll::ContainerNode>("ContainerNode",
         sol::no_constructor,
         "type", sol::property(&ll::ContainerNode::getType),
+        "state", sol::property(&ll::ContainerNode::getState),
         "descriptor", sol::property(&ll::ContainerNode::getDescriptor),
+        "init", &ll::ContainerNode::init,
         "record", &ll::ContainerNode::record,
         "__getPort", &ll::ContainerNode::getPort,   // user facing getPort() implemented in library.lua
         "__bind", &ll::ContainerNode::bind,         // user facing bind() implemented in library.lua
@@ -228,7 +242,9 @@ void registerTypes(sol::table& lib) {
     lib.new_usertype<ll::Session>("Session",
         sol::no_constructor,
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
-        "getProgram", &ll::Session::getProgram
+        "getProgram", &ll::Session::getProgram,
+        "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName) const) &ll::Session::createComputeNode,
+        "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName) const) &ll::Session::createContainerNode
         );
 
     lib.new_usertype<ll::Memory>("Memory",
@@ -240,6 +256,12 @@ void registerTypes(sol::table& lib) {
         "createBuffer", &ll::Memory::createBuffer,
         "createImage", &ll::Memory::createImage,
         "createImageView", &ll::Memory::createImageView
+        );
+
+    lib.new_usertype<ll::CommandBuffer>("CommandBuffer",
+        sol::no_constructor,
+        "run", &ll::CommandBuffer::run,
+        "memoryBarrier", &ll::CommandBuffer::memoryBarrier
         );
 }
 
@@ -267,7 +289,7 @@ Interpreter::Interpreter() :
     m_libImpl["castComputeNodeToNode"] = [](std::shared_ptr<ll::ComputeNode> node) {return std::static_pointer_cast<ll::Node>(node);};
     m_libImpl["castContainerNodeToNode"] = [](std::shared_ptr<ll::ContainerNode> node) {return std::static_pointer_cast<ll::Node>(node);};
 
-    m_libImpl["castNodeToComputeNode"] = [](std::shared_ptr<ll::Node> node) {return std::static_pointer_cast<ll::Node>(node);};
+    m_libImpl["castNodeToComputeNode"] = [](std::shared_ptr<ll::Node> node) {return std::static_pointer_cast<ll::ComputeNode>(node);};
     m_libImpl["castNodeToContainerNode"] = [](std::shared_ptr<ll::Node> node) {return std::static_pointer_cast<ll::ContainerNode>(node);};
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);

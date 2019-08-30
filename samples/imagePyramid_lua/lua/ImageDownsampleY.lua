@@ -4,10 +4,10 @@ function builder.newDescriptor()
     
     local desc = ll.ComputeNodeDescriptor.new()
     
-    desc.builderName  = 'imageDownsampleY'
+    desc.builderName  = 'ImageDownsampleY'
     desc.localShape   = ll.vec3ui.new(32, 32, 1)
     desc.gridShape    = ll.vec3ui.new(1, 1, 1)
-    desc.program      = ll.getProgram('imageDownsampleY')
+    desc.program      = ll.getProgram('ImageDownsampleY')
     desc.functionName = 'main'
 
     desc:addPort(ll.PortDescriptor.new(0, 'in_RGBA', ll.PortDirection.In, ll.PortType.ImageView))
@@ -40,10 +40,10 @@ function builder.onNodeInit(node)
     node:bind('out_RGBA', out_RGBA)
     -- ll.bindImageView(node, 'out_RGBA', out_RGBA)
 
-    ll.logd('imageDownsampleY', 'in_RGBA ', string.format('[%d, %d]', in_RGBA.width, in_RGBA.height)
+    ll.logd('ImageDownsampleY', 'in_RGBA ', string.format('[%d, %d]', in_RGBA.width, in_RGBA.height)
                               , 'out_RGBA', string.format('[%d, %d]', out_RGBA.width, out_RGBA.height))
     
     node:configureGridShape(ll.vec3ui.new(out_RGBA.width, out_RGBA.height, 1))
 end
 
-ll.registerNodeBuilder('imageDownsampleY', builder)
+ll.registerNodeBuilder('ImageDownsampleY', builder)

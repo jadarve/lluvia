@@ -8,8 +8,8 @@ add_executable(imagePyramid_lua
 
 
 set (_SHADER_LIST
-    glsl/imageDownsampleX.comp
-    glsl/imageDownsampleY.comp
+    glsl/ImageDownsampleX.comp
+    glsl/ImageDownsampleY.comp
 )
 
 set (_SHADERS_OUTPUT_LIST)
@@ -23,8 +23,8 @@ endforeach ()
 
 
 set (_LUA_LIST
-    imageDownsampleX.lua
-    imageDownsampleY.lua
+    ImageDownsampleX.lua
+    ImageDownsampleY.lua
 )
 foreach(_LUA ${_LUA_LIST})
     file(COPY lua/${_LUA} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/lua)

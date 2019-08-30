@@ -60,7 +60,9 @@ function ll.castNode(node)
     return castTable[node.type](node)
 end
 
-
+-----------------------------------------------------------
+--                     Session
+-----------------------------------------------------------
 function ll.getProgram(name)
     
     if not ll.activeSession then
@@ -68,6 +70,24 @@ function ll.getProgram(name)
     end
 
     return ll.activeSession:getProgram(name)
+end
+
+function ll.createComputeNode(name)
+    
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:createComputeNode(name)
+end
+
+function ll.createContainerNode(name)
+    
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:createContainerNode(name)
 end
 
 
@@ -144,7 +164,13 @@ end
 
 
 function ll.ContainerNode:getNode(name)
-    return ll.castNode(self:__getNode(name))
+    
+    local node = self:__getNode(name)
+    if not node then
+        error(string.format('node with name %s not found', name))
+    end
+    
+    return ll.castNode(node)
 end
 
 

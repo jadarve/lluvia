@@ -48,13 +48,13 @@ void ContainerNode::bind(const std::string& name, const std::shared_ptr<ll::Obje
 
 
 void ContainerNode::bindNode(const std::string& name, const std::shared_ptr<ll::Node>& node) {
-
     m_nodes[name] = node;
 }
 
 
 std::shared_ptr<ll::Node> ContainerNode::getNode(const std::string& name) const {
 
+    std::cout << "ContainerNode::getNode: " << name << std::endl;
     const auto it = m_nodes.find(name);
     return it == m_nodes.cend()? nullptr : it->second;
 }
@@ -68,7 +68,7 @@ void ContainerNode::record(ll::CommandBuffer& commandBuffer) const {
         constexpr const auto lua = R"(
             local builderName, node, cmdBuffer = ...
             local builder = ll.getNodeBuilder(builderName)
-            builder.onNodeRecord(node)
+            builder.onNodeRecord(node, cmdBuffer)
         )";
 
         auto load = m_session->getInterpreter()->load(lua);
