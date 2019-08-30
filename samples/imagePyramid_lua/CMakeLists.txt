@@ -2,7 +2,6 @@ message (STATUS "-------------------------------------------------")
 message (STATUS "Building imagePyramid")
 
 add_executable(imagePyramid_lua
-    src/ImagePyramid.cpp
     src/main.cpp
 )
 
@@ -36,7 +35,6 @@ add_dependencies (imagePyramid_lua imagePyramidShaders_lua)
 
 target_include_directories(imagePyramid_lua
     PUBLIC ${LL_INCLUDE_DIRS}
-    PUBLIC include
 )
 
 target_link_libraries(imagePyramid_lua
