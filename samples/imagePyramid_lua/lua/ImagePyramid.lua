@@ -12,7 +12,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(1, 'out_RGBA', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    -- desc:addParameter(ll.ParameterDescriptor.new('levels', ll.ParameterType.Int, 0))
+    desc:setParameter('levels', 2)
 
     return desc
 end
@@ -20,8 +20,8 @@ end
 
 function builder.onNodeInit(node)
 
-    -- levels = node.descriptor:getParameter('levels')
-    levels = 4
+    levels = node.descriptor:getParameter('levels')
+    ll.logd('ImagePyramid', 'onNodeInit: levels:', levels)
 
     -- in_RGBA should have been bound before calling init()
     in_RGBA = node:getPort('in_RGBA')
@@ -58,8 +58,7 @@ end
 
 function builder.onNodeRecord(node, cmdBuffer)
 
-    -- levels = node.descriptor:getParameter('levels')
-    levels = 4
+    levels = node.descriptor:getParameter('levels')
 
     for i = 1, levels -1 do
         ll.logd('ImagePyramid', 'onNodeRecord: level:', i)

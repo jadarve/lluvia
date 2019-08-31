@@ -98,9 +98,9 @@ int main(int argc, char const* argv[])
     session->setProgram("ImageDownsampleX", session->createProgram("ImageDownsampleX.spv"));
     session->setProgram("ImageDownsampleY", session->createProgram("ImageDownsampleY.spv"));
 
-    session->scriptFile("/home/juan/workspace/git/lluvia/samples/imagePyramid_lua/lua/ImageDownsampleX.lua");
-    session->scriptFile("/home/juan/workspace/git/lluvia/samples/imagePyramid_lua/lua/ImageDownsampleY.lua");
-    session->scriptFile("/home/juan/workspace/git/lluvia/samples/imagePyramid_lua/lua/ImagePyramid.lua");
+    session->scriptFile("/home/jadarve/git/lluvia/samples/imagePyramid_lua/lua/ImageDownsampleX.lua");
+    session->scriptFile("/home/jadarve/git/lluvia/samples/imagePyramid_lua/lua/ImageDownsampleY.lua");
+    session->scriptFile("/home/jadarve/git/lluvia/samples/imagePyramid_lua/lua/ImagePyramid.lua");
     
     auto pyramidDesc = session->createContainerNodeDescriptor("ImagePyramid");
     auto pyramid = session->createContainerNode(pyramidDesc);
@@ -161,14 +161,16 @@ int main(int argc, char const* argv[])
 
     session->run(*cmdBuffer);
 
-    constexpr const auto names = std::array<const char*, 4> {{"out_RGBA_downY_0", "out_RGBA_downY_1", "out_RGBA_downY_2", "out_RGBA_downY_3"}};
+    const auto levels = pyramidDesc.getParameter("levels").get<int32_t>();
+    const auto baseName = "out_RGBA_downY_";
+    for (auto i = 0; i < levels; ++i) {
 
-    for (const auto& name : names) {
+        const auto name = baseName + std::to_string(i);
         writeImage(session,
                    std::static_pointer_cast<ll::ImageView>(pyramid->getPort(name))->getImage(),
                    std::string{name} + std::string{".bmp"});
     }
-
+    
     std::cout << "ImagePyramid_lua: finish" << std::endl;
     return EXIT_SUCCESS;
 }

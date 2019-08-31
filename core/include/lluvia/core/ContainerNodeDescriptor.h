@@ -11,6 +11,7 @@
 #include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/types.h"
 #include "lluvia/core/Node.h"
+#include "lluvia/core/Parameter.h"
 
 #include <map>
 #include <string>
@@ -58,6 +59,29 @@ public:
 
 
     /**
+    @brief      Sets a parameter.
+    
+    @param[in]  name          The name
+    @param[in]  defaultValue  The value.
+    
+    @return     A reference to this object.
+    */
+    ContainerNodeDescriptor& setParameter(const std::string& name, const ll::Parameter& value);
+
+
+    /**
+    @brief      Gets a parameter.
+    
+    @param[in]  name  The parameter name
+    
+    @return     The parameter.
+
+    @throws     std::system_error With error code ll::ErrorCode::KeyNotFound if name is not
+                                  in the parameters table.
+    */
+    const ll::Parameter& getParameter(const std::string& name) const;
+
+    /**
     @brief      Sets the builder name this descriptor refers to within the Lua interpreter.
     
     @param[in]  name  The builder name.
@@ -78,6 +102,7 @@ public:
 private:
     std::string                               m_builderName;
     std::map<std::string, ll::PortDescriptor> m_ports;
+    std::map<std::string, ll::Parameter>      m_parameters;
 };
 
 

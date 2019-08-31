@@ -1,5 +1,7 @@
 #include "lluvia/core/ContainerNodeDescriptor.h"
 
+#include "lluvia/core/error.h"
+
 namespace ll {
 
 ContainerNodeDescriptor& ContainerNodeDescriptor::addPort(const ll::PortDescriptor& port) {
@@ -16,6 +18,21 @@ ContainerNodeDescriptor& ContainerNodeDescriptor::addPorts(const std::initialize
     }
 
     return *this;
+}
+
+
+ContainerNodeDescriptor& ContainerNodeDescriptor::setParameter(const std::string& name, const ll::Parameter& defaultValue) {
+    m_parameters[name] = defaultValue;
+    return *this;
+}
+
+
+const ll::Parameter& ContainerNodeDescriptor::getParameter(const std::string& name) const {
+
+    auto it = m_parameters.find(name);
+
+    ll::throwSystemErrorIf(it == m_parameters.cend(), ll::ErrorCode::KeyNotFound, "Parameter [" + name + "] not found.");
+    return it->second;
 }
 
 

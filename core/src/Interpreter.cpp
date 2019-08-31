@@ -21,6 +21,7 @@
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Node.h"
 #include "lluvia/core/Object.h"
+#include "lluvia/core/Parameter.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/Session.h"
 #include "lluvia/core/types.h"
@@ -56,6 +57,7 @@ void registerTypes(sol::table& lib) {
     registerEnum<ll::NodeState, ll::impl::NodeStateStrings.size(), ll::impl::NodeStateStrings>(lib, "NodeState");
     registerEnum<ll::NodeType, ll::impl::NodeTypeStrings.size(), ll::impl::NodeTypeStrings>(lib, "NodeType");
     registerEnum<ll::ObjectType, ll::impl::ObjectTypeStrings.size(), ll::impl::ObjectTypeStrings>(lib, "ObjectType");
+    registerEnum<ll::ParameterType, ll::impl::ParameterTypeStrings.size(), ll::impl::ParameterTypeStrings>(lib, "ParameterType");
     registerEnum<ll::PortDirection, ll::impl::PortDirectionStrings.size(), ll::impl::PortDirectionStrings>(lib, "PortDirection");
     registerEnum<ll::PortType, ll::impl::PortTypeStrings.size(), ll::impl::PortTypeStrings>(lib, "PortType");
     registerEnum<vk::BufferUsageFlagBits, ll::impl::VkBufferUsageFlagBitsStrings.size(), ll::impl::VkBufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
@@ -78,6 +80,16 @@ void registerTypes(sol::table& lib) {
         "page", &ll::MemoryAllocationInfo::page
         );
 
+    lib.new_usertype<ll::Parameter>("Parameter",
+        sol::constructors<ll::Parameter(), ll::Parameter(const ll::Parameter&), ll::Parameter(ll::Parameter&&)>(),
+        "type", sol::property(&ll::Parameter::getType),
+        "__getInt", &ll::Parameter::get<int32_t>,
+        "__getFloat", &ll::Parameter::get<float>,
+        "__getBool", &ll::Parameter::get<bool>,
+        "__setInt", &ll::Parameter::set<int32_t>,
+        "__setFloat", &ll::Parameter::set<float>,
+        "__setBool", &ll::Parameter::set<bool>
+        );
 
     ///////////////////////////////////////////////////////
     // Descriptors
@@ -130,7 +142,9 @@ void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::ContainerNodeDescriptor>("ContainerNodeDescriptor",
         "builderName", sol::property(&ll::ContainerNodeDescriptor::getBuilderName, &ll::ContainerNodeDescriptor::setBuilderName),
-        "addPort", &ll::ContainerNodeDescriptor::addPort
+        "addPort", &ll::ContainerNodeDescriptor::addPort,
+        "__setParameter", &ll::ContainerNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
+        "__getParameter", &ll::ContainerNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
         );
 
     ///////////////////////////////////////////////////////

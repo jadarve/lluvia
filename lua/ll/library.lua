@@ -124,6 +124,50 @@ end
 
 
 -----------------------------------------------------------
+--                     Parameter
+-----------------------------------------------------------
+
+function ll.Parameter:get()
+
+    -- castTable = {
+    --     [ll.ParameterType.Int]   = self:__getInt(),
+    --     [ll.ParameterType.Float] = self:__getFloat()
+    -- }
+
+    -- return castTable[self.type]()
+
+    if self.type == ll.ParameterType.Int then
+        return self:__getInt()
+    end
+
+    if self.type == ll.ParameterType.Float then
+        return self:__getFloat()
+    end
+
+    if self.type == ll.ParameterType.Bool then
+        return self:__getBool()
+    end
+end
+
+
+function ll.Parameter:set(value)
+
+    if type(value) == 'number' then
+        self:__setFloat(value)
+    end
+
+    if type(value) == 'boolean' then
+        self:__setBool(value)
+    end
+
+    -- castTable = {
+    --     ['number'] = self:__setFloat
+    -- }
+
+    -- castTable[type(value)](value)
+end
+
+-----------------------------------------------------------
 --                     ComputeNode
 -----------------------------------------------------------
 function ll.ComputeNode:getPort(name)
@@ -142,6 +186,26 @@ function ll.ComputeNode:bind(name, obj)
     self:__bind(name, castTable[obj.type](obj))
 end
 
+
+-----------------------------------------------------------
+--                ContainerNodeDescriptor
+-----------------------------------------------------------
+function ll.ContainerNodeDescriptor:setParameter(name, value)
+
+    -- this workaround is needed in order to call
+    -- the correct setter method given Lua type for value
+    local param = ll.Parameter.new()
+    param:set(value)
+
+    self:__setParameter(name, param)
+end
+
+
+function ll.ContainerNodeDescriptor:getParameter(name)
+
+    local param = self:__getParameter(name)
+    return param:get()
+end
 
 -----------------------------------------------------------
 --                     ContainerNode

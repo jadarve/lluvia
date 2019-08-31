@@ -35,7 +35,8 @@ enum class ErrorCode : int32_t {
     InvalidLocalShape         = 9,      /**< Local shape passed to a Compute node is invalid*/
     InvalidGridShape          = 10,     /**< Grid shape for a ComputeNode is invalid */
     BadEnumCasting            = 11,     /**< Bad casting of integral value to enum type */
-    PhysicalDevicesNotFound   = 12      /**< No physical devices found */
+    PhysicalDevicesNotFound   = 12,     /**< No physical devices found */
+    KeyNotFound               = 13      /**< Key not found in a given look up method */
 };
 
 
@@ -44,7 +45,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 13> ErrorCodeStrings {{
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 14> ErrorCodeStrings {{
         std::make_tuple("EnumConversionFailed"      , ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed"           , ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError"     , ll::ErrorCode::ObjectAllocationError),
@@ -58,6 +59,7 @@ namespace impl {
         std::make_tuple("InvalidGridShape"          , ll::ErrorCode::InvalidGridShape),
         std::make_tuple("BadEnumCasting"            , ll::ErrorCode::BadEnumCasting),
         std::make_tuple("PhysicalDevicesNotFound"   , ll::ErrorCode::PhysicalDevicesNotFound),
+        std::make_tuple("KeyNotFound"               , ll::ErrorCode::KeyNotFound),
     }};
 
 } // namespace impl

@@ -23,6 +23,7 @@
 #include "core/Memory.h"
 #include "core/MemoryAllocationInfo.h"
 #include "core/Node.h"
+#include "core/Parameter.h"
 #include "core/Program.h"
 #include "core/Session.h"
 #include "core/types.h"

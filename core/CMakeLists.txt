@@ -40,6 +40,7 @@ set(_SRCS
     src/Memory.cpp
     src/MemoryAllocationInfo.cpp
     src/Node.cpp
+    src/Parameter.cpp
     src/Program.cpp
     src/Session.cpp
     src/utils.cpp
