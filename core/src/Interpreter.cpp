@@ -137,13 +137,15 @@ void registerTypes(sol::table& lib) {
         "localShape", sol::property(&ll::ComputeNodeDescriptor::getLocalShape, &ll::ComputeNodeDescriptor::setLocalShape),
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
-        "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape
+        "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape,
+        "__addParameter", &ll::ComputeNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
+        "__getParameter", &ll::ComputeNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
         );
 
     lib.new_usertype<ll::ContainerNodeDescriptor>("ContainerNodeDescriptor",
         "builderName", sol::property(&ll::ContainerNodeDescriptor::getBuilderName, &ll::ContainerNodeDescriptor::setBuilderName),
         "addPort", &ll::ContainerNodeDescriptor::addPort,
-        "__setParameter", &ll::ContainerNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
+        "__addParameter", &ll::ContainerNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ContainerNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
         );
 

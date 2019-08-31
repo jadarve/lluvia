@@ -12,7 +12,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(1, 'out_RGBA', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:setParameter('levels', 2)
+    desc:addParameter('levels', 5)
 
     return desc
 end

@@ -21,7 +21,16 @@ ContainerNodeDescriptor& ContainerNodeDescriptor::addPorts(const std::initialize
 }
 
 
-ContainerNodeDescriptor& ContainerNodeDescriptor::setParameter(const std::string& name, const ll::Parameter& defaultValue) {
+const ll::PortDescriptor& ContainerNodeDescriptor::getPort(const std::string& name) const {
+
+    auto it = m_ports.find(name);
+
+    ll::throwSystemErrorIf(it == m_ports.cend(), ll::ErrorCode::KeyNotFound, "Port [" + name + "] not found.");
+    return it->second;    
+}
+
+
+ContainerNodeDescriptor& ContainerNodeDescriptor::addParameter(const std::string& name, const ll::Parameter& defaultValue) {
     m_parameters[name] = defaultValue;
     return *this;
 }

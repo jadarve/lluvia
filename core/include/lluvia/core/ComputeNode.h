@@ -218,7 +218,7 @@ public:
     */
     ll::vec3ui getGridShape() const noexcept;
 
-    std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept override;
+    std::shared_ptr<ll::Object> getPort(const std::string& name) const override;
     
     void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
@@ -278,7 +278,6 @@ private:
     // std::vector<vk::SpecializationMapEntry> specializationMapEntries;
     // // uint32_t local_x {1};
 
-    // std::vector<std::shared_ptr<ll::Object>> m_objects;
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
 
     // Shared pointer to the session this node was created from

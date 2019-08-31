@@ -35,13 +35,11 @@ ComputeNode::ComputeNode(
     m_descriptor   {tDescriptor},
     m_session      {tSession} {
 
-    ll::throwSystemErrorIf(m_descriptor.m_program == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
-    ll::throwSystemErrorIf(m_descriptor.m_functionName.empty(), ll::ErrorCode::InvalidShaderFunctionName, "Shader function name must be different than empty string.");
-    ll::throwSystemErrorIf(m_descriptor.m_localShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape X must be greater than zero");
-    ll::throwSystemErrorIf(m_descriptor.m_localShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Y must be greater than zero");
-    ll::throwSystemErrorIf(m_descriptor.m_localShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Z must be greater than zero");
-
-    // TODO: call the script onNodeCreated()
+    ll::throwSystemErrorIf(m_descriptor.getProgram() == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
+    ll::throwSystemErrorIf(m_descriptor.getFunctionName().empty(), ll::ErrorCode::InvalidShaderFunctionName, "Shader function name must be different than empty string.");
+    ll::throwSystemErrorIf(m_descriptor.getLocalX() == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape X must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.getLocalY() == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Y must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.getLocalZ() == 0, ll::ErrorCode::InvalidLocalShape, "descriptor local shape Z must be greater than zero");
 
     initPortBindings();
 }
@@ -58,21 +56,7 @@ ComputeNode::~ComputeNode() {
 
 void ComputeNode::initPortBindings() {
 
-    for(const auto keyValue : m_descriptor.m_ports) {
-
-        const auto& port = keyValue.second;
-        auto binding = vk::DescriptorSetLayoutBinding {}
-                        .setBinding(port.binding)
-                        .setDescriptorCount(1)
-                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
-                        .setStageFlags(vk::ShaderStageFlagBits::eCompute)
-                        .setPImmutableSamplers(nullptr);
-        m_parameterBindings.push_back(binding);
-    }
-
-    // resize the objects vector so that class to bind() can be done
-    // out of order
-    // m_objects.resize(m_parameterBindings.size());
+    m_parameterBindings = m_descriptor.getParameterBindings();
 
     /////////////////////////////////////////////
     // Descriptor pool and descriptor set
@@ -113,16 +97,17 @@ void ComputeNode::initPipeline() {
         {3, 2*size, size}
     };
 
+    auto localShape = m_descriptor.getLocalShape();
     auto specializationInfo = vk::SpecializationInfo()
         .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
         .setPMapEntries(specializationMapEntries.data())
         .setDataSize(sizeof(ll::vec3ui))
-        .setPData(&m_descriptor.m_localShape);
+        .setPData(&localShape);
 
     auto stageInfo = vk::PipelineShaderStageCreateInfo()
         .setStage(vk::ShaderStageFlagBits::eCompute)
-        .setModule(m_descriptor.m_program->getShaderModule())
-        .setPName(m_descriptor.m_functionName.c_str())
+        .setModule(m_descriptor.getProgram()->getShaderModule())
+        .setPName(m_descriptor.getFunctionName().c_str())
         .setPSpecializationInfo(&specializationInfo);
 
     /////////////////////////////////////////////
@@ -148,12 +133,12 @@ ll::NodeType ComputeNode::getType() const noexcept {
 
 
 std::string ComputeNode::getFunctionName() const noexcept {
-    return m_descriptor.m_functionName;
+    return m_descriptor.getFunctionName();
 }
 
 
 std::shared_ptr<ll::Program> ComputeNode::getProgram() const noexcept{
-    return m_descriptor.m_program;
+    return m_descriptor.getProgram();
 }
 
 
@@ -163,56 +148,56 @@ const ll::ComputeNodeDescriptor& ComputeNode::getDescriptor() const noexcept {
 
 
 uint32_t ComputeNode::getLocalX() const noexcept {
-    return m_descriptor.m_localShape.x;
+    return m_descriptor.getLocalX();
 }
 
 
 uint32_t ComputeNode::getLocalY() const noexcept {
-    return m_descriptor.m_localShape.y;
+    return m_descriptor.getLocalY();
 }
 
 
 uint32_t ComputeNode::getLocalZ() const noexcept {
-    return m_descriptor.m_localShape.z;
+    return m_descriptor.getLocalZ();
 }
 
 ll::vec3ui ComputeNode::getLocalShape() const noexcept {
-    return m_descriptor.m_localShape;
+    return m_descriptor.getLocalShape();
 }
 
 
 uint32_t ComputeNode::getGridX() const noexcept {
-    return m_descriptor.m_gridShape.x;
+    return m_descriptor.getGridX();
 }
 
 
 void ComputeNode::setGridX(const uint32_t x) noexcept {
-    m_descriptor.m_gridShape.x = x;
+    m_descriptor.setGridX(x);
 }
 
 
 uint32_t ComputeNode::getGridY() const noexcept {
-    return m_descriptor.m_gridShape.y;
+    return m_descriptor.getGridY();
 }
 
 
 void ComputeNode::setGridY(const uint32_t y) noexcept {
-    m_descriptor.m_gridShape.y = y;
+    m_descriptor.setGridY(y);
 }
 
 
 uint32_t ComputeNode::getGridZ() const noexcept {
-    return m_descriptor.m_gridShape.z;
+    return m_descriptor.getGridZ();
 }
 
 
 void ComputeNode::setGridZ(const uint32_t z) noexcept {
-    m_descriptor.m_gridShape.z = z;
+    m_descriptor.setGridZ(z);
 }
 
 
 void ComputeNode::setGridShape(const ll::vec3ui& shape) noexcept {
-    m_descriptor.m_gridShape = shape;
+    m_descriptor.setGridShape(shape);
 }
 
 
@@ -222,25 +207,22 @@ void ComputeNode::configureGridShape(const ll::vec3ui& globalShape) noexcept {
 
 
 ll::vec3ui ComputeNode::getGridShape() const noexcept {
-    return m_descriptor.m_gridShape;
+    return m_descriptor.getGridShape();
 }
 
 
-std::shared_ptr<ll::Object> ComputeNode::getPort(const std::string& name) const noexcept {
+std::shared_ptr<ll::Object> ComputeNode::getPort(const std::string& name) const {
 
     const auto it = m_objects.find(name);
-    return it == m_objects.end()? nullptr : it->second;
+    ll::throwSystemErrorIf(it == m_objects.cend(), ll::ErrorCode::KeyNotFound, "Port [" + name + "] not found.");
+
+    return it->second;
 }
 
 
 void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
 
-    const auto it = m_descriptor.m_ports.find(name);
-
-    ll::throwSystemErrorIf(it == m_descriptor.m_ports.end(), ll::ErrorCode::PortNotFound,
-        "Port [" + name + "] not found");
-
-    const auto& port = it->second;
+    const auto& port = m_descriptor.getPort(name);
 
     // bind obj according to its type
     switch (obj->getType()) {
@@ -263,9 +245,9 @@ void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
 
     auto vkCommandBuffer = commandBuffer.getVkCommandBuffer();
 
-    ll::throwSystemErrorIf(m_descriptor.m_gridShape.x == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape X must be greater than zero");
-    ll::throwSystemErrorIf(m_descriptor.m_gridShape.y == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Y must be greater than zero");
-    ll::throwSystemErrorIf(m_descriptor.m_gridShape.z == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Z must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.getGridX() == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape X must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.getGridY() == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Y must be greater than zero");
+    ll::throwSystemErrorIf(m_descriptor.getGridZ() == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape Z must be greater than zero");
 
     vkCommandBuffer.bindPipeline(vk::PipelineBindPoint::eCompute, m_pipeline);
     
@@ -277,15 +259,15 @@ void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
                                      0,
                                      nullptr);
 
-    vkCommandBuffer.dispatch(m_descriptor.m_gridShape.x,
-                           m_descriptor.m_gridShape.y,
-                           m_descriptor.m_gridShape.z);
+    vkCommandBuffer.dispatch(m_descriptor.getGridX(),
+                             m_descriptor.getGridY(),
+                             m_descriptor.getGridZ());
 }
 
 
 void ComputeNode::onInit() {
 
-    const auto& builderName = m_descriptor.m_builderName;
+    const auto builderName = m_descriptor.getBuilderName();
     if (!builderName.empty()) {
 
         constexpr const auto lua = R"(

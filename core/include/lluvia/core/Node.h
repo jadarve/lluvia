@@ -210,13 +210,16 @@ public:
     virtual ll::NodeType getType() const noexcept = 0;
 
     /**
-    @brief      Returns the object associated to a port \p name
-                
-    @param[in]  name  The name of the port.
+    @brief      Gets a port descriptor given its name
     
-    @return     The port object or nullptr if the port does not exists.
+    @param[in]  name  The name
+    
+    @return     The port descriptor.
+
+    @throws     std::system_error With error code ll::ErrorCode::KeyNotFound if name is not
+                                  in the ports table.
     */
-    virtual std::shared_ptr<ll::Object> getPort(const std::string& name) const noexcept = 0;
+    virtual std::shared_ptr<ll::Object> getPort(const std::string& name) const = 0;
 
     /**
     @brief      Binds a ll::Object as port \p index for this node.

@@ -33,10 +33,12 @@ const ll::ContainerNodeDescriptor& ContainerNode::getDescriptor() const noexcept
 }
 
 
-std::shared_ptr<ll::Object> ContainerNode::getPort(const std::string& name) const noexcept {
+std::shared_ptr<ll::Object> ContainerNode::getPort(const std::string& name) const {
 
     const auto it = m_objects.find(name);
-    return it == m_objects.end()? nullptr : it->second;
+    ll::throwSystemErrorIf(it == m_objects.cend(), ll::ErrorCode::KeyNotFound, "Port [" + name + "] not found.");
+
+    return it->second;
 }
 
 

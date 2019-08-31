@@ -10,6 +10,7 @@
 
 #include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/Node.h"
+#include "lluvia/core/Parameter.h"
 #include "lluvia/core/types.h"
 
 #include <array>
@@ -65,6 +66,17 @@ public:
     @sa ll::ComputeNodeDescriptor::setFunctionName  sets the function name.
     */
     ComputeNodeDescriptor& setProgram(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept;
+
+
+    /**
+    @brief      Sets a parameter.
+    
+    @param[in]  name          The name
+    @param[in]  defaultValue  The value.
+    
+    @return     A reference to this object.
+    */
+    ComputeNodeDescriptor& addParameter(const std::string& name, const ll::Parameter& value);
 
 
     /**
@@ -233,6 +245,32 @@ public:
 
 
     /**
+    @brief      Gets a port descriptor given its name
+    
+    @param[in]  name  The name
+    
+    @return     The port descriptor.
+
+    @throws     std::system_error With error code ll::ErrorCode::KeyNotFound if name is not
+                                  in the ports table.
+    */
+    const ll::PortDescriptor& getPort(const std::string& name) const;
+
+
+    /**
+    @brief      Gets a parameter.
+    
+    @param[in]  name  The parameter name
+    
+    @return     The parameter.
+
+    @throws     std::system_error With error code ll::ErrorCode::KeyNotFound if name is not
+                                  in the parameters table.
+    */
+    const ll::Parameter& getParameter(const std::string& name) const;
+
+
+    /**
     @brief      Gets the function name within the ll::Program object used by this node.
     
     @return     The function name.
@@ -270,6 +308,8 @@ public:
     uint32_t getLocalY() const noexcept;
     uint32_t getLocalZ() const noexcept;
 
+    std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const;
+
 private:
     std::shared_ptr<ll::Program>                m_program;
     std::string                                 m_functionName;
@@ -280,9 +320,7 @@ private:
     ll::vec3ui m_gridShape  {1, 1, 1};
 
     std::map<std::string, ll::PortDescriptor> m_ports;
-
-
-friend class ComputeNode;
+    std::map<std::string, ll::Parameter>      m_parameters;
 };
 
 

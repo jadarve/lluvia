@@ -167,6 +167,28 @@ function ll.Parameter:set(value)
     -- castTable[type(value)](value)
 end
 
+
+-----------------------------------------------------------
+--                ComputeNodeDescriptor
+-----------------------------------------------------------
+function ll.ComputeNodeDescriptor:addParameter(name, value)
+
+    -- this workaround is needed in order to call
+    -- the correct setter method given Lua type for value
+    local param = ll.Parameter.new()
+    param:set(value)
+
+    self:__addParameter(name, param)
+end
+
+
+function ll.ComputeNodeDescriptor:getParameter(name)
+
+    local param = self:__getParameter(name)
+    return param:get()
+end
+
+
 -----------------------------------------------------------
 --                     ComputeNode
 -----------------------------------------------------------
@@ -190,14 +212,14 @@ end
 -----------------------------------------------------------
 --                ContainerNodeDescriptor
 -----------------------------------------------------------
-function ll.ContainerNodeDescriptor:setParameter(name, value)
+function ll.ContainerNodeDescriptor:addParameter(name, value)
 
     -- this workaround is needed in order to call
     -- the correct setter method given Lua type for value
     local param = ll.Parameter.new()
     param:set(value)
 
-    self:__setParameter(name, param)
+    self:__addParameter(name, param)
 end
 
 

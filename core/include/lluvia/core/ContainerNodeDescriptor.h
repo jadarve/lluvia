@@ -59,14 +59,27 @@ public:
 
 
     /**
-    @brief      Sets a parameter.
+    @brief      Gets a port descriptor given its name
+    
+    @param[in]  name  The name
+    
+    @return     The port descriptor.
+
+    @throws     std::system_error With error code ll::ErrorCode::KeyNotFound if name is not
+                                  in the ports table.
+    */
+    const ll::PortDescriptor& getPort(const std::string& name) const;
+
+
+    /**
+    @brief      Adds a parameter.
     
     @param[in]  name          The name
     @param[in]  defaultValue  The value.
     
     @return     A reference to this object.
     */
-    ContainerNodeDescriptor& setParameter(const std::string& name, const ll::Parameter& value);
+    ContainerNodeDescriptor& addParameter(const std::string& name, const ll::Parameter& value);
 
 
     /**

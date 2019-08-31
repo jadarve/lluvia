@@ -34,6 +34,13 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<l
 }
 
 
+ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const std::string& name, const ll::Parameter& value) {
+
+    m_parameters[name] = value;
+    return *this;
+}
+
+
 ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) noexcept {
 
     m_functionName = name;
@@ -169,6 +176,44 @@ uint32_t ComputeNodeDescriptor::getLocalZ() const noexcept {
 
 std::shared_ptr<ll::Program> ComputeNodeDescriptor::getProgram() const noexcept {
     return m_program;
+}
+
+
+const ll::PortDescriptor& ComputeNodeDescriptor::getPort(const std::string& name) const {
+
+    auto it = m_ports.find(name);
+
+    ll::throwSystemErrorIf(it == m_ports.cend(), ll::ErrorCode::KeyNotFound, "Port [" + name + "] not found.");
+    return it->second;    
+}
+
+
+const ll::Parameter& ComputeNodeDescriptor::getParameter(const std::string& name) const {
+
+    auto it = m_parameters.find(name);
+
+    ll::throwSystemErrorIf(it == m_parameters.cend(), ll::ErrorCode::KeyNotFound, "Parameter [" + name + "] not found.");
+    return it->second;
+}
+
+
+std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterBindings() const {
+
+    auto bindings = std::vector<vk::DescriptorSetLayoutBinding> {};
+
+    for(const auto it : m_ports) {
+
+        const auto& port = it.second;
+        auto binding = vk::DescriptorSetLayoutBinding {}
+                        .setBinding(port.binding)
+                        .setDescriptorCount(1)
+                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
+                        .setStageFlags(vk::ShaderStageFlagBits::eCompute)
+                        .setPImmutableSamplers(nullptr);
+        bindings.push_back(binding);
+    }
+
+    return bindings;
 }
 
 } // namespace ll
