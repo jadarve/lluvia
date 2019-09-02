@@ -31,9 +31,19 @@ cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
         _ComputeNodeDescriptor()
 
         _ComputeNodeDescriptor& setProgram(const shared_ptr[_Program]& program)
-        _ComputeNodeDescriptor& setFunctionName(const string& name)
+        shared_ptr[_Program] getProgram() const
 
-        _ComputeNodeDescriptor& addParameter(const _ParameterType param)
+        _ComputeNodeDescriptor& setFunctionName(const string& name)
+        string getFunctionName() const
+
+        _ComputeNodeDescriptor& setBuilderName(const string& name)
+        string getBuilderName() const
+
+        _ComputeNodeDescriptor& addPort(_PortDescriptor& port)
+        _PortDescriptor getPort(const string& name) except +
+
+        _ComputeNodeDescriptor& addParameter(const string& name, const _Parameter& value)
+        _Parameter getParameter(const string& name) except +
 
         _ComputeNodeDescriptor& setGridX(const uint32_t x)
         _ComputeNodeDescriptor& setGridY(const uint32_t y)
@@ -42,10 +52,6 @@ cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
         _ComputeNodeDescriptor& setLocalX(const uint32_t x)
         _ComputeNodeDescriptor& setLocalY(const uint32_t y)
         _ComputeNodeDescriptor& setLocalZ(const uint32_t z)
-
-        shared_ptr[_Program] getProgram() const
-
-        string getFunctionName() const
 
         uint32_t getGridX() const
         uint32_t getGridY() const

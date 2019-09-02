@@ -29,7 +29,7 @@ libs   = ['lluvia-core',
           'stdc++',
           'vulkan']
 
-cflags = ['-std=c++14',
+cflags = ['-std=c++17',
           '-fPIC',
           '-Wno-unused-function']
 
@@ -59,7 +59,12 @@ extensions = list()
 #################################################
 # PURE PYTHON PACKAGES
 #################################################
-py_packages = ['lluvia', 'lluvia.core', 'lluvia.core.impl']
+py_packages = [
+    'lluvia',
+    'lluvia.core',
+    'lluvia.core.enums'
+    # 'lluvia.core.impl'
+]
 
 # package data include Cython .pxd files
 package_data = {'lluvia.core' : ['*.pxd']}
@@ -68,16 +73,24 @@ package_dir = {'lluvia': 'src/lluvia'}
 #################################################
 # CYTHON EXTENSIONS
 #################################################
-GPUmodulesTable = [('lluvia.core.core_buffer'    , ['src/lluvia/core/core_buffer.pyx']),
-                   ('lluvia.core.command_buffer' , ['src/lluvia/core/command_buffer.pyx']),
-                   ('lluvia.core.compute_node'   , ['src/lluvia/core/compute_node.pyx']),
-                   ('lluvia.core.image'          , ['src/lluvia/core/image.pyx']),
-                   ('lluvia.core.io'             , ['src/lluvia/core/io.pyx']),
-                   ('lluvia.core.memory'         , ['src/lluvia/core/memory.pyx']),
-                   ('lluvia.core.program'        , ['src/lluvia/core/program.pyx']),
-                   ('lluvia.core.session'        , ['src/lluvia/core/session.pyx']),]
+# coreExtensions = [
+#   'NodeState',
+#   'NodeType',
+#   'PortDirection',
+#   'PortType'
+# ]
 
-for mod in GPUmodulesTable:
+# cythonModules = list()
+# for ext in coreExtensions:
+#     cythonModules.append(('lluvia.core.' + ext,
+#                           ['src/lluvia/core/' + ext + '.pyx'])
+#                         )
+# modulesTable = [('lluvia.core.NodeState'           , ['src/lluvia/core/NodeState.pyx'])]
+cythonModules = [
+  ('lluvia.core.enums.node', ['src/lluvia/core/enums/node.pyx'])
+]
+
+for mod in cythonModules:
     extList = cythonize(createExtension(mod[0], mod[1]), compiler_directives=cython_directives)
     extensions.extend(extList)
 

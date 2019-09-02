@@ -34,10 +34,10 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
         bool isMappable() const
 
         unique_ptr[T, _BufferMapDeleter] map[T]()
-        
+
 
 cdef class Buffer:
-    
+
     cdef Memory              __memory
     cdef Session             __session
     cdef shared_ptr[_Buffer] __buffer
