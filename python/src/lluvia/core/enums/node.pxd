@@ -9,7 +9,7 @@
 from libc.stdint cimport uint32_t
 
 
-cdef extern from "lluvia/core/Node.h" namespace 'll::NodeState':
+cdef extern from "lluvia/core/Node.h" namespace 'll':
 
     cdef enum _NodeState 'll::NodeState':
         _NodeState_Created 'll::NodeState::Created'

@@ -76,26 +76,15 @@ package_dir = {'lluvia': 'src/lluvia'}
 #################################################
 # CYTHON EXTENSIONS
 #################################################
-# coreExtensions = [
-#   'NodeState',
-#   'NodeType',
-#   'PortDirection',
-#   'PortType'
-# ]
-
-# cythonModules = list()
-# for ext in coreExtensions:
-#     cythonModules.append(('lluvia.core.' + ext,
-#                           ['src/lluvia/core/' + ext + '.pyx'])
-#                         )
-# modulesTable = [('lluvia.core.NodeState'           , ['src/lluvia/core/NodeState.pyx'])]
 cythonModules = [
-    ('lluvia.core.enums.node',    ['src/lluvia/core/enums/node.pyx']),
-    ('lluvia.core.enums.vulkan',  ['src/lluvia/core/enums/vulkan.pyx']),
-    ('lluvia.core.impl.enum_utils',  ['src/lluvia/core/impl/enum_utils.pyx']),
-    ('lluvia.core.core_buffer',   ['src/lluvia/core/core_buffer.pyx']),
-    ('lluvia.core.memory',        ['src/lluvia/core/memory.pyx']),
-    ('lluvia.core.session',       ['src/lluvia/core/session.pyx']),
+    ('lluvia.core.core_buffer'     , ['src/lluvia/core/core_buffer.pyx']),
+    ('lluvia.core.enums.node'      , ['src/lluvia/core/enums/node.pyx']),
+    ('lluvia.core.enums.image'     , ['src/lluvia/core/enums/image.pyx']),
+    ('lluvia.core.enums.vulkan'    , ['src/lluvia/core/enums/vulkan.pyx']),
+    # ('lluvia.core.image'           , ['src/lluvia/core/image.pyx']),
+    ('lluvia.core.impl.enum_utils' , ['src/lluvia/core/impl/enum_utils.pyx']),
+    ('lluvia.core.memory'          , ['src/lluvia/core/memory.pyx']),
+    ('lluvia.core.session'         , ['src/lluvia/core/session.pyx']),
 ]
 
 for mod in cythonModules:
