@@ -27,7 +27,10 @@ libDirs = ['../build/lib',
 
 libs   = ['lluvia-core',
           'stdc++',
-          'vulkan']
+          'vulkan',
+          'm',
+          'dl',
+          'lua']
 
 cflags = ['-std=c++17',
           '-fPIC',
@@ -62,8 +65,8 @@ extensions = list()
 py_packages = [
     'lluvia',
     'lluvia.core',
-    'lluvia.core.enums'
-    # 'lluvia.core.impl'
+    'lluvia.core.enums',
+    'lluvia.core.impl'
 ]
 
 # package data include Cython .pxd files
@@ -87,7 +90,12 @@ package_dir = {'lluvia': 'src/lluvia'}
 #                         )
 # modulesTable = [('lluvia.core.NodeState'           , ['src/lluvia/core/NodeState.pyx'])]
 cythonModules = [
-  ('lluvia.core.enums.node', ['src/lluvia/core/enums/node.pyx'])
+    ('lluvia.core.enums.node',    ['src/lluvia/core/enums/node.pyx']),
+    ('lluvia.core.enums.vulkan',  ['src/lluvia/core/enums/vulkan.pyx']),
+    ('lluvia.core.impl.enum_utils',  ['src/lluvia/core/impl/enum_utils.pyx']),
+    ('lluvia.core.core_buffer',   ['src/lluvia/core/core_buffer.pyx']),
+    ('lluvia.core.memory',        ['src/lluvia/core/memory.pyx']),
+    ('lluvia.core.session',       ['src/lluvia/core/session.pyx']),
 ]
 
 for mod in cythonModules:

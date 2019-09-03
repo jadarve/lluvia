@@ -10,3 +10,4 @@ cdef extern from 'lluvia/core/Object.h' namespace 'll':
 
     cdef cppclass _Object 'll::Object':
         pass
+        
