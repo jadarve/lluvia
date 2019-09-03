@@ -9,13 +9,7 @@
 from libc.stdint cimport uint32_t
 
 
-# __all__ = [
-#     'flattenFlagBits',
-#     'expandFlagsBits'
-# ]
-
-
-cdef uint32_t flattenFlagBits(flagBits, expectedType):
+cpdef uint32_t flattenFlagBits(flagBits, expectedType):
     """
     """
 
@@ -25,9 +19,9 @@ cdef uint32_t flattenFlagBits(flagBits, expectedType):
         for i, f in enumerate(flagBits):
             if type(f) is not expectedType:
                 msg = 'Expecting type {0} at position {1}, got: {2}'
-                msg.format(str(expectedType),
-                           str(type(f)),
-                           i)
+                msg = msg.format(str(expectedType),
+                           i,
+                           str(type(f)))
                 raise ValueError(msg)
 
             flagsOR |= f
@@ -40,7 +34,7 @@ cdef uint32_t flattenFlagBits(flagBits, expectedType):
     return flagsOR
 
 
-def expandFlagsBits(uint32_t flags, flagBits):
+cpdef list expandFlagBits(uint32_t flags, flagBits):
     """
     """
 

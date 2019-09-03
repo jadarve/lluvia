@@ -141,23 +141,13 @@ cdef class Session:
 
         """
 
-        # converts one string object to a list
-        # if type(flags) is str:
-        #     flags = [flags]
-
-        # # sanitize flags
-        # flags = impl.validateFlagStrings(memory.MemoryPropertyFlags, flags, forceList=True)
-
-        # # convert flags to vk.MemoryPropertyFlags
-        # cdef list flagsList = flags
-        # cdef vk.MemoryPropertyFlags vkFlags = memory.vectorStringToMemoryPropertyFlags(flagsList)
-
-        cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> 0#impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
+        cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
 
         cdef Memory mem = Memory()
-        mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, False)
+        mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
         mem.__session = self
-        
+
         return mem
 
 

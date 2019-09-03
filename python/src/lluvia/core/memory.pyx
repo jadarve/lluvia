@@ -45,7 +45,7 @@ cdef class Memory:
             """
 
             cdef uint32_t vkFlags_u32 = <uint32_t> self.__memory.get().getMemoryPropertyFlags()
-            impl.expandFlagsBits(vkFlags_u32, MemoryPropertyFlagBits)
+            return impl.expandFlagBits(vkFlags_u32, MemoryPropertyFlagBits)
 
         def __set__(self, value):
             raise RuntimeError('memoryFlags cannot be set')
