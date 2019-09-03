@@ -124,12 +124,12 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalShape(const ll::vec3ui& sh
 }
 
 
-std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
+const std::string& ComputeNodeDescriptor::getFunctionName() const noexcept {
     return m_functionName;
 }
 
 
-std::string ComputeNodeDescriptor::getBuilderName() const noexcept {
+const std::string& ComputeNodeDescriptor::getBuilderName() const noexcept {
     return m_builderName;
 }
 

@@ -109,7 +109,7 @@ public:
     
     @return     The builder name.
     */
-    std::string getBuilderName() const noexcept;
+    const std::string& getBuilderName() const noexcept;
 
 
 private:

@@ -58,6 +58,8 @@ add_library (lua STATIC
     ${LUA_INCLUDE_DIR}/linit.c
 )
 
+set_property(TARGET lua PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 target_compile_definitions(lua
     PUBLIC
     LUA_USE_LINUX

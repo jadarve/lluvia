@@ -52,7 +52,7 @@ ContainerNodeDescriptor& ContainerNodeDescriptor::setBuilderName(const std::stri
 }
 
 
-std::string ContainerNodeDescriptor::getBuilderName() const noexcept {
+const std::string& ContainerNodeDescriptor::getBuilderName() const noexcept {
     return m_builderName;
 }
 

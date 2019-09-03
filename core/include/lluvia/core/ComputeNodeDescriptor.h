@@ -275,7 +275,7 @@ public:
     
     @return     The function name.
     */
-    std::string getFunctionName() const noexcept;
+    const std::string& getFunctionName() const noexcept;
 
 
     /**
@@ -283,7 +283,7 @@ public:
     
     @return     The builder name.
     */
-    std::string getBuilderName() const noexcept;
+    const std::string& getBuilderName() const noexcept;
 
 
     /**
