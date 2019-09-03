@@ -8,6 +8,8 @@
 
 from . import impl
 from .enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from .memory cimport Memory, MemoryAllocationInfo
+from .memory import Memory, MemoryAllocationInfo
 
 from libc.stdint cimport uint64_t, uint32_t
 from libc.string cimport memcpy
@@ -15,9 +17,6 @@ from libcpp.memory cimport unique_ptr
 
 cimport numpy as np
 import numpy as np
-
-from memory cimport Memory
-from memory import Memory
 
 
 __all__ = ['Buffer']
@@ -40,13 +39,6 @@ cdef class Buffer:
             cdef uint32_t vkFlags_u32 = <uint32_t> self.__buffer.get().getUsageFlags()
             return impl.expandFlagBits(vkFlags_u32, BufferUsageFlagBits)
 
-        def __set__(self, value):
-            raise RuntimeError('usageFlags cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
     property size:
         def __get__(self):
             """
@@ -55,23 +47,27 @@ cdef class Buffer:
 
             return self.__buffer.get().getSize()
 
-        def __set__(self, value):
-            raise RuntimeError('size cannot be set')
+    property allocationInfo:
+        def __get__(self):
+            """
+            Memory allocation information
+            """
 
-        def __del__(self):
-            # nothing to do
-            pass
+            cdef MemoryAllocationInfo allocInfo = MemoryAllocationInfo()
+            allocInfo.__allocationInfo = self.__buffer.get().getAllocationInfo()
+            return allocInfo
 
     property isMappable:
         def __get__(self):
             return self.__buffer.get().isMappable()
 
-        def __set__(self, value):
-            raise RuntimeError('isMappable cannot be set')
+    property memory:
+        def __get__(self):
+            return self.__memory
 
-        def __del__(self):
-            # nothing to do
-            pass
+    property session:
+        def __get__(self):
+            return self.__session
 
     def toHost(self, np.ndarray output=None, dtype=np.uint8):
         """
@@ -133,8 +129,16 @@ cdef class Buffer:
         ######################
 
         # create a stage buffer and copy the content of arr to it
-        cdef Memory mappableMemory = self.__session.createMemory([MemoryPropertyFlagBits.HostVisible, MemoryPropertyFlagBits.HostCoherent], sizeBytes, False)
-        cdef Buffer stageBuffer = mappableMemory.createBuffer(sizeBytes, [BufferUsageFlagBits.StorageBuffer, BufferUsageFlagBits.TransferDst])
+        mapFlags = [MemoryPropertyFlagBits.HostVisible,
+                    MemoryPropertyFlagBits.HostCoherent]
+        cdef Memory mappableMemory = self.__session.createMemory(mapFlags,
+                                                                 sizeBytes,
+                                                                 False)
+
+        stageFlags = [BufferUsageFlagBits.StorageBuffer,
+                      BufferUsageFlagBits.TransferDst]
+        cdef Buffer stageBuffer = mappableMemory.createBuffer(sizeBytes,
+                                                              stageFlags)
 
         # create a command buffer to issue the copy to this buffer
         cmdBuffer = self.__session.createCommandBuffer()
@@ -189,8 +193,15 @@ cdef class Buffer:
         ######################
 
         # create a stage buffer and copy the content of arr to it
-        cdef Memory mappableMemory = self.__session.createMemory([MemoryPropertyFlagBits.HostVisible, MemoryPropertyFlagBits.HostCoherent], sizeBytes, False)
-        cdef Buffer stageBuffer = mappableMemory.createBuffer(sizeBytes, [BufferUsageFlagBits.StorageBuffer, BufferUsageFlagBits.TransferSrc])
+        mapFlags = [MemoryPropertyFlagBits.HostVisible,
+                    MemoryPropertyFlagBits.HostCoherent]
+        cdef Memory mappableMemory = self.__session.createMemory(mapFlags,
+                                                                 sizeBytes,
+                                                                 False)
+        stageFlags = [BufferUsageFlagBits.StorageBuffer,
+                      BufferUsageFlagBits.TransferSrc]
+        cdef Buffer stageBuffer = mappableMemory.createBuffer(sizeBytes,
+                                                              stageFlags)
 
         # copy input into stageBuffer
         mappedPtr = stageBuffer.__buffer.get().map[char]()

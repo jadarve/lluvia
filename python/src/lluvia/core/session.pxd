@@ -6,6 +6,13 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
+# from command_buffer cimport _CommandBuffer
+# from compute_node cimport _ComputeNodeDescriptor, _ComputeNode
+from memory cimport _Memory
+# from program cimport _Program
+
+cimport vulkan as vk
+
 from libc.stdint cimport uint64_t
 
 from libcpp cimport bool
@@ -14,12 +21,6 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-# from command_buffer cimport _CommandBuffer
-# from compute_node cimport _ComputeNodeDescriptor, _ComputeNode
-from memory cimport _Memory
-# from program cimport _Program
-
-cimport vulkan as vk
 
 cdef extern from 'lluvia/core/Session.h' namespace 'll':
 

@@ -26,7 +26,43 @@ cimport core_buffer
 cimport vulkan as vk
 
 
-__all__ = ['Memory']
+__all__ = [
+    'Memory',
+    'MemoryAllocationInfo'
+]
+
+cdef class MemoryAllocationInfo:
+    
+    def __cinit__(self):
+        pass
+
+    def __init__(self):
+        pass
+
+    def __dealloc__(self):
+        pass
+
+    property offset:
+        def __get__(self):
+            return self.__allocationInfo.offset
+
+    property size:
+        def __get__(self):
+            return self.__allocationInfo.size
+
+    property leftPadding:
+        def __get__(self):
+            return self.__allocationInfo.leftPadding
+
+    property page:
+        def __get__(self):
+            return self.__allocationInfo.page
+
+    def __str__(self):
+        return 'p:{0} o:{1} l:{2} s:{3}'.format(self.page,
+                                                self.offset,
+                                                self.leftPadding,
+                                                self.size)
 
 
 cdef class Memory:
@@ -47,14 +83,6 @@ cdef class Memory:
             cdef uint32_t vkFlags_u32 = <uint32_t> self.__memory.get().getMemoryPropertyFlags()
             return impl.expandFlagBits(vkFlags_u32, MemoryPropertyFlagBits)
 
-        def __set__(self, value):
-            raise RuntimeError('memoryFlags cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
-
     property pageSize:
         def __get__(self):
             """
@@ -62,14 +90,6 @@ cdef class Memory:
             """
 
             return self.__memory.get().getPageSize()
-
-        def __set__(self, value):
-            raise RuntimeError('pageSize cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
 
     property pageCount:
         def __get__(self):
@@ -79,14 +99,6 @@ cdef class Memory:
 
             return self.__memory.get().getPageCount()
 
-        def __set__(self, value):
-            raise RuntimeError('pageCount cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
-
     property isMappable:
         def __get__(self):
             """
@@ -94,14 +106,6 @@ cdef class Memory:
             """
 
             return self.__memory.get().isMappable()
-
-        def __set__(self, value):
-            raise RuntimeError('isMappable cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
 
     def isPageMappable(self, uint64_t page):
         """
