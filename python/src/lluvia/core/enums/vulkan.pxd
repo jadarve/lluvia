@@ -9,7 +9,7 @@
 from libc.stdint cimport uint32_t
 
 cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
-    
+
     cdef enum _BufferUsageFlagBits:
         _BufferUsageFlagBits_IndexBuffer        'vk::BufferUsageFlagBits::eIndexBuffer'
         _BufferUsageFlagBits_IndirectBuffer     'vk::BufferUsageFlagBits::eIndirectBuffer'

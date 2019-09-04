@@ -6,6 +6,6 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from .image import ChannelType, ChannelCount
+from .image import ChannelType, ChannelCount, ImageAxis, ImageFilterMode, ImageAddressMode, ImageUsageFlagBits, ImageLayout
 from .node import NodeState, NodeType, PortDirection, PortType
 from .vulkan import BufferUsageFlagBits, MemoryPropertyFlagBits
