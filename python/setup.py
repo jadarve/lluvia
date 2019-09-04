@@ -81,7 +81,7 @@ cythonModules = [
     ('lluvia.core.enums.node'      , ['src/lluvia/core/enums/node.pyx']),
     ('lluvia.core.enums.image'     , ['src/lluvia/core/enums/image.pyx']),
     ('lluvia.core.enums.vulkan'    , ['src/lluvia/core/enums/vulkan.pyx']),
-    # ('lluvia.core.image'           , ['src/lluvia/core/image.pyx']),
+    ('lluvia.core.image'           , ['src/lluvia/core/image.pyx']),
     ('lluvia.core.impl.enum_utils' , ['src/lluvia/core/impl/enum_utils.pyx']),
     ('lluvia.core.memory'          , ['src/lluvia/core/memory.pyx']),
     ('lluvia.core.session'         , ['src/lluvia/core/session.pyx']),
