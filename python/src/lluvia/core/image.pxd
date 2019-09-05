@@ -6,7 +6,7 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from memory cimport Memory
+from memory cimport Memory, _MemoryAllocationInfo
 from core_object cimport _Object
 from session cimport Session
 
@@ -23,12 +23,17 @@ from libcpp.string cimport string
 
 
 cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
+    
+    cdef cppclass _ChannelType 'll::ChannelType':
+        pass
 
-    img_enums._ChannelCount castChannelCount[T](T c)
-    uint64_t getChannelTypeSize(img_enums._ChannelType type)
-    string channelTypeToString(img_enums._ChannelType&& value)
-    # img_enums._ChannelType stringToChannelType(string&& stringValue) except +
+    cdef cppclass _ChannelCount 'll::channelCount':
+        pass
 
+    _ChannelCount castChannelCount[T](T c)
+    uint64_t getChannelTypeSize(_ChannelType type)
+    # string channelTypeToString(_ChannelType&& value)
+    # _ChannelType stringToChannelType(string&& stringValue) except +
 
     cdef cppclass _ImageDescriptor 'll::ImageDescriptor':
 
@@ -36,25 +41,25 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
         _ImageDescriptor(const uint32_t width,
                     const uint32_t height,
                     const uint32_t depth,
-                    img_enums._ChannelCount channelCount,
-                    img_enums._ChannelType channelType,
-                    const img_enums._ImageUsageFlags usageFlags)
+                    _ChannelCount channelCount,
+                    _ChannelType channelType,
+                    const vk.ImageUsageFlags usageFlags)
 
 
-        _ImageDescriptor& setChannelType(const img_enums._ChannelType type)
-        _ImageDescriptor& setChannelCount(const img_enums._ChannelCount count)
+        _ImageDescriptor& setChannelType(const _ChannelType type)
+        _ImageDescriptor& setChannelCount(const _ChannelCount count)
         _ImageDescriptor& setWidth(const uint32_t width)
         _ImageDescriptor& setHeight(const uint32_t height)
         _ImageDescriptor& setDepth(const uint32_t depth)
 
-        img_enums._ChannelType getChannelType() const
+        _ChannelType getChannelType() const
         T getChannelCount[T]()        const
         uint32_t getWidth()           const
         uint32_t getHeight()          const
         uint32_t getDepth()           const
         uint64_t getSize()            const
-        img_enums._ImageType getImageType()   const
-        img_enums._Format getFormat()         const
+        vk.ImageType getImageType()   const
+        vk.Format getFormat()         const
 
 
 cdef extern from 'lluvia/core/Image.h' namespace 'll':
@@ -62,11 +67,12 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
     cdef cppclass _Image 'll::Image' (_Object):
 
         uint64_t getSize() const
+        _MemoryAllocationInfo getAllocationInfo() const
 
-        img_enums._ImageUsageFlags getUsageFlags() const
-        img_enums._ImageLayout     getLayout()     const
+        vk.ImageUsageFlags getUsageFlags() const
+        vk.ImageLayout     getLayout()     const
 
-        img_enums._ChannelType getChannelType()    const
+        _ChannelType getChannelType()    const
         uint64_t getChannelTypeSize()    const
         T getChannelCount[T]()           const
         uint32_t getWidth()              const
@@ -78,19 +84,31 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
 
 cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
 
+    cdef cppclass _ImageAxis 'll::ImageAxis':
+        pass
+
+
+    cdef cppclass _ImageFilterMode 'll::ImageFilterMode':
+        pass
+
+
+    cdef cppclass _ImageAddressMode 'll::ImageAddressMode':
+        pass
+
+
     cdef cppclass _ImageViewDescriptor 'll::ImageViewDescriptor':
 
         _ImageViewDescriptor()
 
-        _ImageViewDescriptor& setFilterMode(img_enums._ImageFilterMode filterMode)
-        img_enums._ImageFilterMode getFilterMode() const
+        _ImageViewDescriptor& setFilterMode(_ImageFilterMode filterMode)
+        _ImageFilterMode getFilterMode() const
 
-        _ImageViewDescriptor& setAddressMode(img_enums._ImageAddressMode addressMode)
-        _ImageViewDescriptor& setAddressMode(img_enums._ImageAxis axis, _ImageAddressMode addressMode)
+        _ImageViewDescriptor& setAddressMode(_ImageAddressMode addressMode)
+        _ImageViewDescriptor& setAddressMode(_ImageAxis axis, _ImageAddressMode addressMode)
     
-        img_enums._ImageAddressMode getAddressModeU() const
-        img_enums._ImageAddressMode getAddressModeV() const
-        img_enums._ImageAddressMode getAddressModeW() const
+        _ImageAddressMode getAddressModeU() const
+        _ImageAddressMode getAddressModeV() const
+        _ImageAddressMode getAddressModeW() const
 
         _ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates)
         bool isNormalizedCoordinates() const

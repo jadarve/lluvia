@@ -7,7 +7,7 @@
 """
 
 from core_buffer cimport _Buffer
-# from image cimport _Image, _ImageDescriptor
+from image cimport _Image, _ImageDescriptor
 from session cimport Session
 
 cimport vulkan as vk
@@ -40,7 +40,7 @@ cdef extern from 'lluvia/core/Memory.h' namespace 'll':
         bool isPageMappable(const uint64_t page) const
 
         shared_ptr[_Buffer] createBuffer(const uint64_t size, const vk.BufferUsageFlags usageFlags) except +
-        # shared_ptr[_Image] createImage(const _ImageDescriptor& descriptor) except +
+        shared_ptr[_Image] createImage(const _ImageDescriptor& descriptor) except +
 
 
 cdef class MemoryAllocationInfo:

@@ -17,11 +17,11 @@ cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
     cdef cppclass ImageUsageFlags 'vk::ImageUsageFlags':
         pass
 
-    # cdef cppclass ImageLayout 'vk::ImageLayout':
-    #     pass
+    cdef cppclass ImageLayout 'vk::ImageLayout':
+        pass
 
-    # cdef cppclass ImageType 'vk::ImageType':
-    #     pass
+    cdef cppclass ImageType 'vk::ImageType':
+        pass
 
-    # cdef cppclass Format 'vk::Format':
-    #     pass
+    cdef cppclass Format 'vk::Format':
+        pass

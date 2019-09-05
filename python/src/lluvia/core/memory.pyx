@@ -20,8 +20,8 @@ import numpy as np
 import  core_buffer
 cimport core_buffer
 
-# import  image
-# cimport image
+import  image
+cimport image
 
 cimport vulkan as vk
 
@@ -32,7 +32,7 @@ __all__ = [
 ]
 
 cdef class MemoryAllocationInfo:
-    
+
     def __cinit__(self):
         pass
 
@@ -299,8 +299,8 @@ cdef class Memory:
     #                 width    = shape[2]
     #                 channels = shape[3]
 
-    #     channelType : str. Defaults to 'uint8'.
-    #         Channel type. It must be one of the strings in lluvia.ImageChannelType.
+    #     channelType : ll.ChannelType. Defaults to ll.ChannelType.Uint8.
+    #         Channel type.
 
     #     usageFlags : string or list of strings.
     #         Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
@@ -375,7 +375,7 @@ cdef class Memory:
     #     img.__session = self.__session
     #     img.__image   = self.__memory.get().createImage(desc)
 
-    #     img.changeLayout('General')
+    #     img.changeLayout(ImageLayout.General)
     #     return img
 
 
