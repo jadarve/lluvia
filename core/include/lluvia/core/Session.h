@@ -130,6 +130,9 @@ public:
                                  or if it is enough that it contains at least the \p flags bits.
     
     @return     A new ll::Memory object or nullptr if it could not be created.
+
+    @throws     std::system_error With error code ll::ErrorCode::MemoryCreationError
+                                  if no memory was found that matched the requested flags.
     */
     std::shared_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch = false);
 
@@ -164,6 +167,9 @@ public:
     @param[in]  spirv  The SPIR-V code.
     
     @return     A new ll::Program object.
+
+    @throws     std::system_error With error code ll::ErrorCode::ProgramCompilationError
+                                  if the supplied spirv code is empty.
     */
     std::shared_ptr<ll::Program> createProgram(const std::vector<uint8_t>& spirv) const;
 

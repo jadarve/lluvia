@@ -9,7 +9,7 @@
 from command_buffer cimport _CommandBuffer
 # from compute_node cimport _ComputeNodeDescriptor, _ComputeNode
 from memory cimport _Memory
-# from program cimport _Program
+from program cimport _Program
 
 cimport vulkan as vk
 
@@ -31,8 +31,8 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         vector[vk.MemoryPropertyFlags] getSupportedMemoryFlags() const
 
-        shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const
-        # shared_ptr[_Program] createProgram(const string& spirvPath) except +
+        shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) except +
+        shared_ptr[_Program] createProgram(const string& spirvPath) except +
 
         # shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) except +
 

@@ -19,9 +19,7 @@ Program::Program(
     m_spirvCode {spirvCode},
     m_session   {session} {
 
-    if (m_spirvCode.empty()) {
-        throw std::system_error(createErrorCode(ll::ErrorCode::ProgramCompilationError), "Zero size SPIR-V code.");
-    }
+    ll::throwSystemErrorIf(m_spirvCode.empty(), ll::ErrorCode::ProgramCompilationError, "Zero size SPIR-V code.");
 
     vk::ShaderModuleCreateInfo moduleCreateInfo = vk::ShaderModuleCreateInfo()
             .setCodeSize(m_spirvCode.size())

@@ -13,6 +13,7 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/ContainerNode.h"
 #include "lluvia/core/ContainerNodeDescriptor.h"
+#include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/Interpreter.h"
@@ -174,7 +175,8 @@ std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
         }
     }
 
-    return nullptr;
+    throw std::system_error(createErrorCode(ll::ErrorCode::MemoryCreationError),
+        "No memory was found that matched the requested flags.");
 }
 
 

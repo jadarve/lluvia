@@ -33,14 +33,10 @@ cimport memory
 from memory cimport Memory, _Memory
 cimport vulkan as vk
 
-# import  program
-# cimport program
+import  program
+cimport program
 
 # from compute_node cimport ComputeNode, ComputeNodeDescriptor
-
-
-
-__all__ = ['Session']
 
 
 cdef class Session:
@@ -51,7 +47,6 @@ cdef class Session:
     def __dealloc__(self):
         # nothing to do
         pass
-
 
     def getSupportedMemoryPropertyFlags(self):
         """
@@ -81,7 +76,6 @@ cdef class Session:
             supportedMemoryFlags.append(flagBits)
 
         return supportedMemoryFlags
-
 
     def createMemory(self,
                      flags=MemoryPropertyFlagBits.DeviceLocal,
@@ -150,35 +144,34 @@ cdef class Session:
 
         return mem
 
+    def createProgram(self, str path):
+        """
+        Creates a Program object reading the SPIR-V code from a given file.
 
-    # def createProgram(self, str path):
-    #     """
-    #     Creates a Program object reading the SPIR-V code from a given file.
-
-    #     Parameters
-    #     ----------
-    #     path : string
-    #         path to the file where the SPIR-V code is stored.
-
-
-    #     Returns
-    #     -------
-    #     program : lluvia.Program
+        Parameters
+        ----------
+        path : string
+            path to the file where the SPIR-V code is stored.
 
 
-    #     Raises
-    #     ------
-    #     IOError : if there is any problem reading the file at the given path.
-    #     """
+        Returns
+        -------
+        program : lluvia.Program
 
-    #     cdef program.Program prog = program.Program()
 
-    #     try:
-    #         prog.__program = self.__session.get().createProgram(impl.encodeString(path))
-    #         return prog
+        Raises
+        ------
+        IOError : if there is any problem reading the file at the given path.
+        """
 
-    #     except IOError as e:
-    #         raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
+        cdef program.Program prog = program.Program()
+
+        try:
+            prog.__program = self.__session.get().createProgram(impl.encodeString(path))
+            return prog
+
+        except IOError as e:
+            raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
 
     # def createComputeNode(self, ComputeNodeDescriptor desc):
@@ -362,7 +355,6 @@ cdef class Session:
     #     desc = self.readComputeNodeDescriptor(filePath)
     #     return self.createComputeNode(desc)
 
-
     def createCommandBuffer(self):
         """
         Creates a command buffer object.
@@ -384,7 +376,6 @@ cdef class Session:
         cmdBuffer.__session = self
 
         return cmdBuffer
-
 
     def run(self, obj):
         """
@@ -411,73 +402,78 @@ cdef class Session:
             cmdBuffer = obj
             self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
 
-    # def compileProgram(self, shaderCode, includeDirs=None, compileFlags=['-Werror']):
-    #     """
-    #     Compiles a Program from GLSL shader code.
+    def compileProgram(self, shaderCode,
+                       includeDirs=None,
+                       compileFlags=['-Werror']):
+        """
+        Compiles a Program from GLSL shader code.
 
-    #     This method assumes that glslc command is avialable in the system.
-
-
-    #     Parameters
-    #     ----------
-    #     shaderCode : file or str.
-    #         If file, it must contain the GLSL code of the shader to compile. The
-    #         file is not closed during the execution of this method.
-            
-    #         If str,  it must be valid GLSL code. A temporal file is created and
-    #         its path is passed to glslc for compilation.
-
-    #     includeDirs : list of strings. Defaults to None.
-    #         List of include directories to pass to glslc through -I flag.
-
-    #     compileFlags : list of strings. Defaults to ['-Werror'].
-    #         Extra compile flags to pass to glslc.
+        This method assumes that glslc command is avialable in the system.
 
 
-    #     Returns
-    #     -------
-    #     program : lluvia.Program.
-    #         Compiled program.
+        Parameters
+        ----------
+        shaderCode : file or str.
+            If file, it must contain the GLSL code of the shader to compile.
+            The file is not closed during the execution of this method.
+
+            If str,  it must be valid GLSL code. A temporal file is created and
+            its path is passed to glslc for compilation.
+
+        includeDirs : list of strings. Defaults to None.
+            List of include directories to pass to glslc through -I flag.
+
+        compileFlags : list of strings. Defaults to ['-Werror'].
+            Extra compile flags to pass to glslc.
 
 
-    #     Raises
-    #     ------
-    #     RuntimeError : if the compilation fails.
-    #     """
+        Returns
+        -------
+        program : lluvia.Program.
+            Compiled program.
 
-    #     shaderFile = None
 
-    #     if type(shaderCode) is not str:
-    #         shaderFile = shaderCode
+        Raises
+        ------
+        RuntimeError : if the compilation fails.
+        """
 
-    #     else:
-    #         shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
-    #         shaderFile.file.write(impl.encodeString(shaderCode))
-    #         shaderFile.file.flush()
+        shaderFile = None
 
-    #     # temp file for SPIR-V output
-    #     with tempfile.NamedTemporaryFile(suffix='.spv') as outputFile:
+        if type(shaderCode) is not str:
+            shaderFile = shaderCode
 
-    #         command = ['glslc', '-o', outputFile.name] + compileFlags
+        else:
+            shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
+            shaderFile.file.write(impl.encodeString(shaderCode))
+            shaderFile.file.flush()
 
-    #         if includeDirs is not None:
+        # temp file for SPIR-V output
+        with tempfile.NamedTemporaryFile(suffix='.spv') as outputFile:
 
-    #             if type(includeDirs) is str:
-    #                 includeDirs = [includeDirs]
+            command = ['glslc', '-o', outputFile.name] + compileFlags
 
-    #             for incDir in includeDirs:
-    #                 command += ['-I', incDir]
-            
-    #         command.append(shaderFile.name)
-    #         command = ' '.join(command)
+            if includeDirs is not None:
 
-    #         proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    #         proc.wait()
-            
-    #         if proc.returncode != 0:
-    #             raise RuntimeError(proc.stderr.read())
+                if type(includeDirs) is str:
+                    includeDirs = [includeDirs]
 
-    #         return self.createProgram(outputFile.name)
+                for incDir in includeDirs:
+                    command += ['-I', incDir]
+
+            command.append(shaderFile.name)
+            command = ' '.join(command)
+
+            proc = subprocess.Popen(command,
+                                    shell=True,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE)
+            proc.wait()
+
+            if proc.returncode != 0:
+                raise RuntimeError(proc.stderr.read())
+
+            return self.createProgram(outputFile.name)
 
 
     # def compileComputeNode( self,
