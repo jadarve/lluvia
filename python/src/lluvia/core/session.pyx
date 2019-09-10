@@ -24,7 +24,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-# from command_buffer cimport CommandBuffer, _CommandBuffer, move
+from command_buffer cimport CommandBuffer, _CommandBuffer, move
 
 import io
 
@@ -363,49 +363,53 @@ cdef class Session:
     #     return self.createComputeNode(desc)
 
 
-    # def createCommandBuffer(self):
-    #     """
-    #     Creates a command buffer object.
+    def createCommandBuffer(self):
+        """
+        Creates a command buffer object.
 
-    #     Command buffers are used to record commands to be executed
-    #     by the device. Once the recording finishes, the command buffer
-    #     can be sent for execution using the `run` method.
+        Command buffers are used to record commands to be executed
+        by the device. Once the recording finishes, the command buffer
+        can be sent for execution using the `run` method.
 
-    #     Raises
-    #     ------
-    #     RuntimeError : if the command buffer cannot be created.
-    #     """
+        Raises
+        ------
+        RuntimeError : if the command buffer cannot be created.
+        """
 
-    #     cdef CommandBuffer cmdBuffer = CommandBuffer()
-    #     cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer()))
+        cdef CommandBuffer cmdBuffer = CommandBuffer()
+        cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer()))
 
-    #     # hold a reference to this session to avoid deleting it before the command buffer
-    #     cmdBuffer.__session = self
+        # hold a reference to this session to
+        # avoid deleting it before the command buffer
+        cmdBuffer.__session = self
 
-    #     return cmdBuffer
+        return cmdBuffer
 
 
-    # def run(self, obj):
-    #     """
-    #     Runs a CommandBuffer or ComputeNode
-        
-        
-    #     Parameters
-    #     ----------
-    #     obj : CommandBuffer or ComputeNode
-    #     """
+    def run(self, obj):
+        """
+        Runs a CommandBuffer or ComputeNode
 
-    #     cdef ComputeNode node = None
-    #     cdef CommandBuffer cmdBuffer = None
+        Parameters
+        ----------
+        obj : CommandBuffer or ComputeNode
+        """
 
-    #     if type(obj) == ComputeNode:
-    #         node = obj
-    #         self.__session.get().run(deref(node.__node.get()))
+        # cdef ComputeNode node = None
+        # cdef CommandBuffer cmdBuffer = None
 
-    #     elif type(obj) == CommandBuffer:
-    #         cmdBuffer = obj
-    #         self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
-    
+        # if type(obj) == ComputeNode:
+        #     node = obj
+        #     self.__session.get().run(deref(node.__node.get()))
+
+        # elif type(obj) == CommandBuffer:
+        #     cmdBuffer = obj
+        #     self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
+
+        cdef CommandBuffer cmdBuffer = None
+        if type(obj) == CommandBuffer:
+            cmdBuffer = obj
+            self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
 
     # def compileProgram(self, shaderCode, includeDirs=None, compileFlags=['-Werror']):
     #     """

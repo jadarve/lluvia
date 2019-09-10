@@ -27,13 +27,11 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
     cdef cppclass _ChannelType 'll::ChannelType':
         pass
 
-    cdef cppclass _ChannelCount 'll::channelCount':
+    cdef cppclass _ChannelCount 'll::ChannelCount':
         pass
 
-    _ChannelCount castChannelCount[T](T c)
+    _ChannelCount castChannelCount[T](T c) except +
     uint64_t getChannelTypeSize(_ChannelType type)
-    # string channelTypeToString(_ChannelType&& value)
-    # _ChannelType stringToChannelType(string&& stringValue) except +
 
     cdef cppclass _ImageDescriptor 'll::ImageDescriptor':
 

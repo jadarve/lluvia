@@ -6,7 +6,7 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-# from command_buffer cimport _CommandBuffer
+from command_buffer cimport _CommandBuffer
 # from compute_node cimport _ComputeNodeDescriptor, _ComputeNode
 from memory cimport _Memory
 # from program cimport _Program
@@ -39,10 +39,10 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         # _ComputeNodeDescriptor readComputeNodeDescriptor(const string& filePath) except +
         # shared_ptr[_ComputeNode] readComputeNode(const string& filePath) except +
 
-        # unique_ptr[_CommandBuffer] createCommandBuffer() except +
+        unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
         # void run(const _ComputeNode& node) except +
-        # void run(const _CommandBuffer& cmdBuffer) except +
+        void run(const _CommandBuffer& cmdBuffer) except +
 
 
 cdef class Session:
