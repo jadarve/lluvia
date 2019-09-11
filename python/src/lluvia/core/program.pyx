@@ -12,6 +12,9 @@ from libc.stdint cimport uint8_t
 from libcpp.vector cimport vector
 
 
+__all__ = ['Program']
+
+
 cdef class Program:
 
     def __cinit__(self):

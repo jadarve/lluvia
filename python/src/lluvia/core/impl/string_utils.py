@@ -8,8 +8,6 @@
 
 import sys
 
-__all__ = ['isStringLike', 'encodeString']
-
 
 def isStringLike(s):
     """

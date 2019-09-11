@@ -36,7 +36,10 @@ cimport vulkan as vk
 import  program
 cimport program
 
-# from compute_node cimport ComputeNode, ComputeNodeDescriptor
+from node cimport ComputeNode, ComputeNodeDescriptor
+
+
+__all__ = ['Session']
 
 
 cdef class Session:
@@ -386,19 +389,14 @@ cdef class Session:
         obj : CommandBuffer or ComputeNode
         """
 
-        # cdef ComputeNode node = None
-        # cdef CommandBuffer cmdBuffer = None
-
-        # if type(obj) == ComputeNode:
-        #     node = obj
-        #     self.__session.get().run(deref(node.__node.get()))
-
-        # elif type(obj) == CommandBuffer:
-        #     cmdBuffer = obj
-        #     self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
-
+        cdef ComputeNode node = None
         cdef CommandBuffer cmdBuffer = None
-        if type(obj) == CommandBuffer:
+
+        if type(obj) == ComputeNode:
+            node = obj
+            self.__session.get().run(deref(node.__node.get()))
+
+        elif type(obj) == CommandBuffer:
             cmdBuffer = obj
             self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
 

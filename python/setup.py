@@ -85,6 +85,7 @@ cythonModules = [
     ('lluvia.core.image'           , ['src/lluvia/core/image.pyx']),
     ('lluvia.core.impl.enum_utils' , ['src/lluvia/core/impl/enum_utils.pyx']),
     ('lluvia.core.memory'          , ['src/lluvia/core/memory.pyx']),
+    ('lluvia.core.node'            , ['src/lluvia/core/node.pyx']),
     ('lluvia.core.program'         , ['src/lluvia/core/program.pyx']),
     ('lluvia.core.session'         , ['src/lluvia/core/session.pyx']),
 ]

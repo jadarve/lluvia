@@ -29,6 +29,9 @@ from .enums.vulkan cimport ImageLayout
 cimport vulkan as vk
 
 
+__all__ = ['CommandBuffer']
+
+
 cdef class CommandBuffer:
 
     def __cinit__(self):

@@ -21,7 +21,7 @@ from libcpp.string cimport string
 
 
 cdef extern from 'lluvia/core/MemoryAllocationInfo.h' namespace 'll':
-    
+
     cdef struct _MemoryAllocationInfo 'll::MemoryAllocationInfo':
         uint64_t offset
         uint64_t size

@@ -26,6 +26,12 @@ import  numpy as np
 cimport numpy as np
 
 
+__all__ = [
+    'Image',
+    'ImageView'
+]
+
+
 ImageChannelTypeToNumpyMap = {
     ChannelType.Uint8   : np.uint8,
     ChannelType.Int8    : np.int8,

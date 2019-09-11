@@ -7,7 +7,7 @@
 """
 
 from command_buffer cimport _CommandBuffer
-# from compute_node cimport _ComputeNodeDescriptor, _ComputeNode
+from node cimport _ComputeNodeDescriptor, _ComputeNode
 from memory cimport _Memory
 from program cimport _Program
 
@@ -41,7 +41,7 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
-        # void run(const _ComputeNode& node) except +
+        void run(const _ComputeNode& node) except +
         void run(const _CommandBuffer& cmdBuffer) except +
 
 
