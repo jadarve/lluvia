@@ -36,7 +36,7 @@ cimport vulkan as vk
 import  program
 cimport program
 
-from node cimport ComputeNode, ComputeNodeDescriptor
+from node cimport ComputeNode, ComputeNodeDescriptor, ContainerNodeDescriptor, ContainerNode
 
 
 __all__ = ['Session']
@@ -176,6 +176,22 @@ cdef class Session:
         except IOError as e:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
+    def setProgram(self, str name, program.Program program):
+
+        self.__session.get().setProgram(impl.encodeString(name), program.__program)
+
+    def getProgram(self, str name):
+
+        cdef program.Program out = program.Program()
+        out.__program = self.__session.get().getProgram(impl.encodeString(name))
+        return out
+
+    def createComputeNodeDescriptor(self, str builderName):
+
+        cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
+        desc.__descriptor = self.__session.get().createComputeNodeDescriptor(impl.encodeString(builderName))
+        return desc
+
     def createComputeNode(self, ComputeNodeDescriptor desc):
         """
         Creates a ComputeNode from a given descriptor.
@@ -189,173 +205,26 @@ cdef class Session:
         Returns
         node : lluvia.ComputeNode
         """
+
         cdef ComputeNode node = ComputeNode()
         node.__session = self
         node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
 
         return node
 
+    def createContainerNodeDescriptor(self, str builderName):
 
-    # def readComputeNodeDescriptor(self, filePath):
-    #     """
-    #     Reads a ComputeNodeDescriptor from a given file.
+        cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
+        desc.__descriptor = self.__session.get().createContainerNodeDescriptor(impl.encodeString(builderName))
+        return desc
 
-    #     The JSON file must have the following structure:
+    def createContainerNode(self, ContainerNodeDescriptor desc):
 
-    #         {
-    #             "function": "main",
-    #             "grid_x": 1,
-    #             "grid_y": 1,
-    #             "grid_z": 1,
-    #             "local_x": 1,
-    #             "local_y": 1,
-    #             "local_z": 1,
-    #             "parameters": [
-    #                 "Buffer",
-    #                 "ImageView"
-    #                 "SampledImageView"
-    #             ],
-    #             "spirv": "base 64 SPIR-V code"
-    #         }
+        cdef ContainerNode node = ContainerNode()
+        node.__session = self
+        node.__node    = self.__session.get().createContainerNode(desc.__descriptor)
 
-
-    #     Parameters
-    #     ----------
-    #     filePath : string
-    #         File path to JSON file.
-
-
-    #     Returns
-    #     -------
-    #     desc : lluvia.ComputeNodeDescriptor
-
-
-    #     Raises
-    #     ------
-    #     IOError : if there are problems reading the JSON file.
-    #     """
-
-    #     cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
-        
-    #     filePath = impl.encodeString(filePath)
-    #     desc.__descriptor = self.__session.get().readComputeNodeDescriptor(filePath)
-    #     return desc
-
-
-    # def writeComputeNodeDescriptor(self, ComputeNodeDescriptor desc, filePath):
-    #     """
-    #     Write a compute node descriptor as a JSON file.
-
-    #     The JSON file has the following structure:
-
-    #         {
-    #             "function"   : "function name",
-    #             "grid_x"     : int,
-    #             "grid_y"     : int,
-    #             "grid_z"     : int,
-    #             "local_x"    : int,
-    #             "local_y"    : int,
-    #             "local_z"    : int,
-    #             "parameters" : [
-    #                 "Buffer",
-    #                 "ImageView",
-    #                 "SampledImageView",
-    #                 ...
-    #             ],
-    #             "spirv"      : "base 64 SPIR-V code"
-    #         }
-
-    #     Parameters
-    #     ----------
-    #     desc : ComputeNodeDescriptor.
-    #         The descriptor to write
-
-    #     filePath : str
-    #         The file path.
-    #     """
-
-    #     filePath = impl.encodeString(filePath)
-    #     io.writeComputeNodeDescriptor(desc, filePath)
-
-
-    # def writeComputeNode(self, ComputeNode node, filePath):
-    #     """
-    #     Write a compute node as a JSON file.
-
-    #     The JSON file has the following structure:
-
-    #         {
-    #             "function"   : "function name",
-    #             "grid_x"     : int,
-    #             "grid_y"     : int,
-    #             "grid_z"     : int,
-    #             "local_x"    : int,
-    #             "local_y"    : int,
-    #             "local_z"    : int,
-    #             "parameters" : [
-    #                 "Buffer",
-    #                 "ImageView",
-    #                 "SampledImageView",
-    #                 ...
-    #             ],
-    #             "spirv"      : "base 64 SPIR-V code"
-    #         }
-
-    #     Parameters
-    #     ----------
-    #     desc : ComputeNodeDescriptor.
-    #         The descriptor to write
-
-    #     filePath : str
-    #         The file path.
-    #     """
-
-    #     filePath = impl.encodeString(filePath)
-    #     io.writeComputeNode(node, filePath)
-
-
-    # def readComputeNode(self, filePath):
-    #     """
-    #     Reads a ComputeNode from a given file.
-
-    #     The JSON file must have the following structure:
-
-    #         {
-    #             "function": "main",
-    #             "grid_x": 1,
-    #             "grid_y": 1,
-    #             "grid_z": 1,
-    #             "local_x": 1,
-    #             "local_y": 1,
-    #             "local_z": 1,
-    #             "parameters": [
-    #                 "Buffer",
-    #                 "ImageView"
-    #                 "SampledImageView"
-    #             ],
-    #             "spirv": "base 64 SPIR-V code"
-    #         }
-
-
-    #     Parameters
-    #     ----------
-    #     filePath : string
-    #         File path to JSON file.
-
-
-    #     Returns
-    #     -------
-    #     desc : lluvia.ComputeNode
-
-
-    #     Raises
-    #     ------
-    #     IOError : if there are problems reading the JSON file.
-    #     """
-
-    #     filePath = impl.encodeString(filePath)
-    #     desc = self.readComputeNodeDescriptor(filePath)
-    #     return self.createComputeNode(desc)
+        return node
 
     def createCommandBuffer(self):
         """
@@ -378,6 +247,14 @@ cdef class Session:
         cmdBuffer.__session = self
 
         return cmdBuffer
+
+    def script(self, str code):
+
+        self.__session.get().script(impl.encodeString(code))
+
+    def scriptFile(self, str filename):
+
+        self.__session.get().scriptFile(impl.encodeString(filename))
 
     def run(self, obj):
         """
