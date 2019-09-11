@@ -28,7 +28,8 @@ cimport numpy as np
 
 __all__ = [
     'Image',
-    'ImageView'
+    'ImageView',
+    'ImageChannelTypeToNumpyMap'
 ]
 
 

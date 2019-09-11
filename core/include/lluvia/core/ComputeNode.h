@@ -225,7 +225,7 @@ public:
     void record(ll::CommandBuffer& commandBuffer) const override;
 
 protected:
-    void onInit() override;    
+    void onInit() override;
 
 private:
     /**

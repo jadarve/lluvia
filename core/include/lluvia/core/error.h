@@ -37,6 +37,7 @@ enum class ErrorCode : int32_t {
     PhysicalDevicesNotFound,    /**< No physical devices found */
     KeyNotFound,                /**< Key not found in a given look up method */
     MemoryCreationError,        /**< Error creating ll::Memory object */
+    InvalidNodeState,           /**< Invalid ll::Node state */
 };
 
 
@@ -45,7 +46,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 14> ErrorCodeStrings {{
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 15> ErrorCodeStrings {{
         std::make_tuple("EnumConversionFailed"      , ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed"           , ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError"     , ll::ErrorCode::ObjectAllocationError),
@@ -60,6 +61,7 @@ namespace impl {
         std::make_tuple("PhysicalDevicesNotFound"   , ll::ErrorCode::PhysicalDevicesNotFound),
         std::make_tuple("KeyNotFound"               , ll::ErrorCode::KeyNotFound),
         std::make_tuple("MemoryCreationError"       , ll::ErrorCode::MemoryCreationError),
+        std::make_tuple("InvalidNodeState"          , ll::ErrorCode::InvalidNodeState),
     }};
 
 } // namespace impl

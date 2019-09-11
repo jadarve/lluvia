@@ -176,25 +176,24 @@ cdef class Session:
         except IOError as e:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
+    def createComputeNode(self, ComputeNodeDescriptor desc):
+        """
+        Creates a ComputeNode from a given descriptor.
 
-    # def createComputeNode(self, ComputeNodeDescriptor desc):
-    #     """
-    #     Creates a ComputeNode from a given descriptor.
-
-    #     Parameters
-    #     ----------
-    #     desc : lluvia.ComputeNodeDescriptor
-    #         Compute node descriptor for this node.
+        Parameters
+        ----------
+        desc : lluvia.ComputeNodeDescriptor
+            Compute node descriptor for this node.
 
 
-    #     Returns
-    #     node : lluvia.ComputeNode
-    #     """
-    #     cdef ComputeNode node = ComputeNode()
-    #     node.__session = self
-    #     node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
-        
-    #     return node
+        Returns
+        node : lluvia.ComputeNode
+        """
+        cdef ComputeNode node = ComputeNode()
+        node.__session = self
+        node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
+
+        return node
 
 
     # def readComputeNodeDescriptor(self, filePath):

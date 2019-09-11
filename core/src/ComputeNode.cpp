@@ -243,6 +243,8 @@ void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object
 
 void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
 
+    ll::throwSystemErrorIf(getState() != ll::NodeState::Init, ll::ErrorCode::InvalidNodeState, "node must be in Init state before calling record()");
+
     auto vkCommandBuffer = commandBuffer.getVkCommandBuffer();
 
     ll::throwSystemErrorIf(m_descriptor.getGridX() == 0, ll::ErrorCode::InvalidLocalShape, "descriptor grid shape X must be greater than zero");

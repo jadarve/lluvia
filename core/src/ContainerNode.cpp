@@ -64,6 +64,8 @@ std::shared_ptr<ll::Node> ContainerNode::getNode(const std::string& name) const 
 
 void ContainerNode::record(ll::CommandBuffer& commandBuffer) const {
 
+    ll::throwSystemErrorIf(getState() != ll::NodeState::Init, ll::ErrorCode::InvalidNodeState, "node must be in Init state before calling record()");
+    
     const auto builderName = m_descriptor.getBuilderName();
     if (!builderName.empty()) {
 

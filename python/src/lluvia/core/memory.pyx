@@ -365,7 +365,12 @@ cdef class Memory:
         return img
 
 
-    def createImageFromHost(self, np.ndarray arr, usageFlags=['Storage', 'Sampled', 'TransferSrc', 'TransferDst']):
+    def createImageFromHost(self,
+                            np.ndarray arr,
+                            usageFlags=[ImageUsageFlagBits.Storage,
+                                        ImageUsageFlagBits.Sampled, 
+                                        ImageUsageFlagBits.TransferSrc, 
+                                        ImageUsageFlagBits.TransferDst]):
         """
         Creates a lluvia.Image object from a Numpy array.
 
@@ -422,9 +427,9 @@ cdef class Memory:
         depth, height, width, channels = self.__getImageShape(shape)
 
         channelType = None
-        for k, v in image.ImageChannelTypeToNumpyMap:
-            if v is arr.dtype:
-                channelType = k
+        for llChannelType, dtype in image.ImageChannelTypeToNumpyMap.items():
+            if dtype == arr.dtype:
+                channelType = llChannelType
                 break
 
         if channelType is None:
