@@ -81,11 +81,13 @@ cythonModules = [
     ('lluvia.core.core_buffer'     , ['src/lluvia/core/core_buffer.pyx']),
     ('lluvia.core.enums.image'     , ['src/lluvia/core/enums/image.pyx']),
     ('lluvia.core.enums.node'      , ['src/lluvia/core/enums/node.pyx']),
+    ('lluvia.core.enums.parameter' , ['src/lluvia/core/enums/parameter.pyx']),
     ('lluvia.core.enums.vulkan'    , ['src/lluvia/core/enums/vulkan.pyx']),
     ('lluvia.core.image'           , ['src/lluvia/core/image.pyx']),
     ('lluvia.core.impl.enum_utils' , ['src/lluvia/core/impl/enum_utils.pyx']),
     ('lluvia.core.memory'          , ['src/lluvia/core/memory.pyx']),
     ('lluvia.core.node'            , ['src/lluvia/core/node.pyx']),
+    ('lluvia.core.parameter'       , ['src/lluvia/core/parameter.pyx']),
     ('lluvia.core.program'         , ['src/lluvia/core/program.pyx']),
     ('lluvia.core.session'         , ['src/lluvia/core/session.pyx']),
 ]

@@ -58,7 +58,7 @@ public:
     ll::ParameterType getType() const noexcept;
 
     template<typename T>
-    void set(T&& value) {
+    void set(const T& value) {
 
         if constexpr (std::is_integral_v<T>) {
             m_type = ll::ParameterType::Int;
