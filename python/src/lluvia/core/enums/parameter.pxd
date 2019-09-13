@@ -14,10 +14,8 @@ cdef extern from 'lluvia/core/Parameter.h' namespace 'll':
     cdef enum _ParameterType 'll::ParameterType':
         _ParameterType_Int   'll::ParameterType::Int'
         _ParameterType_Float 'll::ParameterType::Float'
-        _ParameterType_Bool  'll::ParameterType::Bool'
 
 
 cpdef enum ParameterType:
     Int   = <uint32_t> _ParameterType_Int
     Float = <uint32_t> _ParameterType_Float
-    Bool  = <uint32_t> _ParameterType_Bool

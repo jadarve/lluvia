@@ -20,8 +20,7 @@ namespace ll {
 
 enum class ParameterType : uint32_t {
     Int   = 0,
-    Float = 1,
-    Bool  = 2
+    Float = 1
 };
 
 
@@ -32,10 +31,9 @@ namespace impl {
 
      @sa ll::ParameterType enum values for this array.
      */
-    constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 3> ParameterTypeStrings {{
+    constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 2> ParameterTypeStrings {{
         std::make_tuple("Int"   , ll::ParameterType::Int),
-        std::make_tuple("Float" , ll::ParameterType::Float),
-        std::make_tuple("Bool"  , ll::ParameterType::Bool)
+        std::make_tuple("Float" , ll::ParameterType::Float)
     }};
 
 } // namespace impl
@@ -68,10 +66,6 @@ public:
             m_type = ll::ParameterType::Float;
             m_value.v_float = static_cast<float>(value);
         }
-        else if constexpr (std::is_convertible_v<T, bool>) {
-            m_type = ll::ParameterType::Bool;
-            m_value.v_bool = static_cast<bool>(value);
-        }
         else {
             // at least we are sure the first if is false
             static_assert(!std::is_integral_v<T>, "type T does not match any of the supported types");
@@ -84,7 +78,6 @@ public:
         switch (m_type) {
             case ParameterType::Int   : return static_cast<int32_t>(m_value.v_int);
             case ParameterType::Float : return static_cast<float>(m_value.v_float);
-            case ParameterType::Bool  : return static_cast<bool>(m_value.v_bool);
         }
     }
 

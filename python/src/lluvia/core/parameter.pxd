@@ -16,9 +16,6 @@ cdef extern from 'lluvia/core/Parameter.h' namespace 'll':
 
         _Parameter()
         _Parameter(const _Parameter&)
-        # _Parameter(_Parameter&&)
-
-        # _Parameter(_ParameterType)
 
         _ParameterType getType() const
 

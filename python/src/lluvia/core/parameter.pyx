@@ -6,36 +6,48 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-# from libcpp cimport bool
+from libc.stdint cimport uint32_t
+from libcpp cimport bool as boolean
+
+from .enums import ParameterType
 
 cdef class Parameter:
 
     def __init__(self, value=0):
-        pass
+        self.set(value)
 
     def __cinit__(self):
         pass
 
-    def __assign__(self, other):
+    property type:
+        def __get__(self):
+            return ParameterType(<uint32_t> self.__p.getType())
 
-        return self
+    def set(self, value):
 
-    def __rassign__(self, other):
-        return 0
-
-
-    def __set(self, value):
+        vType = type(value)
 
         cdef Parameter p
-        if type(value) == Parameter:
+        if vType == Parameter:
             p = value
             self.__p = _Parameter(p.__p)
 
-        if type(value) == int:
+        if vType == int or vType == bool:
             self.__p.set[int](value)
 
-        elif type(value) == float:
+        elif vType == float:
             self.__p.set[float](value)
 
-        elif type(value) == bool:
-            self.__p.set[bool](value)
+        else:
+            raise RuntimeError('Unknown parameter type {0}'.format(vType))
+
+    def get(self):
+
+        pType = self.type
+        if pType == ParameterType.Int:
+            return self.__p.get[int]()
+
+        if pType == ParameterType.Float:
+            return self.__p.get[float]()
+
+        raise RuntimeError('Unknown parameter type: {0}'.format(pType))
