@@ -52,19 +52,31 @@ ImageChannelTypeToNumpyMap = {
 
 
 cdef class Image:
-    
+
     def __cinit__(self):
         pass
 
     def __dealloc__(self):
         pass
 
+    property session:
+        def __get__(self):
+            cdef Session out = Session()
+            out.__session = self.__image.get().getSession()
+            return out
+
+    property memory:
+        def __get__(self):
+            cdef Memory out = Memory()
+            out.__memory = self.__image.get().getMemory()
+            return out
+
     property width:
         def __get__(self):
             """
             Width in pixels
             """
-            
+
             return self.__image.get().getWidth()
 
     property height:
@@ -72,7 +84,7 @@ cdef class Image:
             """
             Height in pixels
             """
-            
+
             return self.__image.get().getHeight()
 
     property depth:
@@ -80,7 +92,7 @@ cdef class Image:
             """
             Depth in pixels
             """
-            
+
             return self.__image.get().getDepth()
 
     property channels:
@@ -107,7 +119,7 @@ cdef class Image:
         def __get__(self):
             cdef uint32_t vkFlags_u32 = <uint32_t> self.__image.get().getUsageFlags()
             return impl.expandFlagBits(vkFlags_u32, ImageUsageFlagBits)
-    
+
     property size:
         def __get__(self):
             """
@@ -169,7 +181,8 @@ cdef class Image:
         The shape of the array must comply with the following rules.
 
         * If arr.ndim == 1, then this image must be 1D
-            (height, depth and channels equal to 1) and img.width == arr.shape[0]
+            (height, depth and channels equal to 1) and
+            img.width == arr.shape[0]
 
         * If arr.ndim == 2, then this image must be 2D
             (depth and channels equal to 1) and
@@ -226,7 +239,7 @@ cdef class Image:
         ------
         ValueError : if output is different than None and does not match this image shape.
         """
-        
+
         if output is None:
             
             heightIsOne   = self.height   == 1
@@ -247,13 +260,11 @@ cdef class Image:
             else:
                 shape = [self.depth, self.height, self.width, self.channels]
 
-
             output = np.zeros(shape, dtype=ImageChannelTypeToNumpyMap[self.channelType])
 
         else:
             self.__validateNumpyShape(output)
-        
-        
+
         currentLayout = self.layout
 
         nextLayout = currentLayout
@@ -264,6 +275,7 @@ cdef class Image:
                                                    [BufferUsageFlagBits.StorageBuffer,
                                                     BufferUsageFlagBits.TransferSrc,
                                                     BufferUsageFlagBits.TransferDst])
+
         cmdBuffer     = self.__session.createCommandBuffer()
 
         cmdBuffer.begin()
@@ -319,7 +331,8 @@ cdef class Image:
 
         Raises
         ------
-        ValueError : if either filterMode or addressMode parameter have incorrect values.
+        ValueError : if either filterMode or addressMode
+                     parameter have incorrect values.
 
         RuntimeError : if the image view cannot be created.
         """
@@ -331,7 +344,7 @@ cdef class Image:
         desc.setIsSampled(sampled)
 
         cdef ImageView view = ImageView()
-        view.__image     = self
+        # view.__image     = self
         view.__imageView = self.__image.get().createImageView(desc)
 
         return view
@@ -372,62 +385,115 @@ cdef class ImageView:
     def __dealloc__(self):
         pass
 
+    property session:
+        def __get__(self):
+            cdef Session out = Session()
+            out.__session = self.__image.get().getSession()
+            return out
+
+    property memory:
+        def __get__(self):
+            cdef Memory out = Memory()
+            out.__memory = self.__image.get().getMemory()
+            return out
+
+    property image:
+        def __get__(self):
+            """
+            The underlying Image object from which this
+            ImageView was created.
+            """
+            cdef Image img = Image()
+            img.__image = self.__imageView.get().getImage()
+            return img
+
     property width:
         def __get__(self):
-            return self.__image.width
-        
+            """
+            Width in pixels
+            """
+
+            return self.__imageView.get().getWidth()
+
     property height:
         def __get__(self):
-            return self.__image.height
-        
+            """
+            Height in pixels
+            """
+
+            return self.__imageView.get().getHeight()
+
     property depth:
         def __get__(self):
-            return self.__image.depth
+            """
+            Depth in pixels
+            """
+
+            return self.__imageView.get().getDepth()
 
     property channels:
         def __get__(self):
-            return self.__image.channels
+            """
+            Number of channels per pixel
+            """
+
+            return self.__imageView.get().getChannelCount[uint32_t]()
 
     property shape:
         def __get__(self):
-            return self.__image.shape
+            """
+            Image shape as (depth, height, width, channels)
+            """
+
+            return (self.depth, self.height, self.width, self.channels)
 
     property channelType:
         def __get__(self):
-            return self.__image.channelType
+            return ChannelType(<uint32_t> self.__imageView.get().getChannelType())
 
     property usageFlags:
         def __get__(self):
-            return self.__image.usageFlags
-    
+            cdef uint32_t vkFlags_u32 = <uint32_t> self.__imageView.get().getUsageFlags()
+            return impl.expandFlagBits(vkFlags_u32, ImageUsageFlagBits)
+
     property size:
         def __get__(self):
-            return self.__image.size
+            """
+            Size in bytes.
+            """
+
+            return self.__imageView.get().getSize()
 
     property allocationInfo:
         def __get__(self):
-            return self.__image.allocationInfo
+            """
+            Memory allocation information
+            """
+
+            cdef MemoryAllocationInfo allocInfo = MemoryAllocationInfo()
+            allocInfo.__allocationInfo = self.__imageView.get().getAllocationInfo()
+            return allocInfo
 
     property layout:
         def __get__(self):
-            return self.__image.layout
+            return ImageLayout_t(<uint32_t> self.__imageView.get().getLayout())
 
     property filterMode:
         def __get__(self):
             return ImageFilterMode_t(<uint32_t> self.__imageView.get().getDescriptor().getFilterMode())
-            
+
     property addressModeU:
         def __get__(self):
             return ImageAddressMode_t(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeU())
-            
+
     property addressModeV:
         def __get__(self):
             return ImageAddressMode_t(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeV())
-            
+
     property addressModeW:
         def __get__(self):
             return ImageAddressMode_t(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeW())
-            
+
     property normalizedCoordinates:
         def __get__(self):
             return self.__imageView.get().getDescriptor().isNormalizedCoordinates()
@@ -443,7 +509,8 @@ cdef class ImageView:
         The shape of the array must comply with the following rules.
 
         * If arr.ndim == 1, then this image must be 1D
-            (height, depth and channels equal to 1) and img.width == arr.shape[0]
+            (height, depth and channels equal to 1) and
+            img.width == arr.shape[0]
 
         * If arr.ndim == 2, then this image must be 2D
             (depth and channels equal to 1) and
@@ -467,7 +534,7 @@ cdef class ImageView:
         ValueError : if arr does not match this image shape.
         """
 
-        self.__image.fromHost(arr)
+        self.image.fromHost(arr)
 
 
     def toHost(self, np.ndarray output=None):
@@ -484,5 +551,5 @@ cdef class ImageView:
         ------
         ValueError : if output is different than None and does not match this image shape.
         """
-        
-        return self.__image.toHost(output)
+
+        return self.image.toHost(output)

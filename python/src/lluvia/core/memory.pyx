@@ -16,6 +16,9 @@ from lluvia.core.enums.image import ImageUsageFlagBits
 
 from lluvia.core.enums.vulkan cimport ImageLayout
 
+from session import Session
+from session cimport Session
+
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
@@ -73,11 +76,17 @@ cdef class MemoryAllocationInfo:
 cdef class Memory:
 
     def __cinit__(self):
-        self.__session = None
+        pass
 
     def __dealloc__(self):
         # nothing to do
         pass
+
+    property session:
+        def __get__(self):
+            cdef Session out = Session()
+            out.__session = self.__memory.get().getSession()
+            return out
 
     property memoryFlags:
         def __get__(self):
@@ -349,7 +358,7 @@ cdef class Memory:
 
         cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ImageUsageFlagBits)
         cdef vk.ImageUsageFlags vkUsageFlags = <vk.ImageUsageFlags> flattenFlags
-        
+
         cdef image._ChannelType cType = <image._ChannelType> channelType
 
         cdef image._ChannelCount cCount = image.castChannelCount[uint32_t](channels)

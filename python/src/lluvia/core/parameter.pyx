@@ -51,3 +51,9 @@ cdef class Parameter:
             return self.__p.get[float]()
 
         raise RuntimeError('Unknown parameter type: {0}'.format(pType))
+
+    def __str__(self):
+        return str(self.get())
+
+    def __repr__(self):
+        return 'Parameter(value={0})'.format(self.get())

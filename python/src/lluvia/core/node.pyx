@@ -9,15 +9,21 @@
 from .enums.node cimport NodeState, NodeType, PortDirection, PortType
 from .enums.node import PortDirection as PortDirection_t
 from .enums.node import PortType as PortType_t
+from .enums.core_object import ObjectType
+
+from core_object cimport _Object
 
 from core_buffer import Buffer
-from core_buffer cimport Buffer
+from core_buffer cimport Buffer, _Buffer
 
 from command_buffer import CommandBuffer
 from command_buffer cimport CommandBuffer
 
-from image import ImageView
-from image cimport ImageView
+from image import Image, ImageView
+from image cimport Image, ImageView, _ImageView
+
+from parameter import Parameter
+from parameter cimport Parameter
 
 from program import Program
 from program cimport Program, _Program
@@ -176,6 +182,16 @@ cdef class ComputeNodeDescriptor:
 
         self.__descriptor.addPort(portDesc.__descriptor)
 
+    def addParameter(self, str name, Parameter param):
+
+        self.__descriptor.addParameter(impl.encodeString(name), param.__p)
+
+    def getParameter(self, str name):
+
+        cdef Parameter out = Parameter()
+        out.__p = self.__descriptor.getParameter(impl.encodeString(name))
+        return out
+
 
 cdef class ComputeNode:
 
@@ -254,6 +270,26 @@ cdef class ComputeNode:
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](imgView.__imageView))
 
+    def getPort(self, str name):
+
+        cdef shared_ptr[_Object] obj = self.__node.get().getPort(impl.encodeString(name))
+
+        # cdef shared_ptr[_Buffer] bufferObj
+        # cdef shared_ptr[_ImageView] imgView
+        oType = ObjectType(<uint32_t> obj.get().getType())
+
+        cdef Buffer bufObj = Buffer()
+        if oType == ObjectType.Buffer:
+            bufObj.__buffer = static_pointer_cast[_Buffer](obj)
+            return bufObj
+
+        cdef ImageView imgView = ImageView()
+        if oType == ObjectType.ImageView:
+            imgView.__imageView = static_pointer_cast[_ImageView](obj)
+            return imgView
+
+        raise RuntimeError('Unsupported object type {0}'.format(oType))
+
     def init(self):
 
         self.__node.get().init()
@@ -287,6 +323,16 @@ cdef class ContainerNodeDescriptor:
     def addPort(self, PortDescriptor portDesc):
 
         self.__descriptor.addPort(portDesc.__descriptor)
+
+    def addParameter(self, str name, Parameter param):
+
+        self.__descriptor.addParameter(impl.encodeString(name), param.__p)
+
+    def getParameter(self, str name):
+
+        cdef Parameter out = Parameter()
+        out.__p = self.__descriptor.getParameter(impl.encodeString(name))
+        return out
 
 
 cdef class ContainerNode:
@@ -323,6 +369,24 @@ cdef class ContainerNode:
             imgView = obj
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](imgView.__imageView))
+
+    def getPort(self, str name):
+
+        cdef shared_ptr[_Object] obj = self.__node.get().getPort(impl.encodeString(name))
+
+        oType = ObjectType(<uint32_t> obj.get().getType())
+
+        cdef Buffer bufObj = Buffer()
+        if oType == ObjectType.Buffer:
+            bufObj.__buffer = static_pointer_cast[_Buffer](obj)
+            return bufObj
+
+        cdef ImageView imgView = ImageView()
+        if oType == ObjectType.ImageView:
+            imgView.__imageView = static_pointer_cast[_ImageView](obj)
+            return imgView
+
+        raise RuntimeError('Unsupported object type {0}'.format(oType))
 
     def init(self):
 

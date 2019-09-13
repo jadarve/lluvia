@@ -10,7 +10,7 @@ from libc.stdint cimport uint32_t
 
 
 cdef extern from 'lluvia/core/Parameter.h' namespace 'll':
-    
+
     cdef enum _ParameterType 'll::ParameterType':
         _ParameterType_Int   'll::ParameterType::Int'
         _ParameterType_Float 'll::ParameterType::Float'

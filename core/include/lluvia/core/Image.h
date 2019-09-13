@@ -208,6 +208,14 @@ public:
 
 
     /**
+    @brief      Gets the Session this object belongs to
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
+
+
+    /**
     @brief      Gets the memory allocation size in bytes.
 
     This methods is equivalent to calling `getAllocationInfo().size`.

@@ -15,7 +15,7 @@ from libcpp.string cimport string
 
 from core_buffer cimport _Buffer
 from image cimport _Image
-# from compute_node cimport _ComputeNode
+from node cimport _ComputeNode
 from session cimport Session
 
 cimport vulkan as vk
@@ -28,7 +28,7 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
         void begin()
         void end()
 
-        # void run(const _ComputeNode& node)
+        void run(const _ComputeNode& node)
 
         void copyBuffer(const _Buffer& src, const _Buffer& dst) except +
         void copyBufferToImage(const _Buffer& src, const _Image& dst)

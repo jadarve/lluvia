@@ -13,8 +13,8 @@ from cython.operator cimport dereference as deref
 from core_buffer cimport Buffer
 from core_buffer import  Buffer
 
-# from compute_node cimport ComputeNode
-# from compute_node import  ComputeNode
+from node cimport ComputeNode
+from node import  ComputeNode
 
 cimport image
 import image
@@ -158,22 +158,20 @@ cdef class CommandBuffer:
         cdef vk.ImageLayout vkLayout = <vk.ImageLayout> newLayout
         self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), vkLayout)
 
+    def run(self, ComputeNode node):
+        """
+        Records running a compute node.
 
-    # def run(self, ComputeNode node):
-    #     """
-    #     Records running a compute node.
+        This operation uses node.grid to dispatch the compute shader. After
+        the call of this method, node.grid can be changed to a new value.
 
-    #     This operation uses node.grid to dispatch the compute shader. After
-    #     the call of this method, node.grid can be changed to a new value.
+        Parameters
+        ----------
+        node : ComputeNode.
+            The compute node.
+        """
 
-    #     Parameters
-    #     ----------
-    #     node : ComputeNode.
-    #         The compute node.
-    #     """
-        
-    #     self.__commandBuffer.get().run(deref(node.__node))
-
+        self.__commandBuffer.get().run(deref(node.__node))
 
     def memoryBarrier(self):
         """

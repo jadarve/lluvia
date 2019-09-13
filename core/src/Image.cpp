@@ -55,6 +55,11 @@ const std::shared_ptr<ll::Memory>& Image::getMemory() const noexcept {
 }
 
 
+const std::shared_ptr<ll::Session>& Image::getSession() const noexcept {
+    return m_memory->getSession();
+}
+
+
 uint64_t Image::getSize() const noexcept {
     return m_allocInfo.size;
 }

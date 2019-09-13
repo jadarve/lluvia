@@ -8,7 +8,7 @@
 
 from core_buffer cimport _Buffer
 from image cimport _Image, _ImageDescriptor
-from session cimport Session
+from session cimport _Session
 
 cimport vulkan as vk
 
@@ -33,6 +33,8 @@ cdef extern from 'lluvia/core/Memory.h' namespace 'll':
 
     cdef cppclass _Memory 'll::Memory':
 
+        const shared_ptr[_Session]& getSession() const
+
         vk.MemoryPropertyFlags getMemoryPropertyFlags() const
         uint64_t getPageSize()  const
         uint32_t getPageCount() const
@@ -48,6 +50,4 @@ cdef class MemoryAllocationInfo:
 
 
 cdef class Memory:
-
-    cdef Session             __session
     cdef shared_ptr[_Memory] __memory

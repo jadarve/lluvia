@@ -8,6 +8,10 @@
 
 cdef extern from 'lluvia/core/Object.h' namespace 'll':
 
-    cdef cppclass _Object 'll::Object':
+    cdef cppclass _ObjectType 'll::ObjectType':
         pass
-        
+
+
+    cdef cppclass _Object 'll::Object':
+
+        _ObjectType getType() const

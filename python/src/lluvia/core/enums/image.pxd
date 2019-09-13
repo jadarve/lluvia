@@ -10,7 +10,7 @@ from libc.stdint cimport uint32_t
 
 
 cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
-    
+
     cdef enum _ChannelType 'll::ChannelType':
         _ChannelType_Uint8   'll::ChannelType::Uint8'
         _ChannelType_Int8    'll::ChannelType::Int8'
@@ -36,7 +36,7 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
 
 
 cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
-    
+
     cdef enum _ImageAxis 'll::ImageAxis':
         _ImageAxis_U 'll::ImageAxis::U'
         _ImageAxis_V 'll::ImageAxis::V'
@@ -57,7 +57,7 @@ cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
 
 
 cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
-    
+
     cdef enum _ImageUsageFlagBits 'vk::ImageUsageFlagBits':
         _ImageUsageFlagBits_TransferSrc            'vk::ImageUsageFlagBits::eTransferSrc'
         _ImageUsageFlagBits_TransferDst            'vk::ImageUsageFlagBits::eTransferDst'

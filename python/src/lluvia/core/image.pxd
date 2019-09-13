@@ -6,9 +6,9 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from memory cimport Memory, _MemoryAllocationInfo
+from memory cimport _Memory, _MemoryAllocationInfo
 from core_object cimport _Object
-from session cimport Session
+from session cimport _Session
 
 cimport enums.image as img_enums
 
@@ -23,7 +23,7 @@ from libcpp.string cimport string
 
 
 cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
-    
+
     cdef cppclass _ChannelType 'll::ChannelType':
         pass
 
@@ -64,6 +64,9 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
 
     cdef cppclass _Image 'll::Image' (_Object):
 
+        const shared_ptr[_Memory]& getMemory()   const
+        const shared_ptr[_Session]& getSession() const
+
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
 
@@ -103,7 +106,7 @@ cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
 
         _ImageViewDescriptor& setAddressMode(_ImageAddressMode addressMode)
         _ImageViewDescriptor& setAddressMode(_ImageAxis axis, _ImageAddressMode addressMode)
-    
+
         _ImageAddressMode getAddressModeU() const
         _ImageAddressMode getAddressModeV() const
         _ImageAddressMode getAddressModeW() const
@@ -116,21 +119,29 @@ cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
 
 
 cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
-    
+
     cdef cppclass _ImageView 'll::ImageView':
 
         shared_ptr[_Image] getImage() const
         _ImageViewDescriptor& getDescriptor() const
 
+        uint64_t getSize() const
+        _MemoryAllocationInfo getAllocationInfo() const
+
+        vk.ImageUsageFlags getUsageFlags() const
+        vk.ImageLayout     getLayout()     const
+
+        _ChannelType getChannelType()    const
+        uint64_t getChannelTypeSize()    const
+        T getChannelCount[T]()           const
+        uint32_t getWidth()              const
+        uint32_t getHeight()             const
+        uint32_t getDepth()              const
+
 
 cdef class Image:
-    
-    cdef Memory             __memory
-    cdef Session            __session
     cdef shared_ptr[_Image] __image
 
 
 cdef class ImageView:
-
-    cdef Image                  __image
     cdef shared_ptr[_ImageView] __imageView
