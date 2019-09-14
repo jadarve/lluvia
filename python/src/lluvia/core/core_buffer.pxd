@@ -6,9 +6,9 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from memory cimport Memory, _MemoryAllocationInfo
+from memory cimport _Memory, _MemoryAllocationInfo
 from core_object cimport _Object
-from session cimport Session
+from session cimport _Session
 
 cimport vulkan as vk
 
@@ -27,6 +27,9 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
 
     cdef cppclass _Buffer 'll::Buffer' (_Object):
 
+        const shared_ptr[_Memory]& getMemory()   const
+        const shared_ptr[_Session]& getSession() const
+
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
         vk.BufferUsageFlags getUsageFlags() const
@@ -36,7 +39,4 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
 
 
 cdef class Buffer:
-
-    cdef Memory              __memory
-    cdef Session             __session
     cdef shared_ptr[_Buffer] __buffer

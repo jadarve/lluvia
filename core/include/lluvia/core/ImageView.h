@@ -24,6 +24,7 @@ namespace ll {
 class ComputeNode;
 class Image;
 class Memory;
+class Session;
 
 
 /**
@@ -172,6 +173,14 @@ public:
     @return     The memory.
     */
     const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
+
+
+    /**
+    @brief      Gets the session this object belongs to.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**

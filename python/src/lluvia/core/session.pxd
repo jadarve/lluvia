@@ -55,5 +55,4 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
 
 cdef class Session:
-
     cdef shared_ptr[_Session] __session

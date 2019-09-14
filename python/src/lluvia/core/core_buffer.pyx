@@ -11,6 +11,9 @@ from .enums import BufferUsageFlagBits, MemoryPropertyFlagBits
 from .memory cimport Memory, MemoryAllocationInfo
 from .memory import Memory, MemoryAllocationInfo
 
+from .session import Session
+from .session cimport Session
+
 from libc.stdint cimport uint64_t, uint32_t
 from libc.string cimport memcpy
 from libcpp.memory cimport unique_ptr
@@ -25,10 +28,22 @@ __all__ = ['Buffer']
 cdef class Buffer:
 
     def __cinit__(self):
-        self.__session = None
+        pass
 
     def __dealloc__(self):
         pass
+
+    property session:
+        def __get__(self):
+            cdef Session out = Session()
+            out.__session = self.__buffer.get().getSession()
+            return out
+
+    property memory:
+        def __get__(self):
+            cdef Memory out = Memory()
+            out.__memory = self.__buffer.get().getMemory()
+            return out
 
     property usageFlags:
         def __get__(self):
@@ -60,14 +75,6 @@ cdef class Buffer:
     property isMappable:
         def __get__(self):
             return self.__buffer.get().isMappable()
-
-    property memory:
-        def __get__(self):
-            return self.__memory
-
-    property session:
-        def __get__(self):
-            return self.__session
 
     def toHost(self, np.ndarray output=None, dtype=np.uint8):
         """
@@ -131,7 +138,7 @@ cdef class Buffer:
         # create a stage buffer and copy the content of arr to it
         mapFlags = [MemoryPropertyFlagBits.HostVisible,
                     MemoryPropertyFlagBits.HostCoherent]
-        cdef Memory mappableMemory = self.__session.createMemory(mapFlags,
+        cdef Memory mappableMemory = self.session.createMemory(mapFlags,
                                                                  sizeBytes,
                                                                  False)
 
@@ -141,13 +148,13 @@ cdef class Buffer:
                                                               stageFlags)
 
         # create a command buffer to issue the copy to this buffer
-        cmdBuffer = self.__session.createCommandBuffer()
+        cmdBuffer = self.session.createCommandBuffer()
 
         cmdBuffer.begin()
         cmdBuffer.copyBuffer(self, stageBuffer)
         cmdBuffer.end()
 
-        self.__session.run(cmdBuffer)
+        self.session.run(cmdBuffer)
 
         return stageBuffer.toHost(output, dtype)
 
@@ -195,7 +202,7 @@ cdef class Buffer:
         # create a stage buffer and copy the content of arr to it
         mapFlags = [MemoryPropertyFlagBits.HostVisible,
                     MemoryPropertyFlagBits.HostCoherent]
-        cdef Memory mappableMemory = self.__session.createMemory(mapFlags,
+        cdef Memory mappableMemory = self.session.createMemory(mapFlags,
                                                                  sizeBytes,
                                                                  False)
         stageFlags = [BufferUsageFlagBits.StorageBuffer,
@@ -211,13 +218,13 @@ cdef class Buffer:
         mappedPtr.reset()
 
         # create a command buffer to issue the copy to stageBuffer
-        cmdBuffer = self.__session.createCommandBuffer()
+        cmdBuffer = self.session.createCommandBuffer()
 
         cmdBuffer.begin()
         cmdBuffer.copyBuffer(stageBuffer, self)
         cmdBuffer.end()
 
-        self.__session.run(cmdBuffer)
+        self.session.run(cmdBuffer)
 
     def copy(self, Buffer output=None):
         """
@@ -244,12 +251,12 @@ cdef class Buffer:
         if output is None:
             output = self.__memory.createBuffer(self.size, self.usageFlags)
 
-        cmdBuffer = self.__session.createCommandBuffer()
+        cmdBuffer = self.session.createCommandBuffer()
 
         cmdBuffer.begin()
         cmdBuffer.copyBuffer(self, output)
         cmdBuffer.end()
 
-        self.__session.run(cmdBuffer)
+        self.session.run(cmdBuffer)
 
         return output

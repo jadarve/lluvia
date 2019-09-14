@@ -16,7 +16,11 @@ from .enums.image import ImageAddressMode as ImageAddressMode_t
 from .enums.vulkan cimport ImageLayout
 from .enums.vulkan import ImageLayout as ImageLayout_t
 
-from .memory cimport MemoryAllocationInfo
+from .memory import Memory
+from .memory cimport Memory, MemoryAllocationInfo
+
+from .session import Session
+from .session cimport Session
 
 cimport vulkan as vk
 
@@ -166,13 +170,13 @@ cdef class Image:
                 - DepthAttachmentStencilReadOnlyOptimalKHR
         """
 
-        cmdBuffer = self.__session.createCommandBuffer()
+        cmdBuffer = self.session.createCommandBuffer()
 
         cmdBuffer.begin()
         cmdBuffer.changeImageLayout(self, newLayout)
         cmdBuffer.end()
 
-        self.__session.run(cmdBuffer)
+        self.session.run(cmdBuffer)
 
     def fromHost(self, np.ndarray arr):
         """
@@ -214,8 +218,8 @@ cdef class Image:
         if currentLayout in [ImageLayout.Undefined, ImageLayout.Preinitialized]:
             nextLayout = ImageLayout.General
 
-        stageBuffer   = self.__memory.createBufferFromHost(arr)
-        cmdBuffer     = self.__session.createCommandBuffer()
+        stageBuffer   = self.memory.createBufferFromHost(arr)
+        cmdBuffer     = self.session.createCommandBuffer()
 
         cmdBuffer.begin()
         cmdBuffer.changeImageLayout(self, ImageLayout.TransferDstOptimal)
@@ -223,7 +227,7 @@ cdef class Image:
         cmdBuffer.changeImageLayout(self, nextLayout)
         cmdBuffer.end()
 
-        self.__session.run(cmdBuffer)
+        self.session.run(cmdBuffer)
 
     def toHost(self, np.ndarray output=None):
         """
@@ -271,12 +275,12 @@ cdef class Image:
         if currentLayout in [ImageLayout.Undefined, ImageLayout.Preinitialized]:
             nextLayout = ImageLayout.General
 
-        stageBuffer   = self.__memory.createBuffer(output.nbytes,
+        stageBuffer   = self.memory.createBuffer(output.nbytes,
                                                    [BufferUsageFlagBits.StorageBuffer,
                                                     BufferUsageFlagBits.TransferSrc,
                                                     BufferUsageFlagBits.TransferDst])
 
-        cmdBuffer     = self.__session.createCommandBuffer()
+        cmdBuffer     = self.session.createCommandBuffer()
 
         cmdBuffer.begin()
         cmdBuffer.changeImageLayout(self, ImageLayout.TransferSrcOptimal)
@@ -284,7 +288,7 @@ cdef class Image:
         cmdBuffer.changeImageLayout(self, nextLayout)
         cmdBuffer.end()
 
-        self.__session.run(cmdBuffer)
+        self.session.run(cmdBuffer)
 
         return stageBuffer.toHost(output)
 
@@ -344,7 +348,6 @@ cdef class Image:
         desc.setIsSampled(sampled)
 
         cdef ImageView view = ImageView()
-        # view.__image     = self
         view.__imageView = self.__image.get().createImageView(desc)
 
         return view
@@ -388,13 +391,13 @@ cdef class ImageView:
     property session:
         def __get__(self):
             cdef Session out = Session()
-            out.__session = self.__image.get().getSession()
+            out.__session = self.__imageView.get().getSession()
             return out
 
     property memory:
         def __get__(self):
             cdef Memory out = Memory()
-            out.__memory = self.__image.get().getMemory()
+            out.__memory = self.__imageView.get().getMemory()
             return out
 
     property image:

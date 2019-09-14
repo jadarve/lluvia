@@ -67,6 +67,11 @@ const std::shared_ptr<ll::Memory>& ImageView::getMemory() const noexcept {
 }
 
 
+const std::shared_ptr<ll::Session>& ImageView::getSession() const noexcept {
+    return m_image->getSession();
+}
+
+
 ll::MemoryAllocationInfo ImageView::getAllocationInfo() const noexcept {
     return m_image->getAllocationInfo();
 }

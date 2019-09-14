@@ -208,7 +208,7 @@ public:
 
 
     /**
-    @brief      Gets the Session this object belongs to
+    @brief      Gets the Session this object belongs to.
     
     @return     The session.
     */

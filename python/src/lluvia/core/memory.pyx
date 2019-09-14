@@ -39,6 +39,7 @@ __all__ = [
     'MemoryAllocationInfo'
 ]
 
+
 cdef class MemoryAllocationInfo:
 
     def __cinit__(self):
@@ -187,8 +188,6 @@ cdef class Memory:
 
         cdef core_buffer.Buffer buf = core_buffer.Buffer()
         buf.__buffer  = self.__memory.get().createBuffer(size, vkUsageFlags)
-        buf.__memory  = self
-        buf.__session = self.__session
 
         return buf
 
@@ -366,8 +365,6 @@ cdef class Memory:
         cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, cCount, cType, vkUsageFlags)
 
         cdef image.Image img = image.Image()
-        img.__memory  = self
-        img.__session = self.__session
         img.__image   = self.__memory.get().createImage(desc)
 
         img.changeLayout(ImageLayout.General)
