@@ -88,7 +88,6 @@ private:
         union{
             int32_t v_int;
             float   v_float;
-            bool    v_bool;
         };
     } m_value;
 };
