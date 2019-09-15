@@ -146,16 +146,16 @@ public:
     /**
     @brief      Constructs a new ll::Memory object.
     
-    @param[in]  tSession   The session this node was created from.
-    @param[in]  tDevice    The Vulkan device used for the construction.
-    @param[in]  tHeapInfo  The heap information.
-    @param[in]  tPageSize  The page size in bytes.
+    @param[in]  session   The session this node was created from.
+    @param[in]  device    The Vulkan device used for the construction.
+    @param[in]  heapInfo  The heap information.
+    @param[in]  pageSize  The page size in bytes.
     */
     Memory(
-        const std::shared_ptr<ll::Session>& tSession,
-        const vk::Device tDevice,
-        const ll::VkHeapInfo& tHeapInfo,
-        const uint64_t tPageSize);
+        const std::shared_ptr<ll::Session>& session,
+        const vk::Device device,
+        const ll::VkHeapInfo& heapInfo,
+        const uint64_t pageSize);
 
     ~Memory();
 
@@ -294,18 +294,18 @@ private:
 
     void releaseImage(const ll::Image& image);
 
-    vk::Device device;
+    vk::Device m_device;
 
-    const ll::VkHeapInfo    heapInfo        {};
-    const uint64_t          pageSize        {0u};
+    const ll::VkHeapInfo    m_heapInfo        {};
+    const uint64_t          m_pageSize        {0u};
 
-    std::vector<vk::DeviceMemory>                 memoryPages;
-    std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
-    std::vector<bool>                             memoryPageMappingFlags;
+    std::vector<vk::DeviceMemory>                 m_memoryPages;
+    std::vector<ll::impl::MemoryFreeSpaceManager> m_pageManagers;
+    std::vector<bool>                             m_memoryPageMappingFlags;
 
     // Shared pointer to the session this memory was created from
     // This will keep the session alive until this or any other memory is deleted.
-    std::shared_ptr<ll::Session>            session;
+    std::shared_ptr<ll::Session>                  m_session;
 
 
 friend class ll::Buffer;

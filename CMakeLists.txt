@@ -29,7 +29,6 @@ set(LL_GLSL_OUTPUT_DIR ${CMAKE_BINARY_DIR}/glsl)
 message(STATUS "-------------------------------------------------")
 message(STATUS "Configuring compiler")
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Werror -Wall -Wextra -Wshadow -Wshorten-64-to-32 -Wnon-virtual-dtor -pedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Werror -Wall -Wextra -Wshadow -Wshorten-64-to-32 -Wnon-virtual-dtor -pedantic")
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "Flags    : ${CMAKE_CXX_FLAGS}")
