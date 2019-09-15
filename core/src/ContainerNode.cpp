@@ -14,17 +14,27 @@
 namespace ll {
 
 
-ContainerNode::ContainerNode(const std::shared_ptr<const ll::Session>& session) :
+ContainerNode::ContainerNode(const std::shared_ptr<ll::Session>& session) :
     m_session {session} {
 
 }
 
 
-ContainerNode::ContainerNode(const std::shared_ptr<const ll::Session>& session,
+ContainerNode::ContainerNode(const std::shared_ptr<ll::Session>& session,
               const ll::ContainerNodeDescriptor& descriptor) :
     m_descriptor {descriptor},
     m_session {session} {
 
+}
+
+
+ll::NodeType ContainerNode::getType() const noexcept {
+    return ll::NodeType::Container;
+}
+
+
+const std::shared_ptr<ll::Session>& ContainerNode::getSession() const noexcept {
+    return m_session;
 }
 
 

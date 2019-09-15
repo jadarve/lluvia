@@ -26,8 +26,8 @@ class Session;
 class ContainerNode : public Node, public std::enable_shared_from_this<ll::ContainerNode> {
 
 public:
-    ContainerNode(const std::shared_ptr<const ll::Session>& session);
-    ContainerNode(const std::shared_ptr<const ll::Session>& session,
+    ContainerNode(const std::shared_ptr<ll::Session>& session);
+    ContainerNode(const std::shared_ptr<ll::Session>& session,
                   const ll::ContainerNodeDescriptor& descriptor);
 
     ContainerNode(const ll::ContainerNode&)                  = delete;
@@ -39,9 +39,15 @@ public:
     ll::ContainerNode& operator = (ll::ContainerNode&&)      = delete;
 
 
-    ll::NodeType getType() const noexcept override {
-        return ll::NodeType::Container;
-    }
+    ll::NodeType getType() const noexcept override;
+
+
+    /**
+    @brief      Gets the session this memory was created from.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
     const ll::ContainerNodeDescriptor& getDescriptor() const noexcept;
 
@@ -65,7 +71,7 @@ protected:
 
     // Shared pointer to the session this node was created from
     // This will keep the session alive until this or any other node is deleted.
-    std::shared_ptr<const ll::Session>                 m_session;
+    std::shared_ptr<ll::Session>                 m_session;
 };
 
 } // namespace ll

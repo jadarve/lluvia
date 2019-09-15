@@ -39,13 +39,31 @@ cimport program
 from node cimport ComputeNode, ComputeNodeDescriptor, ContainerNodeDescriptor, ContainerNode
 
 
-__all__ = ['Session']
+__all__ = [
+    'createSession',
+    'Session'
+]
+
+
+def createSession():
+    """
+    Creates a new lluvia.Session object.
+
+    Returns
+    -------
+    session : Session.
+        New session.
+    """
+
+    cdef Session out = Session()
+    out.__session = _Session.create()
+    return out
 
 
 cdef class Session:
 
     def __cinit__(self):
-        self.__session = _Session.create()
+        pass
 
     def __dealloc__(self):
         # nothing to do
@@ -53,18 +71,22 @@ cdef class Session:
 
     def getSupportedMemoryPropertyFlags(self):
         """
-        Returns the supported memory property flags for creating memories in this session.
+        Returns the supported memory property flags for
+        creating memories in this session.
 
-        The length of the returned vector equals the number of Vulkan memory types
-        available for the physical device this session was created from.
+        The length of the returned vector equals the number
+        of Vulkan memory types available for the physical device
+        this session was created from.
 
-        See https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits for more information.
+        See https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits
+        for more information.
 
 
         Returns
         -------
         supportedMemoryFlags : list of string lists
-            The supported memory property flags combinations supported by this session.
+            The supported memory property flags combinations supported
+            by this session.
         """
 
         cdef vector[vk.MemoryPropertyFlags] vkFlags = self.__session.get().getSupportedMemoryFlags()
@@ -90,7 +112,7 @@ cdef class Session:
         ```
             import lluvia as ll
 
-            session = ll.Session()
+            session = ll.createSession()
             memory = session.createMemory([ll.MemoryPropertyFlagBits.HostVisible,
                                            ll.MemoryPropertyFlagBits.HostCoherent],
                                           4096, False)
@@ -98,7 +120,7 @@ cdef class Session:
 
         The flags parameter can contain one string or a list of strings
         specifying the memory property flags the new memory will be created
-        with. The possible string values are defined in lluvia.MemoryPropertyFlagBits:
+        with. The possible values are defined in lluvia.MemoryPropertyFlagBits:
 
         - DeviceLocal
         - HostCached
@@ -206,7 +228,6 @@ cdef class Session:
         """
 
         cdef ComputeNode node = ComputeNode()
-        node.__session = self
         node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
 
         return node
@@ -220,7 +241,6 @@ cdef class Session:
     def createContainerNode(self, ContainerNodeDescriptor desc):
 
         cdef ContainerNode node = ContainerNode()
-        node.__session = self
         node.__node    = self.__session.get().createContainerNode(desc.__descriptor)
 
         return node
@@ -347,75 +367,3 @@ cdef class Session:
                 raise RuntimeError(proc.stderr.read())
 
             return self.createProgram(outputFile.name)
-
-
-    # def compileComputeNode( self,
-    #                         shaderCode,
-    #                         parameters,
-    #                         localSize    = (1, 1, 1),
-    #                         gridSize     = (1, 1, 1),
-    #                         includeDirs  = None,
-    #                         compileFlags = ['-Werror']):
-    #     """
-    #     Compiles a ComputeNode from GLSL shader code.
-
-    #     This method assumes that glslc command is avialable in the system.
-
-    #     Parameters
-    #     ----------
-    #     shaderCode : file or str.
-    #         If file, it must contain the GLSL code of the shader to compile. The
-    #         file is not closed during the execution of this method.
-
-    #         If str,  it must be valid GLSL code. A temporal file is created and
-    #         its path is passed to glslc for compilation.
-
-    #     parameters : list of strings.
-    #         List of parameters the compute node receives. Each string
-    #         must be one of the values defined in lluvia.ParameterType:
-    #             - Buffer
-    #             - ImageView
-    #             - SampledImageView
-
-    #     localSize : list or tuple of length 3. Defaults to (1, 1, 1).
-    #         Local group size for each XYZ dimension. Each value
-    #         must be greater or equal to 1.
-
-    #     gridSize : list or tuple of length 3. Defaults to (1, 1, 1).
-    #         Grid size for each XYZ dimension. The grid size defines
-    #         the number of local groups in each dimension. Each value
-    #         must be greater or equal to 1.
-
-    #     includeDirs : list of strings. Defaults to None.
-    #         List of include directories to pass to glslc through -I flag.
-
-    #     compileFlags : list of strings. Defaults to ['-Werror'].
-    #         Extra compile flags to pass to glslc.
-
-
-    #     Returns
-    #     -------
-    #     node : lluvia.ComputeNode.
-    #         Compiled node.
-
-
-    #     Raises
-    #     ------
-    #     RuntimeError : if the compilation fails.
-
-
-    #     See also
-    #     --------
-    #     compileProgram : Compiles a Program from GLSL shader code.
-    #     """
-
-    #     desc = ComputeNodeDescriptor()
-    #     desc.program      = self.compileProgram(shaderCode, includeDirs, compileFlags)
-    #     desc.functionName = 'main'
-    #     desc.grid         = gridSize
-    #     desc.local        = localSize
-
-    #     for param in parameters:
-    #         desc.addParameter(param)
-
-    #     return self.createComputeNode(desc)

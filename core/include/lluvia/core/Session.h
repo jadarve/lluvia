@@ -203,7 +203,7 @@ public:
     
     @return     A new ll::ComputeNode object.
     */
-    std::shared_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const;
+    std::shared_ptr<ll::ComputeNode> createComputeNode(const ll::ComputeNodeDescriptor& descriptor);
 
 
     /**
@@ -215,7 +215,7 @@ public:
     
     @return     A new ll::ComputeNode object
     */
-    std::shared_ptr<ll::ComputeNode> createComputeNode(const std::string& builderName) const;
+    std::shared_ptr<ll::ComputeNode> createComputeNode(const std::string& builderName);
 
     
     /**
@@ -230,10 +230,10 @@ public:
     ll::ComputeNodeDescriptor createComputeNodeDescriptor(const std::string& builderName) const;
 
 
-    std::shared_ptr<ll::ContainerNode> createContainerNode(const ll::ContainerNodeDescriptor& descriptor) const;
+    std::shared_ptr<ll::ContainerNode> createContainerNode(const ll::ContainerNodeDescriptor& descriptor);
 
 
-    std::shared_ptr<ll::ContainerNode> createContainerNode(const std::string& builderName) const;
+    std::shared_ptr<ll::ContainerNode> createContainerNode(const std::string& builderName);
 
 
     ll::ContainerNodeDescriptor createContainerNodeDescriptor(const std::string& builderName) const;

@@ -222,13 +222,13 @@ std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const 
 }
 
 
-std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
+std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
 
     return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {shared_from_this(), device, descriptor}};
 }
 
 
-std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const std::string& builderName) const {
+std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const std::string& builderName) {
 
     // create a ComputeNodeDescriptor using the builder
     // call Session::createComputeNode using that descriptor
@@ -254,13 +254,13 @@ ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string
 }
 
 
-std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const ll::ContainerNodeDescriptor& descriptor) const {
+std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const ll::ContainerNodeDescriptor& descriptor) {
 
     return std::shared_ptr<ll::ContainerNode> {new ll::ContainerNode {shared_from_this(), descriptor}};
 }
 
 
-std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const std::string& builderName) const {
+std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const std::string& builderName) {
 
     const auto descriptor = createContainerNodeDescriptor(builderName);
     return createContainerNode(descriptor);

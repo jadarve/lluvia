@@ -28,6 +28,9 @@ from parameter cimport Parameter
 from program import Program
 from program cimport Program, _Program
 
+from session import Session
+from session cimport Session
+
 from . import impl
 from .impl.stdcpp cimport static_pointer_cast
 
@@ -201,6 +204,16 @@ cdef class ComputeNode:
     def __dealloc__(self):
         pass
 
+    property type:
+        def __get__(self):
+            return NodeType(<uint32_t> self.__node.get().getType())
+
+    property session:
+        def __get__(self):
+            cdef Session out = Session()
+            out.__session = self.__node.get().getSession()
+            return out
+
     property grid:
         def __get__(self):
             return (self.gridX, self.gridY, self.gridZ)
@@ -299,7 +312,7 @@ cdef class ComputeNode:
         Runs this node
         """
 
-        self.__session.run(self)
+        self.session.run(self)
 
     def record(self, CommandBuffer cmdBuffer):
         self.__node.get().record(deref(cmdBuffer.__commandBuffer.get()))
@@ -342,6 +355,16 @@ cdef class ContainerNode:
 
     def __dealloc__(self):
         pass
+
+    property type:
+        def __get__(self):
+            return NodeType(<uint32_t> self.__node.get().getType())
+
+    property session:
+        def __get__(self):
+            cdef Session out = Session()
+            out.__session = self.__node.get().getSession()
+            return out
 
     def bind(self, str name, obj):
         """
@@ -388,6 +411,30 @@ cdef class ContainerNode:
 
         raise RuntimeError('Unsupported object type {0}'.format(oType))
 
+    def getNode(self, str name):
+
+        cdef shared_ptr[_Node] node = self.__node.get().getNode(impl.encodeString(name))
+
+        cdef NodeType nType = NodeType(<uint32_t> node.get().getType())
+
+        cdef ComputeNode computeNode
+        cdef ContainerNode containerNode
+
+        if nType == NodeType.Compute:
+            computeNode = ComputeNode()
+            computeNode.__node = static_pointer_cast[_ComputeNode](node)
+            return computeNode
+
+        if nType == NodeType.Container:
+            containerNode = ContainerNode()
+            containerNode.__node = static_pointer_cast[_ContainerNode](node)
+            return containerNode
+
+        raise RuntimeError('Unsupported node type {0}'.format(nType))
+
+    def bindNode(self, node):
+        pass
+
     def init(self):
 
         self.__node.get().init()
@@ -397,7 +444,7 @@ cdef class ContainerNode:
         Runs this node
         """
 
-        self.__session.run(self)
+        self.session.run(self)
 
     def record(self, CommandBuffer cmdBuffer):
         self.__node.get().record(deref(cmdBuffer.__commandBuffer.get()))

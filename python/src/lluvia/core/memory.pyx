@@ -451,6 +451,7 @@ cdef class Memory:
         """
         Calculates the lluvia image shape given a tuple
         """
+
         if len(shape) not in [1, 2, 3, 4]:
             raise ValueError('invalid number of dimensions. Expected 1, 2, 3 or 4')
 

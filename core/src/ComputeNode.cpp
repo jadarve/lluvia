@@ -27,7 +27,7 @@ using namespace std;
 
 
 ComputeNode::ComputeNode(
-    const std::shared_ptr<const ll::Session>& tSession,
+    const std::shared_ptr<ll::Session>& tSession,
     const vk::Device& tDevice,
     const ll::ComputeNodeDescriptor& tDescriptor):
 
@@ -129,6 +129,11 @@ void ComputeNode::initPipeline() {
 
 ll::NodeType ComputeNode::getType() const noexcept {
     return ll::NodeType::Compute;
+}
+
+
+const std::shared_ptr<ll::Session>& ComputeNode::getSession() const noexcept {
+    return m_session;
 }
 
 

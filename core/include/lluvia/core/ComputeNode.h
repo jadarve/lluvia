@@ -48,6 +48,14 @@ public:
 
 
     /**
+    @brief      Gets the session this memory was created from.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
+
+
+    /**
     @brief      Gets the function name within the shader module this node runs.
     
     @return     The function name.
@@ -246,7 +254,7 @@ private:
                                   if any of the components of descriptor.localShape is zero.
     */
     ComputeNode(
-        const std::shared_ptr<const ll::Session>& tSession,
+        const std::shared_ptr<ll::Session>& tSession,
         const vk::Device& tDevice,
         const ll::ComputeNodeDescriptor& tDescriptor);
 
@@ -282,7 +290,7 @@ private:
 
     // Shared pointer to the session this node was created from
     // This will keep the session alive until this or any other node is deleted.
-    std::shared_ptr<const ll::Session>            m_session;
+    std::shared_ptr<ll::Session>            m_session;
 
 friend class ll::Session;
 };
