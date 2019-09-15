@@ -1,21 +1,23 @@
 import sys
-sys.path.append('../build/python/lib.linux-x86_64-2.7')
+sys.path.append('../build/python/lib.linux-x86_64-3.6')
 
 import pytest
 import numpy as np
 import lluvia as ll
 
+
 def test_creation():
 
-    session = ll.Session()
-    mem = session.createMemory('DeviceLocal')
+    session = ll.createSession()
+    mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
-    size  = 512
+    size = 512
     # some flags different to the default values of mem.createBuffer()
-    flags = ['IndexBuffer', 'UniformBuffer']
+    flags = [ll.BufferUsageFlagBits.IndexBuffer,
+             ll.BufferUsageFlagBits.UniformBuffer]
 
     buf = mem.createBuffer(size, flags)
-    
+
     assert(buf.size == size)
     assert(len(flags) == len(buf.usageFlags))
 
@@ -26,7 +28,7 @@ def test_creation():
 
 def test_fromHost():
 
-    session = ll.Session()
+    session = ll.createSession()
     mem = session.createMemory()
 
     dtype = np.uint8

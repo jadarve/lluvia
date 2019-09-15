@@ -367,3 +367,81 @@ cdef class Session:
                 raise RuntimeError(proc.stderr.read())
 
             return self.createProgram(outputFile.name)
+
+    def compileComputeNode(self,
+                           ports,
+                           shaderCode,
+                           functionName='main',
+                           builderName='',
+                           localSize=(1, 1, 1),
+                           gridSize=(1, 1, 1),
+                           includeDirs=None,
+                           compileFlags=['-Werror']):
+        """
+        Compiles a ComputeNode from GLSL shader code.
+
+        This method assumes that glslc command is avialable in the system.
+
+        Parameters
+        ----------
+        ports : list of PortDescriptor.
+            List of port descriptors the compute node receives.
+
+        shaderCode : file or str.
+            If file, it must contain the GLSL code of the shader to compile.
+            The file is not closed during the execution of this method.
+
+            If str,  it must be valid GLSL code. A temporal file is created and
+            its path is passed to glslc for compilation.
+
+        functionName : str. Defaults to 'main'.
+            Function name whitin the shader the compute node will execute.
+
+        builderName : str. Defaults to '' (empty string).
+            Builder name associated to this node.
+
+        localSize : list or tuple of length 3. Defaults to (1, 1, 1).
+            Local group size for each XYZ dimension. Each value
+            must be greater or equal to 1.
+
+        gridSize : list or tuple of length 3. Defaults to (1, 1, 1).
+            Grid size for each XYZ dimension. The grid size defines
+            the number of local groups in each dimension. Each value
+            must be greater or equal to 1.
+
+        includeDirs : list of strings. Defaults to None.
+            List of include directories to pass to glslc through -I flag.
+
+        compileFlags : list of strings. Defaults to ['-Werror'].
+            Extra compile flags to pass to glslc.
+
+
+        Returns
+        -------
+        node : lluvia.ComputeNode.
+            Compiled node.
+
+
+        Raises
+        ------
+        RuntimeError : if the compilation fails.
+
+
+        See also
+        --------
+        compileProgram : Compiles a Program from GLSL shader code.
+        """
+
+        desc = ComputeNodeDescriptor()
+        desc.program = self.compileProgram(shaderCode,
+                                           includeDirs,
+                                           compileFlags)
+        desc.functionName = functionName
+        desc.builderName = builderName
+        desc.grid = gridSize
+        desc.local = localSize
+
+        for port in ports:
+            desc.addPort(port)
+
+        return self.createComputeNode(desc)
