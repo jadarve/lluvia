@@ -17,43 +17,43 @@ constexpr const size_t CAPACITY_INCREASE = 512u;
 
 
 MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t tSize) :
-    size            {tSize},
-    offsetVector    {0},
-    sizeVector      {tSize} {
+    m_size            {tSize},
+    m_offsetVector    {0},
+    m_sizeVector      {tSize} {
 
-    offsetVector.reserve(CAPACITY_INCREASE);
-    sizeVector.reserve(CAPACITY_INCREASE);
+    m_offsetVector.reserve(CAPACITY_INCREASE);
+    m_sizeVector.reserve(CAPACITY_INCREASE);
 }
 
 
 std::ostream& operator << (std::ostream& out, const MemoryFreeSpaceManager& manager) {
 
-    out << "size: " << manager.size << ". offsetVector: [size: " << manager.offsetVector.size() << ", capacity: " << manager.offsetVector.capacity() << "].";
-    out << " sizeVector: [size: " << manager.sizeVector.size() << ", capacity: " << manager.sizeVector.capacity() << "]\n";
+    out << "size: " << manager.m_size << ". offsetVector: [size: " << manager.m_offsetVector.size() << ", capacity: " << manager.m_offsetVector.capacity() << "].";
+    out << " sizeVector: [size: " << manager.m_sizeVector.size() << ", capacity: " << manager.m_sizeVector.capacity() << "]\n";
 
-    for (auto i = 0u; i < manager.offsetVector.size(); ++i) {
-        out << "    [" << manager.offsetVector[i] << ", " << manager.sizeVector[i] << "]\n";
+    for (auto i = 0u; i < manager.m_offsetVector.size(); ++i) {
+        out << "    [" << manager.m_offsetVector[i] << ", " << manager.m_sizeVector[i] << "]\n";
     }
     return out;
 }
 
 uint64_t MemoryFreeSpaceManager::getSize() const noexcept {
-    return size;
+    return m_size;
 }
 
 
 uint64_t MemoryFreeSpaceManager::getFreeSpaceCount() const noexcept {
-    return offsetVector.size();
+    return m_offsetVector.size();
 }
 
 
-std::vector<uint64_t> MemoryFreeSpaceManager::getOffsetVector() const noexcept {
-    return offsetVector;
+const std::vector<uint64_t>& MemoryFreeSpaceManager::getOffsetVector() const noexcept {
+    return m_offsetVector;
 }
 
 
-std::vector<uint64_t> MemoryFreeSpaceManager::getSizeVector() const noexcept {
-    return sizeVector;
+const std::vector<uint64_t>& MemoryFreeSpaceManager::getSizeVector() const noexcept {
+    return m_sizeVector;
 }
 
 
@@ -109,10 +109,10 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
     // update the interval offset or size if the input parameters are
     // at the boundaries of the interval.
     auto position = 0u;
-    for (; position < offsetVector.size(); ++ position) {
+    for (; position < m_offsetVector.size(); ++ position) {
 
-        auto& offset_i = offsetVector[position];
-        auto& size_i = sizeVector[position];
+        auto& offset_i = m_offsetVector[position];
+        auto& size_i = m_sizeVector[position];
 
         if (offsetPlusSize == offset_i) {
             // update lower bound
@@ -146,37 +146,37 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
             // std::cout << "    merging lower interval" << std::endl;
 
             if (position > 0) {
-                const auto offsetLeft = offsetVector[position - 1];
-                const auto sizeLeft = sizeVector[position - 1];
+                const auto offsetLeft = m_offsetVector[position - 1];
+                const auto sizeLeft = m_sizeVector[position - 1];
 
-                if (offsetLeft + sizeLeft == offsetVector[position]) {
+                if (offsetLeft + sizeLeft == m_offsetVector[position]) {
 
                     // merge
-                    sizeVector[position - 1] += sizeVector[position];
-                    offsetVector.erase(offsetVector.begin() + position);
-                    sizeVector.erase(sizeVector.begin() + position);
+                    m_sizeVector[position - 1] += m_sizeVector[position];
+                    m_offsetVector.erase(m_offsetVector.begin() + position);
+                    m_sizeVector.erase(m_sizeVector.begin() + position);
                 }
             }
         }
         else {
             // std::cout << "    merging upper interval" << std::endl;
 
-            if (position < offsetVector.size() - 1) {
+            if (position < m_offsetVector.size() - 1) {
 
-                const auto offsetRight = offsetVector[position + 1];
+                const auto offsetRight = m_offsetVector[position + 1];
 
-                if (offsetVector[position] + sizeVector[position] == offsetRight) {
+                if (m_offsetVector[position] + m_sizeVector[position] == offsetRight) {
 
                     // merge
-                    offsetVector[position + 1] -= sizeVector[position];
-                    sizeVector[position + 1]   += sizeVector[position];
-                    offsetVector.erase(offsetVector.begin() + position);
-                    sizeVector.erase(sizeVector.begin() + position);
+                    m_offsetVector[position + 1] -= m_sizeVector[position];
+                    m_sizeVector[position + 1]   += m_sizeVector[position];
+                    m_offsetVector.erase(m_offsetVector.begin() + position);
+                    m_sizeVector.erase(m_sizeVector.begin() + position);
                 }
             }
         }
 
-        // std::cout << "MemoryFreeSpaceManager::release: return end: pos: " << position << " [" << offsetVector.size() << ", " << sizeVector.size() << "]" << std::endl;
+        // std::cout << "MemoryFreeSpaceManager::release: return end: pos: " << position << " [" << m_offsetVector.size() << ", " << m_sizeVector.size() << "]" << std::endl;
         // std::cout << *this << "\n" << std::endl;
         return;
     }
@@ -184,37 +184,37 @@ void MemoryFreeSpaceManager::release(const MemoryAllocationInfo& info) noexcept 
     // insert a new interval before position
     // since reserveManagerSpace() is called before inserting the new interval
     // this insert() calls should not throw exceptions.
-    const auto insertOffset = offsetVector[position] > infoLocal.offset? position : std::max(0, static_cast<int32_t>(position) -1);
+    const auto insertOffset = m_offsetVector[position] > infoLocal.offset? position : std::max(0, static_cast<int32_t>(position) -1);
     // std::cout << "    insertOffset: " << insertOffset << std::endl;
 
-    offsetVector.insert(offsetVector.begin() + insertOffset, infoLocal.offset);
-    sizeVector.insert(sizeVector.begin() + insertOffset, infoLocal.size);
-    // std::cout << "MemoryFreeSpaceManager::release: end: pos: " << position << " [" << offsetVector.size() << ", " << sizeVector.size() << "]" << std::endl;
+    m_offsetVector.insert(m_offsetVector.begin() + insertOffset, infoLocal.offset);
+    m_sizeVector.insert(m_sizeVector.begin() + insertOffset, infoLocal.size);
+    // std::cout << "MemoryFreeSpaceManager::release: end: pos: " << position << " [" << m_offsetVector.size() << ", " << m_sizeVector.size() << "]" << std::endl;
     // std::cout << *this << "\n" << std::endl;
 }
 
 
 bool MemoryFreeSpaceManager::reserveManagerSpace() noexcept {
 
-    // offsetVector and sizeVector should have the same size and capacity
-    assert(offsetVector.size()     == sizeVector.size());
-    assert(offsetVector.capacity() == sizeVector.capacity());
+    // m_offsetVector and m_sizeVector should have the same size and capacity
+    assert(m_offsetVector.size()     == m_sizeVector.size());
+    assert(m_offsetVector.capacity() == m_sizeVector.capacity());
 
     try {
 
-        if (offsetVector.size() == offsetVector.capacity()) {
+        if (m_offsetVector.size() == m_offsetVector.capacity()) {
             
             auto newOffsetVector = std::vector<uint64_t> {};
             auto newSizeVector   = std::vector<uint64_t> {};
-            newOffsetVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
-            newSizeVector.reserve(offsetVector.capacity() + CAPACITY_INCREASE);
+            newOffsetVector.reserve(m_offsetVector.capacity() + CAPACITY_INCREASE);
+            newSizeVector.reserve(m_offsetVector.capacity() + CAPACITY_INCREASE);
 
-            newOffsetVector.insert(newOffsetVector.begin(), offsetVector.begin(), offsetVector.end());
-            newSizeVector.insert(newSizeVector.begin(), sizeVector.begin(), sizeVector.end());
+            newOffsetVector.insert(newOffsetVector.begin(), m_offsetVector.begin(), m_offsetVector.end());
+            newSizeVector.insert(newSizeVector.begin(), m_sizeVector.begin(), m_sizeVector.end());
 
             // move the new vectors to the members and delete the old ones
-            offsetVector = std::move(newOffsetVector);
-            sizeVector   = std::move(newSizeVector);
+            m_offsetVector = std::move(newOffsetVector);
+            m_sizeVector   = std::move(newSizeVector);
         }
 
         return true;
@@ -245,9 +245,9 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t tSize, uint64_t alignment, ll:
     }
 
     auto position = 0;
-    for (auto& s : sizeVector) {
+    for (auto& s : m_sizeVector) {
 
-        auto offset        = offsetVector[position];
+        auto offset        = m_offsetVector[position];
         auto offsetModulus = offset & offsetMask;
         auto leftPadding   = (alignment - offsetModulus) & offsetMask;
 
@@ -270,15 +270,15 @@ bool MemoryFreeSpaceManager::tryAllocate(uint64_t tSize, uint64_t alignment, ll:
 
 void MemoryFreeSpaceManager::commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept {
 
-    assert(tryInfo.index < offsetVector.size());
+    assert(tryInfo.index < m_offsetVector.size());
     
     // the space used for the allocation is equalt to the requested size plus
     // the bytes required to align the offset
     const auto sizePlusAlignment = tryInfo.allocInfo.size + tryInfo.allocInfo.leftPadding;
 
     // update offset and size of [index] block
-    offsetVector[tryInfo.index] += sizePlusAlignment;
-    sizeVector[tryInfo.index]   -= sizePlusAlignment;
+    m_offsetVector[tryInfo.index] += sizePlusAlignment;
+    m_sizeVector[tryInfo.index]   -= sizePlusAlignment;
 }
 
 

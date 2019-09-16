@@ -46,8 +46,8 @@ public:
     uint64_t getSize()           const noexcept;
     uint64_t getFreeSpaceCount() const noexcept;
 
-    std::vector<uint64_t> getOffsetVector() const noexcept;
-    std::vector<uint64_t> getSizeVector()   const noexcept;
+    const std::vector<uint64_t>& getOffsetVector() const noexcept;
+    const std::vector<uint64_t>& getSizeVector()   const noexcept;
 
     bool allocate(uint64_t tSize, ll::MemoryAllocationInfo& out) noexcept;
     bool allocate(uint64_t tSize, uint64_t alignment, ll::MemoryAllocationInfo& out) noexcept;
@@ -59,12 +59,12 @@ public:
     void commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
 
 private:
-    uint64_t size {0};
+    uint64_t m_size {0};
 
     // separate offset and size vectors help to keep data locality
     // when scanning for inserting or deleting a new interval.
-    std::vector<uint64_t> offsetVector;
-    std::vector<uint64_t> sizeVector;
+    std::vector<uint64_t> m_offsetVector;
+    std::vector<uint64_t> m_sizeVector;
 
 };
 
