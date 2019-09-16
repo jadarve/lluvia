@@ -67,6 +67,17 @@ enum class ImageAddressMode : uint32_t {
 namespace impl {
 
     /**
+    @brief Image axis strings used for converting ll::ImageAxis to std::string and vice-versa.
+
+    @sa         ll::ImageAxis enum values for this array.
+    */
+    constexpr const std::array<std::tuple<const char*, ll::ImageAxis>, 3> ImageAxisStrings {{
+        std::make_tuple("U" , ll::ImageAxis::U),
+        std::make_tuple("V"  , ll::ImageAxis::V),
+        std::make_tuple("W"  , ll::ImageAxis::W),
+    }};
+
+    /**
     @brief Image filter mode strings used for converting ll::ImageFilterMode to std::string and vice-versa.
 
     @sa         ll::ImageFilterMode enum values for this array.
@@ -197,13 +208,13 @@ public:
     /**
     @brief      Sets the filtering mode.
     
-    @param[in]  filterMode  The filter mode
+    @param[in]  tFilterMode  The filter mode
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setFilterMode(ll::ImageFilterMode filterMode) noexcept {
+    inline ImageViewDescriptor& setFilterMode(ll::ImageFilterMode tFilterMode) noexcept {
 
-        this->filterMode = filterMode;
+        this->filterMode = tFilterMode;
         return *this;
     }
 
@@ -222,32 +233,22 @@ public:
     /**
     @brief      Sets the address mode to all image axes.
     
-    @param[in]  addressMode  The address mode
+    @param[in]  tAddressMode  The address mode
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode) noexcept {
-
-        for (auto& it : this->addressMode) {
-            it = addressMode;
-        }
-        return *this;
-    }
+    ImageViewDescriptor& setAddressMode(ll::ImageAddressMode tAddressMode) noexcept;
 
 
     /**
     @brief      Sets the address mode to a given image axis.
     
-    @param[in]  axis         The axis
-    @param[in]  addressMode  The address mode
+    @param[in]  axis           The axis
+    @param[in]  tAddressMode   The address mode
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept {
-
-        this->addressMode[static_cast<uint32_t>(axis)] = addressMode;
-        return *this;
-    }
+    ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode tAddressMode) noexcept;
 
 
     /**
@@ -286,13 +287,13 @@ public:
     /**
     @brief      Sets whether or not the image view will use normalized coordinates.
     
-    @param[in]  normalizedCoordinates  The normalized coordinates.
+    @param[in]  tNormalizedCoordinates  The normalized coordinates.
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates) noexcept {
+    inline ImageViewDescriptor& setNormalizedCoordinates(bool tNormalizedCoordinates) noexcept {
 
-        this->normalizedCoordinates = normalizedCoordinates;
+        this->normalizedCoordinates = tNormalizedCoordinates;
         return *this;
     }
 

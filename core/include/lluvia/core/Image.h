@@ -54,6 +54,10 @@ namespace impl {
     }};
 
 
+    /**
+     String values for Vulkan VkImageLayout.
+     See @VULKAN_DOC#VkImageLayout for more information.
+     */
     constexpr const std::array<std::tuple<const char*, vk::ImageLayout>, 13> VkImageLayoutStrings {{
         std::make_tuple("Undefined"                                , vk::ImageLayout::eUndefined),
         std::make_tuple("General"                                  , vk::ImageLayout::eGeneral),
@@ -196,6 +200,22 @@ public:
 
 
     /**
+    @brief      Gets the memory this image was allocated from.
+    
+    @return     The memory.
+    */
+    const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
+
+
+    /**
+    @brief      Gets the Session this object belongs to.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
+
+
+    /**
     @brief      Gets the memory allocation size in bytes.
 
     This methods is equivalent to calling `getAllocationInfo().size`.
@@ -203,6 +223,14 @@ public:
     @return     The image size in bytes.
     */
     uint64_t getSize() const noexcept;
+
+
+    /**
+    @brief      Gets the descriptor.
+    
+    @return     The descriptor.
+    */
+    const ll::ImageDescriptor& getDescriptor() const noexcept;
 
 
     /**
@@ -254,7 +282,7 @@ public:
     */
     template<typename T=ll::ChannelCount>
     T getChannelCount() const noexcept {
-        return descriptor.getChannelCount<T>();
+        return m_descriptor.getChannelCount<T>();
     }
 
 
@@ -297,31 +325,43 @@ public:
     /**
     @brief      Creates an image view from this image.
     
-    @param[in]  descriptor  The image view descriptor
+    @param[in]  tDescriptor  The image view descriptor
     
     @return     A new image view object.
     */
-    std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& descriptor);
+    std::shared_ptr<ll::ImageView> createImageView(const ll::ImageViewDescriptor& tDescriptor);
+
+
+    /**
+    @brief      Immediately changes the image layout.
+    
+    This method creates a command buffer and submits it to change
+    the layout of the image. Execution is blocked until the layout
+    change is completed. 
+    
+    @param[in]  newLayout  The new layout
+    */
+    void changeImageLayout(const vk::ImageLayout newLayout);
 
 private:
-    Image(const vk::Device& device,
-          const vk::Image& vkImage,
-          const ll::ImageDescriptor& descriptor,
-          const std::shared_ptr<ll::Memory>& memory,
-          const ll::MemoryAllocationInfo& allocInfo,
-          const vk::ImageLayout layout);
+    Image(const vk::Device& tDevice,
+          const vk::Image& tVkImage,
+          const ll::ImageDescriptor& tDescriptor,
+          const std::shared_ptr<ll::Memory>& tMemory,
+          const ll::MemoryAllocationInfo& tAllocInfo,
+          const vk::ImageLayout tLayout);
 
-    ll::ImageDescriptor descriptor;
-    ll::MemoryAllocationInfo allocInfo;
+    ll::ImageDescriptor m_descriptor;
+    ll::MemoryAllocationInfo m_allocInfo;
 
-    vk::Device          device;
-    vk::Image           vkImage;
-    vk::ImageLayout     vkLayout;
+    vk::Device          m_device;
+    vk::Image           m_vkImage;
+    vk::ImageLayout     m_vkLayout;
 
     // Shared pointer to the memory this image was created from
     // This will keep the memory alive until this image is deleted
     // avoiding reference to a corrupted memory location.
-    std::shared_ptr<ll::Memory> memory;
+    std::shared_ptr<ll::Memory> m_memory;
 
 friend class ll::CommandBuffer;
 friend class ll::ComputeNode;

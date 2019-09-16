@@ -11,12 +11,14 @@
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/ContainerNode.h"
+#include "lluvia/core/ContainerNodeDescriptor.h"
+#include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
-#include "lluvia/core/io.h"
+#include "lluvia/core/Interpreter.h"
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
-
 
 #include <algorithm>
 #include <exception>
@@ -28,8 +30,7 @@ namespace ll {
 using namespace std;
 
 std::shared_ptr<ll::Session> Session::create() {
-
-    return std::shared_ptr<Session>{new Session()};
+    return std::shared_ptr<Session>{new Session()};;
 }
 
 
@@ -70,6 +71,12 @@ Session::Session() {
         // rethrow
         throw;
     }
+
+    m_interpreter = std::make_unique<ll::Interpreter>();
+
+    // by sending a raw pointer, I avoid a circular reference
+    // of shared pointers between the interpreter and this session.
+    m_interpreter->setActiveSession(this);
 }
 
 
@@ -78,6 +85,11 @@ Session::~Session() {
     device.destroyCommandPool(commandPool);
     device.destroy();
     instance.destroy();
+}
+
+
+const std::unique_ptr<ll::Interpreter>& Session::getInterpreter() const noexcept {
+    return m_interpreter;
 }
 
 
@@ -137,10 +149,10 @@ bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) 
 }
 
 
-std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) const {
+std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) {
     
-    auto compareFlags = [](const auto& flags, const auto& value, bool exactFlagsMatch) {
-        return exactFlagsMatch? flags == value : (flags & value) == value;
+    auto compareFlags = [](const auto& tFlags, const auto& value, bool tExactFlagsMatch) {
+        return tExactFlagsMatch? tFlags == value : (tFlags & value) == value;
     };
     
     const auto memProperties = physicalDevice.getMemoryProperties();
@@ -163,7 +175,8 @@ std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
         }
     }
 
-    return nullptr;
+    throw std::system_error(createErrorCode(ll::ErrorCode::MemoryCreationError),
+        "No memory was found that matched the requested flags.");
 }
 
 
@@ -190,21 +203,82 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& 
 }
 
 
-std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) const {
+void Session::setProgram(const std::string& name, const std::shared_ptr<ll::Program>& program) {
 
-    return std::make_shared<ll::ComputeNode>(shared_from_this(), device, descriptor);
+    m_programRegistry.insert_or_assign(name, program);
 }
 
 
-ll::ComputeNodeDescriptor Session::readComputeNodeDescriptor(const std::string& filePath) const {
+std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const {
 
-    return ll::readComputeNodeDescriptor(filePath, *this);
+    auto iter = m_programRegistry.find(name);
+
+    if (iter == m_programRegistry.cend()) {
+        // FIXME: what to do?
+        return nullptr;
+    }
+
+    return iter->second;
 }
 
 
-std::shared_ptr<ll::ComputeNode> Session::readComputeNode(const std::string& filePath) const {
+std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
 
-    return ll::readComputeNode(filePath, *this);
+    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {shared_from_this(), device, descriptor}};
+}
+
+
+std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const std::string& builderName) {
+
+    // create a ComputeNodeDescriptor using the builder
+    // call Session::createComputeNode using that descriptor
+    // TOTHINK: How to handle Lua errors?
+    
+    const auto descriptor = createComputeNodeDescriptor(builderName);
+    return createComputeNode(descriptor);
+}
+
+
+ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string& builderName) const {
+
+    // FIXME: need to distinguish between Compute and Container builders
+    constexpr auto lua = R"(
+        local builderName = ...
+        local builder = ll.getNodeBuilder(builderName)
+        return builder.newDescriptor()
+    )";
+
+    auto load = m_interpreter->load(lua);
+
+    return load(builderName);
+}
+
+
+std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const ll::ContainerNodeDescriptor& descriptor) {
+
+    return std::shared_ptr<ll::ContainerNode> {new ll::ContainerNode {shared_from_this(), descriptor}};
+}
+
+
+std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const std::string& builderName) {
+
+    const auto descriptor = createContainerNodeDescriptor(builderName);
+    return createContainerNode(descriptor);
+}
+
+
+ll::ContainerNodeDescriptor Session::createContainerNodeDescriptor(const std::string& builderName) const {
+
+    // FIXME: need to distinguish between Compute and Container builders
+    constexpr auto lua = R"(
+        local builderName = ...
+        local builder = ll.getNodeBuilder(builderName)
+        return builder.newDescriptor()
+    )";
+
+    auto load = m_interpreter->load(lua);
+
+    return load(builderName);
 }
 
 
@@ -220,7 +294,7 @@ void Session::run(const ll::CommandBuffer& cmdBuffer) {
 
     vk::SubmitInfo submitInfo = vk::SubmitInfo()
         .setCommandBufferCount(1)
-        .setPCommandBuffers(&cmdBuffer.commandBuffer);
+        .setPCommandBuffers(&cmdBuffer.m_commandBuffer);
 
     queue.submit(1, &submitInfo, nullptr);
     queue.waitIdle();
@@ -236,6 +310,16 @@ void Session::run(const ll::ComputeNode& node) {
     cmdBuffer->end();
 
     run(*cmdBuffer);
+}
+
+
+void Session::script(const std::string &code) {
+    m_interpreter->run(code);
+}
+
+
+void Session::scriptFile(const std::string& filename) {
+    m_interpreter->runFile(filename);
 }
 
 

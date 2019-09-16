@@ -12,21 +12,19 @@
 namespace ll {
 
 
-Buffer::Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-                const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-                const uint64_t requestedSize):
-    vkBuffer         {vkBuffer},
-    vkUsageFlags     {vkUsageFlags},
-    allocInfo        (allocInfo),
-    requestedSize    {requestedSize},
-    memory           {memory} {
-
-    assert(memory != nullptr);
+Buffer::Buffer( const vk::Buffer tVkBuffer, const vk::BufferUsageFlags tVkUsageFlags,
+                const std::shared_ptr<ll::Memory>& tMemory, const ll::MemoryAllocationInfo& tAllocInfo,
+                const uint64_t tRequestedSize):
+    m_vkBuffer         {tVkBuffer},
+    m_vkUsageFlags     {tVkUsageFlags},
+    m_allocInfo        (tAllocInfo),
+    m_requestedSize    {tRequestedSize},
+    m_memory           {tMemory} {
 }
 
 
 Buffer::~Buffer() {
-    memory->releaseBuffer(*this);
+    m_memory->releaseBuffer(*this);
 }
 
 
@@ -36,32 +34,37 @@ ll::ObjectType Buffer::getType() const noexcept {
 
 
 ll::MemoryAllocationInfo Buffer::getAllocationInfo() const noexcept {
-    return allocInfo;
+    return m_allocInfo;
 }
 
 
 uint64_t Buffer::getSize() const noexcept {
-    return requestedSize;
+    return m_requestedSize;
+}
+
+
+const std::shared_ptr<ll::Memory>& Buffer::getMemory() const noexcept {
+    return m_memory;
+}
+
+
+const std::shared_ptr<ll::Session>& Buffer::getSession() const noexcept {
+    return m_memory->getSession();
 }
 
 
 vk::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
-    return vkUsageFlags;
+    return m_vkUsageFlags;
 }
 
 
 bool Buffer::isMappable() const noexcept {
-    return memory->isMappable();
-}
-
-
-void Buffer::accept(ll::Visitor *visitor) {
-    assert(visitor != nullptr);
+    return m_memory->isMappable();
 }
 
 
 void Buffer::unmap() {
-    memory->unmapBuffer(*this);
+    m_memory->unmapBuffer(*this);
 }
 
 } // namespace ll

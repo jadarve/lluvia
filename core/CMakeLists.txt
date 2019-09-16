@@ -3,7 +3,6 @@ set (LL_CORE_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test/data)
 
 set (_TEST_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test/include)
 
-
 function(add_catchTest NAME SRCS)
     
     add_executable (${NAME} ${SRCS})
@@ -14,23 +13,34 @@ function(add_catchTest NAME SRCS)
 endfunction()
 
 set(LL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(LL_LINK_LIBRARIES stdc++ json vulkan)
+set(LL_LINK_LIBRARIES stdc++ json vulkan m dl lua)
+
+###########################################################
+# Header files configuration
+###########################################################
+
+file(READ ${CMAKE_SOURCE_DIR}/lua/ll/library.lua LL_LUA_LIBRARY_SRC)
+configure_file(${LL_INCLUDE_DIRS}/lluvia/core/impl/LuaLibrary.h.in ${LL_INCLUDE_DIRS}/lluvia/core/impl/LuaLibrary.h)
+
 
 set(_SRCS
     src/Buffer.cpp
     src/CommandBuffer.cpp
-    src/ComputeGraph.cpp
     src/ComputeNode.cpp
     src/ComputeNodeDescriptor.cpp
+    src/ContainerNode.cpp
+    src/ContainerNodeDescriptor.cpp
     src/error.cpp
     src/Image.cpp
     src/ImageDescriptor.cpp
     src/ImageView.cpp
     src/ImageViewDescriptor.cpp
     src/impl/MemoryFreeSpaceManager.cpp
-    src/io.cpp
+    src/Interpreter.cpp
     src/Memory.cpp
     src/MemoryAllocationInfo.cpp
+    src/Node.cpp
+    src/Parameter.cpp
     src/Program.cpp
     src/Session.cpp
     src/utils.cpp
@@ -51,19 +61,19 @@ target_link_libraries(lluvia-core ${LL_LINK_LIBRARIES})
 # configure
 configure_file (${_TEST_INCLUDE_DIR}/coreTestConfig.h.in ${_TEST_INCLUDE_DIR}/coreTestConfig.h)
 
-add_catchTest (test_VulkanDriver             test/test_VulkanDriver.cpp)
 add_catchTest (test_Base64                   test/test_Base64.cpp                    lluvia-core)
-add_catchTest (test_MemoryFreeSpaceManager   test/test_MemoryFreeSpaceManager.cpp    lluvia-core)
-add_catchTest (test_SessionCreation          test/test_SessionCreation.cpp           lluvia-core)
-add_catchTest (test_BufferCreation           test/test_BufferCreation.cpp            lluvia-core)
 add_catchTest (test_BufferCopy               test/test_BufferCopy.cpp                lluvia-core)
+add_catchTest (test_BufferCreation           test/test_BufferCreation.cpp            lluvia-core)
 add_catchTest (test_BufferMapping            test/test_BufferMapping.cpp             lluvia-core)
-add_catchTest (test_ImageCreation            test/test_ImageCreation.cpp             lluvia-core)
-add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp           lluvia-core)
 add_catchTest (test_ComputeNode              test/test_ComputeNode.cpp               lluvia-core)
 add_catchTest (test_ComputeNodeImage         test/test_ComputeNodeImage.cpp          lluvia-core)
-add_catchTest (test_IO                       test/test_IO.cpp                        lluvia-core)
+add_catchTest (test_ImageCreation            test/test_ImageCreation.cpp             lluvia-core)
+add_catchTest (test_Interpreter              test/test_Interpreter.cpp               lluvia-core)
+add_catchTest (test_MemoryFreeSpaceManager   test/test_MemoryFreeSpaceManager.cpp    lluvia-core)
+add_catchTest (test_ProgramCreation          test/test_ProgramCreation.cpp           lluvia-core)
+add_catchTest (test_SessionCreation          test/test_SessionCreation.cpp           lluvia-core)
 add_catchTest (test_utils                    test/test_utils.cpp                     lluvia-core)
+add_catchTest (test_VulkanDriver             test/test_VulkanDriver.cpp)
 
 
 # store variables in the cache

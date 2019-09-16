@@ -28,49 +28,59 @@ namespace ll {
 constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined;
 
 
-Memory::Memory(const std::shared_ptr<const ll::Session>& session, const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize):
-    device              {device},
-    heapInfo            (heapInfo),
-    pageSize            {pageSize},
-    session             {session} {
+Memory::Memory(
+    const std::shared_ptr<ll::Session>& session,
+    const vk::Device device,
+    const ll::VkHeapInfo& heapInfo,
+    const uint64_t pageSize):
+
+    m_device              {device},
+    m_heapInfo            (heapInfo),
+    m_pageSize            {pageSize},
+    m_session             {session} {
     
     // this prevents shifting outside the range of memoryTypeBits
-    assert(heapInfo.typeIndex <= 32u);
+    assert(m_heapInfo.typeIndex <= 32u);
 }
 
 
 Memory::~Memory() {
 
-    for (auto& memory : memoryPages) {
-        device.freeMemory(memory);
+    for (auto& memory : m_memoryPages) {
+        m_device.freeMemory(memory);
     }
 }
 
 
+const std::shared_ptr<ll::Session>& Memory::getSession() const noexcept {
+    return m_session;
+}
+
+
 vk::MemoryPropertyFlags Memory::getMemoryPropertyFlags() const noexcept {
-    return heapInfo.flags;
+    return m_heapInfo.flags;
 }
 
 
 uint64_t Memory::getPageSize() const noexcept {
-    return pageSize;
+    return m_pageSize;
 }
 
 
 uint32_t Memory::getPageCount() const noexcept {
-    return static_cast<uint32_t>(memoryPages.size());
+    return static_cast<uint32_t>(m_memoryPages.size());
 }
 
 
 bool Memory::isMappable() const noexcept {
-    return (heapInfo.flags & vk::MemoryPropertyFlagBits::eHostVisible) == vk::MemoryPropertyFlagBits::eHostVisible;
+    return (m_heapInfo.flags & vk::MemoryPropertyFlagBits::eHostVisible) == vk::MemoryPropertyFlagBits::eHostVisible;
 }
 
 
 bool Memory::isPageMappable(const uint32_t page) const noexcept {
 
-    if (page < memoryPageMappingFlags.size()) {
-        return isMappable() && !memoryPageMappingFlags[page];
+    if (page < m_memoryPageMappingFlags.size()) {
+        return isMappable() && !m_memoryPageMappingFlags[page];
     }
     
     return false;
@@ -83,21 +93,21 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
                                       .setSharingMode(vk::SharingMode::eExclusive)
                                       .setSize(size)
                                       .setUsage(usageFlags)
-                                      .setQueueFamilyIndexCount(static_cast<uint32_t>(heapInfo.familyQueueIndices.size()))
-                                      .setPQueueFamilyIndices(heapInfo.familyQueueIndices.data());
+                                      .setQueueFamilyIndexCount(static_cast<uint32_t>(m_heapInfo.familyQueueIndices.size()))
+                                      .setPQueueFamilyIndices(m_heapInfo.familyQueueIndices.data());
 
     // It's safe to not guard this call with a try-catch. If an
     // exception is thrown, let the caller to handle it. The memory
     // manager is still in its original state.
-    auto vkBuffer = device.createBuffer(bufferInfo);
+    auto vkBuffer = m_device.createBuffer(bufferInfo);
 
     // query alignment and offset
-    const auto memRequirements = device.getBufferMemoryRequirements(vkBuffer);
+    const auto memRequirements = m_device.getBufferMemoryRequirements(vkBuffer);
 
     // check that memRequirements.memoryTypeBits is supported in this memory
-    const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
+    const auto memoryTypeBits = static_cast<uint32_t>(0x01 << m_heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
-        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(heapInfo.typeIndex) + " does not support allocating buffer objects.");
+        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(m_heapInfo.typeIndex) + " does not support allocating buffer objects.");
     }
 
     // find or create a new memory page where the buffer can be allocated
@@ -109,17 +119,17 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // object construction is successful.
     try {
         
-        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
-        device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
+        const auto& memoryPage = m_memoryPages[tryInfo.allocInfo.page];
+        m_device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
 
         // ll::Buffer can throw exception.
         auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, usageFlags, shared_from_this(), tryInfo.allocInfo, size}};
-        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
+        m_pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return buffer;
 
     } catch (...) {
 
-        device.destroyBuffer(vkBuffer);
+        m_device.destroyBuffer(vkBuffer);
         throw; // rethrow
     }
 }
@@ -127,39 +137,39 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
 
 void Memory::releaseBuffer(const ll::Buffer& buffer) {
 
-    releaseMemoryAllocation(buffer.allocInfo);
-    device.destroyBuffer(buffer.vkBuffer);
+    releaseMemoryAllocation(buffer.m_allocInfo);
+    m_device.destroyBuffer(buffer.m_vkBuffer);
 }
 
 
 void* Memory::mapBuffer(const ll::Buffer& buffer) {
 
-    const auto page   = buffer.allocInfo.page;
-    const auto offset = buffer.allocInfo.offset + buffer.allocInfo.leftPadding;
-    const auto size   = buffer.allocInfo.size;
+    const auto page   = buffer.m_allocInfo.page;
+    const auto offset = buffer.m_allocInfo.offset + buffer.m_allocInfo.leftPadding;
+    const auto size   = buffer.m_allocInfo.size;
 
-    if (memoryPageMappingFlags[page]) {
+    if (m_memoryPageMappingFlags[page]) {
         throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] is already mapped by another object."};
     }
 
     // set mapping flag for this page to mapped
-    memoryPageMappingFlags[page] = true;
-    return device.mapMemory(memoryPages[page], offset, size);
+    m_memoryPageMappingFlags[page] = true;
+    return m_device.mapMemory(m_memoryPages[page], offset, size);
 }
 
 
 void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
-    const auto page = buffer.allocInfo.page;
+    const auto page = buffer.m_allocInfo.page;
 
-    if (!memoryPageMappingFlags[page]) {
+    if (!m_memoryPageMappingFlags[page]) {
         throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] has not been mapped by any object."};
     }
 
-    device.unmapMemory(memoryPages[page]);
+    m_device.unmapMemory(m_memoryPages[page]);
 
     // set mapping flag for this page to unmapped
-    memoryPageMappingFlags[page] = false;
+    m_memoryPageMappingFlags[page] = false;
 }
 
 
@@ -178,7 +188,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     }
 
     // checks if the combination of image shape, tiling and flags can be used.
-    if (!this->session->isImageDescriptorSupported(descriptor)) {
+    if (!m_session->isImageDescriptorSupported(descriptor)) {
         throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError),
             "physical device does not support allocation of image objects with the provided "
             "combination of shape, tiling and usageFlags.");
@@ -196,39 +206,39 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setFormat(descriptor.getFormat())
                     .setInitialLayout(InitialImageLayout);
 
-    auto vkImage = device.createImage(imgInfo);
+    auto vkImage = m_device.createImage(imgInfo);
 
     // query alignment and offset
-    const auto memRequirements = device.getImageMemoryRequirements(vkImage);
+    const auto memRequirements = m_device.getImageMemoryRequirements(vkImage);
 
     // check that memRequirements.memoryTypeBits is supported in this memory
-    const auto memoryTypeBits = static_cast<uint32_t>(0x01 << heapInfo.typeIndex);
+    const auto memoryTypeBits = static_cast<uint32_t>(0x01 << m_heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
 
-        device.destroyImage(vkImage);
-        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(heapInfo.typeIndex) + " does not support allocating image objects.");
+        m_device.destroyImage(vkImage);
+        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(m_heapInfo.typeIndex) + " does not support allocating image objects.");
     }
 
     // find or create a new memory page where the image can be allocated
     auto tryInfo = getSuitableMemoryPage(memRequirements);
     
     try {
-        const auto& memoryPage = memoryPages[tryInfo.allocInfo.page];
-        device.bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
+        const auto& memoryPage = m_memoryPages[tryInfo.allocInfo.page];
+        m_device.bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
 
-        auto image = std::shared_ptr<ll::Image> {new ll::Image {device,
+        auto image = std::shared_ptr<ll::Image> {new ll::Image {m_device,
                                                                 vkImage,
                                                                 descriptor,
                                                                 shared_from_this(),
                                                                 tryInfo.allocInfo,
                                                                 InitialImageLayout}};
                                                                 
-        pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
+        m_pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return image;
 
     } catch (...) {
 
-        device.destroyImage(vkImage);
+        m_device.destroyImage(vkImage);
         throw;  // rethrow
     }
 }
@@ -245,14 +255,8 @@ std::shared_ptr<ll::ImageView> Memory::createImageView(
 
 void Memory::releaseImage(const ll::Image& image) {
 
-    releaseMemoryAllocation(image.allocInfo);
-    device.destroyImage(image.vkImage);
-}
-
-
-void Memory::accept(ll::Visitor* visitor) {
-    assert(visitor != nullptr);
-    // nothing to visit
+    releaseMemoryAllocation(image.getAllocationInfo());
+    m_device.destroyImage(image.m_vkImage);
 }
 
 
@@ -260,7 +264,7 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
 
     auto tryInfo = impl::MemoryAllocationTryInfo {};
     auto pageIndex = 0u;
-    for (auto& manager : pageManagers) {
+    for (auto& manager : m_pageManagers) {
 
         if (manager.tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo)) {
             tryInfo.allocInfo.page = pageIndex;
@@ -279,26 +283,26 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
     // if it is possible to create a new vk::DeviceMemory object according
     // to the physical device limits.
 
-    const auto newPageSize = std::max(pageSize, memRequirements.size);
+    const auto newPageSize = std::max(m_pageSize, memRequirements.size);
 
 
     // reserve space to store a new memory page and manager.
-    if (memoryPages.size() == memoryPages.capacity()) {
-        memoryPages.reserve(memoryPages.capacity() + CAPACITY_INCREASE);
+    if (m_memoryPages.size() == m_memoryPages.capacity()) {
+        m_memoryPages.reserve(m_memoryPages.capacity() + CAPACITY_INCREASE);
     }
 
-    if (pageManagers.size() == pageManagers.capacity()) {
-        pageManagers.reserve(pageManagers.capacity() + CAPACITY_INCREASE);
+    if (m_pageManagers.size() == m_pageManagers.capacity()) {
+        m_pageManagers.reserve(m_pageManagers.capacity() + CAPACITY_INCREASE);
     }
 
-    if (memoryPageMappingFlags.size() == memoryPageMappingFlags.capacity()) {
-        memoryPageMappingFlags.reserve(memoryPageMappingFlags.capacity() + CAPACITY_INCREASE);
+    if (m_memoryPageMappingFlags.size() == m_memoryPageMappingFlags.capacity()) {
+        m_memoryPageMappingFlags.reserve(m_memoryPageMappingFlags.capacity() + CAPACITY_INCREASE);
     }
 
 
     vk::MemoryAllocateInfo allocateInfo = vk::MemoryAllocateInfo()
                                           .setAllocationSize(newPageSize)
-                                          .setMemoryTypeIndex(heapInfo.typeIndex);
+                                          .setMemoryTypeIndex(m_heapInfo.typeIndex);
 
 
     // Safe to not try-catch the creation of manager and memory.
@@ -307,16 +311,16 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
     auto manager = impl::MemoryFreeSpaceManager {newPageSize};
     manager.reserveManagerSpace();
 
-    auto memory  = device.allocateMemory(allocateInfo);
+    auto memory  = m_device.allocateMemory(allocateInfo);
 
     // push objects to vectors after reserving space
-    memoryPages.push_back(memory);
-    pageManagers.push_back(std::move(manager));
-    memoryPageMappingFlags.push_back(false);
+    m_memoryPages.push_back(memory);
+    m_pageManagers.push_back(std::move(manager));
+    m_memoryPageMappingFlags.push_back(false);
 
     // this allocation try is guaranteed to work as there is enough
     // free space in the page to fit memRequirements.size.
-    pageManagers[pageIndex].tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo);
+    m_pageManagers[pageIndex].tryAllocate(memRequirements.size, memRequirements.alignment, tryInfo);
     tryInfo.allocInfo.page = pageIndex;
 
     return tryInfo;
@@ -327,13 +331,13 @@ void Memory::releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo) 
 
     // reserve space in case the release of this allocation requires
     // the insertion of a new free interval.
-    pageManagers[allocInfo.page].reserveManagerSpace();
+    m_pageManagers[allocInfo.page].reserveManagerSpace();
 
     // release the allocated memory regardless of the result of
     // reserveManagerSpace(). In case it failed the release method
     // should throw and exception and abort the program (since it is
     // declared as noexcept).
-    pageManagers[allocInfo.page].release(allocInfo);
+    m_pageManagers[allocInfo.page].release(allocInfo);
 }
 
 

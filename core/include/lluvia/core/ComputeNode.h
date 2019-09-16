@@ -9,8 +9,10 @@
 #define LLUVIA_CORE_COMPUTE_NODE_H_
 
 #include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/Node.h"
 
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -19,48 +21,38 @@
 namespace ll {
 
 class Buffer;
+class CommandBuffer;
 class Image;
 class ImageView;
 class Object;
 class Program;
 class Session;
-class Visitor;
 
 
 /**
 @brief      Class representing compute nodes.
 */
-class ComputeNode {
+class ComputeNode : public Node, public std::enable_shared_from_this<ll::ComputeNode> {
 
 public:
     ComputeNode()                                     = delete;
     ComputeNode(const ComputeNode& node)              = delete;
     ComputeNode(ComputeNode&& node)                   = delete;
 
-
-    /**
-    @brief      Constructs the object.
-    
-    @param[in]  session     The session this node was created from.
-    @param[in]  device      The Vulkan device where this node will run.
-    @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
-                            So this one can be modified after the compute node is constructed.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
-                                  if desc.getFunctionName() is empty string.
-    
-    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
-                                  if desc.getProgram is nullptr.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
-                                  if any of the components of descriptor.localShape is zero.
-    */
-    ComputeNode(const std::shared_ptr<const ll::Session>& session, const vk::Device& device, const ll::ComputeNodeDescriptor& descriptor);
-
-    ~ComputeNode();
+    virtual ~ComputeNode();
 
     ComputeNode& operator = (const ComputeNode& node) = delete;
     ComputeNode& operator = (ComputeNode&& node)      = delete;
+
+    ll::NodeType getType() const noexcept override;
+
+
+    /**
+    @brief      Gets the session this memory was created from.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -234,86 +226,73 @@ public:
     */
     ll::vec3ui getGridShape() const noexcept;
 
-    /**
-    @brief      Gets the parameter count for this node.
+    std::shared_ptr<ll::Object> getPort(const std::string& name) const override;
     
-    @return     The parameter count.
-    */
-    size_t getParameterCount() const noexcept;
+    void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
-    /**
-    @brief      Returns the object associated to parameter \p index.
-    
-    @param[in]  index  The index of this parameter.
-                       It must be less than the value returned by ll::ComputeNode::getParameterCount.
-    
-    @return     The parameter.
-    */
-    std::shared_ptr<ll::Object> getParameter(size_t index) const noexcept;
+    void record(ll::CommandBuffer& commandBuffer) const override;
 
-
-    /**
-    @brief      Binds a ll::Object as parameter \p index for this node.
-    
-    @param[in]  index  The parameter index.
-                       It must be less than the value returned by ll::ComputeNode::getParameterCount.
-    @param[in]  obj    The object to bind.
-
-    @throws     std::system_error if \p obj cannot be mapped as a parameter at position \p index.
-    */
-    void bind(uint32_t index, const std::shared_ptr<ll::Object>& obj);
-
-
-    /**
-    @brief      Records the operations required to run this compute node in a Vulkan command buffer.
-
-    This method is called by ll::CommandBuffer objects when they are called as
-    
-    @param[in]  commandBuffer  The command buffer.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidGridShape
-                                  if any of the components of getGridShape() is zero.
-    */
-    void record(const vk::CommandBuffer& commandBuffer) const;
-
-
-    /**
-    @brief      Accepts a visitor to this compute node.
-    
-    @param      visitor  The visitor
-    */
-    void accept(ll::Visitor* visitor);
+protected:
+    void onInit() override;
 
 private:
-    void bindBuffer(uint32_t index, const std::shared_ptr<ll::Buffer>& buffer);
-    void bindImageView(uint32_t index, const std::shared_ptr<ll::ImageView>& imageView);
+    /**
+    @brief      Constructs the object.
+    
+    @param[in]  tSession     The session this node was created from.
+    @param[in]  tDevice      The Vulkan device where this node will run.
+    @param[in]  tDescriptor  The descriptor. A copy of this descriptor is kept within this object.
+                             So this one can be modified after the compute node is constructed.
 
-    vk::Device                          device;
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
+                                  if desc.getFunctionName() is empty string.
+    
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
+                                  if desc.getProgram is nullptr.
 
-    vk::DescriptorSetLayout             descriptorSetLayout;
-    vk::PipelineShaderStageCreateInfo   stageInfo;
+    @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
+                                  if any of the components of descriptor.localShape is zero.
+    */
+    ComputeNode(
+        const std::shared_ptr<ll::Session>& tSession,
+        const vk::Device& tDevice,
+        const ll::ComputeNodeDescriptor& tDescriptor);
 
-    std::vector<vk::DescriptorPoolSize> descriptorPoolSizes;
-    vk::DescriptorPoolCreateInfo        descriptorPoolCreateInfo;
+    void initPortBindings();
+    void initPipeline();
+    
+    void bindBuffer(const ll::PortDescriptor& port, const std::shared_ptr<ll::Buffer>& buffer);
+    void bindImageView(const ll::PortDescriptor& port, const std::shared_ptr<ll::ImageView>& imageView);
 
-    vk::PipelineLayout                  pipelineLayout;
-    vk::Pipeline                        pipeline;
+    std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
+    uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
 
-    vk::DescriptorSet                   descriptorSet;
-    vk::DescriptorPool                  descriptorPool;
+    vk::Device                          m_device;
 
-    ll::ComputeNodeDescriptor           descriptor;
+    vk::DescriptorSetLayout             m_descriptorSetLayout;
+
+    vk::PipelineLayout                  m_pipelineLayout;
+    vk::Pipeline                        m_pipeline;
+
+    vk::DescriptorSet                   m_descriptorSet;
+    vk::DescriptorPool                  m_descriptorPool;
+
+    ll::ComputeNodeDescriptor           m_descriptor;
+
+    std::vector<vk::DescriptorSetLayoutBinding> m_parameterBindings;
 
     // specialization constants
     // vk::SpecializationInfo specializationInfo;
     // std::vector<vk::SpecializationMapEntry> specializationMapEntries;
     // // uint32_t local_x {1};
 
-    std::vector<std::shared_ptr<ll::Object>> objects;
+    std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
 
     // Shared pointer to the session this node was created from
     // This will keep the session alive until this or any other node is deleted.
-    std::shared_ptr<const ll::Session>            session;
+    std::shared_ptr<ll::Session>            m_session;
+
+friend class ll::Session;
 };
 
 

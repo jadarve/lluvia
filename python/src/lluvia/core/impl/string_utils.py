@@ -1,6 +1,6 @@
 """
-    lluvia.core.impl.str_utils
-    ---------------------------
+    lluvia.core.impl.string_utils
+    -----------------------------
 
     :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
@@ -8,16 +8,14 @@
 
 import sys
 
-__all__ = ['isStringLike', 'encodeString']
-
 
 def isStringLike(s):
     """
     Returns True if s is a string-like object.
-    
+
     The condition to test is:
-    
-    type(s) is str or type(s) is bytes    
+
+        type(s) is str or type(s) is bytes
     """
 
     return type(s) is str or type(s) is bytes

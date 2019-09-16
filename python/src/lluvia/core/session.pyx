@@ -8,13 +8,17 @@
 
 cimport session
 
+from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+
+from . import impl
+
 import subprocess
 import tempfile
 import sys
 
 from cython.operator cimport dereference as deref
 
-from libc.stdint cimport uint64_t
+from libc.stdint cimport uint32_t, uint64_t
 from libcpp cimport bool
 from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
@@ -32,65 +36,91 @@ cimport vulkan as vk
 import  program
 cimport program
 
-from compute_node cimport ComputeNode, ComputeNodeDescriptor
+from node cimport ComputeNode, ComputeNodeDescriptor, ContainerNodeDescriptor, ContainerNode
 
-from . import impl
 
-__all__ = ['Session']
+__all__ = [
+    'createSession',
+    'Session'
+]
+
+
+def createSession():
+    """
+    Creates a new lluvia.Session object.
+
+    Returns
+    -------
+    session : Session.
+        New session.
+    """
+
+    cdef Session out = Session()
+    out.__session = _Session.create()
+    return out
 
 
 cdef class Session:
 
     def __cinit__(self):
-        self.__session = _Session.create()
+        pass
 
     def __dealloc__(self):
         # nothing to do
         pass
 
-
     def getSupportedMemoryPropertyFlags(self):
         """
-        Returns the supported memory property flags for creating memories in this session.
+        Returns the supported memory property flags for
+        creating memories in this session.
 
-        The length of the returned vector equals the number of Vulkan memory types
-        available for the physical device this session was created from.
+        The length of the returned vector equals the number
+        of Vulkan memory types available for the physical device
+        this session was created from.
 
-        See https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits for more information.
+        See https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits
+        for more information.
 
 
         Returns
         -------
         supportedMemoryFlags : list of string lists
-            The supported memory property flags combinations supported by this session.
+            The supported memory property flags combinations supported
+            by this session.
         """
 
         cdef vector[vk.MemoryPropertyFlags] vkFlags = self.__session.get().getSupportedMemoryFlags()
 
-        supportedMemoryFlags = []
+        supportedMemoryFlags = list()
 
-        cdef vector[string] stringFlagsList;
+        cdef uint32_t flags_u32 = 0
         for flags in vkFlags:
-            stringFlagsList = memory.memoryPropertyFlagsToVectorString(flags)
-            supportedMemoryFlags.append(stringFlagsList)
+
+            flags_u32 = <uint32_t> flags
+            flagBits = impl.expandFlagBits(flags_u32, MemoryPropertyFlagBits)
+            supportedMemoryFlags.append(flagBits)
 
         return supportedMemoryFlags
 
-
-    def createMemory(self, flags = 'DeviceLocal', uint64_t pageSize = 33554432L, bool exactFlagsMatch = False):
+    def createMemory(self,
+                     flags=MemoryPropertyFlagBits.DeviceLocal,
+                     uint64_t pageSize=33554432L,
+                     bool exactFlagsMatch=False):
         """
         Creates a new memory.
 
         ```
             import lluvia as ll
 
-            session = ll.Session()
-            memory = session.createMemory(['HostVisible', 'HostCoherent'], 4096, False)
+            session = ll.createSession()
+            memory = session.createMemory([ll.MemoryPropertyFlagBits.HostVisible,
+                                           ll.MemoryPropertyFlagBits.HostCoherent],
+                                          4096, False)
         ```
 
         The flags parameter can contain one string or a list of strings
         specifying the memory property flags the new memory will be created
-        with. The possible string values are defined in lluvia.MemoryPropertyFlags:
+        with. The possible values are defined in lluvia.MemoryPropertyFlagBits:
 
         - DeviceLocal
         - HostCached
@@ -130,23 +160,13 @@ cdef class Session:
 
         """
 
-        # converts one string object to a list
-        if type(flags) is str:
-            flags = [flags]
-
-        # sanitize flags
-        flags = impl.validateFlagStrings(memory.MemoryPropertyFlags, flags, forceList=True)
-
-        # convert flags to vk.MemoryPropertyFlags
-        cdef list flagsList = flags
-        cdef vk.MemoryPropertyFlags vkFlags = memory.vectorStringToMemoryPropertyFlags(flagsList)
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
+        cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
 
         cdef Memory mem = Memory()
-        mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, False)
-        mem.__session = self
-        
-        return mem
+        mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
 
+        return mem
 
     def createProgram(self, str path):
         """
@@ -177,6 +197,21 @@ cdef class Session:
         except IOError as e:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
+    def setProgram(self, str name, program.Program program):
+
+        self.__session.get().setProgram(impl.encodeString(name), program.__program)
+
+    def getProgram(self, str name):
+
+        cdef program.Program out = program.Program()
+        out.__program = self.__session.get().getProgram(impl.encodeString(name))
+        return out
+
+    def createComputeNodeDescriptor(self, str builderName):
+
+        cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
+        desc.__descriptor = self.__session.get().createComputeNodeDescriptor(impl.encodeString(builderName))
+        return desc
 
     def createComputeNode(self, ComputeNodeDescriptor desc):
         """
@@ -191,174 +226,24 @@ cdef class Session:
         Returns
         node : lluvia.ComputeNode
         """
+
         cdef ComputeNode node = ComputeNode()
-        node.__session = self
         node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
-        
+
         return node
 
+    def createContainerNodeDescriptor(self, str builderName):
 
-    def readComputeNodeDescriptor(self, filePath):
-        """
-        Reads a ComputeNodeDescriptor from a given file.
-
-        The JSON file must have the following structure:
-
-            {
-                "function": "main",
-                "grid_x": 1,
-                "grid_y": 1,
-                "grid_z": 1,
-                "local_x": 1,
-                "local_y": 1,
-                "local_z": 1,
-                "parameters": [
-                    "Buffer",
-                    "ImageView"
-                    "SampledImageView"
-                ],
-                "spirv": "base 64 SPIR-V code"
-            }
-
-
-        Parameters
-        ----------
-        filePath : string
-            File path to JSON file.
-
-
-        Returns
-        -------
-        desc : lluvia.ComputeNodeDescriptor
-
-
-        Raises
-        ------
-        IOError : if there are problems reading the JSON file.
-        """
-
-        cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
-        
-        filePath = impl.encodeString(filePath)
-        desc.__descriptor = self.__session.get().readComputeNodeDescriptor(filePath)
+        cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
+        desc.__descriptor = self.__session.get().createContainerNodeDescriptor(impl.encodeString(builderName))
         return desc
 
+    def createContainerNode(self, ContainerNodeDescriptor desc):
 
-    def writeComputeNodeDescriptor(self, ComputeNodeDescriptor desc, filePath):
-        """
-        Write a compute node descriptor as a JSON file.
+        cdef ContainerNode node = ContainerNode()
+        node.__node    = self.__session.get().createContainerNode(desc.__descriptor)
 
-        The JSON file has the following structure:
-
-            {
-                "function"   : "function name",
-                "grid_x"     : int,
-                "grid_y"     : int,
-                "grid_z"     : int,
-                "local_x"    : int,
-                "local_y"    : int,
-                "local_z"    : int,
-                "parameters" : [
-                    "Buffer",
-                    "ImageView",
-                    "SampledImageView",
-                    ...
-                ],
-                "spirv"      : "base 64 SPIR-V code"
-            }
-
-        Parameters
-        ----------
-        desc : ComputeNodeDescriptor.
-            The descriptor to write
-
-        filePath : str
-            The file path.
-        """
-
-        filePath = impl.encodeString(filePath)
-        io.writeComputeNodeDescriptor(desc, filePath)
-
-
-    def writeComputeNode(self, ComputeNode node, filePath):
-        """
-        Write a compute node as a JSON file.
-
-        The JSON file has the following structure:
-
-            {
-                "function"   : "function name",
-                "grid_x"     : int,
-                "grid_y"     : int,
-                "grid_z"     : int,
-                "local_x"    : int,
-                "local_y"    : int,
-                "local_z"    : int,
-                "parameters" : [
-                    "Buffer",
-                    "ImageView",
-                    "SampledImageView",
-                    ...
-                ],
-                "spirv"      : "base 64 SPIR-V code"
-            }
-
-        Parameters
-        ----------
-        desc : ComputeNodeDescriptor.
-            The descriptor to write
-
-        filePath : str
-            The file path.
-        """
-
-        filePath = impl.encodeString(filePath)
-        io.writeComputeNode(node, filePath)
-
-
-    def readComputeNode(self, filePath):
-        """
-        Reads a ComputeNode from a given file.
-
-        The JSON file must have the following structure:
-
-            {
-                "function": "main",
-                "grid_x": 1,
-                "grid_y": 1,
-                "grid_z": 1,
-                "local_x": 1,
-                "local_y": 1,
-                "local_z": 1,
-                "parameters": [
-                    "Buffer",
-                    "ImageView"
-                    "SampledImageView"
-                ],
-                "spirv": "base 64 SPIR-V code"
-            }
-
-
-        Parameters
-        ----------
-        filePath : string
-            File path to JSON file.
-
-
-        Returns
-        -------
-        desc : lluvia.ComputeNode
-
-
-        Raises
-        ------
-        IOError : if there are problems reading the JSON file.
-        """
-
-        filePath = impl.encodeString(filePath)
-        desc = self.readComputeNodeDescriptor(filePath)
-        return self.createComputeNode(desc)
-
+        return node
 
     def createCommandBuffer(self):
         """
@@ -376,17 +261,24 @@ cdef class Session:
         cdef CommandBuffer cmdBuffer = CommandBuffer()
         cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer()))
 
-        # hold a reference to this session to avoid deleting it before the command buffer
+        # hold a reference to this session to
+        # avoid deleting it before the command buffer
         cmdBuffer.__session = self
 
         return cmdBuffer
 
+    def script(self, str code):
+
+        self.__session.get().script(impl.encodeString(code))
+
+    def scriptFile(self, str filename):
+
+        self.__session.get().scriptFile(impl.encodeString(filename))
 
     def run(self, obj):
         """
         Runs a CommandBuffer or ComputeNode
-        
-        
+
         Parameters
         ----------
         obj : CommandBuffer or ComputeNode
@@ -402,9 +294,10 @@ cdef class Session:
         elif type(obj) == CommandBuffer:
             cmdBuffer = obj
             self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
-    
 
-    def compileProgram(self, shaderCode, includeDirs=None, compileFlags=['-Werror']):
+    def compileProgram(self, shaderCode,
+                       includeDirs=None,
+                       compileFlags=['-Werror']):
         """
         Compiles a Program from GLSL shader code.
 
@@ -414,9 +307,9 @@ cdef class Session:
         Parameters
         ----------
         shaderCode : file or str.
-            If file, it must contain the GLSL code of the shader to compile. The
-            file is not closed during the execution of this method.
-            
+            If file, it must contain the GLSL code of the shader to compile.
+            The file is not closed during the execution of this method.
+
             If str,  it must be valid GLSL code. A temporal file is created and
             its path is passed to glslc for compilation.
 
@@ -460,26 +353,30 @@ cdef class Session:
 
                 for incDir in includeDirs:
                     command += ['-I', incDir]
-            
+
             command.append(shaderFile.name)
             command = ' '.join(command)
 
-            proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            proc = subprocess.Popen(command,
+                                    shell=True,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE)
             proc.wait()
-            
+
             if proc.returncode != 0:
                 raise RuntimeError(proc.stderr.read())
 
             return self.createProgram(outputFile.name)
 
-
-    def compileComputeNode( self,
-                            shaderCode,
-                            parameters,
-                            localSize    = (1, 1, 1),
-                            gridSize     = (1, 1, 1),
-                            includeDirs  = None,
-                            compileFlags = ['-Werror']):
+    def compileComputeNode(self,
+                           ports,
+                           shaderCode,
+                           functionName='main',
+                           builderName='',
+                           localSize=(1, 1, 1),
+                           gridSize=(1, 1, 1),
+                           includeDirs=None,
+                           compileFlags=['-Werror']):
         """
         Compiles a ComputeNode from GLSL shader code.
 
@@ -487,19 +384,21 @@ cdef class Session:
 
         Parameters
         ----------
+        ports : list of PortDescriptor.
+            List of port descriptors the compute node receives.
+
         shaderCode : file or str.
-            If file, it must contain the GLSL code of the shader to compile. The
-            file is not closed during the execution of this method.
+            If file, it must contain the GLSL code of the shader to compile.
+            The file is not closed during the execution of this method.
 
             If str,  it must be valid GLSL code. A temporal file is created and
             its path is passed to glslc for compilation.
 
-        parameters : list of strings.
-            List of parameters the compute node receives. Each string
-            must be one of the values defined in lluvia.ParameterType:
-                - Buffer
-                - ImageView
-                - SampledImageView
+        functionName : str. Defaults to 'main'.
+            Function name whitin the shader the compute node will execute.
+
+        builderName : str. Defaults to '' (empty string).
+            Builder name associated to this node.
 
         localSize : list or tuple of length 3. Defaults to (1, 1, 1).
             Local group size for each XYZ dimension. Each value
@@ -534,12 +433,15 @@ cdef class Session:
         """
 
         desc = ComputeNodeDescriptor()
-        desc.program      = self.compileProgram(shaderCode, includeDirs, compileFlags)
-        desc.functionName = 'main'
-        desc.grid         = gridSize
-        desc.local        = localSize
+        desc.program = self.compileProgram(shaderCode,
+                                           includeDirs,
+                                           compileFlags)
+        desc.functionName = functionName
+        desc.builderName = builderName
+        desc.grid = gridSize
+        desc.local = localSize
 
-        for param in parameters:
-            desc.addParameter(param)
+        for port in ports:
+            desc.addPort(port)
 
         return self.createComputeNode(desc)

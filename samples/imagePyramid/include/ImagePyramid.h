@@ -10,9 +10,9 @@
 class ImagePyramid {
 
 public:
-    ImagePyramid(const uint32_t levels);
+    ImagePyramid(const uint32_t tLevels);
 
-    void setInputImage(std::shared_ptr<ll::Image> inputImage);
+    void setInputImage(std::shared_ptr<ll::Image> tInputImage);
     void init(std::shared_ptr<ll::Session> session);
     void record(ll::CommandBuffer& cmdBuffer);
 

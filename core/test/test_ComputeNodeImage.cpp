@@ -89,8 +89,8 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addParameter(ll::ParameterType::SampledImageView)
-                            .addParameter(ll::ParameterType::Buffer);
+                            .addPort({0, "in", ll::PortDirection::In, ll::PortType::SampledImageView})
+                            .addPort({1, "out", ll::PortDirection::Out, ll::PortType::Buffer});
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
@@ -105,8 +105,9 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
     // the image view can only be bound after the underlying
     // image is in the correct layout.
-    node->bind(0, imageView);
-    node->bind(1, outputBuffer);
+    node->bind("in", imageView);
+    node->bind("out", outputBuffer);
+    node->init();
 
     cmdBuffer->run(*node);
 
@@ -207,8 +208,8 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
                             .setFunctionName("main")
                             .setLocalX(32)
                             .setLocalY(32)
-                            .addParameter(ll::ParameterType::ImageView)
-                            .addParameter(ll::ParameterType::Buffer);
+                            .addPort({0, "in", ll::PortDirection::In, ll::PortType::ImageView})
+                            .addPort({1, "out", ll::PortDirection::Out, ll::PortType::Buffer});
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
@@ -223,8 +224,9 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
 
     // the image view can only be bound after the underlying
     // image is in the correct layout.
-    node->bind(0, imageView);
-    node->bind(1, outputBuffer);
+    node->bind("in", imageView);
+    node->bind("out", outputBuffer);
+    node->setState(ll::NodeState::Init);
 
     cmdBuffer->run(*node);
 

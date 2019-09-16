@@ -23,18 +23,21 @@ namespace ll {
 @brief      Error codes
 */
 enum class ErrorCode : int32_t {
-    EnumConversionFailed      = 0,      /**< Conversion between enum types failed */
-    MemoryMapFailed           = 1,      /**< Memory mapping operation (map or unmap) failed */
-    ObjectAllocationError     = 2,      /**< Error trying to allocate objects in a memory */
-    ParameterBindingError     = 3,      /**< Error binding a parameter in a ll::ComputeNode */
-    InvalidShaderFunctionName = 5,      /**< Shader function name has invalid name, such as empty string */
-    InvalidShaderProgram      = 6,      /**< Shader program is not valid*/
-    BufferCopyError           = 7,      /**< Error copying data between buffers*/
-    ProgramCompilationError   = 8,      /**< Error compiling shader module for program*/
-    InvalidLocalShape         = 9,      /**< Local shape passed to a Compute node is invalid*/
-    InvalidGridShape          = 10,     /**< Grid shape for a ComputeNode is invalid */
-    BadEnumCasting            = 11,     /**< Bad casting of integral value to enum type */
-    PhysicalDevicesNotFound   = 12      /**< No physical devices found */
+    EnumConversionFailed,       /**< Conversion between enum types failed */
+    MemoryMapFailed,            /**< Memory mapping operation (map or unmap) failed */
+    ObjectAllocationError,      /**< Error trying to allocate objects in a memory */
+    PortBindingError,           /**< Error binding a port to a ll::Node */
+    InvalidShaderFunctionName,  /**< Shader function name has invalid name, such as empty string */
+    InvalidShaderProgram,       /**< Shader program is not valid*/
+    BufferCopyError,            /**< Error copying data between buffers*/
+    ProgramCompilationError,    /**< Error compiling shader module for program*/
+    InvalidLocalShape,          /**< Local shape passed to a Compute node is invalid*/
+    InvalidGridShape,           /**< Grid shape for a ComputeNode is invalid */
+    BadEnumCasting,             /**< Bad casting of integral value to enum type */
+    PhysicalDevicesNotFound,    /**< No physical devices found */
+    KeyNotFound,                /**< Key not found in a given look up method */
+    MemoryCreationError,        /**< Error creating ll::Memory object */
+    InvalidNodeState,           /**< Invalid ll::Node state */
 };
 
 
@@ -43,11 +46,11 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 12> ErrorCodeStrings {{
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 15> ErrorCodeStrings {{
         std::make_tuple("EnumConversionFailed"      , ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed"           , ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError"     , ll::ErrorCode::ObjectAllocationError),
-        std::make_tuple("ParameterBindingError"     , ll::ErrorCode::ParameterBindingError),
+        std::make_tuple("PortBindingError"          , ll::ErrorCode::PortBindingError),
         std::make_tuple("InvalidShaderFunctionName" , ll::ErrorCode::InvalidShaderFunctionName),
         std::make_tuple("InvalidShaderProgram"      , ll::ErrorCode::InvalidShaderProgram),
         std::make_tuple("BufferCopyError"           , ll::ErrorCode::BufferCopyError),
@@ -56,6 +59,9 @@ namespace impl {
         std::make_tuple("InvalidGridShape"          , ll::ErrorCode::InvalidGridShape),
         std::make_tuple("BadEnumCasting"            , ll::ErrorCode::BadEnumCasting),
         std::make_tuple("PhysicalDevicesNotFound"   , ll::ErrorCode::PhysicalDevicesNotFound),
+        std::make_tuple("KeyNotFound"               , ll::ErrorCode::KeyNotFound),
+        std::make_tuple("MemoryCreationError"       , ll::ErrorCode::MemoryCreationError),
+        std::make_tuple("InvalidNodeState"          , ll::ErrorCode::InvalidNodeState),
     }};
 
 } // namespace impl

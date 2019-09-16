@@ -32,7 +32,6 @@ class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
 class Session;
-class Visitor;
 
 
 namespace impl {
@@ -132,6 +131,22 @@ public:
 
 
     /**
+    @brief      Gets the memory this buffer was allocated from.
+    
+    @return     The memory.
+    */
+    const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
+
+
+    /**
+    @brief      Gets the session this object belongs to.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
+
+
+    /**
     @brief      Gets the size of the buffer in bytes.
     
     The size returned corresponds to the size requested by the user through
@@ -173,7 +188,7 @@ public:
     struct BufferMapDeleter{
 
         template<typename T>
-        void operator ()(T* ptr) const {
+        void operator ()(__attribute__((unused)) T* ptr) const {
             buffer->unmap();
         }
 
@@ -231,14 +246,14 @@ public:
     template<typename T>
     std::unique_ptr<T, ll::Buffer::BufferMapDeleter> map() {
 
-        if (!memory->isPageMappable(allocInfo.page)) {
-            throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
+        if (!m_memory->isPageMappable(m_allocInfo.page)) {
+            throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(m_allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
         }
 
         // remove array extend from T if present
         typedef typename std::conditional<std::is_array<T>::value, typename std::remove_all_extents<T>::type, T>::type baseType;
 
-        auto ptr = memory->mapBuffer(*this);
+        auto ptr = m_memory->mapBuffer(*this);
 
         auto deleter = ll::Buffer::BufferMapDeleter {};
         deleter.buffer = this;
@@ -247,34 +262,27 @@ public:
     }
 
 
-    /**
-    @brief      Accepts a visitor to this buffer.
-    
-    @param      visitor  The visitor
-    */
-    void accept(ll::Visitor* visitor);
-
 private:
-    Buffer( const vk::Buffer vkBuffer, const vk::BufferUsageFlags vkUsageFlags,
-            const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-            const uint64_t requestedSize);
+    Buffer( const vk::Buffer tVkBuffer, const vk::BufferUsageFlags tVkUsageFlags,
+            const std::shared_ptr<ll::Memory>& tMemory, const ll::MemoryAllocationInfo& tAllocInfo,
+            const uint64_t tRequestedSize);
 
     void unmap();
 
-    vk::Buffer                  vkBuffer;
-    vk::BufferUsageFlags        vkUsageFlags;
+    vk::Buffer                  m_vkBuffer;
+    vk::BufferUsageFlags        m_vkUsageFlags;
 
-    ll::MemoryAllocationInfo    allocInfo;
+    ll::MemoryAllocationInfo    m_allocInfo;
 
     // the size requested for the buffer. It can
     // be less than allocInfo.size due to alignment
     // and size requirements for the given memory.
-    uint64_t                    requestedSize;
+    uint64_t                    m_requestedSize;
 
     // Shared pointer to the memory this buffer was created from
     // This will keep the memory alive until this buffer is deleted
     // avoiding reference to a corrupted memory location.
-    std::shared_ptr<ll::Memory> memory;
+    std::shared_ptr<ll::Memory> m_memory;
 
 
 friend class ll::CommandBuffer;
@@ -282,16 +290,7 @@ friend class ll::ComputeGraph;
 friend class ll::ComputeNode;
 friend class ll::Memory;
 friend class ll::Session;
-
-// friend struct ll::impl::BufferMapDeleter;
 };
-
-
-namespace impl {
-
-    
-}
-
 
 } // namespace ll
 

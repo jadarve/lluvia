@@ -8,6 +8,17 @@
 
 cimport memory
 
+from . import impl
+from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+
+from lluvia.core.enums.image cimport ChannelType
+from lluvia.core.enums.image import ImageUsageFlagBits
+
+from lluvia.core.enums.vulkan cimport ImageLayout
+
+from session import Session
+from session cimport Session
+
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
@@ -22,30 +33,61 @@ cimport image
 
 cimport vulkan as vk
 
-from . import impl
+
+__all__ = [
+    'Memory',
+    'MemoryAllocationInfo'
+]
 
 
-__all__ = ['Memory', 'MemoryPropertyFlags']
+cdef class MemoryAllocationInfo:
 
+    def __cinit__(self):
+        pass
 
-MemoryPropertyFlags = [b'DeviceLocal',
-                       b'HostCached',
-                       b'HostCoherent',
-                       b'HostVisible',
-                       b'LazylyAllocated']
+    def __init__(self):
+        pass
+
+    def __dealloc__(self):
+        pass
+
+    property offset:
+        def __get__(self):
+            return self.__allocationInfo.offset
+
+    property size:
+        def __get__(self):
+            return self.__allocationInfo.size
+
+    property leftPadding:
+        def __get__(self):
+            return self.__allocationInfo.leftPadding
+
+    property page:
+        def __get__(self):
+            return self.__allocationInfo.page
+
+    def __str__(self):
+        return 'p:{0} o:{1} l:{2} s:{3}'.format(self.page,
+                                                self.offset,
+                                                self.leftPadding,
+                                                self.size)
 
 
 cdef class Memory:
 
     def __cinit__(self):
-        
-        self.__session = None
-
+        pass
 
     def __dealloc__(self):
         # nothing to do
         pass
 
+    property session:
+        def __get__(self):
+            cdef Session out = Session()
+            out.__session = self.__memory.get().getSession()
+            return out
 
     property memoryFlags:
         def __get__(self):
@@ -53,65 +95,32 @@ cdef class Memory:
             Memory flags for this memory.
             """
 
-            cdef vk.MemoryPropertyFlags vkFlags = self.__memory.get().getMemoryPropertyFlags()
-            cdef vector[string] stringFlagsList = memoryPropertyFlagsToVectorString(vkFlags)
-            return stringFlagsList
-
-        def __set__(self, value):
-            raise RuntimeError('memoryFlags cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
+            cdef uint32_t vkFlags_u32 = <uint32_t> self.__memory.get().getMemoryPropertyFlags()
+            return impl.expandFlagBits(vkFlags_u32, MemoryPropertyFlagBits)
 
     property pageSize:
         def __get__(self):
             """
             Page size in bytes.
             """
-            
+
             return self.__memory.get().getPageSize()
-
-        def __set__(self, value):
-            raise RuntimeError('pageSize cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
 
     property pageCount:
         def __get__(self):
             """
             Page size in bytes.
             """
-            
+
             return self.__memory.get().getPageCount()
-
-        def __set__(self, value):
-            raise RuntimeError('pageCount cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
 
     property isMappable:
         def __get__(self):
             """
             Page size in bytes.
             """
-            
+
             return self.__memory.get().isMappable()
-
-        def __set__(self, value):
-            raise RuntimeError('isMappable cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass
-
 
     def isPageMappable(self, uint64_t page):
         """
@@ -135,7 +144,10 @@ cdef class Memory:
         return self.__memory.get().isPageMappable(page)
 
 
-    def createBuffer(self, uint64_t size, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
+    def createBuffer(self, uint64_t size,
+                     usageFlags=[BufferUsageFlagBits.StorageBuffer,
+                                 BufferUsageFlagBits.TransferSrc,
+                                 BufferUsageFlagBits.TransferDst]):
         """
         Creates a new buffer allocated into this memory.
 
@@ -145,10 +157,13 @@ cdef class Memory:
         size : uint64_t greater than zero.
             The size of the buffer in bytes.
 
-        usageFlags : string or list of strings.
-            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst']
+        usageFlags : BufferUsageFlagBits or list of BufferUsageFlagBits.
+            Defaults to:
+                [BufferUsageFlagBits.StorageBuffer,
+                 BufferUsageFlagBits.TransferSrc,
+                 BufferUsageFlagBits.TransferDst]
             Usage flags for this buffer. It must be a combination of the
-            values defined in lluvia.BufferUsageFlags:
+            values defined in lluvia.BufferUsageFlagBits:
                 - IndexBuffer
                 - IndirectBuffer
                 - StorageBuffer
@@ -165,22 +180,22 @@ cdef class Memory:
         buf : lluvia.Buffer object.
         """
 
-        assert(size > 0)
+        if size <= 0:
+            raise ValueError('Size must be greater than zero, got: {0}'.format(size))
 
-        usageFlags = impl.validateFlagStrings(core_buffer.BufferUsageFlags, usageFlags, forceList=True)
-
-        cdef list flagsList = usageFlags
-        cdef vk.BufferUsageFlags vkUsageFlags = core_buffer.vectorStringToBufferUsageFLags(flagsList)
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, BufferUsageFlagBits)
+        cdef vk.BufferUsageFlags vkUsageFlags = <vk.BufferUsageFlags> flattenFlags
 
         cdef core_buffer.Buffer buf = core_buffer.Buffer()
         buf.__buffer  = self.__memory.get().createBuffer(size, vkUsageFlags)
-        buf.__memory  = self
-        buf.__session = self.__session
 
         return buf
 
 
-    def createBufferFromHost(self, np.ndarray arr, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
+    def createBufferFromHost(self, np.ndarray arr,
+                             usageFlags=[BufferUsageFlagBits.StorageBuffer,
+                                         BufferUsageFlagBits.TransferSrc,
+                                         BufferUsageFlagBits.TransferDst]):
         """
         Creates a buffer from a numpy array.
 
@@ -191,10 +206,13 @@ cdef class Memory:
             Numpy array from which the buffer will be created from. The content
             of the array will be copied into the buffer.
 
-        usageFlags : string or list of strings.
-            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst'].
+        usageFlags : BufferUsageFlagBits or list of BufferUsageFlagBits.
+            Defaults to:
+                [BufferUsageFlagBits.StorageBuffer,
+                 BufferUsageFlagBits.TransferSrc,
+                 BufferUsageFlagBits.TransferDst]
             Usage flags for this buffer. It must be a combination of the
-            values defined in lluvia.BufferUsageFlags:
+            values defined in lluvia.BufferUsageFlagBits:
                 - IndexBuffer
                 - IndirectBuffer
                 - StorageBuffer
@@ -204,7 +222,6 @@ cdef class Memory:
                 - UniformBuffer
                 - UniformTexelBuffer
                 - VertexBuffer
-
 
         Returns
         -------
@@ -217,7 +234,10 @@ cdef class Memory:
         return buf
 
 
-    def createBufferLike(self, other, usageFlags=['StorageBuffer', 'TransferSrc', 'TransferDst']):
+    def createBufferLike(self, other,
+                         usageFlags=[BufferUsageFlagBits.StorageBuffer,
+                                     BufferUsageFlagBits.TransferSrc,
+                                     BufferUsageFlagBits.TransferDst]):
         """
         Creates a Buffer with the same size in bytes as the other parameter
 
@@ -228,10 +248,13 @@ cdef class Memory:
         ----------
         other : Numpy ndarray or lluvia Buffer or Image.
 
-        usageFlags : string or list of strings.
-            Defaults to ['StorageBuffer', 'TransferSrc', 'TransferDst'].
+        usageFlags : BufferUsageFlagBits or list of BufferUsageFlagBits.
+            Defaults to:
+                [BufferUsageFlagBits.StorageBuffer,
+                 BufferUsageFlagBits.TransferSrc,
+                 BufferUsageFlagBits.TransferDst]
             Usage flags for this buffer. It must be a combination of the
-            values defined in lluvia.BufferUsageFlags:
+            values defined in lluvia.BufferUsageFlagBits:
                 - IndexBuffer
                 - IndirectBuffer
                 - StorageBuffer
@@ -259,7 +282,12 @@ cdef class Memory:
         return self.createBuffer(sizeBytes, usageFlags)
 
 
-    def createImage(self, shape, str channelType='uint8', usageFlags=['Storage', 'Sampled', 'TransferSrc', 'TransferDst']):
+    def createImage(self, shape,
+                    ChannelType channelType=ChannelType.Uint8,
+                    usageFlags=[ImageUsageFlagBits.Storage,
+                                ImageUsageFlagBits.Sampled,
+                                ImageUsageFlagBits.TransferSrc,
+                                ImageUsageFlagBits.TransferDst]):
         """
         Creates a new image allocated in this memory.
 
@@ -297,10 +325,10 @@ cdef class Memory:
                     width    = shape[2]
                     channels = shape[3]
 
-        channelType : str. Defaults to 'uint8'.
-            Channel type. It must be one of the strings in lluvia.ImageChannelType.
+        channelType : ll.ChannelType. Defaults to ll.ChannelType.Uint8.
+            Channel type.
 
-        usageFlags : string or list of strings.
+        usageFlags : ImageUsageFlagBits or list of ImageUsageFlagBits.
             Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
             Image usage flags. It must be a combination of th strings defined
             in lluvia.ImageUsageFlags:
@@ -321,63 +349,34 @@ cdef class Memory:
 
         Raises
         ------
-        ValueError : if any parameter is not within its required range.
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if any parameter is not within its required range.
         """
 
-        if len(shape) not in [1, 2, 3, 4]:
-            raise ValueError('invalid shape length. Expected 1, 2, 3 or 4')
+        depth, height, width, channels = self.__getImageShape(shape)
 
-        usageFlags = impl.validateFlagStrings(image.ImageUsageFlags, usageFlags, forceList=True)
-        channelTypeBytes = impl.validateFlagStrings(image.ImageChannelType, channelType)
-        
-        cdef uint32_t width    = 0
-        cdef uint32_t height   = 0
-        cdef uint32_t depth    = 0
-        cdef uint32_t channels = 0
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ImageUsageFlagBits)
+        cdef vk.ImageUsageFlags vkUsageFlags = <vk.ImageUsageFlags> flattenFlags
 
-        ndim = len(shape)
-        if ndim is 1:
-            depth    = 1
-            height   = 1
-            width    = shape[0]
-            channels = 1
-
-        elif ndim is 2:
-            depth    = 1
-            height   = shape[0]
-            width    = shape[1]
-            channels = 1
-
-        elif ndim is 3:
-            depth    = 1
-            height   = shape[0]
-            width    = shape[1]
-            channels = shape[2]
-
-        else:
-            depth    = shape[0]
-            height   = shape[1]
-            width    = shape[2]
-            channels = shape[3]
+        cdef image._ChannelType cType = <image._ChannelType> channelType
 
         cdef image._ChannelCount cCount = image.castChannelCount[uint32_t](channels)
-        cdef image._ChannelType cType = image.stringToChannelType(channelTypeBytes)
 
-        cdef list flagsList = usageFlags
-        cdef vk.ImageUsageFlags flags = image.vectorStringToImageUsageFlags(flagsList)
-
-        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, cCount, cType, flags)
+        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, cCount, cType, vkUsageFlags)
 
         cdef image.Image img = image.Image()
-        img.__memory  = self
-        img.__session = self.__session
         img.__image   = self.__memory.get().createImage(desc)
 
-        img.changeLayout('General')
+        img.changeLayout(ImageLayout.General)
         return img
 
 
-    def createImageFromHost(self, np.ndarray arr, usageFlags=['Storage', 'Sampled', 'TransferSrc', 'TransferDst']):
+    def createImageFromHost(self,
+                            np.ndarray arr,
+                            usageFlags=[ImageUsageFlagBits.Storage,
+                                        ImageUsageFlagBits.Sampled, 
+                                        ImageUsageFlagBits.TransferSrc, 
+                                        ImageUsageFlagBits.TransferDst]):
         """
         Creates a lluvia.Image object from a Numpy array.
 
@@ -425,47 +424,65 @@ cdef class Memory:
 
         Raises
         ------
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if arr.dtype is incompatible with image ChannelType.
         RuntimeError : if the image cannot be created from this memory.
         """
 
-        ndim = arr.ndim
+        shape = [arr.shape[n] for n in range(arr.ndim)]
+        depth, height, width, channels = self.__getImageShape(shape)
 
-        width    = 0
-        height   = 0
-        depth    = 0
-        channels = 0
+        channelType = None
+        for llChannelType, dtype in image.ImageChannelTypeToNumpyMap.items():
+            if dtype == arr.dtype:
+                channelType = llChannelType
+                break
 
-        if ndim is 1:
-            depth    = 1
-            height   = 1
-            width    = arr.shape[0]
-            channels = 1
-
-        elif ndim is 2:
-            depth    = 1
-            height   = arr.shape[0]
-            width    = arr.shape[1]
-            channels = 1
-
-        elif ndim is 3:
-            depth    = 1
-            height   = arr.shape[0]
-            width    = arr.shape[1]
-            channels = arr.shape[2]
-
-        elif ndim is 4:
-            depth    = arr.shape[0]
-            height   = arr.shape[1]
-            width    = arr.shape[2]
-            channels = arr.shape[3]
-
-        else:
-            raise ValueError('arr parameter must have between 1 to 4 dimensions, got: {0}'.format(ndim))
-
-
-        channelType = str(arr.dtype)
+        if channelType is None:
+            raise ValueError('arr parameter has unsupported dtype: {0}'.format(arr.dtype))
 
         img = self.createImage((depth, height, width, channels), channelType, usageFlags)
         img.fromHost(arr)
         
         return img
+
+
+    def __getImageShape(self, shape):
+        """
+        Calculates the lluvia image shape given a tuple
+        """
+
+        if len(shape) not in [1, 2, 3, 4]:
+            raise ValueError('invalid number of dimensions. Expected 1, 2, 3 or 4')
+
+        cdef uint32_t width    = 0
+        cdef uint32_t height   = 0
+        cdef uint32_t depth    = 0
+        cdef uint32_t channels = 0
+
+        ndim = len(shape)
+        if ndim is 1:
+            depth    = 1
+            height   = 1
+            width    = shape[0]
+            channels = 1
+
+        elif ndim is 2:
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = 1
+
+        elif ndim is 3:
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = shape[2]
+
+        else:
+            depth    = shape[0]
+            height   = shape[1]
+            width    = shape[2]
+            channels = shape[3]
+
+        return depth, height, width, channels

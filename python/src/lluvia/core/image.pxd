@@ -6,6 +6,14 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
+from memory cimport _Memory, _MemoryAllocationInfo
+from core_object cimport _Object
+from session cimport _Session
+
+cimport enums.image as img_enums
+
+cimport vulkan as vk
+
 from libc.stdint cimport uint64_t, uint32_t
 
 from libcpp cimport bool
@@ -13,26 +21,17 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from memory cimport Memory
-from core_object cimport _Object
-from session cimport Session
-
-cimport vulkan as vk
-
 
 cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
-    
-    cdef cppclass _ChannelCount 'll::ChannelCount':
-        pass
 
     cdef cppclass _ChannelType 'll::ChannelType':
         pass
 
-    _ChannelCount castChannelCount[T](T c)
-    uint64_t getChannelTypeSize(_ChannelType type)
-    string channelTypeToString(_ChannelType&& value)
-    _ChannelType stringToChannelType(string&& stringValue) except +
+    cdef cppclass _ChannelCount 'll::ChannelCount':
+        pass
 
+    _ChannelCount castChannelCount[T](T c) except +
+    uint64_t getChannelTypeSize(_ChannelType type)
 
     cdef cppclass _ImageDescriptor 'll::ImageDescriptor':
 
@@ -42,7 +41,7 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
                     const uint32_t depth,
                     _ChannelCount channelCount,
                     _ChannelType channelType,
-                     const vk.ImageUsageFlags usageFlags)
+                    const vk.ImageUsageFlags usageFlags)
 
 
         _ImageDescriptor& setChannelType(const _ChannelType type)
@@ -63,15 +62,13 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
 
 cdef extern from 'lluvia/core/Image.h' namespace 'll':
 
-    vk.ImageUsageFlags vectorStringToImageUsageFlags(const vector[string]& flagsVector)
-    vector[string] imageUsageFlagsToVectorString(const vk.ImageUsageFlags flags)
-
-    string imageLayoutToString(vk.ImageLayout&& layout)
-    vk.ImageLayout stringToImageLayout(string&& stringValue) except +
-
     cdef cppclass _Image 'll::Image' (_Object):
 
+        const shared_ptr[_Memory]& getMemory()   const
+        const shared_ptr[_Session]& getSession() const
+
         uint64_t getSize() const
+        _MemoryAllocationInfo getAllocationInfo() const
 
         vk.ImageUsageFlags getUsageFlags() const
         vk.ImageLayout     getLayout()     const
@@ -100,13 +97,6 @@ cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
         pass
 
 
-    string imageFilterModeToString(_ImageFilterMode&& value)
-    _ImageFilterMode stringToImageFilterMode(string&& stringValue)
-
-    string imageAddressModeToString(_ImageAddressMode&& value)
-    _ImageAddressMode stringToImageAddressMode(string&& stringValue)
-
-
     cdef cppclass _ImageViewDescriptor 'll::ImageViewDescriptor':
 
         _ImageViewDescriptor()
@@ -116,7 +106,7 @@ cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
 
         _ImageViewDescriptor& setAddressMode(_ImageAddressMode addressMode)
         _ImageViewDescriptor& setAddressMode(_ImageAxis axis, _ImageAddressMode addressMode)
-    
+
         _ImageAddressMode getAddressModeU() const
         _ImageAddressMode getAddressModeV() const
         _ImageAddressMode getAddressModeW() const
@@ -129,21 +119,32 @@ cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
 
 
 cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
-    
+
     cdef cppclass _ImageView 'll::ImageView':
 
-        shared_ptr[_Image] getImage() const
+        const shared_ptr[_Memory]& getMemory()   const
+        const shared_ptr[_Session]& getSession() const
+        const shared_ptr[_Image]& getImage()     const
+
         _ImageViewDescriptor& getDescriptor() const
+
+        uint64_t getSize() const
+        _MemoryAllocationInfo getAllocationInfo() const
+
+        vk.ImageUsageFlags getUsageFlags() const
+        vk.ImageLayout     getLayout()     const
+
+        _ChannelType getChannelType()    const
+        uint64_t getChannelTypeSize()    const
+        T getChannelCount[T]()           const
+        uint32_t getWidth()              const
+        uint32_t getHeight()             const
+        uint32_t getDepth()              const
 
 
 cdef class Image:
-    
-    cdef Memory             __memory
-    cdef Session            __session
     cdef shared_ptr[_Image] __image
 
 
 cdef class ImageView:
-
-    cdef Image                  __image
     cdef shared_ptr[_ImageView] __imageView

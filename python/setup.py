@@ -27,9 +27,12 @@ libDirs = ['../build/lib',
 
 libs   = ['lluvia-core',
           'stdc++',
-          'vulkan']
+          'vulkan',
+          'm',
+          'dl',
+          'lua']
 
-cflags = ['-std=c++14',
+cflags = ['-std=c++17',
           '-fPIC',
           '-Wno-unused-function']
 
@@ -59,7 +62,12 @@ extensions = list()
 #################################################
 # PURE PYTHON PACKAGES
 #################################################
-py_packages = ['lluvia', 'lluvia.core', 'lluvia.core.impl']
+py_packages = [
+    'lluvia',
+    'lluvia.core',
+    'lluvia.core.enums',
+    'lluvia.core.impl'
+]
 
 # package data include Cython .pxd files
 package_data = {'lluvia.core' : ['*.pxd']}
@@ -68,16 +76,24 @@ package_dir = {'lluvia': 'src/lluvia'}
 #################################################
 # CYTHON EXTENSIONS
 #################################################
-GPUmodulesTable = [('lluvia.core.core_buffer'    , ['src/lluvia/core/core_buffer.pyx']),
-                   ('lluvia.core.command_buffer' , ['src/lluvia/core/command_buffer.pyx']),
-                   ('lluvia.core.compute_node'   , ['src/lluvia/core/compute_node.pyx']),
-                   ('lluvia.core.image'          , ['src/lluvia/core/image.pyx']),
-                   ('lluvia.core.io'             , ['src/lluvia/core/io.pyx']),
-                   ('lluvia.core.memory'         , ['src/lluvia/core/memory.pyx']),
-                   ('lluvia.core.program'        , ['src/lluvia/core/program.pyx']),
-                   ('lluvia.core.session'        , ['src/lluvia/core/session.pyx']),]
+cythonModules = [
+    ('lluvia.core.command_buffer'    , ['src/lluvia/core/command_buffer.pyx']),
+    ('lluvia.core.core_buffer'       , ['src/lluvia/core/core_buffer.pyx']),
+    ('lluvia.core.enums.core_object' , ['src/lluvia/core/enums/core_object.pyx']),
+    ('lluvia.core.enums.image'       , ['src/lluvia/core/enums/image.pyx']),
+    ('lluvia.core.enums.node'        , ['src/lluvia/core/enums/node.pyx']),
+    ('lluvia.core.enums.parameter'   , ['src/lluvia/core/enums/parameter.pyx']),
+    ('lluvia.core.enums.vulkan'      , ['src/lluvia/core/enums/vulkan.pyx']),
+    ('lluvia.core.image'             , ['src/lluvia/core/image.pyx']),
+    ('lluvia.core.impl.enum_utils'   , ['src/lluvia/core/impl/enum_utils.pyx']),
+    ('lluvia.core.memory'            , ['src/lluvia/core/memory.pyx']),
+    ('lluvia.core.node'              , ['src/lluvia/core/node.pyx']),
+    ('lluvia.core.parameter'         , ['src/lluvia/core/parameter.pyx']),
+    ('lluvia.core.program'           , ['src/lluvia/core/program.pyx']),
+    ('lluvia.core.session'           , ['src/lluvia/core/session.pyx']),
+]
 
-for mod in GPUmodulesTable:
+for mod in cythonModules:
     extList = cythonize(createExtension(mod[0], mod[1]), compiler_directives=cython_directives)
     extensions.extend(extList)
 

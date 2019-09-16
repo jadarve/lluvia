@@ -29,7 +29,7 @@ set(LL_GLSL_OUTPUT_DIR ${CMAKE_BINARY_DIR}/glsl)
 message(STATUS "-------------------------------------------------")
 message(STATUS "Configuring compiler")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -O0 -Werror -Wall -Wshorten-64-to-32")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Werror -Wall -Wextra -Wshadow -Wshorten-64-to-32 -Wnon-virtual-dtor -pedantic")
 message(STATUS "Compiler : ${CMAKE_CXX_COMPILER}")
 message(STATUS "Flags    : ${CMAKE_CXX_FLAGS}")
 message(STATUS "-------------------------------------------------")
@@ -47,7 +47,10 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 enable_testing()
 include(cmake/thirdparty/Catch.cmake)
 include(cmake/thirdparty/JSON.cmake)
+include(cmake/thirdparty/CLI.cmake)
 include(cmake/thirdparty/STB.cmake)
+include(cmake/thirdparty/Lua.cmake)
+include(cmake/thirdparty/Sol2.cmake)
 
 
 #################################################

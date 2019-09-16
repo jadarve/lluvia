@@ -30,7 +30,6 @@ class ImageDescriptor;
 class ImageView;
 class ImageViewDescriptor;
 class Session;
-class Visitor;
 
 
 namespace impl {
@@ -152,12 +151,24 @@ public:
     @param[in]  heapInfo  The heap information.
     @param[in]  pageSize  The page size in bytes.
     */
-    Memory(const std::shared_ptr<const ll::Session>& session, const vk::Device device, const ll::VkHeapInfo& heapInfo, const uint64_t pageSize);
+    Memory(
+        const std::shared_ptr<ll::Session>& session,
+        const vk::Device device,
+        const ll::VkHeapInfo& heapInfo,
+        const uint64_t pageSize);
 
     ~Memory();
 
     Memory& operator = (const Memory& memory) = delete;
     Memory& operator = (Memory&& memory)      = delete;
+
+
+    /**
+    @brief      Gets the session this memory was created from.
+    
+    @return     The session.
+    */
+    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -271,14 +282,6 @@ public:
     std::shared_ptr<ll::ImageView> createImageView(
         const ll::ImageDescriptor& imgDescriptor,
         const ll::ImageViewDescriptor& viewDescriptor);
-    
-    
-    /**
-    @brief      Accepts a visitor to this memory.
-    
-    @param      visitor  The visitor
-    */
-    void accept(ll::Visitor* visitor);
 
 
 private:
@@ -291,18 +294,18 @@ private:
 
     void releaseImage(const ll::Image& image);
 
-    vk::Device device;
+    vk::Device m_device;
 
-    const ll::VkHeapInfo    heapInfo        {};
-    const uint64_t          pageSize        {0u};
+    const ll::VkHeapInfo    m_heapInfo        {};
+    const uint64_t          m_pageSize        {0u};
 
-    std::vector<vk::DeviceMemory>                 memoryPages;
-    std::vector<ll::impl::MemoryFreeSpaceManager> pageManagers;
-    std::vector<bool>                             memoryPageMappingFlags;
+    std::vector<vk::DeviceMemory>                 m_memoryPages;
+    std::vector<ll::impl::MemoryFreeSpaceManager> m_pageManagers;
+    std::vector<bool>                             m_memoryPageMappingFlags;
 
     // Shared pointer to the session this memory was created from
     // This will keep the session alive until this or any other memory is deleted.
-    std::shared_ptr<const ll::Session>            session;
+    std::shared_ptr<ll::Session>                  m_session;
 
 
 friend class ll::Buffer;

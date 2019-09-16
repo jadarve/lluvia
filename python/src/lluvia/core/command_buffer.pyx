@@ -13,36 +13,42 @@ from cython.operator cimport dereference as deref
 from core_buffer cimport Buffer
 from core_buffer import  Buffer
 
-from compute_node cimport ComputeNode
-from compute_node import  ComputeNode
+from node cimport ComputeNode
+from node import  ComputeNode
 
 cimport image
 import image
+
 from image cimport Image
 from image import  Image
 
 import impl
 
+from .enums.vulkan cimport ImageLayout
+
+cimport vulkan as vk
+
+
+__all__ = ['CommandBuffer']
+
+
 cdef class CommandBuffer:
-    
+
     def __cinit__(self):
         pass
-
 
     def __dealloc__(self):
         pass
 
-
     def begin(self):
         """
         Begin recording.
-        
+
         This method should be called before any record operation. Otherwise
         the behaviour is undefined.
         """
-        
-        self.__commandBuffer.get().begin()
 
+        self.__commandBuffer.get().begin()
 
     def end(self):
         """
@@ -53,7 +59,6 @@ cdef class CommandBuffer:
         """
 
         self.__commandBuffer.get().end()
-
 
     def copyBuffer(self, Buffer src, Buffer dst):
         """
@@ -79,7 +84,6 @@ cdef class CommandBuffer:
             deref(src.__buffer.get()),
             deref(dst.__buffer.get()))
 
-
     def copyBufferToImage(self, Buffer src, Image dst):
         """
         Copies the content of src Buffer to dst Image
@@ -99,7 +103,6 @@ cdef class CommandBuffer:
             deref(src.__buffer.get()),
             deref(dst.__image.get()))
 
-
     def copyImageToBuffer(self, Image src, Buffer dst):
         """
         Copies the content of src Image to dst Buffer.
@@ -112,22 +115,21 @@ cdef class CommandBuffer:
         dst : Buffer.
             Destination buffer.
         """
-        
+
         self.__commandBuffer.get().copyImageToBuffer(
             deref(src.__image.get()),
             deref(dst.__buffer.get()))
 
-
-    def changeImageLayout(self, Image img, newLayout):
+    def changeImageLayout(self, Image img, ImageLayout newLayout):
         """
         Changes image layout.
 
         The actual change in image layout is performed when this command buffer
-        is submitted to execution. However, calling `image.getLayout()` right after
-        this call will return the new layout value.
+        is submitted to execution. However, calling `image.getLayout()`
+        right after this call will return the new layout value.
 
-        This is necessary to keep track of the current image layout of \p image parameter
-        after this call.
+        This is necessary to keep track of the current image layout of
+        \p image parameter after this call.
 
 
         Parameters
@@ -135,8 +137,9 @@ cdef class CommandBuffer:
         img : Image.
             The image.
 
-        newLayout : str.
-            The new layout. Its value must be one of the strings defined in lluvia.ImageLayout:
+        newLayout : lluvia.ImageLayout.
+            The new layout. Its value must be one of the values
+            defined in lluvia.ImageLayout:
                 - Undefined
                 - General
                 - ColorAttachmentOptimal
@@ -151,11 +154,9 @@ cdef class CommandBuffer:
                 - DepthReadOnlyStencilAttachmentOptimalKHR
                 - DepthAttachmentStencilReadOnlyOptimalKHR
         """
-        newLayoutFlag = impl.validateFlagStrings(image.ImageLayout, newLayout)
 
-        cdef vk.ImageLayout vkLayout = image.stringToImageLayout(newLayoutFlag)
+        cdef vk.ImageLayout vkLayout = <vk.ImageLayout> newLayout
         self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), vkLayout)
-
 
     def run(self, ComputeNode node):
         """
@@ -169,9 +170,8 @@ cdef class CommandBuffer:
         node : ComputeNode.
             The compute node.
         """
-        
-        self.__commandBuffer.get().run(deref(node.__node))
 
+        self.__commandBuffer.get().run(deref(node.__node))
 
     def memoryBarrier(self):
         """
@@ -179,7 +179,5 @@ cdef class CommandBuffer:
 
         TODO: details.
         """
-        
-        self.__commandBuffer.get().memoryBarrier()
 
-        
+        self.__commandBuffer.get().memoryBarrier()

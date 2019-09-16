@@ -108,18 +108,18 @@ vk::Format getVulkanImageFormat(ll::ChannelCount channelCount, ll::ChannelType c
 ImageDescriptor::ImageDescriptor(const uint32_t width,
                                  const uint32_t height,
                                  const uint32_t depth,
-                                 const ll::ChannelCount channelCount,
-                                 const ll::ChannelType channelType,
-                                 const vk::ImageUsageFlags usageFlags,
-                                 const vk::ImageTiling tiling):
-    channelType  {channelType},
-    tiling       {tiling},
-    usageFlags   {usageFlags} {
+                                 const ll::ChannelCount tChannelCount,
+                                 const ll::ChannelType tChannelType,
+                                 const vk::ImageUsageFlags tUsageFlags,
+                                 const vk::ImageTiling tTiling):
+    channelType  {tChannelType},
+    tiling       {tTiling},
+    usageFlags   {tUsageFlags} {
 
     setWidth(width);
     setHeight(height);
     setDepth(depth);
-    setChannelCount(channelCount);
+    setChannelCount(tChannelCount);
 }
 
 
@@ -158,23 +158,23 @@ ImageDescriptor& ImageDescriptor::setDepth(const uint32_t depth) noexcept {
 }
 
 
-ImageDescriptor& ImageDescriptor::setShape(const ll::vec3ui& shape) noexcept {
+ImageDescriptor& ImageDescriptor::setShape(const ll::vec3ui& tShape) noexcept {
     
-    this->shape = shape;
+    shape = tShape;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setUsageFlags(const vk::ImageUsageFlags flags) noexcept {
 
-    this->usageFlags = flags;
+    usageFlags = flags;
     return *this;
 }
 
 
-ImageDescriptor& ImageDescriptor::setTiling(const vk::ImageTiling tiling) noexcept {
+ImageDescriptor& ImageDescriptor::setTiling(const vk::ImageTiling tTiling) noexcept {
 
-    this->tiling = tiling;
+    tiling = tTiling;
     return *this;
 }
 

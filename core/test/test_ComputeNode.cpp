@@ -60,16 +60,24 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto program = session->createProgram(SHADER_PATH + "/assign.spv");
     REQUIRE(program != nullptr);
 
+    // TOTHINK: set script in the descriptor, not in the node
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
                             .setProgram(program)
                             .setFunctionName("main")
                             .setLocalX(bufferSize)
-                            .addParameter(ll::ParameterType::Buffer);
+                            .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
 
+    // at this point, the node's port binding table and
+    // vulkan descriptor set is created. So, it is possible
+    // to bind objects to the ports before calling node->init()
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
 
-    node->bind(0, buffer);
+    node->bind("out_buffer", buffer);
+
+    // these are equivalent
+    node->init();
+    // node->setState(ll::NodeState::Init);
 
     auto cmdBuffer = session->createCommandBuffer();
 
@@ -137,4 +145,88 @@ TEST_CASE("ConstructionCommandBuffer", "test_ComputeNode") {
 
     // // run the command buffer
     // session->run(cmdBuffer);
+}
+
+TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
+
+    using memflags = vk::MemoryPropertyFlagBits;
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
+    auto hostMemory = session->createMemory(hostMemFlags, 1024*4, false);
+    REQUIRE(hostMemory != nullptr);
+
+    const auto bufferSize = 128;
+    auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
+
+    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
+    REQUIRE(program != nullptr);
+
+    // registerProgram?
+    session->setProgram("assign", program);
+
+    // register the node builder
+    session->script(R"(
+local builder = ll.class(ll.ComputeNodeBuilder)
+
+function builder.newDescriptor() 
+    
+    local desc = ll.ComputeNodeDescriptor.new()
+    
+    desc.builderName  = 'assign'
+    desc.localShape   = ll.vec3ui.new(32, 1, 1)
+    desc.gridShape    = ll.vec3ui.new(1, 1, 1)
+    desc.program      = ll.getProgram('assign')
+    desc.functionName = 'main'
+
+    desc:addPort(ll.PortDescriptor.new(0, 'out_buffer', ll.PortDirection.Out, ll.PortType.Buffer))
+
+    return desc
+end
+
+function builder.onNodeInit(node)
+
+    -- configure gridShape given the size of out_buffer
+    out_buffer = ll.castObject(node:getPort('out_buffer'))
+    
+    N = out_buffer.size // 4
+    node:configureGridShape(ll.vec3ui.new(N, 1, 1))
+
+end
+
+ll.registerNodeBuilder('assign', builder)
+        )");
+
+    auto desc = session->createComputeNodeDescriptor("assign");
+
+    std::cout << "functionName: " << desc.getFunctionName() << std::endl;
+    std::cout << "builderName: " << desc.getBuilderName() << std::endl;
+    std::cout << "local: " << desc.getLocalX() << ", " << desc.getLocalY() << ", " << desc.getLocalZ() << std::endl;
+    std::cout << "grid: " << desc.getGridX() << ", " << desc.getGridY() << ", " << desc.getGridZ() << std::endl;
+
+    auto node = session->createComputeNode(desc);
+    node->bind("out_buffer", buffer);
+    node->init();
+
+    std::cout << "node grid: " << node->getGridX() << ", " << node->getGridY() << ", " << node->getGridZ() << std::endl;
+
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->run(*node);
+    cmdBuffer->end();
+
+    session->run(*cmdBuffer);
+    
+
+    {
+        auto bufferMap = buffer->map<float[]>();
+        for (auto i = 0u; i < bufferSize; ++i) {
+
+            std::cout << i << ": " << bufferMap[i] << std::endl;;
+        }
+    } // unamp bufferMap
 }

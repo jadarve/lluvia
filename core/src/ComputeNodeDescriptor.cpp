@@ -20,252 +20,200 @@
 namespace ll {
 
 
-vk::DescriptorType parameterTypeToVkDescriptorType(const ll::ParameterType& param) {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& tProgram) noexcept {
 
-    switch (param) {
-        case ll::ParameterType::Buffer:
-            return vk::DescriptorType::eStorageBuffer;
-
-        case ll::ParameterType::ImageView:
-            return vk::DescriptorType::eStorageImage;
-
-        case ll::ParameterType::SampledImageView:
-            return vk::DescriptorType::eCombinedImageSampler;
-    }
-}
-
-
-ll::ParameterType vkDescriptorTypeToParameterType(const vk::DescriptorType& vkDescType) {
-
-    switch (vkDescType) {
-        case vk::DescriptorType::eStorageBuffer:
-            return ll::ParameterType::Buffer;
-
-        case vk::DescriptorType::eStorageImage:
-            return ll::ParameterType::ImageView;
-
-        case vk::DescriptorType::eCombinedImageSampler:
-            return ll::ParameterType::SampledImageView;
-
-        case vk::DescriptorType::eSampler:
-        case vk::DescriptorType::eSampledImage:
-        case vk::DescriptorType::eUniformTexelBuffer:
-        case vk::DescriptorType::eStorageTexelBuffer:
-        case vk::DescriptorType::eUniformBuffer:
-        case vk::DescriptorType::eUniformBufferDynamic:
-        case vk::DescriptorType::eStorageBufferDynamic:
-        case vk::DescriptorType::eInputAttachment:
-        default: // to cover descriptor types added by extension
-            throw std::system_error(createErrorCode(ll::ErrorCode::EnumConversionFailed), "cannot convert from Vulkan DescriptorType enum value to ll::ParameterType.");
-    }
-}
-
-
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program) noexcept {
-
-    this->program = program;
+    this->m_program = tProgram;
     return *this;
 }
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& program, const std::string& functionName) noexcept {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<ll::Program>& tProgram, const std::string& tFunctionName) noexcept {
     
-    setProgram(program);
-    setFunctionName(functionName);
+    setProgram(tProgram);
+    setFunctionName(tFunctionName);
+    return *this;
+}
+
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const std::string& name, const ll::Parameter& value) {
+
+    m_parameters[name] = value;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setFunctionName(const std::string& name) noexcept {
 
-    functionName = name;
+    m_functionName = name;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const ll::ParameterType param) {
-
-    auto paramBinding = vk::DescriptorSetLayoutBinding {}
-                            .setBinding(static_cast<uint32_t>(parameterBindings.size()))
-                            .setDescriptorCount(1)
-                            .setDescriptorType(parameterTypeToVkDescriptorType(param))
-                            .setStageFlags(vk::ShaderStageFlagBits::eCompute)
-                            .setPImmutableSamplers(nullptr);
-
-    parameterBindings.push_back(paramBinding);
+ComputeNodeDescriptor& ComputeNodeDescriptor::setBuilderName(const std::string& name) noexcept {
+    m_builderName = name;
     return *this;
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addParameters(const std::initializer_list<ll::ParameterType>& parameters) {
+ComputeNodeDescriptor& ComputeNodeDescriptor::addPort(const ll::PortDescriptor& port) {
 
-    for(const auto param : parameters) {
-        addParameter(param);
+    m_ports[port.name] = port;
+    return *this;
+}
+
+
+ComputeNodeDescriptor& ComputeNodeDescriptor::addPorts(const std::initializer_list<ll::PortDescriptor>& ports) {
+
+    for(const auto& port : ports) {
+        addPort(port);
     }
 
     return *this;
 }
 
 
-size_t ComputeNodeDescriptor::getParameterCount() const noexcept {
-    return parameterBindings.size();
-}
-
-
-ll::ParameterType ComputeNodeDescriptor::getParameterTypeAt(const size_t& i) const {
-    
-    const auto& binding = parameterBindings.at(i);
-    return ll::vkDescriptorTypeToParameterType(binding.descriptorType);
-}
-
-
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridX(const uint32_t x) noexcept {
-    gridShape.x = x;
+    m_gridShape.x = x;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridY(const uint32_t y) noexcept {
-    gridShape.y = y;
+    m_gridShape.y = y;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridZ(const uint32_t z) noexcept {
-    gridShape.z = z;
+    m_gridShape.z = z;
     return *this;
 }
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setGridShape(const ll::vec3ui& shape) noexcept {
 
-    gridShape = shape;
+    m_gridShape = shape;
     return *this;
 }
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::configureGridShape(const ll::vec3ui& globalShape) noexcept {
 
-    gridShape = ll::configureGridShape(localShape, globalShape);
+    m_gridShape = ll::configureGridShape(m_localShape, globalShape);
     return *this;
 }
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalX(const uint32_t x) noexcept {
-    localShape.x = x;
+    m_localShape.x = x;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalY(const uint32_t y) noexcept {
-    localShape.y = y;
+    m_localShape.y = y;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalZ(const uint32_t z) noexcept {
-    localShape.z = z;
+    m_localShape.z = z;
     return *this;
 }
 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::setLocalShape(const ll::vec3ui& shape) noexcept {
-    localShape = shape;
+    m_localShape = shape;
     return *this;
 }
 
-std::vector<vk::DescriptorPoolSize> ComputeNodeDescriptor::getDescriptorPoolSizes() const noexcept {
 
-    auto pushDescriptorPoolSize = [this](const vk::DescriptorType type, std::vector<vk::DescriptorPoolSize>& v) {
-
-        const auto count = countDescriptorType(type);
-        if (count > 0) {
-            v.push_back({type, count});
-        }
-    };
-
-    std::vector<vk::DescriptorPoolSize> poolSizes;
-    pushDescriptorPoolSize(vk::DescriptorType::eStorageBuffer, poolSizes);
-    pushDescriptorPoolSize(vk::DescriptorType::eStorageImage, poolSizes);
-    pushDescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, poolSizes);
-        
-    return poolSizes;
+const std::string& ComputeNodeDescriptor::getFunctionName() const noexcept {
+    return m_functionName;
 }
 
 
-std::string ComputeNodeDescriptor::getFunctionName() const noexcept {
-    return functionName;
+const std::string& ComputeNodeDescriptor::getBuilderName() const noexcept {
+    return m_builderName;
 }
 
 
 ll::vec3ui ComputeNodeDescriptor::getGridShape() const noexcept {
-    return gridShape;
+    return m_gridShape;
 }
 
 
 ll::vec3ui ComputeNodeDescriptor::getLocalShape() const noexcept {
-    return localShape;
+    return m_localShape;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridX() const noexcept {
-    return gridShape.x;
+    return m_gridShape.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridY() const noexcept {
-    return gridShape.y;
+    return m_gridShape.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getGridZ() const noexcept {
-    return gridShape.z;
+    return m_gridShape.z;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalX() const noexcept {
-    return localShape.x;
+    return m_localShape.x;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalY() const noexcept {
-    return localShape.y;
+    return m_localShape.y;
 }
 
 
 uint32_t ComputeNodeDescriptor::getLocalZ() const noexcept {
-    return localShape.z;
-}
-
-
-std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterBindings() const noexcept {
-    return parameterBindings;
+    return m_localShape.z;
 }
 
 
 std::shared_ptr<ll::Program> ComputeNodeDescriptor::getProgram() const noexcept {
-    return program;
+    return m_program;
 }
 
 
-uint32_t ComputeNodeDescriptor::getStorageBufferCount() const noexcept {
-    return countDescriptorType(vk::DescriptorType::eStorageBuffer);
+const ll::PortDescriptor& ComputeNodeDescriptor::getPort(const std::string& name) const {
+
+    auto it = m_ports.find(name);
+
+    ll::throwSystemErrorIf(it == m_ports.cend(), ll::ErrorCode::KeyNotFound, "Port [" + name + "] not found.");
+    return it->second;    
 }
 
 
-uint32_t ComputeNodeDescriptor::getStorageImageViewCount() const noexcept {
-    return countDescriptorType(vk::DescriptorType::eStorageImage);
+const ll::Parameter& ComputeNodeDescriptor::getParameter(const std::string& name) const {
+
+    auto it = m_parameters.find(name);
+
+    ll::throwSystemErrorIf(it == m_parameters.cend(), ll::ErrorCode::KeyNotFound, "Parameter [" + name + "] not found.");
+    return it->second;
 }
 
 
-uint32_t ComputeNodeDescriptor::getSampledImageViewCount() const noexcept {
-    return countDescriptorType(vk::DescriptorType::eCombinedImageSampler);
-}
+std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterBindings() const {
 
+    auto bindings = std::vector<vk::DescriptorSetLayoutBinding> {};
 
-uint32_t ComputeNodeDescriptor::countDescriptorType(const vk::DescriptorType type) const noexcept {
+    for(const auto it : m_ports) {
 
-    auto count = uint32_t {0};
-    for (const auto& it : parameterBindings) {
-        count += static_cast<uint32_t>(it.descriptorType == type);
+        const auto& port = it.second;
+        auto binding = vk::DescriptorSetLayoutBinding {}
+                        .setBinding(port.binding)
+                        .setDescriptorCount(1)
+                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
+                        .setStageFlags(vk::ShaderStageFlagBits::eCompute)
+                        .setPImmutableSamplers(nullptr);
+        bindings.push_back(binding);
     }
-    return count;
+
+    return bindings;
 }
 
 } // namespace ll

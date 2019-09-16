@@ -11,18 +11,18 @@ cimport program
 from libc.stdint cimport uint8_t
 from libcpp.vector cimport vector
 
+
 __all__ = ['Program']
+
 
 cdef class Program:
 
     def __cinit__(self):
         pass
 
-
     def __dealloc__(self):
         # nothing to do
         pass
-
 
     property spirV:
         def __get__(self):
@@ -31,10 +31,3 @@ cdef class Program:
             """
             cdef vector[uint8_t] spirV = self.__program.get().getSpirV()
             return spirV
-
-        def __set__(self, value):
-            raise RuntimeError('spirV cannot be set')
-
-        def __del__(self):
-            # nothing to do
-            pass

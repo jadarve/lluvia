@@ -82,6 +82,19 @@ namespace impl {
         std::make_tuple("float64" , ll::ChannelType::Float64),
     }};
 
+
+    /**
+    @brief Channel type string values used for converting ll::ChannelType to std::string and vice-versa.
+
+    @sa ll::ChannelType enum values for this array.
+    */
+    constexpr const std::array<std::tuple<const char*, ll::ChannelCount>, 4> ChannelCountStrings {{
+        std::make_tuple("C1", ll::ChannelCount::C1),
+        std::make_tuple("C2", ll::ChannelCount::C2),
+        std::make_tuple("C3", ll::ChannelCount::C3),
+        std::make_tuple("C4", ll::ChannelCount::C4)
+    }};
+
 } // namespace impl
 
 
@@ -186,23 +199,23 @@ public:
     /**
     @brief      Constructs the object.
     
-    @param[in]  width         The width. It must be greater than zero.
-    @param[in]  height        The height. It must be greater than zero.
-    @param[in]  depth         The depth. It must be greater than zero.
-    @param[in]  channelCount  The channel count. It must be between 1 and 4.
-    @param[in]  channelType   The channel type.
-    @param[in]  usageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
-                              See @VULKAN_DOC#VkBufferUsageFlagBits.
-    @param[in]  tiling        The image tiling. Defaults to `vk::ImageTiling::eOptimal`.
+    @param[in]  width          The width. It must be greater than zero.
+    @param[in]  height         The height. It must be greater than zero.
+    @param[in]  depth          The depth. It must be greater than zero.
+    @param[in]  tChannelCount  The channel count. It must be between 1 and 4.
+    @param[in]  tChannelType   The channel type.
+    @param[in]  tUsageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
+                               See @VULKAN_DOC#VkBufferUsageFlagBits.
+    @param[in]  tTiling        The image tiling. Defaults to `vk::ImageTiling::eOptimal`.
     */
     ImageDescriptor(const uint32_t width,
                     const uint32_t height,
                     const uint32_t depth,
-                    const ll::ChannelCount channelCount,
-                    const ll::ChannelType channelType,
-                    const vk::ImageUsageFlags usageFlags = {  vk::ImageUsageFlagBits::eStorage
-                                                            | vk::ImageUsageFlagBits::eSampled},
-                    const vk::ImageTiling tiling = vk::ImageTiling::eOptimal
+                    const ll::ChannelCount tChannelCount,
+                    const ll::ChannelType tChannelType,
+                    const vk::ImageUsageFlags tUsageFlags = {  vk::ImageUsageFlagBits::eStorage
+                                                             | vk::ImageUsageFlagBits::eSampled},
+                    const vk::ImageTiling tTiling = vk::ImageTiling::eOptimal
                     );
 
     ~ImageDescriptor()                                              = default;
@@ -263,7 +276,7 @@ public:
     /**
     @brief      Sets the image shape.
     
-    @param[in]  shape  The shape. The components of this vector
+    @param[in]  tShape  The shape. The components of this vector
         must be interpreted as:
         
             x : width
@@ -272,7 +285,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageDescriptor& setShape(const ll::vec3ui& shape)          noexcept;
+    ImageDescriptor& setShape(const ll::vec3ui& tShape)          noexcept;
 
 
     /**
@@ -286,11 +299,11 @@ public:
     /**
     @brief      Sets the vulkan image tiling.
     
-    @param[in]  tiling  The tiling
+    @param[in]  tTiling  The tiling
     
     @return     A reference to this object.
     */
-    ImageDescriptor& setTiling(const vk::ImageTiling tiling) noexcept;
+    ImageDescriptor& setTiling(const vk::ImageTiling tTiling) noexcept;
 
 
     /**

@@ -17,8 +17,8 @@ cdef extern from 'lluvia/core/Program.h' namespace 'll':
     cdef cppclass _Program 'll::Program':
 
         const vector[uint8_t]& getSpirV() const
-        
+
 
 cdef class Program:
-    
+
     cdef shared_ptr[_Program] __program

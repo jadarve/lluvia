@@ -143,7 +143,7 @@ std::shared_ptr<ll::Image> createAndInitImage(
         auto cmdBuffer = session->createCommandBuffer();
 
         cmdBuffer->begin();
-        cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
+        cmdBuffer->changeImageLayout(*image, initialLayout);
         cmdBuffer->end();
 
         session->run(*cmdBuffer);

@@ -1,7 +1,7 @@
 
 #include "lluvia/core.h"
 
-#import "json/json.hpp"
+#include "json/json.hpp"
 
 #include <iostream>
 
@@ -77,7 +77,7 @@ void getPhysicalDeviceMemoryProperties(const vk::PhysicalDeviceMemoryProperties&
 }
 
 
-void getCompatibleImageFormats(std::shared_ptr<ll::Session>& session, json& jsonParent) {
+void getCompatibleImageFormats(__attribute__((unused)) std::shared_ptr<ll::Session>& session, json& jsonParent) {
 
     auto formats = json {};
 

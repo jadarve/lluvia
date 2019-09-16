@@ -59,12 +59,15 @@ public:
     CommandBuffer(const CommandBuffer& cmdBuffer)   = delete;
     CommandBuffer(CommandBuffer&& cmdBuffer)        = delete;
 
-    CommandBuffer(const vk::Device& device, const vk::CommandPool& cmdPool);
+    CommandBuffer(const vk::Device& tDevice, const vk::CommandPool& cmdPool);
 
     ~CommandBuffer();
 
     CommandBuffer& operator = (const CommandBuffer& cmdBuffer) = delete;
     CommandBuffer& operator = (CommandBuffer&& cmdBuffer)      = delete;
+
+
+    const vk::CommandBuffer& getVkCommandBuffer() const noexcept;
 
     /**
     @brief      begins recording.
@@ -166,9 +169,9 @@ public:
     void memoryBarrier();
 
 private:
-    vk::Device          device;
-    vk::CommandPool     commandPool;
-    vk::CommandBuffer   commandBuffer;
+    vk::Device          m_device;
+    vk::CommandPool     m_commandPool;
+    vk::CommandBuffer   m_commandBuffer;
 
 
 friend class ll::Session;

@@ -7,22 +7,27 @@
 
 namespace ll {
 
-CommandBuffer::CommandBuffer(const vk::Device& device, const vk::CommandPool& cmdPool):
-    device {device},
-    commandPool {cmdPool} {
+CommandBuffer::CommandBuffer(const vk::Device& tDevice, const vk::CommandPool& cmdPool):
+    m_device {tDevice},
+    m_commandPool {cmdPool} {
 
     const auto allocInfo = vk::CommandBufferAllocateInfo()
-                            .setCommandPool(commandPool)
+                            .setCommandPool(m_commandPool)
                             .setCommandBufferCount(1);
 
-    auto cmdBuffers = device.allocateCommandBuffers(allocInfo);
-    commandBuffer = cmdBuffers[0];
+    auto cmdBuffers = m_device.allocateCommandBuffers(allocInfo);
+    m_commandBuffer = cmdBuffers[0];
 }
 
 
 CommandBuffer::~CommandBuffer() {
 
-    device.freeCommandBuffers(commandPool, 1, &commandBuffer);
+    m_device.freeCommandBuffers(m_commandPool, 1, &m_commandBuffer);
+}
+
+
+const vk::CommandBuffer& CommandBuffer::getVkCommandBuffer() const noexcept {
+    return m_commandBuffer;
 }
 
 
@@ -31,18 +36,18 @@ void CommandBuffer::begin() {
     vk::CommandBufferBeginInfo beginInfo = vk::CommandBufferBeginInfo()
         .setFlags(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
 
-    commandBuffer.begin(beginInfo);
+    m_commandBuffer.begin(beginInfo);
 }
 
 
 void CommandBuffer::end() {
-    commandBuffer.end();
+    m_commandBuffer.end();
 }
 
 
 void CommandBuffer::run(const ll::ComputeNode& node) {
 
-    node.record(commandBuffer);
+    node.record(*this);
 }
 
 
@@ -58,7 +63,7 @@ void CommandBuffer::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
         .setDstOffset(0)
         .setSize(src.getSize());
 
-    commandBuffer.copyBuffer(src.vkBuffer, dst.vkBuffer, 1, &copyInfo);
+    m_commandBuffer.copyBuffer(src.m_vkBuffer, dst.m_vkBuffer, 1, &copyInfo);
 }
 
 
@@ -78,7 +83,7 @@ void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({dst.getWidth(), dst.getHeight(), dst.getDepth()});
 
-    commandBuffer.copyBufferToImage(src.vkBuffer, dst.vkImage, dst.vkLayout, 1, &copyInfo);
+    m_commandBuffer.copyBufferToImage(src.m_vkBuffer, dst.m_vkImage, dst.m_vkLayout, 1, &copyInfo);
 }
 
 
@@ -98,18 +103,18 @@ void CommandBuffer::copyImageToBuffer(const ll::Image& src, const ll::Buffer& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({src.getWidth(), src.getHeight(), src.getDepth()});
 
-    commandBuffer.copyImageToBuffer(src.vkImage, src.vkLayout, dst.vkBuffer, 1, &copyInfo);
+    m_commandBuffer.copyImageToBuffer(src.m_vkImage, src.m_vkLayout, dst.m_vkBuffer, 1, &copyInfo);
 }
 
 
 void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout) {
 
     auto barrier = vk::ImageMemoryBarrier {}
-                    .setOldLayout(image.vkLayout)
+                    .setOldLayout(image.m_vkLayout)
                     .setNewLayout(newLayout)
                     .setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
                     .setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
-                    .setImage(image.vkImage)
+                    .setImage(image.m_vkImage)
                     .setSrcAccessMask(vk::AccessFlagBits::eMemoryRead)      // TODO ???
                     .setDstAccessMask(vk::AccessFlagBits::eMemoryWrite);    // TODO ???
 
@@ -120,7 +125,7 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
     barrier.subresourceRange.setLayerCount(1);
 
 
-    commandBuffer.pipelineBarrier(
+    m_commandBuffer.pipelineBarrier(
         vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
         vk::DependencyFlagBits::eDeviceGroupKHR,
         0, nullptr,
@@ -128,7 +133,7 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
         1, &barrier);
 
     // FIXME: this should be set only after the pipelineBarrier is executed
-    image.vkLayout = newLayout;
+    image.m_vkLayout = newLayout;
 }
 
 void CommandBuffer::changeImageLayout(ll::ImageView& imageView, const vk::ImageLayout newLayout) {
@@ -144,7 +149,7 @@ void CommandBuffer::memoryBarrier() {
                     .setDstAccessMask(vk::AccessFlagBits::eShaderRead);
 
 
-    commandBuffer.pipelineBarrier(
+    m_commandBuffer.pipelineBarrier(
         vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
         vk::DependencyFlagBits::eDeviceGroupKHR,
         1, &barrier,

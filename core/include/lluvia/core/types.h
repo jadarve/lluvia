@@ -21,9 +21,21 @@ namespace ll {
 */
 template<typename T>
 struct vec3 {
-    T x;
-    T y;
-    T z;
+    T x {0};
+    T y {0};
+    T z {0};
+
+    vec3() {}
+
+    vec3(const T& value) :
+        x {value},
+        y {value},
+        z {value} {}
+
+    vec3(const T& x_, const T& y_, const T& z_) :
+        x {x_},
+        y {y_},
+        z {z_} {}
 };
 
 /**

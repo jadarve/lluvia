@@ -54,4 +54,19 @@ vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexce
     return info;
 }
 
+
+ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAddressMode tAddressMode) noexcept {
+
+    for (auto& it : this->addressMode) {
+        it = tAddressMode;
+    }
+    return *this;
+}
+
+ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode tAddressMode) noexcept {
+    
+    this->addressMode[static_cast<uint32_t>(axis)] = tAddressMode;
+    return *this;
+}
+
 }; // namespace ll
