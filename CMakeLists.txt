@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.7)
 project(lluvia)
 
+#################################################
+# LLUVIA VERSION
+#################################################
+string(TIMESTAMP LL_VERSION "%y.%m.%d" UTC)
+message(STATUS "LL_VERSION: ${LL_VERSION}")
+file(WRITE "${CMAKE_BINARY_DIR}/version.txt" ${LL_VERSION})
 
 #################################################
 # CMAKE SETTINGS

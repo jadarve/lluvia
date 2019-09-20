@@ -97,10 +97,14 @@ for mod in cythonModules:
     extList = cythonize(createExtension(mod[0], mod[1]), compiler_directives=cython_directives)
     extensions.extend(extList)
 
+# read version.txt
+with open('../build/version.txt', 'r') as versionFile:
+    version = versionFile.readline()
+    print('VERSION', version)
 
 # call distutils setup
 setup(name='lluvia',
-    version='0.0.1',
+    version=version,
     author='Juan David Adarve Bermudez',
     author_email='juanda0718@gmail.com',
     maintainer='Juan David Adarve Bermudez',
