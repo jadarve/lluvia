@@ -4,6 +4,8 @@ on: [push]
 
 jobs:
   linux_cpp:
+    name: Linux C++
+    runs-on: ubuntu-latest
     container: jadarve/lluvia:latest
     steps:
     - name: Host C++ libraries
