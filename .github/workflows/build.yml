@@ -11,9 +11,7 @@ jobs:
     - name: Host C++ libraries
       run: |
         echo "$(pwd)"
-        ls
-        cd /github/workspace
-        ls
+        echo "$(ls)"
         mkdir build
         cd build
         cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
