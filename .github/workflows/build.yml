@@ -9,16 +9,12 @@ jobs:
     container:
       image: jadarve/lluvia:latest
     steps:
-    - name: Host C++ libraries
-      run: |
-        echo "$(pwd)"
-        echo "$(ls -la)"
-        echo "after ls"
-        cd $HOME
-        echo "$(pwd)"
-        echo "$(ls -la)"
-        mkdir build
-        cd build
-        echo "$(ls -la)"
-        cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
-        make -j
+    - uses: actions/checkout@v1
+    - name: Creating build dir
+      run: mkdir build
+    - name: Run CMake
+      working-directory: ./build
+      run: cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
+    - name: Compile
+      working-directory: ./build
+      run: make -j
