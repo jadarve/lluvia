@@ -5,8 +5,8 @@ on: [push]
 jobs:
   linux_cpp:
     steps:
+    - uses: docker://jadarve/lluvia:latest
     - name: Host C++ libraries
-      uses: docker://jadarve/lluvia:latest
       run: |
         mkdir build
         cd build
