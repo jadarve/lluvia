@@ -5,11 +5,15 @@ on: [push]
 jobs:
   linux_cpp:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: docker://jadarve/lluvia:latest
     - name: Host C++ libraries
       run: |
+        echo "$(pwd)"
+        ls
+        cd /github/workspace
+        ls
         mkdir build
         cd build
         cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
