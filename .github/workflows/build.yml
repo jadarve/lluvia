@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Linux
 
 on: [push]
 
@@ -14,7 +14,7 @@ jobs:
       run: mkdir build
     - name: Run CMake
       working-directory: ./build
-      run: cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
+      run: cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug ..
     - name: Compile
       working-directory: ./build
       run: make -j
