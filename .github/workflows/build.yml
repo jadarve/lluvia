@@ -6,13 +6,17 @@ jobs:
   linux_cpp:
     name: Linux C++
     runs-on: ubuntu-latest
-    container: jadarve/lluvia:latest
+    container:
+      image: jadarve/lluvia:latest
     steps:
     - name: Host C++ libraries
       run: |
         echo "$(pwd)"
         echo "$(ls -la)"
         echo "after ls"
+        cd $HOME
+        echo "$(pwd)"
+        echo "$(ls -la)"
         mkdir build
         cd build
         echo "$(ls -la)"
