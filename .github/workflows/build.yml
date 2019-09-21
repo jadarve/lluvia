@@ -1,0 +1,15 @@
+name: C/C++ CI
+
+on: [push]
+
+uses: docker://jadarve/lluvia:latest
+
+jobs:
+  linux_cpp:
+    steps:
+    - name: Host C++ libraries
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
+        make -j
