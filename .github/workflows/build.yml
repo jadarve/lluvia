@@ -1,17 +1,17 @@
 name: C/C++ CI
 
 on: [push]
+runs-on: ubuntu-latest
 
 jobs:
   linux_cpp:
-    runs-on: ubuntu-latest
-
+    container: jadarve/lluvia:latest
     steps:
-    - uses: docker://jadarve/lluvia:latest
     - name: Host C++ libraries
       run: |
         echo "$(pwd)"
         echo "$(ls)"
+        echo "after ls"
         mkdir build
         cd build
         cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
