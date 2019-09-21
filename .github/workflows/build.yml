@@ -2,12 +2,11 @@ name: C/C++ CI
 
 on: [push]
 
-uses: docker://jadarve/lluvia:latest
-
 jobs:
   linux_cpp:
     steps:
     - name: Host C++ libraries
+      uses: docker://jadarve/lluvia:latest
       run: |
         mkdir build
         cd build
