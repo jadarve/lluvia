@@ -18,3 +18,6 @@ jobs:
     - name: Compile
       working-directory: ./build
       run: make -j
+    - name: Build Python
+      working-directory: ./python
+      run: CC=clang python3 setup.py build
