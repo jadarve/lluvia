@@ -5,6 +5,12 @@ Welcome to Lluvia's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   introduction
+   installation
+   gettingStarted_python
+   gettingStarted_cpp
+
+
 Indices and tables
 ==================
 
