@@ -13,7 +13,7 @@ foreach(_FILE ${_TO_DOWNLOAD})
     if (NOT EXISTS ${_FPATH})
 
         download_file (
-            "https://github.com/ThePhD/sol2/releases/download/v3.0.2/${_FILE}"
+            "https://github.com/ThePhD/sol2/releases/download/v3.0.3/${_FILE}"
             ${_FPATH}
         )
         
