@@ -25,12 +25,21 @@ http_file (
     sha256 = "2dfb4fa5171656ca1bfbbddee5131b8fddb1b83884da30643bfd217f57e91f06",
 )
 
-http_file (
+# http_file (
+#     name = "catch",
+#     urls = [
+#         "https://github.com/catchorg/Catch2/releases/download/v2.11.0/catch.hpp"
+#     ],
+#     sha256 = "c3e164751617483c25d42f7f71254d5e5ba39f6b4245c2cfd6cc7ea8d3918cad"
+# )
+
+http_archive (
     name = "catch",
     urls = [
-        "https://github.com/catchorg/Catch2/releases/download/v2.0.1/catch.hpp"
+        "https://github.com/catchorg/Catch2/archive/v2.11.0.tar.gz"
     ],
-    sha256 = "6988c82def026a0b862f43ab122bbbd6051b0b7648bfe04c8a150ef62ca5a0a2"
+    sha256 = "b9957af46a04327d80833960ae51cf5e67765fd264389bd1e275294907f1a3e0",
+    build_file = "@//external:catch.bzl"
 )
 
 http_archive (

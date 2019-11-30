@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 cc_library (
     name = "core_cc_library",
@@ -20,4 +20,16 @@ cc_library (
         "@lua//:lua_cc_library",
     ],
     visibility = ["//visibility:public"]
+)
+
+cc_test (
+    name = "test_base64",
+    srcs = ["test/test_Base64.cpp"],
+    copts = [
+        "--std=c++17",
+    ],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
 )
