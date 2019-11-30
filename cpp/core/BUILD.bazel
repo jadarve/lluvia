@@ -1,0 +1,23 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+cc_library (
+    name = "core_cc_library",
+    srcs = glob(["src/**/*.cpp"]),
+    hdrs = glob(["include/**/*.h"]),
+    strip_include_prefix = "include/",
+    copts = [
+        "--std=c++17",
+        "-stdlib=libstdc++",
+    ],
+    linkstatic = True,
+    linkopts = [
+        "-lvulkan",
+        "-lm",
+        "-ldl",
+    ],
+    deps = [
+        "@sol//:sol_cc_library",
+        "@lua//:lua_cc_library",
+    ],
+    visibility = ["//visibility:public"]
+)
