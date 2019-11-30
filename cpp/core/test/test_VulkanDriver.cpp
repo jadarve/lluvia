@@ -6,13 +6,13 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "catch/catch.hpp"
+#include "catch2/catch.hpp"
 
 #include <iostream>
 #include <vulkan/vulkan.hpp>
 
 
-TEST_CASE("CreateInstance", "[VulkanDriverTest]") {
+TEST_CASE("create_instance", "test_VulkanDriver") {
 
     const vk::ApplicationInfo appInfo = vk::ApplicationInfo()
             .setPApplicationName("lluvia")

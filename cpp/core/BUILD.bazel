@@ -23,11 +23,130 @@ cc_library (
 )
 
 cc_test (
-    name = "test_base64",
+    name = "test_Base64",
     srcs = ["test/test_Base64.cpp"],
-    copts = [
-        "--std=c++17",
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
     ],
+)
+
+cc_test (
+    name = "test_BufferCopy",
+    srcs = ["test/test_BufferCopy.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
+    name = "test_BufferCreation",
+    srcs = ["test/test_BufferCreation.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
+    name = "test_BufferMapping",
+    srcs = ["test/test_BufferMapping.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+# TODO: uncomment these tests once I have GLSL compile and data rules.
+# cc_test (
+#     name = "test_ComputeNode",
+#     srcs = ["test/test_ComputeNode.cpp"],
+#     copts = ["--std=c++17",],
+#     deps = [
+#         ":core_cc_library",
+#         "@catch//:catch_cc_library"
+#     ],
+# )
+
+# cc_test (
+#     name = "test_ComputeNodeImage",
+#     srcs = ["test/test_ComputeNodeImage.cpp"],
+#     copts = ["--std=c++17",],
+#     deps = [
+#         ":core_cc_library",
+#         "@catch//:catch_cc_library"
+#     ],
+# )
+
+cc_test (
+    name = "test_ImageCreation",
+    srcs = ["test/test_ImageCreation.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
+    name = "test_Interpreter",
+    srcs = ["test/test_Interpreter.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
+    name = "test_MemoryFreeSpaceManager",
+    srcs = ["test/test_MemoryFreeSpaceManager.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+# cc_test (
+#     name = "test_ProgramCreation",
+#     srcs = ["test/test_ProgramCreation.cpp"],
+#     copts = ["--std=c++17",],
+#     deps = [
+#         ":core_cc_library",
+#         "@catch//:catch_cc_library"
+#     ],
+# )
+
+cc_test (
+    name = "test_SessionCreation",
+    srcs = ["test/test_SessionCreation.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
+    name = "test_utils",
+    srcs = ["test/test_utils.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
+    name = "test_VulkanDriver",
+    srcs = ["test/test_VulkanDriver.cpp"],
+    copts = ["--std=c++17",],
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
