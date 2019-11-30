@@ -8,14 +8,14 @@ workspace (
 load("@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive", "http_file")
 
-# accessible as @nlohmann_json//file
-http_file (
-    name = "nolhmann_json",
-    urls = [
-        "https://github.com/nlohmann/json/releases/download/v3.0.1/json.hpp"
-    ],
-    sha256 = "c9b3591f1bb94e723a0cd7be861733a3a555b234ef132be1e9027a0364118c4c",
-)
+# # accessible as @nlohmann_json//file
+# http_file (
+#     name = "nolhmann_json",
+#     urls = [
+#         "https://github.com/nlohmann/json/releases/download/v3.0.1/json.hpp"
+#     ],
+#     sha256 = "c9b3591f1bb94e723a0cd7be861733a3a555b234ef132be1e9027a0364118c4c",
+# )
 
 http_file (
     name = "cli11",
@@ -42,21 +42,22 @@ http_archive (
     build_file = "@//external:sol.bzl"
 )
 
-http_file (
-    name = "stb_image",
-    urls = [
-        "https://raw.githubusercontent.com/nothings/stb/master/stb_image.h"
-    ],
-    # sha256 = "0e28238d865510073b5740ae8eba8cd8032cc5b25f94e0f7505fac8036864909",
-)
+# TODO: Add the whole repo with commit hash
+# http_file (
+#     name = "stb_image",
+#     urls = [
+#         "https://raw.githubusercontent.com/nothings/stb/master/stb_image.h"
+#     ],
+#     # sha256 = "0e28238d865510073b5740ae8eba8cd8032cc5b25f94e0f7505fac8036864909",
+# )
 
-http_file (
-    name = "stb_image_write",
-    urls = [
-        "https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h"
-    ],
-    # sha256 = "0e8b3d80bc6eb8fdb64abc4db9fec608b489bc73418eaf14beda102a0699a4c9",
-)
+# http_file (
+#     name = "stb_image_write",
+#     urls = [
+#         "https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h"
+#     ],
+#     # sha256 = "0e8b3d80bc6eb8fdb64abc4db9fec608b489bc73418eaf14beda102a0699a4c9",
+# )
 
 http_archive (
     name = "lua",
