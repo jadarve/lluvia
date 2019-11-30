@@ -41,6 +41,9 @@ build*/
 *.sublime-project
 *.sublime-workspace
 
+# Visual Studio Code
+.vscode/
+
 # KDevelop
 .kdev4
 *.kdev4

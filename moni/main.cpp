@@ -1,9 +1,12 @@
 #include <iostream>
+#include "moni/moni.h"
 
 // TODO
 // #include "CLI11/CLI11.hpp"
 
 #include <lua.hpp>
+
+#include <vulkan/vulkan.hpp>
 
 // lua libraries are included and linked as expected
 #define SOL_ALL_SAFETIES_ON 1
@@ -21,4 +24,6 @@ int main()
     lua.script("beep()");
     lua.script("print('moni moni')");
     assert(x == 1);
+
+    moni::sayHello();
 }
