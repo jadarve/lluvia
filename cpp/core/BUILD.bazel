@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 cc_library (
     name = "core_cc_library",
@@ -30,6 +30,9 @@ cc_test (
         ":core_cc_library",
         "@catch//:catch_cc_library"
     ],
+    data = [
+        "//glsl:assign_shader"
+    ]
 )
 
 cc_test (
