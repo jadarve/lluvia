@@ -8,8 +8,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include "coreTestConfig.h"
-
 #include <iostream>
 #include "lluvia/core.h"
 
@@ -57,7 +55,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
 
-    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
+    auto program = session->createProgram("glsl/assign.spv");
     REQUIRE(program != nullptr);
 
     // TOTHINK: set script in the descriptor, not in the node
@@ -161,7 +159,7 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
     const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
 
-    auto program = session->createProgram(SHADER_PATH + "/assign.spv");
+    auto program = session->createProgram("glsl/assign.spv");
     REQUIRE(program != nullptr);
 
     // registerProgram?
@@ -176,7 +174,7 @@ function builder.newDescriptor()
     local desc = ll.ComputeNodeDescriptor.new()
     
     desc.builderName  = 'assign'
-    desc.localShape   = ll.vec3ui.new(32, 1, 1)
+    desc.localShape   = ll.vec3ui.new(128, 1, 1)
     desc.gridShape    = ll.vec3ui.new(1, 1, 1)
     desc.program      = ll.getProgram('assign')
     desc.functionName = 'main'
@@ -220,7 +218,6 @@ ll.registerNodeBuilder('assign', builder)
     cmdBuffer->end();
 
     session->run(*cmdBuffer);
-    
 
     {
         auto bufferMap = buffer->map<float[]>();

@@ -81,7 +81,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     REQUIRE(imageView != nullptr);
 
 
-    auto program = session->createProgram(SHADER_PATH + "/textureToBuffer.spv");
+    auto program = session->createProgram("glsl/textureToBuffer.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -200,7 +200,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     REQUIRE(imageView != nullptr);
 
 
-    auto program = session->createProgram(SHADER_PATH + "/imageToBuffer.spv");
+    auto program = session->createProgram("glsl/imageToBuffer.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()

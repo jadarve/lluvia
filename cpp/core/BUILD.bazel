@@ -65,26 +65,32 @@ cc_test (
     ],
 )
 
-# TODO: uncomment these tests once I have GLSL compile and data rules.
-# cc_test (
-#     name = "test_ComputeNode",
-#     srcs = ["test/test_ComputeNode.cpp"],
-#     copts = ["--std=c++17",],
-#     deps = [
-#         ":core_cc_library",
-#         "@catch//:catch_cc_library"
-#     ],
-# )
+cc_test (
+    name = "test_ComputeNode",
+    srcs = ["test/test_ComputeNode.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+    data = [
+        "//glsl:assign_shader"
+    ]
+)
 
-# cc_test (
-#     name = "test_ComputeNodeImage",
-#     srcs = ["test/test_ComputeNodeImage.cpp"],
-#     copts = ["--std=c++17",],
-#     deps = [
-#         ":core_cc_library",
-#         "@catch//:catch_cc_library"
-#     ],
-# )
+cc_test (
+    name = "test_ComputeNodeImage",
+    srcs = ["test/test_ComputeNodeImage.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+    data = [
+        "//glsl:image_to_buffer_shader",
+        "//glsl:texture_to_buffer_shader"
+    ]
+)
 
 cc_test (
     name = "test_ImageCreation",
@@ -116,15 +122,18 @@ cc_test (
     ],
 )
 
-# cc_test (
-#     name = "test_ProgramCreation",
-#     srcs = ["test/test_ProgramCreation.cpp"],
-#     copts = ["--std=c++17",],
-#     deps = [
-#         ":core_cc_library",
-#         "@catch//:catch_cc_library"
-#     ],
-# )
+cc_test (
+    name = "test_ProgramCreation",
+    srcs = ["test/test_ProgramCreation.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+    data = [
+        "//glsl:assign_shader"
+    ]
+)
 
 cc_test (
     name = "test_SessionCreation",

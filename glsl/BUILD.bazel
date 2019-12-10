@@ -6,3 +6,17 @@ glsl_shader(
     includes = [],
     visibility = ["//visibility:public"]
 )
+
+glsl_shader(
+    name = "image_to_buffer_shader",
+    shader = "imageToBuffer.comp",
+    includes = [],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "texture_to_buffer_shader",
+    shader = "textureToBuffer.comp",
+    includes = [],
+    visibility = ["//visibility:public"]
+)
