@@ -1,7 +1,19 @@
 """
 """
 
-def _glsl_shader_impl(ctx):
+def _glsl_header_library(ctx):
+
+    print(dir(ctx))
+
+    for hdr in ctx.files.hdrs:
+        print(hdr.path)
+        print(hdr.short_path)
+        print(hdr.dirname)
+        print(hdr.basename)
+        print(dir(hdr))
+
+
+def _glsl_shader(ctx):
 
     shader = ctx.file.shader
 
@@ -36,10 +48,18 @@ def _glsl_shader_impl(ctx):
 
 
 glsl_shader = rule(
-    implementation = _glsl_shader_impl,
+    implementation = _glsl_shader,
     attrs = {
         "shader": attr.label(allow_single_file=[".comp"]),
         "includes": attr.string_list(allow_empty=True),
     },
     provides = [DefaultInfo]
+)
+
+
+glsl_header_library = rule(
+    implementation = _glsl_header_library,
+    attrs = {
+        "hdrs": attr.label_list(allow_files=[".glsl"])
+    }
 )
