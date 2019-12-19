@@ -1,19 +1,35 @@
 """
 """
 
+GlslInfo = provider(fields=[
+    "includes",
+    "headers"
+])
+
+# glslc -I lib/ -o moni.spv imageToBuffer.comp
 def _glsl_header_library(ctx):
 
     print(dir(ctx))
+    print(ctx.bin_dir.path)
+    
+    # print(ctx.build_file_path)
+    # for hdr in ctx.files.hdrs:
+    #     print(hdr.path)
+    #     print(hdr.short_path)
+    #     print(hdr.dirname)
+    #     print(hdr.basename)
+    #     print(dir(hdr))
 
-    for hdr in ctx.files.hdrs:
-        print(hdr.path)
-        print(hdr.short_path)
-        print(hdr.dirname)
-        print(hdr.basename)
-        print(dir(hdr))
+    return [
+        GlslInfo(
+            headers=depset(direct=ctx.files.hdrs),
+            includes=depset(direct=["/home/jadarve/git/lluvia/glsl/lib"]),
+        )
+    ]
 
 
 def _glsl_shader(ctx):
+
 
     shader = ctx.file.shader
 
@@ -22,7 +38,11 @@ def _glsl_shader(ctx):
     spirv = ctx.actions.declare_file(spirv_name, sibling=shader)
 
     args = ctx.actions.args()
-    args.add("-I", "glsl/include")
+
+    for dep in ctx.attr.deps:
+        for inc in dep[GlslInfo].includes.to_list():
+            args.add("-I", inc)
+    
     args.add("-o", spirv)
     args.add(shader.path)
 
@@ -51,7 +71,7 @@ glsl_shader = rule(
     implementation = _glsl_shader,
     attrs = {
         "shader": attr.label(allow_single_file=[".comp"]),
-        "includes": attr.string_list(allow_empty=True),
+        "deps": attr.label_list(providers=[GlslInfo]),
     },
     provides = [DefaultInfo]
 )

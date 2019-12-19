@@ -5,5 +5,6 @@ glsl_header_library(
     hdrs = [
         "lluvia/core/color.glsl",
         "lluvia/core.glsl"
-    ]
+    ],
+    visibility = ["//visibility:public"]
 )
