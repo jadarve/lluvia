@@ -6,5 +6,6 @@ glsl_header_library(
         "lluvia/core/color.glsl",
         "lluvia/core.glsl"
     ],
+    strip_include_prefix = "glsl/lib",
     visibility = ["//visibility:public"]
 )
