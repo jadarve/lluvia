@@ -1,4 +1,13 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@//bazel/header_template:def.bzl", "cc_header_template")
+
+cc_header_template(
+    name = "lua_library_cc_template",
+    template = "include/lluvia/core/impl/LuaLibrary.h.in",
+    vars = [
+        "LUA:'This is some lua code!'"
+    ]
+)
 
 cc_library (
     name = "core_cc_library",

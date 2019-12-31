@@ -14,7 +14,7 @@ namespace ll {
 namespace impl {
 
 constexpr const auto LUA_LIBRARY_SRC = R"(
-${LL_LUA_LIBRARY_SRC}
+{{LUA}}
 )";
 
 } // namespace impl

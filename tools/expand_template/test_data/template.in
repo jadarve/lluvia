@@ -1,0 +1,10 @@
+This is a template file.
+
+Value of "-D'A:hello world!'"
+A : {{A}}
+
+Value of "-F'B:test_data/file.txt'"
+B :
+```
+{{B}}
+```

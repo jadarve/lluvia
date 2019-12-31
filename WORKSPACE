@@ -2,11 +2,49 @@ workspace (
     name = "lluvia"
 )
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+
+
+###########################################################
+# Python configuration
+###########################################################
+
+# http_archive(
+#     name = "rules_python",
+#     url = "https://github.com/bazelbuild/rules_python/releases/download/0.0.1/rules_python-0.0.1.tar.gz",
+#     sha256 = "aa96a691d3a8177f3215b14b0edc9641787abaaa30363a080165d06ab65e1161",
+# )
+
+git_repository(
+    name = "rules_python",
+    remote = "https://github.com/bazelbuild/rules_python.git",
+    commit = "38f86fb55b698c51e8510c807489c9f4e047480e",
+    shallow_since = "1575517988 -0500",
+)
+
+load("@rules_python//python:repositories.bzl", "py_repositories")
+py_repositories()
+
+# Only needed if using the packaging rules.
+load("@rules_python//python:pip.bzl", "pip_repositories")
+pip_repositories()
+
+
+load("@rules_python//python:pip.bzl", "pip3_import")
+pip3_import (
+   name = "python_deps",
+   requirements = "//:requirements.txt",
+)
+
+load("@python_deps//:requirements.bzl", "pip_install")
+pip_install()
+
+
 ###########################################################
 # download third-party dependencies
 ###########################################################
-load("@bazel_tools//tools/build_defs/repo:http.bzl",
-    "http_archive", "http_file")
 
 # # accessible as @nlohmann_json//file
 # http_file (
@@ -24,14 +62,6 @@ http_file (
     ],
     sha256 = "2dfb4fa5171656ca1bfbbddee5131b8fddb1b83884da30643bfd217f57e91f06",
 )
-
-# http_file (
-#     name = "catch",
-#     urls = [
-#         "https://github.com/catchorg/Catch2/releases/download/v2.11.0/catch.hpp"
-#     ],
-#     sha256 = "c3e164751617483c25d42f7f71254d5e5ba39f6b4245c2cfd6cc7ea8d3918cad"
-# )
 
 http_archive (
     name = "catch",
