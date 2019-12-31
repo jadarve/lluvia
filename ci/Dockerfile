@@ -17,6 +17,7 @@ RUN apt-get update \
         python3-pip \
         python-pip \
         unzip \
+        git \
     && rm -rf /var/lib/apt/lists/*
 
 # Python
