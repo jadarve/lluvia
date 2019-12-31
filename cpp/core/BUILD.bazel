@@ -12,7 +12,7 @@ cc_header_template(
 cc_library (
     name = "core_cc_library",
     srcs = glob(["src/**/*.cpp"]),
-    hdrs = glob(["include/**/*.h"]),
+    hdrs = glob(["include/**/*.h"]) + [":lua_library_cc_template"],
     strip_include_prefix = "include/",
     copts = [
         "--std=c++17",

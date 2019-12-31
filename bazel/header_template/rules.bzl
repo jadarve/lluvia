@@ -1,14 +1,13 @@
 """
 """
 
+
 def _cc_header_template(ctx):
 
     template = ctx.files.template[0]
     template_out = ctx.actions.declare_file(template.basename[:-3], sibling=template)
 
     executable = ctx.attr._executable
-    print(dir(executable))
-    print(executable.files_to_run)
 
     args = ctx.actions.args()
     args.add("-D", "LUA:print('moni moni')")
@@ -23,11 +22,8 @@ def _cc_header_template(ctx):
         mnemonic="template"
     )
 
-    runfiles = ctx.runfiles(
-        files = [template_out]
-    )
     return [
-        DefaultInfo(runfiles=runfiles)
+        DefaultInfo(files=depset([template_out]))
     ]
 
 cc_header_template = rule(
