@@ -1,18 +1,21 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@//bazel/header_template:def.bzl", "cc_header_template")
+load("@//bazel/expand_template:def.bzl", "expand_template")
 
-cc_header_template(
-    name = "lua_library_cc_template",
+expand_template(
+    name = "core_lua_cc_library_header",
     template = "include/lluvia/core/impl/LuaLibrary.h.in",
-    vars = [
-        "LUA:'This is some lua code!'"
-    ]
+    file_vars = {
+        "LUA": "lua/ll/library.lua"
+    },
+    data = [
+        "//lua:ll_lua_library"
+    ],
 )
 
 cc_library (
     name = "core_cc_library",
     srcs = glob(["src/**/*.cpp"]),
-    hdrs = glob(["include/**/*.h"]) + [":lua_library_cc_template"],
+    hdrs = glob(["include/**/*.h"]) + [":core_lua_cc_library_header"],
     strip_include_prefix = "include/",
     copts = [
         "--std=c++17",

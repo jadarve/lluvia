@@ -73,7 +73,6 @@ def main():
 
             try:
                 with open(outPath, mode='w') as o:
-                    print(out)
                     o.write(out)
             except IOError as eo:
                 print('Error creating output file "{0}": {1}'.format(outPath, eo))
