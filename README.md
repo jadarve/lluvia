@@ -128,6 +128,15 @@ node.run()
 print(C.toHost(dtype=np.int32))
 ```
 
+# Running Docker container
+
+```
+docker run --mount type=bind,source="$(pwd)",target="/lluvia" -it jadarve/lluvia:latest bash
+
+# inside the container
+cd lluvia
+CC=clang bazel build //...
+```
 
 # License
 
