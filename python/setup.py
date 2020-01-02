@@ -16,21 +16,22 @@ from Cython.Build import cythonize
 
 VULKAN_SDK = os.environ['VULKAN_SDK'] if 'VULKAN_SDK' in os.environ.keys() else ''
 
-incDirs = ['../core/include',
+incDirs = ['../cpp/core/include',
            os.path.join(VULKAN_SDK, 'include'),
            np.get_include()]
 
 # path to build
-libDirs = ['../build/lib',
+libDirs = ['../bazel-out/k8-fastbuild/bin/cpp/core',
+           '../bazel-out/k8-fastbuild/bin/external/lua',
            os.path.join(VULKAN_SDK, 'lib')]
 
 
-libs   = ['lluvia-core',
+libs   = ['core_cc_library',
           'stdc++',
           'vulkan',
           'm',
           'dl',
-          'lua']
+          'lua_cc_library']
 
 cflags = ['-std=c++17',
           '-fPIC',
@@ -98,9 +99,11 @@ for mod in cythonModules:
     extensions.extend(extList)
 
 # read version.txt
-with open('../build/version.txt', 'r') as versionFile:
-    version = versionFile.readline()
-    print('VERSION', version)
+# FIXME
+# with open('../build/version.txt', 'r') as versionFile:
+#     version = versionFile.readline()
+#     print('VERSION', version)
+version = '0.0.1'
 
 # call distutils setup
 setup(name='lluvia',

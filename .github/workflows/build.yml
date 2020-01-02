@@ -12,6 +12,9 @@ jobs:
     - uses: actions/checkout@v1
     - name: Bazel build
       run: CC=clang bazel build //...
+    - name: Python build
+      working-directory: ./python
+      run: CC=clang python3 setup.py build
     # - name: Creating build dir
     #   run: mkdir build
     # - name: Run CMake
