@@ -13,6 +13,15 @@ Install the following packages in your system if they are still not available:
         cmake \
         clang
 
+Install Bazel:
+
+.. code-block:: bash
+    curl https://bazel.build/bazel-release.pub.gpg | apt-key add -
+    echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
+
+    apt update
+    apt install bazel
+
 Install the `LunarG Vulkan SDK <https://www.lunarg.com/vulkan-sdk/>`_:
 
 .. code-block:: bash
@@ -38,19 +47,13 @@ Clone and compile Lluvia's C++ libraries:
 
     git clone https://github.com/jadarve/lluvia.git
     cd lluvia
-    mkdir build
-    cd build
-    cmake -DCMAKE_SYSTEM_NAME=Linux \
-      -DCMAKE_CXX_COMPILER=clang++ \
-      -DCMAKE_BUILD_TYPE=Release  \
-      ..
-    make -j
+    CC=clang bazel build //...
 
 Run the tests to verify that your compilation runs properly:
 
 .. code-block:: bash
     
-    make test
+    CC=clang bazel test //...
 
 
 Python3 package
