@@ -1,0 +1,25 @@
+load("@//bazel/glsl:def.bzl", "glsl_shader")
+
+glsl_shader(
+    name = "assign_shader",
+    shader = "assign.comp",
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "image_to_buffer_shader",
+    shader = "imageToBuffer.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "texture_to_buffer_shader",
+    shader = "textureToBuffer.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)

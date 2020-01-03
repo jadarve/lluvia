@@ -1,0 +1,11 @@
+load("@//bazel/glsl:def.bzl", "glsl_header_library")
+
+glsl_header_library(
+    name = "lluvia_glsl_library",
+    hdrs = [
+        "lluvia/core/color.glsl",
+        "lluvia/core.glsl"
+    ],
+    strip_include_prefix = "glsl/lib",
+    visibility = ["//visibility:public"]
+)

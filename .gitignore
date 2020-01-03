@@ -41,6 +41,9 @@ build*/
 *.sublime-project
 *.sublime-workspace
 
+# Visual Studio Code
+.vscode/
+
 # KDevelop
 .kdev4
 *.kdev4
@@ -67,3 +70,9 @@ __pycache__
 *.eggs
 *.pytest_cache
 *.egg-info
+
+# Bazel
+bazel-bin
+bazel-lluvia
+bazel-out
+bazel-testlogs

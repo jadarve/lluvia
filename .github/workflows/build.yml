@@ -10,14 +10,8 @@ jobs:
       image: jadarve/lluvia:latest
     steps:
     - uses: actions/checkout@v1
-    - name: Creating build dir
-      run: mkdir build
-    - name: Run CMake
-      working-directory: ./build
-      run: cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug ..
-    - name: Compile
-      working-directory: ./build
-      run: make -j
-    - name: Build Python
+    - name: Bazel build
+      run: CC=clang bazel build //...
+    - name: Python build
       working-directory: ./python
       run: CC=clang python3 setup.py build
