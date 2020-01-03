@@ -1,9 +1,0 @@
-load("//bazel/cython:def.bzl", "pyx_library")
-
-# FIXME: need to include the Python includes for this macro to work
-# pyx_library(
-#     name = "moni_pyx_library",
-#     srcs = [
-#         "src/moni/moni.pyx"
-#     ]
-# )

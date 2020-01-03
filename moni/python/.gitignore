@@ -1,5 +1,0 @@
-# Cython generated C++ files.
-*.cpp
-
-# Distribution folder
-dist
