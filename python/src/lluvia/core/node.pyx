@@ -279,21 +279,20 @@ cdef class ComputeNode:
         cdef Buffer    buf     = None
         cdef ImageView imgView = None
 
-        if type(obj) == Buffer:
+        objType = type(obj)
+
+        if objType == Buffer:
             buf = obj
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](buf.__buffer))
-            
-            return
-
-        if type(obj) == ImageView:
+        
+        elif objType == ImageView:
             imgView = obj
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](imgView.__imageView))
             
-            return
-        
-        raise RuntimeError('Unsupported obj type {0}.'.format(type(obj)))
+        else:
+            raise RuntimeError('Unsupported obj type {0}. Valid types are ll.Buffer and ll.ImageView.'.format(type(obj)))
 
     def getPort(self, str name):
 
