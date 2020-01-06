@@ -185,6 +185,12 @@ cdef class ComputeNodeDescriptor:
 
         self.__descriptor.addPort(portDesc.__descriptor)
 
+    def getPort(self, str name):
+
+        cdef PortDescriptor out = PortDescriptor(0, 'dummy', PortDirection.In, PortType.Buffer)
+        out.__descriptor = self.__descriptor.getPort(impl.encodeString(name))
+        return out
+
     def addParameter(self, str name, Parameter param):
 
         self.__descriptor.addParameter(impl.encodeString(name), param.__p)
@@ -277,11 +283,17 @@ cdef class ComputeNode:
             buf = obj
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](buf.__buffer))
+            
+            return
 
         if type(obj) == ImageView:
             imgView = obj
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](imgView.__imageView))
+            
+            return
+        
+        raise RuntimeError('Unsupported obj type {0}.'.format(type(obj)))
 
     def getPort(self, str name):
 
