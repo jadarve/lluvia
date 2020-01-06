@@ -1,3 +1,6 @@
+"""
+"""
+
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@//bazel/expand_template:def.bzl", "expand_template")
 

@@ -21,8 +21,8 @@ incDirs = ['../cpp/core/include',
            np.get_include()]
 
 # path to build
-libDirs = ['../bazel-out/k8-fastbuild/bin/cpp/core',
-           '../bazel-out/k8-fastbuild/bin/external/lua',
+libDirs = ['../bazel-bin/cpp/core',
+           '../bazel-bin/external/lua',
            os.path.join(VULKAN_SDK, 'lib')]
 
 
