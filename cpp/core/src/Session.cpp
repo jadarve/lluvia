@@ -313,6 +313,18 @@ void Session::run(const ll::ComputeNode& node) {
 }
 
 
+void Session::run(const ll::ContainerNode& node) {
+
+    auto cmdBuffer = createCommandBuffer();
+
+    cmdBuffer->begin();
+    node.record(*cmdBuffer);
+    cmdBuffer->end();
+
+    run(*cmdBuffer);
+}
+
+
 void Session::script(const std::string &code) {
     m_interpreter->run(code);
 }

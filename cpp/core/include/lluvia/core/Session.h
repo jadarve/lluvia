@@ -275,6 +275,30 @@ public:
 
 
     /**
+    @brief      Runs a ll::ContainerNode
+
+    Internally, this function creates a ll::CommandBuffer using
+    ll::Session::createCommandBuffer, records the execution of the
+    container node and submits to the device.
+
+    Calling this function is equivalent to:
+
+    @code
+        auto cmdBuffer = session->createCommandBuffer();
+
+        cmdBuffer->begin();
+        node.record(*cmdBuffer)
+        cmdBuffer->end();
+
+        session->run(*cmdBuffer);
+    @endcode
+    
+    @param[in]  node  The node
+    */
+    void run(const ll::ContainerNode& node);
+
+
+    /**
     @brief      Runs Lua script code into the session's internal interpreter
 
     @param[in]  code  The Lua code

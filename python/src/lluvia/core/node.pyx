@@ -9,6 +9,7 @@
 from .enums.node cimport NodeState, NodeType, PortDirection, PortType
 from .enums.node import PortDirection as PortDirection_t
 from .enums.node import PortType as PortType_t
+from .enums.node import NodeType as NodeType_t
 from .enums.core_object import ObjectType
 
 from core_object cimport _Object
@@ -212,7 +213,7 @@ cdef class ComputeNode:
 
     property type:
         def __get__(self):
-            return NodeType(<uint32_t> self.__node.get().getType())
+            return NodeType_t(<uint32_t> self.__node.get().getType())
 
     property session:
         def __get__(self):
@@ -369,7 +370,7 @@ cdef class ContainerNode:
 
     property type:
         def __get__(self):
-            return NodeType(<uint32_t> self.__node.get().getType())
+            return NodeType_t(<uint32_t> self.__node.get().getType())
 
     property session:
         def __get__(self):
@@ -426,7 +427,7 @@ cdef class ContainerNode:
 
         cdef shared_ptr[_Node] node = self.__node.get().getNode(impl.encodeString(name))
 
-        cdef NodeType nType = NodeType(<uint32_t> node.get().getType())
+        cdef NodeType nType = NodeType_t(<uint32_t> node.get().getType())
 
         cdef ComputeNode computeNode
         cdef ContainerNode containerNode

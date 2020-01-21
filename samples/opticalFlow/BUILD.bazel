@@ -8,3 +8,21 @@ glsl_shader(
     ],
     visibility = ["//visibility:public"]
 )
+
+glsl_shader(
+    name = "ImageDownsampleX_8ui_shader",
+    shader = "glsl/ImageDownsampleX_8ui.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "ImageDownsampleY_8ui_shader",
+    shader = "glsl/ImageDownsampleY_8ui.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)

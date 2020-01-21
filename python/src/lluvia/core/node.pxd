@@ -152,7 +152,7 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
         void bindNode(const string& name, const shared_ptr[_Node]& obj) except +
 
         void init()
-        void record(_CommandBuffer& commandBuffer) const
+        void record(_CommandBuffer& commandBuffer) except +
 
 
 cdef class PortDescriptor:

@@ -285,15 +285,25 @@ cdef class Session:
         """
 
         cdef ComputeNode node = None
+        cdef ContainerNode containerNode = None
         cdef CommandBuffer cmdBuffer = None
 
         if type(obj) == ComputeNode:
             node = obj
             self.__session.get().run(deref(node.__node.get()))
+        
+        elif type(obj) == ContainerNode:
+            containerNode = obj
+            self.__session.get().run(deref(containerNode.__node.get()))
 
         elif type(obj) == CommandBuffer:
             cmdBuffer = obj
             self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
+        
+        else:
+            raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
+
+        
 
     def compileProgram(self, shaderCode,
                        includeDirs=None,

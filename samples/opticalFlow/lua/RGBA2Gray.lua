@@ -10,7 +10,7 @@ function builder.newDescriptor()
     desc.program      = ll.getProgram('RGBA2Gray')
     desc.functionName = 'main'
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_RGBA', ll.PortDirection.In, ll.PortType.ImageView))
+    desc:addPort(ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
 
     return desc
@@ -18,7 +18,7 @@ end
 
 function builder.onNodeInit(node)
     
-    in_RGBA = node:getPort('in_RGBA')
+    in_RGBA = node:getPort('in_rgba')
 
     -- ll::Memory where out_gray will be allocated
     memory = in_RGBA.memory
