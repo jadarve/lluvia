@@ -66,20 +66,20 @@ namespace impl {
     @sa ll::ChannelType enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ChannelType>, 11> ChannelTypeStrings {{
-        std::make_tuple("uint8"   , ll::ChannelType::Uint8),
-        std::make_tuple("int8"    , ll::ChannelType::Int8),
+        std::make_tuple("Uint8"   , ll::ChannelType::Uint8),
+        std::make_tuple("Int8"    , ll::ChannelType::Int8),
 
-        std::make_tuple("uint16"  , ll::ChannelType::Uint16),
-        std::make_tuple("int16"   , ll::ChannelType::Int16),
-        std::make_tuple("float16" , ll::ChannelType::Float16),
+        std::make_tuple("Uint16"  , ll::ChannelType::Uint16),
+        std::make_tuple("Int16"   , ll::ChannelType::Int16),
+        std::make_tuple("Float16" , ll::ChannelType::Float16),
 
-        std::make_tuple("uint32"  , ll::ChannelType::Uint32),
-        std::make_tuple("int32"   , ll::ChannelType::Int32),
-        std::make_tuple("float32" , ll::ChannelType::Float32),
+        std::make_tuple("Uint32"  , ll::ChannelType::Uint32),
+        std::make_tuple("Int32"   , ll::ChannelType::Int32),
+        std::make_tuple("Float32" , ll::ChannelType::Float32),
 
-        std::make_tuple("uint64"  , ll::ChannelType::Uint64),
-        std::make_tuple("int64"   , ll::ChannelType::Int64),
-        std::make_tuple("float64" , ll::ChannelType::Float64),
+        std::make_tuple("Uint64"  , ll::ChannelType::Uint64),
+        std::make_tuple("Int64"   , ll::ChannelType::Int64),
+        std::make_tuple("Float64" , ll::ChannelType::Float64),
     }};
 
 

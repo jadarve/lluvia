@@ -1,0 +1,47 @@
+#version 450
+
+#include <lluvia/core.glsl>
+
+layout(binding = 0, r8ui) uniform uimage2D in_gray;
+layout(binding = 1, r32f) uniform image2D out_gray;
+layout(binding = 2, rg32f) uniform image2D out_gradient;
+
+void main() {
+
+    // this coordinates are relative to out_gradient size
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
+    const ivec2 imgSize = imageSize(out_gradient);
+
+    if (coords.x > imgSize.x || coords.y > imgSize.y) {
+        return;
+    }
+
+    const bool leftBorder   = coords.x == 0;
+    const bool rightBorder  = coords.x == imgSize.x - 1;
+    const bool topBorder    = coords.y == 0;
+    const bool bottomBorder = coords.y == imgSize.y -1;
+
+    // central pixel in the 3x3 window
+    const uint img_11 = imageLoad(in_gray, coords).r;
+
+    const uint img_00 = leftBorder || topBorder?     img_11 : imageLoad(in_gray, coords + ivec2(-1, -1)).r;
+    const uint img_01 = topBorder?                   img_11 : imageLoad(in_gray, coords + ivec2( 0, -1)).r;
+    const uint img_02 = rightBorder || topBorder?    img_11 : imageLoad(in_gray, coords + ivec2(+1, -1)).r;
+    const uint img_10 = leftBorder?                  img_11 : imageLoad(in_gray, coords + ivec2(-1,  0)).r;
+    const uint img_12 = rightBorder?                 img_11 : imageLoad(in_gray, coords + ivec2(+1,  0)).r;
+    const uint img_20 = leftBorder || bottomBorder?  img_11 : imageLoad(in_gray, coords + ivec2(-1, +1)).r;
+    const uint img_21 = bottomBorder?                img_11 : imageLoad(in_gray, coords + ivec2( 0, +1)).r;
+    const uint img_22 = rightBorder || bottomBorder? img_11 : imageLoad(in_gray, coords + ivec2(+1, +1)).r;
+
+    const float grad_x = (0.25*(img_02 + img_22) + 0.5*img_12) - (0.25*(img_00 + img_02) + 0.5*img_02);
+    const float grad_y = (0.25*(img_20 + img_22) + 0.5*img_21) - (0.25*(img_00 + img_02) + 0.5*img_01);
+    const float imgFiltered = 0.0625*(img_00 + img_02 + img_20 + img_22)
+                            + 0.125*(img_01 + img_12 + img_21 + img_10)
+                            + 0.25*img_11;
+
+    // normalized image intensity in range [0, 1] and gradients in range [-1, 1]
+    const vec4 outputValue = vec4(grad_x / 255, grad_y / 255, 0, 0);
+
+    imageStore(out_gray, coords, vec4(imgFiltered / 255));
+    imageStore(out_gradient, coords, outputValue);
+}
