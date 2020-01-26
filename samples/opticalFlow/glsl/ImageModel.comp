@@ -24,16 +24,21 @@ void main() {
     // central pixel in the 3x3 window
     const uint img_11 = imageLoad(in_gray, coords).r;
 
+    // row 0
     const uint img_00 = leftBorder || topBorder?     img_11 : imageLoad(in_gray, coords + ivec2(-1, -1)).r;
     const uint img_01 = topBorder?                   img_11 : imageLoad(in_gray, coords + ivec2( 0, -1)).r;
     const uint img_02 = rightBorder || topBorder?    img_11 : imageLoad(in_gray, coords + ivec2(+1, -1)).r;
+
+    // row 1
     const uint img_10 = leftBorder?                  img_11 : imageLoad(in_gray, coords + ivec2(-1,  0)).r;
     const uint img_12 = rightBorder?                 img_11 : imageLoad(in_gray, coords + ivec2(+1,  0)).r;
+
+    // row 2
     const uint img_20 = leftBorder || bottomBorder?  img_11 : imageLoad(in_gray, coords + ivec2(-1, +1)).r;
     const uint img_21 = bottomBorder?                img_11 : imageLoad(in_gray, coords + ivec2( 0, +1)).r;
     const uint img_22 = rightBorder || bottomBorder? img_11 : imageLoad(in_gray, coords + ivec2(+1, +1)).r;
 
-    const float grad_x = (0.25*(img_02 + img_22) + 0.5*img_12) - (0.25*(img_00 + img_02) + 0.5*img_02);
+    const float grad_x = (0.25*(img_02 + img_22) + 0.5*img_12) - (0.25*(img_00 + img_20) + 0.5*img_10);
     const float grad_y = (0.25*(img_20 + img_22) + 0.5*img_21) - (0.25*(img_00 + img_02) + 0.5*img_01);
     const float imgFiltered = 0.0625*(img_00 + img_02 + img_20 + img_22)
                             + 0.125*(img_01 + img_12 + img_21 + img_10)
