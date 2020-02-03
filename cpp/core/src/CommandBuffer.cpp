@@ -106,6 +106,28 @@ void CommandBuffer::copyImageToBuffer(const ll::Image& src, const ll::Buffer& ds
     m_commandBuffer.copyImageToBuffer(src.m_vkImage, src.m_vkLayout, dst.m_vkBuffer, 1, &copyInfo);
 }
 
+void CommandBuffer::copyImageToImage(const ll::Image &src, const ll::Image &dst) {
+
+    auto imgSubresourceLayers = vk::ImageSubresourceLayers{}
+                                    .setAspectMask(vk::ImageAspectFlagBits::eColor)
+                                    .setMipLevel(0)
+                                    .setBaseArrayLayer(0)
+                                    .setLayerCount(1);
+
+    auto copyRegion = vk::ImageCopy {}
+        .setSrcOffset({0, 0, 0})
+        .setSrcSubresource(imgSubresourceLayers)
+        .setDstOffset({0, 0, 0})
+        .setDstSubresource(imgSubresourceLayers)
+        .setExtent({src.getWidth(), src.getHeight(), src.getDepth()});
+
+    m_commandBuffer.copyImage(src.m_vkImage,
+        src.m_vkLayout,
+        dst.m_vkImage,
+        dst.m_vkLayout,
+        1,
+        &copyRegion);
+}
 
 void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout) {
 

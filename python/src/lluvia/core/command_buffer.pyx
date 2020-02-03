@@ -120,6 +120,32 @@ cdef class CommandBuffer:
             deref(src.__image.get()),
             deref(dst.__buffer.get()))
 
+    def copyImageToImage(self, Image src, Image dst):
+        """
+        Copies the content of src Image to dst Image.
+
+        The image parameters must be in the following layouts:
+
+        * src: TransferSrcOptimal
+        * dst: TransferDstOptimal
+
+        This method does not check if the images are in the correct
+        layout. The results are undefined if the images are in
+        any other layout.
+
+        Parameters
+        ----------
+        src : Image.
+            Source image.
+
+        dst : Image.
+            Destination buffer.
+        """
+
+        self.__commandBuffer.get().copyImageToImage(
+            deref(src.__image.get()),
+            deref(dst.__image.get()))
+
     def changeImageLayout(self, Image img, ImageLayout newLayout):
         """
         Changes image layout.

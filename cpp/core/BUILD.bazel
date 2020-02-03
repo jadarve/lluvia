@@ -118,6 +118,16 @@ cc_test (
 )
 
 cc_test (
+    name = "test_ImageCopy",
+    srcs = ["test/test_ImageCopy.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
     name = "test_Interpreter",
     srcs = ["test/test_Interpreter.cpp"],
     copts = ["--std=c++17",],

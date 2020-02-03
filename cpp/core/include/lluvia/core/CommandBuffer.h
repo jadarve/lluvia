@@ -131,6 +131,17 @@ public:
 
 
     /**
+    @brief      Copies the content of \p src image into \p dst image.
+
+    *TODO:* assert buffer size.
+    
+    @param[in]  src   The source
+    @param[in]  dst   The destination
+    */
+    void copyImageToImage(const ll::Image& src, const ll::Image& dst);
+
+
+    /**
     @brief      Change \p image layout.
 
     The actual change in image layout is performed when this command buffer
