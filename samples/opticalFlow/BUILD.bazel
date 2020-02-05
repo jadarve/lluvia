@@ -37,6 +37,15 @@ glsl_shader(
 )
 
 glsl_shader(
+    name = "FlowUpdate_shader",
+    shader = "glsl/FlowUpdate.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
     name = "FlowPredictX_shader",
     shader = "glsl/FlowPredictX.comp",
     deps = [
