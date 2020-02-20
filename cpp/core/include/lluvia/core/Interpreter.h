@@ -10,7 +10,6 @@
 
 #include <cstdint>
 #include <cstdlib>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -23,6 +22,7 @@
 
 #pragma clang diagnostic pop
 
+#include "lluvia/core/error.h"
 
 namespace ll {
 
@@ -47,6 +47,24 @@ public:
     sol::load_result load(const std::string& code);
 
     void setActiveSession(ll::Session* session);
+
+    template<typename T, typename... Args>
+    T loadAndRun(const std::string&& code, Args&&... args) {
+
+        auto loadCode = load(std::forward<const std::string>(code));
+
+        auto scriptFunction = static_cast<sol::protected_function>(loadCode);
+        sol::protected_function_result scriptResult = scriptFunction(std::forward<Args>(args)...);
+
+        if (!scriptResult.valid()) {
+            const auto err = static_cast<sol::error>(scriptResult);
+
+            ll::throwSystemError(ll::ErrorCode::InterpreterError,
+                                 "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+        }
+
+        return static_cast<T>(scriptResult);
+    }
 
 private:
     std::unique_ptr<sol::state> m_lua;

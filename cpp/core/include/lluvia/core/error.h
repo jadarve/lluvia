@@ -38,6 +38,7 @@ enum class ErrorCode : int32_t {
     KeyNotFound,                /**< Key not found in a given look up method */
     MemoryCreationError,        /**< Error creating ll::Memory object */
     InvalidNodeState,           /**< Invalid ll::Node state */
+    InterpreterError,           /**< Error evaluating interpreter script*/
 };
 
 
@@ -46,23 +47,24 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 15> ErrorCodeStrings {{
-        std::make_tuple("EnumConversionFailed"      , ll::ErrorCode::EnumConversionFailed),
-        std::make_tuple("MemoryMapFailed"           , ll::ErrorCode::MemoryMapFailed),
-        std::make_tuple("ObjectAllocationError"     , ll::ErrorCode::ObjectAllocationError),
-        std::make_tuple("PortBindingError"          , ll::ErrorCode::PortBindingError),
-        std::make_tuple("InvalidShaderFunctionName" , ll::ErrorCode::InvalidShaderFunctionName),
-        std::make_tuple("InvalidShaderProgram"      , ll::ErrorCode::InvalidShaderProgram),
-        std::make_tuple("BufferCopyError"           , ll::ErrorCode::BufferCopyError),
-        std::make_tuple("ProgramCompilationError"   , ll::ErrorCode::ProgramCompilationError),
-        std::make_tuple("InvalidLocalShape"         , ll::ErrorCode::InvalidLocalShape),
-        std::make_tuple("InvalidGridShape"          , ll::ErrorCode::InvalidGridShape),
-        std::make_tuple("BadEnumCasting"            , ll::ErrorCode::BadEnumCasting),
-        std::make_tuple("PhysicalDevicesNotFound"   , ll::ErrorCode::PhysicalDevicesNotFound),
-        std::make_tuple("KeyNotFound"               , ll::ErrorCode::KeyNotFound),
-        std::make_tuple("MemoryCreationError"       , ll::ErrorCode::MemoryCreationError),
-        std::make_tuple("InvalidNodeState"          , ll::ErrorCode::InvalidNodeState),
-    }};
+constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 16> ErrorCodeStrings{{
+    std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
+    std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
+    std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
+    std::make_tuple("PortBindingError", ll::ErrorCode::PortBindingError),
+    std::make_tuple("InvalidShaderFunctionName", ll::ErrorCode::InvalidShaderFunctionName),
+    std::make_tuple("InvalidShaderProgram", ll::ErrorCode::InvalidShaderProgram),
+    std::make_tuple("BufferCopyError", ll::ErrorCode::BufferCopyError),
+    std::make_tuple("ProgramCompilationError", ll::ErrorCode::ProgramCompilationError),
+    std::make_tuple("InvalidLocalShape", ll::ErrorCode::InvalidLocalShape),
+    std::make_tuple("InvalidGridShape", ll::ErrorCode::InvalidGridShape),
+    std::make_tuple("BadEnumCasting", ll::ErrorCode::BadEnumCasting),
+    std::make_tuple("PhysicalDevicesNotFound", ll::ErrorCode::PhysicalDevicesNotFound),
+    std::make_tuple("KeyNotFound", ll::ErrorCode::KeyNotFound),
+    std::make_tuple("MemoryCreationError", ll::ErrorCode::MemoryCreationError),
+    std::make_tuple("InvalidNodeState", ll::ErrorCode::InvalidNodeState),
+    std::make_tuple("InterpreterError", ll::ErrorCode::InterpreterError),
+}};
 
 } // namespace impl
 
@@ -144,6 +146,22 @@ void throwSystemErrorIf(bool condition, ll::ErrorCode errorCode, T&& msg) {
     if (condition) {
         throw std::system_error(createErrorCode(errorCode), msg);
     }
+}
+
+/**
+@brief      Throws a std::system_error exception with error code and message.
+
+@param[in]  condition  The condition.
+@param[in]  errorCode  The error code.
+@param      msg        The error message.
+
+@tparam     T          Type of the error message. It must be convertible to std::string.
+*/
+template <typename T>
+void throwSystemError(ll::ErrorCode errorCode, T &&msg) {
+
+    static_assert(std::is_convertible<T, std::string>(), "T must be a string-like type");
+    throw std::system_error(createErrorCode(errorCode), msg);
 }
 
 } // namespace ll

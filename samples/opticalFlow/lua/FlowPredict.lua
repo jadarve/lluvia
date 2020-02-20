@@ -12,8 +12,9 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(1, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:addParameter('iterations', 1)
+    desc:addParameter('iterations', 4)
 
+    ll.logd('FlowPredict', 'newDescriptor: finish')
     return desc
 end
 

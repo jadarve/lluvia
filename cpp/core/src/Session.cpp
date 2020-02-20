@@ -248,9 +248,7 @@ ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string
         return builder.newDescriptor()
     )";
 
-    auto load = m_interpreter->load(lua);
-
-    return load(builderName);
+    return m_interpreter->loadAndRun<ll::ComputeNodeDescriptor>(lua, builderName);
 }
 
 
@@ -276,9 +274,7 @@ ll::ContainerNodeDescriptor Session::createContainerNodeDescriptor(const std::st
         return builder.newDescriptor()
     )";
 
-    auto load = m_interpreter->load(lua);
-
-    return load(builderName);
+    return m_interpreter->loadAndRun<ll::ContainerNodeDescriptor>(lua, builderName);
 }
 
 

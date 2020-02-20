@@ -34,14 +34,21 @@
 
 namespace ll {
 
+inline int failOnNewIndex(lua_State* L) {
+    return luaL_error(L, "cannot modify the elements of a read-only table");
+}
+
 template<typename T, std::size_t N, const std::array<std::tuple<const char*, T>, N>& values>
 void registerEnum(sol::table& lib, const std::string& enumName) {
 
     // TODO: make table read only and not able to add new elements
-    auto table = lib.create(enumName);
+    auto target = lib.create(enumName);
     for (const auto& kv : values) {
-        table[std::get<0>(kv)] = std::get<1>(kv);
+        target[std::get<0>(kv)] = std::get<1>(kv);
     }
+
+    auto x = lib.create_with(sol::meta_function::new_index, failOnNewIndex, sol::meta_function::index, target);
+    auto shim = lib.create_named(enumName, sol::metatable_key, x);
 }
 
 void registerTypes(sol::table& lib) {
@@ -131,16 +138,14 @@ void registerTypes(sol::table& lib) {
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",
         "functionName", sol::property(&ll::ComputeNodeDescriptor::getFunctionName, &ll::ComputeNodeDescriptor::setFunctionName),
         "builderName", sol::property(&ll::ComputeNodeDescriptor::getBuilderName, &ll::ComputeNodeDescriptor::setBuilderName),
-        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram,
-                                 (ComputeNodeDescriptor& (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program>&) noexcept) &ll::ComputeNodeDescriptor::setProgram
-                                ),
+        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram, (ComputeNodeDescriptor & (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program> &)noexcept) & ll::ComputeNodeDescriptor::setProgram),
         "localShape", sol::property(&ll::ComputeNodeDescriptor::getLocalShape, &ll::ComputeNodeDescriptor::setLocalShape),
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
         "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape,
         "__addParameter", &ll::ComputeNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ComputeNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
-        );
+    );
 
     lib.new_usertype<ll::ContainerNodeDescriptor>("ContainerNodeDescriptor",
         "builderName", sol::property(&ll::ContainerNodeDescriptor::getBuilderName, &ll::ContainerNodeDescriptor::setBuilderName),
@@ -319,27 +324,36 @@ Interpreter::~Interpreter() {
 
 void Interpreter::run(const std::string& code) {
     
-    auto result = m_lua->script(code);
-
-    if (!result.valid()) {
-        auto err = static_cast<sol::error>(result);
-        std::cerr << "Interpreter::run(): " << err.what() << std::endl;
+    try {
+        auto result = m_lua->script(code);
+    } catch(std::runtime_error& e) {
+        ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
 
 
 void Interpreter::runFile(const std::string& filename) {
-    auto result = m_lua->script_file(filename);
 
-    if (!result.valid()) {
-        auto err = static_cast<sol::error>(result);
-        std::cerr << "Interpreter::run(): " << err.what() << std::endl;
+    try {
+        auto result = m_lua->script_file(filename);
+    }
+    catch (std::runtime_error &e) {
+        ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
 
 
 sol::load_result Interpreter::load(const std::string& code) {
-    return m_lua->load(code);
+
+    auto loadCode = m_lua->load(code);
+    if (!loadCode.valid()) {
+        const auto err = static_cast<sol::error>(loadCode);
+
+        ll::throwSystemError(ll::ErrorCode::InterpreterError,
+                             "error loading code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+    }
+
+    return loadCode;
 }
 
 

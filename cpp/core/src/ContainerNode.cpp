@@ -85,8 +85,7 @@ void ContainerNode::record(ll::CommandBuffer& commandBuffer) const {
             builder.onNodeRecord(node, cmdBuffer)
         )";
 
-        auto load = m_session->getInterpreter()->load(lua);
-        load(builderName, shared_from_this(), commandBuffer);
+        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this(), commandBuffer);
     }
 }
 
@@ -102,8 +101,7 @@ void ContainerNode::onInit() {
             builder.onNodeInit(node)
         )";
 
-        auto load = m_session->getInterpreter()->load(lua);
-        load(builderName, shared_from_this());
+        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
     }
 }
 

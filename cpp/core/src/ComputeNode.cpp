@@ -283,8 +283,10 @@ void ComputeNode::onInit() {
             builder.onNodeInit(node)
         )";
 
-        auto load = m_session->getInterpreter()->load(lua);
-        load(builderName, shared_from_this());
+        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
+
+        // auto load = m_session->getInterpreter()->load(lua);
+        // load(builderName, shared_from_this());
     }
 
     initPipeline();

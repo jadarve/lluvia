@@ -116,8 +116,8 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
         shared_ptr[_Object] getPort(const string& name) except +
         void bind(const string& name, const shared_ptr[_Object]& obj) except +
 
-        void init()
-        void record(_CommandBuffer& commandBuffer) const
+        void init() except +
+        void record(_CommandBuffer& commandBuffer) except +
 
 
 cdef extern from 'lluvia/core/ContainerNodeDescriptor.h' namespace 'll':
@@ -151,7 +151,7 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
         shared_ptr[_Node] getNode(const string& name) except +
         void bindNode(const string& name, const shared_ptr[_Node]& obj) except +
 
-        void init()
+        void init() except +
         void record(_CommandBuffer& commandBuffer) except +
 
 
