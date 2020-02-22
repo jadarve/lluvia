@@ -16,6 +16,9 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(3, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
 
     desc:addPort(ll.PortDescriptor.new(4, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
+    
+    -- out_flow is initialized externally in FlowFilterSimple and bound to this node. This way,
+    -- the loop between FlowPredict and FlowUpdate can be broken.
     desc:addPort(ll.PortDescriptor.new(5, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     ll.logd('FlowUpdate', 'newDescriptor: finish')
@@ -39,7 +42,6 @@ function builder.onNodeInit(node)
     in_gray_old:changeImageLayout(ll.ImageLayout.General)
     out_gray:changeImageLayout(ll.ImageLayout.General)
 
-    -- node:bind('out_flow', out_flow)
     node:bind('in_gray_old', in_gray_old)
     node:bind('out_gray', out_gray)
 
@@ -49,6 +51,10 @@ function builder.onNodeInit(node)
                               , 'out_flow', string.format('[%d, %d, %d]', out_flow.width, out_flow.height, out_flow.channelCount))
     
     node:configureGridShape(ll.vec3ui.new(out_flow.width, out_flow.height, 1))
+
+    -- clear outputs
+    node:getPort('out_gray'):clear()
+    node:getPort('out_flow'):clear()
 
     ll.logd('FlowUpdate', 'onNodeInit: finish')
 end

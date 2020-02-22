@@ -102,7 +102,6 @@ function builder.onNodeRecord(node, cmdBuffer)
     -- the image model and the predictor can run concurrently
     cmdBuffer:run(imageModel)
     predictor:record(cmdBuffer)
-    -- cmdBuffer:run(predictor)
     cmdBuffer:memoryBarrier()
 
     cmdBuffer:run(update)

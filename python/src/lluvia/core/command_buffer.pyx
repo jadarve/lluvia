@@ -184,6 +184,13 @@ cdef class CommandBuffer:
         cdef vk.ImageLayout vkLayout = <vk.ImageLayout> newLayout
         self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), vkLayout)
 
+    def clearImage(self, Image img):
+        """
+        Clears the pixels of the image to zero.
+        """
+
+        self.__commandBuffer.get().clearImage(deref(img.__image.get()))
+
     def run(self, ComputeNode node):
         """
         Records running a compute node.

@@ -318,6 +318,16 @@ public:
     */
     void changeImageLayout(const vk::ImageLayout newLayout);
 
+    /**
+    @brief      Immediately clears the image pixels to zero.
+
+    This method creates a command buffer and sumbits it to clear
+    all the pixels in the underlying image to zero. Execution is
+    blocked until the operation is completed.
+    
+    */
+    void clear();
+
 private:
     ImageView(  vk::Device tDevice,
                 const std::shared_ptr<ll::Image>& tImage,

@@ -125,4 +125,16 @@ void Image::changeImageLayout(const vk::ImageLayout newLayout) {
 
 }
 
+void Image::clear() {
+
+    const auto &session = m_memory->getSession();
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->clearImage(*this);
+    cmdBuffer->end();
+    session->run(*cmdBuffer);
+}
+
 } // namespace ll

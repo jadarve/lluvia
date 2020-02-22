@@ -82,6 +82,8 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
 
         shared_ptr[_ImageView] createImageView(const _ImageViewDescriptor& descriptor) except +
 
+        void clear() except +
+
 
 cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
 
@@ -140,6 +142,8 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
         uint32_t getWidth()              const
         uint32_t getHeight()             const
         uint32_t getDepth()              const
+
+        void clear() except +
 
 
 cdef class Image:

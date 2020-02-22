@@ -37,6 +37,8 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
 
         void changeImageLayout(_Image& image, const vk.ImageLayout newLayout) except +
 
+        void clearImage(_Image& image) except +
+
         void memoryBarrier() except +
 
 

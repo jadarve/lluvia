@@ -179,6 +179,11 @@ public:
     */
     void memoryBarrier();
 
+    /**
+    @brief      Clears the pixels of an image to zero.
+    */
+    void clearImage(ll::Image& image);
+
 private:
     vk::Device          m_device;
     vk::CommandPool     m_commandPool;

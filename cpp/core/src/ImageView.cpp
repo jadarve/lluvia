@@ -136,4 +136,9 @@ void ImageView::changeImageLayout(const vk::ImageLayout newLayout) {
     m_image->changeImageLayout(newLayout);
 }
 
+
+void ImageView::clear() {
+    m_image->clear();
+}
+
 } // namespace ll
