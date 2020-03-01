@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -75,11 +76,19 @@ public:
     Session& operator = (const Session& session) = delete;
     Session& operator = (Session&& session)      = delete;
 
+    /**
+    @brief      Returns a pointer to ll::Memory object that is HOST_LOCAL and HOST_COHERENT.
+    
+    This memory can be used to create uniform buffers to pass to shaders.
+    
+    @return     The host memory.
+     */
+    std::shared_ptr<ll::Memory> getHostMemory() const noexcept;
 
     /**
-     * @brief      Gets the Lua interpreter.
-     *
-     * @return     The interpreter.
+    @brief      Gets the Lua interpreter.
+    
+    @return     The interpreter.
      */
     const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
     
@@ -322,9 +331,15 @@ private:
     bool initDevice();
     bool initQueue();
     bool initCommandPool();
+    void initHostMemory();
     uint32_t getComputeFamilyQueueIndex();
 
-    vk::Instance         instance;
+    std::shared_ptr<ll::Memory> createMemoryImpl(const vk::MemoryPropertyFlags flags,
+                                                 const uint64_t pageSize,
+                                                 bool exactFlagsMatch,
+                                                 bool keepThisSharedReference);
+
+        vk::Instance instance;
     vk::PhysicalDevice   physicalDevice;
     vk::Device           device;
     vk::Queue            queue;
@@ -334,6 +349,9 @@ private:
     std::unique_ptr<ll::Interpreter> m_interpreter;
 
     std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
+
+    std::once_flag m_hostMemoryAllocate;
+    std::shared_ptr<ll::Memory> m_hostMemory;
 };
 
 } // namespace ll

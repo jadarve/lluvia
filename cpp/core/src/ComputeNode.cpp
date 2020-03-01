@@ -266,6 +266,8 @@ void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
                                      0,
                                      nullptr);
 
+    // vkCommandBuffer.pushConstants(m_pipelineLayout, vk::ShaderStageFlagBits::eCompute, 0, nullptr);
+
     vkCommandBuffer.dispatch(m_descriptor.getGridX(),
                              m_descriptor.getGridY(),
                              m_descriptor.getGridZ());

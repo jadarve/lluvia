@@ -77,14 +77,23 @@ Session::Session() {
     // by sending a raw pointer, I avoid a circular reference
     // of shared pointers between the interpreter and this session.
     m_interpreter->setActiveSession(this);
+
+    initHostMemory();
 }
 
 
 Session::~Session() {
 
+    m_hostMemory.reset();
+
     device.destroyCommandPool(commandPool);
     device.destroy();
     instance.destroy();
+}
+
+
+std::shared_ptr<ll::Memory> Session::getHostMemory() const noexcept {
+    return m_hostMemory;
 }
 
 
@@ -151,32 +160,8 @@ bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) 
 
 std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) {
     
-    auto compareFlags = [](const auto& tFlags, const auto& value, bool tExactFlagsMatch) {
-        return tExactFlagsMatch? tFlags == value : (tFlags & value) == value;
-    };
-    
-    const auto memProperties = physicalDevice.getMemoryProperties();
-
-    for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
-
-        const auto& memType = memProperties.memoryTypes[i];
-        
-        if (compareFlags(memType.propertyFlags, flags, exactFlagsMatch)) {
-
-            auto heapInfo = ll::VkHeapInfo {};
-
-            heapInfo.typeIndex          = i;
-            heapInfo.size               = memProperties.memoryHeaps[memType.heapIndex].size;
-            heapInfo.flags              = memType.propertyFlags;
-            heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
-
-            // can throw exception. Invariants of Session are kept.
-            return std::make_shared<ll::Memory>(shared_from_this(), device, heapInfo, pageSize);
-        }
-    }
-
-    throw std::system_error(createErrorCode(ll::ErrorCode::MemoryCreationError),
-        "No memory was found that matched the requested flags.");
+    // memory objects returned externally are set to keep a reference to this session.
+    return createMemoryImpl(flags, pageSize, exactFlagsMatch, true);
 }
 
 
@@ -403,6 +388,14 @@ bool Session::initCommandPool() {
     return true;
 }
 
+void Session::initHostMemory() {
+
+    // as m_hostMemory is a member of this class, there is no need to keep a reference
+    // to this pointer.
+    m_hostMemory = createMemoryImpl(
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        0, false, false);
+}
 
 uint32_t Session::getComputeFamilyQueueIndex() {
 
@@ -423,5 +416,40 @@ uint32_t Session::getComputeFamilyQueueIndex() {
     throw std::system_error(std::error_code(), "No compute capable queue family found.");
 }
 
+std::shared_ptr<ll::Memory> Session::createMemoryImpl(const vk::MemoryPropertyFlags flags,
+                                                      const uint64_t pageSize,
+                                                      bool exactFlagsMatch,
+                                                      bool keepThisSharedReference) {
+
+    auto compareFlags = [](const auto &tFlags, const auto &value, bool tExactFlagsMatch) {
+        return tExactFlagsMatch ? tFlags == value : (tFlags & value) == value;
+    };
+
+    const auto memProperties = physicalDevice.getMemoryProperties();
+
+    for (auto i = 0u; i < memProperties.memoryTypeCount; ++i)
+    {
+
+        const auto &memType = memProperties.memoryTypes[i];
+
+        if (compareFlags(memType.propertyFlags, flags, exactFlagsMatch))
+        {
+
+            auto heapInfo = ll::VkHeapInfo{};
+
+            heapInfo.typeIndex = i;
+            heapInfo.size = memProperties.memoryHeaps[memType.heapIndex].size;
+            heapInfo.flags = memType.propertyFlags;
+            heapInfo.familyQueueIndices = std::vector<uint32_t>{computeQueueFamilyIndex};
+
+            // can throw exception. Invariants of Session are kept.
+            return std::make_shared<ll::Memory>(keepThisSharedReference? shared_from_this() : nullptr,
+                                                device, heapInfo, pageSize);
+        }
+    }
+
+    throw std::system_error(createErrorCode(ll::ErrorCode::MemoryCreationError),
+                            "No memory was found that matched the requested flags.");
+}
 
 } // namespace ll

@@ -264,6 +264,7 @@ void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::Session>("Session",
         sol::no_constructor,
+        "getHostMemory", &ll::Session::getHostMemory,
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createComputeNode,

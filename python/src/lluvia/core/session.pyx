@@ -102,6 +102,21 @@ cdef class Session:
 
         return supportedMemoryFlags
 
+    def getHostMemory(self):
+        """
+        Returns a memory object that is HOST_LOCAL and HOST_COHERENT. This memory can
+        be used to create uniform buffers to pass to shaders.
+
+        Returns
+        -------
+        mem : ll.Memory
+        """
+
+        cdef Memory mem = Memory()
+        mem.__memory = self.__session.get().getHostMemory()
+
+        return mem
+
     def createMemory(self,
                      flags=MemoryPropertyFlagBits.DeviceLocal,
                      uint64_t pageSize=33554432L,

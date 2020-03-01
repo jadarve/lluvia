@@ -24,6 +24,13 @@ function builder.onNodeInit(node)
     iterations = node.descriptor:getParameter('iterations')
     ll.logd('FlowPredict', 'onNodeInit: iterations:', iterations)
 
+    dt = 1.0 / iterations
+    -- create uniform buffer to set dt
+
+    -- dt_uniform = ll.getHostMemory().createBuffer(...)
+    -- dt_uniform = ll.createUniformBuffer(4)
+    -- dt_uniform.setFloat(dt, offset=10)
+
     in_flow = node:getPort('in_flow')
 
     -- Pass through the input to the output
@@ -38,6 +45,8 @@ function builder.onNodeInit(node)
         predictY = ll.createComputeNode('FlowPredictY')
 
         predictX:bind('in_flow', in_flow)
+        predictX:bind('dt', dt_uniform)
+        predictX:setPushConstants(...)
         predictX:init()
 
         predictY:bind('in_flow', predictX:getPort('out_flow'))

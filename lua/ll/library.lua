@@ -63,6 +63,14 @@ end
 -----------------------------------------------------------
 --                     Session
 -----------------------------------------------------------
+function ll.getHostMemory()
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:getHostMemory()
+end
+
 function ll.getProgram(name)
     
     if not ll.activeSession then

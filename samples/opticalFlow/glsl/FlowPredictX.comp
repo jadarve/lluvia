@@ -4,6 +4,9 @@
 
 layout(binding = 0, rg32f) uniform image2D in_flow;
 layout(binding = 1, rg32f) uniform image2D out_flow;
+layout(push_constant) uniform moni {
+    float dt;
+} params;
 
 void main() {
 
@@ -36,8 +39,8 @@ void main() {
     const vec2 diff_upstream = Ud >= 0.0f? diff_m : diff_p;
 
     // propagation
-    const float dt = 0.25f; // FIXME: parameter
-    vec2 flowPropU = flow_0 - dt * Ud * diff_upstream;
+    // const float dt = 0.25f; // FIXME: parameter
+    vec2 flowPropU = flow_0 - params.dt * Ud * diff_upstream;
 
     //#################################
     // BORDER REMOVAL
