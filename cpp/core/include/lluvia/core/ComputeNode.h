@@ -27,6 +27,7 @@ class ImageView;
 class Object;
 class Program;
 class Session;
+class PushConstants;
 
 
 /**
@@ -227,6 +228,10 @@ public:
     ll::vec3ui getGridShape() const noexcept;
 
     std::shared_ptr<ll::Object> getPort(const std::string& name) const override;
+
+    void setPushConstants(const std::shared_ptr<ll::PushConstants>& constants);
+
+    std::shared_ptr<ll::PushConstants> getPushConstants() const noexcept;
     
     void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
@@ -287,6 +292,8 @@ private:
     // // uint32_t local_x {1};
 
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
+
+    std::shared_ptr<ll::PushConstants> m_pushConstants;
 
     // Shared pointer to the session this node was created from
     // This will keep the session alive until this or any other node is deleted.

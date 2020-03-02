@@ -39,6 +39,7 @@ enum class ErrorCode : int32_t {
     MemoryCreationError,        /**< Error creating ll::Memory object */
     InvalidNodeState,           /**< Invalid ll::Node state */
     InterpreterError,           /**< Error evaluating interpreter script*/
+    PushConstantError,          /**< Error regarding push constant operation*/
 };
 
 
@@ -47,7 +48,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 16> ErrorCodeStrings{{
+constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 17> ErrorCodeStrings{{
     std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
     std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
     std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
@@ -64,6 +65,7 @@ constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 16> ErrorCod
     std::make_tuple("MemoryCreationError", ll::ErrorCode::MemoryCreationError),
     std::make_tuple("InvalidNodeState", ll::ErrorCode::InvalidNodeState),
     std::make_tuple("InterpreterError", ll::ErrorCode::InterpreterError),
+    std::make_tuple("PushConstantError", ll::ErrorCode::PushConstantError),
 }};
 
 } // namespace impl

@@ -4,7 +4,8 @@
 
 layout(binding = 0, rg32f) uniform image2D in_flow;
 layout(binding = 1, rg32f) uniform image2D out_flow;
-layout(push_constant) uniform moni {
+
+layout(push_constant) uniform const_0 {
     float dt;
 } params;
 

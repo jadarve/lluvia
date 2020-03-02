@@ -159,7 +159,7 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
     const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
 
-    auto program = session->createProgram("glsl/assign.spv");
+    auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
 
     // registerProgram?

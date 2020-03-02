@@ -16,6 +16,7 @@
 #include "lluvia/core/Interpreter.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/PushConstants.h"
 #include "lluvia/core/Session.h"
 
 #include <algorithm>
@@ -225,6 +226,16 @@ std::shared_ptr<ll::Object> ComputeNode::getPort(const std::string& name) const 
 }
 
 
+void ComputeNode::setPushConstants(const std::shared_ptr<ll::PushConstants> &constants) {
+    m_pushConstants = constants;
+}
+
+
+std::shared_ptr<ll::PushConstants> ComputeNode::getPushConstants() const noexcept {
+    return m_pushConstants;
+}
+
+
 void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
 
     const auto& port = m_descriptor.getPort(name);
@@ -266,8 +277,14 @@ void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
                                      0,
                                      nullptr);
 
-    // vkCommandBuffer.pushConstants(m_pipelineLayout, vk::ShaderStageFlagBits::eCompute, 0, nullptr);
-
+    if (m_pushConstants) {
+        vkCommandBuffer.pushConstants(m_pipelineLayout,
+            vk::ShaderStageFlagBits::eCompute,
+            0,
+            m_pushConstants->getSize(),
+            m_pushConstants->getPtr());
+    }
+    
     vkCommandBuffer.dispatch(m_descriptor.getGridX(),
                              m_descriptor.getGridY(),
                              m_descriptor.getGridZ());

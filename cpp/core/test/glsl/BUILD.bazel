@@ -23,3 +23,12 @@ glsl_shader(
     ],
     visibility = ["//visibility:public"]
 )
+
+glsl_shader(
+    name = "pushConstants_shader",
+    shader = "pushConstants.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)

@@ -95,7 +95,7 @@ TEST_CASE("FromFile", "test_ProgramCreation") {
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    auto program = session->createProgram("glsl/assign.spv");
+    auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
 }
 
