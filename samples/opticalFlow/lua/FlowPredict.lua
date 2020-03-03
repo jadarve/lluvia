@@ -43,12 +43,14 @@ function builder.onNodeInit(node)
         predictX = ll.createComputeNode('FlowPredictX')
         predictY = ll.createComputeNode('FlowPredictY')
 
+        predictX:setParameter('dt', dt) -- FIXME
         predictX:bind('in_flow', in_flow)
-        predictX.pushConstants = pushConstants
+        -- predictX.pushConstants = pushConstants
         predictX:init()
 
+        predictY:setParameter('dt', dt) -- FIXME
         predictY:bind('in_flow', predictX:getPort('out_flow'))
-        predictY.pushConstants = pushConstants
+        -- predictY.pushConstants = pushConstants
         predictY:init()
 
         in_flow = predictY:getPort('out_flow')

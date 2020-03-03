@@ -21,13 +21,27 @@ function builder.newDescriptor()
     -- the loop between FlowPredict and FlowUpdate can be broken.
     desc:addPort(ll.PortDescriptor.new(5, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    ll.logd('FlowUpdate', 'newDescriptor: finish')
+    desc:addParameter('gamma', 0.01)
+    desc:addParameter('maxflow', 4.0)
+    
+    -- pushConstants = ll.PushConstants.new()
+    -- pushConstants:pushFloat(0.01) -- gamma
+    -- pushConstants:pushFloat(4.0)  -- maxflow
+
+    -- desc.pushConstants = pushConstants
     
     return desc
 end
 
 function builder.onNodeInit(node)
     ll.logd('FlowUpdate', 'onNodeInit')
+
+    gamma = node.descriptor:getParameter('gamma')
+    maxflow = node.descriptor:getParameter('maxflow')
+
+    pushConstants = ll.PushConstants.new()
+    pushConstants:pushFloat(gamma)
+    pushConstants:pushFloat(maxflow)
 
     in_flow = node:getPort('in_flow')
     in_gray = node:getPort('in_gray')
@@ -44,6 +58,7 @@ function builder.onNodeInit(node)
 
     node:bind('in_gray_old', in_gray_old)
     node:bind('out_gray', out_gray)
+    node.pushConstants = pushConstants
 
     ll.logd('FlowUpdate', 'in_gray ', string.format('[%d, %d, %d]', in_gray.width, in_gray.height, in_gray.channelCount)
                               , 'out_gray', string.format('[%d, %d, %d]', out_gray.width, out_gray.height, out_gray.channelCount))
