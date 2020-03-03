@@ -23,6 +23,7 @@
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Parameter.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/PushConstants.h"
 #include "lluvia/core/Session.h"
 #include "lluvia/core/types.h"
 
@@ -141,6 +142,7 @@ void registerTypes(sol::table& lib) {
         "program", sol::property(&ll::ComputeNodeDescriptor::getProgram, (ComputeNodeDescriptor & (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program> &)noexcept) & ll::ComputeNodeDescriptor::setProgram),
         "localShape", sol::property(&ll::ComputeNodeDescriptor::getLocalShape, &ll::ComputeNodeDescriptor::setLocalShape),
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
+        "pushConstants", sol::property(&ll::ComputeNodeDescriptor::getPushConstants, &ll::ComputeNodeDescriptor::setPushConstants),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
         "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape,
         "__addParameter", &ll::ComputeNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
@@ -153,6 +155,13 @@ void registerTypes(sol::table& lib) {
         "__addParameter", &ll::ContainerNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ContainerNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
         );
+
+    lib.new_usertype<ll::PushConstants>("PushConstants",
+        sol::constructors<ll::PushConstants(), ll::PushConstants(const ll::PushConstants&)>(),
+        "size", sol::property(&ll::PushConstants::getSize),
+        "float", sol::property(&ll::PushConstants::getFloat, &ll::PushConstants::setFloat),
+        "int32", sol::property(&ll::PushConstants::getInt32, &ll::PushConstants::setInt32)
+    );
 
     ///////////////////////////////////////////////////////
     // Objects
@@ -242,6 +251,7 @@ void registerTypes(sol::table& lib) {
         "gridY", sol::property(&ll::ComputeNode::getGridY, &ll::ComputeNode::setGridY),
         "gridZ", sol::property(&ll::ComputeNode::getGridZ, &ll::ComputeNode::setGridZ),
         "gridShape", sol::property(&ll::ComputeNode::getGridShape, &ll::ComputeNode::setGridShape),
+        "pushConstants", sol::property(&ll::ComputeNode::getPushConstants, &ll::ComputeNode::setPushConstants),
         "configureGridShape", &ll::ComputeNode::configureGridShape,
         "init", &ll::ComputeNode::init,
         "record", &ll::ComputeNode::record,

@@ -13,7 +13,7 @@ from program cimport _Program
 from session cimport _Session
 from types cimport _vec3ui
 
-from libc.stdint cimport uint32_t
+from libc.stdint cimport int32_t, uint32_t, uint64_t
 
 from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
@@ -49,6 +49,22 @@ cdef extern from 'lluvia/core/Node.h' namespace 'll':
         _NodeType getType() const
 
 
+cdef extern from 'lluvia/core/PushConstants.h' namespace 'll':
+
+    cdef cppclass _PushConstants:
+
+        _PushConstants()
+        _PushConstants(const _PushConstants&)
+
+        uint64_t getSize() const
+
+        void setFloat(const float&)
+        float getFloat() const
+
+        void setInt32(const int32_t&)
+        float getInt32() const
+
+
 cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
 
     cdef cppclass _ComputeNodeDescriptor 'll::ComputeNodeDescriptor':
@@ -66,6 +82,9 @@ cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
 
         _ComputeNodeDescriptor& addPort(_PortDescriptor& port)
         _PortDescriptor getPort(const string& name) except +
+
+        _ComputeNodeDescriptor& setPushConstants(const _PushConstants&)
+        const _PushConstants getPushConstants() const
 
         _ComputeNodeDescriptor& addParameter(const string& name, const _Parameter& value)
         _Parameter getParameter(const string& name) except +
@@ -110,6 +129,9 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
         uint32_t getLocalX() const
         uint32_t getLocalY() const
         uint32_t getLocalZ() const
+
+        void setPushConstants(const _PushConstants&)
+        const _PushConstants getPushConstants() const
 
         void configureGridShape(const _vec3ui& globalShape)
 

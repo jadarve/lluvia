@@ -117,6 +117,17 @@ void ComputeNode::initPipeline() {
     vk::PipelineLayoutCreateInfo pipeLayoutInfo = vk::PipelineLayoutCreateInfo()
         .setSetLayoutCount(1)
         .setPSetLayouts(&m_descriptorSetLayout);
+    
+    const auto& pushConstants = m_descriptor.getPushConstants();
+    if (pushConstants.getSize() != 0) {
+        auto pushConstantRange = vk::PushConstantRange()
+            .setOffset(0)
+            .setSize(pushConstants.getSize())
+            .setStageFlags(vk::ShaderStageFlagBits::eCompute);
+
+        pipeLayoutInfo.setPushConstantRangeCount(1);
+        pipeLayoutInfo.setPPushConstantRanges(&pushConstantRange);
+    }
 
     m_pipelineLayout = m_device.createPipelineLayout(pipeLayoutInfo);
     vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
@@ -226,13 +237,13 @@ std::shared_ptr<ll::Object> ComputeNode::getPort(const std::string& name) const 
 }
 
 
-void ComputeNode::setPushConstants(const std::shared_ptr<ll::PushConstants> &constants) {
-    m_pushConstants = constants;
+void ComputeNode::setPushConstants(const ll::PushConstants& constants) noexcept {
+    m_descriptor.setPushConstants(constants);
 }
 
 
-std::shared_ptr<ll::PushConstants> ComputeNode::getPushConstants() const noexcept {
-    return m_pushConstants;
+const ll::PushConstants& ComputeNode::getPushConstants() const noexcept {
+    return m_descriptor.getPushConstants();
 }
 
 
@@ -277,12 +288,13 @@ void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
                                      0,
                                      nullptr);
 
-    if (m_pushConstants) {
+    const auto &pushConstants = m_descriptor.getPushConstants();
+    if (pushConstants.getSize() != 0) {
         vkCommandBuffer.pushConstants(m_pipelineLayout,
             vk::ShaderStageFlagBits::eCompute,
             0,
-            m_pushConstants->getSize(),
-            m_pushConstants->getPtr());
+            pushConstants.getSize(),
+            pushConstants.getPtr());
     }
     
     vkCommandBuffer.dispatch(m_descriptor.getGridX(),
@@ -303,9 +315,6 @@ void ComputeNode::onInit() {
         )";
 
         m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
-
-        // auto load = m_session->getInterpreter()->load(lua);
-        // load(builderName, shared_from_this());
     }
 
     initPipeline();

@@ -8,8 +8,11 @@
 #ifndef LLUVIA_CORE_PUSH_CONSTANTS_H_
 #define LLUVIA_CORE_PUSH_CONSTANTS_H_
 
+#include "lluvia/core/error.h"
+
 #include <cstdint>
 #include <cstring>
+#include <memory>
 #include <vector>
 
 namespace ll {
@@ -18,11 +21,11 @@ namespace ll {
 class PushConstants {
 
 public:
-    PushConstants()                                 = default;
+    PushConstants()                                  = default;
     PushConstants(const PushConstants&)              = default;
     PushConstants(PushConstants&&)                   = default;
 
-    ~PushConstants()                                = default;
+    ~PushConstants()                                 = default;
 
     PushConstants& operator = (const PushConstants&) = default;
     PushConstants& operator = (PushConstants&&)      = default;

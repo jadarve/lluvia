@@ -13,6 +13,11 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
+    pushConstants = ll.PushConstants.new()
+    pushConstants.float = 1.0
+    
+    desc.pushConstants = pushConstants
+
     return desc
 end
 

@@ -67,8 +67,8 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
     auto session = ll::Session::create();
     REQUIRE(session != nullptr);
 
-    auto constants = std::make_shared<ll::PushConstants>();
-    constants->setFloat(3.1415f);
+    auto constants = ll::PushConstants{};
+    constants.setFloat(3.1415f);
 
     auto program = session->createProgram("cpp/core/test/glsl/pushConstants.spv");
 
@@ -77,7 +77,8 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
         .setProgram(program)
         .setGridShape({N / 32, 1, 1})
         .setLocalShape({32, 1, 1})
-        .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
+        .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer})
+        .setPushConstants(constants);
     
     auto node = session->createComputeNode(desc);
     REQUIRE(node != nullptr);
@@ -86,7 +87,6 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
     REQUIRE(buffer != nullptr);
 
     node->bind("out_buffer", buffer);
-    node->setPushConstants(constants);
 
     node->init();
 

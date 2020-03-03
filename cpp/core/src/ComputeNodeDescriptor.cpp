@@ -10,6 +10,7 @@
 #include "lluvia/core/error.h"
 #include "lluvia/core/utils.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/PushConstants.h"
 
 #include <cassert>
 #include <exception>
@@ -194,6 +195,17 @@ const ll::Parameter& ComputeNodeDescriptor::getParameter(const std::string& name
 
     ll::throwSystemErrorIf(it == m_parameters.cend(), ll::ErrorCode::KeyNotFound, "Parameter [" + name + "] not found.");
     return it->second;
+}
+
+
+ll::ComputeNodeDescriptor& ComputeNodeDescriptor::setPushConstants(const ll::PushConstants& constants) noexcept {
+    m_pushConstants = constants;
+    return *this;
+}
+
+
+const ll::PushConstants& ComputeNodeDescriptor::getPushConstants() const noexcept {
+    return m_pushConstants;
 }
 
 
