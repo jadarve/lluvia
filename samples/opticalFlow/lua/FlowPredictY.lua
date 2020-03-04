@@ -13,16 +13,20 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    pushConstants = ll.PushConstants.new()
-    pushConstants.float = 1.0
-    
-    desc.pushConstants = pushConstants
+    desc:setParameter('dt', 1.0)
 
     return desc
 end
 
 function builder.onNodeInit(node)
-    ll.logd('FlowPredictY', 'onNodeInit')
+    
+    dt = node:getParameter('dt')
+    ll.logd('FlowPredictY', 'onNodeInit: dt', dt)
+
+    pushConstants = ll.PushConstants.new()
+    pushConstants.float = dt
+    node.pushConstants = pushConstants
+
 
     in_flow = node:getPort('in_flow')
 

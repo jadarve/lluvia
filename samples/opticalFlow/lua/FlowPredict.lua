@@ -12,7 +12,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(1, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:addParameter('iterations', 4)
+    desc:setParameter('max_flow', 4)
 
     ll.logd('FlowPredict', 'newDescriptor: finish')
     return desc
@@ -21,10 +21,10 @@ end
 
 function builder.onNodeInit(node)
 
-    iterations = node.descriptor:getParameter('iterations')
-    ll.logd('FlowPredict', 'onNodeInit: iterations:', iterations)
+    max_flow = math.ceil(node.descriptor:getParameter('max_flow'))
+    ll.logd('FlowPredict', 'onNodeInit: max_flow:', max_flow)
 
-    dt = 1.0 / iterations
+    dt = 1.0 / max_flow
     ll.logd('FlowPredict', 'onNodeInit: dt:', dt)
 
     pushConstants = ll.PushConstants.new()
@@ -33,24 +33,22 @@ function builder.onNodeInit(node)
     in_flow = node:getPort('in_flow')
 
     -- Pass through the input to the output
-    if iterations == 0 then
+    if max_flow == 0 then
         node:bind('out_flow', in_flow)
     end
 
-    for i = 1, iterations do
+    for i = 1, max_flow do
         ll.logd('FlowPredict', 'iteration: ', i)
 
         predictX = ll.createComputeNode('FlowPredictX')
         predictY = ll.createComputeNode('FlowPredictY')
 
-        predictX:setParameter('dt', dt) -- FIXME
+        predictX:setParameter('dt', dt)
         predictX:bind('in_flow', in_flow)
-        -- predictX.pushConstants = pushConstants
         predictX:init()
 
-        predictY:setParameter('dt', dt) -- FIXME
+        predictY:setParameter('dt', dt)
         predictY:bind('in_flow', predictX:getPort('out_flow'))
-        -- predictY.pushConstants = pushConstants
         predictY:init()
 
         in_flow = predictY:getPort('out_flow')
@@ -71,9 +69,9 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     ll.logd('FlowPredict', 'onNodeRecord')
 
-    iterations = node.descriptor:getParameter('iterations')
+    max_flow = node.descriptor:getParameter('max_flow')
 
-    for i = 1, iterations do
+    for i = 1, max_flow do
         ll.logd('FlowPredict', 'onNodeRecord: iteration:', i)
 
         predictX = node:getNode(string.format('FlowPredictX_%d', i))

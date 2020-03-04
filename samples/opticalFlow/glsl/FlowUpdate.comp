@@ -19,8 +19,8 @@ layout(push_constant) uniform const_0 {
 void main() {
 
     // FIXME: set as parameters
-    // const float gamma = 0.01;
-    // const float maxflow = 4.0;
+    const float gamma = params.gamma;
+    const float maxflow = params.maxflow;
 
     // this coordinates are relative to out_gradient size
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
@@ -44,18 +44,18 @@ void main() {
 
     // Adjunt matrix
     const float diag_off = gray_gradient.x * gray_gradient.y;
-    const mat2 M = mat2(params.gamma + grad_square.y, -diag_off, -diag_off, params.gamma + grad_square.x);
+    const mat2 M = mat2(gamma + grad_square.y, -diag_off, -diag_off, gamma + grad_square.x);
 
     // reciprocal determinand of M
-    const float rdet = 1.0f / (params.gamma * (params.gamma + grad_square.x + grad_square.y));
+    const float rdet = 1.0f / (gamma * (gamma + grad_square.x + grad_square.y));
 
-    const vec2 q = (params.gamma * flow_old) + (gray_dt * gray_gradient);
+    const vec2 q = (gamma * flow_old) + (gray_dt * gray_gradient);
 
     vec2 flow_new = rdet * (M * q);
 
     // truncate
-    flow_new.x = max(-params.maxflow, min(flow_new.x, params.maxflow));
-    flow_new.y = max(-params.maxflow, min(flow_new.y, params.maxflow));
+    flow_new.x = max(-maxflow, min(flow_new.x, maxflow));
+    flow_new.y = max(-maxflow, min(flow_new.y, maxflow));
 
     // sanitize
     flow_new.x = isinf(flow_new.x) || isnan(flow_new.x)? 0.0f : flow_new.x;

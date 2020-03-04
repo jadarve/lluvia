@@ -86,7 +86,7 @@ cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
         _ComputeNodeDescriptor& setPushConstants(const _PushConstants&)
         const _PushConstants getPushConstants() const
 
-        _ComputeNodeDescriptor& addParameter(const string& name, const _Parameter& value)
+        _ComputeNodeDescriptor& setParameter(const string& name, const _Parameter& value)
         _Parameter getParameter(const string& name) except +
 
         _ComputeNodeDescriptor& setGridX(const uint32_t x)
@@ -154,7 +154,7 @@ cdef extern from 'lluvia/core/ContainerNodeDescriptor.h' namespace 'll':
         _ContainerNodeDescriptor& addPort(_PortDescriptor& port)
         _PortDescriptor getPort(const string& name) except +
 
-        _ContainerNodeDescriptor& addParameter(const string& name, const _Parameter& value)
+        _ContainerNodeDescriptor& setParameter(const string& name, const _Parameter& value)
         _Parameter getParameter(const string& name) except +
 
 

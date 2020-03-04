@@ -106,3 +106,60 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
         }
     }
 }
+
+TEST_CASE("Push2Constants", "test_PushConstants")
+{
+
+    constexpr const float firstValue  = 3.1415f;
+    constexpr const float secondValue = 0.7896f;
+    constexpr const size_t N{32};
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    auto constants = ll::PushConstants{};
+    constants.pushFloat(firstValue);
+    constants.pushFloat(secondValue);
+
+    auto program = session->createProgram("cpp/core/test/glsl/pushConstants2.spv");
+
+    auto desc = ll::ComputeNodeDescriptor{}
+                    .setFunctionName("main")
+                    .setProgram(program)
+                    .setGridShape({N / 32, 1, 1})
+                    .setLocalShape({32, 1, 1})
+                    .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer})
+                    .setPushConstants(constants);
+
+    auto node = session->createComputeNode(desc);
+    REQUIRE(node != nullptr);
+
+    auto buffer = session->getHostMemory()->createBuffer(N * sizeof(firstValue));
+    REQUIRE(buffer != nullptr);
+
+    node->bind("out_buffer", buffer);
+
+    node->init();
+
+    auto cmdBuffer = session->createCommandBuffer();
+    REQUIRE(cmdBuffer != nullptr);
+
+    cmdBuffer->begin();
+    cmdBuffer->run(*node);
+    cmdBuffer->end();
+
+    session->run(*cmdBuffer);
+
+    {
+        auto bufferMap = buffer->map<float[]>();
+        for (auto i = 0u; i < N; ++i) {
+
+            if (i % 2 == 0) {
+                REQUIRE(bufferMap[i] == firstValue);
+            } else {
+                REQUIRE(bufferMap[i] == secondValue);
+            }
+            
+        }
+    }
+}

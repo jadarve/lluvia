@@ -13,7 +13,8 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:addParameter('predict_iterations', 4)
+    desc:setParameter('max_flow', 4)
+    desc:setParameter('gamma', 0.01)
 
     return desc
 end
@@ -23,8 +24,9 @@ function builder.onNodeInit(node)
 
     ll.logd('FlowFilterSimple', 'onNodeInit')
 
-    predict_iterations = node.descriptor:getParameter('predict_iterations')
-    ll.logd('FlowFilterSimple', 'onNodeInit: predict_iterations', predict_iterations)
+    gamma = node:getParameter('gamma')
+    max_flow = node:getParameter('max_flow')
+    ll.logd('FlowFilterSimple', 'onNodeInit: max_flow', max_flow)
 
     in_rgba = node:getPort('in_rgba')
 
@@ -63,11 +65,13 @@ function builder.onNodeInit(node)
     predict_inflow:changeImageLayout(ll.ImageLayout.General)
 
     predictor = ll.createContainerNode('FlowPredict')
-    -- predictor:setParameter('iterations', predict_iterations) -- FIXME: not possible to do!!!
+    predictor:setParameter('max_flow', max_flow) -- FIXME: not possible to do!!!
     predictor:bind('in_flow', predict_inflow)
     predictor:init()
 
     update = ll.createComputeNode('FlowUpdate')
+    update:setParameter('gamma', gamma)
+    update:setParameter('max_flow', max_flow)
     update:bind('in_gray', imageModel:getPort('out_gray'))
     update:bind('in_gradient', imageModel:getPort('out_gradient'))
     update:bind('in_flow', predictor:getPort('out_flow'))

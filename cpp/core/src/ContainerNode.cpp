@@ -51,6 +51,13 @@ std::shared_ptr<ll::Object> ContainerNode::getPort(const std::string& name) cons
     return it->second;
 }
 
+void ContainerNode::setParameter(const std::string &name, const ll::Parameter &value) {
+    m_descriptor.setParameter(name, value);
+}
+
+const ll::Parameter& ContainerNode::getParameter(const std::string &name) const {
+    return m_descriptor.getParameter(name);
+}
 
 void ContainerNode::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
 

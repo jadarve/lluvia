@@ -58,6 +58,24 @@ public:
         return out;
     }
 
+    template<typename T>
+    void push(T&& data) {
+
+        const auto currentSize = getSize();
+        if (currentSize == 0) {
+            set(std::forward<T>(data));
+            return;
+        }
+
+        const auto dataSize = sizeof(data);
+
+        auto new_data = std::vector<uint8_t>(currentSize + dataSize);
+        std::memcpy(&new_data[0], &m_data[0], currentSize);
+        std::memcpy(&new_data[currentSize], &data, dataSize);
+
+        m_data = std::move(new_data);
+    }
+
     
     inline void* getPtr() const noexcept {
         return (void*)(&m_data[0]);
@@ -67,11 +85,13 @@ public:
         return m_data.size();
     }
 
+    void pushFloat(const float& d) {push(d);};
     void setFloat(const float& d) {set(d);}
     float getFloat() const {return get<float>();}
 
+    void pushInt32(const int32_t& d) {push(d);};
     void setInt32(const int32_t &d) { set(d); }
-    float getInt32() const { return get<int32_t>(); }
+    float getInt32() const { return get<int32_t>();}
 
 private:
     std::vector<uint8_t> m_data {};

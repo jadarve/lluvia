@@ -21,8 +21,8 @@ function builder.newDescriptor()
     -- the loop between FlowPredict and FlowUpdate can be broken.
     desc:addPort(ll.PortDescriptor.new(5, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    desc:addParameter('gamma', 0.01)
-    desc:addParameter('maxflow', 4.0)
+    desc:setParameter('gamma', 0.01)
+    desc:setParameter('maxflow', 4.0)
     
     -- pushConstants = ll.PushConstants.new()
     -- pushConstants:pushFloat(0.01) -- gamma
@@ -36,8 +36,8 @@ end
 function builder.onNodeInit(node)
     ll.logd('FlowUpdate', 'onNodeInit')
 
-    gamma = node.descriptor:getParameter('gamma')
-    maxflow = node.descriptor:getParameter('maxflow')
+    gamma = node:getParameter('gamma')
+    maxflow = node:getParameter('maxflow')
 
     pushConstants = ll.PushConstants.new()
     pushConstants:pushFloat(gamma)

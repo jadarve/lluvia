@@ -192,9 +192,9 @@ cdef class ComputeNodeDescriptor:
         out.__descriptor = self.__descriptor.getPort(impl.encodeString(name))
         return out
 
-    def addParameter(self, str name, Parameter param):
+    def setParameter(self, str name, Parameter param):
 
-        self.__descriptor.addParameter(impl.encodeString(name), param.__p)
+        self.__descriptor.setParameter(impl.encodeString(name), param.__p)
 
     def getParameter(self, str name):
 
@@ -349,9 +349,9 @@ cdef class ContainerNodeDescriptor:
 
         self.__descriptor.addPort(portDesc.__descriptor)
 
-    def addParameter(self, str name, Parameter param):
+    def setParameter(self, str name, Parameter param):
 
-        self.__descriptor.addParameter(impl.encodeString(name), param.__p)
+        self.__descriptor.setParameter(impl.encodeString(name), param.__p)
 
     def getParameter(self, str name):
 

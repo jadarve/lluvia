@@ -35,7 +35,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<l
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const std::string& name, const ll::Parameter& value) {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setParameter(const std::string& name, const ll::Parameter& value) {
 
     m_parameters[name] = value;
     return *this;

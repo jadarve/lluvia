@@ -145,14 +145,14 @@ void registerTypes(sol::table& lib) {
         "pushConstants", sol::property(&ll::ComputeNodeDescriptor::getPushConstants, &ll::ComputeNodeDescriptor::setPushConstants),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
         "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape,
-        "__addParameter", &ll::ComputeNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
+        "__setParameter", &ll::ComputeNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ComputeNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
     );
 
     lib.new_usertype<ll::ContainerNodeDescriptor>("ContainerNodeDescriptor",
         "builderName", sol::property(&ll::ContainerNodeDescriptor::getBuilderName, &ll::ContainerNodeDescriptor::setBuilderName),
         "addPort", &ll::ContainerNodeDescriptor::addPort,
-        "__addParameter", &ll::ContainerNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
+        "__setParameter", &ll::ContainerNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ContainerNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
         );
 
@@ -160,7 +160,9 @@ void registerTypes(sol::table& lib) {
         sol::constructors<ll::PushConstants(), ll::PushConstants(const ll::PushConstants&)>(),
         "size", sol::property(&ll::PushConstants::getSize),
         "float", sol::property(&ll::PushConstants::getFloat, &ll::PushConstants::setFloat),
-        "int32", sol::property(&ll::PushConstants::getInt32, &ll::PushConstants::setInt32)
+        "int32", sol::property(&ll::PushConstants::getInt32, &ll::PushConstants::setInt32),
+        "pushFloat", &ll::PushConstants::pushFloat,
+        "pushInt32", &ll::PushConstants::pushInt32
     );
 
     ///////////////////////////////////////////////////////
@@ -232,6 +234,8 @@ void registerTypes(sol::table& lib) {
         "state", sol::property(&ll::Node::getState),
         "init", &ll::Node::init,
         "record", &ll::Node::record,
+        "setParameter", &ll::Node::setParameter,
+        "getParameter", &ll::Node::getParameter,
         "__getPort", &ll::Node::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::Node::bind        // user facing bind() implemented in library.lua
         );
@@ -255,6 +259,8 @@ void registerTypes(sol::table& lib) {
         "configureGridShape", &ll::ComputeNode::configureGridShape,
         "init", &ll::ComputeNode::init,
         "record", &ll::ComputeNode::record,
+        "__setParameter", &ll::ComputeNode::setParameter,
+        "__getParameter", &ll::ComputeNode::getParameter,
         "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::ComputeNode::bind        // user facing bind() implemented in library.lua
         );
@@ -266,6 +272,8 @@ void registerTypes(sol::table& lib) {
         "descriptor", sol::property(&ll::ContainerNode::getDescriptor),
         "init", &ll::ContainerNode::init,
         "record", &ll::ContainerNode::record,
+        "__setParameter", &ll::ContainerNode::setParameter,
+        "__getParameter", &ll::ContainerNode::getParameter,
         "__getPort", &ll::ContainerNode::getPort,   // user facing getPort() implemented in library.lua
         "__bind", &ll::ContainerNode::bind,         // user facing bind() implemented in library.lua
         "__bindNode", &ll::ContainerNode::bindNode, // user facing bindNode() implemented in library.lua 

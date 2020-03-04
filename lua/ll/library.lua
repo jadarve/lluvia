@@ -179,14 +179,14 @@ end
 -----------------------------------------------------------
 --                ComputeNodeDescriptor
 -----------------------------------------------------------
-function ll.ComputeNodeDescriptor:addParameter(name, value)
+function ll.ComputeNodeDescriptor:setParameter(name, value)
 
     -- this workaround is needed in order to call
     -- the correct setter method given Lua type for value
     local param = ll.Parameter.new()
     param:set(value)
 
-    self:__addParameter(name, param)
+    self:__setParameter(name, param)
 end
 
 
@@ -217,17 +217,35 @@ function ll.ComputeNode:bind(name, obj)
 end
 
 
------------------------------------------------------------
---                ContainerNodeDescriptor
------------------------------------------------------------
-function ll.ContainerNodeDescriptor:addParameter(name, value)
+function ll.ComputeNode:setParameter(name, value)
 
     -- this workaround is needed in order to call
     -- the correct setter method given Lua type for value
     local param = ll.Parameter.new()
     param:set(value)
 
-    self:__addParameter(name, param)
+    self:__setParameter(name, param)
+end
+
+
+function ll.ComputeNode:getParameter(name)
+
+    local param = self:__getParameter(name)
+    return param:get()
+end
+
+
+-----------------------------------------------------------
+--                ContainerNodeDescriptor
+-----------------------------------------------------------
+function ll.ContainerNodeDescriptor:setParameter(name, value)
+
+    -- this workaround is needed in order to call
+    -- the correct setter method given Lua type for value
+    local param = ll.Parameter.new()
+    param:set(value)
+
+    self:__setParameter(name, param)
 end
 
 
@@ -236,6 +254,7 @@ function ll.ContainerNodeDescriptor:getParameter(name)
     local param = self:__getParameter(name)
     return param:get()
 end
+
 
 -----------------------------------------------------------
 --                     ContainerNode
@@ -276,4 +295,21 @@ function ll.ContainerNode:bindNode(name, node)
     }
 
     self:__bindNode(name, castTable[node.type](node))
+end
+
+function ll.ContainerNode:setParameter(name, value)
+
+    -- this workaround is needed in order to call
+    -- the correct setter method given Lua type for value
+    local param = ll.Parameter.new()
+    param:set(value)
+
+    self:__setParameter(name, param)
+end
+
+
+function ll.ContainerNode:getParameter(name)
+
+    local param = self:__getParameter(name)
+    return param:get()
 end

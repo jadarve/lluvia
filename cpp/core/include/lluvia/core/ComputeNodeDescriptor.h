@@ -77,7 +77,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& addParameter(const std::string& name, const ll::Parameter& value);
+    ComputeNodeDescriptor& setParameter(const std::string& name, const ll::Parameter& value);
 
 
     /**

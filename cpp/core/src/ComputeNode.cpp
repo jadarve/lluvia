@@ -246,6 +246,13 @@ const ll::PushConstants& ComputeNode::getPushConstants() const noexcept {
     return m_descriptor.getPushConstants();
 }
 
+void ComputeNode::setParameter(const std::string& name, const ll::Parameter& value) {
+    m_descriptor.setParameter(name, value);
+}
+
+const ll::Parameter& ComputeNode::getParameter(const std::string& name) const {
+    return m_descriptor.getParameter(name);
+}
 
 void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
 

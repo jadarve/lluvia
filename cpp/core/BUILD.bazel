@@ -196,6 +196,7 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//cpp/core/test/glsl:pushConstants_shader"
+        "//cpp/core/test/glsl:pushConstants_shader",
+        "//cpp/core/test/glsl:pushConstants2_shader",
     ]
 )

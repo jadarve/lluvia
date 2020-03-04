@@ -79,7 +79,7 @@ public:
     
     @return     A reference to this object.
     */
-    ContainerNodeDescriptor& addParameter(const std::string& name, const ll::Parameter& value);
+    ContainerNodeDescriptor& setParameter(const std::string& name, const ll::Parameter& value);
 
 
     /**

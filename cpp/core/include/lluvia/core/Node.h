@@ -20,6 +20,7 @@ namespace ll {
 
 class Object;
 class CommandBuffer;
+class Parameter;
 
 
 /**
@@ -220,6 +221,28 @@ public:
                                   in the ports table.
     */
     virtual std::shared_ptr<ll::Object> getPort(const std::string& name) const = 0;
+
+    /**
+    @brief      Sets a parameter.
+    
+    @param[in]  name          The name
+    @param[in]  defaultValue  The value.
+    
+    @return     A reference to this object.
+    */
+    virtual void setParameter(const std::string &name, const ll::Parameter &value) = 0;
+
+    /**
+    @brief      Gets a parameter.
+    
+    @param[in]  name  The parameter name
+    
+    @return     The parameter.
+
+    @throws     std::system_error With error code ll::ErrorCode::KeyNotFound if name is not
+                                  in the parameters table.
+    */
+    virtual const ll::Parameter& getParameter(const std::string &name) const = 0;
 
     /**
     @brief      Binds a ll::Object as port \p index for this node.
