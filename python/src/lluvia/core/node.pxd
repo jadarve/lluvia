@@ -133,6 +133,9 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
         void setPushConstants(const _PushConstants&)
         const _PushConstants getPushConstants() const
 
+        void setParameter(const string& name, const _Parameter& value)
+        const _Parameter& getParameter(const string& name) except +
+
         void configureGridShape(const _vec3ui& globalShape)
 
         shared_ptr[_Object] getPort(const string& name) except +
@@ -172,6 +175,9 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
 
         shared_ptr[_Node] getNode(const string& name) except +
         void bindNode(const string& name, const shared_ptr[_Node]& obj) except +
+
+        void setParameter(const string& name, const _Parameter& value)
+        const _Parameter& getParameter(const string& name) except +
 
         void init() except +
         void record(_CommandBuffer& commandBuffer) except +

@@ -263,6 +263,16 @@ cdef class ComputeNode:
         def __get__(self):
             return self.__node.get().getLocalZ()
 
+    def setParameter(self, str name, Parameter param):
+
+        self.__node.get().setParameter(impl.encodeString(name), param.__p)
+
+    def getParameter(self, str name):
+
+        cdef Parameter out = Parameter()
+        out.__p = self.__node.get().getParameter(impl.encodeString(name))
+        return out
+
     def bind(self, str name, obj):
         """
         Binds an object as parater to this node.
@@ -377,6 +387,16 @@ cdef class ContainerNode:
             cdef Session out = Session()
             out.__session = self.__node.get().getSession()
             return out
+
+    def setParameter(self, str name, Parameter param):
+
+        self.__node.get().setParameter(impl.encodeString(name), param.__p)
+
+    def getParameter(self, str name):
+
+        cdef Parameter out = Parameter()
+        out.__p = self.__node.get().getParameter(impl.encodeString(name))
+        return out
 
     def bind(self, str name, obj):
         """
