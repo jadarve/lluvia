@@ -15,6 +15,7 @@ function builder.newDescriptor()
     -- parameter with default value
     desc:setParameter('max_flow', 4)
     desc:setParameter('gamma', 0.01)
+    desc:setParameter('smooth_iterations', 1)
 
     return desc
 end
@@ -26,6 +27,8 @@ function builder.onNodeInit(node)
 
     gamma = node:getParameter('gamma')
     max_flow = node:getParameter('max_flow')
+    smooth_iterations = node:getParameter('smooth_iterations')
+
     ll.logd('FlowFilterSimple', 'onNodeInit: max_flow', max_flow)
 
     in_rgba = node:getPort('in_rgba')
@@ -75,15 +78,32 @@ function builder.onNodeInit(node)
     update:bind('in_gray', imageModel:getPort('out_gray'))
     update:bind('in_gradient', imageModel:getPort('out_gradient'))
     update:bind('in_flow', predictor:getPort('out_flow'))
-    update:bind('out_flow', predict_inflow)
+    -- update:bind('out_flow', predict_inflow)
     update:init()
+
+    smooth_in_flow = update:getPort('out_flow')
+    for i = 1, smooth_iterations do
+
+        flowSmooth = ll.createComputeNode('FlowSmooth')
+        flowSmooth:bind('in_flow', smooth_in_flow)
+        
+        if i == smooth_iterations then
+            flowSmooth:setParameter('allocate_output', false)
+            flowSmooth:bind('out_flow', predict_inflow)
+        end
+
+        flowSmooth:init()
+        node:bindNode(string.format('flowSmooth_%d', i), flowSmooth)
+        smooth_in_flow = flowSmooth:getPort('out_flow')
+    end
 
     node:bindNode('RGBA2Gray', RGBA2Gray)
     node:bindNode('ImageModel', imageModel)
     node:bindNode('Predictor', predictor)
     node:bindNode('Update', update)
 
-    node:bind('out_flow', update:getPort('out_flow'))
+    -- node:bind('out_flow', update:getPort('out_flow'))
+    node:bind('out_flow', smooth_in_flow)
     node:bind('out_gray', update:getPort('out_gray'))
 
     ll.logd('FlowFilterSimple', 'onNodeInit: finish')
@@ -110,6 +130,13 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     cmdBuffer:run(update)
     cmdBuffer:memoryBarrier()
+
+    smooth_iterations = node:getParameter('smooth_iterations')
+    for i = 1, smooth_iterations do
+        flowSmooth = node:getNode(string.format('flowSmooth_%d', i))
+        cmdBuffer:run(flowSmooth)
+        cmdBuffer:memoryBarrier()
+    end
     
     ll.logd('FlowFilterSimple', 'onNodeRecord: finish')
 end

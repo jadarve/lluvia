@@ -24,12 +24,6 @@ function builder.newDescriptor()
     desc:setParameter('gamma', 0.01)
     desc:setParameter('maxflow', 4.0)
     
-    -- pushConstants = ll.PushConstants.new()
-    -- pushConstants:pushFloat(0.01) -- gamma
-    -- pushConstants:pushFloat(4.0)  -- maxflow
-
-    -- desc.pushConstants = pushConstants
-    
     return desc
 end
 
@@ -51,13 +45,16 @@ function builder.onNodeInit(node)
 
     in_gray_old = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
     out_gray = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
+    out_flow = memory:createImageView(in_flow.imageDescriptor, in_flow.descriptor)
 
     -- need to change image layout before binding
     in_gray_old:changeImageLayout(ll.ImageLayout.General)
     out_gray:changeImageLayout(ll.ImageLayout.General)
+    out_flow:changeImageLayout(ll.ImageLayout.General)
 
     node:bind('in_gray_old', in_gray_old)
     node:bind('out_gray', out_gray)
+    node:bind('out_flow', out_flow)
     node.pushConstants = pushConstants
 
     ll.logd('FlowUpdate', 'in_gray ', string.format('[%d, %d, %d]', in_gray.width, in_gray.height, in_gray.channelCount)
