@@ -4,15 +4,20 @@
 
 layout(binding = 0, r32f)  uniform image2D in_gray;
 layout(binding = 1, rg32f) uniform image2D in_gradient;
-layout(binding = 2, rg32f) uniform image2D in_flow;
+layout(binding = 2, rg32f) uniform image2D in_delta_flow;
 
-layout(binding = 3, r32f) uniform image2D out_gray;
-layout(binding = 4, rg32f) uniform image2D out_flow;
+// input flow from level above. This has half the resolution of the other parameters.
+layout(binding = 3) uniform sampler2D in_flow;
+
+layout(binding = 4, r32f) uniform image2D out_gray;
+layout(binding = 5, rg32f) uniform image2D out_flow;
+layout(binding = 6, rg32f) uniform image2D out_delta_flow;
 
 layout(push_constant) uniform const_0 {
     float gamma;
     float maxflow;
 } params;
+
 
 void main() {
 
@@ -29,10 +34,13 @@ void main() {
 
     const float gray = imageLoad(in_gray, coords).r;
     const float gray_old = imageLoad(out_gray, coords).r;
-
     const vec2 gray_gradient = imageLoad(in_gradient, coords).xy;
-    const vec2 flow_old = imageLoad(in_flow, coords).xy;
 
+    const vec2 delta_flow_old = imageLoad(in_delta_flow, coords).xy;
+
+    //#################################
+    // Delta flow computation
+    //#################################
     // temporal derivative
     const float gray_dt = gray_old - gray;
     
@@ -46,10 +54,29 @@ void main() {
     // reciprocal determinand of M
     const float rdet = 1.0f / (gamma * (gamma + grad_square.x + grad_square.y));
 
-    const vec2 q = (gamma * flow_old) + (gray_dt * gray_gradient);
+    const vec2 q = (gamma * delta_flow_old) + (gray_dt * gray_gradient);
 
-    vec2 flow_new = rdet * (M * q);
+    vec2 delta_flow_new = rdet * (M * q);
 
+    // truncate
+    // FIXME: possibly truncation and sanitation can happen on flow_new
+    delta_flow_new.x = max(-maxflow, min(delta_flow_new.x, maxflow));
+    delta_flow_new.y = max(-maxflow, min(delta_flow_new.y, maxflow));
+
+    // sanitize
+    delta_flow_new.x = isinf(delta_flow_new.x) || isnan(delta_flow_new.x)? 0.0f : delta_flow_new.x;
+    delta_flow_new.y = isinf(delta_flow_new.y) || isnan(delta_flow_new.y)? 0.0f : delta_flow_new.y;
+
+    //#################################
+    // Optical flow computation
+    //#################################
+    // normalized coordinates
+    const vec2 flowUpCoords = vec2(coords.x / (imgSize.x - 1.0), coords.y / (imgSize.y - 1.0));
+    
+    const vec2 flow_old = 2.0 * texture(in_flow, flowUpCoords).xy;
+
+    vec2 flow_new = flow_old + delta_flow_new;
+    
     // truncate
     flow_new.x = max(-maxflow, min(flow_new.x, maxflow));
     flow_new.y = max(-maxflow, min(flow_new.y, maxflow));
@@ -60,4 +87,5 @@ void main() {
 
     imageStore(out_flow, coords, vec4(flow_new.x, flow_new.y, 0, 0));
     imageStore(out_gray, coords, vec4(gray));
+    imageStore(out_delta_flow, coords, vec4(delta_flow_new.x, delta_flow_new.y, 0, 0));
 }

@@ -1,0 +1,108 @@
+#version 450
+
+#include <lluvia/core.glsl>
+
+layout(binding = 0, rg32f) uniform image2D in_flow;
+layout(binding = 1, r32f)  uniform image2D in_gray;
+layout(binding = 2, rg32f) uniform image2D in_vector;
+
+layout(binding = 3, rg32f) uniform image2D out_flow;
+layout(binding = 4, r32f)  uniform image2D out_gray;
+layout(binding = 5, rg32f) uniform image2D out_vector;
+
+layout(push_constant) uniform const_0 {
+    float dt;
+} params;
+
+void main() {
+
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
+    const ivec2 imgSize = imageSize(in_flow);
+
+    const float dt = params.dt;
+
+    if (coords.x > imgSize.x || coords.y > imgSize.y) {
+        return;
+    }
+
+    const bool leftBorder = coords.x == 0;
+    const bool rightBorder = coords.x == imgSize.x - 1;
+
+    //#################################
+    // Flow propagation
+    //#################################
+    // flow values around pixel in X direction
+    const vec2 flow_0 = imageLoad(in_flow, coords).xy;
+    const vec2 flow_m = leftBorder  ? flow_0 : imageLoad(in_flow, coords + ivec2(-1, 0)).xy;
+    const vec2 flow_p = rightBorder ? flow_0 : imageLoad(in_flow, coords + ivec2(+1, 0)).xy;
+
+    // central difference of U_abs
+    const float Uabs_central = abs(flow_p.x) - abs(flow_m.x);
+
+    // dominant flow
+    const float Ud = Uabs_central > 0.0f? flow_p.x : flow_m.x;
+
+    // forward and backward flow differences
+    const vec2 diff_p = flow_p - flow_0;
+    const vec2 diff_m = flow_0 - flow_m;
+
+    // upstream difference
+    const vec2 diff_upstream = Ud >= 0.0f? diff_m : diff_p;
+
+    // propagation
+    vec2 flowPropU = flow_0 - dt * Ud * diff_upstream;
+
+    //#################################
+    // Gray propagation
+    //#################################
+    const float gray_0 = imageLoad(in_gray, coords).x;
+    const float gray_m = leftBorder  ? gray_0 : imageLoad(in_gray, coords + ivec2(-1, 0)).x;
+    const float gray_p = rightBorder ? gray_0 : imageLoad(in_gray, coords + ivec2(+1, 0)).x;
+
+    // forward and backward flow differences
+    const float gray_diff_p = gray_p - gray_0;
+    const float gray_diff_m = gray_0 - gray_m;
+
+    // upstream difference
+    const float gray_diff_upstream = Ud >= 0.0? gray_diff_m : gray_diff_p;
+
+    // propagation
+    float grayPropU = gray_0 - dt * Ud * gray_diff_upstream;
+
+    //#################################
+    // Vector propagation
+    //#################################
+    const vec2 vector_0 = imageLoad(in_gray, coords).xy;
+    const vec2 vector_m = leftBorder  ? vector_0 : imageLoad(in_gray, coords + ivec2(-1, 0)).xy;
+    const vec2 vector_p = rightBorder ? vector_0 : imageLoad(in_gray, coords + ivec2(+1, 0)).xy;
+
+    // forward and backward flow differences
+    const vec2 vector_diff_p = vector_p - vector_0;
+    const vec2 vector_diff_m = vector_0 - vector_m;
+
+    // upstream difference
+    const vec2 vector_diff_upstream = Ud >= 0.0? vector_diff_m : vector_diff_p;
+
+    // propagation
+    vec2 vectorPropU = vector_0 - dt * Ud * vector_diff_upstream;
+
+    //#################################
+    // BORDER REMOVAL
+    //#################################
+    const uint border = 2; // FIXME: parameter
+    const bool inRange = (coords.x >= border && coords.x < imgSize.x - border) &&
+                         (coords.y >= border && coords.y < imgSize.y - border);
+
+    // if the pixel coordinate lies on the image border,
+    // take the original value of flow (flow_0) as the propagated flow
+    flowPropU = inRange? flowPropU : flow_0;
+    grayPropU = inRange? grayPropU : gray_0;
+    vectorPropU = inRange? vectorPropU : vector_0;
+
+    //#################################
+    // PACK RESULTS
+    //#################################
+    imageStore(out_flow, coords, vec4(flowPropU.x, flowPropU.y, 0, 0));
+    imageStore(out_gray, coords, vec4(grayPropU, 0, 0, 0));
+    imageStore(out_vector, coords, vec4(vectorPropU.x, vectorPropU.y, 0, 0));
+}

@@ -8,7 +8,7 @@ function builder.newDescriptor()
 
     desc.builderName = 'FlowFilterSimple'
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView))
+    desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
@@ -31,19 +31,15 @@ function builder.onNodeInit(node)
 
     ll.logd('FlowFilterSimple', 'onNodeInit: max_flow', max_flow)
 
-    in_rgba = node:getPort('in_rgba')
+    in_gray = node:getPort('in_gray')
 
-    width = in_rgba.width
-    height = in_rgba.height
+    width = in_gray.width
+    height = in_gray.height
 
     ll.logd('FlowFilterSimple', string.format('onNodeInit: input shape: [%d, %d]', width, height))
 
-    RGBA2Gray = ll.createComputeNode('RGBA2Gray')
-    RGBA2Gray:bind('in_rgba', in_rgba)
-    RGBA2Gray:init()
-
     imageModel = ll.createComputeNode('ImageModel')
-    imageModel:bind('in_gray', RGBA2Gray:getPort('out_gray'))
+    imageModel:bind('in_gray', in_gray)
     imageModel:init()
 
 
@@ -97,7 +93,6 @@ function builder.onNodeInit(node)
         smooth_in_flow = flowSmooth:getPort('out_flow')
     end
 
-    node:bindNode('RGBA2Gray', RGBA2Gray)
     node:bindNode('ImageModel', imageModel)
     node:bindNode('Predictor', predictor)
     node:bindNode('Update', update)
@@ -115,13 +110,9 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     ll.logd('FlowFilterSimple', 'onNodeRecord')
 
-    RGBA2Gray = node:getNode('RGBA2Gray')
     imageModel = node:getNode('ImageModel')
     predictor = node:getNode('Predictor')
     update = node:getNode('Update')
-
-    cmdBuffer:run(RGBA2Gray)
-    cmdBuffer:memoryBarrier()
     
     -- the image model and the predictor can run concurrently
     cmdBuffer:run(imageModel)

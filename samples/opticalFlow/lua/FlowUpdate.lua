@@ -12,17 +12,16 @@ function builder.newDescriptor()
 
     desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'in_gradient', ll.PortDirection.In, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(2, 'in_gray_old', ll.PortDirection.In, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(3, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
+    desc:addPort(ll.PortDescriptor.new(2, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
 
-    desc:addPort(ll.PortDescriptor.new(4, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
+    desc:addPort(ll.PortDescriptor.new(3, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     
     -- out_flow is initialized externally in FlowFilterSimple and bound to this node. This way,
     -- the loop between FlowPredict and FlowUpdate can be broken.
-    desc:addPort(ll.PortDescriptor.new(5, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
+    desc:addPort(ll.PortDescriptor.new(4, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     desc:setParameter('gamma', 0.01)
-    desc:setParameter('maxflow', 4.0)
+    desc:setParameter('maxflow', 1.0)
     
     return desc
 end
@@ -43,16 +42,14 @@ function builder.onNodeInit(node)
     -- ll::Memory where out_flow will be allocated
     memory = in_flow.memory
 
-    in_gray_old = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
     out_gray = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
     out_flow = memory:createImageView(in_flow.imageDescriptor, in_flow.descriptor)
 
     -- need to change image layout before binding
-    in_gray_old:changeImageLayout(ll.ImageLayout.General)
     out_gray:changeImageLayout(ll.ImageLayout.General)
     out_flow:changeImageLayout(ll.ImageLayout.General)
 
-    node:bind('in_gray_old', in_gray_old)
+    -- node:bind('in_gray_old', in_gray_old)
     node:bind('out_gray', out_gray)
     node:bind('out_flow', out_flow)
     node.pushConstants = pushConstants

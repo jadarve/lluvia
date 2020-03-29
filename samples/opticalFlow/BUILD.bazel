@@ -46,6 +46,15 @@ glsl_shader(
 )
 
 glsl_shader(
+    name = "FlowUpdateDelta_shader",
+    shader = "glsl/FlowUpdateDelta.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
     name = "FlowPredictX_shader",
     shader = "glsl/FlowPredictX.comp",
     deps = [
@@ -57,6 +66,24 @@ glsl_shader(
 glsl_shader(
     name = "FlowPredictY_shader",
     shader = "glsl/FlowPredictY.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "FlowPredictPayloadX_shader",
+    shader = "glsl/FlowPredictPayloadX.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "FlowPredictPayloadY_shader",
+    shader = "glsl/FlowPredictPayloadY.comp",
     deps = [
         "//glsl/lib:lluvia_glsl_library"
     ],
