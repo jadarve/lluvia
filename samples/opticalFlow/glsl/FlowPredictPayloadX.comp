@@ -72,9 +72,9 @@ void main() {
     //#################################
     // Vector propagation
     //#################################
-    const vec2 vector_0 = imageLoad(in_gray, coords).xy;
-    const vec2 vector_m = leftBorder  ? vector_0 : imageLoad(in_gray, coords + ivec2(-1, 0)).xy;
-    const vec2 vector_p = rightBorder ? vector_0 : imageLoad(in_gray, coords + ivec2(+1, 0)).xy;
+    const vec2 vector_0 = imageLoad(in_vector, coords).xy;
+    const vec2 vector_m = leftBorder  ? vector_0 : imageLoad(in_vector, coords + ivec2(-1, 0)).xy;
+    const vec2 vector_p = rightBorder ? vector_0 : imageLoad(in_vector, coords + ivec2(+1, 0)).xy;
 
     // forward and backward flow differences
     const vec2 vector_diff_p = vector_p - vector_0;

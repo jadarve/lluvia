@@ -336,8 +336,8 @@ void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_p
 
     ll::throwSystemErrorIf(paramType != ll::PortType::Buffer,
         ll::ErrorCode::PortBindingError,
-        "Parameter of type ll::Buffer cannot be bound at position ["
-        + std::to_string(port.binding) + "] as parameter type is not ll::ParameterType::Buffer");
+        "Port [" + port.name + "] of type ll::Buffer cannot be bound at position ["
+        + std::to_string(port.binding) + "] as port type is not ll::PortType::Buffer");
 
     // holds a reference to the object
     m_objects[port.name] = buffer;
@@ -365,17 +365,17 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
 
     // validate that imgView can be bound at index position.
     const auto& vkBinding = m_parameterBindings.at(port.binding);
-    const auto  paramType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
-
+    const auto portType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
+    
     if (isSampled) {
-        ll::throwSystemErrorIf(paramType != ll::PortType::SampledImageView, ll::ErrorCode::PortBindingError,
-            "Parameter of type ll::Imageview (sampled) cannot be bound at position ["
-            + std::to_string(port.binding) + "] as parameter type is not ll::PortType::SampledImageView");
+        ll::throwSystemErrorIf(portType != ll::PortType::SampledImageView, ll::ErrorCode::PortBindingError,
+            "Port [" + port.name + "] of type ll::Imageview (sampled) cannot be bound at position ["
+            + std::to_string(port.binding) + "] as port type is not ll::PortType::SampledImageView, got: " + std::to_string(static_cast<int32_t>(portType)));
     }
     else {
-        ll::throwSystemErrorIf(paramType != ll::PortType::ImageView, ll::ErrorCode::PortBindingError,
-            "Parameter of type ll::Imageview cannot be bound at position ["
-            + std::to_string(port.binding) + "] as parameter type is not ll::PortType::ImageView");
+        ll::throwSystemErrorIf(portType != ll::PortType::ImageView, ll::ErrorCode::PortBindingError,
+            "Port [" + port.name + "] of type ll::Imageview cannot be bound at position ["
+            + std::to_string(port.binding) + "] as port type is not ll::PortType::ImageView, got: " + std::to_string(static_cast<int32_t>(portType)));
     }
 
     // binding

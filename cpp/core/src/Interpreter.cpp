@@ -197,7 +197,8 @@ void registerTypes(sol::table& lib) {
         "depth", sol::property(&ll::Image::getDepth),
         "shape", sol::property(&ll::Image::getShape),
         "changeImageLayout", &ll::Image::changeImageLayout,
-        "clear", &ll::Image::clear
+        "clear", &ll::Image::clear,
+        "createImageView", &ll::Image::createImageView
         );
 
     // TODO: usage flags, layout

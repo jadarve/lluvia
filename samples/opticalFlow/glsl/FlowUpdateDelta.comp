@@ -5,13 +5,14 @@
 layout(binding = 0, r32f)  uniform image2D in_gray;
 layout(binding = 1, rg32f) uniform image2D in_gradient;
 layout(binding = 2, rg32f) uniform image2D in_delta_flow;
+layout(binding = 3, r32f)  uniform image2D in_gray_old;
 
 // input flow from level above. This has half the resolution of the other parameters.
-layout(binding = 3) uniform sampler2D in_flow;
+layout(binding = 4) uniform sampler2D in_flow;
 
-layout(binding = 4, r32f) uniform image2D out_gray;
-layout(binding = 5, rg32f) uniform image2D out_flow;
-layout(binding = 6, rg32f) uniform image2D out_delta_flow;
+layout(binding = 5, r32f) uniform image2D out_gray;
+layout(binding = 6, rg32f) uniform image2D out_flow;
+layout(binding = 7, rg32f) uniform image2D out_delta_flow;
 
 layout(push_constant) uniform const_0 {
     float gamma;
@@ -33,7 +34,7 @@ void main() {
     }
 
     const float gray = imageLoad(in_gray, coords).r;
-    const float gray_old = imageLoad(out_gray, coords).r;
+    const float gray_old = imageLoad(in_gray_old, coords).r;
     const vec2 gray_gradient = imageLoad(in_gradient, coords).xy;
 
     const vec2 delta_flow_old = imageLoad(in_delta_flow, coords).xy;

@@ -56,7 +56,7 @@ void main() {
     // Gray propagation
     //#################################
     const float gray_0 = imageLoad(in_gray, coords).x;
-    const float gray_m = topBorder  ? gray_0 : imageLoad(in_gray, coords + ivec2(0, -1)).x;
+    const float gray_m = topBorder    ? gray_0 : imageLoad(in_gray, coords + ivec2(0, -1)).x;
     const float gray_p = bottomBorder ? gray_0 : imageLoad(in_gray, coords + ivec2(0, +1)).x;
 
     // forward and backward flow differences
@@ -73,7 +73,7 @@ void main() {
     // Vector propagation
     //#################################
     const vec2 vector_0 = imageLoad(in_vector, coords).xy;
-    const vec2 vector_m = topBorder  ? vector_0 : imageLoad(in_vector, coords + ivec2(0, -1)).xy;
+    const vec2 vector_m = topBorder    ? vector_0 : imageLoad(in_vector, coords + ivec2(0, -1)).xy;
     const vec2 vector_p = bottomBorder ? vector_0 : imageLoad(in_vector, coords + ivec2(0, +1)).xy;
 
     // forward and backward flow differences

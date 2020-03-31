@@ -64,7 +64,7 @@ function builder.onNodeInit(node)
     predict_inflow:changeImageLayout(ll.ImageLayout.General)
 
     predictor = ll.createContainerNode('FlowPredict')
-    predictor:setParameter('max_flow', max_flow) -- FIXME: not possible to do!!!
+    predictor:setParameter('max_flow', max_flow)
     predictor:bind('in_flow', predict_inflow)
     predictor:init()
 

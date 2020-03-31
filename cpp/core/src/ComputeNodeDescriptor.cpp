@@ -211,7 +211,7 @@ const ll::PushConstants& ComputeNodeDescriptor::getPushConstants() const noexcep
 
 std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterBindings() const {
 
-    auto bindings = std::vector<vk::DescriptorSetLayoutBinding> {};
+    auto bindings = std::vector<vk::DescriptorSetLayoutBinding>(m_ports.size());
 
     for(const auto it : m_ports) {
 
@@ -222,7 +222,14 @@ std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterB
                         .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
                         .setStageFlags(vk::ShaderStageFlagBits::eCompute)
                         .setPImmutableSamplers(nullptr);
-        bindings.push_back(binding);
+
+        if (port.binding >= m_ports.size()) {
+            throwSystemError(ll::ErrorCode::PortBindingError, "port [" + port.name +
+                "] has a binding index [" + std::to_string(port.binding) +
+                "] greater than the maximum allowed for this node: " + std::to_string(m_ports.size()));
+        }
+
+        bindings[port.binding] = binding;
     }
 
     return bindings;
