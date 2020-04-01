@@ -3,7 +3,6 @@ local builder = ll.class(ll.ContainerNodeBuilder)
 
 function builder.newDescriptor()
 
-    ll.logd('FlowPredictPayload', 'newDescriptor')
     local desc = ll.ContainerNodeDescriptor.new()
 
     desc.builderName = 'FlowPredictPayload'
@@ -15,39 +14,41 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(4, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(5, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    -- parameter with default value
     desc:setParameter('max_flow', 4)
 
-    ll.logd('FlowPredictPayload', 'newDescriptor: finish')
     return desc
 end
 
 
 function builder.onNodeInit(node)
 
-    max_flow = math.ceil(node.descriptor:getParameter('max_flow'))
+    local max_flow = math.ceil(node.descriptor:getParameter('max_flow'))
     ll.logd('FlowPredictPayload', 'onNodeInit: max_flow:', max_flow)
 
-    dt = 1.0 / max_flow
+    -- max_flow could be any floating number. The round-up value
+    -- is the number of iterations to propagate.
+    local N = math.ceil(max_flow)
+
+    local dt = 1.0 / N
     ll.logd('FlowPredictPayload', 'onNodeInit: dt:', dt)
 
-    pushConstants = ll.PushConstants.new()
+    local pushConstants = ll.PushConstants.new()
     pushConstants.float = dt
 
-    in_flow = node:getPort('in_flow')
-    in_gray = node:getPort('in_gray')
-    in_vector = node:getPort('in_vector')
+    local in_flow = node:getPort('in_flow')
+    local in_gray = node:getPort('in_gray')
+    local in_vector = node:getPort('in_vector')
 
     -- Pass through the input to the output
-    if max_flow == 0 then
+    if N == 0 then
         node:bind('out_flow', in_flow)
     end
 
-    for i = 1, max_flow do
+    for i = 1, N do
         ll.logd('FlowPredictPayload', 'iteration: ', i)
 
-        predictX = ll.createComputeNode('FlowPredictPayloadX')
-        predictY = ll.createComputeNode('FlowPredictPayloadY')
+        local predictX = ll.createComputeNode('FlowPredictPayloadX')
+        local predictY = ll.createComputeNode('FlowPredictPayloadY')
 
         predictX:setParameter('dt', dt)
         predictX:bind('in_flow', in_flow)
@@ -81,13 +82,14 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     ll.logd('FlowPredictPayload', 'onNodeRecord')
 
-    max_flow = node.descriptor:getParameter('max_flow')
+    local max_flow = node.descriptor:getParameter('max_flow')
+    local N = math.ceil(max_flow)
 
-    for i = 1, max_flow do
+    for i = 1, N do
         ll.logd('FlowPredictPayload', 'onNodeRecord: iteration:', i)
 
-        predictX = node:getNode(string.format('FlowPredictPayloadX_%d', i))
-        predictY = node:getNode(string.format('FlowPredictPayloadY_%d', i))
+        local predictX = node:getNode(string.format('FlowPredictPayloadX_%d', i))
+        local predictY = node:getNode(string.format('FlowPredictPayloadY_%d', i))
 
         predictX:record(cmdBuffer)
         cmdBuffer:memoryBarrier()

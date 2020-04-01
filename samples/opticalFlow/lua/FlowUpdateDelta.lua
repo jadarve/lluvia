@@ -33,38 +33,38 @@ end
 function builder.onNodeInit(node)
     ll.logd('FlowUpdateDelta', 'onNodeInit')
 
-    gamma = node:getParameter('gamma')
-    maxflow = node:getParameter('maxflow')
-    allocate_output = node:getParameter('allocate_output')
+    local gamma = node:getParameter('gamma')
+    local maxflow = node:getParameter('maxflow')
+    local allocate_output = node:getParameter('allocate_output')
 
-    pushConstants = ll.PushConstants.new()
+    local pushConstants = ll.PushConstants.new()
     pushConstants:pushFloat(gamma)
     pushConstants:pushFloat(maxflow)
 
-    in_flow = node:getPort('in_flow')
-    in_gray = node:getPort('in_gray')
+    local in_flow = node:getPort('in_flow')
+    local in_gray = node:getPort('in_gray')
 
     -- ll::Memory where out_flow will be allocated
-    memory = in_flow.memory
+    local memory = in_flow.memory
 
-    outFlowImgDesc = ll.ImageDescriptor.new(in_flow.imageDescriptor)
+    local outFlowImgDesc = ll.ImageDescriptor.new(in_flow.imageDescriptor)
     outFlowImgDesc.width = in_gray.width
     outFlowImgDesc.height = in_gray.height
 
-    outFlowViewDesc = ll.ImageViewDescriptor.new()
+    local outFlowViewDesc = ll.ImageViewDescriptor.new()
     outFlowViewDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
     outFlowViewDesc.filterMode = ll.ImageFilterMode.Nearest
     outFlowViewDesc.isSampled = false
     outFlowViewDesc.normalizedCoordinates = false
 
-    out_flow = memory:createImageView(outFlowImgDesc, outFlowViewDesc)
+    local out_flow = memory:createImageView(outFlowImgDesc, outFlowViewDesc)
     out_flow:changeImageLayout(ll.ImageLayout.General)
     node:bind('out_flow', out_flow)
 
     if allocate_output ~= 0 then
 
-        out_gray = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
-        out_delta_flow = memory:createImageView(outFlowImgDesc, outFlowViewDesc)
+        local out_gray = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
+        local out_delta_flow = memory:createImageView(outFlowImgDesc, outFlowViewDesc)
 
         out_gray:changeImageLayout(ll.ImageLayout.General)
         out_delta_flow:changeImageLayout(ll.ImageLayout.General)
@@ -73,11 +73,10 @@ function builder.onNodeInit(node)
         node:bind('out_delta_flow', out_delta_flow)
     end
 
-    out_delta_flow = node:getPort('out_delta_flow')
+    local out_delta_flow = node:getPort('out_delta_flow')
     ll.logd('FlowUpdateDelta', 'in_flow ', string.format('[%d, %d, %d]', in_flow.width, in_flow.height, in_flow.channelCount)
                              , 'out_flow', string.format('[%d, %d, %d]', out_flow.width, out_flow.height, out_flow.channelCount)
                              , 'out_delta_flow', string.format('[%d, %d, %d]', out_delta_flow.width, out_delta_flow.height, out_delta_flow.channelCount))
-    
 
     node.pushConstants = pushConstants
     node:configureGridShape(ll.vec3ui.new(out_flow.width, out_flow.height, 1))
