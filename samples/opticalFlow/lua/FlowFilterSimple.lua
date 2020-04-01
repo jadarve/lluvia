@@ -62,7 +62,7 @@ function builder.onNodeInit(node)
     local predict_inflow = memory:createImageView(inflowImgDesc, inflowViewDesc)
     predict_inflow:changeImageLayout(ll.ImageLayout.General)
 
-    predictor = ll.createContainerNode('FlowPredict')
+    local predictor = ll.createContainerNode('FlowPredict')
     predictor:setParameter('max_flow', max_flow)
     predictor:bind('in_flow', predict_inflow)
     predictor:init()
