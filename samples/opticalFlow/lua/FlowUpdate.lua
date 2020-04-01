@@ -29,21 +29,21 @@ end
 function builder.onNodeInit(node)
     ll.logd('FlowUpdate', 'onNodeInit')
 
-    gamma = node:getParameter('gamma')
-    maxflow = node:getParameter('maxflow')
+    local gamma = node:getParameter('gamma')
+    local maxflow = node:getParameter('maxflow')
 
-    pushConstants = ll.PushConstants.new()
+    local pushConstants = ll.PushConstants.new()
     pushConstants:pushFloat(gamma)
     pushConstants:pushFloat(maxflow)
 
-    in_flow = node:getPort('in_flow')
-    in_gray = node:getPort('in_gray')
+    local in_flow = node:getPort('in_flow')
+    local in_gray = node:getPort('in_gray')
 
     -- ll::Memory where out_flow will be allocated
-    memory = in_flow.memory
+    local memory = in_flow.memory
 
-    out_gray = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
-    out_flow = memory:createImageView(in_flow.imageDescriptor, in_flow.descriptor)
+    local out_gray = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
+    local out_flow = memory:createImageView(in_flow.imageDescriptor, in_flow.descriptor)
 
     -- need to change image layout before binding
     out_gray:changeImageLayout(ll.ImageLayout.General)

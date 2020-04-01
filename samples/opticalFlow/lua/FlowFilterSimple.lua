@@ -3,7 +3,6 @@ local builder = ll.class(ll.ContainerNodeBuilder)
 
 function builder.newDescriptor()
 
-    ll.logd('FlowFilterSimple', 'newDescriptor')
     local desc = ll.ContainerNodeDescriptor.new()
 
     desc.builderName = 'FlowFilterSimple'
@@ -25,28 +24,28 @@ function builder.onNodeInit(node)
 
     ll.logd('FlowFilterSimple', 'onNodeInit')
 
-    gamma = node:getParameter('gamma')
-    max_flow = node:getParameter('max_flow')
-    smooth_iterations = node:getParameter('smooth_iterations')
+    local gamma = node:getParameter('gamma')
+    local max_flow = node:getParameter('max_flow')
+    local smooth_iterations = node:getParameter('smooth_iterations')
 
     ll.logd('FlowFilterSimple', 'onNodeInit: max_flow', max_flow)
 
-    in_gray = node:getPort('in_gray')
+    local in_gray = node:getPort('in_gray')
 
-    width = in_gray.width
-    height = in_gray.height
+    local width = in_gray.width
+    local height = in_gray.height
 
     ll.logd('FlowFilterSimple', string.format('onNodeInit: input shape: [%d, %d]', width, height))
 
-    imageModel = ll.createComputeNode('ImageModel')
+    local imageModel = ll.createComputeNode('ImageModel')
     imageModel:bind('in_gray', in_gray)
     imageModel:init()
 
 
-    memory = imageModel:getPort('out_gradient').memory
+    local memory = imageModel:getPort('out_gradient').memory
 
-    -- HACK!!! pass in_rgba.imageDescriptor so that the usage flags of predict_inflow are set
-    inflowImgDesc = ll.ImageDescriptor.new(in_rgba.imageDescriptor)
+    -- HACK!!! pass in_gray.imageDescriptor so that the usage flags of predict_inflow are set
+    local inflowImgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
     inflowImgDesc.width = width
     inflowImgDesc.height = height
     inflowImgDesc.depth = 1
@@ -54,13 +53,13 @@ function builder.onNodeInit(node)
     inflowImgDesc.channelType = ll.ChannelType.Float32
     -- FIXME: usage flags
 
-    inflowViewDesc = ll.ImageViewDescriptor.new()
+    local inflowViewDesc = ll.ImageViewDescriptor.new()
     inflowViewDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
     inflowViewDesc.filterMode = ll.ImageFilterMode.Nearest
     inflowViewDesc.isSampled = false
     inflowViewDesc.normalizedCoordinates = false
 
-    predict_inflow = memory:createImageView(inflowImgDesc, inflowViewDesc)
+    local predict_inflow = memory:createImageView(inflowImgDesc, inflowViewDesc)
     predict_inflow:changeImageLayout(ll.ImageLayout.General)
 
     predictor = ll.createContainerNode('FlowPredict')
@@ -68,7 +67,7 @@ function builder.onNodeInit(node)
     predictor:bind('in_flow', predict_inflow)
     predictor:init()
 
-    update = ll.createComputeNode('FlowUpdate')
+    local update = ll.createComputeNode('FlowUpdate')
     update:setParameter('gamma', gamma)
     update:setParameter('max_flow', max_flow)
     update:bind('in_gray', imageModel:getPort('out_gray'))
@@ -77,10 +76,10 @@ function builder.onNodeInit(node)
     -- update:bind('out_flow', predict_inflow)
     update:init()
 
-    smooth_in_flow = update:getPort('out_flow')
+    local smooth_in_flow = update:getPort('out_flow')
     for i = 1, smooth_iterations do
 
-        flowSmooth = ll.createComputeNode('FlowSmooth')
+        local flowSmooth = ll.createComputeNode('FlowSmooth')
         flowSmooth:bind('in_flow', smooth_in_flow)
         
         if i == smooth_iterations then
@@ -110,9 +109,9 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     ll.logd('FlowFilterSimple', 'onNodeRecord')
 
-    imageModel = node:getNode('ImageModel')
-    predictor = node:getNode('Predictor')
-    update = node:getNode('Update')
+    local imageModel = node:getNode('ImageModel')
+    local predictor = node:getNode('Predictor')
+    local update = node:getNode('Update')
     
     -- the image model and the predictor can run concurrently
     cmdBuffer:run(imageModel)
@@ -122,9 +121,9 @@ function builder.onNodeRecord(node, cmdBuffer)
     cmdBuffer:run(update)
     cmdBuffer:memoryBarrier()
 
-    smooth_iterations = node:getParameter('smooth_iterations')
+    local smooth_iterations = node:getParameter('smooth_iterations')
     for i = 1, smooth_iterations do
-        flowSmooth = node:getNode(string.format('flowSmooth_%d', i))
+        local flowSmooth = node:getNode(string.format('flowSmooth_%d', i))
         cmdBuffer:run(flowSmooth)
         cmdBuffer:memoryBarrier()
     end

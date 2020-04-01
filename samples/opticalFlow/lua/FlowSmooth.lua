@@ -21,26 +21,32 @@ end
 
 function builder.onNodeInit(node)
 
-    allocate_output = node:getParameter('allocate_output')
+    local allocate_output = node:getParameter('allocate_output')
 
     ll.logd('FlowSmooth', 'onNodeInit', 'start, allocate_output:', allocate_output)
 
-    in_flow = node:getPort('in_flow')
+    local in_flow = node:getPort('in_flow')
 
+    local out_flow = nil
     if allocate_output ~= 0 then
 
         ll.logd('FlowSmooth', 'onNodeInit: allocating output')
         
-        memory = in_flow.memory
+        local memory = in_flow.memory
         out_flow = memory:createImageView(in_flow.imageDescriptor, in_flow.descriptor)
         out_flow:changeImageLayout(ll.ImageLayout.General)
         node:bind('out_flow', out_flow)
+
+    else
+
+        out_flow = node:getPort('out_flow')
     end
 
+    
     node:configureGridShape(ll.vec3ui.new(out_flow.width, out_flow.height, 1))
 
     -- clear outputs
-    node:getPort('out_flow'):clear()
+    out_flow:clear()
 
     ll.logd('FlowSmooth', 'onNodeInit', 'finish')
 end

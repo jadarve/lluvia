@@ -20,20 +20,20 @@ end
 
 function builder.onNodeInit(node)
     
-    dt = node:getParameter('dt')
+    local dt = node:getParameter('dt')
     ll.logd('FlowPredictY', 'onNodeInit: dt', dt)
 
-    pushConstants = ll.PushConstants.new()
+    local pushConstants = ll.PushConstants.new()
     pushConstants.float = dt
     node.pushConstants = pushConstants
 
 
-    in_flow = node:getPort('in_flow')
+    local in_flow = node:getPort('in_flow')
 
     -- ll::Memory where out_flow will be allocated
-    memory = in_flow.memory
+    local memory = in_flow.memory
 
-    out_flow = memory:createImageView(in_flow.imageDescriptor, in_flow.descriptor)
+    local out_flow = memory:createImageView(in_flow.imageDescriptor, in_flow.descriptor)
 
     -- need to change image layout before binding
     out_flow:changeImageLayout(ll.ImageLayout.General)
