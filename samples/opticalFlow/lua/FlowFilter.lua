@@ -3,7 +3,6 @@ local builder = ll.class(ll.ContainerNodeBuilder)
 
 function builder.newDescriptor()
 
-    ll.logd('FlowFilter', 'newDescriptor')
     local desc = ll.ContainerNodeDescriptor.new()
 
     desc.builderName = 'FlowFilter'
@@ -26,27 +25,27 @@ function builder.onNodeInit(node)
 
     ll.logd('FlowFilter', 'onNodeInit')
 
-    gamma = node:getParameter('gamma')
-    max_flow = node:getParameter('max_flow')
-    smooth_iterations = node:getParameter('smooth_iterations')
-    levels = node:getParameter('levels')
+    local gamma = node:getParameter('gamma')
+    local max_flow = node:getParameter('max_flow')
+    local smooth_iterations = node:getParameter('smooth_iterations')
+    local levels = node:getParameter('levels')
 
     ll.logd('FlowFilter', 'onNodeInit: max_flow', max_flow)
 
-    in_rgba = node:getPort('in_rgba')
+    local in_rgba = node:getPort('in_rgba')
 
-    RGBA2Gray = ll.createComputeNode('RGBA2Gray')
+    local RGBA2Gray = ll.createComputeNode('RGBA2Gray')
     RGBA2Gray:bind('in_rgba', in_rgba)
     RGBA2Gray:init()
 
-    imagePyramid = ll.createContainerNode('ImagePyramid_8ui')
+    local imagePyramid = ll.createContainerNode('ImagePyramid_8ui')
     imagePyramid:setParameter('levels', levels)
     imagePyramid:bind('in_gray', RGBA2Gray:getPort('out_gray'))
     imagePyramid:init()
     
-    filterTop = ll.createContainerNode('FlowFilterSimple')
+    local filterTop = ll.createContainerNode('FlowFilterSimple')
     filterTop:setParameter('gamma', gamma)
-    filterTop:setParameter('max_flow', max_flow)
+    filterTop:setParameter('max_flow', math.ceil(max_flow / (2^(levels - 1))))
     filterTop:setParameter('smooth_iterations', smooth_iterations)
     filterTop:bind('in_gray', imagePyramid:getPort('out_gray'))
     filterTop:init()
@@ -54,19 +53,20 @@ function builder.onNodeInit(node)
     node:bind(string.format('out_flow_%d', levels - 1), filterTop:getPort('out_flow'))
     node:bind(string.format('out_gray_%d', levels - 1), filterTop:getPort('out_gray'))
 
-    in_flow = filterTop:getPort('out_flow')
+    local out_flow = filterTop:getPort('out_flow')
+    local out_gray = filterTop:getPort('out_gray')
 
-    h = levels - 2
+    local h = levels - 2
     while h >= 0 do
 
-        filterLow = ll.createContainerNode('FlowFilterDelta')
+        local filterLow = ll.createContainerNode('FlowFilterDelta')
         filterLow:setParameter('gamma', gamma)
-        filterLow:setParameter('max_flow', max_flow)
+        filterLow:setParameter('max_flow', math.ceil(max_flow / (2^h)))
         filterLow:setParameter('smooth_iterations', smooth_iterations)
 
-        in_gray = imagePyramid:getPort(string.format('out_gray_%d', h))
+        local in_gray = imagePyramid:getPort(string.format('out_gray_%d', h))
         filterLow:bind('in_gray', in_gray)
-        filterLow:bind('in_flow', in_flow)
+        filterLow:bind('in_flow', out_flow)
 
         filterLow:init()
         node:bindNode(string.format('FilterLow_%d', h), filterLow)
@@ -75,7 +75,8 @@ function builder.onNodeInit(node)
         node:bind(string.format('out_flow_%d', h), filterLow:getPort('out_flow'))
         node:bind(string.format('out_delta_flow_%d', h), filterLow:getPort('out_delta_flow'))
 
-        in_flow = filterLow:getPort('out_flow')
+        out_flow = filterLow:getPort('out_flow')
+        out_gray = filterLow:getPort('out_gray')
 
         h = h - 1
     end
@@ -84,11 +85,10 @@ function builder.onNodeInit(node)
     node:bindNode('ImagePyramid', imagePyramid)
     node:bindNode('FilterTop', filterTop)
 
-    node:bind('out_flow', filterLow:getPort('out_flow'))
-    node:bind('out_gray', filterLow:getPort('out_gray'))
+    node:bind('out_flow', out_flow)
+    node:bind('out_gray', out_gray)
 
     ll.logd('FlowFilter', 'onNodeInit: finish')
-
 end
 
 
@@ -96,26 +96,25 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     ll.logd('FlowFilter', 'onNodeRecord')
 
-    levels = node:getParameter('levels')
+    local levels = node:getParameter('levels')
 
-    RGBA2Gray = node:getNode('RGBA2Gray')
-    imagePyramid = node:getNode('ImagePyramid')
-    filterTop = node:getNode('FilterTop')
+    local RGBA2Gray = node:getNode('RGBA2Gray')
+    local imagePyramid = node:getNode('ImagePyramid')
+    local filterTop = node:getNode('FilterTop')
 
     cmdBuffer:run(RGBA2Gray)
     cmdBuffer:memoryBarrier()
 
-    -- cmdBuffer:run(imagePyramid)
     imagePyramid:record(cmdBuffer)
     cmdBuffer:memoryBarrier()
 
     filterTop:record(cmdBuffer)
     cmdBuffer:memoryBarrier()
 
-    h = levels - 2
+    local h = levels - 2
     while h >= 0 do
 
-        filterLow = node:getNode(string.format('FilterLow_%d', h))
+        local filterLow = node:getNode(string.format('FilterLow_%d', h))
         filterLow:record(cmdBuffer)
         cmdBuffer:memoryBarrier()
 
