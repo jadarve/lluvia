@@ -73,9 +73,10 @@ void ContainerNode::bindNode(const std::string& name, const std::shared_ptr<ll::
 
 std::shared_ptr<ll::Node> ContainerNode::getNode(const std::string& name) const {
 
-    std::cout << "ContainerNode::getNode: " << name << std::endl;
     const auto it = m_nodes.find(name);
-    return it == m_nodes.cend()? nullptr : it->second;
+    
+    ll::throwSystemErrorIf(it == m_nodes.cend(), ll::ErrorCode::KeyNotFound, "Node [" + name + "] not found.");
+    return it->second;
 }
 
 
