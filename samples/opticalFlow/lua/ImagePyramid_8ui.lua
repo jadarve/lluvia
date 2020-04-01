@@ -3,7 +3,6 @@ local builder = ll.class(ll.ContainerNodeBuilder)
 
 function builder.newDescriptor()
 
-    ll.logd('ImagePyramid_8ui', 'newDescriptor')
     local desc = ll.ContainerNodeDescriptor.new()
 
     desc.builderName = 'ImagePyramid_8ui'
@@ -20,11 +19,11 @@ end
 
 function builder.onNodeInit(node)
 
-    levels = node.descriptor:getParameter('levels')
+    local levels = node.descriptor:getParameter('levels')
     ll.logd('ImagePyramid_8ui', 'onNodeInit: levels:', levels)
 
     -- in_gray should have been bound before calling init()
-    in_gray = node:getPort('in_gray')
+    local in_gray = node:getPort('in_gray')
     node:bind(string.format('out_gray_0', i), in_gray)
 
     -- Pass through the input to the output
@@ -35,8 +34,8 @@ function builder.onNodeInit(node)
     for i = 1, levels -1 do
         ll.logd('ImagePyramid_8ui', 'onNodeInit: level:', i)
         
-        downX = ll.createComputeNode('ImageDownsampleX_8ui')
-        downY = ll.createComputeNode('ImageDownsampleY_8ui')
+        local downX = ll.createComputeNode('ImageDownsampleX_8ui')
+        local downY = ll.createComputeNode('ImageDownsampleY_8ui')
 
         downX:bind('in_gray', in_gray)
         downX:init()
@@ -66,13 +65,13 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     ll.logd('ImagePyramid_8ui', 'onNodeRecord')
 
-    levels = node.descriptor:getParameter('levels')
+    local levels = node.descriptor:getParameter('levels')
 
     for i = 1, levels -1 do
         ll.logd('ImagePyramid_8ui', 'onNodeRecord: level:', i)
 
-        downX = node:getNode(string.format('DownX_%d', i))
-        downY = node:getNode(string.format('DownY_%d', i))
+        local downX = node:getNode(string.format('DownX_%d', i))
+        local downY = node:getNode(string.format('DownY_%d', i))
 
         downX:record(cmdBuffer)
         cmdBuffer:memoryBarrier()

@@ -18,18 +18,18 @@ end
 
 function builder.onNodeInit(node)
     
-    in_RGBA = node:getPort('in_rgba')
+    local in_RGBA = node:getPort('in_rgba')
 
     -- ll::Memory where out_gray will be allocated
-    memory = in_RGBA.memory
+    local memory = in_RGBA.memory
 
     -- out_gray descriptors
-    imgDesc = ll.ImageDescriptor.new(in_RGBA.imageDescriptor)
+    local imgDesc = ll.ImageDescriptor.new(in_RGBA.imageDescriptor)
     imgDesc.channelCount = 1
 
-    imgViewDesc = ll.ImageViewDescriptor.new(in_RGBA.descriptor)
+    local imgViewDesc = ll.ImageViewDescriptor.new(in_RGBA.descriptor)
     
-    out_gray = memory:createImageView(imgDesc, imgViewDesc)
+    local out_gray = memory:createImageView(imgDesc, imgViewDesc)
 
     -- need to change image layout before binding
     out_gray:changeImageLayout(ll.ImageLayout.General)

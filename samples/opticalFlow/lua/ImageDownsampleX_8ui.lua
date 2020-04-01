@@ -18,18 +18,18 @@ end
 
 function builder.onNodeInit(node)
 
-    in_gray = node:getPort('in_gray')
+    local in_gray = node:getPort('in_gray')
 
     -- ll::Memory where out_gray will be allocated
-    memory = in_gray.memory
+    local memory = in_gray.memory
 
     -- out_gray descriptors
-    imgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
+    local imgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
     imgDesc.width = in_gray.width // 2
 
-    imgViewDesc = ll.ImageViewDescriptor.new(in_gray.descriptor)
+    local imgViewDesc = ll.ImageViewDescriptor.new(in_gray.descriptor)
     
-    out_gray = memory:createImageView(imgDesc, imgViewDesc)
+    local out_gray = memory:createImageView(imgDesc, imgViewDesc)
 
     -- need to change image layout before binding
     out_gray:changeImageLayout(ll.ImageLayout.General)
