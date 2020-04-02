@@ -25,7 +25,6 @@ void main() {
     const float gamma = params.gamma;
     const float maxflow = params.maxflow;
 
-    // this coordinates are relative to out_gradient size
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(in_gray);
 
@@ -53,9 +52,16 @@ void main() {
     const mat2 M = mat2(gamma + grad_square.y, -diag_off, -diag_off, gamma + grad_square.x);
 
     // reciprocal determinand of M
+    // this calculations are for gamma being a scalar in the cost function
+    // of the form Data + gamma * Regularization    
     const float rdet = 1.0f / (gamma * (gamma + grad_square.x + grad_square.y));
-
     const vec2 q = (gamma * delta_flow_old) + (gray_dt * gray_gradient);
+
+    // this calculations are for gamma being a weight between data and regularization term
+    // of the form (1 - gamma) * Data + gamma * Regularization
+    // const float rdet = 1.0f / (gamma * (gamma + (1 - gamma) * (grad_square.x + grad_square.y)));
+    // const vec2 q = (gamma * delta_flow_old) + ((1 - gamma) * gray_dt * gray_gradient);
+    
 
     vec2 delta_flow_new = rdet * (M * q);
 

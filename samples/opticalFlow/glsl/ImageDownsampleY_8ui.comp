@@ -7,6 +7,7 @@ layout(binding = 1, r8ui) uniform uimage2D out_gray;
 
 void main() {
 
+    // this coordinates are relative to out_gray size
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(out_gray);
 

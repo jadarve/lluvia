@@ -7,7 +7,6 @@ layout(binding = 1, rg32f) uniform image2D out_flow;
 
 void main() {
 
-    // this coordinates are relative to out_gradient size
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(out_flow);
 

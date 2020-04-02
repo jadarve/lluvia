@@ -63,6 +63,8 @@ function builder.onNodeInit(node)
         predictY:init()
 
         in_flow = predictY:getPort('out_flow')
+        in_gray = predictY:getPort('out_gray')
+        in_vector = predictY:getPort('out_vector')
 
         node:bindNode(string.format('FlowPredictPayloadX_%d', i), predictX)
         node:bindNode(string.format('FlowPredictPayloadY_%d', i), predictY)
@@ -70,6 +72,9 @@ function builder.onNodeInit(node)
 
     -- in_flow in the last iteration contains the output of the last cycle.
     in_flow:clear()
+    in_gray:clear()
+    in_vector:clear()
+    
     node:bind('out_flow', in_flow)
     node:bind('out_gray', in_gray)
     node:bind('out_vector', in_vector)

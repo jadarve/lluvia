@@ -48,6 +48,10 @@ function builder.onNodeInit(node)
     out_gray:changeImageLayout(ll.ImageLayout.General)
     out_vector:changeImageLayout(ll.ImageLayout.General)
 
+    out_flow:clear()
+    out_gray:clear()
+    out_vector:clear()
+
     node:bind('out_flow', out_flow)
     node:bind('out_gray', out_gray)
     node:bind('out_vector', out_vector)

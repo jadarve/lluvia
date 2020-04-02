@@ -37,6 +37,7 @@ function builder.onNodeInit(node)
 
     -- need to change image layout before binding
     out_flow:changeImageLayout(ll.ImageLayout.General)
+    out_flow:clear()
 
     node:bind('out_flow', out_flow)
 

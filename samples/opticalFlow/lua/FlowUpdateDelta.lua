@@ -21,6 +21,8 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(6, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(7, 'out_delta_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
+    -- out_gray and out_delta_flow are allocated externally in FlowFilterDelta
+
     desc:setParameter('gamma', 0.01)
     desc:setParameter('maxflow', 1.0)
 
@@ -60,18 +62,6 @@ function builder.onNodeInit(node)
     local out_flow = memory:createImageView(outFlowImgDesc, outFlowViewDesc)
     out_flow:changeImageLayout(ll.ImageLayout.General)
     node:bind('out_flow', out_flow)
-
-    if allocate_output ~= 0 then
-
-        local out_gray = memory:createImageView(in_gray.imageDescriptor, in_gray.descriptor)
-        local out_delta_flow = memory:createImageView(outFlowImgDesc, outFlowViewDesc)
-
-        out_gray:changeImageLayout(ll.ImageLayout.General)
-        out_delta_flow:changeImageLayout(ll.ImageLayout.General)
-
-        node:bind('out_gray', out_gray)
-        node:bind('out_delta_flow', out_delta_flow)
-    end
 
     local out_delta_flow = node:getPort('out_delta_flow')
     ll.logd('FlowUpdateDelta', 'in_flow ', string.format('[%d, %d, %d]', in_flow.width, in_flow.height, in_flow.channelCount)

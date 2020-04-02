@@ -78,12 +78,14 @@ function builder.onNodeInit(node)
 
     local predict_in_flow = memory:createImageView(predictInflowImgDesc, predictInflowViewDesc)
     predict_in_flow:changeImageLayout(ll.ImageLayout.General)
+    predict_in_flow:clear()
     -------------------------------------------------------
 
     -------------------------------------------------------
     -- I can recycle the descriptors
     local predict_in_delta_flow = memory:createImageView(predictInflowImgDesc, predictInflowViewDesc)
     predict_in_delta_flow:changeImageLayout(ll.ImageLayout.General)
+    predict_in_delta_flow:clear()
     -------------------------------------------------------
 
     -------------------------------------------------------
@@ -103,6 +105,7 @@ function builder.onNodeInit(node)
 
     local predict_in_gray = memory:createImageView(predictInGrayImgDesc, predictInGrayViewDesc)
     predict_in_gray:changeImageLayout(ll.ImageLayout.General)
+    predict_in_gray:clear()
     -------------------------------------------------------
 
 
@@ -116,7 +119,6 @@ function builder.onNodeInit(node)
     local update = ll.createComputeNode('FlowUpdateDelta')
     update:setParameter('gamma', gamma)
     update:setParameter('max_flow', max_flow)
-    update:setParameter('allocate_output', 0)
     update:bind('in_gray', imageModel:getPort('out_gray'))
     update:bind('in_gradient', imageModel:getPort('out_gradient'))
     update:bind('in_delta_flow', predictor:getPort('out_vector'))
@@ -133,7 +135,7 @@ function builder.onNodeInit(node)
         flowSmooth:bind('in_flow', smooth_in_flow)
         
         if i == smooth_iterations then
-            flowSmooth:setParameter('allocate_output', false)
+            flowSmooth:setParameter('allocate_output', 0)
             flowSmooth:bind('out_flow', predict_in_flow)
         end
 

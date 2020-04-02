@@ -59,7 +59,6 @@ function builder.onNodeInit(node)
     end
 
     -- in_flow in the last iteration contains the output of the last cycle.
-    in_flow:clear()
     node:bind('out_flow', in_flow)
 
     ll.logd('FlowPredict', 'onNodeInit: finish')

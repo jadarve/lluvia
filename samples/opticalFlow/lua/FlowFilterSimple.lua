@@ -83,7 +83,7 @@ function builder.onNodeInit(node)
         flowSmooth:bind('in_flow', smooth_in_flow)
         
         if i == smooth_iterations then
-            flowSmooth:setParameter('allocate_output', false)
+            flowSmooth:setParameter('allocate_output', 0)
             flowSmooth:bind('out_flow', predict_inflow)
         end
 

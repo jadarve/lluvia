@@ -77,14 +77,14 @@ void main() {
     const vec2 vector_p = bottomBorder ? vector_0 : imageLoad(in_vector, coords + ivec2(0, +1)).xy;
 
     // forward and backward flow differences
-    const vec2 vector_diff_p = flow_p - flow_0;
-    const vec2 vector_diff_m = flow_0 - flow_m;
+    const vec2 vector_diff_p = vector_p - vector_0;
+    const vec2 vector_diff_m = vector_0 - vector_m;
 
     // upstream difference
     const vec2 vector_diff_upstream = Vd >= 0.0f? vector_diff_m : vector_diff_p;
 
     // propagation
-    vec2 vectorPropV = flow_0 - dt * Vd * vector_diff_upstream;
+    vec2 vectorPropV = vector_0 - dt * Vd * vector_diff_upstream;
 
     //#################################
     // BORDER REMOVAL

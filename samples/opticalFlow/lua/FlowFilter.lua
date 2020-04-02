@@ -71,7 +71,7 @@ function builder.onNodeInit(node)
         filterLow:init()
         node:bindNode(string.format('FilterLow_%d', h), filterLow)
 
-        node:bind(string.format('out_gray_%d', h), in_gray)
+        node:bind(string.format('out_gray_%d', h), filterLow:getPort('out_gray'))
         node:bind(string.format('out_flow_%d', h), filterLow:getPort('out_flow'))
         node:bind(string.format('out_delta_flow_%d', h), filterLow:getPort('out_delta_flow'))
 
