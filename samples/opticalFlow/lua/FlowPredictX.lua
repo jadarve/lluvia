@@ -21,7 +21,6 @@ end
 function builder.onNodeInit(node)
 
     local dt = node:getParameter('dt')
-
     ll.logd('FlowPredictX', 'onNodeInit: dt', dt)
 
     local pushConstants = ll.PushConstants.new()

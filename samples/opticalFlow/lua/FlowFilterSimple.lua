@@ -44,22 +44,12 @@ function builder.onNodeInit(node)
 
     local memory = imageModel:getPort('out_gradient').memory
 
-    -- HACK!!! pass in_gray.imageDescriptor so that the usage flags of predict_inflow are set
-    local inflowImgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
-    inflowImgDesc.width = width
-    inflowImgDesc.height = height
-    inflowImgDesc.depth = 1
-    inflowImgDesc.channelCount = 2
-    inflowImgDesc.channelType = ll.ChannelType.Float32
-    -- FIXME: usage flags
+    -- local inflowImgDesc  = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32)
+    -- local inflowViewDesc = ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false)
 
-    local inflowViewDesc = ll.ImageViewDescriptor.new()
-    inflowViewDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
-    inflowViewDesc.filterMode = ll.ImageFilterMode.Nearest
-    inflowViewDesc.isSampled = false
-    inflowViewDesc.normalizedCoordinates = false
-
-    local predict_inflow = memory:createImageView(inflowImgDesc, inflowViewDesc)
+    local predict_inflow = memory:createImageView(
+        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32),
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
     predict_inflow:changeImageLayout(ll.ImageLayout.General)
 
     local predictor = ll.createContainerNode('FlowPredict')
@@ -73,7 +63,6 @@ function builder.onNodeInit(node)
     update:bind('in_gray', imageModel:getPort('out_gray'))
     update:bind('in_gradient', imageModel:getPort('out_gradient'))
     update:bind('in_flow', predictor:getPort('out_flow'))
-    -- update:bind('out_flow', predict_inflow)
     update:init()
 
     local smooth_in_flow = update:getPort('out_flow')
@@ -96,7 +85,6 @@ function builder.onNodeInit(node)
     node:bindNode('Predictor', predictor)
     node:bindNode('Update', update)
 
-    -- node:bind('out_flow', update:getPort('out_flow'))
     node:bind('out_flow', smooth_in_flow)
     node:bind('out_gray', update:getPort('out_gray'))
 

@@ -53,12 +53,8 @@ function builder.onNodeInit(node)
     outFlowImgDesc.width = in_gray.width
     outFlowImgDesc.height = in_gray.height
 
-    local outFlowViewDesc = ll.ImageViewDescriptor.new()
-    outFlowViewDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
-    outFlowViewDesc.filterMode = ll.ImageFilterMode.Nearest
-    outFlowViewDesc.isSampled = false
-    outFlowViewDesc.normalizedCoordinates = false
-
+    local outFlowViewDesc = ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false)
+    
     local out_flow = memory:createImageView(outFlowImgDesc, outFlowViewDesc)
     out_flow:changeImageLayout(ll.ImageLayout.General)
     node:bind('out_flow', out_flow)

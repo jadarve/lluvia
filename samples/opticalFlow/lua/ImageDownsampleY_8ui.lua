@@ -27,9 +27,7 @@ function builder.onNodeInit(node)
     local imgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
     imgDesc.height = in_gray.height // 2
 
-    local imgViewDesc = ll.ImageViewDescriptor.new(in_gray.descriptor)
-    
-    local out_gray = memory:createImageView(imgDesc, imgViewDesc)
+    local out_gray = memory:createImageView(imgDesc, in_gray.descriptor)
 
     -- need to change image layout before binding
     out_gray:changeImageLayout(ll.ImageLayout.General)

@@ -23,34 +23,22 @@ function builder.onNodeInit(node)
     local in_gray = node:getPort('in_gray')
 
     -- ll::Memory where out_prefilter will be allocated
+    local height = in_gray.height
+    local width  = in_gray.width
     local memory = in_gray.memory
 
-    -- out_gray descriptors
-    ll.logd('ImageModel', 'onNodeInit', 'creating image descriptors')
-    local grayImgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
-    grayImgDesc.channelCount = 1
-    grayImgDesc.channelType = ll.ChannelType.Float32
+    local grayImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, ll.ChannelType.Float32)
+    local gradientImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32)
 
-    -- out_gradient descriptors
-    local gradientImgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
-    gradientImgDesc.channelCount = 2
-    gradientImgDesc.channelType = ll.ChannelType.Float32
-
-    -- the image view descriptor has the same parameters for both outputs
-    ll.logd('ImageModel', 'onNodeInit', 'creating image view descriptor')
-    local imgViewDesc = ll.ImageViewDescriptor.new()
-    imgViewDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
-    imgViewDesc.filterMode = ll.ImageFilterMode.Nearest
-    imgViewDesc.isSampled = false
-    imgViewDesc.normalizedCoordinates = false
+    -- normalizedCoordinates : false
+    -- isSampled             : false
+    local imgViewDesc = ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false)
 
     -- memory allocation
-    ll.logd('ImageModel', 'onNodeInit', 'allocating images')
     local out_gray = memory:createImageView(grayImgDesc, imgViewDesc)
     local out_gradient = memory:createImageView(gradientImgDesc, imgViewDesc)
 
     -- need to change image layout before binding
-    ll.logd('ImageModel', 'onNodeInit', 'changing layout')
     out_gray:changeImageLayout(ll.ImageLayout.General)
     out_gradient:changeImageLayout(ll.ImageLayout.General)
 

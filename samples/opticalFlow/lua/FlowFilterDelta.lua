@@ -39,75 +39,39 @@ function builder.onNodeInit(node)
     local width = in_gray.width
     local height = in_gray.height
 
+    local memory = in_gray.memory
+
     ll.logd('FlowFilterDelta', string.format('onNodeInit: input shape: [%d, %d]', width, height))
 
     -- create SampledImageView from in_flow
-    -- TODO: constructor will all common arguments
-    local inFlowSampledDesc = ll.ImageViewDescriptor.new()
-    inFlowSampledDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
-    inFlowSampledDesc.filterMode = ll.ImageFilterMode.Linear
-    inFlowSampledDesc.isSampled = true
-    inFlowSampledDesc.normalizedCoordinates = true
-
-    local in_flow_view = in_flow.image:createImageView(inFlowSampledDesc)
+    -- use normalized coordinates and sampling
+    local in_flow_view = in_flow.image:createImageView(
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Linear, true, true))
 
 
     local imageModel = ll.createComputeNode('ImageModel')
     imageModel:bind('in_gray', in_gray)
     imageModel:init()
 
-    local out_gradient = imageModel:getPort('out_gradient')
-
-
-    local memory = imageModel:getPort('out_gradient').memory
-
-    -------------------------------------------------------
-    -- HACK!!! pass in_gray.imageDescriptor so that the usage flags of predict_inflow are set
-    local predictInflowImgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
-    predictInflowImgDesc.width = width
-    predictInflowImgDesc.height = height
-    predictInflowImgDesc.depth = 1
-    predictInflowImgDesc.channelCount = 2
-    predictInflowImgDesc.channelType = ll.ChannelType.Float32
-
-    local predictInflowViewDesc = ll.ImageViewDescriptor.new()
-    predictInflowViewDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
-    predictInflowViewDesc.filterMode = ll.ImageFilterMode.Nearest
-    predictInflowViewDesc.isSampled = false
-    predictInflowViewDesc.normalizedCoordinates = false
-
-    local predict_in_flow = memory:createImageView(predictInflowImgDesc, predictInflowViewDesc)
+    
+    local predict_in_flow = memory:createImageView(
+        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32),
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
     predict_in_flow:changeImageLayout(ll.ImageLayout.General)
     predict_in_flow:clear()
-    -------------------------------------------------------
-
-    -------------------------------------------------------
-    -- I can recycle the descriptors
-    local predict_in_delta_flow = memory:createImageView(predictInflowImgDesc, predictInflowViewDesc)
+        
+    local predict_in_delta_flow = memory:createImageView(
+        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32),
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
     predict_in_delta_flow:changeImageLayout(ll.ImageLayout.General)
     predict_in_delta_flow:clear()
-    -------------------------------------------------------
-
-    -------------------------------------------------------
-    -- HACK!!! pass in_gray.imageDescriptor so that the usage flags of predict_in_flow are set
-    local predictInGrayImgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)
-    predictInGrayImgDesc.width = width
-    predictInGrayImgDesc.height = height
-    predictInGrayImgDesc.depth = 1
-    predictInGrayImgDesc.channelCount = 1
-    predictInGrayImgDesc.channelType = ll.ChannelType.Float32
-
-    local predictInGrayViewDesc = ll.ImageViewDescriptor.new()
-    predictInGrayViewDesc:setAddressMode(ll.ImageAddressMode.MirroredRepeat)
-    predictInGrayViewDesc.filterMode = ll.ImageFilterMode.Nearest
-    predictInGrayViewDesc.isSampled = false
-    predictInGrayViewDesc.normalizedCoordinates = false
-
-    local predict_in_gray = memory:createImageView(predictInGrayImgDesc, predictInGrayViewDesc)
+    
+    local predict_in_gray = memory:createImageView(
+        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, ll.ChannelType.Float32),
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
     predict_in_gray:changeImageLayout(ll.ImageLayout.General)
     predict_in_gray:clear()
-    -------------------------------------------------------
-
+    
 
     local predictor = ll.createContainerNode('FlowPredictPayload')
     predictor:setParameter('max_flow', max_flow)
