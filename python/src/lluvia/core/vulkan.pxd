@@ -25,3 +25,6 @@ cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
 
     cdef cppclass Format 'vk::Format':
         pass
+
+    cdef cppclass ImageTiling 'vk::ImageTiling':
+        pass

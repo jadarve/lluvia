@@ -103,20 +103,19 @@ void registerTypes(sol::table& lib) {
     ///////////////////////////////////////////////////////
     // Descriptors
     ///////////////////////////////////////////////////////
-
-    // TODO: usageFlags, tiling
     lib.new_usertype<ll::ImageDescriptor>("ImageDescriptor",
         sol::constructors<
             ll::ImageDescriptor(),
             ll::ImageDescriptor(const ll::ImageDescriptor&),
-            // ll::ImageDescriptor(const uint32_t, const uint32_t, const uint32_t, const ll::ChannelCount, const ll::ChannelType, const vk::ImageUsageFlags, const vk::ImageTiling),
-            ll::ImageDescriptor(const uint32_t, const uint32_t, const uint32_t, const ll::ChannelCount)>(),
+            ll::ImageDescriptor(const uint32_t, const uint32_t, const uint32_t, const ll::ChannelCount, const ll::ChannelType)>(),
         "channelType", sol::property(&ll::ImageDescriptor::getChannelType, &ll::ImageDescriptor::setChannelType),
         "channelCount", sol::property(&ll::ImageDescriptor::getChannelCount<ll::ChannelCount>, &ll::ImageDescriptor::setChannelCount),
         "width", sol::property(&ll::ImageDescriptor::getWidth, &ll::ImageDescriptor::setWidth),
         "height", sol::property(&ll::ImageDescriptor::getHeight, &ll::ImageDescriptor::setHeight),
         "depth", sol::property(&ll::ImageDescriptor::getDepth, &ll::ImageDescriptor::setDepth),
-        "shape", sol::property(&ll::ImageDescriptor::getShape, &ll::ImageDescriptor::setShape)
+        "shape", sol::property(&ll::ImageDescriptor::getShape, &ll::ImageDescriptor::setShape),
+        "tiling", sol::property(&ll::ImageDescriptor::getTiling, &ll::ImageDescriptor::setTiling),
+        "usageFlags", sol::property(&ll::ImageDescriptor::getUsageFlagsUnsafe, &ll::ImageDescriptor::setUsageFlagsUnsafe)
         );
 
     lib.new_usertype<ll::ImageViewDescriptor>("ImageViewDescriptor",
@@ -178,16 +177,17 @@ void registerTypes(sol::table& lib) {
         "type", sol::property(&ll::Object::getType)
         );
 
+    // TODO: usage flags
     lib.new_usertype<ll::Buffer>("Buffer",
         sol::no_constructor,
         sol::base_classes, sol::bases<ll::Object>(),
         "size", sol::property(&ll::Buffer::getSize),
         "isMappable", sol::property(&ll::Buffer::isMappable),
         "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo),
+        "usageFlags", sol::property(&ll::Buffer::getUsageFlagsUnsafe),
         "memory", sol::property(&ll::Buffer::getMemory)
         );
 
-    // TODO: layout, usageFlags, createImageView
     lib.new_usertype<ll::Image>("Image",
         sol::no_constructor,
         sol::base_classes, sol::bases<ll::Object>(),
@@ -201,12 +201,14 @@ void registerTypes(sol::table& lib) {
         "height", sol::property(&ll::Image::getHeight),
         "depth", sol::property(&ll::Image::getDepth),
         "shape", sol::property(&ll::Image::getShape),
+        "layout", sol::property(&ll::Image::getLayout),
+        "tiling", sol::property(&ll::Image::getTiling),
+        "usageFlags", sol::property(&ll::Image::getUsageFlagsUnsafe),
         "changeImageLayout", &ll::Image::changeImageLayout,
         "clear", &ll::Image::clear,
         "createImageView", &ll::Image::createImageView
         );
 
-    // TODO: usage flags, layout
     lib.new_usertype<ll::ImageView>("ImageView",
         sol::no_constructor,
         sol::base_classes, sol::bases<ll::Object>(),
@@ -222,6 +224,9 @@ void registerTypes(sol::table& lib) {
         "height", sol::property(&ll::ImageView::getHeight),
         "depth", sol::property(&ll::ImageView::getDepth),
         "shape", sol::property(&ll::ImageView::getShape),
+        "layout", sol::property(&ll::ImageView::getLayout),
+        "tiling", sol::property(&ll::ImageView::getTiling),
+        "usageFlags", sol::property(&ll::ImageView::getUsageFlagsUnsafe),
         "changeImageLayout", &ll::ImageView::changeImageLayout,
         "clear", &ll::ImageView::clear
         );

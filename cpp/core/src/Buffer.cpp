@@ -58,6 +58,11 @@ vk::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
 }
 
 
+uint32_t Buffer::getUsageFlagsUnsafe() const noexcept {
+    return static_cast<uint32_t>(m_vkUsageFlags);
+}
+
+
 bool Buffer::isMappable() const noexcept {
     return m_memory->isMappable();
 }

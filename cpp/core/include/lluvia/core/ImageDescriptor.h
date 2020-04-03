@@ -202,28 +202,33 @@ public:
     @param[in]  depth          The depth. It must be greater than zero.
     @param[in]  height         The height. It must be greater than zero.
     @param[in]  width          The width. It must be greater than zero.
-    @param[in]  tChannelCount  The channel count. It must be between 1 and 4.
-    @param[in]  tChannelType   The channel type.
-    @param[in]  tUsageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
-                               See @VULKAN_DOC#VkBufferUsageFlagBits.
-    @param[in]  tTiling        The image tiling. Defaults to `vk::ImageTiling::eOptimal`.
+    @param[in]  channelCount   The channel count. It must be between 1 and 4.
+    @param[in]  channelType    The channel type.
     */
     ImageDescriptor(const uint32_t depth,
                     const uint32_t height,
                     const uint32_t width,
-                    const ll::ChannelCount tChannelCount,
-                    const ll::ChannelType tChannelType,
-                    const vk::ImageUsageFlags tUsageFlags = {  vk::ImageUsageFlagBits::eStorage
-                                                             | vk::ImageUsageFlagBits::eSampled},
-                    const vk::ImageTiling tTiling = vk::ImageTiling::eOptimal
-                    );
+                    const ll::ChannelCount channelCount,
+                    const ll::ChannelType channelType);
 
-    // Test constructor
-    // FIXME: add channel type
+    /**
+    @brief      Constructs the object.
+    
+    @param[in]  depth          The depth. It must be greater than zero.
+    @param[in]  height         The height. It must be greater than zero.
+    @param[in]  width          The width. It must be greater than zero.
+    @param[in]  channelCount   The channel count. It must be between 1 and 4.
+    @param[in]  channelType    The channel type.
+    @param[in]  usageFlags     The usage flags. See @VULKAN_DOC#VkImageUsageFlagBits.
+    @param[in]  tiling         The image tiling. See @VULKAN_DOC#VkImageTiling.
+    */
     ImageDescriptor(const uint32_t depth,
                     const uint32_t height,
                     const uint32_t width,
-                    const ll::ChannelCount tChannelCount);
+                    const ll::ChannelCount channelCount,
+                    const ll::ChannelType channelType,
+                    const vk::ImageUsageFlags usageFlags,
+                    const vk::ImageTiling tiling);
 
     ~ImageDescriptor()                                              = default;
     
@@ -298,9 +303,21 @@ public:
     /**
     @brief      Sets the usage flags.
     
-    @return     The usage flags.
+    @return     A reference to this object.
     */
     ImageDescriptor& setUsageFlags(const vk::ImageUsageFlags flags) noexcept;
+
+
+    /**
+    @brief      Sets the usage flags from an integer type.
+
+    Please do not use this method. It's for internal use only.
+    
+    @param[in]  flags  The flags
+    
+    @return     A reference to this object
+    */
+    ImageDescriptor& setUsageFlagsUnsafe(const uint32_t flags) noexcept;
 
 
     /**
@@ -422,6 +439,15 @@ public:
     @return     The image tiling.
     */
     vk::ImageTiling getTiling() const noexcept;
+
+    /**
+    @brief      Gets the usage flags casted to an integer type.
+
+    Please do not use this method. It's for internal use only.
+    
+    @return     The usage flags unsafe.
+    */
+    uint32_t getUsageFlagsUnsafe() const noexcept;
 
 private:
     ll::ChannelType m_channelType    {ll::ChannelType::Uint8};

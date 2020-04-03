@@ -199,6 +199,8 @@ public:
     ImageViewDescriptor(const ImageViewDescriptor& descriptor)              = default;
     ImageViewDescriptor(ImageViewDescriptor&& descriptor)                   = default;
 
+    // ImageViewDescriptor(const ll::ImageFilterMode filterMode)
+
     ~ImageViewDescriptor()                                                  = default;
     
     ImageViewDescriptor& operator = (const ImageViewDescriptor& descriptor) = default;

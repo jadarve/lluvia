@@ -14,7 +14,7 @@ from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
 from lluvia.core.enums.image cimport ChannelType
 from lluvia.core.enums.image import ImageUsageFlagBits
 
-from lluvia.core.enums.vulkan cimport ImageLayout
+from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
 
 from session import Session
 from session cimport Session
@@ -357,12 +357,13 @@ cdef class Memory:
 
         cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ImageUsageFlagBits)
         cdef vk.ImageUsageFlags vkUsageFlags = <vk.ImageUsageFlags> flattenFlags
+        cdef vk.ImageTiling tiling = <vk.ImageTiling> ImageTiling.Optimal
 
         cdef image._ChannelType cType = <image._ChannelType> channelType
 
         cdef image._ChannelCount cCount = image.castChannelCount[uint32_t](channels)
 
-        cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags)
+        cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
 
         cdef image.Image img = image.Image()
         img.__image   = self.__memory.get().createImage(desc)

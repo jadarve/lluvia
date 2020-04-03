@@ -172,6 +172,16 @@ public:
 
 
     /**
+    @brief      Gets the usage flags casted to an integer type.
+
+    Please do not use this method. It's for internal use only.
+    
+    @return     The usage flags unsafe.
+    */
+    uint32_t getUsageFlagsUnsafe() const noexcept;
+
+
+    /**
     @brief      Determines if this buffer is mappable to host-visible memory.
 
     This function calls ll::Memory::isPageMappable from the memory this

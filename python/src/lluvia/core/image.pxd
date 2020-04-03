@@ -41,7 +41,8 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
                     const uint32_t depth,
                     _ChannelCount channelCount,
                     _ChannelType channelType,
-                    const vk.ImageUsageFlags usageFlags)
+                    const vk.ImageUsageFlags usageFlags,
+                    const vk.ImageTiling tiling)
 
 
         _ImageDescriptor& setChannelType(const _ChannelType type)

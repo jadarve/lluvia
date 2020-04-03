@@ -126,7 +126,9 @@ ImageDescriptor::ImageDescriptor(const uint32_t depth,
 ImageDescriptor::ImageDescriptor(const uint32_t depth,
                     const uint32_t height,
                     const uint32_t width,
-                    const ll::ChannelCount channelCount):
+                    const ll::ChannelCount channelCount,
+                    const ll::ChannelType channelType):
+    m_channelType {channelType},
     m_channelCount {channelCount} {
 
     setWidth(width);
@@ -248,6 +250,18 @@ vk::ImageUsageFlags ImageDescriptor::getUsageFlags() const noexcept {
 
 vk::ImageTiling ImageDescriptor::getTiling() const noexcept {
     return m_tiling;
+}
+
+
+ImageDescriptor& ImageDescriptor::setUsageFlagsUnsafe(const uint32_t flags) noexcept {
+
+    m_usageFlags = static_cast<vk::ImageUsageFlags>(flags);
+    return *this;
+}
+
+
+uint32_t ImageDescriptor::getUsageFlagsUnsafe() const noexcept {
+    return static_cast<uint32_t>(m_usageFlags);
 }
 
 } // namespace ll

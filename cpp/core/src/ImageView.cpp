@@ -92,8 +92,18 @@ vk::ImageUsageFlags ImageView::getUsageFlags() const noexcept {
 }
 
 
+uint32_t ImageView::getUsageFlagsUnsafe() const noexcept {
+    return m_image->getUsageFlagsUnsafe();
+}
+
+
 vk::ImageLayout ImageView::getLayout() const noexcept {
     return m_image->getLayout();
+}
+
+
+vk::ImageTiling ImageView::getTiling() const noexcept {
+    return m_image->getTiling();
 }
 
 
