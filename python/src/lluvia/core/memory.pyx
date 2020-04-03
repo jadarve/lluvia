@@ -362,7 +362,7 @@ cdef class Memory:
 
         cdef image._ChannelCount cCount = image.castChannelCount[uint32_t](channels)
 
-        cdef image._ImageDescriptor desc = image._ImageDescriptor(width, height, depth, cCount, cType, vkUsageFlags)
+        cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags)
 
         cdef image.Image img = image.Image()
         img.__image   = self.__memory.get().createImage(desc)

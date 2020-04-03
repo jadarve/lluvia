@@ -74,6 +74,16 @@ namespace impl {
         std::make_tuple("DepthAttachmentStencilReadOnlyOptimalKHR" , vk::ImageLayout::eDepthAttachmentStencilReadOnlyOptimalKHR),
     }};
 
+    /**
+    String values for Vulkan VkImageTiling values.
+
+    See @VULKAN_DOC#VkImageTiling for more information.
+    */
+    constexpr const std::array<std::tuple<const char *, vk::ImageTiling>, 2> VkImageTilingStrings{{
+        std::make_tuple("Optimal", vk::ImageTiling::eOptimal),
+        std::make_tuple("Linear", vk::ImageTiling::eLinear),
+    }};
+
 } // namespace impl
 
 
@@ -141,6 +151,42 @@ corresponding enum value is returned. The comparison is case sensitive.
 template<typename T>
 inline vk::ImageLayout stringToImageLayout(T&& stringValue) {
     return impl::stringToEnum<vk::ImageLayout, T, ll::impl::VkImageLayoutStrings.size(), ll::impl::VkImageLayoutStrings>(std::forward<T>(stringValue));
+}
+
+
+/**
+@brief      Converts from vk::ImageTiling enum value to string
+
+@param[in]  tiling  Vulkan image tiling enum.
+
+@tparam     T          function return type. Defaults to std::string-
+
+@return     Returns the corresponding `std::string` in ll::impl::VkImageTilingStrings for the enum value.
+*/
+template <typename T = std::string>
+inline T imageTilingToString(vk::ImageTiling &&tiling) noexcept {
+    return impl::enumToString<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(std::forward<vk::ImageTiling>(tiling));
+}
+
+
+/**
+@brief      Converst from a string-like object to vk::ImageTiling.
+
+This function can be used either with string literals, const char* or `std::string` objects.
+\p stringValue parameter is compared against the values in ll::impl::VkImageTilingStrings and the
+corresponding enum value is returned. The comparison is case sensitive.
+
+@param[in]  stringValue  string-like parameter. String literals and `std::string` objects are allowed.
+
+@tparam     T          \p stringValue type. \p T must satisfies `std::is_convertible<T, std::string>()`
+
+@return     vk::ImageTiling value corresponding to stringValue.
+
+@throws std::out_of_range if \p stringValue is not found in ll::impl::VkImageTilingStrings.
+*/
+template <typename T>
+inline vk::ImageTiling stringToImageTiling(T &&stringValue) {
+    return impl::stringToEnum<vk::ImageTiling, T, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(std::forward<T>(stringValue));
 }
 
 

@@ -48,8 +48,8 @@ void registerEnum(sol::table& lib, const std::string& enumName) {
         target[std::get<0>(kv)] = std::get<1>(kv);
     }
 
-    auto x = lib.create_with(sol::meta_function::new_index, failOnNewIndex, sol::meta_function::index, target);
-    auto shim = lib.create_named(enumName, sol::metatable_key, x);
+    // auto x = lib.create_with(sol::meta_function::new_index, failOnNewIndex, sol::meta_function::index, target);
+    // auto shim = lib.create_named(enumName, sol::metatable_key, x);
 }
 
 void registerTypes(sol::table& lib) {
@@ -71,6 +71,7 @@ void registerTypes(sol::table& lib) {
     registerEnum<vk::BufferUsageFlagBits, ll::impl::VkBufferUsageFlagBitsStrings.size(), ll::impl::VkBufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
     registerEnum<vk::ImageLayout, ll::impl::VkImageLayoutStrings.size(), ll::impl::VkImageLayoutStrings>(lib, "ImageLayout");
     registerEnum<vk::ImageUsageFlagBits, ll::impl::VkImageUsageFlagBitsStrings.size(), ll::impl::VkImageUsageFlagBitsStrings>(lib, "ImageUsageFlagBits");
+    registerEnum<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(lib, "ImageTiling");
 
     ///////////////////////////////////////////////////////
     // Types
@@ -105,7 +106,11 @@ void registerTypes(sol::table& lib) {
 
     // TODO: usageFlags, tiling
     lib.new_usertype<ll::ImageDescriptor>("ImageDescriptor",
-        sol::constructors<ll::ImageDescriptor(), ll::ImageDescriptor(const ll::ImageDescriptor&)>(),
+        sol::constructors<
+            ll::ImageDescriptor(),
+            ll::ImageDescriptor(const ll::ImageDescriptor&),
+            // ll::ImageDescriptor(const uint32_t, const uint32_t, const uint32_t, const ll::ChannelCount, const ll::ChannelType, const vk::ImageUsageFlags, const vk::ImageTiling),
+            ll::ImageDescriptor(const uint32_t, const uint32_t, const uint32_t, const ll::ChannelCount)>(),
         "channelType", sol::property(&ll::ImageDescriptor::getChannelType, &ll::ImageDescriptor::setChannelType),
         "channelCount", sol::property(&ll::ImageDescriptor::getChannelCount<ll::ChannelCount>, &ll::ImageDescriptor::setChannelCount),
         "width", sol::property(&ll::ImageDescriptor::getWidth, &ll::ImageDescriptor::setWidth),

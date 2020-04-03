@@ -199,24 +199,31 @@ public:
     /**
     @brief      Constructs the object.
     
-    @param[in]  width          The width. It must be greater than zero.
-    @param[in]  height         The height. It must be greater than zero.
     @param[in]  depth          The depth. It must be greater than zero.
+    @param[in]  height         The height. It must be greater than zero.
+    @param[in]  width          The width. It must be greater than zero.
     @param[in]  tChannelCount  The channel count. It must be between 1 and 4.
     @param[in]  tChannelType   The channel type.
     @param[in]  tUsageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
                                See @VULKAN_DOC#VkBufferUsageFlagBits.
     @param[in]  tTiling        The image tiling. Defaults to `vk::ImageTiling::eOptimal`.
     */
-    ImageDescriptor(const uint32_t width,
+    ImageDescriptor(const uint32_t depth,
                     const uint32_t height,
-                    const uint32_t depth,
+                    const uint32_t width,
                     const ll::ChannelCount tChannelCount,
                     const ll::ChannelType tChannelType,
                     const vk::ImageUsageFlags tUsageFlags = {  vk::ImageUsageFlagBits::eStorage
                                                              | vk::ImageUsageFlagBits::eSampled},
                     const vk::ImageTiling tTiling = vk::ImageTiling::eOptimal
                     );
+
+    // Test constructor
+    // FIXME: add channel type
+    ImageDescriptor(const uint32_t depth,
+                    const uint32_t height,
+                    const uint32_t width,
+                    const ll::ChannelCount tChannelCount);
 
     ~ImageDescriptor()                                              = default;
     
@@ -276,7 +283,7 @@ public:
     /**
     @brief      Sets the image shape.
     
-    @param[in]  tShape  The shape. The components of this vector
+    @param[in]  shape  The shape. The components of this vector
         must be interpreted as:
         
             x : width
@@ -285,7 +292,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageDescriptor& setShape(const ll::vec3ui& tShape)          noexcept;
+    ImageDescriptor& setShape(const ll::vec3ui& shape)          noexcept;
 
 
     /**
@@ -323,7 +330,7 @@ public:
     */
     template<typename T=ll::ChannelCount>
     T getChannelCount() const noexcept {
-        return static_cast<T>(channelCount);
+        return static_cast<T>(m_channelCount);
     }
 
 
@@ -417,17 +424,17 @@ public:
     vk::ImageTiling getTiling() const noexcept;
 
 private:
-    ll::ChannelType channelType   {ll::ChannelType::Uint8};
-    ll::ChannelCount channelCount {ll::ChannelCount::C1};
+    ll::ChannelType m_channelType    {ll::ChannelType::Uint8};
+    ll::ChannelCount m_channelCount  {ll::ChannelCount::C1};
 
     // dimensions along each axis
     // x : width
     // y : height
     // z : depth
-    ll::vec3ui shape              {1, 1, 1};
+    ll::vec3ui m_shape               {1, 1, 1};
 
-    vk::ImageTiling tiling        {vk::ImageTiling::eOptimal};
-    vk::ImageUsageFlags usageFlags;
+    vk::ImageTiling m_tiling         {vk::ImageTiling::eOptimal};
+    vk::ImageUsageFlags m_usageFlags {vk::ImageUsageFlagBits::eStorage| vk::ImageUsageFlagBits::eSampled};
 };
 
 

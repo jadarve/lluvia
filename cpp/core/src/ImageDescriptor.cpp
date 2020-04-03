@@ -105,112 +105,124 @@ vk::Format getVulkanImageFormat(ll::ChannelCount channelCount, ll::ChannelType c
 }
 
 
-ImageDescriptor::ImageDescriptor(const uint32_t width,
+ImageDescriptor::ImageDescriptor(const uint32_t depth,
                                  const uint32_t height,
-                                 const uint32_t depth,
-                                 const ll::ChannelCount tChannelCount,
-                                 const ll::ChannelType tChannelType,
-                                 const vk::ImageUsageFlags tUsageFlags,
-                                 const vk::ImageTiling tTiling):
-    channelType  {tChannelType},
-    tiling       {tTiling},
-    usageFlags   {tUsageFlags} {
+                                 const uint32_t width,
+                                 const ll::ChannelCount channelCount,
+                                 const ll::ChannelType channelType,
+                                 const vk::ImageUsageFlags usageFlags,
+                                 const vk::ImageTiling tiling):
+    m_channelType  {channelType},
+    m_channelCount {channelCount},
+    m_tiling       {tiling},
+    m_usageFlags   {usageFlags} {
 
     setWidth(width);
     setHeight(height);
     setDepth(depth);
-    setChannelCount(tChannelCount);
+}
+
+
+ImageDescriptor::ImageDescriptor(const uint32_t depth,
+                    const uint32_t height,
+                    const uint32_t width,
+                    const ll::ChannelCount channelCount):
+    m_channelCount {channelCount} {
+
+    setWidth(width);
+    setHeight(height);
+    setDepth(depth);
 }
 
 
 ImageDescriptor& ImageDescriptor::setChannelType(const ll::ChannelType type) noexcept {
     
-    channelType = type;
+    m_channelType = type;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setChannelCount(const ll::ChannelCount count) noexcept {
 
-    channelCount = count;
+    m_channelCount = count;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setWidth(const uint32_t width) noexcept {
 
-    shape.x = width;
+    m_shape.x = width;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setHeight(const uint32_t height) noexcept {
 
-    shape.y = height;
+    m_shape.y = height;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setDepth(const uint32_t depth) noexcept {
 
-    shape.z = depth;
+    m_shape.z = depth;
     return *this;
 }
 
 
-ImageDescriptor& ImageDescriptor::setShape(const ll::vec3ui& tShape) noexcept {
+ImageDescriptor& ImageDescriptor::setShape(const ll::vec3ui& shape) noexcept {
     
-    shape = tShape;
+    m_shape = shape;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setUsageFlags(const vk::ImageUsageFlags flags) noexcept {
 
-    usageFlags = flags;
+    m_usageFlags = flags;
     return *this;
 }
 
 
 ImageDescriptor& ImageDescriptor::setTiling(const vk::ImageTiling tTiling) noexcept {
 
-    tiling = tTiling;
+    m_tiling = tTiling;
     return *this;
 }
 
 
 ll::ChannelType ImageDescriptor::getChannelType() const noexcept {
-    return channelType;
+    return m_channelType;
 }
 
 
 uint32_t ImageDescriptor::getWidth() const noexcept {
-    return shape.x;
+    return m_shape.x;
 }
 
 
 uint32_t ImageDescriptor::getHeight() const noexcept {
-    return shape.y;
+    return m_shape.y;
 }
 
 
 uint32_t ImageDescriptor::getDepth() const noexcept {
-    return shape.z;
+    return m_shape.z;
 }
 
 
 uint64_t ImageDescriptor::getSize() const noexcept {
 
-    auto w = uint64_t {shape.x};
-    auto h = uint64_t {shape.y};
-    auto d = uint64_t {shape.z};
-    auto c = static_cast<uint64_t>(channelCount);
-    return w*h*d*c*getChannelTypeSize(channelType);
+    auto w = uint64_t {m_shape.x};
+    auto h = uint64_t {m_shape.y};
+    auto d = uint64_t {m_shape.z};
+    auto c = static_cast<uint64_t>(m_channelCount);
+    return w*h*d*c*getChannelTypeSize(m_channelType);
 }
 
 ll::vec3ui ImageDescriptor::getShape() const noexcept {
 
-    return shape;
+    return m_shape;
 }
 
 
@@ -225,17 +237,17 @@ vk::ImageType ImageDescriptor::getImageType() const noexcept {
 
 vk::Format ImageDescriptor::getFormat() const noexcept {
 
-    return getVulkanImageFormat(channelCount, channelType);
+    return getVulkanImageFormat(m_channelCount, m_channelType);
 }
 
 
 vk::ImageUsageFlags ImageDescriptor::getUsageFlags() const noexcept {
-    return usageFlags;
+    return m_usageFlags;
 }
 
 
 vk::ImageTiling ImageDescriptor::getTiling() const noexcept {
-    return tiling;
+    return m_tiling;
 }
 
 } // namespace ll

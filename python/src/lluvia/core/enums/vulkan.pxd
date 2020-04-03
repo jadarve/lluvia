@@ -46,6 +46,11 @@ cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
         _ImageLayout_DepthAttachmentStencilReadOnlyOptimalKHR 'vk::ImageLayout::eDepthAttachmentStencilReadOnlyOptimalKHR'
 
 
+    cdef enum _ImageTiling 'vk::ImageTiling':
+        _ImageTiling_Optimal 'vk::ImageTiling::eOptimal'
+        _ImageTiling_Linear  'vk::ImageTiling::eLinear'
+
+
     cdef enum _ImageType 'vk::ImageType':
         _ImageType_1D 'vk::ImageType::e1D'
         _ImageType_2D 'vk::ImageType::e2D'
@@ -137,6 +142,11 @@ cpdef enum ImageLayout:
     SharedPresentKHR                         = <uint32_t> _ImageLayout_SharedPresentKHR
     DepthReadOnlyStencilAttachmentOptimalKHR = <uint32_t> _ImageLayout_DepthReadOnlyStencilAttachmentOptimalKHR
     DepthAttachmentStencilReadOnlyOptimalKHR = <uint32_t> _ImageLayout_DepthAttachmentStencilReadOnlyOptimalKHR
+
+
+cpdef enum ImageTiling:
+    Optimal = <uint32_t> _ImageTiling_Optimal
+    Linear  = <uint32_t> _ImageTiling_Linear
 
 
 cpdef enum Format:

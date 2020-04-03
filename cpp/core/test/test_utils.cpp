@@ -46,7 +46,7 @@ TEST_CASE("createInitImage", "test_utils") {
                                               | vk::ImageUsageFlagBits::eSampled
                                               | vk::ImageUsageFlagBits::eTransferDst};
 
-    const auto imgDesc = ll::ImageDescriptor {width, height, 1, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags};
+    const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags};
 
 
     auto session = ll::Session::create();
@@ -69,7 +69,7 @@ TEST_CASE("configureGraph", "test_utils") {
                                               | vk::ImageUsageFlagBits::eSampled
                                               | vk::ImageUsageFlagBits::eTransferDst};
 
-    const auto imgDesc = ll::ImageDescriptor {width, height, 1, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags};
+    const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags};
 
     auto session = ll::Session::create();
     auto memory = session->createMemory(memoryFlags, 0);
