@@ -119,7 +119,10 @@ void registerTypes(sol::table& lib) {
         );
 
     lib.new_usertype<ll::ImageViewDescriptor>("ImageViewDescriptor",
-        sol::constructors<ll::ImageViewDescriptor(), ll::ImageViewDescriptor(const ll::ImageViewDescriptor&)>(),
+        sol::constructors<
+            ll::ImageViewDescriptor(),
+            ll::ImageViewDescriptor(const ll::ImageViewDescriptor&),
+            ll::ImageViewDescriptor(const ll::ImageAddressMode, const ll::ImageFilterMode, const bool, const bool)>(),
         "filterMode", sol::property(&ll::ImageViewDescriptor::getFilterMode, &ll::ImageViewDescriptor::setFilterMode),
         "addressModeU", sol::property(&ll::ImageViewDescriptor::getAddressModeU),
         "addressModeV", sol::property(&ll::ImageViewDescriptor::getAddressModeV),
@@ -177,7 +180,6 @@ void registerTypes(sol::table& lib) {
         "type", sol::property(&ll::Object::getType)
         );
 
-    // TODO: usage flags
     lib.new_usertype<ll::Buffer>("Buffer",
         sol::no_constructor,
         sol::base_classes, sol::bases<ll::Object>(),

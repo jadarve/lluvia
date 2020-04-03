@@ -10,6 +10,86 @@
 
 namespace ll {
 
+ImageViewDescriptor::ImageViewDescriptor(const ll::ImageAddressMode addressMode,
+                        const ll::ImageFilterMode filterMode,
+                        const bool normalizedCoordinates,
+                        const bool isSampled):
+    m_filterMode {filterMode},
+    m_addressMode {addressMode},
+    m_normalizedCoordinates {normalizedCoordinates},
+    m_isSampled {isSampled} {
+
+}
+
+
+ImageViewDescriptor& ImageViewDescriptor::setFilterMode(ll::ImageFilterMode filterMode) noexcept {
+
+    this->m_filterMode = filterMode;
+    return *this;
+}
+
+
+ll::ImageFilterMode ImageViewDescriptor::getFilterMode() const noexcept {
+
+    return m_filterMode;
+}
+
+
+ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAddressMode addressMode) noexcept {
+
+    for (auto& it : this->m_addressMode) {
+        it = addressMode;
+    }
+    return *this;
+}
+
+
+ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept {
+    
+    this->m_addressMode[static_cast<uint32_t>(axis)] = addressMode;
+    return *this;
+}
+
+
+ll::ImageAddressMode ImageViewDescriptor::getAddressModeU() const noexcept {
+    return m_addressMode[static_cast<uint32_t>(ll::ImageAxis::U)];
+}
+
+
+ll::ImageAddressMode ImageViewDescriptor::getAddressModeV() const noexcept {
+    return m_addressMode[static_cast<uint32_t>(ll::ImageAxis::V)];
+}
+
+
+ll::ImageAddressMode ImageViewDescriptor::getAddressModeW() const noexcept {
+    return m_addressMode[static_cast<uint32_t>(ll::ImageAxis::W)];
+}
+
+
+ImageViewDescriptor& ImageViewDescriptor::setNormalizedCoordinates(bool normalizedCoordinates) noexcept {
+
+    this->m_normalizedCoordinates = normalizedCoordinates;
+    return *this;
+}
+
+
+bool ImageViewDescriptor::isNormalizedCoordinates() const noexcept {
+    return m_normalizedCoordinates;
+}
+
+
+ImageViewDescriptor& ImageViewDescriptor::setIsSampled(bool isSampled) noexcept {
+
+    this->m_isSampled = isSampled;
+    return *this;
+}
+
+
+bool ImageViewDescriptor::isSampled() const noexcept {
+
+    return m_isSampled;
+}
+
 
 vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexcept {
 
@@ -24,10 +104,10 @@ vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexce
     };
 
     auto info = vk::SamplerCreateInfo {}
-                .setAddressModeU(getVkAddressMode(addressMode[static_cast<uint32_t>(ll::ImageAxis::U)]))
-                .setAddressModeV(getVkAddressMode(addressMode[static_cast<uint32_t>(ll::ImageAxis::V)]))
-                .setAddressModeW(getVkAddressMode(addressMode[static_cast<uint32_t>(ll::ImageAxis::W)]))
-                .setUnnormalizedCoordinates(!normalizedCoordinates)
+                .setAddressModeU(getVkAddressMode(m_addressMode[static_cast<uint32_t>(ll::ImageAxis::U)]))
+                .setAddressModeV(getVkAddressMode(m_addressMode[static_cast<uint32_t>(ll::ImageAxis::V)]))
+                .setAddressModeW(getVkAddressMode(m_addressMode[static_cast<uint32_t>(ll::ImageAxis::W)]))
+                .setUnnormalizedCoordinates(!m_normalizedCoordinates)
                 .setAnisotropyEnable(false)
                 .setMaxAnisotropy(1.0f)
                 .setCompareEnable(false)
@@ -38,7 +118,7 @@ vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexce
                 .setMaxLod(0.0f);
 
     // filter mode
-    switch (filterMode) {
+    switch (m_filterMode) {
         case ll::ImageFilterMode::Nearest:
             info.setMinFilter(vk::Filter::eNearest);
             info.setMagFilter(vk::Filter::eNearest);
@@ -54,19 +134,5 @@ vk::SamplerCreateInfo ImageViewDescriptor::getVkSamplerCreateInfo() const noexce
     return info;
 }
 
-
-ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAddressMode tAddressMode) noexcept {
-
-    for (auto& it : this->addressMode) {
-        it = tAddressMode;
-    }
-    return *this;
-}
-
-ImageViewDescriptor& ImageViewDescriptor::setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode tAddressMode) noexcept {
-    
-    this->addressMode[static_cast<uint32_t>(axis)] = tAddressMode;
-    return *this;
-}
 
 }; // namespace ll
