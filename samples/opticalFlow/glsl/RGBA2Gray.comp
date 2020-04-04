@@ -35,7 +35,7 @@ void main() {
     }
 
     const uvec4 RGBA = imageLoad(in_rgba, coords);
-    const uint  gray = rgba2gray(RGBA);
+    const uint  gray = color_rgba2gray(RGBA);
 
     imageStore(out_gray, coords, uvec4(gray));
 }

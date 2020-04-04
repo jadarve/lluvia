@@ -98,3 +98,30 @@ glsl_shader(
     ],
     visibility = ["//visibility:public"]
 )
+
+glsl_shader(
+    name = "Flow2RGBA_shader",
+    shader = "glsl/Flow2RGBA.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "RGBA2HSVA_shader",
+    shader = "glsl/RGBA2HSVA.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "HSVA2RGBA_shader",
+    shader = "glsl/HSVA2RGBA.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
