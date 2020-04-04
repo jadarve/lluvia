@@ -460,7 +460,10 @@ private:
     ll::vec3ui m_shape               {1, 1, 1};
 
     vk::ImageTiling m_tiling         {vk::ImageTiling::eOptimal};
-    vk::ImageUsageFlags m_usageFlags {vk::ImageUsageFlagBits::eStorage| vk::ImageUsageFlagBits::eSampled};
+    vk::ImageUsageFlags m_usageFlags {vk::ImageUsageFlagBits::eStorage |
+                                      vk::ImageUsageFlagBits::eSampled |
+                                      vk::ImageUsageFlagBits::eTransferSrc |
+                                      vk::ImageUsageFlagBits::eTransferDst};
 };
 
 
