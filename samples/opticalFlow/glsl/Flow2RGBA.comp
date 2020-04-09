@@ -20,18 +20,20 @@ void main() {
     }
 
     vec2 flow = imageLoad(in_flow, coords).xy;
+    bool isInvalid = any(isinf(flow)) || any(isnan(flow));
+
     const float normClamped = clamp(length(flow) / params.maxflow, 0, 1);
 
-    float h = 3.14159 + atan(-flow.y, -flow.x);
-
-    // saturation increases linearly with the norm
-    const float s = normClamped;
-
-    // value increases logaritmically with the norm.
-    // For norm equal zero, the rgb value is black
-    const float v = 0.3 * log(normClamped) + 1;;
-
-    const vec4 hsva = vec4(h, s, v, 0);
+    // * Saturation increases linearly with the norm
+    // * Value increases logaritmically with the norm.
+    // * For norm equal zero, the rgb value is black
+    // * Invalid pixels are coloured white.
+    const vec4 hsva = isInvalid ?
+                        vec4(255, 255, 255, 0) :
+                        vec4(3.14159 + atan(-flow.y, -flow.x),
+                             normClamped,
+                             0.3 * log(normClamped) + 1,
+                             0);
 
     uvec4 rgba = normClamped < 1e-3 ?
                     uvec4(0, 0, 0, 0) :

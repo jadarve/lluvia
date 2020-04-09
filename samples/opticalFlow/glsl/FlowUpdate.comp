@@ -55,9 +55,7 @@ void main() {
 
     vec2 flow_new = rdet * (M * q);
 
-    // truncate
-    flow_new.x = max(-maxflow, min(flow_new.x, maxflow));
-    flow_new.y = max(-maxflow, min(flow_new.y, maxflow));
+    flow_new = clamp(flow_new, vec2(-maxflow), vec2(maxflow));
 
     // sanitize
     flow_new.x = isinf(flow_new.x) || isnan(flow_new.x)? 0.0f : flow_new.x;

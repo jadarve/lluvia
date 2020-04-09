@@ -15,6 +15,7 @@ function builder.newDescriptor()
     desc:setParameter('max_flow', 4)
     desc:setParameter('levels', 1)
     desc:setParameter('gamma', 0.01)
+    desc:setParameter('gamma_low', 0.01)
     desc:setParameter('smooth_iterations', 1)
 
     return desc
@@ -26,6 +27,7 @@ function builder.onNodeInit(node)
     ll.logd('FlowFilter', 'onNodeInit')
 
     local gamma = node:getParameter('gamma')
+    local gamma_low = node:getParameter('gamma_low')
     local max_flow = node:getParameter('max_flow')
     local smooth_iterations = node:getParameter('smooth_iterations')
     local levels = node:getParameter('levels')
@@ -60,7 +62,7 @@ function builder.onNodeInit(node)
     while h >= 0 do
 
         local filterLow = ll.createContainerNode('FlowFilterDelta')
-        filterLow:setParameter('gamma', gamma)
+        filterLow:setParameter('gamma', gamma_low)
         filterLow:setParameter('max_flow', math.ceil(max_flow / (2^h)))
         filterLow:setParameter('smooth_iterations', smooth_iterations)
 

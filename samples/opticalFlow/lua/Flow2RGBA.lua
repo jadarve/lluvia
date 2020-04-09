@@ -13,7 +13,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_rgba', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    desc:setParameter('maxflow', 1.0)
+    desc:setParameter('max_flow', 1.0)
 
     return desc
 end
@@ -23,7 +23,7 @@ function builder.onNodeInit(node)
     local in_flow = node:getPort('in_flow')
 
     local pushConstants = ll.PushConstants.new()
-    pushConstants:pushFloat(node:getParameter('maxflow'))
+    pushConstants:pushFloat(node:getParameter('max_flow'))
     node.pushConstants = pushConstants
 
     local memory = in_flow.memory

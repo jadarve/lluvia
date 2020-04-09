@@ -65,14 +65,12 @@ void main() {
 
     vec2 delta_flow_new = rdet * (M * q);
 
-    // truncate
-    // FIXME: possibly truncation and sanitation can happen on flow_new
-    delta_flow_new.x = max(-maxflow, min(delta_flow_new.x, maxflow));
-    delta_flow_new.y = max(-maxflow, min(delta_flow_new.y, maxflow));
+    // sanitaze
+    bool needSanitize = any(isnan(delta_flow_new)) || any(isnan(delta_flow_new));
+    delta_flow_new = needSanitize? vec2(0) : delta_flow_new;
 
-    // sanitize
-    delta_flow_new.x = isinf(delta_flow_new.x) || isnan(delta_flow_new.x)? 0.0f : delta_flow_new.x;
-    delta_flow_new.y = isinf(delta_flow_new.y) || isnan(delta_flow_new.y)? 0.0f : delta_flow_new.y;
+    // truncate
+    delta_flow_new = clamp(delta_flow_new, vec2(-maxflow), vec2(maxflow));
 
     //#################################
     // Optical flow computation
@@ -84,13 +82,12 @@ void main() {
 
     vec2 flow_new = flow_old + delta_flow_new;
     
-    // truncate
-    flow_new.x = max(-maxflow, min(flow_new.x, maxflow));
-    flow_new.y = max(-maxflow, min(flow_new.y, maxflow));
-
     // sanitize
-    flow_new.x = isinf(flow_new.x) || isnan(flow_new.x)? 0.0f : flow_new.x;
-    flow_new.y = isinf(flow_new.y) || isnan(flow_new.y)? 0.0f : flow_new.y;
+    needSanitize = any(isnan(flow_new)) || any(isnan(flow_new));
+    flow_new = needSanitize? vec2(0) : flow_new;
+
+    // truncate
+    flow_new = clamp(flow_new, vec2(-maxflow), vec2(maxflow));
 
     imageStore(out_flow, coords, vec4(flow_new.x, flow_new.y, 0, 0));
     imageStore(out_gray, coords, vec4(gray));
