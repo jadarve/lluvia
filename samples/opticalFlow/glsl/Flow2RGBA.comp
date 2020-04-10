@@ -22,21 +22,23 @@ void main() {
     vec2 flow = imageLoad(in_flow, coords).xy;
     bool isInvalid = any(isinf(flow)) || any(isnan(flow));
 
-    const float normClamped = clamp(length(flow) / params.maxflow, 0, 1);
+    const float normNormalized = length(flow) / params.maxflow;
+    const float normClamped = clamp(normNormalized, 0, 1);
 
     // * Saturation increases linearly with the norm
     // * Value increases logaritmically with the norm.
     // * For norm equal zero, the rgb value is black
+    // * For flow norm greater than max_flow, set value to 0.8.
     // * Invalid pixels are coloured white.
     const vec4 hsva = isInvalid ?
-                        vec4(255, 255, 255, 0) :
+                        vec4(0.0, 0.0, 1.0, 1.0) :
                         vec4(3.14159 + atan(-flow.y, -flow.x),
                              normClamped,
-                             0.3 * log(normClamped) + 1,
-                             0);
+                             normNormalized <= 1.0? 0.3 * log(normClamped) + 1 : 0.8,
+                             1.0);
 
     uvec4 rgba = normClamped < 1e-3 ?
-                    uvec4(0, 0, 0, 0) :
+                    uvec4(0, 0, 0, 255) :
                     color_hsva2rgba(hsva);
 
     imageStore(out_rgba, coords, rgba);
