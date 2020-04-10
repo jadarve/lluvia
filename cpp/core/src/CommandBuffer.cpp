@@ -2,6 +2,7 @@
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/Duration.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageView.h"
 
@@ -192,6 +193,20 @@ void CommandBuffer::clearImage(ll::Image &image) {
                     .setLayerCount(1);
 
     m_commandBuffer.clearColorImage(image.m_vkImage, image.m_vkLayout, clearColor, range);
+}
+
+void CommandBuffer::durationStart(ll::Duration &duration) {
+
+    m_commandBuffer.writeTimestamp(vk::PipelineStageFlagBits::eComputeShader,
+                                   duration.getQueryPool(),
+                                   duration.getStartTimeQueryIndex());
+}
+
+void CommandBuffer::durationEnd(ll::Duration &duration) {
+
+    m_commandBuffer.writeTimestamp(vk::PipelineStageFlagBits::eComputeShader,
+                                   duration.getQueryPool(),
+                                   duration.getEndTimeQueryIndex());
 }
 
 } // namespace ll

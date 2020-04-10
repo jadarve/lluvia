@@ -29,6 +29,7 @@ class ComputeNode;
 class ComputeNodeDescriptor;
 class ContainerNode;
 class ContainerNodeDescriptor;
+class Duration;
 class Image;
 class Interpreter;
 class Memory;
@@ -153,7 +154,13 @@ public:
     */
     std::unique_ptr<ll::CommandBuffer> createCommandBuffer() const;
 
+    /**
+    @brief      Creates a Duration object.
     
+    @return     A new ll::Duration object.
+    */
+    std::unique_ptr<ll::Duration> createDuration() const;
+
     /**
     @brief      Creates a program object reading a file at a given path.
 
@@ -339,7 +346,7 @@ private:
                                                  bool exactFlagsMatch,
                                                  bool keepThisSharedReference);
 
-        vk::Instance instance;
+    vk::Instance         instance;
     vk::PhysicalDevice   physicalDevice;
     vk::Device           device;
     vk::Queue            queue;
@@ -350,7 +357,7 @@ private:
 
     std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
 
-    std::once_flag m_hostMemoryAllocate;
+    std::once_flag              m_hostMemoryAllocate;
     std::shared_ptr<ll::Memory> m_hostMemory;
 };
 

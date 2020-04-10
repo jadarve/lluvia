@@ -200,3 +200,16 @@ cc_test (
         "//cpp/core/test/glsl:pushConstants2_shader",
     ]
 )
+
+cc_test (
+    name = "test_Duration",
+    srcs = ["test/test_Duration.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+    data = [
+        "//cpp/core/test/glsl:assign_shader"
+    ]
+)

@@ -13,6 +13,7 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/ContainerNode.h"
 #include "lluvia/core/ContainerNodeDescriptor.h"
+#include "lluvia/core/Duration.h"
 #include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
@@ -262,6 +263,11 @@ ll::ContainerNodeDescriptor Session::createContainerNodeDescriptor(const std::st
     return m_interpreter->loadAndRun<ll::ContainerNodeDescriptor>(lua, builderName);
 }
 
+std::unique_ptr<ll::Duration> Session::createDuration() const {
+
+    return std::make_unique<ll::Duration>(device);
+}
+
 
 std::unique_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 
@@ -270,8 +276,6 @@ std::unique_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 
 
 void Session::run(const ll::CommandBuffer& cmdBuffer) {
-
-    // assert (cmdBuffer != nullptr);
 
     vk::SubmitInfo submitInfo = vk::SubmitInfo()
         .setCommandBufferCount(1)

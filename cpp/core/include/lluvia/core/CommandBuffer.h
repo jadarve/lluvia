@@ -15,6 +15,7 @@ namespace ll {
 
 class Buffer;
 class ComputeNode;
+class Duration;
 class Image;
 class ImageView;
 class Session;
@@ -183,6 +184,10 @@ public:
     @brief      Clears the pixels of an image to zero.
     */
     void clearImage(ll::Image& image);
+
+    void durationStart(ll::Duration& duration);
+
+    void durationEnd(ll::Duration& duration);
 
 private:
     vk::Device          m_device;
