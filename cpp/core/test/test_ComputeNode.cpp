@@ -8,40 +8,15 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
+#include <cstdint>
 #include <iostream>
 #include "lluvia/core.h"
 
 
-// TEST_CASE("Construction", "test_ComputeNode") {
-
-//     auto session = ll::Session::create();
-//     REQUIRE(session != nullptr);
-
-//     const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
-//     auto memory = session->createMemory(memoryFlags, 1024*4, false);
-//     REQUIRE(memory != nullptr);
-
-//     auto buffer = uniqueToShared(memory->createBuffer(32*sizeof(float)));
-//     REQUIRE(buffer != nullptr);
-
-//     auto program = session->createProgram("/home/jadarve/git/lluvia/glsl/comp.spv");
-//     REQUIRE(program != nullptr);
-
-//     auto nodeDescriptor = ll::ComputeNodeDescriptor()
-//                             .setProgram(program)
-//                             .setFunctionName("main")
-//                             .setLocalX(32)
-//                             .addBufferParameter();
-
-//     auto node = uniqueToShared(session->createComputeNode(nodeDescriptor));
-//     REQUIRE(node != nullptr);
-
-//     node->bind(0, buffer);
-//     session->run(node);
-// }
-
-
 TEST_CASE("BufferAssignment", "test_ComputeNode") {
+
+    constexpr const size_t length = 128;
+    constexpr const size_t size = sizeof(float);
 
     using memflags = vk::MemoryPropertyFlagBits;
 
@@ -49,20 +24,19 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
-    auto hostMemory = session->createMemory(hostMemFlags, 1024*4, false);
+    auto hostMemory = session->createMemory(hostMemFlags, length * size, false);
     REQUIRE(hostMemory != nullptr);
 
-    const auto bufferSize = 128;
-    auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
+    auto buffer = hostMemory->createBuffer(length*sizeof(float));
+    REQUIRE(buffer != nullptr);
 
-    auto program = session->createProgram("glsl/assign.spv");
+    auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
 
-    // TOTHINK: set script in the descriptor, not in the node
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
                             .setProgram(program)
                             .setFunctionName("main")
-                            .setLocalX(bufferSize)
+                            .setLocalX(length)
                             .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
 
     // at this point, the node's port binding table and
@@ -72,78 +46,25 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     REQUIRE(node != nullptr);
 
     node->bind("out_buffer", buffer);
-
-    // these are equivalent
     node->init();
-    // node->setState(ll::NodeState::Init);
 
     auto cmdBuffer = session->createCommandBuffer();
+    REQUIRE(cmdBuffer != nullptr);
 
     cmdBuffer->begin();
     cmdBuffer->run(*node);
     cmdBuffer->end();
 
-    session->run(*cmdBuffer);
-    
+    session->run(*cmdBuffer);    
 
     {
         auto bufferMap = buffer->map<float[]>();
-        for (auto i = 0u; i < bufferSize; ++i) {
-
-            std::cout << i << ": " << bufferMap[i] << std::endl;;
+        for (auto i = 0u; i < length; ++i) {
+            REQUIRE(bufferMap[i] == static_cast<float>(i));
         }
     } // unamp bufferMap
 }
 
-
-TEST_CASE("ConstructionCommandBuffer", "test_ComputeNode") {
-
-    // auto session = ll::Session::create();
-
-    // const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
-    // auto memory = session->createMemory(memoryFlags, 1024*sizeof(float));
-
-    // auto buffer0      = uniqueToShared(memory->createBuffer(32*sizeof(float)));
-    // auto buffer1      = uniqueToShared(memory->createBuffer(32*sizeof(float)));
-    // auto bufferSubOut = uniqueToShared(memory->createBuffer(32*sizeof(float)));
-    // auto bufferAbsOut = uniqueToShared(memory->createBuffer(32*sizeof(float)));
-
-    // auto program = session->createProgram("/home/jadarve/git/lluvia/glsl/comp.spv");
-
-    // auto desc0 = ll::ComputeNodeDescriptor()
-    //                         .setProgram(program)
-    //                         .setFunctionName("sub")
-    //                         .setLocalX(32)
-    //                         .addBufferParameter()   // first input
-    //                         .addBufferParameter()   // second input
-    //                         .addBufferParameter();  // output
-
-    // auto desc1 = ll::ComputeNodeDescriptor()
-    //                         .setProgram(program)
-    //                         .setFunctionName("abs")
-    //                         .setLocalX(32)
-    //                         .addBufferParameter()   // input
-    //                         .addBufferParameter();  // output
-
-    // auto nodeSub = uniqueToShared(session->createComputeNode(desc0));
-    // nodeSub->bind(0, buffer0);
-    // nodeSub->bind(1, buffer1);
-    // nodeSub->bind(2, bufferSubOut);
-
-    // auto nodeAbs = uniqueToShared(session->createComputeNode(desc1));
-    // nodeAbs->bind(0, bufferSubOut);
-    // nodeAbs->bind(1, bufferAbsOut);
-
-    // // create and record a command buffer
-    // auto cmdBuffer = session->createCommandBuffer();
-    // cmdBuffer->beginRecording();
-    // nodeSub->record(cmdBuffer);
-    // nodeAbs->record(cmdBuffer);
-    // cmdBuffer->endRecording();
-
-    // // run the command buffer
-    // session->run(cmdBuffer);
-}
 
 TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
 
@@ -158,11 +79,11 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
 
     const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
+    REQUIRE(buffer != nullptr);
 
     auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
 
-    // registerProgram?
     session->setProgram("assign", program);
 
     // register the node builder
@@ -174,7 +95,7 @@ function builder.newDescriptor()
     local desc = ll.ComputeNodeDescriptor.new()
     
     desc.builderName  = 'assign'
-    desc.localShape   = ll.vec3ui.new(128, 1, 1)
+    desc.localShape   = ll.vec3ui.new(32, 32, 1)
     desc.gridShape    = ll.vec3ui.new(1, 1, 1)
     desc.program      = ll.getProgram('assign')
     desc.functionName = 'main'
@@ -187,9 +108,9 @@ end
 function builder.onNodeInit(node)
 
     -- configure gridShape given the size of out_buffer
-    out_buffer = ll.castObject(node:getPort('out_buffer'))
+    local out_buffer = node:getPort('out_buffer')
     
-    N = out_buffer.size // 4
+    local N = out_buffer.size // 4
     node:configureGridShape(ll.vec3ui.new(N, 1, 1))
 
 end
@@ -205,6 +126,8 @@ ll.registerNodeBuilder('assign', builder)
     std::cout << "grid: " << desc.getGridX() << ", " << desc.getGridY() << ", " << desc.getGridZ() << std::endl;
 
     auto node = session->createComputeNode(desc);
+    REQUIRE(node != nullptr);
+
     node->bind("out_buffer", buffer);
     node->init();
 
@@ -222,8 +145,7 @@ ll.registerNodeBuilder('assign', builder)
     {
         auto bufferMap = buffer->map<float[]>();
         for (auto i = 0u; i < bufferSize; ++i) {
-
-            std::cout << i << ": " << bufferMap[i] << std::endl;;
+            REQUIRE(bufferMap[i] == static_cast<float>(i));
         }
     } // unamp bufferMap
 }

@@ -120,6 +120,20 @@ TEST_CASE("FromSPIRV_empty", "test_ProgramCreation") {
     REQUIRE_THROWS_AS(session->createProgram(emptySpirv), std::system_error);
 }
 
+TEST_CASE("SetInProgramRegistry", "test_ProgramCreation") {
+
+    std::cout << "SetInProgramRegistry" << std::endl;
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
+    REQUIRE(program != nullptr);
+
+    session->setProgram("assign", program);
+    // session and program should be destroyed gracefully.
+}
+
 
 /**
 

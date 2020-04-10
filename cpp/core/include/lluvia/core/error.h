@@ -23,32 +23,33 @@ namespace ll {
 @brief      Error codes
 */
 enum class ErrorCode : int32_t {
-    EnumConversionFailed,       /**< Conversion between enum types failed */
-    MemoryMapFailed,            /**< Memory mapping operation (map or unmap) failed */
-    ObjectAllocationError,      /**< Error trying to allocate objects in a memory */
-    PortBindingError,           /**< Error binding a port to a ll::Node */
-    InvalidShaderFunctionName,  /**< Shader function name has invalid name, such as empty string */
-    InvalidShaderProgram,       /**< Shader program is not valid*/
-    BufferCopyError,            /**< Error copying data between buffers*/
-    ProgramCompilationError,    /**< Error compiling shader module for program*/
-    InvalidLocalShape,          /**< Local shape passed to a Compute node is invalid*/
-    InvalidGridShape,           /**< Grid shape for a ComputeNode is invalid */
-    BadEnumCasting,             /**< Bad casting of integral value to enum type */
-    PhysicalDevicesNotFound,    /**< No physical devices found */
-    KeyNotFound,                /**< Key not found in a given look up method */
-    MemoryCreationError,        /**< Error creating ll::Memory object */
-    InvalidNodeState,           /**< Invalid ll::Node state */
-    InterpreterError,           /**< Error evaluating interpreter script*/
-    PushConstantError,          /**< Error regarding push constant operation*/
+    EnumConversionFailed,      /**< Conversion between enum types failed */
+    MemoryMapFailed,           /**< Memory mapping operation (map or unmap) failed */
+    ObjectAllocationError,     /**< Error trying to allocate objects in a memory */
+    PortBindingError,          /**< Error binding a port to a ll::Node */
+    InvalidShaderFunctionName, /**< Shader function name has invalid name, such as empty string */
+    InvalidShaderProgram,      /**< Shader program is not valid*/
+    BufferCopyError,           /**< Error copying data between buffers*/
+    ProgramCompilationError,   /**< Error compiling shader module for program*/
+    InvalidLocalShape,         /**< Local shape passed to a Compute node is invalid*/
+    InvalidGridShape,          /**< Grid shape for a ComputeNode is invalid */
+    BadEnumCasting,            /**< Bad casting of integral value to enum type */
+    PhysicalDevicesNotFound,   /**< No physical devices found */
+    KeyNotFound,               /**< Key not found in a given look up method */
+    MemoryCreationError,       /**< Error creating ll::Memory object */
+    InvalidNodeState,          /**< Invalid ll::Node state */
+    InterpreterError,          /**< Error evaluating interpreter script*/
+    PushConstantError,         /**< Error regarding push constant operation*/
+    IOError,                   /**< IO Error accessing files*/
+    InvalidArgument,           /**< Invalid argument*/
 };
-
 
 namespace impl {
 
     /**
     String values for ll::ErrorCode enum.
     */
-constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 17> ErrorCodeStrings{{
+constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 19> ErrorCodeStrings{{
     std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
     std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
     std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
@@ -66,6 +67,8 @@ constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 17> ErrorCod
     std::make_tuple("InvalidNodeState", ll::ErrorCode::InvalidNodeState),
     std::make_tuple("InterpreterError", ll::ErrorCode::InterpreterError),
     std::make_tuple("PushConstantError", ll::ErrorCode::PushConstantError),
+    std::make_tuple("IOError", ll::ErrorCode::IOError),
+    std::make_tuple("InvalidArgument", ll::ErrorCode::InvalidArgument),
 }};
 
 } // namespace impl

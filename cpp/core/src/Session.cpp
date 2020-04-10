@@ -86,6 +86,7 @@ Session::Session() {
 Session::~Session() {
 
     m_hostMemory.reset();
+    m_programRegistry.clear();
 
     device.destroyCommandPool(commandPool);
     device.destroy();
@@ -168,16 +169,24 @@ std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags 
 
 std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath) const {
 
-    // workaround for GCC 4.8
-    ifstream file {spirvPath, std::ios::ate | std::ios::binary};
-    file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+    auto spirvCode = std::vector<uint8_t>();
 
-    const auto fileSize  = static_cast<size_t>(file.tellg());
-          auto spirvCode = std::vector<uint8_t>(fileSize);
+    try {
+        // workaround for GCC 4.8
+        ifstream file{spirvPath, std::ios::ate | std::ios::binary};
+        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
-    file.seekg(0);
-    file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
-    file.close();
+        const auto fileSize = static_cast<size_t>(file.tellg());
+        spirvCode.resize(fileSize);
+
+        file.seekg(0);
+        file.read(reinterpret_cast<char *>(spirvCode.data()), fileSize);
+        file.close();
+
+    } catch (std::ios_base::failure& fail) {
+        ll::throwSystemError(ll::ErrorCode::IOError,
+            "Error reading SPIR-V file '" + spirvPath + "', error: " + fail.what());
+    }
 
     return createProgram(spirvCode);
 }
@@ -190,6 +199,8 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& 
 
 
 void Session::setProgram(const std::string& name, const std::shared_ptr<ll::Program>& program) {
+
+    ll::throwSystemErrorIf(program == nullptr, ll::ErrorCode::InvalidArgument, "program parameter must be not null");
 
     m_programRegistry.insert_or_assign(name, program);
 }
