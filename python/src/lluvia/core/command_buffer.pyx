@@ -1,3 +1,4 @@
+
 """
     lluvia.core.command_buffer
     --------------------------
@@ -21,6 +22,9 @@ import image
 
 from image cimport Image
 from image import  Image
+
+from duration cimport Duration
+from duration import Duration
 
 import impl
 
@@ -214,3 +218,27 @@ cdef class CommandBuffer:
         """
 
         self.__commandBuffer.get().memoryBarrier()
+
+    def durationStart(self, Duration d):
+        """
+        Starts recording the elapsed time between two points.
+
+        Parameters
+        ----------
+        d : Duration.
+            The duration object.
+        """
+
+        self.__commandBuffer.get().durationStart(deref(d.__duration))
+
+    def durationEnd(self, Duration d):
+        """
+        Stops recording the elapsed time between two points.
+
+        Parameters
+        ----------
+        d : Duration.
+            The duration object.
+        """
+
+        self.__commandBuffer.get().durationEnd(deref(d.__duration))

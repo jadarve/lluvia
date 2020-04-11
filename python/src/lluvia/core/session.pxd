@@ -7,6 +7,7 @@
 """
 
 from command_buffer cimport _CommandBuffer
+from duration cimport _Duration
 from node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode
 from memory cimport _Memory
 from program cimport _Program
@@ -46,6 +47,8 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         void setProgram(const string& name, const shared_ptr[_Program]& program)
         shared_ptr[_Program] getProgram(const string& name) except +
+
+        unique_ptr[_Duration] createDuration() except +
 
         unique_ptr[_CommandBuffer] createCommandBuffer() except +
 

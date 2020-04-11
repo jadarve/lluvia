@@ -82,6 +82,7 @@ package_dir = {'lluvia': 'src/lluvia'}
 cythonModules = [
     ('lluvia.core.command_buffer'    , ['src/lluvia/core/command_buffer.pyx']),
     ('lluvia.core.core_buffer'       , ['src/lluvia/core/core_buffer.pyx']),
+    ('lluvia.core.duration'          , ['src/lluvia/core/duration.pyx']),
     ('lluvia.core.enums.core_object' , ['src/lluvia/core/enums/core_object.pyx']),
     ('lluvia.core.enums.image'       , ['src/lluvia/core/enums/image.pyx']),
     ('lluvia.core.enums.node'        , ['src/lluvia/core/enums/node.pyx']),

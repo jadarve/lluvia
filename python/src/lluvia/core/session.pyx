@@ -36,6 +36,9 @@ cimport vulkan as vk
 import  program
 cimport program
 
+from duration import Duration
+from duration cimport Duration, _Duration, moveDuration
+
 from node cimport ComputeNode, ComputeNodeDescriptor, ContainerNodeDescriptor, ContainerNode
 
 
@@ -259,6 +262,20 @@ cdef class Session:
         node.__node    = self.__session.get().createContainerNode(desc.__descriptor)
 
         return node
+
+    def createDuration(self):
+        """
+        Creates a Duration object.
+
+        Returns
+        -------
+        d : ll.Duration.
+            A new Duration object.
+        """
+
+        cdef Duration d = Duration()
+        d.__duration = shared_ptr[_Duration](moveDuration(self.__session.get().createDuration()))
+        return d
 
     def createCommandBuffer(self):
         """

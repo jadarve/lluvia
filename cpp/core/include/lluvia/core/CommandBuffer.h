@@ -185,8 +185,18 @@ public:
     */
     void clearImage(ll::Image& image);
 
+    /**
+    @brief      Starts recording the elapsed time between two points.
+    
+    @param      duration  The duration object.
+    */
     void durationStart(ll::Duration& duration);
 
+    /**
+    @brief      Stops recording the elapsed time between two points.
+    
+    @param      duration  The duration object.
+    */
     void durationEnd(ll::Duration& duration);
 
 private:

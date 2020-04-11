@@ -197,6 +197,8 @@ void CommandBuffer::clearImage(ll::Image &image) {
 
 void CommandBuffer::durationStart(ll::Duration &duration) {
 
+    m_commandBuffer.resetQueryPool(duration.getQueryPool(), 0, 2);
+
     m_commandBuffer.writeTimestamp(vk::PipelineStageFlagBits::eComputeShader,
                                    duration.getQueryPool(),
                                    duration.getStartTimeQueryIndex());

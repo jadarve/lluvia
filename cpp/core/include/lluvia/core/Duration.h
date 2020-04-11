@@ -31,6 +31,8 @@ public:
 
     std::chrono::nanoseconds getDuration() const;
 
+    int64_t getNanoseconds() const;
+
     vk::QueryPool getQueryPool() const noexcept;
 
     uint32_t getStartTimeQueryIndex() const noexcept;

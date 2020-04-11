@@ -16,6 +16,7 @@ from libcpp.string cimport string
 from core_buffer cimport _Buffer
 from image cimport _Image
 from node cimport _ComputeNode
+from duration cimport _Duration
 from session cimport Session
 
 cimport vulkan as vk
@@ -38,6 +39,9 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
         void changeImageLayout(_Image& image, const vk.ImageLayout newLayout) except +
 
         void clearImage(_Image& image) except +
+
+        void durationStart(_Duration& duration) except +
+        void durationEnd(_Duration& duration) except +
 
         void memoryBarrier() except +
 

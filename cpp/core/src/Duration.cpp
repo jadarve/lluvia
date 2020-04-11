@@ -22,6 +22,12 @@ Duration::~Duration() {
 
 std::chrono::nanoseconds Duration::getDuration() const {
 
+    return std::chrono::nanoseconds(getNanoseconds());
+}
+
+
+int64_t Duration::getNanoseconds() const {
+
     auto queryData = std::array<int64_t, 2> {};
 
     m_device.getQueryPoolResults(
@@ -31,10 +37,10 @@ std::chrono::nanoseconds Duration::getDuration() const {
         sizeof(int64_t) * queryData.size(),
         queryData.data(),
         sizeof(int64_t),
-        vk::QueryResultFlagBits::e64
+        vk::QueryResultFlagBits::e64 | vk::QueryResultFlagBits::eWait
     );
 
-    return std::chrono::nanoseconds(queryData[1] - queryData[0]);
+    return queryData[1] - queryData[0];
 }
 
 
