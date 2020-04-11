@@ -2,141 +2,99 @@
 
 ![Build Linux](https://github.com/jadarve/lluvia/workflows/build/badge.svg) [![Documentation Status](https://readthedocs.org/projects/lluvia/badge/?version=latest)](https://lluvia.io/en/latest/?badge=latest)
 
+Lluvia is a computer vision engined designed for real-time applications. It uses the Vulkan API to access the GPU and dispatch computations. Users can describe computations as a compute pipeline where nodes are compute shaders running on the GPU.
+
+This demo is for my real-time optical flow algorithm running using Lluvia on a GTX-1080 GPU. For images of 1016x544 resolution, computation take around 1 millisecond to complete.
+
+[![Real Time Optical Flow ](http://img.youtube.com/vi/mRZ6YdWb8fE/0.jpg)](https://youtu.be/mRZ6YdWb8fE)
+
+See the **samples** folder for more demos.
+
+# Mode of Use
+
+Lluvia uses Lua as embedded scripting language for connecting nodes together, offloading developers of doing so in C++. A node is made of two source files: a GLSL compute shader and a Lua script that describes its interconnection. These files can then be exported into the engine either using the C++ or Python APIs for later use.
+
+Consider converting from a RGBA image to Gray scale; the GLSL compute shaders looks as follows:
+
+```GLSL
+#version 450
+
+#include <lluvia/core.glsl>
+#include <lluvia/core/color.glsl>
+
+layout(binding = 0, rgba8ui) uniform uimage2D in_rgba;
+layout(binding = 1, r8ui)    uniform uimage2D out_gray;
+
+void main() {
+
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
+    const ivec2 imgSize = imageSize(out_gray);
+
+    if (coords.x > imgSize.x || coords.y > imgSize.y) {
+        return;
+    }
+
+    const uvec4 RGBA = imageLoad(in_rgba, coords);
+    const uint  gray = color_rgba2gray(RGBA);
+
+    imageStore(out_gray, coords, uvec4(gray));
+}
+
+```
+
+while the Lua script that instantiates and configures that shader is:
+
+```Lua
+local builder = ll.class(ll.ComputeNodeBuilder)
+
+function builder.newDescriptor() 
+    
+    local desc = ll.ComputeNodeDescriptor.new()
+    
+    desc.builderName  = 'RGBA2Gray'
+    desc.localShape   = ll.vec3ui.new(32, 32, 1)
+    desc.gridShape    = ll.vec3ui.new(1, 1, 1)
+    desc.program      = ll.getProgram('RGBA2Gray')
+    desc.functionName = 'main'
+
+    desc:addPort(ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView))
+    desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
+
+    return desc
+end
+
+function builder.onNodeInit(node)
+    
+    local in_rgba = node:getPort('in_rgba')
+
+    -- ll::Memory where out_gray will be allocated
+    local memory = in_rgba.memory
+
+    -- instantiate out_gray output
+    -- 32-bits floating point output, one color channel, nearest interpolation
+    local out_gray = memory:createImageView(
+        ll.ImageDescriptor.new(1, in_rgba.height, in_rgba.width, ll.ChannelCount.C1, ll.ChannelType.Float32),
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
+
+    -- set output in a correct layout and clear its content
+    out_gray:changeImageLayout(ll.ImageLayout.General)
+    out_gray:clear()
+    
+    -- bind the output to the node
+    node:bind('out_gray', out_gray)
+    node:configureGridShape(ll.vec3ui.new(out_gray.width, out_gray.height, 1))
+end
+
+ll.registerNodeBuilder('RGBA2Gray', builder)
+
+```
+
+Both files can then be exported into the engine to instantiate as many such nodes as required. Lluvia takes care of recording the operations for running a pipeline and submit it to the GPU efficiently.
 
 # Supported Platforms
 
-* [Linux and Mac OSX](https://github.com/jadarve/lluvia/wiki/Linux-and-Mac-OSX-Build).
-* [Android](https://github.com/jadarve/lluvia/wiki/Android-build).
-
-
-# Overview
-
-Lluvia is a computer vision engine designed for real-time applications. It is coded in C++14 and uses the Vulkan graphics and compute API. Compute kernels are coded in GLSL and can be dispatched to the GPU either using C++ or Python.
-
-For instance, the following compute shader computes the sum of two arrays `C = A + B`
-
-```glsl
-#version 450
-
-#include "lluvia/core.glsl"
-
-layout(binding = 0) buffer in0  {int A[]; };
-layout(binding = 1) buffer in1  {int B[]; };
-layout(binding = 2) buffer out0 {int C[]; };
-
-void main() {
-
-    const uint index = LL_GLOBAL_COORDS_1D;
-    C[index] = A[index] + B[index];
-}
-```
-
-The shader is compiled using **glslc** provided by the [LunarG Vulkan SDK](https://vulkan.lunarg.com/). The resulting SPIRV code and some auxiliary information is stored in a JSON file for easy load from the application.
-
-## Running in C++
-
-The C++ API gives programmers fine control over the different objects required for executing the kernel. The main object is the `session` which controls the communication between the engine and the GPU.
-
-```c++
-#include <iostream>
-#include <lluvia/core.h>
-#include <vulkan/vulkan.hpp>
-
-int main() {
-    auto session = ll::Session::create();
-
-    const size_t length = 32;
-    const size_t sizeBytes = length * sizeof(int);
-
-    auto hostMemory = session->createMemory(
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits:: eHostCoherent,
-        sizeBytes);
-
-    auto A = hostMemory->createBuffer(sizeBytes);
-    auto B = hostMemory->createBuffer(sizeBytes);
-    auto C = hostMemory->createBuffer(sizeBytes);
-
-    // write some values into the buffers
-    {
-        auto mapA = A->map<int>();
-        auto mapB = B->map<int>();
-
-        for (int i = 0; i < length; ++i) {
-            mapA[i] = i;
-            mapB[i] = 2*i;
-        }
-
-    } // release mapA and mapB
-
-    auto node = session->readComputeNode("add.json");
-    node.bind(0, A);
-    node.bind(1, B);
-    node.bind(2, C);
-
-    session->run(node);
-
-    {
-        auto mapC = C->map<int>();
-
-        for (int i = 0; i < length; ++i) {
-            std::cout << mapC[i] << std::endl;
-        }
-    } // release mapC
-
-}
-```
-
-# Running in Python
-
-The Python API shares most of the classes defined for the C++ API but simplifies some operations to make them look more Pythonic. This Python package is intended for rapid prototyping.
-
-```python
-import numpy as np
-import lluvia as ll
-
-code = """
-#version 450
-
-layout(binding = 0) buffer in0  {int A[]; };
-layout(binding = 1) buffer in1  {int B[]; };
-layout(binding = 2) buffer out0 {int C[]; };
-
-void main() {
-
-    const uint index = gl_GlobalInvocationID.x;
-    C[index] = A[index] + B[index];
-}
-"""
-
-length = 32
-dtype  = np.int32
-
-session = ll.Session()
-memory = session.createMemory()
-
-A = memory.createBufferFromHost(np.arange(0, length, dtype=dtype))
-B = memory.createBufferFromHost(np.arange(0, length, dtype=dtype))
-C = memory.createBufferFromHost(np.zeros(length, dtype=dtype))
-
-node = session.compileComputeNode(code, ['Buffer', 'Buffer', 'Buffer'])
-node.grid = (length, 1, 1)
-node.bind(0, A)
-node.bind(1, B)
-node.bind(2, C)
-node.run()
-
-print(C.toHost(dtype=np.int32))
-```
-
-# Running Docker container
-
-```
-docker run --mount type=bind,source="$(pwd)",target="/lluvia" -it jadarve/lluvia:latest bash
-
-# inside the container
-cd lluvia
-CC=clang bazel build //...
-```
+* Linux.
+* Android (on the work).
 
 # License
 
