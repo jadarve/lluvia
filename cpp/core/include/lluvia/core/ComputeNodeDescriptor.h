@@ -11,6 +11,7 @@
 #include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/Node.h"
 #include "lluvia/core/Parameter.h"
+#include "lluvia/core/PushConstants.h"
 #include "lluvia/core/types.h"
 
 #include <array>
@@ -76,7 +77,7 @@ public:
     
     @return     A reference to this object.
     */
-    ComputeNodeDescriptor& addParameter(const std::string& name, const ll::Parameter& value);
+    ComputeNodeDescriptor& setParameter(const std::string& name, const ll::Parameter& value);
 
 
     /**
@@ -237,6 +238,17 @@ public:
 
 
     /**
+    @brief      Sets the push constants for this compute node.
+    
+    @param[in]  constants  A shared pointer to ll::PushConstants. This way, the values of
+                the constants can be shared among several nodes.
+    
+    @return     A reference to this object
+    */
+    ComputeNodeDescriptor &setPushConstants(const ll::PushConstants& constants) noexcept;
+
+
+    /**
     @brief      Gets the program associated to this compute node.
     
     @return     The program.
@@ -308,6 +320,8 @@ public:
     uint32_t getLocalY() const noexcept;
     uint32_t getLocalZ() const noexcept;
 
+    const ll::PushConstants& getPushConstants() const noexcept;
+
     std::vector<vk::DescriptorSetLayoutBinding> getParameterBindings() const;
 
 private:
@@ -321,6 +335,8 @@ private:
 
     std::map<std::string, ll::PortDescriptor> m_ports;
     std::map<std::string, ll::Parameter>      m_parameters;
+
+    ll::PushConstants                         m_pushConstants;
 };
 
 

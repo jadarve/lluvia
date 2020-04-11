@@ -30,7 +30,7 @@ const ll::PortDescriptor& ContainerNodeDescriptor::getPort(const std::string& na
 }
 
 
-ContainerNodeDescriptor& ContainerNodeDescriptor::addParameter(const std::string& name, const ll::Parameter& defaultValue) {
+ContainerNodeDescriptor& ContainerNodeDescriptor::setParameter(const std::string& name, const ll::Parameter& defaultValue) {
     m_parameters[name] = defaultValue;
     return *this;
 }

@@ -10,6 +10,7 @@
 #include "lluvia/core/error.h"
 #include "lluvia/core/utils.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/PushConstants.h"
 
 #include <cassert>
 #include <exception>
@@ -34,7 +35,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setProgram(const std::shared_ptr<l
 }
 
 
-ComputeNodeDescriptor& ComputeNodeDescriptor::addParameter(const std::string& name, const ll::Parameter& value) {
+ComputeNodeDescriptor& ComputeNodeDescriptor::setParameter(const std::string& name, const ll::Parameter& value) {
 
     m_parameters[name] = value;
     return *this;
@@ -197,9 +198,20 @@ const ll::Parameter& ComputeNodeDescriptor::getParameter(const std::string& name
 }
 
 
+ll::ComputeNodeDescriptor& ComputeNodeDescriptor::setPushConstants(const ll::PushConstants& constants) noexcept {
+    m_pushConstants = constants;
+    return *this;
+}
+
+
+const ll::PushConstants& ComputeNodeDescriptor::getPushConstants() const noexcept {
+    return m_pushConstants;
+}
+
+
 std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterBindings() const {
 
-    auto bindings = std::vector<vk::DescriptorSetLayoutBinding> {};
+    auto bindings = std::vector<vk::DescriptorSetLayoutBinding>(m_ports.size());
 
     for(const auto it : m_ports) {
 
@@ -210,7 +222,14 @@ std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterB
                         .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
                         .setStageFlags(vk::ShaderStageFlagBits::eCompute)
                         .setPImmutableSamplers(nullptr);
-        bindings.push_back(binding);
+
+        if (port.binding >= m_ports.size()) {
+            throwSystemError(ll::ErrorCode::PortBindingError, "port [" + port.name +
+                "] has a binding index [" + std::to_string(port.binding) +
+                "] greater than the maximum allowed for this node: " + std::to_string(m_ports.size()));
+        }
+
+        bindings[port.binding] = binding;
     }
 
     return bindings;

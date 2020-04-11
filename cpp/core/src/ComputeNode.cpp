@@ -16,6 +16,7 @@
 #include "lluvia/core/Interpreter.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/PushConstants.h"
 #include "lluvia/core/Session.h"
 
 #include <algorithm>
@@ -116,6 +117,17 @@ void ComputeNode::initPipeline() {
     vk::PipelineLayoutCreateInfo pipeLayoutInfo = vk::PipelineLayoutCreateInfo()
         .setSetLayoutCount(1)
         .setPSetLayouts(&m_descriptorSetLayout);
+    
+    const auto& pushConstants = m_descriptor.getPushConstants();
+    if (pushConstants.getSize() != 0) {
+        auto pushConstantRange = vk::PushConstantRange()
+            .setOffset(0)
+            .setSize(pushConstants.getSize())
+            .setStageFlags(vk::ShaderStageFlagBits::eCompute);
+
+        pipeLayoutInfo.setPushConstantRangeCount(1);
+        pipeLayoutInfo.setPPushConstantRanges(&pushConstantRange);
+    }
 
     m_pipelineLayout = m_device.createPipelineLayout(pipeLayoutInfo);
     vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
@@ -225,6 +237,23 @@ std::shared_ptr<ll::Object> ComputeNode::getPort(const std::string& name) const 
 }
 
 
+void ComputeNode::setPushConstants(const ll::PushConstants& constants) noexcept {
+    m_descriptor.setPushConstants(constants);
+}
+
+
+const ll::PushConstants& ComputeNode::getPushConstants() const noexcept {
+    return m_descriptor.getPushConstants();
+}
+
+void ComputeNode::setParameter(const std::string& name, const ll::Parameter& value) {
+    m_descriptor.setParameter(name, value);
+}
+
+const ll::Parameter& ComputeNode::getParameter(const std::string& name) const {
+    return m_descriptor.getParameter(name);
+}
+
 void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
 
     const auto& port = m_descriptor.getPort(name);
@@ -266,6 +295,15 @@ void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
                                      0,
                                      nullptr);
 
+    const auto &pushConstants = m_descriptor.getPushConstants();
+    if (pushConstants.getSize() != 0) {
+        vkCommandBuffer.pushConstants(m_pipelineLayout,
+            vk::ShaderStageFlagBits::eCompute,
+            0,
+            pushConstants.getSize(),
+            pushConstants.getPtr());
+    }
+    
     vkCommandBuffer.dispatch(m_descriptor.getGridX(),
                              m_descriptor.getGridY(),
                              m_descriptor.getGridZ());
@@ -283,8 +321,7 @@ void ComputeNode::onInit() {
             builder.onNodeInit(node)
         )";
 
-        auto load = m_session->getInterpreter()->load(lua);
-        load(builderName, shared_from_this());
+        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
     }
 
     initPipeline();
@@ -299,8 +336,8 @@ void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_p
 
     ll::throwSystemErrorIf(paramType != ll::PortType::Buffer,
         ll::ErrorCode::PortBindingError,
-        "Parameter of type ll::Buffer cannot be bound at position ["
-        + std::to_string(port.binding) + "] as parameter type is not ll::ParameterType::Buffer");
+        "Port [" + port.name + "] of type ll::Buffer cannot be bound at position ["
+        + std::to_string(port.binding) + "] as port type is not ll::PortType::Buffer");
 
     // holds a reference to the object
     m_objects[port.name] = buffer;
@@ -328,17 +365,17 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
 
     // validate that imgView can be bound at index position.
     const auto& vkBinding = m_parameterBindings.at(port.binding);
-    const auto  paramType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
-
+    const auto portType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
+    
     if (isSampled) {
-        ll::throwSystemErrorIf(paramType != ll::PortType::SampledImageView, ll::ErrorCode::PortBindingError,
-            "Parameter of type ll::Imageview (sampled) cannot be bound at position ["
-            + std::to_string(port.binding) + "] as parameter type is not ll::PortType::SampledImageView");
+        ll::throwSystemErrorIf(portType != ll::PortType::SampledImageView, ll::ErrorCode::PortBindingError,
+            "Port [" + port.name + "] of type ll::Imageview (sampled) cannot be bound at position ["
+            + std::to_string(port.binding) + "] as port type is not ll::PortType::SampledImageView, got: " + std::to_string(static_cast<int32_t>(portType)));
     }
     else {
-        ll::throwSystemErrorIf(paramType != ll::PortType::ImageView, ll::ErrorCode::PortBindingError,
-            "Parameter of type ll::Imageview cannot be bound at position ["
-            + std::to_string(port.binding) + "] as parameter type is not ll::PortType::ImageView");
+        ll::throwSystemErrorIf(portType != ll::PortType::ImageView, ll::ErrorCode::PortBindingError,
+            "Port [" + port.name + "] of type ll::Imageview cannot be bound at position ["
+            + std::to_string(port.binding) + "] as port type is not ll::PortType::ImageView, got: " + std::to_string(static_cast<int32_t>(portType)));
     }
 
     // binding

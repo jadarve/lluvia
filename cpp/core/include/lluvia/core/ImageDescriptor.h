@@ -66,20 +66,20 @@ namespace impl {
     @sa ll::ChannelType enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ChannelType>, 11> ChannelTypeStrings {{
-        std::make_tuple("uint8"   , ll::ChannelType::Uint8),
-        std::make_tuple("int8"    , ll::ChannelType::Int8),
+        std::make_tuple("Uint8"   , ll::ChannelType::Uint8),
+        std::make_tuple("Int8"    , ll::ChannelType::Int8),
 
-        std::make_tuple("uint16"  , ll::ChannelType::Uint16),
-        std::make_tuple("int16"   , ll::ChannelType::Int16),
-        std::make_tuple("float16" , ll::ChannelType::Float16),
+        std::make_tuple("Uint16"  , ll::ChannelType::Uint16),
+        std::make_tuple("Int16"   , ll::ChannelType::Int16),
+        std::make_tuple("Float16" , ll::ChannelType::Float16),
 
-        std::make_tuple("uint32"  , ll::ChannelType::Uint32),
-        std::make_tuple("int32"   , ll::ChannelType::Int32),
-        std::make_tuple("float32" , ll::ChannelType::Float32),
+        std::make_tuple("Uint32"  , ll::ChannelType::Uint32),
+        std::make_tuple("Int32"   , ll::ChannelType::Int32),
+        std::make_tuple("Float32" , ll::ChannelType::Float32),
 
-        std::make_tuple("uint64"  , ll::ChannelType::Uint64),
-        std::make_tuple("int64"   , ll::ChannelType::Int64),
-        std::make_tuple("float64" , ll::ChannelType::Float64),
+        std::make_tuple("Uint64"  , ll::ChannelType::Uint64),
+        std::make_tuple("Int64"   , ll::ChannelType::Int64),
+        std::make_tuple("Float64" , ll::ChannelType::Float64),
     }};
 
 
@@ -199,24 +199,36 @@ public:
     /**
     @brief      Constructs the object.
     
-    @param[in]  width          The width. It must be greater than zero.
-    @param[in]  height         The height. It must be greater than zero.
     @param[in]  depth          The depth. It must be greater than zero.
-    @param[in]  tChannelCount  The channel count. It must be between 1 and 4.
-    @param[in]  tChannelType   The channel type.
-    @param[in]  tUsageFlags    The usage flags. Defaults to `vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled`.
-                               See @VULKAN_DOC#VkBufferUsageFlagBits.
-    @param[in]  tTiling        The image tiling. Defaults to `vk::ImageTiling::eOptimal`.
+    @param[in]  height         The height. It must be greater than zero.
+    @param[in]  width          The width. It must be greater than zero.
+    @param[in]  channelCount   The channel count. It must be between 1 and 4.
+    @param[in]  channelType    The channel type.
     */
-    ImageDescriptor(const uint32_t width,
+    ImageDescriptor(const uint32_t depth,
                     const uint32_t height,
-                    const uint32_t depth,
-                    const ll::ChannelCount tChannelCount,
-                    const ll::ChannelType tChannelType,
-                    const vk::ImageUsageFlags tUsageFlags = {  vk::ImageUsageFlagBits::eStorage
-                                                             | vk::ImageUsageFlagBits::eSampled},
-                    const vk::ImageTiling tTiling = vk::ImageTiling::eOptimal
-                    );
+                    const uint32_t width,
+                    const ll::ChannelCount channelCount,
+                    const ll::ChannelType channelType);
+
+    /**
+    @brief      Constructs the object.
+    
+    @param[in]  depth          The depth. It must be greater than zero.
+    @param[in]  height         The height. It must be greater than zero.
+    @param[in]  width          The width. It must be greater than zero.
+    @param[in]  channelCount   The channel count. It must be between 1 and 4.
+    @param[in]  channelType    The channel type.
+    @param[in]  usageFlags     The usage flags. See @VULKAN_DOC#VkImageUsageFlagBits.
+    @param[in]  tiling         The image tiling. See @VULKAN_DOC#VkImageTiling.
+    */
+    ImageDescriptor(const uint32_t depth,
+                    const uint32_t height,
+                    const uint32_t width,
+                    const ll::ChannelCount channelCount,
+                    const ll::ChannelType channelType,
+                    const vk::ImageUsageFlags usageFlags,
+                    const vk::ImageTiling tiling);
 
     ~ImageDescriptor()                                              = default;
     
@@ -276,7 +288,7 @@ public:
     /**
     @brief      Sets the image shape.
     
-    @param[in]  tShape  The shape. The components of this vector
+    @param[in]  shape  The shape. The components of this vector
         must be interpreted as:
         
             x : width
@@ -285,15 +297,27 @@ public:
     
     @return     A reference to this object.
     */
-    ImageDescriptor& setShape(const ll::vec3ui& tShape)          noexcept;
+    ImageDescriptor& setShape(const ll::vec3ui& shape)          noexcept;
 
 
     /**
     @brief      Sets the usage flags.
     
-    @return     The usage flags.
+    @return     A reference to this object.
     */
     ImageDescriptor& setUsageFlags(const vk::ImageUsageFlags flags) noexcept;
+
+
+    /**
+    @brief      Sets the usage flags from an integer type.
+
+    Please do not use this method. It's for internal use only.
+    
+    @param[in]  flags  The flags
+    
+    @return     A reference to this object
+    */
+    ImageDescriptor& setUsageFlagsUnsafe(const uint32_t flags) noexcept;
 
 
     /**
@@ -323,7 +347,7 @@ public:
     */
     template<typename T=ll::ChannelCount>
     T getChannelCount() const noexcept {
-        return static_cast<T>(channelCount);
+        return static_cast<T>(m_channelCount);
     }
 
 
@@ -416,18 +440,30 @@ public:
     */
     vk::ImageTiling getTiling() const noexcept;
 
+    /**
+    @brief      Gets the usage flags casted to an integer type.
+
+    Please do not use this method. It's for internal use only.
+    
+    @return     The usage flags unsafe.
+    */
+    uint32_t getUsageFlagsUnsafe() const noexcept;
+
 private:
-    ll::ChannelType channelType   {ll::ChannelType::Uint8};
-    ll::ChannelCount channelCount {ll::ChannelCount::C1};
+    ll::ChannelType  m_channelType   {ll::ChannelType::Uint8};
+    ll::ChannelCount m_channelCount  {ll::ChannelCount::C1};
 
     // dimensions along each axis
     // x : width
     // y : height
     // z : depth
-    ll::vec3ui shape              {1, 1, 1};
+    ll::vec3ui m_shape               {1, 1, 1};
 
-    vk::ImageTiling tiling        {vk::ImageTiling::eOptimal};
-    vk::ImageUsageFlags usageFlags;
+    vk::ImageTiling m_tiling         {vk::ImageTiling::eOptimal};
+    vk::ImageUsageFlags m_usageFlags {vk::ImageUsageFlagBits::eStorage |
+                                      vk::ImageUsageFlagBits::eSampled |
+                                      vk::ImageUsageFlagBits::eTransferSrc |
+                                      vk::ImageUsageFlagBits::eTransferDst};
 };
 
 

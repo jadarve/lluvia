@@ -227,10 +227,19 @@ public:
     ll::vec3ui getGridShape() const noexcept;
 
     std::shared_ptr<ll::Object> getPort(const std::string& name) const override;
+
+    void setPushConstants(const ll::PushConstants& constants) noexcept;
+
+    const ll::PushConstants& getPushConstants() const noexcept;
     
     void bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) override;
 
     void record(ll::CommandBuffer& commandBuffer) const override;
+
+    void setParameter(const std::string &name, const ll::Parameter &value) override;
+
+    const ll::Parameter &getParameter(const std::string &name) const override;
+
 
 protected:
     void onInit() override;

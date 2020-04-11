@@ -28,5 +28,7 @@ TEST_CASE("create_instance", "test_VulkanDriver") {
 
     // check that the instance is created successfully
     REQUIRE(result == vk::Result::eSuccess);
+
+    instance.destroy();
 }
 

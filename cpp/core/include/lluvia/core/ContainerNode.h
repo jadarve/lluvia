@@ -61,6 +61,10 @@ public:
 
     void record(ll::CommandBuffer& commandBuffer) const override;
 
+    void setParameter(const std::string &name, const ll::Parameter &value) override;
+
+    const ll::Parameter &getParameter(const std::string &name) const override;
+
 protected:
     void onInit() override;
 

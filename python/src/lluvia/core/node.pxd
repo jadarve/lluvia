@@ -13,7 +13,7 @@ from program cimport _Program
 from session cimport _Session
 from types cimport _vec3ui
 
-from libc.stdint cimport uint32_t
+from libc.stdint cimport int32_t, uint32_t, uint64_t
 
 from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
@@ -49,6 +49,22 @@ cdef extern from 'lluvia/core/Node.h' namespace 'll':
         _NodeType getType() const
 
 
+cdef extern from 'lluvia/core/PushConstants.h' namespace 'll':
+
+    cdef cppclass _PushConstants:
+
+        _PushConstants()
+        _PushConstants(const _PushConstants&)
+
+        uint64_t getSize() const
+
+        void setFloat(const float&)
+        float getFloat() const
+
+        void setInt32(const int32_t&)
+        float getInt32() const
+
+
 cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
 
     cdef cppclass _ComputeNodeDescriptor 'll::ComputeNodeDescriptor':
@@ -67,7 +83,10 @@ cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
         _ComputeNodeDescriptor& addPort(_PortDescriptor& port)
         _PortDescriptor getPort(const string& name) except +
 
-        _ComputeNodeDescriptor& addParameter(const string& name, const _Parameter& value)
+        _ComputeNodeDescriptor& setPushConstants(const _PushConstants&)
+        const _PushConstants getPushConstants() const
+
+        _ComputeNodeDescriptor& setParameter(const string& name, const _Parameter& value)
         _Parameter getParameter(const string& name) except +
 
         _ComputeNodeDescriptor& setGridX(const uint32_t x)
@@ -111,13 +130,19 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
         uint32_t getLocalY() const
         uint32_t getLocalZ() const
 
+        void setPushConstants(const _PushConstants&)
+        const _PushConstants getPushConstants() const
+
+        void setParameter(const string& name, const _Parameter& value)
+        const _Parameter& getParameter(const string& name) except +
+
         void configureGridShape(const _vec3ui& globalShape)
 
         shared_ptr[_Object] getPort(const string& name) except +
         void bind(const string& name, const shared_ptr[_Object]& obj) except +
 
-        void init()
-        void record(_CommandBuffer& commandBuffer) const
+        void init() except +
+        void record(_CommandBuffer& commandBuffer) except +
 
 
 cdef extern from 'lluvia/core/ContainerNodeDescriptor.h' namespace 'll':
@@ -132,7 +157,7 @@ cdef extern from 'lluvia/core/ContainerNodeDescriptor.h' namespace 'll':
         _ContainerNodeDescriptor& addPort(_PortDescriptor& port)
         _PortDescriptor getPort(const string& name) except +
 
-        _ContainerNodeDescriptor& addParameter(const string& name, const _Parameter& value)
+        _ContainerNodeDescriptor& setParameter(const string& name, const _Parameter& value)
         _Parameter getParameter(const string& name) except +
 
 
@@ -151,8 +176,11 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
         shared_ptr[_Node] getNode(const string& name) except +
         void bindNode(const string& name, const shared_ptr[_Node]& obj) except +
 
-        void init()
-        void record(_CommandBuffer& commandBuffer) const
+        void setParameter(const string& name, const _Parameter& value)
+        const _Parameter& getParameter(const string& name) except +
+
+        void init() except +
+        void record(_CommandBuffer& commandBuffer) except +
 
 
 cdef class PortDescriptor:

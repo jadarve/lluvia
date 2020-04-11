@@ -177,6 +177,18 @@ cdef class Image:
         cmdBuffer.end()
 
         self.session.run(cmdBuffer)
+    
+    def clear(self):
+        """
+        Clears the pixels in the image to zero.
+        """
+
+        cmdBuffer = self.session.createCommandBuffer()
+        cmdBuffer.begin()
+        cmdBuffer.clearImage(self)
+        cmdBuffer.end()
+
+        self.session.run(cmdBuffer)
 
     def fromHost(self, np.ndarray arr):
         """
@@ -556,3 +568,36 @@ cdef class ImageView:
         """
 
         return self.image.toHost(output)
+    
+    def changeLayout(self, ImageLayout newLayout):
+        """
+        Changes the layout of the underlying image.
+
+
+        Parameters
+        ----------
+        newLayout : str.
+            The new layout. Its value must be one of the values defined in lluvia.ImageLayout:
+                - Undefined
+                - General
+                - ColorAttachmentOptimal
+                - DepthStencilAttachmentOptimal
+                - DepthStencilReadOnlyOptimal
+                - ShaderReadOnlyOptimal
+                - TransferSrcOptimal
+                - TransferDstOptimal
+                - Preinitialized
+                - PresentSrcKHR
+                - SharedPresentKHR
+                - DepthReadOnlyStencilAttachmentOptimalKHR
+                - DepthAttachmentStencilReadOnlyOptimalKHR
+        """
+
+        self.image.changeLayout(newLayout)
+    
+    def clear(self):
+        """
+        Clears the pixels in the image to zero.
+        """
+
+        self.image.clear()

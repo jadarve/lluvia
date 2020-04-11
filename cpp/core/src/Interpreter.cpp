@@ -23,6 +23,7 @@
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Parameter.h"
 #include "lluvia/core/Program.h"
+#include "lluvia/core/PushConstants.h"
 #include "lluvia/core/Session.h"
 #include "lluvia/core/types.h"
 
@@ -34,13 +35,17 @@
 
 namespace ll {
 
+inline int failOnNewIndex(lua_State* L) {
+    return luaL_error(L, "cannot modify the elements of a read-only table");
+}
+
 template<typename T, std::size_t N, const std::array<std::tuple<const char*, T>, N>& values>
 void registerEnum(sol::table& lib, const std::string& enumName) {
 
     // TODO: make table read only and not able to add new elements
-    auto table = lib.create(enumName);
+    auto target = lib.create(enumName);
     for (const auto& kv : values) {
-        table[std::get<0>(kv)] = std::get<1>(kv);
+        target[std::get<0>(kv)] = std::get<1>(kv);
     }
 }
 
@@ -63,6 +68,7 @@ void registerTypes(sol::table& lib) {
     registerEnum<vk::BufferUsageFlagBits, ll::impl::VkBufferUsageFlagBitsStrings.size(), ll::impl::VkBufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
     registerEnum<vk::ImageLayout, ll::impl::VkImageLayoutStrings.size(), ll::impl::VkImageLayoutStrings>(lib, "ImageLayout");
     registerEnum<vk::ImageUsageFlagBits, ll::impl::VkImageUsageFlagBitsStrings.size(), ll::impl::VkImageUsageFlagBitsStrings>(lib, "ImageUsageFlagBits");
+    registerEnum<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(lib, "ImageTiling");
 
     ///////////////////////////////////////////////////////
     // Types
@@ -94,20 +100,26 @@ void registerTypes(sol::table& lib) {
     ///////////////////////////////////////////////////////
     // Descriptors
     ///////////////////////////////////////////////////////
-
-    // TODO: usageFlags, tiling
     lib.new_usertype<ll::ImageDescriptor>("ImageDescriptor",
-        sol::constructors<ll::ImageDescriptor(), ll::ImageDescriptor(const ll::ImageDescriptor&)>(),
+        sol::constructors<
+            ll::ImageDescriptor(),
+            ll::ImageDescriptor(const ll::ImageDescriptor&),
+            ll::ImageDescriptor(const uint32_t, const uint32_t, const uint32_t, const ll::ChannelCount, const ll::ChannelType)>(),
         "channelType", sol::property(&ll::ImageDescriptor::getChannelType, &ll::ImageDescriptor::setChannelType),
         "channelCount", sol::property(&ll::ImageDescriptor::getChannelCount<ll::ChannelCount>, &ll::ImageDescriptor::setChannelCount),
         "width", sol::property(&ll::ImageDescriptor::getWidth, &ll::ImageDescriptor::setWidth),
         "height", sol::property(&ll::ImageDescriptor::getHeight, &ll::ImageDescriptor::setHeight),
         "depth", sol::property(&ll::ImageDescriptor::getDepth, &ll::ImageDescriptor::setDepth),
-        "shape", sol::property(&ll::ImageDescriptor::getShape, &ll::ImageDescriptor::setShape)
+        "shape", sol::property(&ll::ImageDescriptor::getShape, &ll::ImageDescriptor::setShape),
+        "tiling", sol::property(&ll::ImageDescriptor::getTiling, &ll::ImageDescriptor::setTiling),
+        "usageFlags", sol::property(&ll::ImageDescriptor::getUsageFlagsUnsafe, &ll::ImageDescriptor::setUsageFlagsUnsafe)
         );
 
     lib.new_usertype<ll::ImageViewDescriptor>("ImageViewDescriptor",
-        sol::constructors<ll::ImageViewDescriptor(), ll::ImageViewDescriptor(const ll::ImageViewDescriptor&)>(),
+        sol::constructors<
+            ll::ImageViewDescriptor(),
+            ll::ImageViewDescriptor(const ll::ImageViewDescriptor&),
+            ll::ImageViewDescriptor(const ll::ImageAddressMode, const ll::ImageFilterMode, const bool, const bool)>(),
         "filterMode", sol::property(&ll::ImageViewDescriptor::getFilterMode, &ll::ImageViewDescriptor::setFilterMode),
         "addressModeU", sol::property(&ll::ImageViewDescriptor::getAddressModeU),
         "addressModeV", sol::property(&ll::ImageViewDescriptor::getAddressModeV),
@@ -131,23 +143,31 @@ void registerTypes(sol::table& lib) {
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",
         "functionName", sol::property(&ll::ComputeNodeDescriptor::getFunctionName, &ll::ComputeNodeDescriptor::setFunctionName),
         "builderName", sol::property(&ll::ComputeNodeDescriptor::getBuilderName, &ll::ComputeNodeDescriptor::setBuilderName),
-        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram,
-                                 (ComputeNodeDescriptor& (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program>&) noexcept) &ll::ComputeNodeDescriptor::setProgram
-                                ),
+        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram, (ComputeNodeDescriptor & (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program> &)noexcept) & ll::ComputeNodeDescriptor::setProgram),
         "localShape", sol::property(&ll::ComputeNodeDescriptor::getLocalShape, &ll::ComputeNodeDescriptor::setLocalShape),
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
+        "pushConstants", sol::property(&ll::ComputeNodeDescriptor::getPushConstants, &ll::ComputeNodeDescriptor::setPushConstants),
         "addPort", &ll::ComputeNodeDescriptor::addPort,
         "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape,
-        "__addParameter", &ll::ComputeNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
+        "__setParameter", &ll::ComputeNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ComputeNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
-        );
+    );
 
     lib.new_usertype<ll::ContainerNodeDescriptor>("ContainerNodeDescriptor",
         "builderName", sol::property(&ll::ContainerNodeDescriptor::getBuilderName, &ll::ContainerNodeDescriptor::setBuilderName),
         "addPort", &ll::ContainerNodeDescriptor::addPort,
-        "__addParameter", &ll::ContainerNodeDescriptor::addParameter, // user facing setParameter() implemented in library.lua
+        "__setParameter", &ll::ContainerNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ContainerNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
         );
+
+    lib.new_usertype<ll::PushConstants>("PushConstants",
+        sol::constructors<ll::PushConstants(), ll::PushConstants(const ll::PushConstants&)>(),
+        "size", sol::property(&ll::PushConstants::getSize),
+        "float", sol::property(&ll::PushConstants::getFloat, &ll::PushConstants::setFloat),
+        "int32", sol::property(&ll::PushConstants::getInt32, &ll::PushConstants::setInt32),
+        "pushFloat", &ll::PushConstants::pushFloat,
+        "pushInt32", &ll::PushConstants::pushInt32
+    );
 
     ///////////////////////////////////////////////////////
     // Objects
@@ -163,10 +183,10 @@ void registerTypes(sol::table& lib) {
         "size", sol::property(&ll::Buffer::getSize),
         "isMappable", sol::property(&ll::Buffer::isMappable),
         "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo),
+        "usageFlags", sol::property(&ll::Buffer::getUsageFlagsUnsafe),
         "memory", sol::property(&ll::Buffer::getMemory)
         );
 
-    // TODO: layout, usageFlags, createImageView
     lib.new_usertype<ll::Image>("Image",
         sol::no_constructor,
         sol::base_classes, sol::bases<ll::Object>(),
@@ -180,10 +200,14 @@ void registerTypes(sol::table& lib) {
         "height", sol::property(&ll::Image::getHeight),
         "depth", sol::property(&ll::Image::getDepth),
         "shape", sol::property(&ll::Image::getShape),
-        "changeImageLayout", &ll::Image::changeImageLayout
+        "layout", sol::property(&ll::Image::getLayout),
+        "tiling", sol::property(&ll::Image::getTiling),
+        "usageFlags", sol::property(&ll::Image::getUsageFlagsUnsafe),
+        "changeImageLayout", &ll::Image::changeImageLayout,
+        "clear", &ll::Image::clear,
+        "createImageView", &ll::Image::createImageView
         );
 
-    // TODO: usage flags, layout
     lib.new_usertype<ll::ImageView>("ImageView",
         sol::no_constructor,
         sol::base_classes, sol::bases<ll::Object>(),
@@ -199,7 +223,11 @@ void registerTypes(sol::table& lib) {
         "height", sol::property(&ll::ImageView::getHeight),
         "depth", sol::property(&ll::ImageView::getDepth),
         "shape", sol::property(&ll::ImageView::getShape),
-        "changeImageLayout", &ll::ImageView::changeImageLayout
+        "layout", sol::property(&ll::ImageView::getLayout),
+        "tiling", sol::property(&ll::ImageView::getTiling),
+        "usageFlags", sol::property(&ll::ImageView::getUsageFlagsUnsafe),
+        "changeImageLayout", &ll::ImageView::changeImageLayout,
+        "clear", &ll::ImageView::clear
         );
 
 
@@ -216,6 +244,8 @@ void registerTypes(sol::table& lib) {
         "state", sol::property(&ll::Node::getState),
         "init", &ll::Node::init,
         "record", &ll::Node::record,
+        "setParameter", &ll::Node::setParameter,
+        "getParameter", &ll::Node::getParameter,
         "__getPort", &ll::Node::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::Node::bind        // user facing bind() implemented in library.lua
         );
@@ -235,9 +265,12 @@ void registerTypes(sol::table& lib) {
         "gridY", sol::property(&ll::ComputeNode::getGridY, &ll::ComputeNode::setGridY),
         "gridZ", sol::property(&ll::ComputeNode::getGridZ, &ll::ComputeNode::setGridZ),
         "gridShape", sol::property(&ll::ComputeNode::getGridShape, &ll::ComputeNode::setGridShape),
+        "pushConstants", sol::property(&ll::ComputeNode::getPushConstants, &ll::ComputeNode::setPushConstants),
         "configureGridShape", &ll::ComputeNode::configureGridShape,
         "init", &ll::ComputeNode::init,
         "record", &ll::ComputeNode::record,
+        "__setParameter", &ll::ComputeNode::setParameter,
+        "__getParameter", &ll::ComputeNode::getParameter,
         "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::ComputeNode::bind        // user facing bind() implemented in library.lua
         );
@@ -249,6 +282,8 @@ void registerTypes(sol::table& lib) {
         "descriptor", sol::property(&ll::ContainerNode::getDescriptor),
         "init", &ll::ContainerNode::init,
         "record", &ll::ContainerNode::record,
+        "__setParameter", &ll::ContainerNode::setParameter,
+        "__getParameter", &ll::ContainerNode::getParameter,
         "__getPort", &ll::ContainerNode::getPort,   // user facing getPort() implemented in library.lua
         "__bind", &ll::ContainerNode::bind,         // user facing bind() implemented in library.lua
         "__bindNode", &ll::ContainerNode::bindNode, // user facing bindNode() implemented in library.lua 
@@ -257,6 +292,7 @@ void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::Session>("Session",
         sol::no_constructor,
+        "getHostMemory", &ll::Session::getHostMemory,
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createComputeNode,
@@ -319,27 +355,36 @@ Interpreter::~Interpreter() {
 
 void Interpreter::run(const std::string& code) {
     
-    auto result = m_lua->script(code);
-
-    if (!result.valid()) {
-        auto err = static_cast<sol::error>(result);
-        std::cerr << "Interpreter::run(): " << err.what() << std::endl;
+    try {
+        auto result = m_lua->script(code);
+    } catch(std::runtime_error& e) {
+        ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
 
 
 void Interpreter::runFile(const std::string& filename) {
-    auto result = m_lua->script_file(filename);
 
-    if (!result.valid()) {
-        auto err = static_cast<sol::error>(result);
-        std::cerr << "Interpreter::run(): " << err.what() << std::endl;
+    try {
+        auto result = m_lua->script_file(filename);
+    }
+    catch (std::runtime_error &e) {
+        ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
 
 
 sol::load_result Interpreter::load(const std::string& code) {
-    return m_lua->load(code);
+
+    auto loadCode = m_lua->load(code);
+    if (!loadCode.valid()) {
+        const auto err = static_cast<sol::error>(loadCode);
+
+        ll::throwSystemError(ll::ErrorCode::InterpreterError,
+                             "error loading code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+    }
+
+    return loadCode;
 }
 
 

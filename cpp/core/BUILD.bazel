@@ -1,3 +1,6 @@
+"""
+"""
+
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@//bazel/expand_template:def.bzl", "expand_template")
 
@@ -25,7 +28,7 @@ cc_library (
     linkopts = [
         "-lvulkan",
         "-lm",
-        "-ldl",
+        "-ldl"
     ],
     deps = [
         "@sol//:sol_cc_library",
@@ -42,9 +45,6 @@ cc_test (
         ":core_cc_library",
         "@catch//:catch_cc_library"
     ],
-    data = [
-        "//glsl:assign_shader"
-    ]
 )
 
 cc_test (
@@ -86,7 +86,7 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//glsl:assign_shader"
+        "//cpp/core/test/glsl:assign_shader"
     ]
 )
 
@@ -99,14 +99,24 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//glsl:image_to_buffer_shader",
-        "//glsl:texture_to_buffer_shader"
+        "//cpp/core/test/glsl:image_to_buffer_shader",
+        "//cpp/core/test/glsl:texture_to_buffer_shader"
     ]
 )
 
 cc_test (
     name = "test_ImageCreation",
     srcs = ["test/test_ImageCreation.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+)
+
+cc_test (
+    name = "test_ImageCopy",
+    srcs = ["test/test_ImageCopy.cpp"],
     copts = ["--std=c++17",],
     deps = [
         ":core_cc_library",
@@ -143,7 +153,7 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//glsl:assign_shader"
+        "//cpp/core/test/glsl:assign_shader"
     ]
 )
 
@@ -175,4 +185,31 @@ cc_test (
         ":core_cc_library",
         "@catch//:catch_cc_library"
     ],
+)
+
+cc_test (
+    name = "test_PushConstants",
+    srcs = ["test/test_PushConstants.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+    data = [
+        "//cpp/core/test/glsl:pushConstants_shader",
+        "//cpp/core/test/glsl:pushConstants2_shader",
+    ]
+)
+
+cc_test (
+    name = "test_Duration",
+    srcs = ["test/test_Duration.cpp"],
+    copts = ["--std=c++17",],
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library"
+    ],
+    data = [
+        "//cpp/core/test/glsl:assign_shader"
+    ]
 )

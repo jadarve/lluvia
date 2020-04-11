@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -28,6 +29,7 @@ class ComputeNode;
 class ComputeNodeDescriptor;
 class ContainerNode;
 class ContainerNodeDescriptor;
+class Duration;
 class Image;
 class Interpreter;
 class Memory;
@@ -75,11 +77,19 @@ public:
     Session& operator = (const Session& session) = delete;
     Session& operator = (Session&& session)      = delete;
 
+    /**
+    @brief      Returns a pointer to ll::Memory object that is HOST_LOCAL and HOST_COHERENT.
+    
+    This memory can be used to create uniform buffers to pass to shaders.
+    
+    @return     The host memory.
+     */
+    std::shared_ptr<ll::Memory> getHostMemory() const noexcept;
 
     /**
-     * @brief      Gets the Lua interpreter.
-     *
-     * @return     The interpreter.
+    @brief      Gets the Lua interpreter.
+    
+    @return     The interpreter.
      */
     const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
     
@@ -144,7 +154,13 @@ public:
     */
     std::unique_ptr<ll::CommandBuffer> createCommandBuffer() const;
 
+    /**
+    @brief      Creates a Duration object.
     
+    @return     A new ll::Duration object.
+    */
+    std::unique_ptr<ll::Duration> createDuration() const;
+
     /**
     @brief      Creates a program object reading a file at a given path.
 
@@ -275,6 +291,30 @@ public:
 
 
     /**
+    @brief      Runs a ll::ContainerNode
+
+    Internally, this function creates a ll::CommandBuffer using
+    ll::Session::createCommandBuffer, records the execution of the
+    container node and submits to the device.
+
+    Calling this function is equivalent to:
+
+    @code
+        auto cmdBuffer = session->createCommandBuffer();
+
+        cmdBuffer->begin();
+        node.record(*cmdBuffer)
+        cmdBuffer->end();
+
+        session->run(*cmdBuffer);
+    @endcode
+    
+    @param[in]  node  The node
+    */
+    void run(const ll::ContainerNode& node);
+
+
+    /**
     @brief      Runs Lua script code into the session's internal interpreter
 
     @param[in]  code  The Lua code
@@ -298,7 +338,13 @@ private:
     bool initDevice();
     bool initQueue();
     bool initCommandPool();
+    void initHostMemory();
     uint32_t getComputeFamilyQueueIndex();
+
+    std::shared_ptr<ll::Memory> createMemoryImpl(const vk::MemoryPropertyFlags flags,
+                                                 const uint64_t pageSize,
+                                                 bool exactFlagsMatch,
+                                                 bool keepThisSharedReference);
 
     vk::Instance         instance;
     vk::PhysicalDevice   physicalDevice;
@@ -310,6 +356,9 @@ private:
     std::unique_ptr<ll::Interpreter> m_interpreter;
 
     std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
+
+    std::once_flag              m_hostMemoryAllocate;
+    std::shared_ptr<ll::Memory> m_hostMemory;
 };
 
 } // namespace ll

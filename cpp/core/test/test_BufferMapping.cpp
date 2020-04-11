@@ -47,6 +47,7 @@ TEST_CASE("DifferentPage", "test_BufferMapping") {
 TEST_CASE("SamePage", "test_BufferMapping") {
 
     auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
 
     const auto hostMemFlags   = memflags::eHostVisible | memflags::eHostCoherent;;
 
@@ -73,3 +74,37 @@ TEST_CASE("SamePage", "test_BufferMapping") {
     REQUIRE_THROWS_AS(buffer2->map<uint8_t>(), std::system_error);
 }
 
+
+TEST_CASE("MapAndSet", "test_BufferMapping") {
+
+    auto session = ll::Session::create();
+    REQUIRE(session != nullptr);
+
+    std::cout << "Getting host memory" << std::endl;
+
+    auto uniformMemory = session->getHostMemory();
+    REQUIRE(uniformMemory != nullptr);
+
+    using params = struct {
+        int a;
+        float b;
+    };
+
+    const auto p = params{789456, 3.1415};
+    
+
+    auto uniformBuffer = uniformMemory->createBuffer(sizeof(p), vk::BufferUsageFlagBits::eUniformBuffer);
+    REQUIRE(uniformBuffer != nullptr);
+    
+    uniformBuffer->mapAndSet(p);
+
+    auto pGet = params{};
+
+    {
+        auto mapPtr = uniformBuffer->map<params>();
+        pGet = *mapPtr;
+    }
+
+    REQUIRE(p.a == pGet.a);
+    REQUIRE(p.b == pGet.b);
+}

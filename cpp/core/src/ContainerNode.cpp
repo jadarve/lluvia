@@ -51,6 +51,13 @@ std::shared_ptr<ll::Object> ContainerNode::getPort(const std::string& name) cons
     return it->second;
 }
 
+void ContainerNode::setParameter(const std::string &name, const ll::Parameter &value) {
+    m_descriptor.setParameter(name, value);
+}
+
+const ll::Parameter& ContainerNode::getParameter(const std::string &name) const {
+    return m_descriptor.getParameter(name);
+}
 
 void ContainerNode::bind(const std::string& name, const std::shared_ptr<ll::Object>& obj) {
 
@@ -66,9 +73,10 @@ void ContainerNode::bindNode(const std::string& name, const std::shared_ptr<ll::
 
 std::shared_ptr<ll::Node> ContainerNode::getNode(const std::string& name) const {
 
-    std::cout << "ContainerNode::getNode: " << name << std::endl;
     const auto it = m_nodes.find(name);
-    return it == m_nodes.cend()? nullptr : it->second;
+    
+    ll::throwSystemErrorIf(it == m_nodes.cend(), ll::ErrorCode::KeyNotFound, "Node [" + name + "] not found.");
+    return it->second;
 }
 
 
@@ -85,8 +93,7 @@ void ContainerNode::record(ll::CommandBuffer& commandBuffer) const {
             builder.onNodeRecord(node, cmdBuffer)
         )";
 
-        auto load = m_session->getInterpreter()->load(lua);
-        load(builderName, shared_from_this(), commandBuffer);
+        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this(), commandBuffer);
     }
 }
 
@@ -102,8 +109,7 @@ void ContainerNode::onInit() {
             builder.onNodeInit(node)
         )";
 
-        auto load = m_session->getInterpreter()->load(lua);
-        load(builderName, shared_from_this());
+        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
     }
 }
 

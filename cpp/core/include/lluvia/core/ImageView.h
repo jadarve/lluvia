@@ -221,6 +221,16 @@ public:
 
 
     /**
+    @brief      Gets the usage flags casted to an integer type.
+
+    Please do not use this method. It's for internal use only.
+    
+    @return     The usage flags unsafe.
+    */
+    uint32_t getUsageFlagsUnsafe() const noexcept;
+
+
+    /**
     @brief      Gets the Vulkan image layout.
 
     The layout is changed through invocations of Session::changeImageLayout
@@ -231,6 +241,14 @@ public:
     @return     The image layout.
     */
     vk::ImageLayout getLayout() const noexcept;
+
+
+    /**
+    @brief      Gets the vulkan image tiling.
+    
+    @return     The image tiling.
+    */
+    vk::ImageTiling getTiling() const noexcept;
 
 
     /**
@@ -317,6 +335,16 @@ public:
     @param[in]  newLayout  The new layout
     */
     void changeImageLayout(const vk::ImageLayout newLayout);
+
+    /**
+    @brief      Immediately clears the image pixels to zero.
+
+    This method creates a command buffer and sumbits it to clear
+    all the pixels in the underlying image to zero. Execution is
+    blocked until the operation is completed.
+    
+    */
+    void clear();
 
 private:
     ImageView(  vk::Device tDevice,

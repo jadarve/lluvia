@@ -9,6 +9,7 @@
 from .enums.node cimport NodeState, NodeType, PortDirection, PortType
 from .enums.node import PortDirection as PortDirection_t
 from .enums.node import PortType as PortType_t
+from .enums.node import NodeType as NodeType_t
 from .enums.core_object import ObjectType
 
 from core_object cimport _Object
@@ -185,9 +186,15 @@ cdef class ComputeNodeDescriptor:
 
         self.__descriptor.addPort(portDesc.__descriptor)
 
-    def addParameter(self, str name, Parameter param):
+    def getPort(self, str name):
 
-        self.__descriptor.addParameter(impl.encodeString(name), param.__p)
+        cdef PortDescriptor out = PortDescriptor(0, 'dummy', PortDirection.In, PortType.Buffer)
+        out.__descriptor = self.__descriptor.getPort(impl.encodeString(name))
+        return out
+
+    def setParameter(self, str name, Parameter param):
+
+        self.__descriptor.setParameter(impl.encodeString(name), param.__p)
 
     def getParameter(self, str name):
 
@@ -206,7 +213,7 @@ cdef class ComputeNode:
 
     property type:
         def __get__(self):
-            return NodeType(<uint32_t> self.__node.get().getType())
+            return NodeType_t(<uint32_t> self.__node.get().getType())
 
     property session:
         def __get__(self):
@@ -256,6 +263,16 @@ cdef class ComputeNode:
         def __get__(self):
             return self.__node.get().getLocalZ()
 
+    def setParameter(self, str name, Parameter param):
+
+        self.__node.get().setParameter(impl.encodeString(name), param.__p)
+
+    def getParameter(self, str name):
+
+        cdef Parameter out = Parameter()
+        out.__p = self.__node.get().getParameter(impl.encodeString(name))
+        return out
+
     def bind(self, str name, obj):
         """
         Binds an object as parater to this node.
@@ -273,15 +290,20 @@ cdef class ComputeNode:
         cdef Buffer    buf     = None
         cdef ImageView imgView = None
 
-        if type(obj) == Buffer:
+        objType = type(obj)
+
+        if objType == Buffer:
             buf = obj
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](buf.__buffer))
-
-        if type(obj) == ImageView:
+        
+        elif objType == ImageView:
             imgView = obj
             self.__node.get().bind(impl.encodeString(name),
                                    static_pointer_cast[_Object](imgView.__imageView))
+            
+        else:
+            raise RuntimeError('Unsupported obj type {0}. Valid types are ll.Buffer and ll.ImageView.'.format(type(obj)))
 
     def getPort(self, str name):
 
@@ -337,9 +359,9 @@ cdef class ContainerNodeDescriptor:
 
         self.__descriptor.addPort(portDesc.__descriptor)
 
-    def addParameter(self, str name, Parameter param):
+    def setParameter(self, str name, Parameter param):
 
-        self.__descriptor.addParameter(impl.encodeString(name), param.__p)
+        self.__descriptor.setParameter(impl.encodeString(name), param.__p)
 
     def getParameter(self, str name):
 
@@ -358,13 +380,23 @@ cdef class ContainerNode:
 
     property type:
         def __get__(self):
-            return NodeType(<uint32_t> self.__node.get().getType())
+            return NodeType_t(<uint32_t> self.__node.get().getType())
 
     property session:
         def __get__(self):
             cdef Session out = Session()
             out.__session = self.__node.get().getSession()
             return out
+
+    def setParameter(self, str name, Parameter param):
+
+        self.__node.get().setParameter(impl.encodeString(name), param.__p)
+
+    def getParameter(self, str name):
+
+        cdef Parameter out = Parameter()
+        out.__p = self.__node.get().getParameter(impl.encodeString(name))
+        return out
 
     def bind(self, str name, obj):
         """
@@ -415,7 +447,7 @@ cdef class ContainerNode:
 
         cdef shared_ptr[_Node] node = self.__node.get().getNode(impl.encodeString(name))
 
-        cdef NodeType nType = NodeType(<uint32_t> node.get().getType())
+        cdef NodeType nType = NodeType_t(<uint32_t> node.get().getType())
 
         cdef ComputeNode computeNode
         cdef ContainerNode containerNode

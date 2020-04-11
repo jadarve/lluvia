@@ -43,5 +43,4 @@ const std::vector<uint8_t>& Program::getSpirV() const noexcept {
     return m_spirvCode;
 }
 
-
 } // namespace ll

@@ -7,6 +7,7 @@
 """
 
 from command_buffer cimport _CommandBuffer
+from duration cimport _Duration
 from node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode
 from memory cimport _Memory
 from program cimport _Program
@@ -31,6 +32,8 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         vector[vk.MemoryPropertyFlags] getSupportedMemoryFlags() const
 
+        shared_ptr[_Memory] getHostMemory() except +
+
         shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) except +
         shared_ptr[_Program] createProgram(const string& spirvPath) except +
 
@@ -45,9 +48,12 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         void setProgram(const string& name, const shared_ptr[_Program]& program)
         shared_ptr[_Program] getProgram(const string& name) except +
 
+        unique_ptr[_Duration] createDuration() except +
+
         unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
         void run(const _ComputeNode& node) except +
+        void run(const _ContainerNode& node) except +
         void run(const _CommandBuffer& cmdBuffer) except +
 
         void script(const string& code) except +

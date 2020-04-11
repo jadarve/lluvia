@@ -70,13 +70,23 @@ const ll::ImageDescriptor& Image::getDescriptor() const noexcept {
 }
 
 
-vk::ImageUsageFlags Image::getUsageFlags()const noexcept {
+vk::ImageUsageFlags Image::getUsageFlags() const noexcept {
     return m_descriptor.getUsageFlags();
+}
+
+
+uint32_t Image::getUsageFlagsUnsafe() const noexcept {
+    return m_descriptor.getUsageFlagsUnsafe();
 }
 
 
 vk::ImageLayout Image::getLayout() const noexcept {
     return m_vkLayout;
+}
+
+
+vk::ImageTiling Image::getTiling() const noexcept {
+    return m_descriptor.getTiling();
 }
 
 
@@ -123,6 +133,18 @@ void Image::changeImageLayout(const vk::ImageLayout newLayout) {
     cmdBuffer->end();
     session->run(*cmdBuffer);
 
+}
+
+void Image::clear() {
+
+    const auto &session = m_memory->getSession();
+
+    auto cmdBuffer = session->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->clearImage(*this);
+    cmdBuffer->end();
+    session->run(*cmdBuffer);
 }
 
 } // namespace ll

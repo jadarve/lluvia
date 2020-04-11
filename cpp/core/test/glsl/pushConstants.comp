@@ -1,0 +1,17 @@
+#version 450
+
+#include <lluvia/core.glsl>
+
+layout(binding = 0) buffer out_0 {
+    float outputBuffer[];
+};
+
+layout(push_constant) uniform const_0 {
+    float value;
+} params;
+
+void main() {
+
+    const uint index = LL_GLOBAL_COORDS_1D;
+    outputBuffer[index] = params.value;
+}

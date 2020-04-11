@@ -36,6 +36,9 @@ cimport vulkan as vk
 import  program
 cimport program
 
+from duration import Duration
+from duration cimport Duration, _Duration, moveDuration
+
 from node cimport ComputeNode, ComputeNodeDescriptor, ContainerNodeDescriptor, ContainerNode
 
 
@@ -101,6 +104,21 @@ cdef class Session:
             supportedMemoryFlags.append(flagBits)
 
         return supportedMemoryFlags
+
+    def getHostMemory(self):
+        """
+        Returns a memory object that is HOST_LOCAL and HOST_COHERENT. This memory can
+        be used to create uniform buffers to pass to shaders.
+
+        Returns
+        -------
+        mem : ll.Memory
+        """
+
+        cdef Memory mem = Memory()
+        mem.__memory = self.__session.get().getHostMemory()
+
+        return mem
 
     def createMemory(self,
                      flags=MemoryPropertyFlagBits.DeviceLocal,
@@ -245,6 +263,20 @@ cdef class Session:
 
         return node
 
+    def createDuration(self):
+        """
+        Creates a Duration object.
+
+        Returns
+        -------
+        d : ll.Duration.
+            A new Duration object.
+        """
+
+        cdef Duration d = Duration()
+        d.__duration = shared_ptr[_Duration](moveDuration(self.__session.get().createDuration()))
+        return d
+
     def createCommandBuffer(self):
         """
         Creates a command buffer object.
@@ -285,15 +317,25 @@ cdef class Session:
         """
 
         cdef ComputeNode node = None
+        cdef ContainerNode containerNode = None
         cdef CommandBuffer cmdBuffer = None
 
         if type(obj) == ComputeNode:
             node = obj
             self.__session.get().run(deref(node.__node.get()))
+        
+        elif type(obj) == ContainerNode:
+            containerNode = obj
+            self.__session.get().run(deref(containerNode.__node.get()))
 
         elif type(obj) == CommandBuffer:
             cmdBuffer = obj
             self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
+        
+        else:
+            raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
+
+        
 
     def compileProgram(self, shaderCode,
                        includeDirs=None,

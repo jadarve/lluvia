@@ -7,13 +7,71 @@
 """
 
 import math
+import os
+import glob
+import imageio
+import numpy as np
 
-__all__ = ['calculateGridSize']
+
+__all__ = [
+    'calculateGridSize',
+    'loadNodes',
+    'readRGBA'
+]
+
+
+def loadNodes(session, glslPath, luaPath):
+    """
+    Load GLSL and Lua nodes into a session.
+
+    Parameters
+    ----------
+    session : Session.
+        Session where the nodes will be loaded.
+    glslPath : str.
+        Path where the SPIR-V files can be found.
+    luaPath : std.
+        Path where the Lua files can be found.
+    """
+
+    shaders = glob.glob(os.path.join(glslPath, '*.spv'))
+    luas = glob.glob(os.path.join(luaPath, '*.lua'))
+
+    for spirv in shaders:
+        fname = os.path.split(spirv)[-1]
+        programName = os.path.splitext(fname)[0]
+        session.setProgram(programName, session.createProgram(spirv))
+
+    for lua in luas:
+        session.scriptFile(lua)
+
+
+def readRGBA(path):
+    """
+    Reads an image and converts it to RGBA.
+
+    Parameters
+    ----------
+    path : str.
+        Image path.
+
+    Returns
+    -------
+    RGBA : np.ndarray.
+        RGBA image.
+    """
+
+    img = imageio.imread(path)
+    RGBA = np.zeros(img.shape[:-1] + tuple([4]), dtype=img.dtype)
+    RGBA[..., :3] = img
+
+    return RGBA
 
 
 def calculateGridSize(local, imgShape):
     """
-    Calculates the grid size of a compute node given its local size and an image parameter.
+    Calculates the grid size of a compute node given its local size
+    and an image parameter.
 
     Parameters
     ----------
@@ -29,11 +87,30 @@ def calculateGridSize(local, imgShape):
         (X, Y, Z) grid size.
     """
 
-    calc = lambda length, l: int(math.ceil(float(length) / float(l)))
-
     x, y, z = local
     depth, height, width, _ = imgShape
 
-    return (calc(width  , x),
-            calc(height , y),
-            calc(depth  , z))
+    return (__calculateGridAxis(width, x),
+            __calculateGridAxis(height, y),
+            __calculateGridAxis(depth, z))
+
+
+def __calculateGridAxis(length, local):
+    """
+    Calculates the grid axis.
+
+    Parameters
+    ----------
+    length : int.
+        Global length.
+    local : int.
+        Local size.
+
+    Returns
+    -------
+    grid : int
+        Calculated grid size.
+
+    """
+
+    return int(math.ceil(float(length) / float(local)))

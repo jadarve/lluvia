@@ -41,7 +41,8 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
                     const uint32_t depth,
                     _ChannelCount channelCount,
                     _ChannelType channelType,
-                    const vk.ImageUsageFlags usageFlags)
+                    const vk.ImageUsageFlags usageFlags,
+                    const vk.ImageTiling tiling)
 
 
         _ImageDescriptor& setChannelType(const _ChannelType type)
@@ -81,6 +82,8 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
         uint32_t getDepth()              const
 
         shared_ptr[_ImageView] createImageView(const _ImageViewDescriptor& descriptor) except +
+
+        void clear() except +
 
 
 cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
@@ -140,6 +143,8 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
         uint32_t getWidth()              const
         uint32_t getHeight()             const
         uint32_t getDepth()              const
+
+        void clear() except +
 
 
 cdef class Image:

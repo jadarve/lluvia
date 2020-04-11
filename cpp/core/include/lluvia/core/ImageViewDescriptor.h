@@ -199,6 +199,11 @@ public:
     ImageViewDescriptor(const ImageViewDescriptor& descriptor)              = default;
     ImageViewDescriptor(ImageViewDescriptor&& descriptor)                   = default;
 
+    ImageViewDescriptor(const ll::ImageAddressMode addressmode,
+                        const ll::ImageFilterMode filterMode,
+                        const bool normalizedCoordinates,
+                        const bool isSampled);
+
     ~ImageViewDescriptor()                                                  = default;
     
     ImageViewDescriptor& operator = (const ImageViewDescriptor& descriptor) = default;
@@ -208,15 +213,11 @@ public:
     /**
     @brief      Sets the filtering mode.
     
-    @param[in]  tFilterMode  The filter mode
+    @param[in]  filterMode  The filter mode
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setFilterMode(ll::ImageFilterMode tFilterMode) noexcept {
-
-        this->filterMode = tFilterMode;
-        return *this;
-    }
+    ImageViewDescriptor& setFilterMode(ll::ImageFilterMode filterMode) noexcept;
 
 
     /**
@@ -224,31 +225,28 @@ public:
     
     @return     The filter mode.
     */
-    inline ll::ImageFilterMode getFilterMode() const noexcept {
-
-        return filterMode;
-    }
+    ll::ImageFilterMode getFilterMode() const noexcept;
 
 
     /**
     @brief      Sets the address mode to all image axes.
     
-    @param[in]  tAddressMode  The address mode
+    @param[in]  addressMode  The address mode
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setAddressMode(ll::ImageAddressMode tAddressMode) noexcept;
+    ImageViewDescriptor& setAddressMode(ll::ImageAddressMode addressMode) noexcept;
 
 
     /**
     @brief      Sets the address mode to a given image axis.
     
     @param[in]  axis           The axis
-    @param[in]  tAddressMode   The address mode
+    @param[in]  addressMode   The address mode
     
     @return     A reference to this object.
     */
-    ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode tAddressMode) noexcept;
+    ImageViewDescriptor& setAddressMode(ll::ImageAxis axis, ll::ImageAddressMode addressMode) noexcept;
 
 
     /**
@@ -256,10 +254,7 @@ public:
     
     @return     The address mode.
     */
-    inline ll::ImageAddressMode getAddressModeU() const noexcept {
-
-        return addressMode[static_cast<uint32_t>(ll::ImageAxis::U)];
-    }
+    ll::ImageAddressMode getAddressModeU() const noexcept;
 
 
     /**
@@ -267,10 +262,7 @@ public:
     
     @return     The address mode.
     */
-    inline ll::ImageAddressMode getAddressModeV() const noexcept {
-
-        return addressMode[static_cast<uint32_t>(ll::ImageAxis::V)];
-    }
+    ll::ImageAddressMode getAddressModeV() const noexcept;
 
 
     /**
@@ -278,24 +270,17 @@ public:
     
     @return     The address mode.
     */
-    inline ll::ImageAddressMode getAddressModeW() const noexcept {
-
-        return addressMode[static_cast<uint32_t>(ll::ImageAxis::W)];
-    }
+    ll::ImageAddressMode getAddressModeW() const noexcept;
 
 
     /**
     @brief      Sets whether or not the image view will use normalized coordinates.
     
-    @param[in]  tNormalizedCoordinates  The normalized coordinates.
+    @param[in]  normalizedCoordinates  The normalized coordinates.
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setNormalizedCoordinates(bool tNormalizedCoordinates) noexcept {
-
-        this->normalizedCoordinates = tNormalizedCoordinates;
-        return *this;
-    }
+    ImageViewDescriptor& setNormalizedCoordinates(bool normalizedCoordinates) noexcept;
 
 
     /**
@@ -303,10 +288,7 @@ public:
     
     @return     True if normalized coordinates, False otherwise.
     */
-    inline bool isNormalizedCoordinates()  const noexcept {
-
-        return normalizedCoordinates;
-    }
+    bool isNormalizedCoordinates() const noexcept;
 
 
     /**
@@ -316,11 +298,7 @@ public:
     
     @return     A reference to this object.
     */
-    inline ImageViewDescriptor& setIsSampled(bool isSampled) noexcept {
-
-        this->_isSampled = isSampled;
-        return *this;
-    }
+    ImageViewDescriptor& setIsSampled(bool isSampled) noexcept;
 
 
     /**
@@ -328,10 +306,7 @@ public:
     
     @return     True if sampled, False otherwise.
     */
-    inline bool isSampled() const noexcept {
-
-        return _isSampled;
-    }
+    bool isSampled() const noexcept;
 
 
     /**
@@ -343,22 +318,20 @@ public:
     */
     vk::SamplerCreateInfo getVkSamplerCreateInfo() const noexcept;
 
-private:
 
-    ll::ImageFilterMode filterMode {ll::ImageFilterMode::Nearest};
+private:
+    ll::ImageFilterMode m_filterMode {ll::ImageFilterMode::Nearest};
 
     /**
      * Address mode for U, V, W axes
      */
-    std::array<ll::ImageAddressMode, 3> addressMode {{ll::ImageAddressMode::Repeat,
-                                                      ll::ImageAddressMode::Repeat,
-                                                      ll::ImageAddressMode::Repeat}};
+    std::array<ll::ImageAddressMode, 3> m_addressMode {{ll::ImageAddressMode::Repeat,
+                                                        ll::ImageAddressMode::Repeat,
+                                                        ll::ImageAddressMode::Repeat}};
 
-    bool normalizedCoordinates {false};
-    bool _isSampled            {false};
+    bool m_normalizedCoordinates {false};
+    bool m_isSampled             {false};
 
-
-friend class ImageView;
 };
 
 

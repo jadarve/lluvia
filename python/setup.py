@@ -21,8 +21,8 @@ incDirs = ['../cpp/core/include',
            np.get_include()]
 
 # path to build
-libDirs = ['../bazel-out/k8-fastbuild/bin/cpp/core',
-           '../bazel-out/k8-fastbuild/bin/external/lua',
+libDirs = ['../bazel-bin/cpp/core',
+           '../bazel-bin/external/lua',
            os.path.join(VULKAN_SDK, 'lib')]
 
 
@@ -35,10 +35,12 @@ libs   = ['core_cc_library',
 
 cflags = ['-std=c++17',
           '-fPIC',
-          '-Wno-unused-function']
+          '-Wno-unused-function',
+          '-DSOL_ALL_SAFETIES_ON=1']
 
 cython_directives = {'embedsignature' : True,
-                     'infer_types' : True}
+                     'infer_types' : True,
+                     'language_level': 2}
 
 def createExtension(name, sources):
 
@@ -80,6 +82,7 @@ package_dir = {'lluvia': 'src/lluvia'}
 cythonModules = [
     ('lluvia.core.command_buffer'    , ['src/lluvia/core/command_buffer.pyx']),
     ('lluvia.core.core_buffer'       , ['src/lluvia/core/core_buffer.pyx']),
+    ('lluvia.core.duration'          , ['src/lluvia/core/duration.pyx']),
     ('lluvia.core.enums.core_object' , ['src/lluvia/core/enums/core_object.pyx']),
     ('lluvia.core.enums.image'       , ['src/lluvia/core/enums/image.pyx']),
     ('lluvia.core.enums.node'        , ['src/lluvia/core/enums/node.pyx']),

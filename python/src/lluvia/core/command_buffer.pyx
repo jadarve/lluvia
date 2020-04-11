@@ -1,3 +1,4 @@
+
 """
     lluvia.core.command_buffer
     --------------------------
@@ -21,6 +22,9 @@ import image
 
 from image cimport Image
 from image import  Image
+
+from duration cimport Duration
+from duration import Duration
 
 import impl
 
@@ -120,6 +124,32 @@ cdef class CommandBuffer:
             deref(src.__image.get()),
             deref(dst.__buffer.get()))
 
+    def copyImageToImage(self, Image src, Image dst):
+        """
+        Copies the content of src Image to dst Image.
+
+        The image parameters must be in the following layouts:
+
+        * src: TransferSrcOptimal
+        * dst: TransferDstOptimal
+
+        This method does not check if the images are in the correct
+        layout. The results are undefined if the images are in
+        any other layout.
+
+        Parameters
+        ----------
+        src : Image.
+            Source image.
+
+        dst : Image.
+            Destination buffer.
+        """
+
+        self.__commandBuffer.get().copyImageToImage(
+            deref(src.__image.get()),
+            deref(dst.__image.get()))
+
     def changeImageLayout(self, Image img, ImageLayout newLayout):
         """
         Changes image layout.
@@ -158,6 +188,13 @@ cdef class CommandBuffer:
         cdef vk.ImageLayout vkLayout = <vk.ImageLayout> newLayout
         self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), vkLayout)
 
+    def clearImage(self, Image img):
+        """
+        Clears the pixels of the image to zero.
+        """
+
+        self.__commandBuffer.get().clearImage(deref(img.__image.get()))
+
     def run(self, ComputeNode node):
         """
         Records running a compute node.
@@ -181,3 +218,27 @@ cdef class CommandBuffer:
         """
 
         self.__commandBuffer.get().memoryBarrier()
+
+    def durationStart(self, Duration d):
+        """
+        Starts recording the elapsed time between two points.
+
+        Parameters
+        ----------
+        d : Duration.
+            The duration object.
+        """
+
+        self.__commandBuffer.get().durationStart(deref(d.__duration))
+
+    def durationEnd(self, Duration d):
+        """
+        Stops recording the elapsed time between two points.
+
+        Parameters
+        ----------
+        d : Duration.
+            The duration object.
+        """
+
+        self.__commandBuffer.get().durationEnd(deref(d.__duration))

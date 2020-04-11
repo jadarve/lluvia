@@ -15,6 +15,7 @@ namespace ll {
 
 class Buffer;
 class ComputeNode;
+class Duration;
 class Image;
 class ImageView;
 class Session;
@@ -131,6 +132,15 @@ public:
 
 
     /**
+    @brief      Copies the content of \p src image into \p dst image.
+    
+    @param[in]  src   The source
+    @param[in]  dst   The destination
+    */
+    void copyImageToImage(const ll::Image& src, const ll::Image& dst);
+
+
+    /**
     @brief      Change \p image layout.
 
     The actual change in image layout is performed when this command buffer
@@ -167,6 +177,25 @@ public:
     *TODO:* details.
     */
     void memoryBarrier();
+
+    /**
+    @brief      Clears the pixels of an image to zero.
+    */
+    void clearImage(ll::Image& image);
+
+    /**
+    @brief      Starts recording the elapsed time between two points.
+    
+    @param      duration  The duration object.
+    */
+    void durationStart(ll::Duration& duration);
+
+    /**
+    @brief      Stops recording the elapsed time between two points.
+    
+    @param      duration  The duration object.
+    */
+    void durationEnd(ll::Duration& duration);
 
 private:
     vk::Device          m_device;

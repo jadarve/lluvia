@@ -22,6 +22,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <type_traits>
 #include <vector>
 
 
@@ -171,6 +172,16 @@ public:
 
 
     /**
+    @brief      Gets the usage flags casted to an integer type.
+
+    Please do not use this method. It's for internal use only.
+    
+    @return     The usage flags unsafe.
+    */
+    uint32_t getUsageFlagsUnsafe() const noexcept;
+
+
+    /**
     @brief      Determines if this buffer is mappable to host-visible memory.
 
     This function calls ll::Memory::isPageMappable from the memory this
@@ -259,6 +270,19 @@ public:
         deleter.buffer = this;
 
         return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> {static_cast<baseType*>(ptr), deleter};
+    }
+
+    template<typename T>
+    void mapAndSet(T&& obj) {
+
+        const auto objSize = sizeof(obj);
+        if (objSize > getSize()) {
+            ll::throwSystemError(ll::ErrorCode::MemoryMapFailed, "size of input object (" + std::to_string(objSize) + " bytes) is greater than size of buffer (" + std::to_string(getSize()) + " bytes)");
+        }
+
+        auto ptr = map<std::remove_const_t<std::remove_reference_t<T>>>();
+
+        std::memcpy(static_cast<void*>(ptr.get()), &obj, objSize);
     }
 
 

@@ -1,4 +1,7 @@
-# load("@rules_cc//cc:defs.bzl", "cc_library")
+"""
+"""
+
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
 
 cc_library (
     name = "lua_cc_library",
@@ -8,6 +11,7 @@ cc_library (
     ),
     hdrs = glob(["lua-5.3.5/src/*.h", "lua-5.3.5/src/*.hpp"]),
     strip_include_prefix = "lua-5.3.5/src",
+    linkstatic = True,
     local_defines = [
         "LUA_USE_LINUX",
     ],

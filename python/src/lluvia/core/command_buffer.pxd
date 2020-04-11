@@ -16,6 +16,7 @@ from libcpp.string cimport string
 from core_buffer cimport _Buffer
 from image cimport _Image
 from node cimport _ComputeNode
+from duration cimport _Duration
 from session cimport Session
 
 cimport vulkan as vk
@@ -25,18 +26,24 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
 
     cdef cppclass _CommandBuffer 'll::CommandBuffer':
 
-        void begin()
-        void end()
+        void begin() except +
+        void end() except +
 
-        void run(const _ComputeNode& node)
+        void run(const _ComputeNode& node) except +
 
         void copyBuffer(const _Buffer& src, const _Buffer& dst) except +
-        void copyBufferToImage(const _Buffer& src, const _Image& dst)
-        void copyImageToBuffer(const _Image& src, const _Buffer& dst)
+        void copyBufferToImage(const _Buffer& src, const _Image& dst) except +
+        void copyImageToBuffer(const _Image& src, const _Buffer& dst) except +
+        void copyImageToImage(const _Image& src, const _Image& dst) except +
 
-        void changeImageLayout(_Image& image, const vk.ImageLayout newLayout)
+        void changeImageLayout(_Image& image, const vk.ImageLayout newLayout) except +
 
-        void memoryBarrier()
+        void clearImage(_Image& image) except +
+
+        void durationStart(_Duration& duration) except +
+        void durationEnd(_Duration& duration) except +
+
+        void memoryBarrier() except +
 
 
 cdef extern from "<utility>" namespace "std":

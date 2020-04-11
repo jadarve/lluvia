@@ -13,6 +13,7 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/ContainerNode.h"
 #include "lluvia/core/ContainerNodeDescriptor.h"
+#include "lluvia/core/Duration.h"
 #include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
@@ -77,14 +78,24 @@ Session::Session() {
     // by sending a raw pointer, I avoid a circular reference
     // of shared pointers between the interpreter and this session.
     m_interpreter->setActiveSession(this);
+
+    initHostMemory();
 }
 
 
 Session::~Session() {
 
+    m_hostMemory.reset();
+    m_programRegistry.clear();
+
     device.destroyCommandPool(commandPool);
     device.destroy();
     instance.destroy();
+}
+
+
+std::shared_ptr<ll::Memory> Session::getHostMemory() const noexcept {
+    return m_hostMemory;
 }
 
 
@@ -151,47 +162,31 @@ bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) 
 
 std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) {
     
-    auto compareFlags = [](const auto& tFlags, const auto& value, bool tExactFlagsMatch) {
-        return tExactFlagsMatch? tFlags == value : (tFlags & value) == value;
-    };
-    
-    const auto memProperties = physicalDevice.getMemoryProperties();
-
-    for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
-
-        const auto& memType = memProperties.memoryTypes[i];
-        
-        if (compareFlags(memType.propertyFlags, flags, exactFlagsMatch)) {
-
-            auto heapInfo = ll::VkHeapInfo {};
-
-            heapInfo.typeIndex          = i;
-            heapInfo.size               = memProperties.memoryHeaps[memType.heapIndex].size;
-            heapInfo.flags              = memType.propertyFlags;
-            heapInfo.familyQueueIndices = std::vector<uint32_t> {computeQueueFamilyIndex};
-
-            // can throw exception. Invariants of Session are kept.
-            return std::make_shared<ll::Memory>(shared_from_this(), device, heapInfo, pageSize);
-        }
-    }
-
-    throw std::system_error(createErrorCode(ll::ErrorCode::MemoryCreationError),
-        "No memory was found that matched the requested flags.");
+    // memory objects returned externally are set to keep a reference to this session.
+    return createMemoryImpl(flags, pageSize, exactFlagsMatch, true);
 }
 
 
 std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath) const {
 
-    // workaround for GCC 4.8
-    ifstream file {spirvPath, std::ios::ate | std::ios::binary};
-    file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+    auto spirvCode = std::vector<uint8_t>();
 
-    const auto fileSize  = static_cast<size_t>(file.tellg());
-          auto spirvCode = std::vector<uint8_t>(fileSize);
+    try {
+        // workaround for GCC 4.8
+        ifstream file{spirvPath, std::ios::ate | std::ios::binary};
+        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
-    file.seekg(0);
-    file.read(reinterpret_cast<char*>(spirvCode.data()), fileSize);
-    file.close();
+        const auto fileSize = static_cast<size_t>(file.tellg());
+        spirvCode.resize(fileSize);
+
+        file.seekg(0);
+        file.read(reinterpret_cast<char *>(spirvCode.data()), fileSize);
+        file.close();
+
+    } catch (std::ios_base::failure& fail) {
+        ll::throwSystemError(ll::ErrorCode::IOError,
+            "Error reading SPIR-V file '" + spirvPath + "', error: " + fail.what());
+    }
 
     return createProgram(spirvCode);
 }
@@ -204,6 +199,8 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::vector<uint8_t>& 
 
 
 void Session::setProgram(const std::string& name, const std::shared_ptr<ll::Program>& program) {
+
+    ll::throwSystemErrorIf(program == nullptr, ll::ErrorCode::InvalidArgument, "program parameter must be not null");
 
     m_programRegistry.insert_or_assign(name, program);
 }
@@ -248,9 +245,7 @@ ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string
         return builder.newDescriptor()
     )";
 
-    auto load = m_interpreter->load(lua);
-
-    return load(builderName);
+    return m_interpreter->loadAndRun<ll::ComputeNodeDescriptor>(lua, builderName);
 }
 
 
@@ -276,9 +271,12 @@ ll::ContainerNodeDescriptor Session::createContainerNodeDescriptor(const std::st
         return builder.newDescriptor()
     )";
 
-    auto load = m_interpreter->load(lua);
+    return m_interpreter->loadAndRun<ll::ContainerNodeDescriptor>(lua, builderName);
+}
 
-    return load(builderName);
+std::unique_ptr<ll::Duration> Session::createDuration() const {
+
+    return std::make_unique<ll::Duration>(device);
 }
 
 
@@ -289,8 +287,6 @@ std::unique_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 
 
 void Session::run(const ll::CommandBuffer& cmdBuffer) {
-
-    // assert (cmdBuffer != nullptr);
 
     vk::SubmitInfo submitInfo = vk::SubmitInfo()
         .setCommandBufferCount(1)
@@ -307,6 +303,18 @@ void Session::run(const ll::ComputeNode& node) {
 
     cmdBuffer->begin();
     cmdBuffer->run(node);
+    cmdBuffer->end();
+
+    run(*cmdBuffer);
+}
+
+
+void Session::run(const ll::ContainerNode& node) {
+
+    auto cmdBuffer = createCommandBuffer();
+
+    cmdBuffer->begin();
+    node.record(*cmdBuffer);
     cmdBuffer->end();
 
     run(*cmdBuffer);
@@ -395,6 +403,14 @@ bool Session::initCommandPool() {
     return true;
 }
 
+void Session::initHostMemory() {
+
+    // as m_hostMemory is a member of this class, there is no need to keep a reference
+    // to this pointer.
+    m_hostMemory = createMemoryImpl(
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        0, false, false);
+}
 
 uint32_t Session::getComputeFamilyQueueIndex() {
 
@@ -415,5 +431,40 @@ uint32_t Session::getComputeFamilyQueueIndex() {
     throw std::system_error(std::error_code(), "No compute capable queue family found.");
 }
 
+std::shared_ptr<ll::Memory> Session::createMemoryImpl(const vk::MemoryPropertyFlags flags,
+                                                      const uint64_t pageSize,
+                                                      bool exactFlagsMatch,
+                                                      bool keepThisSharedReference) {
+
+    auto compareFlags = [](const auto &tFlags, const auto &value, bool tExactFlagsMatch) {
+        return tExactFlagsMatch ? tFlags == value : (tFlags & value) == value;
+    };
+
+    const auto memProperties = physicalDevice.getMemoryProperties();
+
+    for (auto i = 0u; i < memProperties.memoryTypeCount; ++i)
+    {
+
+        const auto &memType = memProperties.memoryTypes[i];
+
+        if (compareFlags(memType.propertyFlags, flags, exactFlagsMatch))
+        {
+
+            auto heapInfo = ll::VkHeapInfo{};
+
+            heapInfo.typeIndex = i;
+            heapInfo.size = memProperties.memoryHeaps[memType.heapIndex].size;
+            heapInfo.flags = memType.propertyFlags;
+            heapInfo.familyQueueIndices = std::vector<uint32_t>{computeQueueFamilyIndex};
+
+            // can throw exception. Invariants of Session are kept.
+            return std::make_shared<ll::Memory>(keepThisSharedReference? shared_from_this() : nullptr,
+                                                device, heapInfo, pageSize);
+        }
+    }
+
+    throw std::system_error(createErrorCode(ll::ErrorCode::MemoryCreationError),
+                            "No memory was found that matched the requested flags.");
+}
 
 } // namespace ll
