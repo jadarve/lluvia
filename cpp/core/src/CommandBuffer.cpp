@@ -199,14 +199,14 @@ void CommandBuffer::durationStart(ll::Duration &duration) {
 
     m_commandBuffer.resetQueryPool(duration.getQueryPool(), 0, 2);
 
-    m_commandBuffer.writeTimestamp(vk::PipelineStageFlagBits::eComputeShader,
+    m_commandBuffer.writeTimestamp(vk::PipelineStageFlagBits::eBottomOfPipe,
                                    duration.getQueryPool(),
                                    duration.getStartTimeQueryIndex());
 }
 
 void CommandBuffer::durationEnd(ll::Duration &duration) {
 
-    m_commandBuffer.writeTimestamp(vk::PipelineStageFlagBits::eComputeShader,
+    m_commandBuffer.writeTimestamp(vk::PipelineStageFlagBits::eBottomOfPipe,
                                    duration.getQueryPool(),
                                    duration.getEndTimeQueryIndex());
 }
