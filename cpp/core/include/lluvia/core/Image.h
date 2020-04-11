@@ -105,7 +105,7 @@ inline vk::ImageUsageFlags vectorStringToImageUsageFlags(const std::vector<std::
 
 
 /**
-@brief      Converst from Vulkan ImageUsageFlags to a vector of strings.
+@brief      Converts from Vulkan ImageUsageFlags to a vector of strings.
 
 See @VULKAN_DOC#VkImageUsageFlagBits for more information.
 
@@ -134,7 +134,7 @@ inline T imageLayoutToString(vk::ImageLayout&& layout) noexcept {
 
 
 /**
-@brief      Converst from a string-like object to vk::ImageLayout.
+@brief      Converts from a string-like object to vk::ImageLayout.
 
 This function can be used either with string literals, const char* or `std::string` objects.
 \p stringValue parameter is compared against the values in ll::impl::VkImageLayoutStrings and the
@@ -168,9 +168,8 @@ inline T imageTilingToString(vk::ImageTiling &&tiling) noexcept {
     return impl::enumToString<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(std::forward<vk::ImageTiling>(tiling));
 }
 
-
 /**
-@brief      Converst from a string-like object to vk::ImageTiling.
+@brief      Converts from a string-like object to vk::ImageTiling.
 
 This function can be used either with string literals, const char* or `std::string` objects.
 \p stringValue parameter is compared against the values in ll::impl::VkImageTilingStrings and the

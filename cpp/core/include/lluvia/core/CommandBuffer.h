@@ -133,8 +133,6 @@ public:
 
     /**
     @brief      Copies the content of \p src image into \p dst image.
-
-    *TODO:* assert buffer size.
     
     @param[in]  src   The source
     @param[in]  dst   The destination

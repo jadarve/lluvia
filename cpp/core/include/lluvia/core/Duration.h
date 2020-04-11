@@ -38,8 +38,6 @@ public:
     uint32_t getStartTimeQueryIndex() const noexcept;
     uint32_t getEndTimeQueryIndex() const noexcept;
 
-    
-
 private:
     vk::Device    m_device;
     vk::QueryPool m_queryPool;

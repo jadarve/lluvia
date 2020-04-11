@@ -47,9 +47,6 @@ void registerEnum(sol::table& lib, const std::string& enumName) {
     for (const auto& kv : values) {
         target[std::get<0>(kv)] = std::get<1>(kv);
     }
-
-    // auto x = lib.create_with(sol::meta_function::new_index, failOnNewIndex, sol::meta_function::index, target);
-    // auto shim = lib.create_named(enumName, sol::metatable_key, x);
 }
 
 void registerTypes(sol::table& lib) {

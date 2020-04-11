@@ -450,7 +450,7 @@ public:
     uint32_t getUsageFlagsUnsafe() const noexcept;
 
 private:
-    ll::ChannelType m_channelType    {ll::ChannelType::Uint8};
+    ll::ChannelType  m_channelType   {ll::ChannelType::Uint8};
     ll::ChannelCount m_channelCount  {ll::ChannelCount::C1};
 
     // dimensions along each axis

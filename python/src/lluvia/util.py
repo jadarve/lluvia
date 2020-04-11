@@ -87,8 +87,6 @@ def calculateGridSize(local, imgShape):
         (X, Y, Z) grid size.
     """
 
-    # calc = lambda length, l: return int(math.ceil(float(length) / float(l)))
-
     x, y, z = local
     depth, height, width, _ = imgShape
 
