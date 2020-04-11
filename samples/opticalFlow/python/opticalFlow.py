@@ -127,12 +127,19 @@ def main():
     flowToColor.bind('in_flow', flowFilter.getPort('out_flow'))
     flowToColor.init()
 
+    duration = session.createDuration()
+
     cmdBuffer = session.createCommandBuffer()
     cmdBuffer.begin()
+    cmdBuffer.durationStart(duration)
     flowFilter.record(cmdBuffer)
     cmdBuffer.memoryBarrier()
+    cmdBuffer.durationEnd(duration)
     cmdBuffer.run(flowToColor)
     cmdBuffer.end()
+
+    width = in_rgba.width
+    height = in_rgba.height
 
     while r:
 
@@ -147,6 +154,18 @@ def main():
 
         flowColor = flowToColor.getPort('out_rgba').toHost()
         flowBGR = cv2.cvtColor(flowColor, cv2.COLOR_RGBA2BGR)
+
+        ms = duration.nanoseconds * 1e-6
+
+        img = cv2.putText(img, '{0:.03f} ms'.format(ms),
+                          (width - 200, 30),
+                          cv2.FONT_HERSHEY_SIMPLEX,
+                          fontScale=1, color=(0, 0, 255), thickness=2)
+
+        flowBGR = cv2.putText(flowBGR, '{0:.03f} ms'.format(ms),
+                              (width - 200, 30),
+                              cv2.FONT_HERSHEY_SIMPLEX,
+                              fontScale=1, color=(0, 0, 255), thickness=2)
 
         cv2.imshow('img', img)
         cv2.imshow('flow', flowBGR)
