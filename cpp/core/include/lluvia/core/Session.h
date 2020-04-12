@@ -20,8 +20,13 @@
 
 #include "lluvia/core/ImageDescriptor.h"
 
-
 namespace ll {
+
+namespace vulkan {
+    class CommandPool;
+    class Device;
+    class Instance;
+} // namespace vulkan
 
 class Buffer;
 class CommandBuffer;
@@ -346,12 +351,18 @@ private:
                                                  bool exactFlagsMatch,
                                                  bool keepThisSharedReference);
 
-    vk::Instance         instance;
     vk::PhysicalDevice   physicalDevice;
-    vk::Device           device;
     vk::Queue            queue;
-    vk::CommandPool      commandPool;
     uint32_t             computeQueueFamilyIndex;
+
+    // FIXME: delete
+    vk::Device device;
+    vk::CommandPool commandPool;
+
+    std::shared_ptr<ll::vulkan::Instance>    m_instance;
+    std::shared_ptr<ll::vulkan::Device>      m_device;
+    std::shared_ptr<ll::vulkan::CommandPool> m_commandPool;
+
 
     std::unique_ptr<ll::Interpreter> m_interpreter;
 

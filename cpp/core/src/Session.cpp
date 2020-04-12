@@ -21,6 +21,10 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
+#include "lluvia/core/vulkan/CommandPool.h"
+#include "lluvia/core/vulkan/Device.h"
+#include "lluvia/core/vulkan/Instance.h"
+
 #include <algorithm>
 #include <exception>
 #include <fstream>
@@ -52,6 +56,7 @@ Session::Session() {
     auto instanceCreated = false;
     auto deviceCreated   = false;
 
+    // FIXME: once all the VK objects are managed, this try-catch can disappear :)
     try {
 
         instanceCreated = initInstance();
@@ -66,7 +71,7 @@ Session::Session() {
         }
 
         if (instanceCreated) {
-            instance.destroy();
+            m_instance.reset();
         }
 
         // rethrow
@@ -90,7 +95,6 @@ Session::~Session() {
 
     device.destroyCommandPool(commandPool);
     device.destroy();
-    instance.destroy();
 }
 
 
@@ -333,6 +337,8 @@ void Session::scriptFile(const std::string& filename) {
 
 bool Session::initInstance() {
     
+    auto instance = vk::Instance {};
+
     auto appInfo = vk::ApplicationInfo()
                    .setPApplicationName("lluvia")
                    .setApplicationVersion(0)
@@ -344,17 +350,17 @@ bool Session::initInstance() {
                         .setPApplicationInfo(&appInfo);
 
     const auto result = vk::createInstance(&instanceInfo, nullptr, &instance);
+    ll::throwSystemErrorIf(result == vk::Result::eErrorIncompatibleDriver,
+                           ll::ErrorCode::InconpatibleDriver, "Inconpatible driver.");
 
-    if (result == vk::Result::eErrorIncompatibleDriver) {
-        throw std::system_error(std::error_code(), "Incompatible driver");
-    }
+    m_instance = std::make_shared<ll::vulkan::Instance>(instance);
 
-    const auto physicalDevices = instance.enumeratePhysicalDevices();
+    const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
     ll::throwSystemErrorIf(physicalDevices.size() == 0,
         ll::ErrorCode::PhysicalDevicesNotFound, "No physical devices found in the system");
 
     // TODO: let user to choose physical device
-    physicalDevice = instance.enumeratePhysicalDevices()[0];
+    physicalDevice = m_instance->get().enumeratePhysicalDevices()[0];
 
     return true;
 }
@@ -382,6 +388,8 @@ bool Session::initDevice() {
                          .setPEnabledFeatures(&desiredFeatures);
 
     device = physicalDevice.createDevice(devCreateInfo);
+
+    m_device = std::make_shared<ll::vulkan::Device>(device, m_instance);
     return true;
 }
 
@@ -389,7 +397,7 @@ bool Session::initDevice() {
 bool Session::initQueue() {
 
     // get the first compute capable queue
-    queue = device.getQueue(computeQueueFamilyIndex, 0);
+    queue = m_device->get().getQueue(computeQueueFamilyIndex, 0);
     return true;
 }
 
@@ -399,7 +407,9 @@ bool Session::initCommandPool() {
     const auto createInfo = vk::CommandPoolCreateInfo()
                                 .setQueueFamilyIndex(computeQueueFamilyIndex);
 
-    commandPool = device.createCommandPool(createInfo);
+    commandPool = m_device->get().createCommandPool(createInfo);
+
+    m_commandPool = std::make_shared<ll::vulkan::CommandPool>(commandPool, m_device);
     return true;
 }
 

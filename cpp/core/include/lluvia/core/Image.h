@@ -168,6 +168,7 @@ inline T imageTilingToString(vk::ImageTiling &&tiling) noexcept {
     return impl::enumToString<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(std::forward<vk::ImageTiling>(tiling));
 }
 
+
 /**
 @brief      Converts from a string-like object to vk::ImageTiling.
 
