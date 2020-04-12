@@ -8,10 +8,17 @@
 #ifndef LLUVIA_CORE_COMMAND_BUFFER_H_
 #define LLUVIA_CORE_COMMAND_BUFFER_H_
 
+#include <memory>
+
 #include <vulkan/vulkan.hpp>
 
 
 namespace ll {
+
+namespace vulkan {
+class Device;
+class CommandPool;
+} // namespace vulkan
 
 class Buffer;
 class ComputeNode;
@@ -60,7 +67,8 @@ public:
     CommandBuffer(const CommandBuffer& cmdBuffer)   = delete;
     CommandBuffer(CommandBuffer&& cmdBuffer)        = delete;
 
-    CommandBuffer(const vk::Device& tDevice, const vk::CommandPool& cmdPool);
+    CommandBuffer(const std::shared_ptr<ll::vulkan::Device>& device,
+                  const std::shared_ptr<ll::vulkan::CommandPool>& cmdPool);
 
     ~CommandBuffer();
 
@@ -198,12 +206,12 @@ public:
     void durationEnd(ll::Duration& duration);
 
 private:
-    vk::Device          m_device;
-    vk::CommandPool     m_commandPool;
-    vk::CommandBuffer   m_commandBuffer;
+    std::shared_ptr<ll::vulkan::Device>      m_device;
+    std::shared_ptr<ll::vulkan::CommandPool> m_commandPool;
 
+    vk::CommandBuffer m_commandBuffer;
 
-friend class ll::Session;
+    friend class ll::Session;
 };
 
 

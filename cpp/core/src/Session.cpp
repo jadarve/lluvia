@@ -286,7 +286,7 @@ std::unique_ptr<ll::Duration> Session::createDuration() const {
 
 std::unique_ptr<ll::CommandBuffer> Session::createCommandBuffer() const {
 
-    return std::make_unique<ll::CommandBuffer>(device, commandPool);
+    return std::make_unique<ll::CommandBuffer>(m_device, m_commandPool);
 }
 
 

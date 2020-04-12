@@ -6,24 +6,28 @@
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageView.h"
 
+#include "lluvia/core/vulkan/Device.h"
+#include "lluvia/core/vulkan/CommandPool.h"
+
 namespace ll {
 
-CommandBuffer::CommandBuffer(const vk::Device& tDevice, const vk::CommandPool& cmdPool):
-    m_device {tDevice},
-    m_commandPool {cmdPool} {
+CommandBuffer::CommandBuffer(const std::shared_ptr<ll::vulkan::Device> &device,
+                             const std::shared_ptr<ll::vulkan::CommandPool> &cmdPool):
+    m_device{device},
+    m_commandPool{cmdPool}
+{
 
     const auto allocInfo = vk::CommandBufferAllocateInfo()
-                            .setCommandPool(m_commandPool)
+                            .setCommandPool(m_commandPool->get())
                             .setCommandBufferCount(1);
 
-    auto cmdBuffers = m_device.allocateCommandBuffers(allocInfo);
+    auto cmdBuffers = m_device->get().allocateCommandBuffers(allocInfo);
     m_commandBuffer = cmdBuffers[0];
 }
 
-
 CommandBuffer::~CommandBuffer() {
 
-    m_device.freeCommandBuffers(m_commandPool, 1, &m_commandBuffer);
+    m_device->get().freeCommandBuffers(m_commandPool->get(), 1, &m_commandBuffer);
 }
 
 
