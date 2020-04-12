@@ -16,6 +16,10 @@
 
 namespace ll {
 
+namespace vulkan {
+class Device;
+} // namespace vulkan
+
 // forward declarations
 class Session;
 
@@ -47,8 +51,7 @@ public:
     @param[in]  spirvCode  The SPIR-V code.
     */
     Program(
-        const std::shared_ptr<const ll::Session>& session,
-        const vk::Device& device,
+        const std::shared_ptr<ll::vulkan::Device>& device,
         const std::vector<uint8_t>& spirvCode);
 
     ~Program();
@@ -73,13 +76,10 @@ public:
     const std::vector<uint8_t>& getSpirV() const noexcept;
 
 private:
-    vk::Device           m_device;
+    std::shared_ptr<ll::vulkan::Device> m_device;
+
     vk::ShaderModule     m_module;
     std::vector<uint8_t> m_spirvCode;
-
-    // Shared pointer to the session this program was created from
-    // This will keep the session alive until this or any other program is deleted.
-    std::shared_ptr<const ll::Session> m_session;
 };
 
 } // namespace ll
