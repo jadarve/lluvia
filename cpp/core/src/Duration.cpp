@@ -1,8 +1,10 @@
 #include "lluvia/core/Duration.h"
 
+#include "lluvia/core/vulkan/Device.h"
+
 namespace ll {
 
-Duration::Duration(const vk::Device &device):
+Duration::Duration(const std::shared_ptr<ll::vulkan::Device>& device):
     m_device {device} {
 
     // there will be two queries, one for the start time
@@ -11,12 +13,12 @@ Duration::Duration(const vk::Device &device):
                     .setQueryType(vk::QueryType::eTimestamp)
                     .setQueryCount(2);
 
-    m_queryPool = m_device.createQueryPool(desc);
+    m_queryPool = m_device->get().createQueryPool(desc);
 }
 
 
 Duration::~Duration() {
-    m_device.destroyQueryPool(m_queryPool);
+    m_device->get().destroyQueryPool(m_queryPool);
 }
 
 
@@ -30,7 +32,7 @@ int64_t Duration::getNanoseconds() const {
 
     auto queryData = std::array<int64_t, 2> {};
 
-    m_device.getQueryPoolResults(
+    m_device->get().getQueryPoolResults(
         m_queryPool,
         getStartTimeQueryIndex(),
         uint32_t{2},

@@ -9,10 +9,15 @@
 #define LLUVIA_CORE_DURATION_H_
 
 #include <chrono>
+#include <memory>
 
 #include <vulkan/vulkan.hpp>
 
 namespace ll {
+
+namespace vulkan {
+class Device;
+} // namespace vulkan
 
 class Duration {
 
@@ -21,7 +26,7 @@ public:
     Duration(const Duration& duration)  = delete;
     Duration(Duration&& duration) = delete;
 
-    Duration(const vk::Device& device);
+    Duration(const std::shared_ptr<ll::vulkan::Device>& device);
 
     ~Duration();
 
@@ -39,8 +44,9 @@ public:
     uint32_t getEndTimeQueryIndex() const noexcept;
 
 private:
-    vk::Device    m_device;
     vk::QueryPool m_queryPool;
+
+    std::shared_ptr<ll::vulkan::Device> m_device;
 };
 
 } // namespace ll

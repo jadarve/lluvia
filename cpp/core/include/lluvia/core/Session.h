@@ -23,7 +23,6 @@
 namespace ll {
 
 namespace vulkan {
-    class CommandPool;
     class Device;
     class Instance;
 } // namespace vulkan
@@ -348,7 +347,6 @@ private:
 
     std::shared_ptr<ll::vulkan::Instance>    m_instance;
     std::shared_ptr<ll::vulkan::Device>      m_device;
-    std::shared_ptr<ll::vulkan::CommandPool> m_commandPool;
 
 
     std::unique_ptr<ll::Interpreter> m_interpreter;

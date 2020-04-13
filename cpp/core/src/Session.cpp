@@ -21,7 +21,6 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
-#include "lluvia/core/vulkan/CommandPool.h"
 #include "lluvia/core/vulkan/Device.h"
 #include "lluvia/core/vulkan/Instance.h"
 
@@ -261,7 +260,7 @@ ll::ContainerNodeDescriptor Session::createContainerNodeDescriptor(const std::st
 
 std::unique_ptr<ll::Duration> Session::createDuration() const {
 
-    return std::make_unique<ll::Duration>(device);
+    return std::make_unique<ll::Duration>(m_device);
 }
 
 

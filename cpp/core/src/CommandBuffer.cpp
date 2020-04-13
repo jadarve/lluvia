@@ -7,7 +7,6 @@
 #include "lluvia/core/ImageView.h"
 
 #include "lluvia/core/vulkan/Device.h"
-#include "lluvia/core/vulkan/CommandPool.h"
 
 namespace ll {
 
