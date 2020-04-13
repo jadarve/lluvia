@@ -27,7 +27,7 @@ TEST_CASE("DurationRecording", "test_Duration")
     const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize * sizeof(float));
 
-    auto program = session->createProgram("glsl/assign.spv");
+    auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -59,7 +59,7 @@ TEST_CASE("DurationRecording", "test_Duration")
 
     session->run(*cmdBuffer);
 
-    // auto ns = duration->getDuration();
+    auto ns = duration->getDuration();
     
-    // std::cout << "NANOSECONDS: " << ns.count() << std::endl;
+    std::cout << "NANOSECONDS: " << ns.count() << std::endl;
 }
