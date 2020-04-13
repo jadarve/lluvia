@@ -339,25 +339,12 @@ private:
     // Session objects should be created through factory methods
     Session();
 
-    bool initInstance();
-    bool initDevice();
-    bool initQueue();
-    bool initCommandPool();
-    void initHostMemory();
-    uint32_t getComputeFamilyQueueIndex();
+    void initDevice();
+    uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice);
 
-    std::shared_ptr<ll::Memory> createMemoryImpl(const vk::MemoryPropertyFlags flags,
-                                                 const uint64_t pageSize,
-                                                 bool exactFlagsMatch,
-                                                 bool keepThisSharedReference);
-
-    vk::PhysicalDevice   physicalDevice;
-    vk::Queue            queue;
-    uint32_t             computeQueueFamilyIndex;
 
     // FIXME: delete
     vk::Device device;
-    vk::CommandPool commandPool;
 
     std::shared_ptr<ll::vulkan::Instance>    m_instance;
     std::shared_ptr<ll::vulkan::Device>      m_device;

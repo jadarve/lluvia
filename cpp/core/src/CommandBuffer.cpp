@@ -11,14 +11,11 @@
 
 namespace ll {
 
-CommandBuffer::CommandBuffer(const std::shared_ptr<ll::vulkan::Device> &device,
-                             const std::shared_ptr<ll::vulkan::CommandPool> &cmdPool):
-    m_device{device},
-    m_commandPool{cmdPool}
-{
+CommandBuffer::CommandBuffer(const std::shared_ptr<ll::vulkan::Device> &device):
+    m_device{device} {
 
     const auto allocInfo = vk::CommandBufferAllocateInfo()
-                            .setCommandPool(m_commandPool->get())
+                            .setCommandPool(m_device->getCommandPool())
                             .setCommandBufferCount(1);
 
     auto cmdBuffers = m_device->get().allocateCommandBuffers(allocInfo);
@@ -26,8 +23,7 @@ CommandBuffer::CommandBuffer(const std::shared_ptr<ll::vulkan::Device> &device,
 }
 
 CommandBuffer::~CommandBuffer() {
-
-    m_device->get().freeCommandBuffers(m_commandPool->get(), 1, &m_commandBuffer);
+    m_device->get().freeCommandBuffers(m_device->getCommandPool(), 1, &m_commandBuffer);
 }
 
 

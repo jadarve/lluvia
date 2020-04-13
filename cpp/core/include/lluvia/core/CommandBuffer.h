@@ -67,8 +67,7 @@ public:
     CommandBuffer(const CommandBuffer& cmdBuffer)   = delete;
     CommandBuffer(CommandBuffer&& cmdBuffer)        = delete;
 
-    CommandBuffer(const std::shared_ptr<ll::vulkan::Device>& device,
-                  const std::shared_ptr<ll::vulkan::CommandPool>& cmdPool);
+    CommandBuffer(const std::shared_ptr<ll::vulkan::Device>& device);
 
     ~CommandBuffer();
 
@@ -206,12 +205,9 @@ public:
     void durationEnd(ll::Duration& duration);
 
 private:
-    std::shared_ptr<ll::vulkan::Device>      m_device;
-    std::shared_ptr<ll::vulkan::CommandPool> m_commandPool;
-
     vk::CommandBuffer m_commandBuffer;
 
-    friend class ll::Session;
+    std::shared_ptr<ll::vulkan::Device> m_device;
 };
 
 

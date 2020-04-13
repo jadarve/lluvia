@@ -48,11 +48,6 @@ const std::shared_ptr<ll::Memory>& Buffer::getMemory() const noexcept {
 }
 
 
-const std::shared_ptr<ll::Session>& Buffer::getSession() const noexcept {
-    return m_memory->getSession();
-}
-
-
 vk::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
     return m_vkUsageFlags;
 }

@@ -15,6 +15,11 @@
 
 
 namespace ll {
+
+class ImageDescriptor;
+class CommandBuffer;
+
+
 namespace vulkan {
 
 class Instance;
@@ -26,16 +31,37 @@ public:
     Device(const Device& device) = delete;
     Device(Device&& device) = delete;
 
-    Device(const vk::Device& device, const std::shared_ptr<ll::vulkan::Instance>& instance);
+    Device(const vk::Device& device,
+           const vk::PhysicalDevice& physicalDevice,
+           const uint32_t computeQueueFamilyIndex,
+           const std::shared_ptr<ll::vulkan::Instance>& instance);
     ~Device();
 
     Device& operator = (const Device& device) = delete;
     Device& operator = (Device&& device) = delete;
 
     vk::Device& get() noexcept;
+    vk::PhysicalDevice& getPhysicalDevice() noexcept;
+    vk::CommandPool& getCommandPool() noexcept;
+    uint32_t getComputeFamilyQueueIndex() const noexcept;
+
+
+    bool isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) const noexcept;
+
+    std::unique_ptr<ll::CommandBuffer> createCommandBuffer() const;
+
+    void run(const ll::CommandBuffer& cmdBuffer);
+    
 
 private:
-    vk::Device m_device;
+    vk::Device         m_device;
+    vk::PhysicalDevice m_physicalDevice;
+    vk::CommandPool    m_commandPool;
+
+    vk::Queue          m_queue;
+    uint32_t           m_computeQueueFamilyIndex;
+
+    // reference to the instance this device was created from
     std::shared_ptr<ll::vulkan::Instance> m_instance;
 };
 

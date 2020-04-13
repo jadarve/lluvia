@@ -23,6 +23,10 @@
 
 namespace ll {
 
+namespace vulkan {
+class Device;
+} // namespace vulkan
+
 // forward declarations
 class Buffer;
 class Image;
@@ -151,24 +155,14 @@ public:
     @param[in]  heapInfo  The heap information.
     @param[in]  pageSize  The page size in bytes.
     */
-    Memory(
-        const std::shared_ptr<ll::Session>& session,
-        const vk::Device device,
-        const ll::VkHeapInfo& heapInfo,
-        const uint64_t pageSize);
+    Memory(const std::shared_ptr<ll::vulkan::Device>& device,
+           const ll::VkHeapInfo& heapInfo,
+           const uint64_t pageSize);
 
     ~Memory();
 
     Memory& operator = (const Memory& memory) = delete;
     Memory& operator = (Memory&& memory)      = delete;
-
-
-    /**
-    @brief      Gets the session this memory was created from.
-    
-    @return     The session.
-    */
-    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -294,7 +288,8 @@ private:
 
     void releaseImage(const ll::Image& image);
 
-    vk::Device m_device;
+
+    std::shared_ptr<ll::vulkan::Device> m_device;
 
     const ll::VkHeapInfo    m_heapInfo        {};
     const uint64_t          m_pageSize        {0u};
@@ -302,11 +297,6 @@ private:
     std::vector<vk::DeviceMemory>                 m_memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> m_pageManagers;
     std::vector<bool>                             m_memoryPageMappingFlags;
-
-    // Shared pointer to the session this memory was created from
-    // This will keep the session alive until this or any other memory is deleted.
-    std::shared_ptr<ll::Session>                  m_session;
-
 
 friend class ll::Buffer;
 friend class ll::Image;

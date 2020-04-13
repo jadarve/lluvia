@@ -13,23 +13,25 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Session.h"
 
+#include "lluvia/core/vulkan/Device.h"
+
 namespace ll {
 
 
 Image::Image(
-    const vk::Device& tDevice,
-    const vk::Image& tVkImage,
-    const ll::ImageDescriptor& tDescriptor,
-    const std::shared_ptr<ll::Memory>& tMemory,
-    const ll::MemoryAllocationInfo& tAllocInfo,
-    const vk::ImageLayout tLayout) :
+    const std::shared_ptr<ll::vulkan::Device>& device,
+    const vk::Image& vkImage,
+    const ll::ImageDescriptor& descriptor,
+    const std::shared_ptr<ll::Memory>& memory,
+    const ll::MemoryAllocationInfo& allocInfo,
+    const vk::ImageLayout layout) :
 
-    m_descriptor   {tDescriptor},
-    m_allocInfo    (tAllocInfo),
-    m_device       {tDevice},
-    m_vkImage      {tVkImage},
-    m_vkLayout     {tLayout},
-    m_memory       {tMemory} {
+    m_device       {device},
+    m_descriptor   {descriptor},
+    m_allocInfo    (allocInfo),
+    m_vkImage      {vkImage},
+    m_vkLayout     {layout},
+    m_memory       {memory} {
 
 }
 
@@ -52,11 +54,6 @@ ll::MemoryAllocationInfo Image::getAllocationInfo() const noexcept {
 
 const std::shared_ptr<ll::Memory>& Image::getMemory() const noexcept {
     return m_memory;
-}
-
-
-const std::shared_ptr<ll::Session>& Image::getSession() const noexcept {
-    return m_memory->getSession();
 }
 
 
@@ -124,27 +121,23 @@ std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescrip
 
 void Image::changeImageLayout(const vk::ImageLayout newLayout) {
 
-    const auto& session = m_memory->getSession();
-
-    auto cmdBuffer = session->createCommandBuffer();
+    auto cmdBuffer = m_device->createCommandBuffer();
 
     cmdBuffer->begin();
     cmdBuffer->changeImageLayout(*this, newLayout);
     cmdBuffer->end();
-    session->run(*cmdBuffer);
+    m_device->run(*cmdBuffer);
 
 }
 
 void Image::clear() {
 
-    const auto &session = m_memory->getSession();
-
-    auto cmdBuffer = session->createCommandBuffer();
+    auto cmdBuffer = m_device->createCommandBuffer();
 
     cmdBuffer->begin();
     cmdBuffer->clearImage(*this);
     cmdBuffer->end();
-    session->run(*cmdBuffer);
+    m_device->run(*cmdBuffer);
 }
 
 } // namespace ll

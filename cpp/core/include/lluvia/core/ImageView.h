@@ -21,6 +21,10 @@
 
 namespace ll {
 
+namespace vulkan {
+class Device;
+} // namespace vulkan
+
 class ComputeNode;
 class Image;
 class Memory;
@@ -173,14 +177,6 @@ public:
     @return     The memory.
     */
     const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
-
-
-    /**
-    @brief      Gets the session this object belongs to.
-    
-    @return     The session.
-    */
-    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -347,17 +343,18 @@ public:
     void clear();
 
 private:
-    ImageView(  vk::Device tDevice,
-                const std::shared_ptr<ll::Image>& tImage,
-                const ll::ImageViewDescriptor& tDescriptor);
+    ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
+              const std::shared_ptr<ll::Image>& image,
+              const ll::ImageViewDescriptor& descriptor);
     
     ll::ImageViewDescriptor m_descriptor;
 
-    vk::Device    m_device;
+    
     vk::ImageView m_vkImageView;
     vk::Sampler   m_vkSampler;
 
-    std::shared_ptr<ll::Image> m_image;
+    std::shared_ptr<ll::vulkan::Device> m_device;
+    std::shared_ptr<ll::Image>          m_image;
 
 
 friend class Image;
