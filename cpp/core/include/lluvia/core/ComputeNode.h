@@ -28,9 +28,9 @@ class Buffer;
 class CommandBuffer;
 class Image;
 class ImageView;
+class Interpreter;
 class Object;
 class Program;
-class Session;
 
 
 /**
@@ -42,6 +42,27 @@ public:
     ComputeNode()                                     = delete;
     ComputeNode(const ComputeNode& node)              = delete;
     ComputeNode(ComputeNode&& node)                   = delete;
+
+    /**
+    @brief      Constructs the object.
+    
+    @param[in]  device      The Vulkan device where this node will run.
+    @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
+                             So this one can be modified after the compute node is constructed.
+    @param[in]  interpreter Interpreter to use for running Lua scripts.
+
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
+                                  if desc.getFunctionName() is empty string.
+    
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
+                                  if desc.getProgram is nullptr.
+
+    @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
+                                  if any of the components of descriptor.localShape is zero.
+    */
+    ComputeNode(const std::shared_ptr<ll::vulkan::Device> &device,
+                const ll::ComputeNodeDescriptor &descriptor,
+                const std::weak_ptr<ll::Interpreter> &interpreter);
 
     virtual ~ComputeNode();
 
@@ -241,28 +262,6 @@ protected:
     void onInit() override;
 
 private:
-    /**
-    @brief      Constructs the object.
-    
-    @param[in]  session     The session this node was created from.
-    @param[in]  device      The Vulkan device where this node will run.
-    @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
-                             So this one can be modified after the compute node is constructed.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
-                                  if desc.getFunctionName() is empty string.
-    
-    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
-                                  if desc.getProgram is nullptr.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
-                                  if any of the components of descriptor.localShape is zero.
-    */
-    ComputeNode(
-        const std::shared_ptr<ll::Session>& session,
-        const std::shared_ptr<ll::vulkan::Device>& device,
-        const ll::ComputeNodeDescriptor& descriptor);
-
     void initPortBindings();
     void initPipeline();
     
@@ -293,11 +292,7 @@ private:
 
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
 
-    // Shared pointer to the session this node was created from
-    // This will keep the session alive until this or any other node is deleted.
-    std::shared_ptr<ll::Session>            m_session;
-
-friend class ll::Session;
+    std::weak_ptr<ll::Interpreter> m_interpreter;
 };
 
 

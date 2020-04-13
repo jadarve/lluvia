@@ -17,7 +17,6 @@
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/PushConstants.h"
-#include "lluvia/core/Session.h"
 
 #include "lluvia/core/vulkan/Device.h"
 
@@ -29,14 +28,13 @@ namespace ll {
 using namespace std;
 
 
-ComputeNode::ComputeNode(
-    const std::shared_ptr<ll::Session>& session,
-    const std::shared_ptr<ll::vulkan::Device>& device,
-    const ll::ComputeNodeDescriptor& descriptor):
+ComputeNode::ComputeNode(const std::shared_ptr<ll::vulkan::Device>& device,
+                         const ll::ComputeNodeDescriptor& descriptor,
+                         const std::weak_ptr<ll::Interpreter>& interpreter) :
 
     m_device       {device},
     m_descriptor   {descriptor},
-    m_session      {session} {
+    m_interpreter  {interpreter} {
 
     ll::throwSystemErrorIf(m_descriptor.getProgram() == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
     ll::throwSystemErrorIf(m_descriptor.getFunctionName().empty(), ll::ErrorCode::InvalidShaderFunctionName, "Shader function name must be different than empty string.");
@@ -312,13 +310,21 @@ void ComputeNode::onInit() {
     const auto builderName = m_descriptor.getBuilderName();
     if (!builderName.empty()) {
 
-        constexpr const auto lua = R"(
-            local builderName, node = ...
-            local builder = ll.getNodeBuilder(builderName)
-            builder.onNodeInit(node)
-        )";
+        // this will throw an exception if m_interpreter has been destroyed
+        // by the session.
+        if (auto shared_interpreter = m_interpreter.lock()) {
 
-        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
+            constexpr const auto lua = R"(
+                local builderName, node = ...
+                local builder = ll.getNodeBuilder(builderName)
+                builder.onNodeInit(node)
+            )";
+
+            shared_interpreter->loadAndRun<void>(lua, builderName, shared_from_this());
+
+        } else {
+            ll::throwSystemError(ll::ErrorCode::SessionLost, "Attempt to access the Lua interpreter of a Session already destroyed.");
+        }
     }
 
     initPipeline();

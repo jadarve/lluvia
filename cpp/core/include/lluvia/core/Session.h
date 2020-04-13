@@ -95,7 +95,7 @@ public:
     
     @return     The interpreter.
      */
-    const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
+    // const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
     
     
     /**
@@ -344,7 +344,7 @@ private:
     std::shared_ptr<ll::vulkan::Instance>    m_instance;
     std::shared_ptr<ll::vulkan::Device>      m_device;
 
-    std::unique_ptr<ll::Interpreter> m_interpreter;
+    std::shared_ptr<ll::Interpreter>         m_interpreter;
 
     std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
 

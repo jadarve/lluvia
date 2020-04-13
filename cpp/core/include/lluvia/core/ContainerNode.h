@@ -20,14 +20,14 @@
 namespace ll {
 
 class CommandBuffer;
-class Session;
+class Interpreter;
 
 
 class ContainerNode : public Node, public std::enable_shared_from_this<ll::ContainerNode> {
 
 public:
-    ContainerNode(const std::shared_ptr<ll::Session>& session);
-    ContainerNode(const std::shared_ptr<ll::Session>& session,
+    ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter);
+    ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter,
                   const ll::ContainerNodeDescriptor& descriptor);
 
     ContainerNode(const ll::ContainerNode&)                  = delete;
@@ -40,14 +40,6 @@ public:
 
 
     ll::NodeType getType() const noexcept override;
-
-
-    /**
-    @brief      Gets the session this memory was created from.
-    
-    @return     The session.
-    */
-    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
     const ll::ContainerNodeDescriptor& getDescriptor() const noexcept;
 
@@ -73,9 +65,7 @@ protected:
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
     std::map<std::string, std::shared_ptr<ll::Node>>   m_nodes;
 
-    // Shared pointer to the session this node was created from
-    // This will keep the session alive until this or any other node is deleted.
-    std::shared_ptr<ll::Session>                 m_session;
+    std::weak_ptr<ll::Interpreter>                     m_interpreter;
 };
 
 } // namespace ll

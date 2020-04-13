@@ -56,7 +56,7 @@ Session::Session() {
 
     // by sending a raw pointer, I avoid a circular reference
     // of shared pointers between the interpreter and this session.
-    m_interpreter = std::make_unique<ll::Interpreter>();
+    m_interpreter = std::make_shared<ll::Interpreter>();
     m_interpreter->setActiveSession(this);
 
     m_hostMemory = createMemory(
@@ -75,11 +75,6 @@ Session::~Session() {
 
 std::shared_ptr<ll::Memory> Session::getHostMemory() const noexcept {
     return m_hostMemory;
-}
-
-
-const std::unique_ptr<ll::Interpreter>& Session::getInterpreter() const noexcept {
-    return m_interpreter;
 }
 
 
@@ -204,7 +199,7 @@ std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const 
 
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
 
-    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {shared_from_this(), m_device, descriptor}};
+    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {m_device, descriptor, m_interpreter}};
 }
 
 
@@ -234,7 +229,7 @@ ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string
 
 std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const ll::ContainerNodeDescriptor& descriptor) {
 
-    return std::shared_ptr<ll::ContainerNode> {new ll::ContainerNode {shared_from_this(), descriptor}};
+    return std::shared_ptr<ll::ContainerNode> {new ll::ContainerNode {m_interpreter, descriptor}};
 }
 
 
