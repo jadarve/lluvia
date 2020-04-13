@@ -111,7 +111,6 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
     cdef cppclass _ComputeNode 'll::ComputeNode':
 
         _NodeType getType() const
-        const shared_ptr[_Session]& getSession() const
 
         string getFunctionName() const
         shared_ptr[_Program] getProgram() const
@@ -166,7 +165,6 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
     cdef cppclass _ContainerNode 'll::ContainerNode':
 
         _NodeType getType() const
-        const shared_ptr[_Session]& getSession() const
 
         const _ContainerNodeDescriptor& getDescriptor() const
 

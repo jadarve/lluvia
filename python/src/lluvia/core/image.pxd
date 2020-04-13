@@ -66,7 +66,6 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
     cdef cppclass _Image 'll::Image' (_Object):
 
         const shared_ptr[_Memory]& getMemory()   const
-        const shared_ptr[_Session]& getSession() const
 
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
@@ -126,7 +125,6 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
     cdef cppclass _ImageView 'll::ImageView':
 
         const shared_ptr[_Memory]& getMemory()   const
-        const shared_ptr[_Session]& getSession() const
         const shared_ptr[_Image]& getImage()     const
 
         _ImageViewDescriptor& getDescriptor() const

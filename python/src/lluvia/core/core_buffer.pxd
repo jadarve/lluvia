@@ -28,7 +28,6 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
     cdef cppclass _Buffer 'll::Buffer' (_Object):
 
         const shared_ptr[_Memory]& getMemory()   const
-        const shared_ptr[_Session]& getSession() const
 
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const

@@ -65,9 +65,10 @@ cdef class Image:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__image.get().getSession()
-            return out
+            return None
+            # cdef Session out = Session()
+            # out.__session = self.__image.get().getSession()
+            # return out
 
     property memory:
         def __get__(self):
@@ -402,9 +403,10 @@ cdef class ImageView:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__imageView.get().getSession()
-            return out
+            return None
+            # cdef Session out = Session()
+            # out.__session = self.__imageView.get().getSession()
+            # return out
 
     property memory:
         def __get__(self):

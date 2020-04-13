@@ -85,9 +85,10 @@ cdef class Memory:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__memory.get().getSession()
-            return out
+            return None
+            # cdef Session out = Session()
+            # out.__session = self.__memory.get().getSession()
+            # return out
 
     property memoryFlags:
         def __get__(self):

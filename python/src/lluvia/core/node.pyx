@@ -217,9 +217,10 @@ cdef class ComputeNode:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__node.get().getSession()
-            return out
+            return None
+            # cdef Session out = Session()
+            # out.__session = self.__node.get().getSession()
+            # return out
 
     property grid:
         def __get__(self):
@@ -384,9 +385,10 @@ cdef class ContainerNode:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__node.get().getSession()
-            return out
+            return None
+            # cdef Session out = Session()
+            # out.__session = self.__node.get().getSession()
+            # return out
 
     def setParameter(self, str name, Parameter param):
 

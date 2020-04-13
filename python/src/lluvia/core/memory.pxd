@@ -33,8 +33,6 @@ cdef extern from 'lluvia/core/Memory.h' namespace 'll':
 
     cdef cppclass _Memory 'll::Memory':
 
-        const shared_ptr[_Session]& getSession() const
-
         vk.MemoryPropertyFlags getMemoryPropertyFlags() const
         uint64_t getPageSize()  const
         uint32_t getPageCount() const

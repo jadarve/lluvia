@@ -35,9 +35,10 @@ cdef class Buffer:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__buffer.get().getSession()
-            return out
+            return None
+            # cdef Session out = Session()
+            # out.__session = self.__buffer.get().getSession()
+            # return out
 
     property memory:
         def __get__(self):
