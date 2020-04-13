@@ -341,13 +341,8 @@ private:
     void initDevice();
     uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice);
 
-
-    // FIXME: delete
-    vk::Device device;
-
     std::shared_ptr<ll::vulkan::Instance>    m_instance;
     std::shared_ptr<ll::vulkan::Device>      m_device;
-
 
     std::unique_ptr<ll::Interpreter> m_interpreter;
 

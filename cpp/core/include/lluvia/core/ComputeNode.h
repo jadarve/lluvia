@@ -20,6 +20,10 @@
 
 namespace ll {
 
+namespace vulkan {
+class Device;
+} // namespace vulkan
+
 class Buffer;
 class CommandBuffer;
 class Image;
@@ -45,14 +49,6 @@ public:
     ComputeNode& operator = (ComputeNode&& node)      = delete;
 
     ll::NodeType getType() const noexcept override;
-
-
-    /**
-    @brief      Gets the session this memory was created from.
-    
-    @return     The session.
-    */
-    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -248,9 +244,9 @@ private:
     /**
     @brief      Constructs the object.
     
-    @param[in]  tSession     The session this node was created from.
-    @param[in]  tDevice      The Vulkan device where this node will run.
-    @param[in]  tDescriptor  The descriptor. A copy of this descriptor is kept within this object.
+    @param[in]  session     The session this node was created from.
+    @param[in]  device      The Vulkan device where this node will run.
+    @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
                              So this one can be modified after the compute node is constructed.
 
     @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
@@ -263,9 +259,9 @@ private:
                                   if any of the components of descriptor.localShape is zero.
     */
     ComputeNode(
-        const std::shared_ptr<ll::Session>& tSession,
-        const vk::Device& tDevice,
-        const ll::ComputeNodeDescriptor& tDescriptor);
+        const std::shared_ptr<ll::Session>& session,
+        const std::shared_ptr<ll::vulkan::Device>& device,
+        const ll::ComputeNodeDescriptor& descriptor);
 
     void initPortBindings();
     void initPipeline();
@@ -276,7 +272,7 @@ private:
     std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
     uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
 
-    vk::Device                          m_device;
+    std::shared_ptr<ll::vulkan::Device> m_device;
 
     vk::DescriptorSetLayout             m_descriptorSetLayout;
 

@@ -53,10 +53,10 @@ std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties() {
 Session::Session() {
 
     initDevice();
-    m_interpreter = std::make_unique<ll::Interpreter>();
 
     // by sending a raw pointer, I avoid a circular reference
     // of shared pointers between the interpreter and this session.
+    m_interpreter = std::make_unique<ll::Interpreter>();
     m_interpreter->setActiveSession(this);
 
     m_hostMemory = createMemory(
@@ -66,11 +66,10 @@ Session::Session() {
 
 
 Session::~Session() {
-
-    m_hostMemory.reset();
-    m_programRegistry.clear();
-
-    device.destroy();
+    // there might be nodes out there that still want to access the
+    // session through their Lua build scripts. By setting the active
+    // session to null, I should be safe of memory leaks.
+    m_interpreter->setActiveSession(nullptr);
 }
 
 
@@ -205,7 +204,7 @@ std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const 
 
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
 
-    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {shared_from_this(), device, descriptor}};
+    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {shared_from_this(), m_device, descriptor}};
 }
 
 
