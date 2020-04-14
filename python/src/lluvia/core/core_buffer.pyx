@@ -27,24 +27,20 @@ __all__ = ['Buffer']
 
 cdef class Buffer:
 
-    def __cinit__(self):
-        pass
+    def __cinit__(self, Session session, Memory memory):
+        self.__session = session
+        self.__memory = memory
 
     def __dealloc__(self):
         pass
 
     property session:
         def __get__(self):
-            return None
-            # cdef Session out = Session()
-            # out.__session = self.__buffer.get().getSession()
-            # return out
+            return self.__session
 
     property memory:
         def __get__(self):
-            cdef Memory out = Memory()
-            out.__memory = self.__buffer.get().getMemory()
-            return out
+            return self.__memory
 
     property usageFlags:
         def __get__(self):

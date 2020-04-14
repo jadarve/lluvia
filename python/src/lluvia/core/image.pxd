@@ -8,7 +8,9 @@
 
 from memory cimport _Memory, _MemoryAllocationInfo
 from core_object cimport _Object
-from session cimport _Session
+
+from session cimport Session
+from memory cimport Memory
 
 cimport enums.image as img_enums
 
@@ -147,7 +149,12 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
 
 cdef class Image:
     cdef shared_ptr[_Image] __image
+    cdef Session            __session
+    cdef Memory             __memory
 
 
 cdef class ImageView:
     cdef shared_ptr[_ImageView] __imageView
+    cdef Session                __session
+    cdef Memory                 __memory
+    cdef Image                  __image

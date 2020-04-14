@@ -57,24 +57,20 @@ ImageChannelTypeToNumpyMap = {
 
 cdef class Image:
 
-    def __cinit__(self):
-        pass
+    def __cinit__(self, Session session, Memory memory):
+        self.__session = session
+        self.__memory = memory
 
     def __dealloc__(self):
         pass
 
     property session:
         def __get__(self):
-            return None
-            # cdef Session out = Session()
-            # out.__session = self.__image.get().getSession()
-            # return out
+            return self.__session
 
     property memory:
         def __get__(self):
-            cdef Memory out = Memory()
-            out.__memory = self.__image.get().getMemory()
-            return out
+            return self.__memory
 
     property width:
         def __get__(self):
@@ -360,7 +356,7 @@ cdef class Image:
         desc.setNormalizedCoordinates(normalizedCoordinates)
         desc.setIsSampled(sampled)
 
-        cdef ImageView view = ImageView()
+        cdef ImageView view = ImageView(self.session, self.memory, self)
         view.__imageView = self.__image.get().createImageView(desc)
 
         return view
@@ -395,24 +391,21 @@ cdef class Image:
 
 cdef class ImageView:
 
-    def __cinit__(self):
-        pass
+    def __cinit__(self, Session session, Memory memory, Image image):
+        self.__session = session    
+        self.__memory = memory
+        self.__image = image
 
     def __dealloc__(self):
         pass
 
     property session:
         def __get__(self):
-            return None
-            # cdef Session out = Session()
-            # out.__session = self.__imageView.get().getSession()
-            # return out
+            return self.__session
 
     property memory:
         def __get__(self):
-            cdef Memory out = Memory()
-            out.__memory = self.__imageView.get().getMemory()
-            return out
+            return self.__memory
 
     property image:
         def __get__(self):
@@ -420,9 +413,7 @@ cdef class ImageView:
             The underlying Image object from which this
             ImageView was created.
             """
-            cdef Image img = Image()
-            img.__image = self.__imageView.get().getImage()
-            return img
+            return self.__image
 
     property width:
         def __get__(self):

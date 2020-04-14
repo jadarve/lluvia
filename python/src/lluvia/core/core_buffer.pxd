@@ -8,7 +8,9 @@
 
 from memory cimport _Memory, _MemoryAllocationInfo
 from core_object cimport _Object
-from session cimport _Session
+
+from session cimport Session
+from memory cimport Memory
 
 cimport vulkan as vk
 
@@ -39,3 +41,5 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
 
 cdef class Buffer:
     cdef shared_ptr[_Buffer] __buffer
+    cdef Session             __session
+    cdef Memory              __memory

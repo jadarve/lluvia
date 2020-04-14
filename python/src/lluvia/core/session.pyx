@@ -181,7 +181,7 @@ cdef class Session:
         cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
         cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
 
-        cdef Memory mem = Memory()
+        cdef Memory mem = Memory(self)
         mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
 
         return mem
@@ -245,8 +245,8 @@ cdef class Session:
         node : lluvia.ComputeNode
         """
 
-        cdef ComputeNode node = ComputeNode()
-        node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
+        cdef ComputeNode node = ComputeNode(self)
+        node.__node = self.__session.get().createComputeNode(desc.__descriptor)
 
         return node
 
@@ -258,8 +258,8 @@ cdef class Session:
 
     def createContainerNode(self, ContainerNodeDescriptor desc):
 
-        cdef ContainerNode node = ContainerNode()
-        node.__node    = self.__session.get().createContainerNode(desc.__descriptor)
+        cdef ContainerNode node = ContainerNode(self)
+        node.__node = self.__session.get().createContainerNode(desc.__descriptor)
 
         return node
 

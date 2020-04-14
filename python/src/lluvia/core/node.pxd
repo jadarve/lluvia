@@ -10,8 +10,9 @@ from command_buffer cimport _CommandBuffer
 from core_object cimport _Object
 from parameter cimport _Parameter
 from program cimport _Program
-from session cimport _Session
 from types cimport _vec3ui
+
+from session cimport Session
 
 from libc.stdint cimport int32_t, uint32_t, uint64_t
 
@@ -191,6 +192,7 @@ cdef class ComputeNodeDescriptor:
 
 cdef class ComputeNode:
     cdef shared_ptr[_ComputeNode] __node
+    cdef Session                  __session
 
 
 cdef class ContainerNodeDescriptor:
@@ -199,3 +201,4 @@ cdef class ContainerNodeDescriptor:
 
 cdef class ContainerNode:
     cdef shared_ptr[_ContainerNode] __node
+    cdef Session                    __session

@@ -27,6 +27,7 @@ Device::Device(const vk::Device& device,
 
 
 Device::~Device() {
+    m_device.destroyCommandPool(m_commandPool);
     m_device.destroy();
 }
 

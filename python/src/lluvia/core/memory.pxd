@@ -8,7 +8,8 @@
 
 from core_buffer cimport _Buffer
 from image cimport _Image, _ImageDescriptor
-from session cimport _Session
+
+from session cimport Session
 
 cimport vulkan as vk
 
@@ -49,3 +50,4 @@ cdef class MemoryAllocationInfo:
 
 cdef class Memory:
     cdef shared_ptr[_Memory] __memory
+    cdef Session __session

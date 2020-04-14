@@ -205,8 +205,8 @@ cdef class ComputeNodeDescriptor:
 
 cdef class ComputeNode:
 
-    def __cinit__(self):
-        pass
+    def __cinit__(self, Session session):
+        self.__session = session
 
     def __dealloc__(self):
         pass
@@ -217,10 +217,7 @@ cdef class ComputeNode:
 
     property session:
         def __get__(self):
-            return None
-            # cdef Session out = Session()
-            # out.__session = self.__node.get().getSession()
-            # return out
+            return self.__session
 
     property grid:
         def __get__(self):
@@ -314,12 +311,14 @@ cdef class ComputeNode:
         # cdef shared_ptr[_ImageView] imgView
         oType = ObjectType(<uint32_t> obj.get().getType())
 
-        cdef Buffer bufObj = Buffer()
+        # FIXME: cannot get memory
+        cdef Buffer bufObj = Buffer(self.session, None)
         if oType == ObjectType.Buffer:
             bufObj.__buffer = static_pointer_cast[_Buffer](obj)
             return bufObj
 
-        cdef ImageView imgView = ImageView()
+        # FIXME: cannot get memory nor image
+        cdef ImageView imgView = ImageView(self.session, None, None)
         if oType == ObjectType.ImageView:
             imgView.__imageView = static_pointer_cast[_ImageView](obj)
             return imgView
@@ -327,6 +326,9 @@ cdef class ComputeNode:
         raise RuntimeError('Unsupported object type {0}'.format(oType))
 
     def init(self):
+        """
+        Init the node
+        """
 
         self.__node.get().init()
 
@@ -373,8 +375,8 @@ cdef class ContainerNodeDescriptor:
 
 cdef class ContainerNode:
 
-    def __cinit__(self):
-        pass
+    def __cinit__(self, Session session):
+        self.__session = session
 
     def __dealloc__(self):
         pass
@@ -385,10 +387,7 @@ cdef class ContainerNode:
 
     property session:
         def __get__(self):
-            return None
-            # cdef Session out = Session()
-            # out.__session = self.__node.get().getSession()
-            # return out
+            return self.__session
 
     def setParameter(self, str name, Parameter param):
 
@@ -433,12 +432,14 @@ cdef class ContainerNode:
 
         oType = ObjectType(<uint32_t> obj.get().getType())
 
-        cdef Buffer bufObj = Buffer()
+        # FIXME: cannot get memory
+        cdef Buffer bufObj = Buffer(self.session, None)
         if oType == ObjectType.Buffer:
             bufObj.__buffer = static_pointer_cast[_Buffer](obj)
             return bufObj
 
-        cdef ImageView imgView = ImageView()
+        # FIXME: cannot get memory nor image
+        cdef ImageView imgView = ImageView(self.session, None, None)
         if oType == ObjectType.ImageView:
             imgView.__imageView = static_pointer_cast[_ImageView](obj)
             return imgView
@@ -455,12 +456,12 @@ cdef class ContainerNode:
         cdef ContainerNode containerNode
 
         if nType == NodeType.Compute:
-            computeNode = ComputeNode()
+            computeNode = ComputeNode(self.session)
             computeNode.__node = static_pointer_cast[_ComputeNode](node)
             return computeNode
 
         if nType == NodeType.Container:
-            containerNode = ContainerNode()
+            containerNode = ContainerNode(self.session)
             containerNode.__node = static_pointer_cast[_ContainerNode](node)
             return containerNode
 
@@ -470,6 +471,9 @@ cdef class ContainerNode:
         pass
 
     def init(self):
+        """
+        Init the node.
+        """
 
         self.__node.get().init()
 

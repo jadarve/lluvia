@@ -76,6 +76,9 @@ cdef class MemoryAllocationInfo:
 
 cdef class Memory:
 
+    def __init__(self, Session session):
+        self.__session = session
+    
     def __cinit__(self):
         pass
 
@@ -85,10 +88,7 @@ cdef class Memory:
 
     property session:
         def __get__(self):
-            return None
-            # cdef Session out = Session()
-            # out.__session = self.__memory.get().getSession()
-            # return out
+            return self.__session
 
     property memoryFlags:
         def __get__(self):
@@ -187,7 +187,7 @@ cdef class Memory:
         cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, BufferUsageFlagBits)
         cdef vk.BufferUsageFlags vkUsageFlags = <vk.BufferUsageFlags> flattenFlags
 
-        cdef core_buffer.Buffer buf = core_buffer.Buffer()
+        cdef core_buffer.Buffer buf = core_buffer.Buffer(self.session, self)
         buf.__buffer  = self.__memory.get().createBuffer(size, vkUsageFlags)
 
         return buf
@@ -366,7 +366,7 @@ cdef class Memory:
 
         cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
 
-        cdef image.Image img = image.Image()
+        cdef image.Image img = image.Image(self.session, self)
         img.__image   = self.__memory.get().createImage(desc)
 
         img.changeLayout(ImageLayout.General)
