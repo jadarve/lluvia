@@ -16,6 +16,8 @@
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Session.h"
 
+#include "lluvia/core/vulkan/Device.h"
+
 #include <algorithm>
 #include <exception>
 #include <iostream>
@@ -29,15 +31,12 @@ constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined
 
 
 Memory::Memory(
-    const std::shared_ptr<ll::Session>& session,
-    const vk::Device device,
+    const std::shared_ptr<ll::vulkan::Device>& device,
     const ll::VkHeapInfo& heapInfo,
     const uint64_t pageSize):
-
     m_device              {device},
     m_heapInfo            (heapInfo),
-    m_pageSize            {pageSize},
-    m_session             {session} {
+    m_pageSize            {pageSize} {
     
     // this prevents shifting outside the range of memoryTypeBits
     assert(m_heapInfo.typeIndex <= 32u);
@@ -47,13 +46,8 @@ Memory::Memory(
 Memory::~Memory() {
 
     for (auto& memory : m_memoryPages) {
-        m_device.freeMemory(memory);
+        m_device->get().freeMemory(memory);
     }
-}
-
-
-const std::shared_ptr<ll::Session>& Memory::getSession() const noexcept {
-    return m_session;
 }
 
 
@@ -99,10 +93,10 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     // It's safe to not guard this call with a try-catch. If an
     // exception is thrown, let the caller to handle it. The memory
     // manager is still in its original state.
-    auto vkBuffer = m_device.createBuffer(bufferInfo);
+    auto vkBuffer = m_device->get().createBuffer(bufferInfo);
 
     // query alignment and offset
-    const auto memRequirements = m_device.getBufferMemoryRequirements(vkBuffer);
+    const auto memRequirements = m_device->get().getBufferMemoryRequirements(vkBuffer);
 
     // check that memRequirements.memoryTypeBits is supported in this memory
     const auto memoryTypeBits = static_cast<uint32_t>(0x01 << m_heapInfo.typeIndex);
@@ -120,7 +114,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
     try {
         
         const auto& memoryPage = m_memoryPages[tryInfo.allocInfo.page];
-        m_device.bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
+        m_device->get().bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
 
         // ll::Buffer can throw exception.
         auto buffer = std::shared_ptr<ll::Buffer>{new ll::Buffer {vkBuffer, usageFlags, shared_from_this(), tryInfo.allocInfo, size}};
@@ -129,7 +123,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
 
     } catch (...) {
 
-        m_device.destroyBuffer(vkBuffer);
+        m_device->get().destroyBuffer(vkBuffer);
         throw; // rethrow
     }
 }
@@ -138,7 +132,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::
 void Memory::releaseBuffer(const ll::Buffer& buffer) {
 
     releaseMemoryAllocation(buffer.m_allocInfo);
-    m_device.destroyBuffer(buffer.m_vkBuffer);
+    m_device->get().destroyBuffer(buffer.m_vkBuffer);
 }
 
 
@@ -154,7 +148,7 @@ void* Memory::mapBuffer(const ll::Buffer& buffer) {
 
     // set mapping flag for this page to mapped
     m_memoryPageMappingFlags[page] = true;
-    return m_device.mapMemory(m_memoryPages[page], offset, size);
+    return m_device->get().mapMemory(m_memoryPages[page], offset, size);
 }
 
 
@@ -166,7 +160,7 @@ void Memory::unmapBuffer(const ll::Buffer& buffer) {
         throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] has not been mapped by any object."};
     }
 
-    m_device.unmapMemory(m_memoryPages[page]);
+    m_device->get().unmapMemory(m_memoryPages[page]);
 
     // set mapping flag for this page to unmapped
     m_memoryPageMappingFlags[page] = false;
@@ -175,24 +169,15 @@ void Memory::unmapBuffer(const ll::Buffer& buffer) {
 
 std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descriptor) {
 
-    if (descriptor.getWidth() == 0) {
-        throw std::invalid_argument("Image width must be greater than zero, got: " + std::to_string(descriptor.getWidth()));
-    }
-
-    if (descriptor.getHeight() == 0) {
-        throw std::invalid_argument("Image height must be greater than zero, got: " + std::to_string(descriptor.getHeight()));
-    }
-
-    if (descriptor.getDepth() == 0) {
-        throw std::invalid_argument("Image depth must be greater than zero, got: " + std::to_string(descriptor.getDepth()));
-    }
+    ll::throwSystemErrorIf(descriptor.getWidth() == 0, ll::ErrorCode::InvalidArgument, "Image width must be greater than zero, got: " + std::to_string(descriptor.getWidth()));
+    ll::throwSystemErrorIf(descriptor.getHeight() == 0, ll::ErrorCode::InvalidArgument, "Image height must be greater than zero, got: " + std::to_string(descriptor.getHeight()));
+    ll::throwSystemErrorIf(descriptor.getDepth() == 0, ll::ErrorCode::InvalidArgument, "Image depth must be greater than zero, got: " + std::to_string(descriptor.getDepth()));
 
     // checks if the combination of image shape, tiling and flags can be used.
-    if (!m_session->isImageDescriptorSupported(descriptor)) {
-        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError),
-            "physical device does not support allocation of image objects with the provided "
-            "combination of shape, tiling and usageFlags.");
-    }
+    ll::throwSystemErrorIf(!m_device->isImageDescriptorSupported(descriptor),
+        ll::ErrorCode::ObjectAllocationError,
+        "physical device does not support allocation of image objects with the provided "
+        "combination of shape, tiling and usageFlags.");
 
     auto imgInfo = vk::ImageCreateInfo {}
                     .setExtent({descriptor.getWidth(), descriptor.getHeight(), descriptor.getDepth()})
@@ -206,16 +191,16 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setFormat(descriptor.getFormat())
                     .setInitialLayout(InitialImageLayout);
 
-    auto vkImage = m_device.createImage(imgInfo);
+    auto vkImage = m_device->get().createImage(imgInfo);
 
     // query alignment and offset
-    const auto memRequirements = m_device.getImageMemoryRequirements(vkImage);
+    const auto memRequirements = m_device->get().getImageMemoryRequirements(vkImage);
 
     // check that memRequirements.memoryTypeBits is supported in this memory
     const auto memoryTypeBits = static_cast<uint32_t>(0x01 << m_heapInfo.typeIndex);
     if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
 
-        m_device.destroyImage(vkImage);
+        m_device->get().destroyImage(vkImage);
         throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(m_heapInfo.typeIndex) + " does not support allocating image objects.");
     }
 
@@ -224,21 +209,21 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
     
     try {
         const auto& memoryPage = m_memoryPages[tryInfo.allocInfo.page];
-        m_device.bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
+        m_device->get().bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
 
-        auto image = std::shared_ptr<ll::Image> {new ll::Image {m_device,
-                                                                vkImage,
-                                                                descriptor,
-                                                                shared_from_this(),
-                                                                tryInfo.allocInfo,
-                                                                InitialImageLayout}};
-                                                                
+        auto image = std::shared_ptr<ll::Image>{new ll::Image{m_device,
+                                                              vkImage,
+                                                              descriptor,
+                                                              shared_from_this(),
+                                                              tryInfo.allocInfo,
+                                                              InitialImageLayout}};
+
         m_pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return image;
 
     } catch (...) {
 
-        m_device.destroyImage(vkImage);
+        m_device->get().destroyImage(vkImage);
         throw;  // rethrow
     }
 }
@@ -256,7 +241,7 @@ std::shared_ptr<ll::ImageView> Memory::createImageView(
 void Memory::releaseImage(const ll::Image& image) {
 
     releaseMemoryAllocation(image.getAllocationInfo());
-    m_device.destroyImage(image.m_vkImage);
+    m_device->get().destroyImage(image.m_vkImage);
 }
 
 
@@ -311,7 +296,7 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
     auto manager = impl::MemoryFreeSpaceManager {newPageSize};
     manager.reserveManagerSpace();
 
-    auto memory  = m_device.allocateMemory(allocateInfo);
+    auto memory = m_device->get().allocateMemory(allocateInfo);
 
     // push objects to vectors after reserving space
     m_memoryPages.push_back(memory);

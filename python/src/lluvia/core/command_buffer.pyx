@@ -36,6 +36,15 @@ cimport vulkan as vk
 __all__ = ['CommandBuffer']
 
 
+cdef _buildCommandBuffer(shared_ptr[_CommandBuffer] ptr, Session session):
+
+    cdef CommandBuffer cmdBuffer = CommandBuffer()
+    cmdBuffer.__commandBuffer = ptr
+    cmdBuffer.__session = session
+
+    return cmdBuffer
+
+
 cdef class CommandBuffer:
 
     def __cinit__(self):
@@ -43,6 +52,10 @@ cdef class CommandBuffer:
 
     def __dealloc__(self):
         pass
+
+    property session:
+        def __get__(self):
+            return self.__session
 
     def begin(self):
         """

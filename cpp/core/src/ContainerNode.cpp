@@ -8,33 +8,27 @@
 #include "lluvia/core/ContainerNode.h"
 
 #include "lluvia/core/CommandBuffer.h"
-#include "lluvia/core/Session.h"
 #include "lluvia/core/Interpreter.h"
 
 namespace ll {
 
 
-ContainerNode::ContainerNode(const std::shared_ptr<ll::Session>& session) :
-    m_session {session} {
+ContainerNode::ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter) :
+    m_interpreter {interpreter} {
 
 }
 
 
-ContainerNode::ContainerNode(const std::shared_ptr<ll::Session>& session,
+ContainerNode::ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter,
               const ll::ContainerNodeDescriptor& descriptor) :
     m_descriptor {descriptor},
-    m_session {session} {
+    m_interpreter {interpreter} {
 
 }
 
 
 ll::NodeType ContainerNode::getType() const noexcept {
     return ll::NodeType::Container;
-}
-
-
-const std::shared_ptr<ll::Session>& ContainerNode::getSession() const noexcept {
-    return m_session;
 }
 
 
@@ -87,13 +81,19 @@ void ContainerNode::record(ll::CommandBuffer& commandBuffer) const {
     const auto builderName = m_descriptor.getBuilderName();
     if (!builderName.empty()) {
 
-        constexpr const auto lua = R"(
-            local builderName, node, cmdBuffer = ...
-            local builder = ll.getNodeBuilder(builderName)
-            builder.onNodeRecord(node, cmdBuffer)
-        )";
+        if (auto shared_interpreter = m_interpreter.lock()) {
+            constexpr const auto lua = R"(
+                local builderName, node, cmdBuffer = ...
+                local builder = ll.getNodeBuilder(builderName)
+                builder.onNodeRecord(node, cmdBuffer)
+            )";
 
-        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this(), commandBuffer);
+            shared_interpreter->loadAndRun<void>(lua, builderName, shared_from_this(), commandBuffer);
+
+        } else {
+            ll::throwSystemError(ll::ErrorCode::SessionLost, "Attempt to access the Lua interpreter of a Session already destroyed.");
+        }
+        
     }
 }
 
@@ -103,13 +103,18 @@ void ContainerNode::onInit() {
     const auto builderName = m_descriptor.getBuilderName();
     if (!builderName.empty()) {
 
-        constexpr const auto lua = R"(
-            local builderName, node = ...
-            local builder = ll.getNodeBuilder(builderName)
-            builder.onNodeInit(node)
-        )";
+        if (auto shared_interpreter = m_interpreter.lock()) {
+            constexpr const auto lua = R"(
+                local builderName, node = ...
+                local builder = ll.getNodeBuilder(builderName)
+                builder.onNodeInit(node)
+            )";
 
-        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
+            shared_interpreter->loadAndRun<void>(lua, builderName, shared_from_this());
+
+        } else {
+            ll::throwSystemError(ll::ErrorCode::SessionLost, "Attempt to access the Lua interpreter of a Session already destroyed.");
+        }
     }
 }
 

@@ -8,7 +8,9 @@
 
 from memory cimport _Memory, _MemoryAllocationInfo
 from core_object cimport _Object
-from session cimport _Session
+
+from session cimport Session
+from memory cimport Memory
 
 cimport vulkan as vk
 
@@ -28,7 +30,6 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
     cdef cppclass _Buffer 'll::Buffer' (_Object):
 
         const shared_ptr[_Memory]& getMemory()   const
-        const shared_ptr[_Session]& getSession() const
 
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
@@ -38,5 +39,9 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
         unique_ptr[T, _BufferMapDeleter] map[T]()
 
 
+cdef _buildBuffer(shared_ptr[_Buffer] ptr, Session session, Memory memory)
+
 cdef class Buffer:
     cdef shared_ptr[_Buffer] __buffer
+    cdef Session             __session
+    cdef Memory              __memory

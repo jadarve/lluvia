@@ -17,7 +17,8 @@
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/PushConstants.h"
-#include "lluvia/core/Session.h"
+
+#include "lluvia/core/vulkan/Device.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -27,14 +28,13 @@ namespace ll {
 using namespace std;
 
 
-ComputeNode::ComputeNode(
-    const std::shared_ptr<ll::Session>& tSession,
-    const vk::Device& tDevice,
-    const ll::ComputeNodeDescriptor& tDescriptor):
+ComputeNode::ComputeNode(const std::shared_ptr<ll::vulkan::Device>& device,
+                         const ll::ComputeNodeDescriptor& descriptor,
+                         const std::weak_ptr<ll::Interpreter>& interpreter) :
 
-    m_device       {tDevice},
-    m_descriptor   {tDescriptor},
-    m_session      {tSession} {
+    m_device       {device},
+    m_descriptor   {descriptor},
+    m_interpreter  {interpreter} {
 
     ll::throwSystemErrorIf(m_descriptor.getProgram() == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
     ll::throwSystemErrorIf(m_descriptor.getFunctionName().empty(), ll::ErrorCode::InvalidShaderFunctionName, "Shader function name must be different than empty string.");
@@ -48,10 +48,10 @@ ComputeNode::ComputeNode(
 
 ComputeNode::~ComputeNode() {
 
-    m_device.destroyPipeline(m_pipeline, nullptr);
-    m_device.destroyPipelineLayout(m_pipelineLayout, nullptr);
-    m_device.destroyDescriptorPool(m_descriptorPool, nullptr);
-    m_device.destroyDescriptorSetLayout(m_descriptorSetLayout);
+    m_device->get().destroyPipeline(m_pipeline, nullptr);
+    m_device->get().destroyPipelineLayout(m_pipelineLayout, nullptr);
+    m_device->get().destroyDescriptorPool(m_descriptorPool, nullptr);
+    m_device->get().destroyDescriptorSetLayout(m_descriptorSetLayout);
 }
 
 
@@ -66,7 +66,7 @@ void ComputeNode::initPortBindings() {
         .setBindingCount(static_cast<uint32_t>(m_parameterBindings.size()))
         .setPBindings(m_parameterBindings.data());
 
-    m_descriptorSetLayout = m_device.createDescriptorSetLayout(descLayoutInfo);
+    m_descriptorSetLayout = m_device->get().createDescriptorSetLayout(descLayoutInfo);
 
     auto descriptorPoolSizes = getDescriptorPoolSizes();
     auto descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
@@ -74,7 +74,7 @@ void ComputeNode::initPortBindings() {
         .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
         .setPPoolSizes(descriptorPoolSizes.data());
 
-    m_device.createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool);
+    m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool);
 
     // only one descriptor set for this Node object
     vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
@@ -82,7 +82,7 @@ void ComputeNode::initPortBindings() {
         .setDescriptorSetCount(1)
         .setPSetLayouts(&m_descriptorSetLayout);
 
-    m_device.allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet);
+    m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet);
 }
 
 
@@ -129,23 +129,18 @@ void ComputeNode::initPipeline() {
         pipeLayoutInfo.setPPushConstantRanges(&pushConstantRange);
     }
 
-    m_pipelineLayout = m_device.createPipelineLayout(pipeLayoutInfo);
+    m_pipelineLayout = m_device->get().createPipelineLayout(pipeLayoutInfo);
     vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
         .setStage(stageInfo)
         .setLayout(m_pipelineLayout);
 
     // create the compute pipeline
-    m_pipeline = m_device.createComputePipeline(nullptr, computePipeInfo);
+    m_pipeline = m_device->get().createComputePipeline(nullptr, computePipeInfo);
 }
 
 
 ll::NodeType ComputeNode::getType() const noexcept {
     return ll::NodeType::Compute;
-}
-
-
-const std::shared_ptr<ll::Session>& ComputeNode::getSession() const noexcept {
-    return m_session;
 }
 
 
@@ -315,13 +310,21 @@ void ComputeNode::onInit() {
     const auto builderName = m_descriptor.getBuilderName();
     if (!builderName.empty()) {
 
-        constexpr const auto lua = R"(
-            local builderName, node = ...
-            local builder = ll.getNodeBuilder(builderName)
-            builder.onNodeInit(node)
-        )";
+        // this will throw an exception if m_interpreter has been destroyed
+        // by the session.
+        if (auto shared_interpreter = m_interpreter.lock()) {
 
-        m_session->getInterpreter()->loadAndRun<void>(lua, builderName, shared_from_this());
+            constexpr const auto lua = R"(
+                local builderName, node = ...
+                local builder = ll.getNodeBuilder(builderName)
+                builder.onNodeInit(node)
+            )";
+
+            shared_interpreter->loadAndRun<void>(lua, builderName, shared_from_this());
+
+        } else {
+            ll::throwSystemError(ll::ErrorCode::SessionLost, "Attempt to access the Lua interpreter of a Session already destroyed.");
+        }
     }
 
     initPipeline();
@@ -355,7 +358,7 @@ void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_p
         .setDescriptorCount(1)
         .setPBufferInfo(&descBufferInfo);
 
-    m_device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
+    m_device->get().updateDescriptorSets(1, &writeDescSet, 0, nullptr);
 }
 
 
@@ -395,7 +398,7 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
     writeDescSet.setDescriptorType(isSampled? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
 
     // update the informacion of the descriptor set
-    m_device.updateDescriptorSets(1, &writeDescSet, 0, nullptr);
+    m_device->get().updateDescriptorSets(1, &writeDescSet, 0, nullptr);
 }
 
 

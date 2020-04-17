@@ -11,15 +11,17 @@
 #include "lluvia/core/ImageViewDescriptor.h"
 #include "lluvia/core/Memory.h"
 
+#include "lluvia/core/vulkan/Device.h"
+
 
 namespace ll {
 
-ImageView::ImageView(vk::Device tDevice, 
-                     const std::shared_ptr<ll::Image>& tImage,
-                     const ll::ImageViewDescriptor& tDescriptor) :
-    m_descriptor {tDescriptor},
-    m_device {tDevice},
-    m_image  {tImage} {
+ImageView::ImageView(const std::shared_ptr<ll::vulkan::Device>& device, 
+                     const std::shared_ptr<ll::Image>& image,
+                     const ll::ImageViewDescriptor& descriptor) :
+    m_descriptor {descriptor},
+    m_device {device},
+    m_image  {image} {
 
     auto imageViewInfo = vk::ImageViewCreateInfo {}
                             .setViewType(vk::ImageViewType::e2D)        // TODO: set according to image extend
@@ -34,20 +36,20 @@ ImageView::ImageView(vk::Device tDevice,
     imageViewInfo.subresourceRange.setLayerCount(1);
 
     
-    m_vkImageView = m_device.createImageView(imageViewInfo);
+    m_vkImageView = m_device->get().createImageView(imageViewInfo);
 
     if (m_descriptor.isSampled()) {
-        m_vkSampler = m_device.createSampler(m_descriptor.getVkSamplerCreateInfo());
+        m_vkSampler = m_device->get().createSampler(m_descriptor.getVkSamplerCreateInfo());
     }
 }
 
 
 ImageView::~ImageView() {
 
-    m_device.destroyImageView(m_vkImageView);
+    m_device->get().destroyImageView(m_vkImageView);
 
     if (m_descriptor.isSampled()) {
-        m_device.destroySampler(m_vkSampler);
+        m_device->get().destroySampler(m_vkSampler);
     }
 }
 
@@ -64,11 +66,6 @@ const std::shared_ptr<ll::Image>& ImageView::getImage() const noexcept {
 
 const std::shared_ptr<ll::Memory>& ImageView::getMemory() const noexcept {
     return m_image->getMemory();
-}
-
-
-const std::shared_ptr<ll::Session>& ImageView::getSession() const noexcept {
-    return m_image->getSession();
 }
 
 

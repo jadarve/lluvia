@@ -15,13 +15,16 @@ from .enums.core_object import ObjectType
 from core_object cimport _Object
 
 from core_buffer import Buffer
-from core_buffer cimport Buffer, _Buffer
+from core_buffer cimport Buffer, _Buffer, _buildBuffer
+
+from memory import Memory
+from memory cimport Memory, _Memory
 
 from command_buffer import CommandBuffer
 from command_buffer cimport CommandBuffer
 
 from image import Image, ImageView
-from image cimport Image, ImageView, _ImageView
+from image cimport Image, ImageView, _ImageView, _buildImageView
 
 from parameter import Parameter
 from parameter cimport Parameter
@@ -52,6 +55,23 @@ __all__ = [
     'ContainerNodeDescriptor',
     'ContainerNode'
 ]
+
+cdef _buildComputeNode(shared_ptr[_ComputeNode] ptr, Session session):
+
+    cdef ComputeNode node = ComputeNode()
+    node.__node = ptr
+    node.__session = session
+
+    return node
+
+
+cdef _buildContainerNode(shared_ptr[_ContainerNode] ptr, Session session):
+
+    cdef ContainerNode node = ContainerNode()
+    node.__node = ptr
+    node.__session = session
+
+    return node
 
 
 cdef class PortDescriptor:
@@ -206,7 +226,7 @@ cdef class ComputeNodeDescriptor:
 cdef class ComputeNode:
 
     def __cinit__(self):
-        pass
+        self.__session = None
 
     def __dealloc__(self):
         pass
@@ -217,9 +237,7 @@ cdef class ComputeNode:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__node.get().getSession()
-            return out
+            return self.__session
 
     property grid:
         def __get__(self):
@@ -309,23 +327,23 @@ cdef class ComputeNode:
 
         cdef shared_ptr[_Object] obj = self.__node.get().getPort(impl.encodeString(name))
 
-        # cdef shared_ptr[_Buffer] bufferObj
-        # cdef shared_ptr[_ImageView] imgView
         oType = ObjectType(<uint32_t> obj.get().getType())
 
-        cdef Buffer bufObj = Buffer()
+        # cdef Buffer bufObj = Buffer(self.session, None)
         if oType == ObjectType.Buffer:
-            bufObj.__buffer = static_pointer_cast[_Buffer](obj)
-            return bufObj
+            return _buildBuffer(static_pointer_cast[_Buffer](obj),
+                                self.session, None)
 
-        cdef ImageView imgView = ImageView()
         if oType == ObjectType.ImageView:
-            imgView.__imageView = static_pointer_cast[_ImageView](obj)
-            return imgView
+            return _buildImageView(static_pointer_cast[_ImageView](obj),
+                                   self.session, None)
 
         raise RuntimeError('Unsupported object type {0}'.format(oType))
 
     def init(self):
+        """
+        Init the node
+        """
 
         self.__node.get().init()
 
@@ -373,7 +391,7 @@ cdef class ContainerNodeDescriptor:
 cdef class ContainerNode:
 
     def __cinit__(self):
-        pass
+        self.__session = None
 
     def __dealloc__(self):
         pass
@@ -384,9 +402,7 @@ cdef class ContainerNode:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__node.get().getSession()
-            return out
+            return self.__session
 
     def setParameter(self, str name, Parameter param):
 
@@ -428,39 +444,28 @@ cdef class ContainerNode:
     def getPort(self, str name):
 
         cdef shared_ptr[_Object] obj = self.__node.get().getPort(impl.encodeString(name))
-
         oType = ObjectType(<uint32_t> obj.get().getType())
 
-        cdef Buffer bufObj = Buffer()
         if oType == ObjectType.Buffer:
-            bufObj.__buffer = static_pointer_cast[_Buffer](obj)
-            return bufObj
+            return _buildBuffer(static_pointer_cast[_Buffer](obj),
+                                self.session, None)
 
-        cdef ImageView imgView = ImageView()
         if oType == ObjectType.ImageView:
-            imgView.__imageView = static_pointer_cast[_ImageView](obj)
-            return imgView
+            return _buildImageView(static_pointer_cast[_ImageView](obj),
+                                   self.session, None)
 
         raise RuntimeError('Unsupported object type {0}'.format(oType))
 
     def getNode(self, str name):
 
         cdef shared_ptr[_Node] node = self.__node.get().getNode(impl.encodeString(name))
-
         cdef NodeType nType = NodeType_t(<uint32_t> node.get().getType())
 
-        cdef ComputeNode computeNode
-        cdef ContainerNode containerNode
-
         if nType == NodeType.Compute:
-            computeNode = ComputeNode()
-            computeNode.__node = static_pointer_cast[_ComputeNode](node)
-            return computeNode
+            return _buildComputeNode(static_pointer_cast[_ComputeNode](node), self.session)
 
         if nType == NodeType.Container:
-            containerNode = ContainerNode()
-            containerNode.__node = static_pointer_cast[_ContainerNode](node)
-            return containerNode
+            return _buildContainerNode(static_pointer_cast[_ContainerNode](node), self.session)
 
         raise RuntimeError('Unsupported node type {0}'.format(nType))
 
@@ -468,6 +473,9 @@ cdef class ContainerNode:
         pass
 
     def init(self):
+        """
+        Init the node.
+        """
 
         self.__node.get().init()
 

@@ -10,8 +10,9 @@ from command_buffer cimport _CommandBuffer
 from core_object cimport _Object
 from parameter cimport _Parameter
 from program cimport _Program
-from session cimport _Session
 from types cimport _vec3ui
+
+from session cimport Session
 
 from libc.stdint cimport int32_t, uint32_t, uint64_t
 
@@ -111,7 +112,6 @@ cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
     cdef cppclass _ComputeNode 'll::ComputeNode':
 
         _NodeType getType() const
-        const shared_ptr[_Session]& getSession() const
 
         string getFunctionName() const
         shared_ptr[_Program] getProgram() const
@@ -166,7 +166,6 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
     cdef cppclass _ContainerNode 'll::ContainerNode':
 
         _NodeType getType() const
-        const shared_ptr[_Session]& getSession() const
 
         const _ContainerNodeDescriptor& getDescriptor() const
 
@@ -193,6 +192,7 @@ cdef class ComputeNodeDescriptor:
 
 cdef class ComputeNode:
     cdef shared_ptr[_ComputeNode] __node
+    cdef Session                  __session
 
 
 cdef class ContainerNodeDescriptor:
@@ -201,3 +201,8 @@ cdef class ContainerNodeDescriptor:
 
 cdef class ContainerNode:
     cdef shared_ptr[_ContainerNode] __node
+    cdef Session                    __session
+
+
+cdef _buildComputeNode(shared_ptr[_ComputeNode] ptr, Session session)
+cdef _buildContainerNode(shared_ptr[_ContainerNode] ptr, Session session)

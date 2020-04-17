@@ -8,7 +8,9 @@
 
 from memory cimport _Memory, _MemoryAllocationInfo
 from core_object cimport _Object
-from session cimport _Session
+
+from session cimport Session
+from memory cimport Memory
 
 cimport enums.image as img_enums
 
@@ -66,7 +68,6 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
     cdef cppclass _Image 'll::Image' (_Object):
 
         const shared_ptr[_Memory]& getMemory()   const
-        const shared_ptr[_Session]& getSession() const
 
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
@@ -126,7 +127,6 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
     cdef cppclass _ImageView 'll::ImageView':
 
         const shared_ptr[_Memory]& getMemory()   const
-        const shared_ptr[_Session]& getSession() const
         const shared_ptr[_Image]& getImage()     const
 
         _ImageViewDescriptor& getDescriptor() const
@@ -147,9 +147,17 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
         void clear() except +
 
 
+cdef _buildImage(shared_ptr[_Image] ptr, Session session, Memory memory)
+
+cdef _buildImageView(shared_ptr[_ImageView] ptr, Session session, Image image)
+
 cdef class Image:
     cdef shared_ptr[_Image] __image
+    cdef Session            __session
+    cdef Memory             __memory
 
 
 cdef class ImageView:
     cdef shared_ptr[_ImageView] __imageView
+    cdef Session                __session
+    cdef Image                  __image

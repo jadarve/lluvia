@@ -17,7 +17,7 @@ from .enums.vulkan cimport ImageLayout
 from .enums.vulkan import ImageLayout as ImageLayout_t
 
 from .memory import Memory
-from .memory cimport Memory, MemoryAllocationInfo
+from .memory cimport Memory, MemoryAllocationInfo, _buildMemory
 
 from .session import Session
 from .session cimport Session
@@ -25,6 +25,8 @@ from .session cimport Session
 cimport vulkan as vk
 
 from libc.stdint cimport uint32_t
+
+from libcpp.memory cimport shared_ptr
 
 import  numpy as np
 cimport numpy as np
@@ -54,26 +56,49 @@ ImageChannelTypeToNumpyMap = {
     ChannelType.Float64 : np.float64
 }
 
+cdef _buildImage(shared_ptr[_Image] ptr, Session session, Memory memory):
+
+    cdef Image img = Image()
+    img.__image = ptr
+    img.__session = session
+
+    if memory is None:
+        img.__memory = _buildMemory(ptr.get().getMemory(), session)
+    else:
+        img.__memory = memory
+
+    return img
+
+cdef _buildImageView(shared_ptr[_ImageView] ptr, Session session, Image image):
+
+    cdef ImageView view = ImageView()
+    view.__imageView = ptr
+    view.__session = session
+
+    if image is None:
+        view.__image = _buildImage(ptr.get().getImage(), session, None)
+    else:
+        view.__image = image
+
+    return view
+
 
 cdef class Image:
 
     def __cinit__(self):
-        pass
+        self.__session = None
+        self.__memory = None
 
     def __dealloc__(self):
         pass
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__image.get().getSession()
-            return out
+            return self.__session
 
     property memory:
         def __get__(self):
-            cdef Memory out = Memory()
-            out.__memory = self.__image.get().getMemory()
-            return out
+            return self.__memory
 
     property width:
         def __get__(self):
@@ -154,7 +179,8 @@ cdef class Image:
         Parameters
         ----------
         newLayout : str.
-            The new layout. Its value must be one of the values defined in lluvia.ImageLayout:
+            The new layout. Its value must be one of the values defined
+            in lluvia.ImageLayout:
                 - Undefined
                 - General
                 - ColorAttachmentOptimal
@@ -177,7 +203,7 @@ cdef class Image:
         cmdBuffer.end()
 
         self.session.run(cmdBuffer)
-    
+
     def clear(self):
         """
         Clears the pixels in the image to zero.
@@ -359,10 +385,8 @@ cdef class Image:
         desc.setNormalizedCoordinates(normalizedCoordinates)
         desc.setIsSampled(sampled)
 
-        cdef ImageView view = ImageView()
-        view.__imageView = self.__image.get().createImageView(desc)
-
-        return view
+        return _buildImageView(self.__image.get().createImageView(desc),
+                               self.session, self)
 
     def __validateNumpyShape(self, arr):
 
@@ -395,22 +419,19 @@ cdef class Image:
 cdef class ImageView:
 
     def __cinit__(self):
-        pass
+        self.__session = None
+        self.__image = None
 
     def __dealloc__(self):
         pass
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__imageView.get().getSession()
-            return out
+            return self.__session
 
     property memory:
         def __get__(self):
-            cdef Memory out = Memory()
-            out.__memory = self.__imageView.get().getMemory()
-            return out
+            return self.image.memory
 
     property image:
         def __get__(self):
@@ -418,9 +439,7 @@ cdef class ImageView:
             The underlying Image object from which this
             ImageView was created.
             """
-            cdef Image img = Image()
-            img.__image = self.__imageView.get().getImage()
-            return img
+            return self.__image
 
     property width:
         def __get__(self):
@@ -568,7 +587,7 @@ cdef class ImageView:
         """
 
         return self.image.toHost(output)
-    
+
     def changeLayout(self, ImageLayout newLayout):
         """
         Changes the layout of the underlying image.
@@ -594,7 +613,7 @@ cdef class ImageView:
         """
 
         self.image.changeLayout(newLayout)
-    
+
     def clear(self):
         """
         Clears the pixels in the image to zero.

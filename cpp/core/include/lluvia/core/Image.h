@@ -26,6 +26,11 @@
 
 namespace ll {
 
+
+namespace vulkan {
+class Device;
+} // namespace vulkan
+
 class CommandBuffer;
 class ComputeNode;
 class ComputeGraph;
@@ -168,6 +173,7 @@ inline T imageTilingToString(vk::ImageTiling &&tiling) noexcept {
     return impl::enumToString<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(std::forward<vk::ImageTiling>(tiling));
 }
 
+
 /**
 @brief      Converts from a string-like object to vk::ImageTiling.
 
@@ -250,14 +256,6 @@ public:
     @return     The memory.
     */
     const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
-
-
-    /**
-    @brief      Gets the Session this object belongs to.
-    
-    @return     The session.
-    */
-    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -417,17 +415,18 @@ public:
     void clear();
 
 private:
-    Image(const vk::Device& tDevice,
-          const vk::Image& tVkImage,
-          const ll::ImageDescriptor& tDescriptor,
-          const std::shared_ptr<ll::Memory>& tMemory,
-          const ll::MemoryAllocationInfo& tAllocInfo,
-          const vk::ImageLayout tLayout);
+    Image(const std::shared_ptr<ll::vulkan::Device>& device,
+          const vk::Image& vkImage,
+          const ll::ImageDescriptor& descriptor,
+          const std::shared_ptr<ll::Memory>& memory,
+          const ll::MemoryAllocationInfo& allocInfo,
+          const vk::ImageLayout layout);
+
+    std::shared_ptr<ll::vulkan::Device> m_device;
 
     ll::ImageDescriptor m_descriptor;
     ll::MemoryAllocationInfo m_allocInfo;
 
-    vk::Device          m_device;
     vk::Image           m_vkImage;
     vk::ImageLayout     m_vkLayout;
 

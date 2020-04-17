@@ -20,8 +20,12 @@
 
 #include "lluvia/core/ImageDescriptor.h"
 
-
 namespace ll {
+
+namespace vulkan {
+    class Device;
+    class Instance;
+} // namespace vulkan
 
 class Buffer;
 class CommandBuffer;
@@ -91,7 +95,7 @@ public:
     
     @return     The interpreter.
      */
-    const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
+    // const std::unique_ptr<ll::Interpreter>& getInterpreter() const noexcept;
     
     
     /**
@@ -334,26 +338,13 @@ private:
     // Session objects should be created through factory methods
     Session();
 
-    bool initInstance();
-    bool initDevice();
-    bool initQueue();
-    bool initCommandPool();
-    void initHostMemory();
-    uint32_t getComputeFamilyQueueIndex();
+    void initDevice();
+    uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice);
 
-    std::shared_ptr<ll::Memory> createMemoryImpl(const vk::MemoryPropertyFlags flags,
-                                                 const uint64_t pageSize,
-                                                 bool exactFlagsMatch,
-                                                 bool keepThisSharedReference);
+    std::shared_ptr<ll::vulkan::Instance>    m_instance;
+    std::shared_ptr<ll::vulkan::Device>      m_device;
 
-    vk::Instance         instance;
-    vk::PhysicalDevice   physicalDevice;
-    vk::Device           device;
-    vk::Queue            queue;
-    vk::CommandPool      commandPool;
-    uint32_t             computeQueueFamilyIndex;
-
-    std::unique_ptr<ll::Interpreter> m_interpreter;
+    std::shared_ptr<ll::Interpreter>         m_interpreter;
 
     std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
 

@@ -20,13 +20,17 @@
 
 namespace ll {
 
+namespace vulkan {
+class Device;
+} // namespace vulkan
+
 class Buffer;
 class CommandBuffer;
 class Image;
 class ImageView;
+class Interpreter;
 class Object;
 class Program;
-class Session;
 
 
 /**
@@ -39,20 +43,33 @@ public:
     ComputeNode(const ComputeNode& node)              = delete;
     ComputeNode(ComputeNode&& node)                   = delete;
 
+    /**
+    @brief      Constructs the object.
+    
+    @param[in]  device      The Vulkan device where this node will run.
+    @param[in]  descriptor  The descriptor. A copy of this descriptor is kept within this object.
+                             So this one can be modified after the compute node is constructed.
+    @param[in]  interpreter Interpreter to use for running Lua scripts.
+
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
+                                  if desc.getFunctionName() is empty string.
+    
+    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
+                                  if desc.getProgram is nullptr.
+
+    @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
+                                  if any of the components of descriptor.localShape is zero.
+    */
+    ComputeNode(const std::shared_ptr<ll::vulkan::Device> &device,
+                const ll::ComputeNodeDescriptor &descriptor,
+                const std::weak_ptr<ll::Interpreter> &interpreter);
+
     virtual ~ComputeNode();
 
     ComputeNode& operator = (const ComputeNode& node) = delete;
     ComputeNode& operator = (ComputeNode&& node)      = delete;
 
     ll::NodeType getType() const noexcept override;
-
-
-    /**
-    @brief      Gets the session this memory was created from.
-    
-    @return     The session.
-    */
-    const std::shared_ptr<ll::Session>& getSession() const noexcept;
 
 
     /**
@@ -245,28 +262,6 @@ protected:
     void onInit() override;
 
 private:
-    /**
-    @brief      Constructs the object.
-    
-    @param[in]  tSession     The session this node was created from.
-    @param[in]  tDevice      The Vulkan device where this node will run.
-    @param[in]  tDescriptor  The descriptor. A copy of this descriptor is kept within this object.
-                             So this one can be modified after the compute node is constructed.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderFunctionName
-                                  if desc.getFunctionName() is empty string.
-    
-    @throws     std::system_error With error code ll::ErrorCode::InvalidShaderProgram
-                                  if desc.getProgram is nullptr.
-
-    @throws     std::system_error With error code ll::ErrorCode::InvalidLocalShape
-                                  if any of the components of descriptor.localShape is zero.
-    */
-    ComputeNode(
-        const std::shared_ptr<ll::Session>& tSession,
-        const vk::Device& tDevice,
-        const ll::ComputeNodeDescriptor& tDescriptor);
-
     void initPortBindings();
     void initPipeline();
     
@@ -276,7 +271,7 @@ private:
     std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
     uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
 
-    vk::Device                          m_device;
+    std::shared_ptr<ll::vulkan::Device> m_device;
 
     vk::DescriptorSetLayout             m_descriptorSetLayout;
 
@@ -297,11 +292,7 @@ private:
 
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
 
-    // Shared pointer to the session this node was created from
-    // This will keep the session alive until this or any other node is deleted.
-    std::shared_ptr<ll::Session>            m_session;
-
-friend class ll::Session;
+    std::weak_ptr<ll::Interpreter> m_interpreter;
 };
 
 

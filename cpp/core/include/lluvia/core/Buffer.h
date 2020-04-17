@@ -140,14 +140,6 @@ public:
 
 
     /**
-    @brief      Gets the session this object belongs to.
-    
-    @return     The session.
-    */
-    const std::shared_ptr<ll::Session>& getSession() const noexcept;
-
-
-    /**
     @brief      Gets the size of the buffer in bytes.
     
     The size returned corresponds to the size requested by the user through

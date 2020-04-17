@@ -38,6 +38,7 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
 
     // session->changeImageLayout(image, vk::ImageLayout::eGeneral);
     auto cmdBuffer = session->createCommandBuffer();
+    REQUIRE(cmdBuffer != nullptr);
 
     cmdBuffer->begin();
     cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
@@ -88,19 +89,19 @@ TEST_CASE("InvalidImageSize", "test_ImageCreation") {
         .setHeight(32)
         .setDepth(32)
         .setChannelCount(ll::ChannelCount::C1);
-    REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
+    REQUIRE_THROWS_AS(memory->createImage(desc), std::system_error);
 
     // invalid height
     desc.setWidth(32)
         .setHeight(0)
         .setDepth(32)
         .setChannelCount(ll::ChannelCount::C1);
-    REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
+    REQUIRE_THROWS_AS(memory->createImage(desc), std::system_error);
 
     // invalid depth
     desc.setWidth(32)
         .setHeight(32)
         .setDepth(0)
         .setChannelCount(ll::ChannelCount::C1);
-    REQUIRE_THROWS_AS(memory->createImage(desc), std::invalid_argument);
+    REQUIRE_THROWS_AS(memory->createImage(desc), std::system_error);
 }

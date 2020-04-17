@@ -39,6 +39,14 @@ __all__ = [
     'MemoryAllocationInfo'
 ]
 
+cdef _buildMemory(shared_ptr[_Memory] ptr, Session session):
+    
+    cdef Memory m = Memory()
+    m.__memory = ptr
+    m.__session = session
+
+    return m
+
 
 cdef class MemoryAllocationInfo:
 
@@ -76,6 +84,9 @@ cdef class MemoryAllocationInfo:
 
 cdef class Memory:
 
+    def __init__(self):
+        self.__session = None
+    
     def __cinit__(self):
         pass
 
@@ -85,9 +96,7 @@ cdef class Memory:
 
     property session:
         def __get__(self):
-            cdef Session out = Session()
-            out.__session = self.__memory.get().getSession()
-            return out
+            return self.__session
 
     property memoryFlags:
         def __get__(self):
@@ -186,10 +195,7 @@ cdef class Memory:
         cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, BufferUsageFlagBits)
         cdef vk.BufferUsageFlags vkUsageFlags = <vk.BufferUsageFlags> flattenFlags
 
-        cdef core_buffer.Buffer buf = core_buffer.Buffer()
-        buf.__buffer  = self.__memory.get().createBuffer(size, vkUsageFlags)
-
-        return buf
+        return core_buffer._buildBuffer(self.__memory.get().createBuffer(size, vkUsageFlags), self.session, self)
 
 
     def createBufferFromHost(self, np.ndarray arr,
@@ -365,10 +371,9 @@ cdef class Memory:
 
         cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
 
-        cdef image.Image img = image.Image()
-        img.__image   = self.__memory.get().createImage(desc)
-
+        cdef image.Image img = image._buildImage(self.__memory.get().createImage(desc), self.session, self)
         img.changeLayout(ImageLayout.General)
+
         return img
 
 

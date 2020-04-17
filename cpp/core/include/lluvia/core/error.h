@@ -42,6 +42,8 @@ enum class ErrorCode : int32_t {
     PushConstantError,         /**< Error regarding push constant operation*/
     IOError,                   /**< IO Error accessing files*/
     InvalidArgument,           /**< Invalid argument*/
+    InconpatibleDriver,        /**< Incompatible driver */
+    SessionLost,               /**< An object is trying to access a Session already destroyed */
 };
 
 namespace impl {
@@ -49,7 +51,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 19> ErrorCodeStrings{{
+constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 21> ErrorCodeStrings{{
     std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
     std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
     std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
@@ -69,6 +71,8 @@ constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 19> ErrorCod
     std::make_tuple("PushConstantError", ll::ErrorCode::PushConstantError),
     std::make_tuple("IOError", ll::ErrorCode::IOError),
     std::make_tuple("InvalidArgument", ll::ErrorCode::InvalidArgument),
+    std::make_tuple("InconpatibleDriver", ll::ErrorCode::InconpatibleDriver),
+    std::make_tuple("SessionLost", ll::ErrorCode::SessionLost),
 }};
 
 } // namespace impl

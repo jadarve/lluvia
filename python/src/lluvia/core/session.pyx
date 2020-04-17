@@ -24,7 +24,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from command_buffer cimport CommandBuffer, _CommandBuffer, move
+from command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 
 import io
 
@@ -37,9 +37,14 @@ import  program
 cimport program
 
 from duration import Duration
-from duration cimport Duration, _Duration, moveDuration
+from duration cimport Duration, _Duration, moveDuration, _buildDuration
 
-from node cimport ComputeNode, ComputeNodeDescriptor, ContainerNodeDescriptor, ContainerNode
+from node cimport ComputeNode,\
+                  ComputeNodeDescriptor,\
+                  ContainerNodeDescriptor,\
+                  ContainerNode,\
+                  _buildComputeNode,\
+                  _buildContainerNode
 
 
 __all__ = [
@@ -181,10 +186,11 @@ cdef class Session:
         cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
         cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
 
-        cdef Memory mem = Memory()
-        mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
+        # cdef Memory mem = Memory(self)
+        # mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
 
-        return mem
+        # return mem
+        return memory._buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
 
     def createProgram(self, str path):
         """
@@ -245,10 +251,7 @@ cdef class Session:
         node : lluvia.ComputeNode
         """
 
-        cdef ComputeNode node = ComputeNode()
-        node.__node    = self.__session.get().createComputeNode(desc.__descriptor)
-
-        return node
+        return _buildComputeNode(self.__session.get().createComputeNode(desc.__descriptor), self)
 
     def createContainerNodeDescriptor(self, str builderName):
 
@@ -258,10 +261,7 @@ cdef class Session:
 
     def createContainerNode(self, ContainerNodeDescriptor desc):
 
-        cdef ContainerNode node = ContainerNode()
-        node.__node    = self.__session.get().createContainerNode(desc.__descriptor)
-
-        return node
+        return _buildContainerNode(self.__session.get().createContainerNode(desc.__descriptor), self)
 
     def createDuration(self):
         """
@@ -273,9 +273,7 @@ cdef class Session:
             A new Duration object.
         """
 
-        cdef Duration d = Duration()
-        d.__duration = shared_ptr[_Duration](moveDuration(self.__session.get().createDuration()))
-        return d
+        return _buildDuration(shared_ptr[_Duration](moveDuration(self.__session.get().createDuration())))
 
     def createCommandBuffer(self):
         """
@@ -290,14 +288,7 @@ cdef class Session:
         RuntimeError : if the command buffer cannot be created.
         """
 
-        cdef CommandBuffer cmdBuffer = CommandBuffer()
-        cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer()))
-
-        # hold a reference to this session to
-        # avoid deleting it before the command buffer
-        cmdBuffer.__session = self
-
-        return cmdBuffer
+        return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
 
     def script(self, str code):
 
