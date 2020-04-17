@@ -16,7 +16,7 @@ from .session cimport Session
 
 from libc.stdint cimport uint64_t, uint32_t
 from libc.string cimport memcpy
-from libcpp.memory cimport unique_ptr
+from libcpp.memory cimport unique_ptr, shared_ptr
 
 cimport numpy as np
 import numpy as np
@@ -25,11 +25,26 @@ import numpy as np
 __all__ = ['Buffer']
 
 
+cdef _buildBuffer(shared_ptr[_Buffer] ptr, Session session, Memory memory):
+
+    cdef Buffer buf = Buffer(None, None)
+    buf.__buffer = ptr
+    buf.__session = session
+
+    cdef Memory m = memory
+    if memory is None:
+        m = Memory(session)
+        m.__memory = ptr.get().getMemory()
+
+    buf.__memory = m
+    return buf
+
+
 cdef class Buffer:
 
-    def __cinit__(self, Session session, Memory memory):
-        self.__session = session
-        self.__memory = memory
+    def __cinit__(self):
+        self.__session = None
+        self.__memory = None
 
     def __dealloc__(self):
         pass

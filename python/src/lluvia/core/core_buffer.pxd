@@ -39,6 +39,8 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
         unique_ptr[T, _BufferMapDeleter] map[T]()
 
 
+cdef _buildBuffer(shared_ptr[_Buffer] ptr, Session session, Memory memory)
+
 cdef class Buffer:
     cdef shared_ptr[_Buffer] __buffer
     cdef Session             __session

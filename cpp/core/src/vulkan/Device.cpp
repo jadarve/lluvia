@@ -77,8 +77,8 @@ bool Device::isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) c
 }
 
 
-std::unique_ptr<ll::CommandBuffer> Device::createCommandBuffer() const {
-    return nullptr;
+std::unique_ptr<ll::CommandBuffer> Device::createCommandBuffer() {
+    return std::make_unique<ll::CommandBuffer>(shared_from_this());
 }
 
 

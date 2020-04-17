@@ -39,7 +39,12 @@ cimport program
 from duration import Duration
 from duration cimport Duration, _Duration, moveDuration
 
-from node cimport ComputeNode, ComputeNodeDescriptor, ContainerNodeDescriptor, ContainerNode
+from node cimport ComputeNode,\
+                  ComputeNodeDescriptor,\
+                  ContainerNodeDescriptor,\
+                  ContainerNode,\
+                  _buildComputeNode,\
+                  _buildContainerNode
 
 
 __all__ = [
@@ -181,10 +186,11 @@ cdef class Session:
         cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
         cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
 
-        cdef Memory mem = Memory(self)
-        mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
+        # cdef Memory mem = Memory(self)
+        # mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
 
-        return mem
+        # return mem
+        return memory._buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
 
     def createProgram(self, str path):
         """
@@ -245,10 +251,7 @@ cdef class Session:
         node : lluvia.ComputeNode
         """
 
-        cdef ComputeNode node = ComputeNode(self)
-        node.__node = self.__session.get().createComputeNode(desc.__descriptor)
-
-        return node
+        return _buildComputeNode(self.__session.get().createComputeNode(desc.__descriptor), self)
 
     def createContainerNodeDescriptor(self, str builderName):
 
@@ -258,10 +261,7 @@ cdef class Session:
 
     def createContainerNode(self, ContainerNodeDescriptor desc):
 
-        cdef ContainerNode node = ContainerNode(self)
-        node.__node = self.__session.get().createContainerNode(desc.__descriptor)
-
-        return node
+        return _buildContainerNode(self.__session.get().createContainerNode(desc.__descriptor), self)
 
     def createDuration(self):
         """

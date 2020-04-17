@@ -48,6 +48,8 @@ cdef class MemoryAllocationInfo:
     cdef _MemoryAllocationInfo __allocationInfo
 
 
+cdef _buildMemory(shared_ptr[_Memory] ptr, Session session)
+
 cdef class Memory:
     cdef shared_ptr[_Memory] __memory
     cdef Session __session

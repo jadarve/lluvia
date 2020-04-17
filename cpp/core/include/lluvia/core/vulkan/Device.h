@@ -24,7 +24,7 @@ namespace vulkan {
 
 class Instance;
 
-class Device {
+class Device : public std::enable_shared_from_this<ll::vulkan::Device> {
 
 public:
     Device() = delete;
@@ -48,7 +48,7 @@ public:
 
     bool isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) const noexcept;
 
-    std::unique_ptr<ll::CommandBuffer> createCommandBuffer() const;
+    std::unique_ptr<ll::CommandBuffer> createCommandBuffer();
 
     void run(const ll::CommandBuffer& cmdBuffer);
     

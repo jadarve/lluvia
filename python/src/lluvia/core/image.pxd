@@ -147,6 +147,10 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
         void clear() except +
 
 
+cdef _buildImage(shared_ptr[_Image] ptr, Session session, Memory memory)
+
+cdef _buildImageView(shared_ptr[_ImageView] ptr, Session session, Image image)
+
 cdef class Image:
     cdef shared_ptr[_Image] __image
     cdef Session            __session
@@ -156,5 +160,4 @@ cdef class Image:
 cdef class ImageView:
     cdef shared_ptr[_ImageView] __imageView
     cdef Session                __session
-    cdef Memory                 __memory
     cdef Image                  __image

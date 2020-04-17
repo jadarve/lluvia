@@ -202,3 +202,7 @@ cdef class ContainerNodeDescriptor:
 cdef class ContainerNode:
     cdef shared_ptr[_ContainerNode] __node
     cdef Session                    __session
+
+
+cdef _buildComputeNode(shared_ptr[_ComputeNode] ptr, Session session)
+cdef _buildContainerNode(shared_ptr[_ContainerNode] ptr, Session session)
