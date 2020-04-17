@@ -22,5 +22,7 @@ cdef extern from "<utility>" namespace "std":
     unique_ptr[_Duration] moveDuration 'std::move' (unique_ptr[_Duration]&& ptr)
 
 
+cdef _buildDuration(shared_ptr[_Duration] ptr)
+
 cdef class Duration:
     cdef shared_ptr[_Duration] __duration

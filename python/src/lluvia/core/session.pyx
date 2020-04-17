@@ -24,7 +24,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from command_buffer cimport CommandBuffer, _CommandBuffer, move
+from command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 
 import io
 
@@ -37,7 +37,7 @@ import  program
 cimport program
 
 from duration import Duration
-from duration cimport Duration, _Duration, moveDuration
+from duration cimport Duration, _Duration, moveDuration, _buildDuration
 
 from node cimport ComputeNode,\
                   ComputeNodeDescriptor,\
@@ -273,9 +273,7 @@ cdef class Session:
             A new Duration object.
         """
 
-        cdef Duration d = Duration()
-        d.__duration = shared_ptr[_Duration](moveDuration(self.__session.get().createDuration()))
-        return d
+        return _buildDuration(shared_ptr[_Duration](moveDuration(self.__session.get().createDuration())))
 
     def createCommandBuffer(self):
         """
@@ -290,14 +288,7 @@ cdef class Session:
         RuntimeError : if the command buffer cannot be created.
         """
 
-        cdef CommandBuffer cmdBuffer = CommandBuffer()
-        cmdBuffer.__commandBuffer = shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer()))
-
-        # hold a reference to this session to
-        # avoid deleting it before the command buffer
-        cmdBuffer.__session = self
-
-        return cmdBuffer
+        return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
 
     def script(self, str code):
 

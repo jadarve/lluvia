@@ -8,6 +8,12 @@
 
 cimport duration
 
+cdef _buildDuration(shared_ptr[_Duration] ptr):
+
+    cdef Duration duration = Duration()
+    duration.__duration = ptr
+
+    return duration
 
 cdef class Duration:
 

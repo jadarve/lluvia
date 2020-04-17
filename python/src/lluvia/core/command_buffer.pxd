@@ -51,6 +51,8 @@ cdef extern from "<utility>" namespace "std":
     unique_ptr[_CommandBuffer] move(unique_ptr[_CommandBuffer]&& ptr)
 
 
+cdef _buildCommandBuffer(shared_ptr[_CommandBuffer] cmd, Session session)
+
 cdef class CommandBuffer:
 
     cdef shared_ptr[_CommandBuffer] __commandBuffer
