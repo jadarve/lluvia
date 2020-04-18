@@ -69,6 +69,7 @@ http_archive (
         "https://github.com/catchorg/Catch2/archive/v2.11.0.tar.gz"
     ],
     sha256 = "b9957af46a04327d80833960ae51cf5e67765fd264389bd1e275294907f1a3e0",
+    strip_prefix = "Catch2-2.11.0",
     build_file = "@//external:catch.bzl"
 )
 
@@ -78,6 +79,7 @@ http_archive (
         "https://github.com/ThePhD/sol2/archive/v3.0.3.tar.gz"
     ],
     sha256 = "bf089e50387edfc70063e24fd7fbb693cceba4a50147d864fabedd1b33483582",
+    strip_prefix = "sol2-3.0.3",
     build_file = "@//external:sol.bzl"
 )
 
@@ -104,5 +106,14 @@ http_archive (
         "https://www.lua.org/ftp/lua-5.3.5.tar.gz"
     ],
     sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac",
+    strip_prefix = "lua-5.3.5",
     build_file = "@//external:lua.bzl",
+)
+
+http_archive(
+    name = "cython",
+    url = "https://github.com/cython/cython/archive/3.0a1.tar.gz",
+    sha256 = "afd96c9113fc334ca14adea53900fa9e28d70a45b44a39e950825f85aed39b04",
+    strip_prefix = "cython-3.0a1",
+    build_file = "@//external:cython.bzl",
 )
