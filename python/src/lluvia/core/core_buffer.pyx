@@ -7,12 +7,12 @@
 """
 
 from . import impl
-from .enums import BufferUsageFlagBits, MemoryPropertyFlagBits
-from .memory cimport Memory, MemoryAllocationInfo
-from .memory import Memory, MemoryAllocationInfo
+from enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from memory cimport Memory, MemoryAllocationInfo
+from memory import Memory, MemoryAllocationInfo
 
-from .session import Session
-from .session cimport Session
+from session import Session
+from session cimport Session
 
 from libc.stdint cimport uint64_t, uint32_t
 from libc.string cimport memcpy

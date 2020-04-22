@@ -6,7 +6,6 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-cimport duration
 
 cdef _buildDuration(shared_ptr[_Duration] ptr):
 

@@ -6,8 +6,6 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-cimport session
-
 from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
 
 from . import impl

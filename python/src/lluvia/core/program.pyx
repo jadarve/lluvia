@@ -6,7 +6,6 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-cimport program
 
 from libc.stdint cimport uint8_t
 from libcpp.vector cimport vector

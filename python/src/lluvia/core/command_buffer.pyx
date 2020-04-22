@@ -7,7 +7,6 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-cimport command_buffer
 
 from cython.operator cimport dereference as deref
 

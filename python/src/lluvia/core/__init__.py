@@ -8,6 +8,7 @@
 
 from .command_buffer import *
 from .core_buffer import *
+from .duration import *
 from .enums import *
 from .image import *
 from .memory import *

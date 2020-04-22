@@ -7,20 +7,20 @@
 """
 
 from . import impl
-from .enums import BufferUsageFlagBits, ChannelType, ImageUsageFlagBits
+from enums import BufferUsageFlagBits, ChannelType, ImageUsageFlagBits
 
-from .enums.image cimport ImageFilterMode, ImageAddressMode
-from .enums.image import ImageFilterMode as ImageFilterMode_t
-from .enums.image import ImageAddressMode as ImageAddressMode_t
+from enums.image cimport ImageFilterMode, ImageAddressMode
+from enums.image import ImageFilterMode as ImageFilterMode_t
+from enums.image import ImageAddressMode as ImageAddressMode_t
 
-from .enums.vulkan cimport ImageLayout
-from .enums.vulkan import ImageLayout as ImageLayout_t
+from enums.vulkan cimport ImageLayout
+from enums.vulkan import ImageLayout as ImageLayout_t
 
-from .memory import Memory
-from .memory cimport Memory, MemoryAllocationInfo, _buildMemory
+from memory import Memory
+from memory cimport Memory, MemoryAllocationInfo, _buildMemory
 
-from .session import Session
-from .session cimport Session
+from session import Session
+from session cimport Session
 
 cimport vulkan as vk
 

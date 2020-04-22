@@ -1,0 +1,22 @@
+load("//bazel/cython:def.bzl", "pyx_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+
+py_test(
+    name = "test_moni",
+    srcs = [
+        "test/test_moni.py"
+    ],
+    deps = [
+        "//python/src:pyx_library"
+    ]
+)
+
+py_binary(
+    name = "moni",
+    srcs = [
+        "moni.py"
+    ],
+    deps = [
+        "//python/src:pyx_library"
+    ]
+)

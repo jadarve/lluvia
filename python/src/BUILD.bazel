@@ -1,0 +1,45 @@
+load("//bazel/cython:def.bzl", "pyx_library")
+
+
+# this kind of works but I'm not able to create a session out of the generated py_library
+pyx_library (
+    name = "pyx_library",
+    srcs = glob([
+        "**/*.pxd",
+        "**/*.pyx",
+        "**/*.py",
+    ]),
+    srcs_version = "PY3",
+    deps = [
+        "//cpp/core:core_cc_library",
+        "@lua//:lua_cc_library",
+        "@python_linux//:python36-lib"
+    ],
+    copts = [
+        "--std=c++17",
+        "-stdlib=libstdc++",
+        "-fwrapv",
+        "-O2",
+        "-Wall",
+        "-fno-strict-aliasing",
+        "-fPIC",
+        "-Wno-unused-function",
+        "-DSOL_ALL_SAFETIES_ON=1",
+    ],
+    linkopts = [
+        "-lvulkan",
+        "-lm",
+        "-ldl",
+        "-pthread",
+        "-shared",
+        "-Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-Bsymbolic-functions -Wl,-z,relro",
+        "-g",
+        "-fstack-protector-strong",
+        "-Wformat",
+        "-Werror=format-security",
+        "-Wdate-time",
+        "-D_FORTIFY_SOURCE=2"
+    ],
+    cy_include_prefix = 'python/src',
+    visibility = ["//visibility:public"]
+)

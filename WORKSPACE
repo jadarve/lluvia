@@ -117,3 +117,19 @@ http_archive(
     strip_prefix = "cython-3.0a1",
     build_file = "@//external:cython.bzl",
 )
+
+
+# TODO: need to support python 3.5, 3.6, ...
+new_local_repository(
+    name = "python_linux",
+    path = "/usr",
+    build_file_content = """
+cc_library(
+    name = "python36-lib",
+    srcs = ["lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6.so"],
+    hdrs = glob(["include/python3.6/*.h"]),
+    includes = ["include/python3.6"],
+    visibility = ["//visibility:public"]
+)
+    """
+)
