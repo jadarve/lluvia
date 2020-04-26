@@ -83,7 +83,7 @@ pyx_library (
     deps = [
         "//cpp/core:core_cc_library",
         "@lua//:lua_cc_library",
-        "@python_linux//:python36-lib"
+        "@python_linux//:python3-lib"
     ],
     copts = [
         "--std=c++17",
