@@ -6,6 +6,8 @@ py_test(
     srcs = [
         "test/test_moni.py"
     ],
+    srcs_version = "PY3",
+    legacy_create_init = 0,
     deps = [
         "//python/src:pyx_library"
     ]
@@ -16,6 +18,8 @@ py_binary(
     srcs = [
         "moni.py"
     ],
+    srcs_version = "PY3",
+    legacy_create_init = 0,
     deps = [
         "//python/src:pyx_library"
     ]

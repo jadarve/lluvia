@@ -6,7 +6,8 @@ def main():
     print('moni moni')
     print(ll.__dict__)
     print(src.__path__)
-    session = ll.createSession()
+    
+    ll.Parameter(value=2)
     
 
 if __name__ == "__main__":

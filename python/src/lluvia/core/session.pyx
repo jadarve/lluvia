@@ -13,6 +13,7 @@ from . import impl
 import subprocess
 import tempfile
 import sys
+import io
 
 from cython.operator cimport dereference as deref
 
@@ -22,27 +23,26 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
+from . cimport vulkan as vk
+# from command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 
-import io
+# import  memory
+# cimport memory
+from .memory cimport Memory, _Memory, _buildMemory
+from .memory import Memory
 
-import  memory
-cimport memory
-from memory cimport Memory, _Memory
-cimport vulkan as vk
+from .program cimport Program
+from .program import Program
 
-import  program
-cimport program
+# from duration import Duration
+# from duration cimport Duration, _Duration, moveDuration, _buildDuration
 
-from duration import Duration
-from duration cimport Duration, _Duration, moveDuration, _buildDuration
-
-from node cimport ComputeNode,\
-                  ComputeNodeDescriptor,\
-                  ContainerNodeDescriptor,\
-                  ContainerNode,\
-                  _buildComputeNode,\
-                  _buildContainerNode
+# from node cimport ComputeNode,\
+#                   ComputeNodeDescriptor,\
+#                   ContainerNodeDescriptor,\
+#                   ContainerNode,\
+#                   _buildComputeNode,\
+#                   _buildContainerNode
 
 
 __all__ = [
@@ -184,11 +184,7 @@ cdef class Session:
         cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
         cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
 
-        # cdef Memory mem = Memory(self)
-        # mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
-
-        # return mem
-        return memory._buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
+        return _buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
 
     def createProgram(self, str path):
         """
@@ -210,7 +206,7 @@ cdef class Session:
         IOError : if there is any problem reading the file at the given path.
         """
 
-        cdef program.Program prog = program.Program()
+        cdef Program prog = Program()
 
         try:
             prog.__program = self.__session.get().createProgram(impl.encodeString(path))
@@ -219,260 +215,260 @@ cdef class Session:
         except IOError as e:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
-    def setProgram(self, str name, program.Program program):
+    def setProgram(self, str name, Program program):
 
         self.__session.get().setProgram(impl.encodeString(name), program.__program)
 
     def getProgram(self, str name):
 
-        cdef program.Program out = program.Program()
+        cdef Program out = Program()
         out.__program = self.__session.get().getProgram(impl.encodeString(name))
         return out
 
-    def createComputeNodeDescriptor(self, str builderName):
+    # def createComputeNodeDescriptor(self, str builderName):
 
-        cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
-        desc.__descriptor = self.__session.get().createComputeNodeDescriptor(impl.encodeString(builderName))
-        return desc
+    #     cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
+    #     desc.__descriptor = self.__session.get().createComputeNodeDescriptor(impl.encodeString(builderName))
+    #     return desc
 
-    def createComputeNode(self, ComputeNodeDescriptor desc):
-        """
-        Creates a ComputeNode from a given descriptor.
+    # def createComputeNode(self, ComputeNodeDescriptor desc):
+    #     """
+    #     Creates a ComputeNode from a given descriptor.
 
-        Parameters
-        ----------
-        desc : lluvia.ComputeNodeDescriptor
-            Compute node descriptor for this node.
+    #     Parameters
+    #     ----------
+    #     desc : lluvia.ComputeNodeDescriptor
+    #         Compute node descriptor for this node.
 
 
-        Returns
-        node : lluvia.ComputeNode
-        """
+    #     Returns
+    #     node : lluvia.ComputeNode
+    #     """
 
-        return _buildComputeNode(self.__session.get().createComputeNode(desc.__descriptor), self)
+    #     return _buildComputeNode(self.__session.get().createComputeNode(desc.__descriptor), self)
 
-    def createContainerNodeDescriptor(self, str builderName):
+    # def createContainerNodeDescriptor(self, str builderName):
 
-        cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
-        desc.__descriptor = self.__session.get().createContainerNodeDescriptor(impl.encodeString(builderName))
-        return desc
+    #     cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
+    #     desc.__descriptor = self.__session.get().createContainerNodeDescriptor(impl.encodeString(builderName))
+    #     return desc
 
-    def createContainerNode(self, ContainerNodeDescriptor desc):
+    # def createContainerNode(self, ContainerNodeDescriptor desc):
 
-        return _buildContainerNode(self.__session.get().createContainerNode(desc.__descriptor), self)
+    #     return _buildContainerNode(self.__session.get().createContainerNode(desc.__descriptor), self)
 
-    def createDuration(self):
-        """
-        Creates a Duration object.
+    # def createDuration(self):
+    #     """
+    #     Creates a Duration object.
 
-        Returns
-        -------
-        d : ll.Duration.
-            A new Duration object.
-        """
+    #     Returns
+    #     -------
+    #     d : ll.Duration.
+    #         A new Duration object.
+    #     """
 
-        return _buildDuration(shared_ptr[_Duration](moveDuration(self.__session.get().createDuration())))
+    #     return _buildDuration(shared_ptr[_Duration](moveDuration(self.__session.get().createDuration())))
 
-    def createCommandBuffer(self):
-        """
-        Creates a command buffer object.
+    # def createCommandBuffer(self):
+    #     """
+    #     Creates a command buffer object.
 
-        Command buffers are used to record commands to be executed
-        by the device. Once the recording finishes, the command buffer
-        can be sent for execution using the `run` method.
+    #     Command buffers are used to record commands to be executed
+    #     by the device. Once the recording finishes, the command buffer
+    #     can be sent for execution using the `run` method.
 
-        Raises
-        ------
-        RuntimeError : if the command buffer cannot be created.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if the command buffer cannot be created.
+    #     """
 
-        return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
+    #     return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
 
-    def script(self, str code):
+    # def script(self, str code):
 
-        self.__session.get().script(impl.encodeString(code))
+    #     self.__session.get().script(impl.encodeString(code))
 
-    def scriptFile(self, str filename):
+    # def scriptFile(self, str filename):
 
-        self.__session.get().scriptFile(impl.encodeString(filename))
+    #     self.__session.get().scriptFile(impl.encodeString(filename))
 
-    def run(self, obj):
-        """
-        Runs a CommandBuffer or ComputeNode
+    # def run(self, obj):
+    #     """
+    #     Runs a CommandBuffer or ComputeNode
 
-        Parameters
-        ----------
-        obj : CommandBuffer or ComputeNode
-        """
+    #     Parameters
+    #     ----------
+    #     obj : CommandBuffer or ComputeNode
+    #     """
 
-        cdef ComputeNode node = None
-        cdef ContainerNode containerNode = None
-        cdef CommandBuffer cmdBuffer = None
+    #     cdef ComputeNode node = None
+    #     cdef ContainerNode containerNode = None
+    #     cdef CommandBuffer cmdBuffer = None
 
-        if type(obj) == ComputeNode:
-            node = obj
-            self.__session.get().run(deref(node.__node.get()))
+    #     if type(obj) == ComputeNode:
+    #         node = obj
+    #         self.__session.get().run(deref(node.__node.get()))
         
-        elif type(obj) == ContainerNode:
-            containerNode = obj
-            self.__session.get().run(deref(containerNode.__node.get()))
+    #     elif type(obj) == ContainerNode:
+    #         containerNode = obj
+    #         self.__session.get().run(deref(containerNode.__node.get()))
 
-        elif type(obj) == CommandBuffer:
-            cmdBuffer = obj
-            self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
+    #     elif type(obj) == CommandBuffer:
+    #         cmdBuffer = obj
+    #         self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
         
-        else:
-            raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
+    #     else:
+    #         raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
 
         
 
-    def compileProgram(self, shaderCode,
-                       includeDirs=None,
-                       compileFlags=['-Werror']):
-        """
-        Compiles a Program from GLSL shader code.
+    # def compileProgram(self, shaderCode,
+    #                    includeDirs=None,
+    #                    compileFlags=['-Werror']):
+    #     """
+    #     Compiles a Program from GLSL shader code.
 
-        This method assumes that glslc command is avialable in the system.
-
-
-        Parameters
-        ----------
-        shaderCode : file or str.
-            If file, it must contain the GLSL code of the shader to compile.
-            The file is not closed during the execution of this method.
-
-            If str,  it must be valid GLSL code. A temporal file is created and
-            its path is passed to glslc for compilation.
-
-        includeDirs : list of strings. Defaults to None.
-            List of include directories to pass to glslc through -I flag.
-
-        compileFlags : list of strings. Defaults to ['-Werror'].
-            Extra compile flags to pass to glslc.
+    #     This method assumes that glslc command is avialable in the system.
 
 
-        Returns
-        -------
-        program : lluvia.Program.
-            Compiled program.
+    #     Parameters
+    #     ----------
+    #     shaderCode : file or str.
+    #         If file, it must contain the GLSL code of the shader to compile.
+    #         The file is not closed during the execution of this method.
+
+    #         If str,  it must be valid GLSL code. A temporal file is created and
+    #         its path is passed to glslc for compilation.
+
+    #     includeDirs : list of strings. Defaults to None.
+    #         List of include directories to pass to glslc through -I flag.
+
+    #     compileFlags : list of strings. Defaults to ['-Werror'].
+    #         Extra compile flags to pass to glslc.
 
 
-        Raises
-        ------
-        RuntimeError : if the compilation fails.
-        """
-
-        shaderFile = None
-
-        if type(shaderCode) is not str:
-            shaderFile = shaderCode
-
-        else:
-            shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
-            shaderFile.file.write(impl.encodeString(shaderCode))
-            shaderFile.file.flush()
-
-        # temp file for SPIR-V output
-        with tempfile.NamedTemporaryFile(suffix='.spv') as outputFile:
-
-            command = ['glslc', '-o', outputFile.name] + compileFlags
-
-            if includeDirs is not None:
-
-                if type(includeDirs) is str:
-                    includeDirs = [includeDirs]
-
-                for incDir in includeDirs:
-                    command += ['-I', incDir]
-
-            command.append(shaderFile.name)
-            command = ' '.join(command)
-
-            proc = subprocess.Popen(command,
-                                    shell=True,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE)
-            proc.wait()
-
-            if proc.returncode != 0:
-                raise RuntimeError(proc.stderr.read())
-
-            return self.createProgram(outputFile.name)
-
-    def compileComputeNode(self,
-                           ports,
-                           shaderCode,
-                           functionName='main',
-                           builderName='',
-                           localSize=(1, 1, 1),
-                           gridSize=(1, 1, 1),
-                           includeDirs=None,
-                           compileFlags=['-Werror']):
-        """
-        Compiles a ComputeNode from GLSL shader code.
-
-        This method assumes that glslc command is avialable in the system.
-
-        Parameters
-        ----------
-        ports : list of PortDescriptor.
-            List of port descriptors the compute node receives.
-
-        shaderCode : file or str.
-            If file, it must contain the GLSL code of the shader to compile.
-            The file is not closed during the execution of this method.
-
-            If str,  it must be valid GLSL code. A temporal file is created and
-            its path is passed to glslc for compilation.
-
-        functionName : str. Defaults to 'main'.
-            Function name whitin the shader the compute node will execute.
-
-        builderName : str. Defaults to '' (empty string).
-            Builder name associated to this node.
-
-        localSize : list or tuple of length 3. Defaults to (1, 1, 1).
-            Local group size for each XYZ dimension. Each value
-            must be greater or equal to 1.
-
-        gridSize : list or tuple of length 3. Defaults to (1, 1, 1).
-            Grid size for each XYZ dimension. The grid size defines
-            the number of local groups in each dimension. Each value
-            must be greater or equal to 1.
-
-        includeDirs : list of strings. Defaults to None.
-            List of include directories to pass to glslc through -I flag.
-
-        compileFlags : list of strings. Defaults to ['-Werror'].
-            Extra compile flags to pass to glslc.
+    #     Returns
+    #     -------
+    #     program : lluvia.Program.
+    #         Compiled program.
 
 
-        Returns
-        -------
-        node : lluvia.ComputeNode.
-            Compiled node.
+    #     Raises
+    #     ------
+    #     RuntimeError : if the compilation fails.
+    #     """
+
+    #     shaderFile = None
+
+    #     if type(shaderCode) is not str:
+    #         shaderFile = shaderCode
+
+    #     else:
+    #         shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
+    #         shaderFile.file.write(impl.encodeString(shaderCode))
+    #         shaderFile.file.flush()
+
+    #     # temp file for SPIR-V output
+    #     with tempfile.NamedTemporaryFile(suffix='.spv') as outputFile:
+
+    #         command = ['glslc', '-o', outputFile.name] + compileFlags
+
+    #         if includeDirs is not None:
+
+    #             if type(includeDirs) is str:
+    #                 includeDirs = [includeDirs]
+
+    #             for incDir in includeDirs:
+    #                 command += ['-I', incDir]
+
+    #         command.append(shaderFile.name)
+    #         command = ' '.join(command)
+
+    #         proc = subprocess.Popen(command,
+    #                                 shell=True,
+    #                                 stdout=subprocess.PIPE,
+    #                                 stderr=subprocess.PIPE)
+    #         proc.wait()
+
+    #         if proc.returncode != 0:
+    #             raise RuntimeError(proc.stderr.read())
+
+    #         return self.createProgram(outputFile.name)
+
+    # def compileComputeNode(self,
+    #                        ports,
+    #                        shaderCode,
+    #                        functionName='main',
+    #                        builderName='',
+    #                        localSize=(1, 1, 1),
+    #                        gridSize=(1, 1, 1),
+    #                        includeDirs=None,
+    #                        compileFlags=['-Werror']):
+    #     """
+    #     Compiles a ComputeNode from GLSL shader code.
+
+    #     This method assumes that glslc command is avialable in the system.
+
+    #     Parameters
+    #     ----------
+    #     ports : list of PortDescriptor.
+    #         List of port descriptors the compute node receives.
+
+    #     shaderCode : file or str.
+    #         If file, it must contain the GLSL code of the shader to compile.
+    #         The file is not closed during the execution of this method.
+
+    #         If str,  it must be valid GLSL code. A temporal file is created and
+    #         its path is passed to glslc for compilation.
+
+    #     functionName : str. Defaults to 'main'.
+    #         Function name whitin the shader the compute node will execute.
+
+    #     builderName : str. Defaults to '' (empty string).
+    #         Builder name associated to this node.
+
+    #     localSize : list or tuple of length 3. Defaults to (1, 1, 1).
+    #         Local group size for each XYZ dimension. Each value
+    #         must be greater or equal to 1.
+
+    #     gridSize : list or tuple of length 3. Defaults to (1, 1, 1).
+    #         Grid size for each XYZ dimension. The grid size defines
+    #         the number of local groups in each dimension. Each value
+    #         must be greater or equal to 1.
+
+    #     includeDirs : list of strings. Defaults to None.
+    #         List of include directories to pass to glslc through -I flag.
+
+    #     compileFlags : list of strings. Defaults to ['-Werror'].
+    #         Extra compile flags to pass to glslc.
 
 
-        Raises
-        ------
-        RuntimeError : if the compilation fails.
+    #     Returns
+    #     -------
+    #     node : lluvia.ComputeNode.
+    #         Compiled node.
 
 
-        See also
-        --------
-        compileProgram : Compiles a Program from GLSL shader code.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if the compilation fails.
 
-        desc = ComputeNodeDescriptor()
-        desc.program = self.compileProgram(shaderCode,
-                                           includeDirs,
-                                           compileFlags)
-        desc.functionName = functionName
-        desc.builderName = builderName
-        desc.grid = gridSize
-        desc.local = localSize
 
-        for port in ports:
-            desc.addPort(port)
+    #     See also
+    #     --------
+    #     compileProgram : Compiles a Program from GLSL shader code.
+    #     """
 
-        return self.createComputeNode(desc)
+    #     desc = ComputeNodeDescriptor()
+    #     desc.program = self.compileProgram(shaderCode,
+    #                                        includeDirs,
+    #                                        compileFlags)
+    #     desc.functionName = functionName
+    #     desc.builderName = builderName
+    #     desc.grid = gridSize
+    #     desc.local = localSize
+
+    #     for port in ports:
+    #         desc.addPort(port)
+
+    #     return self.createComputeNode(desc)

@@ -8,7 +8,10 @@ import lluvia as ll
 def test_session():
 
     print(ll.__dict__)
-    session = ll.createSession()
+    print(ll.__path__)
+
+    p = ll.Parameter(value=1.0)
+    # session = ll.createSession()
     # memory = session.createMemory()
 
     # buf = memory.createBuffer(1024)

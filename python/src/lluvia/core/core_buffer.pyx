@@ -6,20 +6,21 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from . import impl
-from enums import BufferUsageFlagBits, MemoryPropertyFlagBits
-from memory cimport Memory, MemoryAllocationInfo
-from memory import Memory, MemoryAllocationInfo
-
-from session import Session
-from session cimport Session
-
 from libc.stdint cimport uint64_t, uint32_t
 from libc.string cimport memcpy
 from libcpp.memory cimport unique_ptr, shared_ptr
 
 cimport numpy as np
 import numpy as np
+
+from . import impl
+from .enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+
+from .memory cimport Memory, MemoryAllocationInfo
+from .memory import Memory, MemoryAllocationInfo
+
+from .session import Session
+from .session cimport Session
 
 
 __all__ = ['Buffer']

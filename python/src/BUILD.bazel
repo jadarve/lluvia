@@ -2,12 +2,75 @@ load("//bazel/cython:def.bzl", "pyx_library")
 
 
 # this kind of works but I'm not able to create a session out of the generated py_library
+# pyx_library (
+#     name = "pyx_library",
+#     srcs = glob([
+#         "**/*.pxd",
+#         "**/*.pyx",
+#         "**/*.py",
+#     ]),
+#     srcs_version = "PY3",
+#     deps = [
+#         "//cpp/core:core_cc_library",
+#         "@lua//:lua_cc_library",
+#         "@python_linux//:python36-lib"
+#     ],
+#     copts = [
+#         "--std=c++17",
+#         "-stdlib=libstdc++",
+#         "-fwrapv",
+#         "-O3",
+#         "-Wall",
+#         "-fno-strict-aliasing",
+#         "-fPIC",
+#         "-Wno-unused-function",
+#         "-DSOL_ALL_SAFETIES_ON=1",
+#     ],
+#     linkopts = [
+#         "-lvulkan",
+#         "-lm",
+#         "-ldl",
+#         "-pthread",
+#         "-shared",
+#         "-Wl,-O3 -Wl,-Bsymbolic-functions -Wl,-z,relro",
+#         "-g",
+#         "-fstack-protector-strong",
+#         "-Wformat",
+#         "-Werror=format-security",
+#         "-Wdate-time",
+#         "-D_FORTIFY_SOURCE=2"
+#     ],
+#     cy_include_prefix = 'python/src',
+#     visibility = ["//visibility:public"]
+# )
+
 pyx_library (
     name = "pyx_library",
-    srcs = glob([
-        "**/*.pxd",
-        "**/*.pyx",
-        "**/*.py",
+    srcs = [
+        "lluvia/__init__.py",
+        "lluvia/core/core_buffer.pxd",
+        "lluvia/core/core_buffer.pyx",
+        "lluvia/core/core_object.pxd",
+        "lluvia/core/duration.pxd",
+        "lluvia/core/duration.pyx",
+        "lluvia/core/memory.pxd",
+        "lluvia/core/memory.pyx",
+        "lluvia/core/parameter.pxd",
+        "lluvia/core/parameter.pyx",
+        "lluvia/core/program.pxd",
+        "lluvia/core/program.pyx",
+        "lluvia/core/session.pxd",
+        "lluvia/core/session.pyx",
+        "lluvia/core/types.pxd",
+        "lluvia/core/vulkan.pxd",
+        "lluvia/core/__init__.py",
+    ] + glob([
+        "lluvia/core/enums/*.py",
+        "lluvia/core/enums/*.pyx",
+        "lluvia/core/enums/*.pxd",
+        "lluvia/core/impl/*.py",
+        "lluvia/core/impl/*.pyx",
+        "lluvia/core/impl/*.pxd",
     ]),
     srcs_version = "PY3",
     deps = [
@@ -19,7 +82,7 @@ pyx_library (
         "--std=c++17",
         "-stdlib=libstdc++",
         "-fwrapv",
-        "-O2",
+        "-O3",
         "-Wall",
         "-fno-strict-aliasing",
         "-fPIC",
@@ -32,7 +95,7 @@ pyx_library (
         "-ldl",
         "-pthread",
         "-shared",
-        "-Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-Bsymbolic-functions -Wl,-z,relro",
+        "-Wl,-O3 -Wl,-Bsymbolic-functions -Wl,-z,relro",
         "-g",
         "-fstack-protector-strong",
         "-Wformat",

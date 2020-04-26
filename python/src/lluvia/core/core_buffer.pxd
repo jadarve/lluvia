@@ -6,20 +6,17 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from memory cimport _Memory, _MemoryAllocationInfo
-from core_object cimport _Object
-
-from session cimport Session
-from memory cimport Memory
-
-cimport vulkan as vk
-
 from libc.stdint cimport uint64_t
 
 from libcpp cimport bool
 from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
+
+from .memory cimport Memory, _Memory, _MemoryAllocationInfo
+from .core_object cimport _Object
+from .session cimport Session
+from .vulkan cimport BufferUsageFlags
 
 
 cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
@@ -33,7 +30,7 @@ cdef extern from 'lluvia/core/Buffer.h' namespace 'll':
 
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
-        vk.BufferUsageFlags getUsageFlags() const
+        BufferUsageFlags getUsageFlags() const
         bool isMappable() const
 
         unique_ptr[T, _BufferMapDeleter] map[T]()

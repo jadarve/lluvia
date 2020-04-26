@@ -9,7 +9,11 @@
 from libc.stdint cimport uint32_t
 from libcpp cimport bool as boolean
 
-from enums.parameter import ParameterType
+from .enums.parameter import ParameterType
+
+__all__ = [
+    'Parameter'
+]
 
 cdef class Parameter:
 
