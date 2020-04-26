@@ -48,6 +48,9 @@ pyx_library (
     name = "pyx_library",
     srcs = [
         "lluvia/__init__.py",
+        "lluvia/core/__init__.py",
+        "lluvia/core/command_buffer.pxd",
+        "lluvia/core/command_buffer.pyx",
         "lluvia/core/core_buffer.pxd",
         "lluvia/core/core_buffer.pyx",
         "lluvia/core/core_object.pxd",
@@ -57,6 +60,8 @@ pyx_library (
         "lluvia/core/image.pyx",
         "lluvia/core/memory.pxd",
         "lluvia/core/memory.pyx",
+        "lluvia/core/node.pxd",
+        "lluvia/core/node.pyx",
         "lluvia/core/parameter.pxd",
         "lluvia/core/parameter.pyx",
         "lluvia/core/program.pxd",
@@ -65,7 +70,7 @@ pyx_library (
         "lluvia/core/session.pyx",
         "lluvia/core/types.pxd",
         "lluvia/core/vulkan.pxd",
-        "lluvia/core/__init__.py",
+        "lluvia/util.py",
     ] + glob([
         "lluvia/core/enums/*.py",
         "lluvia/core/enums/*.pyx",
@@ -89,7 +94,7 @@ pyx_library (
         "-fno-strict-aliasing",
         "-fPIC",
         "-Wno-unused-function",
-        "-DSOL_ALL_SAFETIES_ON=1",
+        "-DSOL_ALL_SAFETIES_ON=1"
     ],
     linkopts = [
         "-lvulkan",

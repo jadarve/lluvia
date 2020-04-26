@@ -10,26 +10,13 @@
 
 from cython.operator cimport dereference as deref
 
-from core_buffer cimport Buffer
-from core_buffer import  Buffer
-
-from node cimport ComputeNode
-from node import  ComputeNode
-
-cimport image
-import image
-
-from image cimport Image
-from image import  Image
-
-from duration cimport Duration
-from duration import Duration
-
-import impl
-
-from .enums.vulkan cimport ImageLayout
-
-cimport vulkan as vk
+from lluvia.core cimport vulkan as vk
+from lluvia.core import impl
+from lluvia.core.core_buffer cimport Buffer
+from lluvia.core.duration cimport Duration
+from lluvia.core.enums.vulkan cimport ImageLayout
+from lluvia.core.image cimport Image
+from lluvia.core.node cimport ComputeNode
 
 
 __all__ = ['CommandBuffer']

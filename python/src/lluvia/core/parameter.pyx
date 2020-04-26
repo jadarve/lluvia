@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
+
 """
     lluvia.core.parameter
     ---------------------
@@ -9,7 +11,7 @@
 from libc.stdint cimport uint32_t
 from libcpp cimport bool as boolean
 
-from .enums.parameter import ParameterType
+from lluvia.core.enums.parameter import ParameterType
 
 __all__ = [
     'Parameter'

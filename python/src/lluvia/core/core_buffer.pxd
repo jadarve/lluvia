@@ -13,10 +13,10 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from .memory cimport Memory, _Memory, _MemoryAllocationInfo
-from .core_object cimport _Object
-from .session cimport Session
-from .vulkan cimport BufferUsageFlags
+from lluvia.core.core_object cimport _Object
+from lluvia.core.memory cimport Memory, _Memory, _MemoryAllocationInfo
+from lluvia.core.session cimport Session
+from lluvia.core.vulkan cimport BufferUsageFlags
 
 
 cdef extern from 'lluvia/core/Buffer.h' namespace 'll':

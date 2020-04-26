@@ -14,13 +14,12 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-# from command_buffer cimport _CommandBuffer
-# from duration cimport _Duration
-# from node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode
-from .memory cimport _Memory
-from .program cimport _Program
-
-cimport vulkan as vk
+from lluvia.core cimport vulkan as vk
+from lluvia.core.command_buffer cimport _CommandBuffer
+from lluvia.core.duration cimport _Duration
+from lluvia.core.memory cimport _Memory
+from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode
+from lluvia.core.program cimport _Program
 
 
 cdef extern from 'lluvia/core/Session.h' namespace 'll':
@@ -37,27 +36,27 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) except +
         shared_ptr[_Program] createProgram(const string& spirvPath) except +
 
-        # _ComputeNodeDescriptor createComputeNodeDescriptor(const string& builderName) except +
-        # shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) except +
-        # shared_ptr[_ComputeNode] createComputeNode(const string& builderName) except +
+        _ComputeNodeDescriptor createComputeNodeDescriptor(const string& builderName) except +
+        shared_ptr[_ComputeNode] createComputeNode(const _ComputeNodeDescriptor& descriptor) except +
+        shared_ptr[_ComputeNode] createComputeNode(const string& builderName) except +
 
-        # _ContainerNodeDescriptor createContainerNodeDescriptor(const string& builderName) except +
-        # shared_ptr[_ContainerNode] createContainerNode(const _ContainerNodeDescriptor& descriptor) except +
-        # shared_ptr[_ContainerNode] createContainerNode(const string& builderName) except +
+        _ContainerNodeDescriptor createContainerNodeDescriptor(const string& builderName) except +
+        shared_ptr[_ContainerNode] createContainerNode(const _ContainerNodeDescriptor& descriptor) except +
+        shared_ptr[_ContainerNode] createContainerNode(const string& builderName) except +
 
         void setProgram(const string& name, const shared_ptr[_Program]& program)
         shared_ptr[_Program] getProgram(const string& name) except +
 
-        # unique_ptr[_Duration] createDuration() except +
+        unique_ptr[_Duration] createDuration() except +
 
-        # unique_ptr[_CommandBuffer] createCommandBuffer() except +
+        unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
-        # void run(const _ComputeNode& node) except +
-        # void run(const _ContainerNode& node) except +
-        # void run(const _CommandBuffer& cmdBuffer) except +
+        void run(const _ComputeNode& node) except +
+        void run(const _ContainerNode& node) except +
+        void run(const _CommandBuffer& cmdBuffer) except +
 
-        # void script(const string& code) except +
-        # void scriptFile(const string& filename) except +
+        void script(const string& code) except +
+        void scriptFile(const string& filename) except +
 
 
 cdef class Session:

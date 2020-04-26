@@ -13,14 +13,10 @@ from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from .core_buffer cimport _Buffer
-from .image cimport _Image, _ImageDescriptor
-
-from .session cimport Session
-
-cimport vulkan as vk
-
-
+from lluvia.core cimport vulkan as vk
+from lluvia.core.core_buffer cimport _Buffer
+from lluvia.core.image cimport _Image, _ImageDescriptor
+from lluvia.core.session cimport Session
 
 cdef extern from 'lluvia/core/MemoryAllocationInfo.h' namespace 'll':
 
