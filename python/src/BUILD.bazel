@@ -1,5 +1,5 @@
 load("//bazel/cython:def.bzl", "pyx_library")
-
+load("@python_deps//:requirements.bzl", "requirement")
 
 # this kind of works but I'm not able to create a session out of the generated py_library
 # pyx_library (
@@ -83,7 +83,10 @@ pyx_library (
     deps = [
         "//cpp/core:core_cc_library",
         "@lua//:lua_cc_library",
-        "@python_linux//:python3-lib"
+        "@python_linux//:python3-lib",
+    ],
+    py_deps = [
+        requirement("numpy"),
     ],
     copts = [
         "--std=c++17",
