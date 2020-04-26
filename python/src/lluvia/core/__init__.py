@@ -19,6 +19,8 @@
 
 
 from .duration import *
+from .core_buffer import Buffer
+from .image import *
 from .memory import *
 from .parameter import *
 # from .program import *

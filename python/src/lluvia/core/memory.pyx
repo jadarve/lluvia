@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
+
 """
     lluvia.core.memory
     ------------------
@@ -15,21 +17,16 @@ import numpy as np
 from . import impl
 from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
 
-# from lluvia.core.enums.image cimport ChannelType
-# from lluvia.core.enums.image import ImageUsageFlagBits
+from lluvia.core.enums.image cimport ChannelType
+from lluvia.core.enums.image import ImageUsageFlagBits
 
-# from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
+from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
 
-from .session import Session
-# from .session cimport Session # importing thi one breaks
+from lluvia.core.session cimport Session
 
-# import  core_buffer
-# cimport core_buffer
-from . import core_buffer
-from . cimport core_buffer
+from lluvia.core cimport core_buffer
 
-# import  image
-# cimport image
+from lluvia.core cimport image
 
 cimport vulkan as vk
 
@@ -198,297 +195,299 @@ cdef class Memory:
         return core_buffer._buildBuffer(self.__memory.get().createBuffer(size, vkUsageFlags), self.session, self)
 
 
-    # def createBufferFromHost(self, np.ndarray arr,
-    #                          usageFlags=[BufferUsageFlagBits.StorageBuffer,
-    #                                      BufferUsageFlagBits.TransferSrc,
-    #                                      BufferUsageFlagBits.TransferDst]):
-    #     """
-    #     Creates a buffer from a numpy array.
+    def createBufferFromHost(self, np.ndarray arr,
+                             usageFlags=[BufferUsageFlagBits.StorageBuffer,
+                                         BufferUsageFlagBits.TransferSrc,
+                                         BufferUsageFlagBits.TransferDst]):
+        """
+        Creates a buffer from a numpy array.
 
 
-    #     Parameters
-    #     ----------
-    #     arr : np.ndarray.
-    #         Numpy array from which the buffer will be created from. The content
-    #         of the array will be copied into the buffer.
+        Parameters
+        ----------
+        arr : np.ndarray.
+            Numpy array from which the buffer will be created from. The content
+            of the array will be copied into the buffer.
 
-    #     usageFlags : BufferUsageFlagBits or list of BufferUsageFlagBits.
-    #         Defaults to:
-    #             [BufferUsageFlagBits.StorageBuffer,
-    #              BufferUsageFlagBits.TransferSrc,
-    #              BufferUsageFlagBits.TransferDst]
-    #         Usage flags for this buffer. It must be a combination of the
-    #         values defined in lluvia.BufferUsageFlagBits:
-    #             - IndexBuffer
-    #             - IndirectBuffer
-    #             - StorageBuffer
-    #             - StorageTexelBuffer
-    #             - TransferDst
-    #             - TransferSrc
-    #             - UniformBuffer
-    #             - UniformTexelBuffer
-    #             - VertexBuffer
+        usageFlags : BufferUsageFlagBits or list of BufferUsageFlagBits.
+            Defaults to:
+                [BufferUsageFlagBits.StorageBuffer,
+                 BufferUsageFlagBits.TransferSrc,
+                 BufferUsageFlagBits.TransferDst]
+            Usage flags for this buffer. It must be a combination of the
+            values defined in lluvia.BufferUsageFlagBits:
+                - IndexBuffer
+                - IndirectBuffer
+                - StorageBuffer
+                - StorageTexelBuffer
+                - TransferDst
+                - TransferSrc
+                - UniformBuffer
+                - UniformTexelBuffer
+                - VertexBuffer
 
-    #     Returns
-    #     -------
-    #     buffer : Buffer.
-    #         Buffer object with the same content as the input array parameter.
-    #     """
+        Returns
+        -------
+        buffer : Buffer.
+            Buffer object with the same content as the input array parameter.
+        """
 
-    #     cdef core_buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
-    #     buf.fromHost(arr)
-    #     return buf
-
-
-    # def createBufferLike(self, other,
-    #                      usageFlags=[BufferUsageFlagBits.StorageBuffer,
-    #                                  BufferUsageFlagBits.TransferSrc,
-    #                                  BufferUsageFlagBits.TransferDst]):
-    #     """
-    #     Creates a Buffer with the same size in bytes as the other parameter
-
-    #     The memory allocated to this buffer is not filled with any value
-    #     at the moment of creation.
-
-    #     Parameters
-    #     ----------
-    #     other : Numpy ndarray or lluvia Buffer or Image.
-
-    #     usageFlags : BufferUsageFlagBits or list of BufferUsageFlagBits.
-    #         Defaults to:
-    #             [BufferUsageFlagBits.StorageBuffer,
-    #              BufferUsageFlagBits.TransferSrc,
-    #              BufferUsageFlagBits.TransferDst]
-    #         Usage flags for this buffer. It must be a combination of the
-    #         values defined in lluvia.BufferUsageFlagBits:
-    #             - IndexBuffer
-    #             - IndirectBuffer
-    #             - StorageBuffer
-    #             - StorageTexelBuffer
-    #             - TransferDst
-    #             - TransferSrc
-    #             - UniformBuffer
-    #             - UniformTexelBuffer
-    #             - VertexBuffer
+        cdef core_buffer.Buffer buf = self.createBuffer(arr.nbytes, usageFlags)
+        buf.fromHost(arr)
+        return buf
 
 
-    #     Returns
-    #     -------
-    #     buf : lluvia.Buffer object.
-    #     """
+    def createBufferLike(self, other,
+                         usageFlags=[BufferUsageFlagBits.StorageBuffer,
+                                     BufferUsageFlagBits.TransferSrc,
+                                     BufferUsageFlagBits.TransferDst]):
+        """
+        Creates a Buffer with the same size in bytes as the other parameter
 
-    #     sizeBytes = 0
+        The memory allocated to this buffer is not filled with any value
+        at the moment of creation.
 
-    #     if type(other) is np.ndarray:
-    #         sizeBytes = other.nbytes
+        Parameters
+        ----------
+        other : Numpy ndarray or lluvia Buffer or Image.
 
-    #     else:
-    #         sizeBytes = other.size
-
-    #     return self.createBuffer(sizeBytes, usageFlags)
-
-
-    # def createImage(self, shape,
-    #                 ChannelType channelType=ChannelType.Uint8,
-    #                 usageFlags=[ImageUsageFlagBits.Storage,
-    #                             ImageUsageFlagBits.Sampled,
-    #                             ImageUsageFlagBits.TransferSrc,
-    #                             ImageUsageFlagBits.TransferDst]):
-    #     """
-    #     Creates a new image allocated in this memory.
-
-
-    #     Parameters
-    #     ----------
-    #     shape : list or tuple of length 1, 2, 3 or 4.
-    #         Shape of the image (depth, height , width, channels). Each dimension
-    #         must be greater than zero. The number of channels must in the range [1, 4].
-    #         If one or more dimensions are missing, they are set to 1 by default.
-
-    #         The shape is interpreted as follows:
-
-    #             if len(shape) is 1:
-    #                 depth    = 1
-    #                 height   = 1
-    #                 width    = shape[0]
-    #                 channels = 1
-
-    #             elif len(shape) is 2:
-    #                 depth    = 1
-    #                 height   = shape[0]
-    #                 width    = shape[1]
-    #                 channels = 1
-
-    #             elif len(shape) is 3:
-    #                 depth    = 1
-    #                 height   = shape[0]
-    #                 width    = shape[1]
-    #                 channels = shape[2]
-
-    #             else:
-    #                 depth    = shape[0]
-    #                 height   = shape[1]
-    #                 width    = shape[2]
-    #                 channels = shape[3]
-
-    #     channelType : ll.ChannelType. Defaults to ll.ChannelType.Uint8.
-    #         Channel type.
-
-    #     usageFlags : ImageUsageFlagBits or list of ImageUsageFlagBits.
-    #         Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
-    #         Image usage flags. It must be a combination of th strings defined
-    #         in lluvia.ImageUsageFlags:
-
-    #             - TransferSrc
-    #             - TransferDst
-    #             - Sampled
-    #             - Storage
-    #             - ColorAttachment
-    #             - DepthStencilAttachment
-    #             - TransientAttachment
-    #             - InputAttachment
-
-    #     Returns
-    #     -------
-    #     image : new Image object.
+        usageFlags : BufferUsageFlagBits or list of BufferUsageFlagBits.
+            Defaults to:
+                [BufferUsageFlagBits.StorageBuffer,
+                 BufferUsageFlagBits.TransferSrc,
+                 BufferUsageFlagBits.TransferDst]
+            Usage flags for this buffer. It must be a combination of the
+            values defined in lluvia.BufferUsageFlagBits:
+                - IndexBuffer
+                - IndirectBuffer
+                - StorageBuffer
+                - StorageTexelBuffer
+                - TransferDst
+                - TransferSrc
+                - UniformBuffer
+                - UniformTexelBuffer
+                - VertexBuffer
 
 
-    #     Raises
-    #     ------
-    #     ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
-    #                    if any parameter is not within its required range.
-    #     """
+        Returns
+        -------
+        buf : lluvia.Buffer object.
+        """
 
-    #     depth, height, width, channels = self.__getImageShape(shape)
+        sizeBytes = 0
 
-    #     cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ImageUsageFlagBits)
-    #     cdef vk.ImageUsageFlags vkUsageFlags = <vk.ImageUsageFlags> flattenFlags
-    #     cdef vk.ImageTiling tiling = <vk.ImageTiling> ImageTiling.Optimal
+        if type(other) is np.ndarray:
+            sizeBytes = other.nbytes
 
-    #     cdef image._ChannelType cType = <image._ChannelType> channelType
+        else:
+            sizeBytes = other.size
 
-    #     cdef image._ChannelCount cCount = image.castChannelCount[uint32_t](channels)
-
-    #     cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
-
-    #     cdef image.Image img = image._buildImage(self.__memory.get().createImage(desc), self.session, self)
-    #     img.changeLayout(ImageLayout.General)
-
-    #     return img
+        return self.createBuffer(sizeBytes, usageFlags)
 
 
-    # def createImageFromHost(self,
-    #                         np.ndarray arr,
-    #                         usageFlags=[ImageUsageFlagBits.Storage,
-    #                                     ImageUsageFlagBits.Sampled, 
-    #                                     ImageUsageFlagBits.TransferSrc, 
-    #                                     ImageUsageFlagBits.TransferDst]):
-    #     """
-    #     Creates a lluvia.Image object from a Numpy array.
-
-    #     The numpy array can have between 1 and 4 dimensions. Images
-    #     can be 1D, 2D or 3D and can have up to 4 color channels. The
-    #     width, height, depth and channels of the image are resolved
-    #     as follows.
-
-    #     if arr.ndim is 1: create a 1D image
-    #     if arr.ndim is 2: create a 2D image with one color channel.
-    #     if arr.ndim is 3: create a 2D image with the number of channels
-    #         given by the length of the third dimension.
-    #     if arr.ndim is 4: create a 3D image with the number of channels
-    #         given by the length of the fourth dimension.
-
-    #     Notice that for creating 1D images with several color channels,
-    #     one needs to specify the 4 dimensions [length, 1, 1, channels].
-
-    #     The image's channel type is deduced from arr.dtype.
+    def createImage(self, shape,
+                    ChannelType channelType=ChannelType.Uint8,
+                    usageFlags=[ImageUsageFlagBits.Storage,
+                                ImageUsageFlagBits.Sampled,
+                                ImageUsageFlagBits.TransferSrc,
+                                ImageUsageFlagBits.TransferDst]):
+        """
+        Creates a new image allocated in this memory.
 
 
-    #     Parameters
-    #     ----------
-    #     arr : Numpy array.
+        Parameters
+        ----------
+        shape : list or tuple of length 1, 2, 3 or 4.
+            Shape of the image (depth, height , width, channels). Each dimension
+            must be greater than zero. The number of channels must in the range [1, 4].
+            If one or more dimensions are missing, they are set to 1 by default.
 
-    #     usageFlags : string or list of strings.
-    #         Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
-    #         Image usage flags. It must be a combination of th strings defined
-    #         in lluvia.ImageUsageFlags:
-    #             - TransferSrc
-    #             - TransferDst
-    #             - Sampled
-    #             - Storage
-    #             - ColorAttachment
-    #             - DepthStencilAttachment
-    #             - TransientAttachment
-    #             - InputAttachment
+            The shape is interpreted as follows:
+
+                if len(shape) is 1:
+                    depth    = 1
+                    height   = 1
+                    width    = shape[0]
+                    channels = 1
+
+                elif len(shape) is 2:
+                    depth    = 1
+                    height   = shape[0]
+                    width    = shape[1]
+                    channels = 1
+
+                elif len(shape) is 3:
+                    depth    = 1
+                    height   = shape[0]
+                    width    = shape[1]
+                    channels = shape[2]
+
+                else:
+                    depth    = shape[0]
+                    height   = shape[1]
+                    width    = shape[2]
+                    channels = shape[3]
+
+        channelType : ll.ChannelType. Defaults to ll.ChannelType.Uint8.
+            Channel type.
+
+        usageFlags : ImageUsageFlagBits or list of ImageUsageFlagBits.
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
+
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
+
+        Returns
+        -------
+        image : new Image object.
 
 
-    #     Returns
-    #     -------
-    #     img : lluvia.Image
-    #         A new Image object.
+        Raises
+        ------
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if any parameter is not within its required range.
+        """
+
+        depth, height, width, channels = self.__getImageShape(shape)
+
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ImageUsageFlagBits)
+        cdef vk.ImageUsageFlags vkUsageFlags = <vk.ImageUsageFlags> flattenFlags
+        cdef vk.ImageTiling tiling = <vk.ImageTiling> ImageTiling.Optimal
+
+        cdef image._ChannelType cType = <image._ChannelType> channelType
+
+        cdef image._ChannelCount cCount = image.castChannelCount[uint32_t](channels)
+
+        cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
+
+        cdef image.Image img = image._buildImage(self.__memory.get().createImage(desc), self.session, self)
+        img.changeLayout(ImageLayout.General)
+
+        return img
 
 
-    #     Raises
-    #     ------
-    #     ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
-    #                    if arr.dtype is incompatible with image ChannelType.
-    #     RuntimeError : if the image cannot be created from this memory.
-    #     """
+    def createImageFromHost(self,
+                            np.ndarray arr,
+                            usageFlags=[ImageUsageFlagBits.Storage,
+                                        ImageUsageFlagBits.Sampled, 
+                                        ImageUsageFlagBits.TransferSrc, 
+                                        ImageUsageFlagBits.TransferDst]):
+        """
+        Creates a lluvia.Image object from a Numpy array.
 
-    #     shape = [arr.shape[n] for n in range(arr.ndim)]
-    #     depth, height, width, channels = self.__getImageShape(shape)
+        The numpy array can have between 1 and 4 dimensions. Images
+        can be 1D, 2D or 3D and can have up to 4 color channels. The
+        width, height, depth and channels of the image are resolved
+        as follows.
 
-    #     channelType = None
-    #     for llChannelType, dtype in image.ImageChannelTypeToNumpyMap.items():
-    #         if dtype == arr.dtype:
-    #             channelType = llChannelType
-    #             break
+        if arr.ndim is 1: create a 1D image
+        if arr.ndim is 2: create a 2D image with one color channel.
+        if arr.ndim is 3: create a 2D image with the number of channels
+            given by the length of the third dimension.
+        if arr.ndim is 4: create a 3D image with the number of channels
+            given by the length of the fourth dimension.
 
-    #     if channelType is None:
-    #         raise ValueError('arr parameter has unsupported dtype: {0}'.format(arr.dtype))
+        Notice that for creating 1D images with several color channels,
+        one needs to specify the 4 dimensions [length, 1, 1, channels].
 
-    #     img = self.createImage((depth, height, width, channels), channelType, usageFlags)
-    #     img.fromHost(arr)
+        The image's channel type is deduced from arr.dtype.
+
+
+        Parameters
+        ----------
+        arr : Numpy array.
+
+        usageFlags : string or list of strings.
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
+
+
+        Returns
+        -------
+        img : lluvia.Image
+            A new Image object.
+
+
+        Raises
+        ------
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if arr.dtype is incompatible with image ChannelType.
+        RuntimeError : if the image cannot be created from this memory.
+        """
+
+        from lluvia.core.image import ImageChannelTypeToNumpyMap
+
+        shape = [arr.shape[n] for n in range(arr.ndim)]
+        depth, height, width, channels = self.__getImageShape(shape)
+
+        channelType = None
+        for llChannelType, dtype in ImageChannelTypeToNumpyMap.items():
+            if dtype == arr.dtype:
+                channelType = llChannelType
+                break
+
+        if channelType is None:
+            raise ValueError('arr parameter has unsupported dtype: {0}'.format(arr.dtype))
+
+        img = self.createImage((depth, height, width, channels), channelType, usageFlags)
+        img.fromHost(arr)
         
-    #     return img
+        return img
 
 
-    # def __getImageShape(self, shape):
-    #     """
-    #     Calculates the lluvia image shape given a tuple
-    #     """
+    def __getImageShape(self, shape):
+        """
+        Calculates the lluvia image shape given a tuple
+        """
 
-    #     if len(shape) not in [1, 2, 3, 4]:
-    #         raise ValueError('invalid number of dimensions. Expected 1, 2, 3 or 4')
+        if len(shape) not in [1, 2, 3, 4]:
+            raise ValueError('invalid number of dimensions. Expected 1, 2, 3 or 4')
 
-    #     cdef uint32_t width    = 0
-    #     cdef uint32_t height   = 0
-    #     cdef uint32_t depth    = 0
-    #     cdef uint32_t channels = 0
+        cdef uint32_t width    = 0
+        cdef uint32_t height   = 0
+        cdef uint32_t depth    = 0
+        cdef uint32_t channels = 0
 
-    #     ndim = len(shape)
-    #     if ndim is 1:
-    #         depth    = 1
-    #         height   = 1
-    #         width    = shape[0]
-    #         channels = 1
+        ndim = len(shape)
+        if ndim is 1:
+            depth    = 1
+            height   = 1
+            width    = shape[0]
+            channels = 1
 
-    #     elif ndim is 2:
-    #         depth    = 1
-    #         height   = shape[0]
-    #         width    = shape[1]
-    #         channels = 1
+        elif ndim is 2:
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = 1
 
-    #     elif ndim is 3:
-    #         depth    = 1
-    #         height   = shape[0]
-    #         width    = shape[1]
-    #         channels = shape[2]
+        elif ndim is 3:
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = shape[2]
 
-    #     else:
-    #         depth    = shape[0]
-    #         height   = shape[1]
-    #         width    = shape[2]
-    #         channels = shape[3]
+        else:
+            depth    = shape[0]
+            height   = shape[1]
+            width    = shape[2]
+            channels = shape[3]
 
-    #     return depth, height, width, channels
+        return depth, height, width, channels

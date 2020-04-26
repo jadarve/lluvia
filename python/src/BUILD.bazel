@@ -53,6 +53,8 @@ pyx_library (
         "lluvia/core/core_object.pxd",
         "lluvia/core/duration.pxd",
         "lluvia/core/duration.pyx",
+        "lluvia/core/image.pxd",
+        "lluvia/core/image.pyx",
         "lluvia/core/memory.pxd",
         "lluvia/core/memory.pyx",
         "lluvia/core/parameter.pxd",
