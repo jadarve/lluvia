@@ -15,6 +15,7 @@ RUN apt-get update \
         cmake \
         clang \
         python3-pip \
+        python3-numpy \
         python-pip \
         unzip \
         git \
