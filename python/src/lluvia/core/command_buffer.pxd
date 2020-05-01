@@ -19,7 +19,7 @@ from lluvia.core.node cimport _ComputeNode
 from lluvia.core.duration cimport _Duration
 from lluvia.core.session cimport Session
 
-cimport vulkan as vk
+from lluvia.core cimport vulkan as vk
 
 
 cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':

@@ -1,5 +1,6 @@
-load("//bazel/cython:def.bzl", "pyx_library")
 load("@python_deps//:requirements.bzl", "requirement")
+load("//bazel/cython:def.bzl", "pyx_library")
+
 
 pyx_library (
     name = "pyx_library",
@@ -37,6 +38,10 @@ pyx_library (
         "lluvia/core/impl/*.pxd",
     ]),
     srcs_version = "PY3",
+    directives = [
+        "--3str",
+        "--cplus"
+    ],
     deps = [
         "//cpp/core:core_cc_library",
         "@lua//:lua_cc_library",
@@ -71,6 +76,5 @@ pyx_library (
         "-Wdate-time",
         "-D_FORTIFY_SOURCE=2"
     ],
-    cy_include_prefix = 'python/src',
     visibility = ["//visibility:public"]
 )

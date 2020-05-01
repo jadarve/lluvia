@@ -73,7 +73,11 @@ py_packages = [
 ]
 
 # package data include Cython .pxd files
-package_data = {'lluvia.core' : ['*.pxd']}
+package_data = {
+    'lluvia.core': ['*.pxd', "*.so"],
+    'lluvia.core.enums': ['*.pxd', "*.so"],
+    'lluvia.core.impl': ['*.pxd', "*.so"]
+}
 package_dir = {'lluvia': 'src/lluvia'}
 
 #################################################

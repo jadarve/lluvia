@@ -1,6 +1,7 @@
+"""
+"""
 
 # Adapted from grpc/third_party/cython.BUILD
-
 # Adapted with modifications from tensorflow/third_party/cython.BUILD
 py_library(
     name = "cython_lib",
@@ -19,10 +20,19 @@ py_library(
     visibility = ["//visibility:public"],
 )
 
-# May not be named "cython", since that conflicts with Cython/ on OSX
-filegroup(
-    name="cython_binary",
-    srcs=["cython.py"],
+# a py_binary works along with the cy_compile rule
+py_binary(
+    name = "cython_binary",
+    srcs = ["cython.py"],
+    main = "cython.py",
     visibility=["//visibility:public"],
-    data=["cython_lib"],
+    data=[":cython_lib"],
 )
+
+# May not be named "cython", since that conflicts with Cython/ on OSX
+# filegroup(
+#     name="cython_binary",
+#     srcs=["cython.py"],
+#     visibility=["//visibility:public"],
+#     data=["cython_lib"],
+# )
