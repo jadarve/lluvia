@@ -6,22 +6,19 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from memory cimport _Memory, _MemoryAllocationInfo
-from core_object cimport _Object
-
-from session cimport Session
-from memory cimport Memory
-
-cimport enums.image as img_enums
-
-cimport vulkan as vk
-
 from libc.stdint cimport uint64_t, uint32_t
 
 from libcpp cimport bool
 from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
+
+from lluvia.core cimport vulkan as vk
+from lluvia.core.core_object cimport _Object
+from lluvia.core.enums cimport image as img_enums
+from lluvia.core.memory cimport _Memory, _MemoryAllocationInfo
+from lluvia.core.memory cimport Memory
+from lluvia.core.session cimport Session
 
 
 cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
@@ -43,8 +40,8 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
                     const uint32_t depth,
                     _ChannelCount channelCount,
                     _ChannelType channelType,
-                    const vk.ImageUsageFlags usageFlags,
-                    const vk.ImageTiling tiling)
+                    vk.ImageUsageFlags usageFlags,
+                    vk.ImageTiling tiling)
 
 
         _ImageDescriptor& setChannelType(const _ChannelType type)

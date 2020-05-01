@@ -63,10 +63,12 @@ To build the Python3 package, execute the commands below from the repository's t
 
 .. code-block:: bash
 
+    CC=clang bazel build //cpp/core:core_cc_library
+    CC=clang bazel build @lua//:lua_cc_library
     cd python
     pip3 install -r requirements.txt
-    CC=clang python3 setup.py build
-    python3 setup.py install
+    CC=clang python3 setup.py build bdist_wheel
+    pip3 install dist/lluvia-0.0.1-cp36-cp36m-linux_x86_64.whl
 
 
 Open a Python3 interpreter and import lluvia package

@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
+
 """
     lluvia.core.core_buffer
     ------------------
@@ -6,20 +8,17 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from . import impl
-from .enums import BufferUsageFlagBits, MemoryPropertyFlagBits
-from .memory cimport Memory, MemoryAllocationInfo
-from .memory import Memory, MemoryAllocationInfo
-
-from .session import Session
-from .session cimport Session
-
 from libc.stdint cimport uint64_t, uint32_t
 from libc.string cimport memcpy
 from libcpp.memory cimport unique_ptr, shared_ptr
 
 cimport numpy as np
 import numpy as np
+
+from lluvia.core import impl
+from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from lluvia.core.memory cimport Memory, MemoryAllocationInfo
+from lluvia.core.session cimport Session
 
 
 __all__ = ['Buffer']

@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
+
 """
     lluvia.core.compute_node
     ------------------------
@@ -5,38 +7,6 @@
     :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
 """
-
-from .enums.node cimport NodeState, NodeType, PortDirection, PortType
-from .enums.node import PortDirection as PortDirection_t
-from .enums.node import PortType as PortType_t
-from .enums.node import NodeType as NodeType_t
-from .enums.core_object import ObjectType
-
-from core_object cimport _Object
-
-from core_buffer import Buffer
-from core_buffer cimport Buffer, _Buffer, _buildBuffer
-
-from memory import Memory
-from memory cimport Memory, _Memory
-
-from command_buffer import CommandBuffer
-from command_buffer cimport CommandBuffer
-
-from image import Image, ImageView
-from image cimport Image, ImageView, _ImageView, _buildImageView
-
-from parameter import Parameter
-from parameter cimport Parameter
-
-from program import Program
-from program cimport Program, _Program
-
-from session import Session
-from session cimport Session
-
-from . import impl
-from .impl.stdcpp cimport static_pointer_cast
 
 import sys
 
@@ -46,6 +16,22 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 
 from cython.operator cimport dereference as deref
+
+from lluvia.core import impl
+from lluvia.core.command_buffer cimport CommandBuffer
+from lluvia.core.core_buffer cimport Buffer, _Buffer, _buildBuffer
+from lluvia.core.core_object cimport _Object
+from lluvia.core.enums.core_object import ObjectType
+from lluvia.core.enums.node cimport NodeState, NodeType, PortDirection, PortType
+from lluvia.core.enums.node import NodeType as NodeType_t
+from lluvia.core.enums.node import PortDirection as PortDirection_t
+from lluvia.core.enums.node import PortType as PortType_t
+from lluvia.core.image cimport Image, ImageView, _ImageView, _buildImageView
+from lluvia.core.impl.stdcpp cimport static_pointer_cast
+from lluvia.core.memory cimport Memory, _Memory
+from lluvia.core.parameter cimport Parameter
+from lluvia.core.program cimport Program, _Program
+from lluvia.core.session cimport Session
 
 
 __all__ = [

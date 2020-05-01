@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
+
 """
     lluvia.core.image
     -----------------
@@ -6,30 +8,23 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from . import impl
-from .enums import BufferUsageFlagBits, ChannelType, ImageUsageFlagBits
-
-from .enums.image cimport ImageFilterMode, ImageAddressMode
-from .enums.image import ImageFilterMode as ImageFilterMode_t
-from .enums.image import ImageAddressMode as ImageAddressMode_t
-
-from .enums.vulkan cimport ImageLayout
-from .enums.vulkan import ImageLayout as ImageLayout_t
-
-from .memory import Memory
-from .memory cimport Memory, MemoryAllocationInfo, _buildMemory
-
-from .session import Session
-from .session cimport Session
-
-cimport vulkan as vk
-
 from libc.stdint cimport uint32_t
 
 from libcpp.memory cimport shared_ptr
 
 import  numpy as np
 cimport numpy as np
+
+from lluvia.core cimport vulkan as vk
+from lluvia.core import impl
+from lluvia.core.enums import BufferUsageFlagBits, ChannelType, ImageUsageFlagBits
+from lluvia.core.enums.image cimport ImageFilterMode, ImageAddressMode
+from lluvia.core.enums.image import ImageAddressMode as ImageAddressMode_t
+from lluvia.core.enums.image import ImageFilterMode as ImageFilterMode_t
+from lluvia.core.enums.vulkan cimport ImageLayout
+from lluvia.core.enums.vulkan import ImageLayout as ImageLayout_t
+from lluvia.core.memory cimport Memory, MemoryAllocationInfo, _buildMemory
+from lluvia.core.session cimport Session
 
 
 __all__ = [

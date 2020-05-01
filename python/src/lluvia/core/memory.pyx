@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
+
 """
     lluvia.core.memory
     ------------------
@@ -6,32 +8,21 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-cimport memory
-
-from . import impl
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
-
-from lluvia.core.enums.image cimport ChannelType
-from lluvia.core.enums.image import ImageUsageFlagBits
-
-from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
-
-from session import Session
-from session cimport Session
-
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
 cimport numpy as np
 import numpy as np
 
-import  core_buffer
-cimport core_buffer
-
-import  image
-cimport image
-
-cimport vulkan as vk
+from lluvia.core cimport core_buffer
+from lluvia.core cimport image
+from lluvia.core cimport vulkan as vk
+from lluvia.core import impl
+from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from lluvia.core.enums.image cimport ChannelType
+from lluvia.core.enums.image import ImageUsageFlagBits
+from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
+from lluvia.core.session cimport Session
 
 
 __all__ = [
@@ -435,11 +426,13 @@ cdef class Memory:
         RuntimeError : if the image cannot be created from this memory.
         """
 
+        from lluvia.core.image import ImageChannelTypeToNumpyMap
+
         shape = [arr.shape[n] for n in range(arr.ndim)]
         depth, height, width, channels = self.__getImageShape(shape)
 
         channelType = None
-        for llChannelType, dtype in image.ImageChannelTypeToNumpyMap.items():
+        for llChannelType, dtype in ImageChannelTypeToNumpyMap.items():
             if dtype == arr.dtype:
                 channelType = llChannelType
                 break

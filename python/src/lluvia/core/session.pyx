@@ -1,3 +1,5 @@
+# cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
+
 """
     lluvia.core.session
     -------------------
@@ -6,15 +8,10 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-cimport session
-
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
-
-from . import impl
-
 import subprocess
 import tempfile
 import sys
+import io
 
 from cython.operator cimport dereference as deref
 
@@ -24,27 +21,20 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
+from lluvia.core cimport vulkan as vk
+from lluvia.core import impl
+from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
+from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
+from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from lluvia.core.memory cimport Memory, _Memory, _buildMemory
+from lluvia.core.program cimport Program
 
-import io
-
-import  memory
-cimport memory
-from memory cimport Memory, _Memory
-cimport vulkan as vk
-
-import  program
-cimport program
-
-from duration import Duration
-from duration cimport Duration, _Duration, moveDuration, _buildDuration
-
-from node cimport ComputeNode,\
-                  ComputeNodeDescriptor,\
-                  ContainerNodeDescriptor,\
-                  ContainerNode,\
-                  _buildComputeNode,\
-                  _buildContainerNode
+from lluvia.core.node cimport ComputeNode,\
+                              ComputeNodeDescriptor,\
+                              ContainerNodeDescriptor,\
+                              ContainerNode,\
+                              _buildComputeNode,\
+                              _buildContainerNode
 
 
 __all__ = [
@@ -186,11 +176,7 @@ cdef class Session:
         cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
         cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
 
-        # cdef Memory mem = Memory(self)
-        # mem.__memory = self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch)
-
-        # return mem
-        return memory._buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
+        return _buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
 
     def createProgram(self, str path):
         """
@@ -212,7 +198,7 @@ cdef class Session:
         IOError : if there is any problem reading the file at the given path.
         """
 
-        cdef program.Program prog = program.Program()
+        cdef Program prog = Program()
 
         try:
             prog.__program = self.__session.get().createProgram(impl.encodeString(path))
@@ -221,13 +207,13 @@ cdef class Session:
         except IOError as e:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
-    def setProgram(self, str name, program.Program program):
+    def setProgram(self, str name, Program program):
 
         self.__session.get().setProgram(impl.encodeString(name), program.__program)
 
     def getProgram(self, str name):
 
-        cdef program.Program out = program.Program()
+        cdef Program out = Program()
         out.__program = self.__session.get().getProgram(impl.encodeString(name))
         return out
 

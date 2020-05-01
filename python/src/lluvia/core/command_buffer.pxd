@@ -13,13 +13,13 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from core_buffer cimport _Buffer
-from image cimport _Image
-from node cimport _ComputeNode
-from duration cimport _Duration
-from session cimport Session
+from lluvia.core.core_buffer cimport _Buffer
+from lluvia.core.image cimport _Image
+from lluvia.core.node cimport _ComputeNode
+from lluvia.core.duration cimport _Duration
+from lluvia.core.session cimport Session
 
-cimport vulkan as vk
+from lluvia.core cimport vulkan as vk
 
 
 cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
