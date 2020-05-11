@@ -91,7 +91,7 @@ public:
 
     void pushInt32(const int32_t& d) {push(d);};
     void setInt32(const int32_t &d) { set(d); }
-    float getInt32() const { return get<int32_t>();}
+    int32_t getInt32() const { return get<int32_t>();}
 
 private:
     std::vector<uint8_t> m_data {};

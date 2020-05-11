@@ -191,7 +191,7 @@ public:
     struct BufferMapDeleter{
 
         template<typename T>
-        void operator ()(__attribute__((unused)) T* ptr) const {
+        void operator ()(T* ptr) const {
             buffer->unmap();
         }
 

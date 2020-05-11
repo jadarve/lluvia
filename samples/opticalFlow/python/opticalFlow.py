@@ -36,7 +36,10 @@ def importLluvia(basePath):
     global util
 
     pythonPath = os.path.join(basePath, 'build/python/lib.linux-x86_64-3.6')
+    pythonPathWin = os.path.join(basePath, 'build/python/lib.win-amd64-3.8')
+
     sys.path.append(pythonPath)
+    sys.path.append(pythonPathWin)
 
     ll = importlib.import_module('lluvia')
     util = importlib.import_module('lluvia.util')
@@ -103,6 +106,9 @@ def main():
 
     sys.path.append(os.path.join(
         lluviaBasePath, 'build/python/lib.linux-x86_64-3.6'))
+    # for windows:
+    sys.path.append(os.path.join(
+        lluviaBasePath, 'python/src'))
 
     importLluvia(lluviaBasePath)
 

@@ -45,36 +45,68 @@ pyx_library (
     deps = [
         "//cpp/core:core_cc_library",
         "@lua//:lua_cc_library",
-        "@python_linux//:python3-lib",
-        "@numpy_linux//:numpy_cc_library"
-    ],
+    ] + select({
+        ":on_windows": [
+            "@python_windows//:python3-lib",
+            "@numpy_windows//:numpy_cc_library",
+        ],
+        ":on_linux": [
+            "@python_linux//:python3-lib",
+            "@numpy_linux//:numpy_cc_library",
+        ],
+    }),
     py_deps = [
         requirement("numpy"),
     ],
-    copts = [
-        "--std=c++17",
-        "-stdlib=libstdc++",
-        "-fwrapv",
-        "-O3",
-        "-Wall",
-        "-fno-strict-aliasing",
-        "-fPIC",
-        "-Wno-unused-function",
-        "-DSOL_ALL_SAFETIES_ON=1",
-    ],
-    linkopts = [
-        "-lvulkan",
-        "-lm",
-        "-ldl",
-        "-pthread",
-        "-shared",
-        "-Wl,-O3 -Wl,-Bsymbolic-functions -Wl,-z,relro",
-        "-g",
-        "-fstack-protector-strong",
-        "-Wformat",
-        "-Werror=format-security",
-        "-Wdate-time",
-        "-D_FORTIFY_SOURCE=2"
-    ],
+    copts = select({
+        ":on_windows":[
+            "/std:c++17",
+            "/w",
+        ],
+        ":on_linux": [
+            "--std=c++17",
+            "-stdlib=libstdc++",
+            "-fwrapv",
+            "-O3",
+            "-Wall",
+            "-fno-strict-aliasing",
+            "-fPIC",
+            "-DSOL_ALL_SAFETIES_ON=1",
+        ],
+    }),
+    linkopts = select({
+        ":on_linux": [
+            "-lvulkan",
+            "-lm",
+            "-ldl",
+            "-pthread",
+            "-shared",
+            "-Wl,-O3 -Wl,-Bsymbolic-functions -Wl,-z,relro",
+            "-g",
+            "-fstack-protector-strong",
+            "-Wformat",
+            "-Werror=format-security",
+            "-Wdate-time",
+            "-D_FORTIFY_SOURCE=2",
+        ],
+        ":on_windows": [
+        ],
+    }),
     visibility = ["//visibility:public"]
+)
+
+
+
+config_setting(
+    name = "on_linux",
+    constraint_values = [
+        "@platforms//os:linux",
+    ],
+)
+
+config_setting(
+    name = "on_windows",
+    constraint_values = [
+        "@platforms//os:windows",
+    ],
 )

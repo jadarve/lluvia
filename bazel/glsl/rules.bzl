@@ -10,14 +10,14 @@ GlslInfo = provider(fields=[
 def _glsl_header_library(ctx):
 
     strip_include_prefix = ctx.attr.strip_include_prefix
-    
+
     includes = dict()
 
     # Add each header file directory to the includes
     if len(strip_include_prefix) == 0:
         for hdr in ctx.files.hdrs:
             includes[hdr.dirname] = True
-    
+
     else:
         includes[strip_include_prefix] = True
 
@@ -43,24 +43,24 @@ def _glsl_shader(ctx):
     inputs = [shader]
 
     for dep in ctx.attr.deps:
-    
+
         for inc in dep[GlslInfo].includes.to_list():
             args.add("-I", inc)
-        
+
         # add each header as an input file for the command.
         # This mounts the header into the sandbox running glslc and makes it
         # accessible to the compiler
         for hdr in dep[GlslInfo].headers.to_list():
             inputs.append(hdr)
-            
-    
+
+
     args.add("-o", spirv)
     args.add(shader.path)
 
     # cmd = "glslc -o %s %s" % (spirv.path, shader.path)
-    # cmd = "glslc $@"
     cmd = "glslc $@"
-    
+    # cmd = "C:/VulkanSDK/1.2.135.0/Bin/glslc $@"
+
     ctx.actions.run_shell(
         inputs = inputs,
         outputs = [spirv],

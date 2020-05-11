@@ -1,5 +1,6 @@
 jinja2==2.10.3
 markupsafe==1.1.1
 numpy
+# in windows, we need to comment imageio because bazel tries to build it from source
 imageio
 pytest

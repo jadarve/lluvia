@@ -6,7 +6,7 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-import os
+import os, sys
 import numpy as np
 from setuptools import setup
 from distutils.core import Extension
@@ -42,18 +42,30 @@ cython_directives = {'embedsignature' : True,
                      'infer_types' : True,
                      'language_level': 2}
 
+if sys.platform == "win32":
+    libs = [
+        "vulkan-1",
+    ]
+    cflags = [
+        "/std:c++17",
+    ]
+
 def createExtension(name, sources):
 
     global incDirs
     global libDirs
     global libs
 
+    runtimeLibDirs = libDirs
+    if sys.platform == 'win32':
+        runtimeLibDirs = []
+
     ext = Extension(name,
                     sources=sources,
                     include_dirs=incDirs,
                     library_dirs=libDirs,
                     libraries=libs,
-                    runtime_library_dirs=libDirs,
+                    runtime_library_dirs=runtimeLibDirs,
                     language='c++',
                     extra_compile_args=cflags)
 

@@ -4,9 +4,15 @@ cc_library(
     name = "sol_cc_library",
     hdrs = glob(["single/include/sol/*.hpp"]),
     strip_include_prefix = "single/include/",
-    copts = [
-        "--std=c++17",
-    ],
+    copts = ({
+        ":on_linux": [
+            "--std=c++17",
+        ],
+        ":on_windows": [
+            "/std:c++17",
+            "/w",
+        ],
+    }),
     deps = [
         "@lua//:lua_cc_library",
     ],
