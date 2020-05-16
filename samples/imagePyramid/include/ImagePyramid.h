@@ -7,6 +7,10 @@
 #include <memory>
 #include <vector>
 
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
+
 class ImagePyramid {
 
 public:
@@ -16,7 +20,7 @@ public:
     void init(std::shared_ptr<ll::Session> session);
     void record(ll::CommandBuffer& cmdBuffer);
 
-    void writeAllImages(std::shared_ptr<ll::Session> session);
+    void writeAllImages(std::shared_ptr<ll::Session> session, const fs::path &path);
 
 private:
     void initComputeNodes(std::shared_ptr<ll::Session> session);

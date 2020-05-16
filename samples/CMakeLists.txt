@@ -1,2 +1,0 @@
-add_subdirectory(imagePyramid)
-add_subdirectory(imagePyramid_lua)

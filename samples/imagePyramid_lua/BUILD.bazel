@@ -1,0 +1,46 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@//bazel/glsl:def.bzl", "glsl_shader")
+
+glsl_shader(
+    name = "ImageDownsampleX_shader",
+    shader = "glsl/ImageDownsampleX.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "ImageDownsampleY_shader",
+    shader = "glsl/ImageDownsampleY.comp",
+    deps = [
+        "//glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+
+cc_binary (
+    name = "imagePyramid_lua",
+    srcs = [
+        "src/main.cpp"
+    ],
+    copts = [
+        "--std=c++17",
+        "-stdlib=libstdc++",
+    ],
+    linkopts = [
+        "-lstdc++fs"
+    ],
+    deps = [
+        "//cpp/core:core_cc_library",
+        "@stb//:stb_image_cc_library",
+    ],
+    data = [
+        ":ImageDownsampleX_shader",
+        ":ImageDownsampleY_shader",
+        "lua/ImageDownsampleX.lua",
+        "lua/ImageDownsampleY.lua",
+        "lua/ImagePyramid.lua",
+    ]
+)
