@@ -1,6 +1,6 @@
 #include "ImagePyramid.h"
 
-#include <stb_image_write.h>
+#include "stb_image_write.h"
 
 #include <iostream>
 
@@ -43,7 +43,10 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
     // create downsampled images
     const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferSrc;
-    auto imgDesc = ll::ImageDescriptor {width, height, 1, channels, channelType, imgFlags};
+    
+    auto imgDesc = ll::ImageDescriptor {1, height, width, channels, channelType};
+    imgDesc.setUsageFlags(imgFlags);
+
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setIsSampled(false)
                         .setNormalizedCoordinates(false);
@@ -94,8 +97,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
     //
     // layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
     // layout(binding = 1, rgba8ui) uniform uimage2D outputImage;
-    auto programX = session->createProgram("imageDownsampleX.spv");
-    auto programY = session->createProgram("imageDownsampleY.spv");
+    auto programX = session->createProgram("samples/imagePyramid/glsl/imageDownsampleX.spv");
+    auto programY = session->createProgram("samples/imagePyramid/glsl/imageDownsampleY.spv");
 
     assert(programX != nullptr);
     assert(programY != nullptr);
@@ -168,24 +171,28 @@ void ImagePyramid::record(ll::CommandBuffer& cmdBuffer) {
     }
 }
 
-
-void ImagePyramid::writeAllImages(std::shared_ptr<ll::Session> session) {
+void ImagePyramid::writeAllImages(std::shared_ptr<ll::Session> session, const fs::path &path) {
 
     auto i = 0u;
     for (auto imgViewX : imageViewsX) {
+        
+        auto outPath = fs::path {path};
+        outPath.replace_filename("imgX_" + std::to_string(i) + ".bmp");
 
-        writeImage(session, imgViewX->getImage(), "imgX_" + std::to_string(i) + ".bmp");
+        writeImage(session, imgViewX->getImage(), outPath.string());
         ++ i;
     }
 
     i = 0u;
     for (auto imgViewY : imageViewsY) {
 
-        writeImage(session, imgViewY->getImage(), "imgY_" + std::to_string(i) + ".bmp");
+        auto outPath = fs::path{path};
+        outPath.replace_filename("imgY_" + std::to_string(i) + ".bmp");
+
+        writeImage(session, imgViewY->getImage(), outPath.string());
         ++ i;
     }
 }
-
 
 void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image> image, const std::string& filename) {
 

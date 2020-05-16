@@ -3,19 +3,13 @@ workspace (
 )
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 
 
 ###########################################################
 # Python configuration
 ###########################################################
-
-# http_archive(
-#     name = "rules_python",
-#     url = "https://github.com/bazelbuild/rules_python/releases/download/0.0.1/rules_python-0.0.1.tar.gz",
-#     sha256 = "aa96a691d3a8177f3215b14b0edc9641787abaaa30363a080165d06ab65e1161",
-# )
 
 git_repository(
     name = "rules_python",
@@ -83,22 +77,13 @@ http_archive (
     build_file = "@//external:sol.bzl"
 )
 
-# TODO: Add the whole repo with commit hash
-# http_file (
-#     name = "stb_image",
-#     urls = [
-#         "https://raw.githubusercontent.com/nothings/stb/master/stb_image.h"
-#     ],
-#     # sha256 = "0e28238d865510073b5740ae8eba8cd8032cc5b25f94e0f7505fac8036864909",
-# )
-
-# http_file (
-#     name = "stb_image_write",
-#     urls = [
-#         "https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h"
-#     ],
-#     # sha256 = "0e8b3d80bc6eb8fdb64abc4db9fec608b489bc73418eaf14beda102a0699a4c9",
-# )
+new_git_repository(
+    name = "stb",
+    remote = "https://github.com/nothings/stb.git",
+    commit = "f54acd4e13430c5122cab4ca657705c84aa61b08",
+    shallow_since = "1580905940 -0800",
+    build_file = "@//external:stb.bzl"
+)
 
 http_archive (
     name = "lua",

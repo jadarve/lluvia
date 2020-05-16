@@ -4,16 +4,18 @@
 #include <lluvia/core.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <stb_image_write.h>
+#include "stb_image_write.h"
 
-#include <chrono>
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <iomanip>
+#include <experimental/filesystem>
 
+namespace fs = std::experimental::filesystem;
 
 using image_t = struct {
     int32_t width;
@@ -23,7 +25,7 @@ using image_t = struct {
 };
 
 
-image_t readImage(const std::string& filepath) {
+image_t readImage(const fs::path& filepath) {
 
     // read image data
     auto img        = image_t {};
@@ -33,7 +35,7 @@ image_t readImage(const std::string& filepath) {
     const auto imageSize = static_cast<uint64_t>(img.width * img.height * img.channels);
 
     if (!pixels) {
-        throw std::runtime_error("failed to read image file: " + filepath);
+        throw std::runtime_error("failed to read image file: " + filepath.string());
     }
 
     img.data.resize(imageSize);
@@ -51,7 +53,9 @@ int main(int argc, const char** argv) {
         exit(-1);
     }
 
-    const auto image = readImage(argv[1]);
+    const auto imagePath = fs::path {argv[1]};
+
+    const auto image = readImage(imagePath);
 
     const auto channelType        = ll::ChannelType::Uint8;
     const auto imageSize          = image.width*image.height*image.channels*ll::getChannelTypeSize(channelType);
@@ -63,15 +67,16 @@ int main(int argc, const char** argv) {
     auto memory = session->createMemory(inputImageMemFlags, imageSize, false);
 
     const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc;
-    
-    auto imgDesc = ll::ImageDescriptor {static_cast<uint32_t>(image.width),
-                                        static_cast<uint32_t>(image.height),
-                                        1,
-                                        ll::castChannelCount(image.channels),
-                                        channelType,
-                                        imgFlags};
 
-    auto inputImage = memory->createImage(imgDesc);
+    auto imgDesc = ll::ImageDescriptor{1,
+                                       static_cast<uint32_t>(image.height),
+                                       static_cast<uint32_t>(image.width),
+                                       ll::castChannelCount(image.channels),
+                                       channelType};
+
+    imgDesc.setUsageFlags(imgFlags);
+
+        auto inputImage = memory->createImage(imgDesc);
 
     // stage buffer
     const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
@@ -104,19 +109,20 @@ int main(int argc, const char** argv) {
 
 
     auto cmdBuffer = session->createCommandBuffer();
+    auto duration = session->createDuration();
+
     cmdBuffer->begin();
+    cmdBuffer->durationStart(*duration);
     imagePyramid.record(*cmdBuffer);
+    cmdBuffer->durationEnd(*duration);
     cmdBuffer->end();
 
     for (auto n = 0u; n < 1000; ++n) {
-        const auto start = std::chrono::high_resolution_clock::now();
+
         session->run(*cmdBuffer);
-        const auto end = std::chrono::high_resolution_clock::now();
 
-        const auto diff = std::chrono::duration<float, std::micro> {end - start};
-        std::cout << diff.count() << std::endl;
+        std::cout << std::setprecision(3) << duration->getNanoseconds() * 1e-6 << " ms\n";
     }
-    
 
-    imagePyramid.writeAllImages(session);
+    imagePyramid.writeAllImages(session, imagePath);
 }
