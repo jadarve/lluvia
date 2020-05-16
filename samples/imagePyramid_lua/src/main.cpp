@@ -1,21 +1,22 @@
 
 #include <lluvia/core.h>
 
-#include "CLI11/CLI11.hpp"
-
 #include <iostream>
 #include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <string>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 #include <vulkan/vulkan.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <stb_image_write.h>
+#include "stb_image_write.h"
 
 
 using image_t = struct {
@@ -76,36 +77,31 @@ void writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image>
     std::cout << "stbi_write_bmp result: " << res << std::endl;
 }
 
-int main(int argc, char const* argv[])
-{
-    CLI::App app{"Image pyramid with lua nodes"};
+int main(int argc, char const* argv[]) {
 
-    auto filename = std::string {};
-
-    app.add_option("filename", filename, "image file name")->required();
-
-    try {
-        app.parse(argc, argv);
-    } catch (const CLI::ParseError &e) {
-        return app.exit(e);
+    if (argc != 2) {
+        std::cout << "missing image path, use 'imagePyramid <path to image>'" << std::endl;
+        exit(-1);
     }
 
-    std::cout << "filename: " << filename << std::endl;
+    const auto imagePath = fs::path {argv[1]};
+
+    std::cout << "filename: " << imagePath << std::endl;
 
     auto session = ll::Session::create();
 
     // register programs and node builders
-    session->setProgram("ImageDownsampleX", session->createProgram("ImageDownsampleX.spv"));
-    session->setProgram("ImageDownsampleY", session->createProgram("ImageDownsampleY.spv"));
+    session->setProgram("ImageDownsampleX", session->createProgram("samples/imagePyramid_lua/glsl/ImageDownsampleX.spv"));
+    session->setProgram("ImageDownsampleY", session->createProgram("samples/imagePyramid_lua/glsl/ImageDownsampleY.spv"));
 
-    session->scriptFile("/home/jadarve/git/lluvia/samples/imagePyramid_lua/lua/ImageDownsampleX.lua");
-    session->scriptFile("/home/jadarve/git/lluvia/samples/imagePyramid_lua/lua/ImageDownsampleY.lua");
-    session->scriptFile("/home/jadarve/git/lluvia/samples/imagePyramid_lua/lua/ImagePyramid.lua");
+    session->scriptFile("samples/imagePyramid_lua/lua/ImageDownsampleX.lua");
+    session->scriptFile("samples/imagePyramid_lua/lua/ImageDownsampleY.lua");
+    session->scriptFile("samples/imagePyramid_lua/lua/ImagePyramid.lua");
     
     auto pyramidDesc = session->createContainerNodeDescriptor("ImagePyramid");
     auto pyramid = session->createContainerNode(pyramidDesc);
 
-    const auto image     = readImage(filename);
+    const auto image     = readImage(imagePath.string());
     const auto imageSize = image.width*image.height*image.channels*ll::getChannelTypeSize(ll::ChannelType::Uint8);
 
     auto memory = session->createMemory(vk::MemoryPropertyFlagBits::eDeviceLocal, 0);
@@ -115,14 +111,16 @@ int main(int argc, char const* argv[])
                                               | vk::ImageUsageFlagBits::eTransferDst
                                               | vk::ImageUsageFlagBits::eTransferSrc};
 
-    const auto imgDesc = ll::ImageDescriptor {static_cast<uint32_t>(image.width),
-                                              static_cast<uint32_t>(image.height),
-                                              1,
-                                              ll::ChannelCount::C4, ll::ChannelType::Uint8, imgUsageFlags};
+    auto imgDesc = ll::ImageDescriptor{1,
+                                             static_cast<uint32_t>(image.height),
+                                             static_cast<uint32_t>(image.width),
+                                             ll::ChannelCount::C4, ll::ChannelType::Uint8};
 
-    const auto viewDesc = ll::ImageViewDescriptor {}
-                            .setIsSampled(false)
-                            .setNormalizedCoordinates(false);
+    imgDesc.setUsageFlags(imgUsageFlags);
+
+    const auto viewDesc = ll::ImageViewDescriptor{}
+                                .setIsSampled(false)
+                                .setNormalizedCoordinates(false);
 
     auto in_RGBA = ll::createAndInitImageView(session, memory, imgDesc, viewDesc, vk::ImageLayout::eGeneral);
 
@@ -166,9 +164,13 @@ int main(int argc, char const* argv[])
     for (auto i = 0; i < levels; ++i) {
 
         const auto name = baseName + std::to_string(i);
+
+        const auto outPath = fs::path{imagePath}.replace_filename(
+            std::string{name} + std::string{".bmp"});
+
         writeImage(session,
                    std::static_pointer_cast<ll::ImageView>(pyramid->getPort(name))->getImage(),
-                   std::string{name} + std::string{".bmp"});
+                   outPath.string());
     }
     
     std::cout << "ImagePyramid_lua: finish" << std::endl;
