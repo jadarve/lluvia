@@ -1,6 +1,20 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
 load("@//bazel/glsl:def.bzl", "glsl_shader")
 
+config_setting(
+    name = "on_linux",
+    constraint_values = [
+        "@platforms//os:linux",
+    ],
+)
+
+config_setting(
+    name = "on_windows",
+    constraint_values = [
+        "@platforms//os:windows",
+    ],
+)
+
 glsl_shader(
     name = "ImageDownsampleX_shader",
     shader = "glsl/ImageDownsampleX.comp",
@@ -25,10 +39,15 @@ cc_binary (
     srcs = [
         "src/main.cpp"
     ],
-    copts = [
-        "--std=c++17",
-        "-stdlib=libstdc++",
-    ],
+    copts = select({
+        ":on_linux": [
+            "--std=c++17",
+            "-stdlib=libstdc++",
+        ],
+        ":on_windows": [
+            "/std:c++17",
+        ],
+    }),
     linkopts = [
         "-lstdc++fs"
     ],

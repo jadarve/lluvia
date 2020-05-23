@@ -13,9 +13,9 @@
 #include <memory>
 #include <vector>
 #include <iomanip>
-#include <experimental/filesystem>
+#include <filesystem>
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 using image_t = struct {
     int32_t width;
@@ -29,7 +29,7 @@ image_t readImage(const fs::path& filepath) {
 
     // read image data
     auto img        = image_t {};
-    stbi_uc* pixels = stbi_load(filepath.c_str(), &img.width, &img.height, &img.channels, STBI_rgb_alpha);
+    stbi_uc* pixels = stbi_load((char*)filepath.c_str(), &img.width, &img.height, &img.channels, STBI_rgb_alpha);
     img.channels    = 4; // overwrite to 4
 
     const auto imageSize = static_cast<uint64_t>(img.width * img.height * img.channels);
@@ -60,7 +60,7 @@ int main(int argc, const char** argv) {
     const auto channelType        = ll::ChannelType::Uint8;
     const auto imageSize          = image.width*image.height*image.channels*ll::getChannelTypeSize(channelType);
     const auto inputImageMemFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
-    
+
 
     auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
 
@@ -100,7 +100,7 @@ int main(int argc, const char** argv) {
     imgCopyCmdBuffer->changeImageLayout(*inputImage, vk::ImageLayout::eGeneral);
     imgCopyCmdBuffer->end();
     session->run(*imgCopyCmdBuffer);
-    
+
     std::cout << "input image: [" << inputImage->getWidth() << ", " << inputImage->getHeight() << "]" << std::endl;
 
     auto imagePyramid = ImagePyramid {4};
