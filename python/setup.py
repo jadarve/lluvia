@@ -26,29 +26,37 @@ libDirs = ['../bazel-bin/cpp/core',
            os.path.join(VULKAN_SDK, 'lib')]
 
 
-libs   = ['core_cc_library',
-          'stdc++',
-          'vulkan',
-          'm',
-          'dl',
-          'lua_cc_library']
+# common libs first, then we add per platforms
+libs   = [
+    'core_cc_library',
+    'lua_cc_library',
+]
 
 cflags = ['-std=c++17',
           '-fPIC',
           '-Wno-unused-function',
           '-DSOL_ALL_SAFETIES_ON=1']
 
-cython_directives = {'embedsignature' : True,
-                     'infer_types' : True,
-                     'language_level': 2}
+if sys.platform == "linux":
+    libs += [
+        'stdc++',
+        'vulkan',
+        'm',
+        'dl',
+    ]
 
 if sys.platform == "win32":
-    libs = [
+    libs += [
         "vulkan-1",
     ]
     cflags = [
         "/std:c++17",
     ]
+
+
+cython_directives = {'embedsignature' : True,
+                     'infer_types' : True,
+                     'language_level': 2}
 
 def createExtension(name, sources):
 
