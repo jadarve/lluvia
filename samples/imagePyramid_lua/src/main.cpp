@@ -6,9 +6,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
-#include <filesystem>
-
-namespace fs = std::filesystem;
 
 #include <vulkan/vulkan.hpp>
 
@@ -17,6 +14,19 @@ namespace fs = std::filesystem;
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+
+#ifdef __linux__
+
+// at least in Ubuntu 18.04 and clang 6 <filesystem> is still in experimental
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+
+#elif _WIN32
+
+#include <filesystem>
+namespace fs = std::filesystem;
+
+#endif // OS switch
 
 
 using image_t = struct {
