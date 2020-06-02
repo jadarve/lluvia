@@ -67,6 +67,7 @@ build*/
 # Python
 __pycache__
 *.pyc
+*.pyd
 *.eggs
 *.pytest_cache
 *.egg-info

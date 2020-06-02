@@ -378,7 +378,7 @@ sol::load_result Interpreter::load(const std::string& code) {
 
     auto loadCode = m_lua->load(code);
     if (!loadCode.valid()) {
-        const auto err = static_cast<sol::error>(loadCode);
+        const sol::error err = loadCode;
 
         ll::throwSystemError(ll::ErrorCode::InterpreterError,
                              "error loading code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());

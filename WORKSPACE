@@ -132,3 +132,24 @@ cc_library(
 )
     """
 )
+
+
+load("//:bazel/python/python_windows.bzl", "python_configure")
+load("//:bazel/python/python_windows.bzl", "numpy_configure")
+python_configure(name = "python_windows")
+numpy_configure(name = "numpy_windows")
+
+new_local_repository(
+    name = "vulkan_windows",
+    path = "C:/VulkanSDK/1.2.135.0",
+    build_file_content = """
+cc_library(
+    name = "vulkan",
+    srcs = ["Lib/vulkan-1.lib"],
+    hdrs = glob(["Include/**/*.h"]),
+    includes = ["Include"],
+    visibility = ["//visibility:public"]
+)
+    """
+)
+

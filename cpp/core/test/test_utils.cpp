@@ -11,7 +11,9 @@
 #include "lluvia/core.h"
 
 using memflags = vk::MemoryPropertyFlagBits;
-
+#ifdef _WIN32
+#define __attribute__()
+#endif
 
 struct binding {
 

@@ -57,7 +57,7 @@ public:
         sol::protected_function_result scriptResult = scriptFunction(std::forward<Args>(args)...);
 
         if (!scriptResult.valid()) {
-            const auto err = static_cast<sol::error>(scriptResult);
+            const sol::error err = scriptResult;
 
             ll::throwSystemError(ll::ErrorCode::InterpreterError,
                                  "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());

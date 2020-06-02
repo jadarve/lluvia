@@ -6,7 +6,7 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-import os
+import os, sys
 import numpy as np
 from setuptools import setup
 from distutils.core import Extension
@@ -26,17 +26,33 @@ libDirs = ['../bazel-bin/cpp/core',
            os.path.join(VULKAN_SDK, 'lib')]
 
 
-libs   = ['core_cc_library',
-          'stdc++',
-          'vulkan',
-          'm',
-          'dl',
-          'lua_cc_library']
+# common libs first, then we add per platforms
+libs   = [
+    'core_cc_library',
+    'lua_cc_library',
+]
 
 cflags = ['-std=c++17',
           '-fPIC',
           '-Wno-unused-function',
           '-DSOL_ALL_SAFETIES_ON=1']
+
+if sys.platform == "linux":
+    libs += [
+        'stdc++',
+        'vulkan',
+        'm',
+        'dl',
+    ]
+
+if sys.platform == "win32":
+    libs += [
+        "vulkan-1",
+    ]
+    cflags = [
+        "/std:c++17",
+    ]
+
 
 cython_directives = {'embedsignature' : True,
                      'infer_types' : True,
@@ -48,12 +64,16 @@ def createExtension(name, sources):
     global libDirs
     global libs
 
+    runtimeLibDirs = libDirs
+    if sys.platform == 'win32':
+        runtimeLibDirs = []
+
     ext = Extension(name,
                     sources=sources,
                     include_dirs=incDirs,
                     library_dirs=libDirs,
                     libraries=libs,
-                    runtime_library_dirs=libDirs,
+                    runtime_library_dirs=runtimeLibDirs,
                     language='c++',
                     extra_compile_args=cflags)
 
