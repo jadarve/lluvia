@@ -38,8 +38,6 @@ Memory::Memory(
     m_heapInfo            (heapInfo),
     m_pageSize            {pageSize} {
     
-    // this prevents shifting outside the range of memoryTypeBits
-    assert(m_heapInfo.typeIndex <= 32u);
 }
 
 
@@ -78,6 +76,23 @@ bool Memory::isPageMappable(const uint32_t page) const noexcept {
     }
     
     return false;
+}
+
+
+std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
+
+    const auto usageFlags = vk::BufferUsageFlags { vk::BufferUsageFlagBits::eStorageBuffer
+                                                 | vk::BufferUsageFlagBits::eTransferSrc
+                                                 | vk::BufferUsageFlagBits::eTransferDst};
+
+    return createBuffer(size, usageFlags);
+}
+
+std::shared_ptr<ll::Buffer> Memory::createBufferWithUnsafeFlags(const uint64_t size, const uint32_t usageFlags) {
+
+    // no check of the actual bits of usageFlags is performed
+    return createBuffer(size,
+        static_cast<vk::BufferUsageFlags>(usageFlags));
 }
 
 

@@ -212,6 +212,22 @@ public:
 
 
     /**
+    @brief      Creates a buffer.
+
+    The created buffer will hold a reference to this memory object, preventing it from destroying before
+    the buffer is deleted.
+
+    The usage flags of the buffer will be set to
+    `vk::BufferUsageFlagBits::eStorageBuffer | vk::BufferUsageFlagBits::eTransferSrc | vk::BufferUsageFlagBits::eTransferDst`.
+    See @VULKAN_DOC#VkBufferUsageFlagBits.  
+    
+    @param[in]  size  The size in bytes
+    
+    @return     { description_of_the_return_value }
+    */
+    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size);
+
+    /**
     @brief      Creates a new ll::Buffer object.
 
     The created buffer will hold a reference to this memory object, preventing it from destroying before
@@ -219,19 +235,29 @@ public:
     
     @param[in]  size        The size of the buffer in bytes. If \p size is greater than
                             the page size, a bigger page is created.
-    @param[in]  usageFlags  The usage flags of the buffer. Defaults to:
-                            `vk::BufferUsageFlagBits::eStorageBuffer | vk::BufferUsageFlagBits::eTransferSrc | vk::BufferUsageFlagBits::eTransferDst`.
-                            See @VULKAN_DOC#VkBufferUsageFlagBits.
+    @param[in]  usageFlags  The usage flags of the buffer. See @VULKAN_DOC#VkBufferUsageFlagBits.
     
     @throws     std::system_error if the Vulkan memory does not support allocating buffer objects.
 
     @return     A new ll::Buffer object.
     */
-    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size,
-        const vk::BufferUsageFlags usageFlags = {  vk::BufferUsageFlagBits::eStorageBuffer
-                                                 | vk::BufferUsageFlagBits::eTransferSrc
-                                                 | vk::BufferUsageFlagBits::eTransferDst});
+    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size, const vk::BufferUsageFlags usageFlags);
 
+
+    /**
+    @brief      Creates buffer with usage flags passed as integer type.
+
+    @warning Please do not use this method. It's for internal use only.
+    
+    @param[in]  size        The size
+    @param[in]  usageFlags  The usage flags
+    
+    @throws     std::system_error if the Vulkan memory does not support allocating buffer objects.
+
+    @return     A new ll::Buffer object.
+    */
+    std::shared_ptr<ll::Buffer> createBufferWithUnsafeFlags(const uint64_t size, const uint32_t usageFlags);
+    
 
     /**
     @brief      Creates a new ll::Image object.

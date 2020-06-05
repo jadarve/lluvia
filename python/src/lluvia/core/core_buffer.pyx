@@ -17,7 +17,7 @@ import numpy as np
 
 from lluvia.core import impl
 from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
-from lluvia.core.memory cimport Memory, MemoryAllocationInfo
+from lluvia.core.memory cimport Memory, MemoryAllocationInfo, _buildMemory
 from lluvia.core.session cimport Session
 
 
@@ -26,16 +26,13 @@ __all__ = ['Buffer']
 
 cdef _buildBuffer(shared_ptr[_Buffer] ptr, Session session, Memory memory):
 
-    cdef Buffer buf = Buffer(None, None)
+    cdef Buffer buf = Buffer()
     buf.__buffer = ptr
     buf.__session = session
 
-    cdef Memory m = memory
     if memory is None:
-        m = Memory(session)
-        m.__memory = ptr.get().getMemory()
-
-    buf.__memory = m
+        buf.__memory = _buildMemory(ptr.get().getMemory(), session)
+    
     return buf
 
 

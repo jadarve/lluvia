@@ -305,7 +305,10 @@ void registerTypes(sol::table& lib) {
         "pageCount", sol::property(&ll::Memory::getPageCount),
         "isMappable", sol::property(&ll::Memory::isMappable),
         "isPageMappable", &ll::Memory::isPageMappable,
-        "createBuffer", &ll::Memory::createBuffer,
+        "createBuffer", sol::overload(
+            (std::shared_ptr<ll::Buffer> (ll::Memory::*)(const uint64_t)) &ll::Memory::createBuffer,
+            &ll::Memory::createBufferWithUnsafeFlags
+            ),
         "createImage", &ll::Memory::createImage,
         "createImageView", &ll::Memory::createImageView
         );
