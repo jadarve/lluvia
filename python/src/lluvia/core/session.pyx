@@ -13,6 +13,7 @@ import tempfile
 import sys
 import io
 
+from libcpp cimport nullptr
 from cython.operator cimport dereference as deref
 
 from libc.stdint cimport uint32_t, uint64_t
@@ -207,47 +208,178 @@ cdef class Session:
         except IOError as e:
             raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
-    def setProgram(self, str name, Program program):
+    def setProgram(self, str name, program):
+        """
+        Sets a program into the registry with a given name
 
-        self.__session.get().setProgram(impl.encodeString(name), program.__program)
+        Parameters
+        ----------
+        name : string
+            The name of the program in the registry.
+        
+        program : string or lluvia.Program.
+            If string, this parameter denotes a path to a SPIR-V file used to
+            build the program. This is equivalent to call
+            `session.setProgram(name, session.createProgram(program))`
+
+        Raises
+        ------
+        ValueError: if program's type is not string nor lluvia.Program
+        """
+
+        cdef Program p = Program()
+
+        # if it is a path
+        if type(program) is str:
+            p = self.createProgram(program)
+        
+        elif type(program) is Program:
+            p = program
+        
+        else:
+            raise ValueError('Unknown type {0}, expecting string or ll.Program'.format(type(program)))
+
+        self.__session.get().setProgram(impl.encodeString(name), p.__program)
 
     def getProgram(self, str name):
+        """
+        Returns a program from the registry
+
+        Parameters
+        ----------
+        name : string.
+            Name of the program.
+
+        
+        Returns
+        -------
+        program : lluvia.Program
+            The program.
+
+        Raises
+        ------
+        KeyError : if the program does not exists in the registry
+        """
 
         cdef Program out = Program()
         out.__program = self.__session.get().getProgram(impl.encodeString(name))
+
+        if out.__program == nullptr:
+            raise KeyError('program "{0}" not found'.format(name))
+
         return out
 
     def createComputeNodeDescriptor(self, str builderName):
+        """
+        Creates a ComputeNodeDescriptor from its name in the registry.
+
+        Parameters
+        ----------
+        builderName : string.
+            Name of the builder.
+        
+        Returns
+        -------
+        desc : lluvia.ComputeNodeDescriptor.
+            The descriptor
+        
+        Raises
+        ------
+        RuntimeError : if builderName is not in the registry.
+        """
 
         cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
         desc.__descriptor = self.__session.get().createComputeNodeDescriptor(impl.encodeString(builderName))
         return desc
 
-    def createComputeNode(self, ComputeNodeDescriptor desc):
+    def createComputeNode(self, desc):
         """
-        Creates a ComputeNode from a given descriptor.
+        Creates a ComputeNode from a given descriptor or builder name.
 
         Parameters
         ----------
-        desc : lluvia.ComputeNodeDescriptor
-            Compute node descriptor for this node.
-
+        desc : string or lluvia.ComputeNodeDescriptor
+            If string, denotes the builder name used to create the ComputeNodeDescriptor for this node.
+            Otherwise, a valid lluvia.ComputeNodeDescriptor must be provided.
 
         Returns
+        -------
         node : lluvia.ComputeNode
+
+        Raises
+        ------
+        RuntimeError : if desc is a string and the node builder is not found in the registry.
+        ValueError   : if desc type is not string nor ComputeNodeDescriptor.
         """
 
-        return _buildComputeNode(self.__session.get().createComputeNode(desc.__descriptor), self)
+        cdef ComputeNodeDescriptor d = ComputeNodeDescriptor()
+
+        if type(desc) is str:
+            d = self.createComputeNodeDescriptor(desc)
+
+        elif type(desc) is ComputeNodeDescriptor:
+            d = desc
+
+        else:
+            raise ValueError('Unknown type {0}, expecting string or ComputeNodeDescriptor'.format(type(desc)))
+
+        return _buildComputeNode(self.__session.get().createComputeNode(d.__descriptor), self)
 
     def createContainerNodeDescriptor(self, str builderName):
+        """
+        Creates a ContainerNodeDescriptor from its name in the registry.
+
+        Parameters
+        ----------
+        builderName : string.
+            Name of the builder.
+        
+        Returns
+        -------
+        desc : lluvia.ContainerNodeDescriptor.
+            The descriptor
+        
+        Raises
+        ------
+        RuntimeError : if builderName is not in the registry.
+        """
 
         cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
         desc.__descriptor = self.__session.get().createContainerNodeDescriptor(impl.encodeString(builderName))
         return desc
 
-    def createContainerNode(self, ContainerNodeDescriptor desc):
+    def createContainerNode(self, desc):
+        """
+        Creates a ComputeNode from a given descriptor or builder name.
 
-        return _buildContainerNode(self.__session.get().createContainerNode(desc.__descriptor), self)
+        Parameters
+        ----------
+        desc : string or lluvia.ContainerNodeDescriptor
+            If string, denotes the builder name used to create the ContainerNodeDescriptor for this node.
+            Otherwise, a valid lluvia.ContainerNodeDescriptor must be provided.
+
+        Returns
+        -------
+        node : lluvia.ComputeNode
+
+        Raises
+        ------
+        RuntimeError : if desc is a string and the node builder is not found in the registry.
+        ValueError   : if desc type is not string nor ContainerNodeDescriptor.
+        """
+
+        cdef ContainerNodeDescriptor d = ContainerNodeDescriptor()
+
+        if type(desc) is str:
+            d = self.createContainerNodeDescriptor(desc)
+
+        elif type(desc) is ContainerNodeDescriptor:
+            d = desc
+
+        else:
+            raise ValueError('Unknown type {0}, expecting string or ContainerNodeDescriptor'.format(type(desc)))
+
+        return _buildContainerNode(self.__session.get().createContainerNode(d.__descriptor), self)
 
     def createDuration(self):
         """
@@ -277,10 +409,26 @@ cdef class Session:
         return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
 
     def script(self, str code):
+        """
+        Runs a Lua script in the session's interpreter
+
+        Parameters
+        ----------
+        code : string
+            The Lua code.
+        """
 
         self.__session.get().script(impl.encodeString(code))
 
     def scriptFile(self, str filename):
+        """
+        Read and run a Lua script file in the session's interpreter
+
+        Parameters
+        ----------
+        code : string
+            Path to the script file.
+        """
 
         self.__session.get().scriptFile(impl.encodeString(filename))
 
