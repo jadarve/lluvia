@@ -1,4 +1,13 @@
 load("@//bazel/glsl:def.bzl", "glsl_shader")
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "opticalFlow",
+    srcs = [
+        "cpp/main.cpp"
+    ],
+    visibility = ["//visibility:public"],
+)
 
 glsl_shader(
     name = "RGBA2gray_shader",
