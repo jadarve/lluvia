@@ -2,16 +2,16 @@
 """
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@//bazel/expand_template:def.bzl", "expand_template")
+load("@//lluvia/bazel/expand_template:def.bzl", "expand_template")
 
 expand_template(
     name = "core_lua_cc_library_header",
     template = "include/lluvia/core/impl/LuaLibrary.h.in",
     file_vars = {
-        "LUA": "lua/ll/library.lua"
+        "LUA": "lluvia/lua/ll/library.lua"
     },
     data = [
-        "//lua:ll_lua_library"
+        "//lluvia/lua:ll_lua_library"
     ],
 )
 
@@ -129,7 +129,7 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//cpp/core/test/glsl:assign_shader"
+        "//lluvia/cpp/core/test/glsl:assign_shader"
     ]
 )
 
@@ -142,8 +142,8 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//cpp/core/test/glsl:image_to_buffer_shader",
-        "//cpp/core/test/glsl:texture_to_buffer_shader"
+        "//lluvia/cpp/core/test/glsl:image_to_buffer_shader",
+        "//lluvia/cpp/core/test/glsl:texture_to_buffer_shader"
     ]
 )
 
@@ -196,7 +196,7 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//cpp/core/test/glsl:assign_shader"
+        "//lluvia/cpp/core/test/glsl:assign_shader"
     ]
 )
 
@@ -239,8 +239,8 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//cpp/core/test/glsl:pushConstants_shader",
-        "//cpp/core/test/glsl:pushConstants2_shader",
+        "//lluvia/cpp/core/test/glsl:pushConstants_shader",
+        "//lluvia/cpp/core/test/glsl:pushConstants2_shader",
     ]
 )
 
@@ -253,6 +253,6 @@ cc_test (
         "@catch//:catch_cc_library"
     ],
     data = [
-        "//cpp/core/test/glsl:assign_shader"
+        "//lluvia/cpp/core/test/glsl:assign_shader"
     ]
 )

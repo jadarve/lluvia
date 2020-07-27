@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Bazel build
-      run: CC=clang bazel build //...
+      run: CC=clang bazel build //lluvia/...
     - name: lua_cc_library
       run: CC=clang bazel build @lua//:lua_cc_library
     - name: Python build

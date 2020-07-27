@@ -30,7 +30,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto buffer = hostMemory->createBuffer(length*sizeof(float));
     REQUIRE(buffer != nullptr);
 
-    auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
+    auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -81,7 +81,7 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
     REQUIRE(buffer != nullptr);
 
-    auto program = session->createProgram("cpp/core/test/glsl/assign.spv");
+    auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
 
     session->setProgram("assign", program);

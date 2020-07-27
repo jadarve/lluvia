@@ -133,8 +133,7 @@ cc_library(
 )
 
 
-load("//:bazel/python/python_windows.bzl", "python_configure")
-load("//:bazel/python/python_windows.bzl", "numpy_configure")
+load("//:lluvia/bazel/python/python_windows.bzl", "python_configure", "numpy_configure")
 python_configure(name = "python_windows")
 numpy_configure(name = "numpy_windows")
 

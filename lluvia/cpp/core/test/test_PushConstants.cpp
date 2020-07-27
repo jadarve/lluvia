@@ -70,7 +70,7 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
     auto constants = ll::PushConstants{};
     constants.setFloat(3.1415f);
 
-    auto program = session->createProgram("cpp/core/test/glsl/pushConstants.spv");
+    auto program = session->createProgram("lluvia/cpp/core/test/glsl/pushConstants.spv");
 
     auto desc = ll::ComputeNodeDescriptor{}
         .setFunctionName("main")
@@ -121,7 +121,7 @@ TEST_CASE("Push2Constants", "test_PushConstants")
     constants.pushFloat(firstValue);
     constants.pushFloat(secondValue);
 
-    auto program = session->createProgram("cpp/core/test/glsl/pushConstants2.spv");
+    auto program = session->createProgram("lluvia/cpp/core/test/glsl/pushConstants2.spv");
 
     auto desc = ll::ComputeNodeDescriptor{}
                     .setFunctionName("main")

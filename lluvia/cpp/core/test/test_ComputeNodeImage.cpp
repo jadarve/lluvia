@@ -78,7 +78,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
 
-    auto program = session->createProgram("cpp/core/test/glsl/textureToBuffer.spv");
+    auto program = session->createProgram("lluvia/cpp/core/test/glsl/textureToBuffer.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -196,7 +196,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
 
-    auto program = session->createProgram("cpp/core/test/glsl/imageToBuffer.spv");
+    auto program = session->createProgram("lluvia/cpp/core/test/glsl/imageToBuffer.spv");
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()

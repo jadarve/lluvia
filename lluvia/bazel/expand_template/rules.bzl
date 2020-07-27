@@ -52,7 +52,7 @@ expand_template = rule(
         "file_vars": attr.string_dict(),
         "data": attr.label_list(allow_files=True),
         "_executable": attr.label(
-            default=Label("@//tools/expand_template:expand_template"),
+            default=Label("@//lluvia/tools/expand_template:expand_template"),
             executable=True,
             allow_files=True,
             cfg="host")

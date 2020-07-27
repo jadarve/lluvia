@@ -1,4 +1,4 @@
-load("@//bazel/glsl:def.bzl", "glsl_header_library")
+load("@//lluvia/bazel/glsl:def.bzl", "glsl_header_library")
 
 glsl_header_library(
     name = "lluvia_glsl_library",
@@ -6,6 +6,6 @@ glsl_header_library(
         "lluvia/core/color.glsl",
         "lluvia/core.glsl"
     ],
-    strip_include_prefix = "glsl/lib",
+    strip_include_prefix = "lluvia/glsl/lib",
     visibility = ["//visibility:public"]
 )
