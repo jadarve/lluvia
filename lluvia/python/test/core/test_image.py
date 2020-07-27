@@ -48,17 +48,17 @@ def test_incorrectSize():
     channels = 4
     channelType = ll.ChannelType.Uint8
 
-    # wrong shapes that should raise ValueError
+    # wrong shapes that should raise RuntimeError
     shapes = [(0, height, width, channels),
               (depth, 0, width, channels),
               (depth, height, 0, channels),
               (depth, height, width, 0),
               (depth, height, height, 5)]
 
-    with pytest.raises(ValueError):
+    with pytest.raises(RuntimeError):
 
         for shape in shapes:
-            img = mem.createImage(shape, channelType)
+            _ = mem.createImage(shape, channelType)
 
 
 def test_imageFromHost():
