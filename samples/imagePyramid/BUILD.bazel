@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
-load("@//bazel/glsl:def.bzl", "glsl_shader")
+load("@//lluvia/bazel/glsl:def.bzl", "glsl_shader")
 
 config_setting(
     name = "on_linux",
@@ -19,7 +19,7 @@ glsl_shader(
     name = "ImageDownsampleX_shader",
     shader = "glsl/imageDownsampleX.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -28,7 +28,7 @@ glsl_shader(
     name = "ImageDownsampleY_shader",
     shader = "glsl/imageDownsampleY.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -54,7 +54,7 @@ cc_library (
         "-lstdc++fs"
     ],
     deps = [
-        "//cpp/core:core_cc_library",
+        "//lluvia/cpp/core:core_cc_library",
         "@stb//:stb_image_cc_library",
     ],
     strip_include_prefix = "include",

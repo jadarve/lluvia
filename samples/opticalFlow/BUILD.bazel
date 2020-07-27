@@ -1,4 +1,4 @@
-load("@//bazel/glsl:def.bzl", "glsl_shader")
+load("@//lluvia/bazel/glsl:def.bzl", "glsl_shader")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 cc_binary(
@@ -13,7 +13,7 @@ glsl_shader(
     name = "RGBA2gray_shader",
     shader = "glsl/RGBA2Gray.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -22,7 +22,7 @@ glsl_shader(
     name = "ImageDownsampleX_8ui_shader",
     shader = "glsl/ImageDownsampleX_8ui.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -31,7 +31,7 @@ glsl_shader(
     name = "ImageDownsampleY_8ui_shader",
     shader = "glsl/ImageDownsampleY_8ui.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -40,7 +40,7 @@ glsl_shader(
     name = "ImageModel_shader",
     shader = "glsl/ImageModel.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -49,7 +49,7 @@ glsl_shader(
     name = "FlowUpdate_shader",
     shader = "glsl/FlowUpdate.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -58,7 +58,7 @@ glsl_shader(
     name = "FlowUpdateDelta_shader",
     shader = "glsl/FlowUpdateDelta.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -67,7 +67,7 @@ glsl_shader(
     name = "FlowPredictX_shader",
     shader = "glsl/FlowPredictX.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -76,7 +76,7 @@ glsl_shader(
     name = "FlowPredictY_shader",
     shader = "glsl/FlowPredictY.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -85,7 +85,7 @@ glsl_shader(
     name = "FlowPredictPayloadX_shader",
     shader = "glsl/FlowPredictPayloadX.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -94,7 +94,7 @@ glsl_shader(
     name = "FlowPredictPayloadY_shader",
     shader = "glsl/FlowPredictPayloadY.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -103,7 +103,7 @@ glsl_shader(
     name = "FlowSmooth_shader",
     shader = "glsl/FlowSmooth.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -112,7 +112,7 @@ glsl_shader(
     name = "Flow2RGBA_shader",
     shader = "glsl/Flow2RGBA.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -121,7 +121,7 @@ glsl_shader(
     name = "RGBA2HSVA_shader",
     shader = "glsl/RGBA2HSVA.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
@@ -130,7 +130,7 @@ glsl_shader(
     name = "HSVA2RGBA_shader",
     shader = "glsl/HSVA2RGBA.comp",
     deps = [
-        "//glsl/lib:lluvia_glsl_library"
+        "//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
