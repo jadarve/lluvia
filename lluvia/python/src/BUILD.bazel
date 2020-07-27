@@ -1,5 +1,5 @@
 load("@python_deps//:requirements.bzl", "requirement")
-load("//bazel/cython:def.bzl", "pyx_library")
+load("//lluvia/bazel/cython:def.bzl", "pyx_library")
 
 
 pyx_library (
@@ -43,7 +43,7 @@ pyx_library (
         "--cplus"
     ],
     deps = [
-        "//cpp/core:core_cc_library",
+        "//lluvia/cpp/core:core_cc_library",
         "@lua//:lua_cc_library",
     ] + select({
         ":on_windows": [

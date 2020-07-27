@@ -3,7 +3,7 @@
 
 load("@rules_python//python:defs.bzl", "py_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
-load("//bazel/cython:rules.bzl", "cy_compile")
+load("//lluvia/bazel/cython:rules.bzl", "cy_compile")
 
 def pyx_library(
         name,
