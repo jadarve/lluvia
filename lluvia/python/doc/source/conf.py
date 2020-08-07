@@ -14,7 +14,7 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 import sys
-sys.path.append('../build/lib.linux-x86_64-3.6')
+sys.path.append('../../../../bazel-bin/lluvia/python/')
 
 
 # -- Project information -----------------------------------------------------
