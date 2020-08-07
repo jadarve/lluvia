@@ -1,6 +1,21 @@
 load("@python_deps//:requirements.bzl", "requirement")
 load("//lluvia/bazel/cython:def.bzl", "pyx_library")
 
+package(default_visibility = ["//visibility:public"])
+
+config_setting(
+    name = "on_linux",
+    constraint_values = [
+        "@platforms//os:linux",
+    ],
+)
+
+config_setting(
+    name = "on_windows",
+    constraint_values = [
+        "@platforms//os:windows",
+    ],
+)
 
 pyx_library (
     name = "pyx_library",
@@ -95,18 +110,3 @@ pyx_library (
     visibility = ["//visibility:public"]
 )
 
-
-
-config_setting(
-    name = "on_linux",
-    constraint_values = [
-        "@platforms//os:linux",
-    ],
-)
-
-config_setting(
-    name = "on_windows",
-    constraint_values = [
-        "@platforms//os:windows",
-    ],
-)

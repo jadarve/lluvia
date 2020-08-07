@@ -1,0 +1,35 @@
+load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
+
+py_package(
+    name = "lluvia_python_package",
+    packages = [
+        "lluvia",
+        "lluvia.core",
+        "lluvia.core.enums",
+        "lluvia.core.impl",
+    ],
+    deps = [
+        "//lluvia/python/src:pyx_library"
+    ],
+    visibility = ["//visibility:private"]
+)
+
+py_wheel(
+    name = "lluvia_wheel",
+    author = "Juan David Adarve Bermudez",
+    author_email = "juanda0718@gmail.com",
+    classifiers = [
+        "License :: OSI Approved :: Apache 2 Software License",
+        "Intended Audience :: Developers",
+    ],
+    description_file = "//:readme_file",
+    distribution = "lluvia",
+    homepage = "lluvia.io",
+    python_tag = "py3",
+    strip_path_prefixes = [
+        "lluvia/python/src",
+    ],
+    version = "0.0.1",
+    deps = [":lluvia_python_package"],
+    visibility = ["//visibility:public"]
+)
