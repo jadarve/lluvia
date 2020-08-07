@@ -1,16 +1,12 @@
-import sys
-import os
 
 import pytest
-import lluvia as ll
-
 
 
 def test_session():
 
-    # TODO: This still does not work with the py_wheel data dependency
-    #       AttributeError: module 'lluvia' has no attribute 'createSession'
-    session = ll.createSession()
+    import lluvia as ll
+
+    ll.createSession()
 
 
 def test_memoryFlags():
@@ -25,6 +21,8 @@ def test_memoryFlags():
         There must be at least one memory type with the
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
     """
+
+    import lluvia as ll
 
     session = ll.createSession()
     memFlags = session.getSupportedMemoryPropertyFlags()
@@ -44,4 +42,8 @@ def test_memoryFlags():
 
 
 if __name__ == "__main__":
+    
+    from config import add_lluvia_import_path
+    add_lluvia_import_path()
+
     raise SystemExit(pytest.main([__file__]))

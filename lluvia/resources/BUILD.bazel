@@ -1,0 +1,7 @@
+filegroup(
+    name = "resources",
+    srcs = [
+        "autumn.jpg"
+    ],
+    visibility = ["//visibility:public"]
+)

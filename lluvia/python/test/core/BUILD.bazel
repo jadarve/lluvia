@@ -1,12 +1,24 @@
-load("@rules_python//python:defs.bzl", "py_test")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+py_library(
+    name = "config_test",
+    srcs = [
+        "config.py",
+    ],
+    visibility = ["//visibility:public"]
+)
+
 
 py_test (
     name = "test_buffer",
     srcs = [
         "test_buffer.py"
     ],
+    deps = [
+        ":config_test"
+    ],
     data = [
-        "//lluvia/python:lluvia_wheel"
+        "//lluvia/python/src:pyx_library"
     ]
 )
 
@@ -15,8 +27,11 @@ py_test (
     srcs = [
         "test_compute.py"
     ],
+    deps = [
+        ":config_test"
+    ],
     data = [
-        "//lluvia/python:lluvia_wheel"
+        "//lluvia/python/src:pyx_library"
     ]
 )
 
@@ -25,8 +40,12 @@ py_test (
     srcs = [
         "test_image.py"
     ],
+    deps = [
+        ":config_test"
+    ],
     data = [
-        "//lluvia/python:lluvia_wheel"
+        "//lluvia/python/src:pyx_library",
+        "//lluvia/resources:resources",
     ]
 )
 
@@ -35,7 +54,10 @@ py_test (
     srcs = [
         "test_session.py"
     ],
+    deps = [
+        ":config_test"
+    ],
     data = [
-        "//lluvia/python:lluvia_wheel"
+        "//lluvia/python/src:pyx_library"
     ]
 )

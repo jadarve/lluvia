@@ -1,11 +1,11 @@
-import sys
 
 import pytest
 import numpy as np
-import lluvia as ll
 
 
 def test_creation():
+
+    import lluvia as ll
 
     session = ll.createSession()
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
@@ -27,6 +27,8 @@ def test_creation():
 
 def test_fromHost():
 
+    import lluvia as ll
+
     session = ll.createSession()
     mem = session.createMemory()
 
@@ -41,4 +43,8 @@ def test_fromHost():
 
 
 if __name__ == "__main__":
+
+    from config import add_lluvia_import_path
+    add_lluvia_import_path()
+
     raise SystemExit(pytest.main([__file__]))

@@ -1,12 +1,11 @@
-import sys
-
 import pytest
 import imageio
 import numpy as np
-import lluvia as ll
 
 
 def test_creation():
+
+    import lluvia as ll
 
     session = ll.createSession()
 
@@ -35,7 +34,10 @@ def test_creation():
     for f in img.usageFlags:
         assert(f in flags)
 
+
 def test_incorrectSize():
+
+    import lluvia as ll
 
     session = ll.createSession()
 
@@ -62,7 +64,9 @@ def test_incorrectSize():
 
 def test_imageFromHost():
 
-    img = imageio.imread('../resources/autumn.jpg')
+    import lluvia as ll
+
+    img = imageio.imread('lluvia/resources/autumn.jpg')
     imgRGBA = np.zeros(img.shape[:-1] + tuple([4]), dtype=img.dtype)
     imgRGBA[..., :3] = img
 
@@ -84,4 +88,8 @@ def test_imageFromHost():
 
 
 if __name__ == "__main__":
+
+    from config import add_lluvia_import_path
+    add_lluvia_import_path()
+
     raise SystemExit(pytest.main([__file__]))
