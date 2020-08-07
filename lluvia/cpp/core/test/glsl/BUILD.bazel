@@ -1,0 +1,43 @@
+load("@//lluvia/bazel/glsl:def.bzl", "glsl_shader")
+
+glsl_shader(
+    name = "assign_shader",
+    shader = "assign.comp",
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "image_to_buffer_shader",
+    shader = "imageToBuffer.comp",
+    deps = [
+        "//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "texture_to_buffer_shader",
+    shader = "textureToBuffer.comp",
+    deps = [
+        "//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "pushConstants_shader",
+    shader = "pushConstants.comp",
+    deps = [
+        "//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+glsl_shader(
+    name = "pushConstants2_shader",
+    shader = "pushConstants2.comp",
+    deps = [
+        "//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)

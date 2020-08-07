@@ -10,10 +10,5 @@ jobs:
       image: jadarve/lluvia:latest
     steps:
     - uses: actions/checkout@v1
-    - name: Bazel build
-      run: CC=clang bazel build //...
-    - name: lua_cc_library
-      run: CC=clang bazel build @lua//:lua_cc_library
-    - name: Python build
-      working-directory: ./python
-      run: CC=clang python3 setup.py build
+    - name: Build all
+      run: CC=clang bazel build //lluvia/...

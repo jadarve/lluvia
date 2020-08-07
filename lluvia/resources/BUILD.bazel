@@ -1,8 +1,7 @@
-
 filegroup(
-    name = "readme_file",
+    name = "resources",
     srcs = [
-        "README.md"
+        "autumn.jpg"
     ],
     visibility = ["//visibility:public"]
 )
