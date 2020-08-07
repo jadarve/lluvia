@@ -1,5 +1,4 @@
 import sys
-sys.path.append('../build/python/lib.linux-x86_64-3.6')
 
 import pytest
 import imageio
@@ -82,3 +81,7 @@ def test_imageFromHost():
 
     # pixel-wise check
     assert((hostImg[:] == imgRGBA[:]).all())
+
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__]))

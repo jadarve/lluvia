@@ -1,5 +1,4 @@
 import sys
-sys.path.append('../build/python/lib.linux-x86_64-3.6')
 
 import pytest
 import numpy as np
@@ -39,3 +38,7 @@ def test_fromHost():
 
     for i in range(len(arr)):
         assert(arr[i] == copy[i])
+
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__]))

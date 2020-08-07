@@ -1,0 +1,41 @@
+load("@rules_python//python:defs.bzl", "py_test")
+
+py_test (
+    name = "test_buffer",
+    srcs = [
+        "test_buffer.py"
+    ],
+    data = [
+        "//lluvia/python:lluvia_wheel"
+    ]
+)
+
+py_test (
+    name = "test_compute",
+    srcs = [
+        "test_compute.py"
+    ],
+    data = [
+        "//lluvia/python:lluvia_wheel"
+    ]
+)
+
+py_test (
+    name = "test_image",
+    srcs = [
+        "test_image.py"
+    ],
+    data = [
+        "//lluvia/python:lluvia_wheel"
+    ]
+)
+
+py_test (
+    name = "test_session",
+    srcs = [
+        "test_session.py"
+    ],
+    data = [
+        "//lluvia/python:lluvia_wheel"
+    ]
+)

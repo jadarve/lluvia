@@ -1,12 +1,15 @@
 import sys
-sys.path.append('../build/python/lib.linux-x86_64-3.6')
+import os
 
 import pytest
 import lluvia as ll
 
 
+
 def test_session():
 
+    # TODO: This still does not work with the py_wheel data dependency
+    #       AttributeError: module 'lluvia' has no attribute 'createSession'
     session = ll.createSession()
 
 
@@ -38,3 +41,7 @@ def test_memoryFlags():
             devFlagsFound = True
 
     assert(hostFlagsFound and devFlagsFound)
+
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__]))

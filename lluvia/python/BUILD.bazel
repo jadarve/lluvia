@@ -1,7 +1,7 @@
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 
 py_package(
-    name = "lluvia_python_package",
+    name = "lluvia_package",
     packages = [
         "lluvia",
         "lluvia.core",
@@ -11,7 +11,7 @@ py_package(
     deps = [
         "//lluvia/python/src:pyx_library"
     ],
-    visibility = ["//visibility:private"]
+    visibility = ["//visibility:public"]
 )
 
 py_wheel(
@@ -30,6 +30,6 @@ py_wheel(
         "lluvia/python/src",
     ],
     version = "0.0.1",
-    deps = [":lluvia_python_package"],
+    deps = [":lluvia_package"],
     visibility = ["//visibility:public"]
 )
