@@ -77,7 +77,7 @@ http_archive (
     ],
     sha256 = "b9957af46a04327d80833960ae51cf5e67765fd264389bd1e275294907f1a3e0",
     strip_prefix = "Catch2-2.11.0",
-    build_file = "@//third_party:catch.bzl"
+    build_file = "catch.bzl"
 )
 
 http_archive (
@@ -87,7 +87,7 @@ http_archive (
     ],
     sha256 = "bf089e50387edfc70063e24fd7fbb693cceba4a50147d864fabedd1b33483582",
     strip_prefix = "sol2-3.0.3",
-    build_file = "@//third_party:sol.bzl"
+    build_file = "sol.bzl"
 )
 
 new_git_repository(
@@ -95,7 +95,7 @@ new_git_repository(
     remote = "https://github.com/nothings/stb.git",
     commit = "f54acd4e13430c5122cab4ca657705c84aa61b08",
     shallow_since = "1580905940 -0800",
-    build_file = "@//third_party:stb.bzl"
+    build_file = "stb.bzl"
 )
 
 http_archive (
@@ -105,7 +105,7 @@ http_archive (
     ],
     sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac",
     strip_prefix = "lua-5.3.5",
-    build_file = "@//third_party:lua.bzl",
+    build_file = "lua.bzl",
 )
 
 http_archive(
@@ -113,7 +113,7 @@ http_archive(
     url = "https://github.com/cython/cython/archive/3.0a1.tar.gz",
     sha256 = "afd96c9113fc334ca14adea53900fa9e28d70a45b44a39e950825f85aed39b04",
     strip_prefix = "cython-3.0a1",
-    build_file = "@//third_party:cython.bzl",
+    build_file = "cython.bzl",
 )
 
 http_archive (
@@ -122,7 +122,7 @@ http_archive (
         "https://github.com/richgel999/miniz/releases/download/2.1.0/miniz-2.1.0.zip"
     ],
     sha256 = "d133132721ad5efbcda2507699d44c54b0da5e31379e4ff049d78d6b1a571f0d",
-    build_file = "@//third_party:miniz.bzl"
+    build_file = "miniz.bzl"
 )
 
 # TODO: need to support python 3.5, 3.6, ...

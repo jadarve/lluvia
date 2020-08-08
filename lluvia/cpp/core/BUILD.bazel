@@ -266,7 +266,6 @@ cc_test (
         "@catch//:catch_cc_library",
     ],
     data = [
-        # "//lluvia/cpp/core/test/nodes:Assign",
         "//lluvia/cpp/core/test/nodes:node_files",
         "//lluvia/cpp/core/test/nodes:test_node_library"
     ]
