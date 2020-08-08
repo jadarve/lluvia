@@ -30,7 +30,7 @@ def ll_node(
         name = shader_name,
         shader = shader,
         deps = deps,
-        visibility = ["//visibility:private"]
+        visibility = visibility
     )
 
     pkg_filegroup (
@@ -67,6 +67,7 @@ def ll_node_library(
         name = name,
         extension = "zip",
         package_dir = prefix,
-        srcs = nodes)
+        srcs = nodes,
+        visibility = visibility)
 
 

@@ -256,3 +256,18 @@ cc_test (
         "//lluvia/cpp/core/test/glsl:assign_shader"
     ]
 )
+
+cc_test (
+    name = "test_miniz",
+    srcs = ["test/test_miniz.cpp"],
+    copts = test_opts,
+    deps = [
+        "@miniz//:miniz_cc_library",
+        "@catch//:catch_cc_library",
+    ],
+    data = [
+        # "//lluvia/cpp/core/test/nodes:Assign",
+        "//lluvia/cpp/core/test/nodes:node_files",
+        "//lluvia/cpp/core/test/nodes:test_node_library"
+    ]
+)

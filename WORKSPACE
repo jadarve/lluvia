@@ -116,6 +116,14 @@ http_archive(
     build_file = "@//third_party:cython.bzl",
 )
 
+http_archive (
+    name = "miniz",
+    urls = [
+        "https://github.com/richgel999/miniz/releases/download/2.1.0/miniz-2.1.0.zip"
+    ],
+    sha256 = "d133132721ad5efbcda2507699d44c54b0da5e31379e4ff049d78d6b1a571f0d",
+    build_file = "@//third_party:miniz.bzl"
+)
 
 # TODO: need to support python 3.5, 3.6, ...
 new_local_repository(

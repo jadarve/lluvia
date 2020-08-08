@@ -1,0 +1,32 @@
+load("@//lluvia/bazel/node:def.bzl", "ll_node", "ll_node_library")
+
+
+ll_node(
+    name = "Assign",
+    shader = "Assign.comp",
+    builder = 'Assign.lua',
+    deps = [
+        "//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+
+ll_node_library(
+    name = "test_node_library",
+    prefix = "nodes",
+    nodes = [
+        ":Assign"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+filegroup(
+    name = "node_files",
+    srcs = [
+        "Assign.lua",
+        ":Assign_shader",
+        ":test_node_library"
+    ],
+    visibility = ["//visibility:public"]
+)
