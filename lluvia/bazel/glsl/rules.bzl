@@ -74,8 +74,10 @@ def _glsl_shader(ctx):
         files = [spirv]
     )
 
+    default_files = depset(direct=[spirv])
+
     return [
-        DefaultInfo(runfiles=runfiles)
+        DefaultInfo(files=default_files, runfiles=runfiles)
     ]
 
 

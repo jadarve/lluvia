@@ -1,0 +1,12 @@
+load("@//lluvia/bazel/node:def.bzl", "ll_node")
+
+
+ll_node(
+    name = "Sobel",
+    shader = "Sobel.comp",
+    builder = 'Sobel.lua',
+    deps = [
+        "//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
