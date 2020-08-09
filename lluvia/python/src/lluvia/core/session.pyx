@@ -216,7 +216,7 @@ cdef class Session:
         ----------
         name : string
             The name of the program in the registry.
-        
+
         program : string or lluvia.Program.
             If string, this parameter denotes a path to a SPIR-V file used to
             build the program. This is equivalent to call
@@ -232,10 +232,10 @@ cdef class Session:
         # if it is a path
         if type(program) is str:
             p = self.createProgram(program)
-        
+
         elif type(program) is Program:
             p = program
-        
+
         else:
             raise ValueError('Unknown type {0}, expecting string or ll.Program'.format(type(program)))
 
@@ -250,7 +250,7 @@ cdef class Session:
         name : string.
             Name of the program.
 
-        
+
         Returns
         -------
         program : lluvia.Program
@@ -432,6 +432,23 @@ cdef class Session:
 
         self.__session.get().scriptFile(impl.encodeString(filename))
 
+    def loadLibrary(self, str filename):
+        """
+        Loads a library made of SPIR-V shader code and Lua scripts.
+
+        Parameters
+        ----------
+        filename : string
+            Path to the library file. The file must be a valid
+            zip archive.
+
+        Raises
+        ------
+        RuntimeError : if there is problem reading the library file.
+        """
+
+        self.__session.get().loadLibrary(impl.encodeString(filename))
+
     def run(self, obj):
         """
         Runs a CommandBuffer or ComputeNode
@@ -448,7 +465,7 @@ cdef class Session:
         if type(obj) == ComputeNode:
             node = obj
             self.__session.get().run(deref(node.__node.get()))
-        
+
         elif type(obj) == ContainerNode:
             containerNode = obj
             self.__session.get().run(deref(containerNode.__node.get()))
@@ -456,11 +473,9 @@ cdef class Session:
         elif type(obj) == CommandBuffer:
             cmdBuffer = obj
             self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
-        
+
         else:
             raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
-
-        
 
     def compileProgram(self, shaderCode,
                        includeDirs=None,

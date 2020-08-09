@@ -11,13 +11,13 @@ layout (
 ) in;
 
 layout(binding = 0) buffer out0 {
-    float outputBuffer[];
+    float out_buffer[];
 };
 
 void main() {
 
     const uint index = gl_GlobalInvocationID.x;
-    outputBuffer[index] = index;
+    out_buffer[index] = index;
 }
 
 #endif // ASSIGN_COMP_

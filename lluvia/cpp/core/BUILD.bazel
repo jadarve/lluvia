@@ -52,6 +52,7 @@ cc_library (
             "-lvulkan",
             "-lm",
             "-ldl",
+            "-lstdc++fs",
         ],
         ":on_windows": [
         ],
@@ -59,6 +60,7 @@ cc_library (
     deps = [
         "@sol//:sol_cc_library",
         "@lua//:lua_cc_library",
+        "@miniz//:miniz_cc_library",
     ] + select({
         ":on_windows": [
             "@vulkan_windows//:vulkan",
@@ -268,5 +270,18 @@ cc_test (
     data = [
         "//lluvia/cpp/core/test/nodes:node_files",
         "//lluvia/cpp/core/test/nodes:test_node_library"
+    ]
+)
+
+cc_test (
+    name = "test_LoadLibrary",
+    srcs = ["test/test_LoadLibrary.cpp"],
+    copts = test_opts,
+    deps = [
+        ":core_cc_library",
+        "@catch//:catch_cc_library",
+    ],
+    data = [
+        "//lluvia/cpp/core/test/nodes:node_files"
     ]
 )
