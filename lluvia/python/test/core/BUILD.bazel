@@ -61,3 +61,17 @@ py_test (
         "//lluvia/python/src:pyx_library"
     ]
 )
+
+py_test (
+    name = "test_load_library",
+    srcs = [
+        "test_load_library.py"
+    ],
+    deps = [
+        ":config_test"
+    ],
+    data = [
+        "//lluvia/python/src:pyx_library",
+        "//lluvia/cpp/core/test/nodes:node_files",
+    ]
+)
