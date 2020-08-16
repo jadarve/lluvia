@@ -1,0 +1,11 @@
+load("@//lluvia/bazel/node:def.bzl", "ll_node_library")
+
+
+ll_node_library(
+    name = "lluvia_node_library",
+    prefix = "nodes",
+    nodes = [
+        "//lluvia/nodes/lluvia:Sobel"
+    ],
+    visibility = ["//visibility:public"]
+)

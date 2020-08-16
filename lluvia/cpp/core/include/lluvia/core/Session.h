@@ -333,6 +333,17 @@ public:
      */
     void scriptFile(const std::string& filename);
 
+    /**
+    @brief      Loads a library made of SPIR-V shader code and Lua scripts.
+    
+    @param[in]  filename  The path of the library file. It must be a valid
+                          zip archive.
+
+    @throws     std::system_error With error code ll::ErrorCode::IOError if there is
+                                  some problem reading the library archive.
+    */
+    void loadLibrary(const std::string& filename);
+
 
 private:
     // Session objects should be created through factory methods

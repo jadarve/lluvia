@@ -21,13 +21,42 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/Program.h"
 
+#include "lluvia/core/impl/ZipArchive.h"
+
 #include "lluvia/core/vulkan/Device.h"
 #include "lluvia/core/vulkan/Instance.h"
 
+#if defined(__GNUC__)
+// Ensure we get the 64-bit variants of the CRT's file I/O calls
+#ifndef _FILE_OFFSET_BITS
+#define _FILE_OFFSET_BITS 64
+#endif
+#ifndef _LARGEFILE64_SOURCE
+#define _LARGEFILE64_SOURCE 1
+#endif
+#endif
+
+#include "miniz.h"
+
+#include <cstring>
 #include <algorithm>
 #include <exception>
 #include <fstream>
 #include <iostream>
+
+
+#ifdef __linux__
+
+// at least in Ubuntu 18.04 and clang 6 <filesystem> is still in experimental
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+
+#elif _WIN32
+
+#include <filesystem>
+namespace fs = std::filesystem;
+
+#endif // OS switch
 
 namespace ll {
 
@@ -301,6 +330,34 @@ void Session::script(const std::string &code) {
 
 void Session::scriptFile(const std::string& filename) {
     m_interpreter->runFile(filename);
+}
+
+void Session::loadLibrary(const std::string& filename) {
+
+    constexpr const auto LUA_EXTENSION = ".lua";
+    constexpr const auto SPV_EXTENSION = ".spv";
+
+    auto archive = ll::impl::ZipArchive {filename};
+    const auto numberFiles = archive.numberFiles();
+    for (auto i = 0u; i < numberFiles; ++i) {
+        
+        auto stat = archive.getFileStat(i);
+        auto filepath = fs::path{stat.m_filename};
+
+        if (filepath.extension().string() == LUA_EXTENSION) {
+            
+            auto luaScript = archive.uncompressTextFile(stat);
+            script(luaScript);
+        }
+        else if (filepath.extension().string() == SPV_EXTENSION) {
+            auto spirv = archive.uncompressBinaryFile(stat);
+
+            auto program = createProgram(spirv);
+            auto programName = filepath.parent_path().append(filepath.stem().string());
+
+            setProgram(programName.string(), program);
+        }
+    }
 }
 
 

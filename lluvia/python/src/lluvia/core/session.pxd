@@ -58,6 +58,8 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         void script(const string& code) except +
         void scriptFile(const string& filename) except +
 
+        void loadLibrary(const string& filename) except +
+
 
 cdef class Session:
     cdef shared_ptr[_Session] __session
