@@ -68,6 +68,16 @@ def ll_node_library(
         extension = "zip",
         package_dir = prefix,
         srcs = nodes,
-        visibility = visibility)
-
-
+        visibility = visibility,
+    )
+    
+    # FIXME: pkg_zip generated archive is not accessible directly in the tests
+    #        I need to wrap it in a filegroup so that it appears in the runfiles
+    #        of targets.
+    native.filegroup(
+        name = name + ".runfiles",
+        srcs = [
+            ":" + name,
+        ],
+        visibility = visibility,
+    )
