@@ -43,7 +43,7 @@ private:
     mz_zip_archive mArchive{};
 };
 
-}
-}
+} // namespace impl
+} // namespace ll
 
 #endif // LLUVIA_CORE_IMPL_ZIP_ARCHIVE_H_
