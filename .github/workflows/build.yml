@@ -10,5 +10,7 @@ jobs:
       image: jadarve/lluvia:latest
     steps:
     - uses: actions/checkout@v1
+    - name: Install python deps
+      run: pip3 install --no-cache-dir jinja2 markupsafe
     - name: Build all
       run: CC=clang bazel build //lluvia/...
