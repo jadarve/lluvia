@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 MAINTAINER Juan David Adarve Bermudez <juanda0718@gmail.com>
 
-ENV LUNARG_VERSION="1.1.121"
+ENV LUNARG_VERSION="1.1.130"
 
 # First batch of packages
 RUN apt-get update \
@@ -22,8 +22,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Python
-RUN pip2 install --no-cache-dir cython numpy pytest
-RUN pip3 install --no-cache-dir cython numpy pytest
+RUN pip2 install --no-cache-dir cython numpy pytest jinja2 markupsafe
+RUN pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe
 
 # Vulkan SDK
 RUN wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc >> lunarg-signing-key-pub.asc
