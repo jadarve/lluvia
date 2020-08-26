@@ -20,7 +20,13 @@ def _expand_template(ctx):
         found = False
         for fg in ctx.attr.data:
             for f in fg.files.to_list():
-                if f.path == value:
+
+                # When lluvia is used as external dependency, the path to
+                # files within the repo have prefix "external/lluvia".
+                # Comparing the final part of the path with value enables
+                # matching the same file either if it is used from within the
+                # repo or as an external dependency
+                if f.path.endswith(value):
                     found = True
                     inputs.append(f)
                     args.add("-F", "{0}:{1}".format(key, f.path))
@@ -52,7 +58,7 @@ expand_template = rule(
         "file_vars": attr.string_dict(),
         "data": attr.label_list(allow_files=True),
         "_executable": attr.label(
-            default=Label("@//lluvia/tools/expand_template:expand_template"),
+            default=Label("@lluvia//lluvia/tools/expand_template:expand_template"),
             executable=True,
             allow_files=True,
             cfg="host")

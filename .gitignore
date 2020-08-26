@@ -77,3 +77,6 @@ bazel-bin
 bazel-lluvia
 bazel-out
 bazel-testlogs
+
+# CLion
+.clwb/

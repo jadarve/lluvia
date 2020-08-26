@@ -2,7 +2,8 @@
 """
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@//lluvia/bazel/expand_template:def.bzl", "expand_template")
+load("@lluvia//lluvia/bazel/expand_template:def.bzl", "expand_template")
+load("@lluvia//lluvia/bazel:config.bzl", "CC_TEST_COPTS")
 
 expand_template(
     name = "core_lua_cc_library_header",
@@ -11,23 +12,7 @@ expand_template(
         "LUA": "lluvia/lua/ll/library.lua"
     },
     data = [
-        "//lluvia/lua:ll_lua_library"
-    ],
-)
-
-
-
-config_setting(
-    name = "on_linux",
-    constraint_values = [
-        "@platforms//os:linux",
-    ],
-)
-
-config_setting(
-    name = "on_windows",
-    constraint_values = [
-        "@platforms//os:windows",
+        "@lluvia//lluvia/lua:ll_lua_library"
     ],
 )
 
@@ -37,32 +22,37 @@ cc_library (
     hdrs = glob(["include/**/*.h"]) + [":core_lua_cc_library_header"],
     strip_include_prefix = "include/",
     copts = select({
-        ":on_linux": [
+        "//lluvia:linux": [
             "-std=c++17",
             "-stdlib=libstdc++",
         ],
-        ":on_windows": [
+        "//lluvia:windows": [
             "/std:c++17",
             "/w",
         ],
     }),
     linkstatic = True,
     linkopts = select({
-        ":on_linux": [
+        "//lluvia:linux": [
             "-lvulkan",
             "-lm",
             "-ldl",
             "-lstdc++fs",
         ],
-        ":on_windows": [
+        "//lluvia:android": [
+            "-lvulkan",
+            "-lm",
+            "-ldl",
         ],
+        "//lluvia:windows": [],
     }),
     deps = [
         "@sol//:sol_cc_library",
         "@lua//:lua_cc_library",
         "@miniz//:miniz_cc_library",
+        "@vulkan//:vulkan_cc_library",
     ] + select({
-        ":on_windows": [
+        "//lluvia:windows": [
             "@vulkan_windows//:vulkan",
         ],
         "//conditions:default": [],
@@ -70,22 +60,10 @@ cc_library (
     visibility = ["//visibility:public"]
 )
 
-
-
-test_opts = select({
-    ":on_linux": [
-        "-std=c++17",
-    ],
-    ":on_windows": [
-        "/std:c++17",
-        "/w",
-    ],
-})
-
 cc_test (
     name = "test_Base64",
     srcs = ["test/test_Base64.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -95,7 +73,7 @@ cc_test (
 cc_test (
     name = "test_BufferCopy",
     srcs = ["test/test_BufferCopy.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -105,7 +83,7 @@ cc_test (
 cc_test (
     name = "test_BufferCreation",
     srcs = ["test/test_BufferCreation.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -115,7 +93,7 @@ cc_test (
 cc_test (
     name = "test_BufferMapping",
     srcs = ["test/test_BufferMapping.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -125,7 +103,7 @@ cc_test (
 cc_test (
     name = "test_ComputeNode",
     srcs = ["test/test_ComputeNode.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -138,7 +116,7 @@ cc_test (
 cc_test (
     name = "test_ComputeNodeImage",
     srcs = ["test/test_ComputeNodeImage.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -152,7 +130,7 @@ cc_test (
 cc_test (
     name = "test_ImageCreation",
     srcs = ["test/test_ImageCreation.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -162,7 +140,7 @@ cc_test (
 cc_test (
     name = "test_ImageCopy",
     srcs = ["test/test_ImageCopy.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -172,7 +150,7 @@ cc_test (
 cc_test (
     name = "test_Interpreter",
     srcs = ["test/test_Interpreter.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -182,7 +160,7 @@ cc_test (
 cc_test (
     name = "test_MemoryFreeSpaceManager",
     srcs = ["test/test_MemoryFreeSpaceManager.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -192,7 +170,7 @@ cc_test (
 cc_test (
     name = "test_ProgramCreation",
     srcs = ["test/test_ProgramCreation.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -205,7 +183,7 @@ cc_test (
 cc_test (
     name = "test_SessionCreation",
     srcs = ["test/test_SessionCreation.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -215,7 +193,7 @@ cc_test (
 cc_test (
     name = "test_utils",
     srcs = ["test/test_utils.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -225,7 +203,7 @@ cc_test (
 cc_test (
     name = "test_VulkanDriver",
     srcs = ["test/test_VulkanDriver.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -235,7 +213,7 @@ cc_test (
 cc_test (
     name = "test_PushConstants",
     srcs = ["test/test_PushConstants.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -249,7 +227,7 @@ cc_test (
 cc_test (
     name = "test_Duration",
     srcs = ["test/test_Duration.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library"
@@ -262,7 +240,7 @@ cc_test (
 cc_test (
     name = "test_miniz",
     srcs = ["test/test_miniz.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         "@miniz//:miniz_cc_library",
         "@catch//:catch_cc_library",
@@ -276,7 +254,7 @@ cc_test (
 cc_test (
     name = "test_LoadLibrary",
     srcs = ["test/test_LoadLibrary.cpp"],
-    copts = test_opts,
+    copts = CC_TEST_COPTS,
     deps = [
         ":core_cc_library",
         "@catch//:catch_cc_library",

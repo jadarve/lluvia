@@ -53,77 +53,10 @@ rules_pkg_dependencies()
 # download third-party dependencies
 ###########################################################
 
-# # accessible as @nlohmann_json//file
-# http_file (
-#     name = "nolhmann_json",
-#     urls = [
-#         "https://github.com/nlohmann/json/releases/download/v3.0.1/json.hpp"
-#     ],
-#     sha256 = "c9b3591f1bb94e723a0cd7be861733a3a555b234ef132be1e9027a0364118c4c",
-# )
+load("@lluvia//lluvia/bazel:workspace.bzl", "lluvia_workspace")
 
-http_file (
-    name = "cli11",
-    urls = [
-        "https://github.com/CLIUtils/CLI11/releases/download/v1.8.0/CLI11.hpp"
-    ],
-    sha256 = "2dfb4fa5171656ca1bfbbddee5131b8fddb1b83884da30643bfd217f57e91f06",
-)
+lluvia_workspace()
 
-http_archive (
-    name = "catch",
-    urls = [
-        "https://github.com/catchorg/Catch2/archive/v2.11.0.tar.gz"
-    ],
-    sha256 = "b9957af46a04327d80833960ae51cf5e67765fd264389bd1e275294907f1a3e0",
-    strip_prefix = "Catch2-2.11.0",
-    build_file = "catch.bzl"
-)
-
-http_archive (
-    name = "sol",
-    urls = [
-        "https://github.com/ThePhD/sol2/archive/v3.0.3.tar.gz"
-    ],
-    sha256 = "bf089e50387edfc70063e24fd7fbb693cceba4a50147d864fabedd1b33483582",
-    strip_prefix = "sol2-3.0.3",
-    build_file = "sol.bzl"
-)
-
-new_git_repository(
-    name = "stb",
-    remote = "https://github.com/nothings/stb.git",
-    commit = "f54acd4e13430c5122cab4ca657705c84aa61b08",
-    shallow_since = "1580905940 -0800",
-    build_file = "stb.bzl"
-)
-
-http_archive (
-    name = "lua",
-    urls = [
-        "https://www.lua.org/ftp/lua-5.3.5.tar.gz"
-    ],
-    sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac",
-    strip_prefix = "lua-5.3.5",
-    build_file = "lua.bzl",
-)
-
-http_archive(
-    name = "cython",
-    url = "https://github.com/cython/cython/archive/3.0a1.tar.gz",
-    sha256 = "afd96c9113fc334ca14adea53900fa9e28d70a45b44a39e950825f85aed39b04",
-    strip_prefix = "cython-3.0a1",
-    build_file = "cython.bzl",
-)
-
-http_archive (
-    name = "miniz",
-    urls = [
-        "https://github.com/richgel999/miniz/releases/download/2.1.0/miniz-2.1.0.zip"
-    ],
-    sha256 = "d133132721ad5efbcda2507699d44c54b0da5e31379e4ff049d78d6b1a571f0d",
-    build_file = "miniz.bzl"
-)
 
 # TODO: need to support python 3.5, 3.6, ...
 new_local_repository(
@@ -142,7 +75,7 @@ cc_library(
 
 new_local_repository(
     name = "numpy_linux",
-    path = "/usr/lib/python3/dist-packages/numpy/core",
+    path = "/usr/local/lib/python3.6/dist-packages/numpy/core",
     build_file_content = """
 cc_library(
     name = "numpy_cc_library",
@@ -155,7 +88,7 @@ cc_library(
 )
 
 
-load("//:lluvia/bazel/python/python_windows.bzl", "python_configure", "numpy_configure")
+load("//lluvia/bazel/python:python_windows.bzl", "python_configure", "numpy_configure")
 python_configure(name = "python_windows")
 numpy_configure(name = "numpy_windows")
 

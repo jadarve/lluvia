@@ -1,7 +1,7 @@
 """
 """
 
-load("//lluvia/bazel/expand_template:rules.bzl",
+load("@lluvia//lluvia/bazel/expand_template:rules.bzl",
     _expand_template = "expand_template")
 
 expand_template = _expand_template
