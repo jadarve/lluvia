@@ -5,6 +5,27 @@ workspace (
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
+###########################################################
+# Packaging rules
+###########################################################
+http_archive(
+    name = "rules_pkg",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.2.6/rules_pkg-0.2.6.tar.gz",
+    ],
+    sha256 = "aeca78988341a2ee1ba097641056d168320ecc51372ef7ff8e64b139516a4937",
+)
+load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
+rules_pkg_dependencies()
+
+
+###########################################################
+# download third-party dependencies
+###########################################################
+
+load("@lluvia//lluvia/bazel:workspace.bzl", "lluvia_workspace")
+
+lluvia_workspace()
 
 
 ###########################################################
@@ -33,29 +54,6 @@ pip3_import (
 
 load("@python_deps//:requirements.bzl", "pip_install")
 pip_install()
-
-
-###########################################################
-# Packaging rules
-###########################################################
-http_archive(
-    name = "rules_pkg",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.2.6/rules_pkg-0.2.6.tar.gz",
-    ],
-    sha256 = "aeca78988341a2ee1ba097641056d168320ecc51372ef7ff8e64b139516a4937",
-)
-load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
-rules_pkg_dependencies()
-
-
-###########################################################
-# download third-party dependencies
-###########################################################
-
-load("@lluvia//lluvia/bazel:workspace.bzl", "lluvia_workspace")
-
-lluvia_workspace()
 
 
 # TODO: need to support python 3.5, 3.6, ...
