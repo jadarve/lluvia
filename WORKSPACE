@@ -6,20 +6,6 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file"
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 ###########################################################
-# Packaging rules
-###########################################################
-http_archive(
-    name = "rules_pkg",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.2.6/rules_pkg-0.2.6.tar.gz",
-    ],
-    sha256 = "aeca78988341a2ee1ba097641056d168320ecc51372ef7ff8e64b139516a4937",
-)
-load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
-rules_pkg_dependencies()
-
-
-###########################################################
 # download third-party dependencies
 ###########################################################
 
@@ -35,21 +21,21 @@ lluvia_workspace()
 git_repository(
     name = "rules_python",
     remote = "https://github.com/bazelbuild/rules_python.git",
-    commit = "38f86fb55b698c51e8510c807489c9f4e047480e",
-    shallow_since = "1575517988 -0500",
+    commit = "6ed1fe53f8b36ecd404d98634d8e7411531cd6f8",
+    shallow_since = "1564776078 -0400",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
 # Only needed if using the packaging rules.
-load("@rules_python//python:pip.bzl", "pip_repositories", "pip3_import")
+load("@rules_python//python:pip.bzl", "pip_repositories", "pip_import")
 pip_repositories()
 
-
-pip3_import (
+pip_import (
    name = "python_deps",
    requirements = "//:requirements.txt",
+   python_interpreter = "python3",
 )
 
 load("@python_deps//:requirements.bzl", "pip_install")
@@ -105,3 +91,20 @@ cc_library(
     """
 )
 
+
+###########################################################
+# Packaging rules
+###########################################################
+
+http_archive(
+    name = "rules_pkg",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.2.6/rules_pkg-0.2.6.tar.gz",
+    ],
+    sha256 = "aeca78988341a2ee1ba097641056d168320ecc51372ef7ff8e64b139516a4937",
+)
+
+load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
+
+# FIXME: this macro downloads an old version of rules_python that breaks my build.
+rules_pkg_dependencies()

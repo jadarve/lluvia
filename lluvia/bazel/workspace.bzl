@@ -5,8 +5,6 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 
-# load("@rules_python//python:pip.bzl", "pip3_import")
-
 def lluvia_workspace():
     """Configure the workspace of an external project to work with the rules defined by Lluvia.
     """

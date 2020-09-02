@@ -44,20 +44,6 @@
 #include <fstream>
 #include <iostream>
 
-
-#ifdef __linux__
-
-// at least in Ubuntu 18.04 and clang 6 <filesystem> is still in experimental
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-
-#elif _WIN32
-
-#include <filesystem>
-namespace fs = std::filesystem;
-
-#endif // OS switch
-
 namespace ll {
 
 using namespace std;
@@ -336,26 +322,31 @@ void Session::loadLibrary(const std::string& filename) {
 
     constexpr const auto LUA_EXTENSION = ".lua";
     constexpr const auto SPV_EXTENSION = ".spv";
+    constexpr const auto EXTENSION_LENGTH = 4;
 
     auto archive = ll::impl::ZipArchive {filename};
     const auto numberFiles = archive.numberFiles();
     for (auto i = 0u; i < numberFiles; ++i) {
-        
-        auto stat = archive.getFileStat(i);
-        auto filepath = fs::path{stat.m_filename};
 
-        if (filepath.extension().string() == LUA_EXTENSION) {
-            
+        auto stat = archive.getFileStat(i);
+        auto filepath = std::string{stat.m_filename};
+
+        // ignore filepaths whose length is less than the extension length
+        if (filepath.size() < EXTENSION_LENGTH) {
+            continue;
+        }
+
+        if (filepath.compare(filepath.size() - EXTENSION_LENGTH, EXTENSION_LENGTH, LUA_EXTENSION) == 0) {
+
             auto luaScript = archive.uncompressTextFile(stat);
             script(luaScript);
         }
-        else if (filepath.extension().string() == SPV_EXTENSION) {
+        else if (filepath.compare(filepath.size() - EXTENSION_LENGTH, EXTENSION_LENGTH, SPV_EXTENSION) == 0) {
             auto spirv = archive.uncompressBinaryFile(stat);
 
             auto program = createProgram(spirv);
-            auto programName = filepath.parent_path().append(filepath.stem().string());
-
-            setProgram(programName.string(), program);
+            auto programName = filepath.substr(0, filepath.size() - EXTENSION_LENGTH);
+            setProgram(programName, program);
         }
     }
 }

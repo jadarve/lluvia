@@ -37,7 +37,6 @@ cc_library (
             "-lvulkan",
             "-lm",
             "-ldl",
-            "-lstdc++fs",
         ],
         "//lluvia:android": [
             "-lvulkan",
