@@ -40,7 +40,6 @@ def ll_node(
             builder,
         ],
         prefix = prefix,
-        # strip_prefix = TODO,
         visibility = visibility,
     )
 
