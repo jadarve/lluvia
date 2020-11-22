@@ -1,4 +1,4 @@
-load("@//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 
 
 ll_node(
@@ -6,7 +6,17 @@ ll_node(
     shader = "Sobel.comp",
     builder = 'Sobel.lua',
     deps = [
-        "//lluvia/glsl/lib:lluvia_glsl_library"
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+ll_node(
+    name = "RGBA2Gray",
+    shader = "RGBA2Gray.comp",
+    builder = 'RGBA2Gray.lua',
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library"
     ],
     visibility = ["//visibility:public"]
 )
