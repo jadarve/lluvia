@@ -378,11 +378,14 @@ void Session::initDevice() {
 
     // TODO: extensions
 
+
     const auto result = vk::createInstance(&instanceInfo, nullptr, &instance);
     ll::throwSystemErrorIf(result == vk::Result::eErrorIncompatibleDriver,
                            ll::ErrorCode::InconpatibleDriver, "Inconpatible driver.");
 
     m_instance = std::make_shared<ll::vulkan::Instance>(instance);
+
+//    m_instance->get().createDebugReportCallbackEXT();
 
     const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
     ll::throwSystemErrorIf(physicalDevices.empty(),
@@ -437,7 +440,7 @@ uint32_t Session::findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice
 
 std::vector<const char*> Session::getRequiredLayersNames() {
 
-    constexpr const auto validationLayer = "VK_LAYER_LUNARG_standard_validation";
+    constexpr const auto validationLayer = "VK_LAYER_KHRONOS_validation";
 
     auto layers = std::vector<const char*>{};
 
