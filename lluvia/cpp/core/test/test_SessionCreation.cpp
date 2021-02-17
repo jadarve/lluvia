@@ -11,9 +11,18 @@
 #include <iostream>
 #include "lluvia/core.h"
 
-TEST_CASE("DefaultParameters", "[SessionCreationTest]") {
+TEST_CASE("DefaultParameters", "SessionCreationTest") {
 
     auto session = ll::Session::create();
+}
+
+TEST_CASE("DebugEnabled", "SessionCreationTest") {
+
+    auto desc = ll::SessionDescriptor().enableDebug(true);
+
+    auto session = std::shared_ptr<ll::Session>{nullptr};
+    REQUIRE_NOTHROW(session = ll::Session::create(desc));
+    REQUIRE(session != nullptr);
 }
 
 
@@ -29,7 +38,7 @@ TEST_CASE("DefaultParameters", "[SessionCreationTest]") {
  *  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
  *
  */
-TEST_CASE("MemoryFlags", "[SessionCreationTest]") {
+TEST_CASE("MemoryFlags", "SessionCreationTest") {
     
     auto containFlags = [](const auto& flags, const auto& value) {
         return (flags & value) == value;

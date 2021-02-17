@@ -49,9 +49,12 @@ namespace ll {
 using namespace std;
 
 std::shared_ptr<ll::Session> Session::create() {
-    return std::shared_ptr<Session>{new Session()};;
+    return create(ll::SessionDescriptor {});
 }
 
+std::shared_ptr<ll::Session> Session::create(const ll::SessionDescriptor& descriptor) {
+    return std::shared_ptr<Session>{new Session(descriptor)};
+}
 
 std::vector<vk::LayerProperties> Session::getVulkanInstanceLayerProperties() {
     
@@ -65,7 +68,8 @@ std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties() {
 }
 
 
-Session::Session() {
+Session::Session(const ll::SessionDescriptor& descriptor):
+    m_descriptor {descriptor} {
 
     initDevice();
 
@@ -129,7 +133,7 @@ bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) 
 }
 
 
-std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) {
+std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch) {
     
     auto compareFlags = [](const auto &tFlags, const auto &value, bool tExactFlagsMatch) {
         return tExactFlagsMatch ? tFlags == value : (tFlags & value) == value;
@@ -214,7 +218,7 @@ std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const 
 
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
 
-    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {m_device, descriptor, m_interpreter}};
+    return std::make_shared<ll::ComputeNode>(m_device, descriptor, m_interpreter);
 }
 
 
@@ -244,7 +248,7 @@ ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string
 
 std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const ll::ContainerNodeDescriptor& descriptor) {
 
-    return std::shared_ptr<ll::ContainerNode> {new ll::ContainerNode {m_interpreter, descriptor}};
+    return std::make_shared<ll::ContainerNode>(m_interpreter, descriptor);
 }
 
 
@@ -361,10 +365,18 @@ void Session::initDevice() {
                    .setApplicationVersion(0)
                    .setEngineVersion(0)
                    .setPEngineName("lluvia")
-                   .setApiVersion(VK_MAKE_VERSION(1, 0, 65));
+                   .setApiVersion(VK_MAKE_VERSION(1u, 0u, 65u));
 
     auto instanceInfo = vk::InstanceCreateInfo()
                         .setPApplicationInfo(&appInfo);
+
+    auto requiredLayers = getRequiredLayersNames();
+    if (!requiredLayers.empty()) {
+        instanceInfo.setEnabledLayerCount(requiredLayers.size())
+                    .setPpEnabledLayerNames(&requiredLayers[0]);
+    }
+
+    // TODO: extensions
 
     const auto result = vk::createInstance(&instanceInfo, nullptr, &instance);
     ll::throwSystemErrorIf(result == vk::Result::eErrorIncompatibleDriver,
@@ -373,7 +385,7 @@ void Session::initDevice() {
     m_instance = std::make_shared<ll::vulkan::Instance>(instance);
 
     const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
-    ll::throwSystemErrorIf(physicalDevices.size() == 0,
+    ll::throwSystemErrorIf(physicalDevices.empty(),
         ll::ErrorCode::PhysicalDevicesNotFound, "No physical devices found in the system");
 
     // TODO: let user to choose physical device
@@ -408,7 +420,7 @@ uint32_t Session::findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice
     const auto queueProperties = physicalDevice.getQueueFamilyProperties();
 
     auto queueIndex = uint32_t {0};
-    for (auto prop : queueProperties) {
+    for (const auto& prop : queueProperties) {
 
         const auto compute = ((prop.queueFlags & vk::QueueFlagBits::eCompute) == vk::QueueFlagBits::eCompute);
 
@@ -421,6 +433,28 @@ uint32_t Session::findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice
 
     ll::throwSystemError(ll::ErrorCode::PhysicalDevicesNotFound, "No compute capable queue family found.");
     return 0;
+}
+
+std::vector<const char*> Session::getRequiredLayersNames() {
+
+    constexpr const auto validationLayer = "VK_LAYER_LUNARG_standard_validation";
+
+    auto layers = std::vector<const char*>{};
+
+    if (m_descriptor.isDebugEnabled()) {
+
+        const auto availableLayers = getVulkanInstanceLayerProperties();
+
+        auto predicate = [](const vk::LayerProperties& props) { return std::string(props.layerName) == validationLayer;};
+
+        const auto it = std::find_if(std::begin(availableLayers), std::end(availableLayers), predicate);
+
+        ll::throwSystemErrorIf(it == std::end(availableLayers), ll::ErrorCode::LayerNotFound, std::string("validation layer not found: ") + validationLayer);
+
+        layers.push_back(validationLayer);
+    }
+
+    return layers;
 }
 
 } // namespace ll
