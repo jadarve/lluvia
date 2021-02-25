@@ -39,7 +39,7 @@ TEST_CASE("test_error_unknown_method", "test_Interpreter") {
 TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
 {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     constexpr auto lua = R"(
@@ -67,11 +67,9 @@ TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
         ll.registerNodeBuilder('TestNode', builder)
 
     )";
-    // auto interpreter = std::make_unique<ll::Interpreter>();
 
-    session->script(lua);
+    REQUIRE_NOTHROW(session->script(lua));
 
     REQUIRE_THROWS_AS(session->createComputeNodeDescriptor("TestNode"), std::system_error);
-    
-    // REQUIRE_THROWS(interpreter->loadAndRun<ll::ComputeNodeDescriptor>(lua, "stringParamValue"));
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

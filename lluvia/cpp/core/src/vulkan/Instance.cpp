@@ -32,7 +32,7 @@ Instance::Instance(bool debugEnabled):
     ll::throwSystemErrorIf(result != vk::Result::eSuccess, ll::ErrorCode::InstanceCreationError, "error creating instance: " + vk::to_string(result));
 
     if (m_debugEnabled) {
-        
+
         m_dispatchLoaderDynamic = vk::DispatchLoaderDynamic(m_instance, vkGetInstanceProcAddr);
         m_dispatchLoaderDynamic.init(m_instance, vkGetInstanceProcAddr);
         ll::throwSystemErrorIf(m_dispatchLoaderDynamic.vkCreateDebugUtilsMessengerEXT == nullptr,

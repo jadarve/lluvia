@@ -27,7 +27,7 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     const auto deviceMemFlags = memflags::eDeviceLocal;
     const auto hostMemFlags = memflags::eHostCoherent | memflags::eHostVisible;
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     
@@ -106,4 +106,5 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
         }
     }
 
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

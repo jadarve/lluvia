@@ -15,26 +15,6 @@ using memflags = vk::MemoryPropertyFlagBits;
 #define __attribute__()
 #endif
 
-struct binding {
-
-    binding(const uint32_t tIndex, const std::shared_ptr<ll::Object>& tObject) :
-        index  {tIndex},
-        object {tObject} {
-
-    }
-
-    const uint32_t index;
-    const std::shared_ptr<ll::Object>& object;
-};
-
-void configureComputeNode(
-    __attribute__((unused)) std::shared_ptr<ll::ComputeNode>& node,
-    __attribute__((unused)) const ll::vec3ui&& globalSize,
-    __attribute__((unused)) std::initializer_list<std::pair<uint32_t, const std::shared_ptr<ll::Object>&> > bindings
-    ) {
-
-}
-
 
 TEST_CASE("createInitImage", "test_utils") {
 
@@ -51,11 +31,13 @@ TEST_CASE("createInitImage", "test_utils") {
     const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, vk::ImageTiling::eOptimal};
 
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     auto memory = session->createMemory(memoryFlags, 0);
 
     // could create several images at the same time
     auto image = ll::createAndInitImage(session, memory, imgDesc, vk::ImageLayout::eGeneral);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
@@ -73,7 +55,7 @@ TEST_CASE("configureGraph", "test_utils") {
 
     const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, vk::ImageTiling::eOptimal};
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     auto memory = session->createMemory(memoryFlags, 0);
 
     const auto RGBADesc = ll::ImageDescriptor(imgDesc).setChannelCount(ll::ChannelCount::C4);
@@ -90,4 +72,6 @@ TEST_CASE("configureGraph", "test_utils") {
     //                     );
 
     // {RGBA->getWidth(), RGBA->getHeight(), RGBA->getDepth()}
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

@@ -23,6 +23,8 @@ TEST_CASE("DebugEnabled", "SessionCreationTest") {
     auto session = std::shared_ptr<ll::Session>{nullptr};
     REQUIRE_NOTHROW(session = ll::Session::create(desc));
     REQUIRE(session != nullptr);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
@@ -44,7 +46,7 @@ TEST_CASE("MemoryFlags", "SessionCreationTest") {
         return (flags & value) == value;
     };
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
 
     auto memoryFlags = session->getSupportedMemoryFlags();
 
@@ -66,4 +68,6 @@ TEST_CASE("MemoryFlags", "SessionCreationTest") {
     }
 
     REQUIRE((hostFlagsFound && deviceFlagsFound) == true);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

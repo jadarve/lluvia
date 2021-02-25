@@ -15,7 +15,7 @@
 
 TEST_CASE("LoadLibrary", "test_LoadLibrary") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
 
     REQUIRE_NOTHROW(session->loadLibrary("lluvia/cpp/core/test/nodes/test_node_library.zip"));
 
@@ -28,4 +28,6 @@ TEST_CASE("LoadLibrary", "test_LoadLibrary") {
     auto node = std::shared_ptr<ll::ComputeNode>{nullptr};
     REQUIRE_NOTHROW(node = session->createComputeNode(desc));
     REQUIRE(node != nullptr);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

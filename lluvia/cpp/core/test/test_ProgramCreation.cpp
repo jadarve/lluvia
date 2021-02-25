@@ -83,7 +83,7 @@ auto spirv = std::vector<uint8_t> {{
 
 TEST_CASE("NullProgram", "test_ProgramCreation") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     REQUIRE_THROWS_AS(session->createProgram("noExist.spv"), std::system_error);
@@ -92,39 +92,45 @@ TEST_CASE("NullProgram", "test_ProgramCreation") {
 
 TEST_CASE("FromFile", "test_ProgramCreation") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
     REQUIRE(program != nullptr);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
 TEST_CASE("FromSPIRV", "test_ProgramCreation") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     auto program = session->createProgram(spirv);
     REQUIRE(program != nullptr);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
 TEST_CASE("FromSPIRV_empty", "test_ProgramCreation") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     std::vector<uint8_t> emptySpirv {};
 
     REQUIRE_THROWS_AS(session->createProgram(emptySpirv), std::system_error);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 TEST_CASE("SetInProgramRegistry", "test_ProgramCreation") {
 
     std::cout << "SetInProgramRegistry" << std::endl;
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
@@ -132,14 +138,14 @@ TEST_CASE("SetInProgramRegistry", "test_ProgramCreation") {
 
     session->setProgram("assign", program);
     // session and program should be destroyed gracefully.
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
 /**
 
-NOTE: This test does not pass as no exception is thrown
-after corrupting the SPIR-V code. The following error message is
-displayed when having the validation layer active.
+NOTE: This test expects to receive a warning message like this:
 
 {code}
 
@@ -154,14 +160,17 @@ Validation(ERROR): msg_code: 5: Object: VK_NULL_HANDLE (Type = 0) | SPIR-V modul
 
 {encode}
 */
-// TEST_CASE("FromSPIRV_corrupted", "test_ProgramCreation") {
+ TEST_CASE("FromSPIRV_corrupted", "test_ProgramCreation") {
 
-//     auto session = ll::Session::create();
-//     REQUIRE(session != nullptr);
+     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+     REQUIRE(session != nullptr);
 
-//     auto spirvCorrupted = spirv;
-//     spirvCorrupted[120] = 0;
-//     spirvCorrupted[150] = 0;
+     auto spirvCorrupted = spirv;
+     spirvCorrupted[120] = 0;
+     spirvCorrupted[150] = 0;
 
-//     REQUIRE_THROWS_AS(session->createProgram(spirvCorrupted), std::system_error);
-// }
+    REQUIRE_NOTHROW(session->createProgram(spirvCorrupted));
+
+     // I expect to receive a warning message
+     REQUIRE(ll::hasReceivedVulkanWarningMessages());
+ }

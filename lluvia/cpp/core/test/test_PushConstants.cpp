@@ -64,7 +64,7 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
     constexpr const float constantValue = 3.1415f;
     constexpr const size_t N{32};
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     auto constants = ll::PushConstants{};
@@ -105,6 +105,8 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
             REQUIRE(bufferMap[i] == constantValue);
         }
     }
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 TEST_CASE("Push2Constants", "test_PushConstants")
@@ -114,7 +116,7 @@ TEST_CASE("Push2Constants", "test_PushConstants")
     constexpr const float secondValue = 0.7896f;
     constexpr const size_t N{32};
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     auto constants = ll::PushConstants{};
@@ -162,4 +164,6 @@ TEST_CASE("Push2Constants", "test_PushConstants")
             
         }
     }
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

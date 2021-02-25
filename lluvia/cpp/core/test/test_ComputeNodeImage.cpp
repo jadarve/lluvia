@@ -26,7 +26,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
     using memflags = vk::MemoryPropertyFlagBits;
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
@@ -72,7 +72,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setNormalizedCoordinates(false)
                         .setIsSampled(true)
-                        .setAddressMode(ll::ImageAddressMode::Repeat)
+                        .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                         .setFilterMode(ll::ImageFilterMode::Nearest);
 
     auto imageView = image->createImageView(imgViewDesc);
@@ -129,6 +129,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
         }
     } // unmap bufMapped and outMapped
 
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
@@ -145,7 +146,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
 
     using memflags = vk::MemoryPropertyFlagBits;
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
@@ -191,7 +192,8 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     // image view descriptor for a storage image
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setNormalizedCoordinates(false)
-                        .setIsSampled(false);
+                        .setIsSampled(false)
+                        .setAddressMode(ll::ImageAddressMode::ClampToEdge);
 
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
@@ -247,4 +249,5 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
         }
     } // unmap bufMapped and outMapped
 
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

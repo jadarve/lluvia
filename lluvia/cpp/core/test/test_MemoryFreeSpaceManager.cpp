@@ -552,9 +552,3 @@ TEST_CASE("offset_AARAR", "test_MemoryFreeSpaceManager") {
     auto sizeVector = std::vector<uint64_t>{size - sizeC};
     checkMemory(manager, offsetVector, sizeVector);
 }
-
-// int main(int argc, char **argv) {
-    
-//     testing::InitGoogleTEST_CASE("&argc", "[argv]");
-//     return RUN_ALL_TESTS();
-// }

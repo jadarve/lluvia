@@ -14,7 +14,7 @@
 
 TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
@@ -53,12 +53,14 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
 
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
 TEST_CASE("InvalidImageSize", "test_ImageCreation") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
@@ -104,4 +106,6 @@ TEST_CASE("InvalidImageSize", "test_ImageCreation") {
         .setDepth(0)
         .setChannelCount(ll::ChannelCount::C1);
     REQUIRE_THROWS_AS(memory->createImage(desc), std::system_error);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
