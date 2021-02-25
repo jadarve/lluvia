@@ -366,8 +366,6 @@ private:
     Session(const ll::SessionDescriptor& descriptor);
 
     void initDevice();
-    std::vector<const char*> getRequiredLayersNames();
-
 
     const ll::SessionDescriptor              m_descriptor;
 

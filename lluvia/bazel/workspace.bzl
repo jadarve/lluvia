@@ -32,10 +32,10 @@ def lluvia_workspace():
         repo_rule = http_archive,
         name = "vulkan",
         urls = [
-            "https://github.com/KhronosGroup/Vulkan-Headers/archive/v1.1.130.zip",
+            "https://github.com/KhronosGroup/Vulkan-Headers/archive/v1.2.162.zip",
         ],
-        sha256 = "968e5f6670ea883222c93ef6be176f2310fe0ec51e3be84e3e65542ce45cc348",
-        strip_prefix = "Vulkan-Headers-1.1.130",
+        sha256 = "5f4e1dd009f401d3936b5f3440c7f0d9b7ca40f217f3999e90e55cba1d397de3",
+        strip_prefix = "Vulkan-Headers-1.2.162",
         build_file = "@lluvia//:external/vulkan.bzl"
     )
 

@@ -42,9 +42,11 @@ enum class ErrorCode : int32_t {
     PushConstantError,         /**< Error regarding push constant operation*/
     IOError,                   /**< IO Error accessing files*/
     InvalidArgument,           /**< Invalid argument*/
-    InconpatibleDriver,        /**< Incompatible driver */
+    InstanceCreationError,     /**< Incompatible driver */
     SessionLost,               /**< An object is trying to access a Session already destroyed */
     LayerNotFound,             /**< A layer required to create a Session was not found */
+    ExtensionNotFound,         /**< An extension required to create a Session was not found */
+    PipelineCreationError,     /**< Error creating a vulkan pipeline object */
 };
 
 namespace impl {
@@ -52,7 +54,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 22> ErrorCodeStrings{{
+constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 24> ErrorCodeStrings{{
     std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
     std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
     std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
@@ -72,9 +74,11 @@ constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 22> ErrorCod
     std::make_tuple("PushConstantError", ll::ErrorCode::PushConstantError),
     std::make_tuple("IOError", ll::ErrorCode::IOError),
     std::make_tuple("InvalidArgument", ll::ErrorCode::InvalidArgument),
-    std::make_tuple("InconpatibleDriver", ll::ErrorCode::InconpatibleDriver),
+    std::make_tuple("InstanceCreationError", ll::ErrorCode::InstanceCreationError),
     std::make_tuple("SessionLost", ll::ErrorCode::SessionLost),
     std::make_tuple("LayerNotFound", ll::ErrorCode::LayerNotFound),
+    std::make_tuple("ExtensionNotFound", ll::ErrorCode::ExtensionNotFound),
+    std::make_tuple("PipelineCreationError", ll::ErrorCode::PipelineCreationError),
 }};
 
 } // namespace impl

@@ -8,7 +8,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <iostream>
 #include <vulkan/vulkan.hpp>
 
 
@@ -31,4 +30,3 @@ TEST_CASE("create_instance", "test_VulkanDriver") {
 
     instance.destroy();
 }
-

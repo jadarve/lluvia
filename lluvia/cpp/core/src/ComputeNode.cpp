@@ -135,7 +135,10 @@ void ComputeNode::initPipeline() {
         .setLayout(m_pipelineLayout);
 
     // create the compute pipeline
-    m_pipeline = m_device->get().createComputePipeline(nullptr, computePipeInfo);
+    auto result = m_device->get().createComputePipeline(nullptr, computePipeInfo);
+    ll::throwSystemErrorIf(result.result != vk::Result::eSuccess, ll::ErrorCode ::PipelineCreationError, "error creating vulkan compute pipeline for node.");
+
+    m_pipeline = result.value;
 }
 
 

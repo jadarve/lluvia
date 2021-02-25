@@ -122,6 +122,13 @@ cc_test (
 )
 
 cc_test (
+    name = "test_Instance",
+    srcs = ["test/test_Instance.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = CORE_TEST_DEPS,
+)
+
+cc_test (
     name = "test_ImageCopy",
     srcs = ["test/test_ImageCopy.cpp"],
     copts = CC_TEST_COPTS,

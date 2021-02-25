@@ -4,7 +4,6 @@
 @copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
-
 #include "lluvia/core/Session.h"
 
 #include "lluvia/core/Buffer.h"
@@ -60,7 +59,6 @@ std::vector<vk::LayerProperties> Session::getVulkanInstanceLayerProperties() {
     
     return vk::enumerateInstanceLayerProperties();
 }
-
 
 std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties() {
     
@@ -358,34 +356,66 @@ void Session::loadLibrary(const std::string& filename) {
 
 void Session::initDevice() {
 
-    auto instance = vk::Instance {};
-
-    auto appInfo = vk::ApplicationInfo()
-                   .setPApplicationName("lluvia")
-                   .setApplicationVersion(0)
-                   .setEngineVersion(0)
-                   .setPEngineName("lluvia")
-                   .setApiVersion(VK_MAKE_VERSION(1u, 0u, 65u));
-
-    auto instanceInfo = vk::InstanceCreateInfo()
-                        .setPApplicationInfo(&appInfo);
-
-    auto requiredLayers = getRequiredLayersNames();
-    if (!requiredLayers.empty()) {
-        instanceInfo.setEnabledLayerCount(requiredLayers.size())
-                    .setPpEnabledLayerNames(&requiredLayers[0]);
-    }
-
-    // TODO: extensions
 
 
-    const auto result = vk::createInstance(&instanceInfo, nullptr, &instance);
-    ll::throwSystemErrorIf(result == vk::Result::eErrorIncompatibleDriver,
-                           ll::ErrorCode::InconpatibleDriver, "Inconpatible driver.");
+    // WTF: with this app info and create into, everything works!
+//    auto appInfo = vk::ApplicationInfo()
+//                   .setPApplicationName("lluvia")
+//                   .setApplicationVersion(0)
+//                   .setEngineVersion(0)
+//                   .setPEngineName("lluvia")
+//                   .setApiVersion(VK_MAKE_VERSION(1u, 2u, 162u));
+//
+//
+//    const auto extensions = std::vector<const char*>{"VK_EXT_debug_utils"};
+//    const auto layers = std::vector<const char*>{"VK_LAYER_KHRONOS_validation"};
+//
+//    vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
+//            .setEnabledExtensionCount(extensions.size())
+//            .setPpEnabledExtensionNames(&extensions[0])
+//            .setEnabledLayerCount(layers.size())
+//            .setPpEnabledLayerNames(&layers[0])
+//            .setPApplicationInfo(&appInfo);
 
-    m_instance = std::make_shared<ll::vulkan::Instance>(instance);
+//    auto appInfo = vk::ApplicationInfo()
+//                   .setPApplicationName("lluvia")
+//                   .setApplicationVersion(0)
+//                   .setEngineVersion(0)
+//                   .setPEngineName("lluvia");
+////                   .setApiVersion(VK_MAKE_VERSION(1u, 0u, 65u));
+//
+//    auto instanceInfo = vk::InstanceCreateInfo()
+//                        .setPApplicationInfo(&appInfo);
+//
+//    auto requiredLayers = getRequiredLayersNames();
+//    if (!requiredLayers.empty()) {
+//        instanceInfo.setEnabledLayerCount(requiredLayers.size())
+//                    .setPpEnabledLayerNames(&requiredLayers[0]);
+//    }
+//
+//    auto requiredExtensions = getRequiredExtensionNames();
+//    if (!requiredExtensions.empty()) {
+//        for (const auto& name : requiredExtensions) {
+//            std::cout << "EXTENSION: " << name << std::endl;
+//        }
+//
+//        instanceInfo.setEnabledExtensionCount(requiredExtensions.size())
+//                    .setPpEnabledExtensionNames(&requiredExtensions[0]);
+//    }
+//
+//    for (const auto& name : requiredLayers) {
+//        std::cout << "LAYER: " << name << std::endl;
+//    }
+//
 
-//    m_instance->get().createDebugReportCallbackEXT();
+    m_instance = std::make_shared<ll::vulkan::Instance>(m_descriptor.isDebugEnabled());
+
+//    auto dispatchLoaderDynamic = vk::DispatchLoaderDynamic(instance, vkGetInstanceProcAddr);
+//    ll::throwSystemErrorIf(dispatchLoaderDynamic.vkCreateDebugUtilsMessengerEXT == nullptr, ErrorCode::ExtensionNotFound, "initDevice(): bad dispatcher");
+
+//    m_dispatchLoaderDynamic = vk::DispatchLoaderDynamic(instance, vkGetInstanceProcAddr);
+//    m_dispatchLoaderDynamic.init(instance, vkGetInstanceProcAddr);
+//    ll::throwSystemErrorIf(m_dispatchLoaderDynamic.vkCreateDebugUtilsMessengerEXT == nullptr, ErrorCode::ExtensionNotFound, "initDevice(): bad dispatcher");
 
     const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
     ll::throwSystemErrorIf(physicalDevices.empty(),
@@ -436,28 +466,6 @@ uint32_t Session::findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice
 
     ll::throwSystemError(ll::ErrorCode::PhysicalDevicesNotFound, "No compute capable queue family found.");
     return 0;
-}
-
-std::vector<const char*> Session::getRequiredLayersNames() {
-
-    constexpr const auto validationLayer = "VK_LAYER_KHRONOS_validation";
-
-    auto layers = std::vector<const char*>{};
-
-    if (m_descriptor.isDebugEnabled()) {
-
-        const auto availableLayers = getVulkanInstanceLayerProperties();
-
-        auto predicate = [](const vk::LayerProperties& props) { return std::string(props.layerName) == validationLayer;};
-
-        const auto it = std::find_if(std::begin(availableLayers), std::end(availableLayers), predicate);
-
-        ll::throwSystemErrorIf(it == std::end(availableLayers), ll::ErrorCode::LayerNotFound, std::string("validation layer not found: ") + validationLayer);
-
-        layers.push_back(validationLayer);
-    }
-
-    return layers;
 }
 
 } // namespace ll
