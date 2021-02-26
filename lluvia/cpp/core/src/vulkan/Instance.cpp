@@ -17,9 +17,8 @@ Instance::Instance(bool debugEnabled):
             .setPEngineName("lluvia")
             .setApiVersion(VK_MAKE_VERSION(1u, 2u, 162u));
 
-
-    const auto extensions = std::vector<const char*>{"VK_EXT_debug_utils"};
-    const auto layers = std::vector<const char*>{"VK_LAYER_KHRONOS_validation"};
+    const auto extensions = getRequiredExtensionNames();
+    const auto layers = getRequiredLayersNames();
 
     vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
             .setEnabledExtensionCount(extensions.size())
@@ -33,10 +32,17 @@ Instance::Instance(bool debugEnabled):
 
     if (m_debugEnabled) {
 
+#ifdef __ANDROID__
+        m_dispatchLoaderDynamic = vk::DispatchLoaderDynamic();
+        m_dispatchLoaderDynamic.init(m_instance);
+#else
         m_dispatchLoaderDynamic = vk::DispatchLoaderDynamic(m_instance, vkGetInstanceProcAddr);
         m_dispatchLoaderDynamic.init(m_instance, vkGetInstanceProcAddr);
+#endif
         ll::throwSystemErrorIf(m_dispatchLoaderDynamic.vkCreateDebugUtilsMessengerEXT == nullptr,
                                ErrorCode::InstanceCreationError, "error loading vkCreateDebugUtilsMessengerEXT using a DispatchLoaderDynamic");
+        ll::throwSystemErrorIf(m_dispatchLoaderDynamic.vkDestroyDebugUtilsMessengerEXT == nullptr,
+                               ErrorCode::InstanceCreationError, "error loading vkDestroyDebugUtilsMessengerEXT using a DispatchLoaderDynamic");
 
         m_debugMessenger = m_instance.createDebugUtilsMessengerEXT(
                 vk::DebugUtilsMessengerCreateInfoEXT{{},
