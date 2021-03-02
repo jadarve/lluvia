@@ -1,7 +1,19 @@
+/**
+@file       Instance.cpp
+@brief      Instance class.
+@copyright  2021, Juan David Adarve Bermudez. See AUTHORS for more details.
+            Distributed under the Apache-2 license, see LICENSE for more details.
+*/
+
+// define this macro to use Vulkan's dynamic dispatcher by default
+#define VULKAN_HPP_DISPATCH_LOADER_DYNAMIC 1
 #include "lluvia/core/vulkan/Instance.h"
 
 #include "lluvia/core/error.h"
 #include "lluvia/core/debug_utils.h"
+
+// reserve space for the dynamic dispatch loader function pointers.
+VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
 #include <iostream>
 
@@ -9,6 +21,10 @@ namespace ll::vulkan {
 
 Instance::Instance(bool debugEnabled):
     m_debugEnabled{debugEnabled} {
+
+    auto dl = vk::DynamicLoader{};
+    auto vkGetInstanceProcAddr = dl.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
+    VULKAN_HPP_DEFAULT_DISPATCHER.init(vkGetInstanceProcAddr);
 
     auto appInfo = vk::ApplicationInfo()
             .setPApplicationName("lluvia")
@@ -30,18 +46,13 @@ Instance::Instance(bool debugEnabled):
     const auto result = vk::createInstance(&instanceInfo, nullptr, &m_instance);
     ll::throwSystemErrorIf(result != vk::Result::eSuccess, ll::ErrorCode::InstanceCreationError, "error creating instance: " + vk::to_string(result));
 
+    VULKAN_HPP_DEFAULT_DISPATCHER.init(m_instance);
+
     if (m_debugEnabled) {
 
-#ifdef __ANDROID__
-        m_dispatchLoaderDynamic = vk::DispatchLoaderDynamic();
-        m_dispatchLoaderDynamic.init(m_instance);
-#else
-        m_dispatchLoaderDynamic = vk::DispatchLoaderDynamic(m_instance, vkGetInstanceProcAddr);
-        m_dispatchLoaderDynamic.init(m_instance, vkGetInstanceProcAddr);
-#endif
-        ll::throwSystemErrorIf(m_dispatchLoaderDynamic.vkCreateDebugUtilsMessengerEXT == nullptr,
+        ll::throwSystemErrorIf(VULKAN_HPP_DEFAULT_DISPATCHER.vkCreateDebugUtilsMessengerEXT == nullptr,
                                ErrorCode::InstanceCreationError, "error loading vkCreateDebugUtilsMessengerEXT using a DispatchLoaderDynamic");
-        ll::throwSystemErrorIf(m_dispatchLoaderDynamic.vkDestroyDebugUtilsMessengerEXT == nullptr,
+        ll::throwSystemErrorIf(VULKAN_HPP_DEFAULT_DISPATCHER.vkDestroyDebugUtilsMessengerEXT == nullptr,
                                ErrorCode::InstanceCreationError, "error loading vkDestroyDebugUtilsMessengerEXT using a DispatchLoaderDynamic");
 
         m_debugMessenger = m_instance.createDebugUtilsMessengerEXT(
@@ -53,8 +64,8 @@ Instance::Instance(bool debugEnabled):
                                                      vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
                                                      vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
                                                      vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance,
-                                                     ll::debugCallback},
-                nullptr, m_dispatchLoaderDynamic);
+                                                     &ll::debugCallback,
+                                                     nullptr});
     }
 }
 
@@ -62,7 +73,7 @@ Instance::Instance(bool debugEnabled):
 Instance::~Instance() {
 
     if (m_debugEnabled) {
-        m_instance.destroyDebugUtilsMessengerEXT(m_debugMessenger, nullptr, m_dispatchLoaderDynamic);
+        m_instance.destroyDebugUtilsMessengerEXT(m_debugMessenger);
     }
 
     m_instance.destroy();
@@ -102,13 +113,13 @@ std::vector<const char*> Instance::getRequiredLayersNames() {
 
 std::vector<const char*> Instance::getRequiredExtensionNames() {
 
-    constexpr const auto debugUtilsExtensionName = "VK_EXT_debug_utils";
+    constexpr const auto debugUtilsExtensionName = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
 
     auto extensions = std::vector<const char*>{};
 
     if (m_debugEnabled) {
 
-        const auto availableExtensions = vk::enumerateInstanceExtensionProperties();
+        const auto availableExtensions = vk::enumerateInstanceExtensionProperties(std::string{"VK_LAYER_KHRONOS_validation"});
 
         auto predicate = [](const vk::ExtensionProperties& props) { return std::string(props.extensionName) == debugUtilsExtensionName;};
 

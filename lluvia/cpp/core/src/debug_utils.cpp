@@ -20,9 +20,6 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBits
 
     if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
         messagesReceived.store(true, std::memory_order_release);
-
-        // TODO: For android, use log library
-        std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
     }
 
 #ifdef __ANDROID__
@@ -44,26 +41,31 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBits
     if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
         severityString = error;
         priority = ANDROID_LOG_ERROR;
-    }
-    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+    } else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
         severityString = warning;
         priority = ANDROID_LOG_WARN;
     }
+
     if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT) {
         typeString = validation;
-    }
-    else if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT) {
+    } else if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT) {
         typeString = performance;
     }
 
     __android_log_print(priority,
-                       "AppName",
+                       "Lluvia",
                        "%s %s: [%s] Code %i : %s",
                        typeString,
                        severityString,
                        messageIdName,
                        messageIdNumber,
                        message);
+#else
+
+    if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+        std::cerr << "Lluvia: " << pCallbackData->pMessage << std::endl;
+    }
+
 #endif
 
     return VK_FALSE;

@@ -4,8 +4,7 @@
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/CommandBuffer.h"
 
-namespace ll {
-namespace vulkan {
+namespace ll::vulkan {
 
 Device::Device(const vk::Device& device,
                const vk::PhysicalDevice& physicalDevice,
@@ -67,13 +66,10 @@ bool Device::isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) c
     }
 
     // check extend
-    if (descriptor.getWidth() > formatProperties.maxExtent.width ||
-        descriptor.getHeight() > formatProperties.maxExtent.height ||
-        descriptor.getDepth() > formatProperties.maxExtent.depth) {
-        return false;
-    }
+    return !(descriptor.getWidth() > formatProperties.maxExtent.width ||
+             descriptor.getHeight() > formatProperties.maxExtent.height ||
+             descriptor.getDepth() > formatProperties.maxExtent.depth);
 
-    return true;
 }
 
 
@@ -92,5 +88,4 @@ void Device::run(const ll::CommandBuffer& cmdBuffer) {
     m_queue.waitIdle();
 }
 
-} // namespace vulkan
-} // namespace ll
+} // namespace ll::lluvia

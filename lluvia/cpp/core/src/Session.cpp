@@ -4,6 +4,9 @@
 @copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
+
+// define this macro to use Vulkan's dynamic dispatcher by default
+#define VULKAN_HPP_DISPATCH_LOADER_DYNAMIC 1
 #include "lluvia/core/Session.h"
 
 #include "lluvia/core/Buffer.h"
@@ -444,6 +447,7 @@ void Session::initDevice() {
                          .setPEnabledFeatures(&desiredFeatures);
 
     auto device = physicalDevice.createDevice(devCreateInfo);
+    VULKAN_HPP_DEFAULT_DISPATCHER.init(device);
 
     m_device = std::make_shared<ll::vulkan::Device>(device, physicalDevice, computeQueueFamilyIndex, m_instance);
 }
