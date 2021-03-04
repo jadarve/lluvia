@@ -82,5 +82,3 @@ TEST_CASE("ComparedContent", "test_miniz") {
 
     mz_zip_reader_end(&zip_archive);
 }
-
-

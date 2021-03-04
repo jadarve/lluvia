@@ -17,9 +17,5 @@ py_binary(
   data = [
     ":test_data"
   ],
-  deps = [
-    requirement("jinja2"),
-    requirement("markupsafe"),
-  ],
   visibility = ["//visibility:public"]
 )

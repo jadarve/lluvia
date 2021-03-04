@@ -1,0 +1,6 @@
+
+# General build settings
+build --enable_platform_specific_config
+
+# Linux
+build:linux --action_env=CC=clang

@@ -19,8 +19,21 @@ def _glsl_header_library(ctx):
             includes[hdr.dirname] = True
 
     else:
-        includes[strip_include_prefix] = True
+        for hdr in ctx.files.hdrs:
 
+            # check if the header is being included from the lluvia repo
+            # or externally (e.g., mediapipe). For external inclusion, bazel
+            # adds a "external/lluvia" path to all files of this repo, so I
+            # need to include that path as part of the strip_include_prefix
+
+            prefix_index = hdr.dirname.rfind(strip_include_prefix)
+            if prefix_index >= 0:
+                strip_include_prefix_full = hdr.dirname[:prefix_index] + strip_include_prefix
+                includes[strip_include_prefix_full] = True
+
+            else:
+                fail("strip_include_prefix \"{0}\" not found in header \"{1}\" path.".format(
+                    strip_include_prefix, hdr.path))
 
     return [
         GlslInfo(

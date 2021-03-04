@@ -14,6 +14,7 @@
 #include "core/ComputeNodeDescriptor.h"
 #include "core/ContainerNode.h"
 #include "core/ContainerNodeDescriptor.h"
+#include "core/debug_utils.h"
 #include "core/Duration.h"
 #include "core/error.h"
 #include "core/Image.h"

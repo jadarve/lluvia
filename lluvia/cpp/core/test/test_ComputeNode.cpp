@@ -20,7 +20,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
 
     using memflags = vk::MemoryPropertyFlagBits;
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
@@ -63,6 +63,8 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
             REQUIRE(bufferMap[i] == static_cast<float>(i));
         }
     } // unamp bufferMap
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
@@ -70,7 +72,7 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
 
     using memflags = vk::MemoryPropertyFlagBits;
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
@@ -148,4 +150,6 @@ ll.registerNodeBuilder('assign', builder)
             REQUIRE(bufferMap[i] == static_cast<float>(i));
         }
     } // unamp bufferMap
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

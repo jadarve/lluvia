@@ -22,7 +22,7 @@ public:
     Instance(const Instance &instance) = delete;
     Instance(Instance &&instance) = delete;
 
-    Instance(const vk::Instance &instance);
+    Instance(bool debugEnabled);
     ~Instance();
 
     Instance &operator=(const Instance &Instance) = delete;
@@ -32,7 +32,13 @@ public:
     vk::Instance& get() noexcept;
 
 private:
-    vk::Instance m_instance;
+    std::vector<const char*> getRequiredLayersNames();
+    std::vector<const char*> getRequiredExtensionNames();
+
+    vk::Instance                 m_instance;
+    vk::DispatchLoaderDynamic    m_dispatchLoaderDynamic;
+    vk::DebugUtilsMessengerEXT   m_debugMessenger;
+    bool                         m_debugEnabled;
 };
 
 } // namespace vk

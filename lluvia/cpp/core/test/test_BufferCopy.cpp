@@ -19,7 +19,7 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     constexpr const auto length = 128u;
     constexpr const auto bufferSize = length*sizeof(int);
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     const auto hostMemFlags   = memflags::eHostVisible | memflags::eHostCoherent;;
     const auto deviceMemFlags = memflags::eDeviceLocal;
         
@@ -99,5 +99,7 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
 
         REQUIRE(areEqual == true);
     } // unmap hostPtr and secPtr
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 

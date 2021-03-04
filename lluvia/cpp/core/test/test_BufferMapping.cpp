@@ -18,7 +18,7 @@ using memflags = vk::MemoryPropertyFlagBits;
 
 TEST_CASE("DifferentPage", "test_BufferMapping") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
 
     const auto hostMemFlags   = memflags::eHostVisible | memflags::eHostCoherent;;
 
@@ -41,12 +41,14 @@ TEST_CASE("DifferentPage", "test_BufferMapping") {
     // in different memory pages
     auto ptr1 = buffer1->map<uint8_t>();
     auto ptr2 = buffer2->map<uint8_t>();
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
 TEST_CASE("SamePage", "test_BufferMapping") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags   = memflags::eHostVisible | memflags::eHostCoherent;;
@@ -72,12 +74,14 @@ TEST_CASE("SamePage", "test_BufferMapping") {
     // since both buffers are allocated in the same memory page, mapping
     // the second one should throw an exception
     REQUIRE_THROWS_AS(buffer2->map<uint8_t>(), std::system_error);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
 
 TEST_CASE("MapAndSet", "test_BufferMapping") {
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     std::cout << "Getting host memory" << std::endl;
@@ -107,4 +111,6 @@ TEST_CASE("MapAndSet", "test_BufferMapping") {
 
     REQUIRE(p.a == pGet.a);
     REQUIRE(p.b == pGet.b);
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }

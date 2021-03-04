@@ -5,6 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
+// define this macro to use Vulkan's dynamic dispatcher by default
+#define VULKAN_HPP_DISPATCH_LOADER_DYNAMIC 1
 #include "lluvia/core/Session.h"
 
 #include "lluvia/core/Buffer.h"
@@ -44,34 +46,22 @@
 #include <fstream>
 #include <iostream>
 
-
-#ifdef __linux__
-
-// at least in Ubuntu 18.04 and clang 6 <filesystem> is still in experimental
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-
-#elif _WIN32
-
-#include <filesystem>
-namespace fs = std::filesystem;
-
-#endif // OS switch
-
 namespace ll {
 
 using namespace std;
 
 std::shared_ptr<ll::Session> Session::create() {
-    return std::shared_ptr<Session>{new Session()};;
+    return create(ll::SessionDescriptor {});
 }
 
+std::shared_ptr<ll::Session> Session::create(const ll::SessionDescriptor& descriptor) {
+    return std::shared_ptr<Session>{new Session(descriptor)};
+}
 
 std::vector<vk::LayerProperties> Session::getVulkanInstanceLayerProperties() {
     
     return vk::enumerateInstanceLayerProperties();
 }
-
 
 std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties() {
     
@@ -79,7 +69,8 @@ std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties() {
 }
 
 
-Session::Session() {
+Session::Session(const ll::SessionDescriptor& descriptor):
+    m_descriptor {descriptor} {
 
     initDevice();
 
@@ -143,7 +134,7 @@ bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) 
 }
 
 
-std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch) {
+std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch) {
     
     auto compareFlags = [](const auto &tFlags, const auto &value, bool tExactFlagsMatch) {
         return tExactFlagsMatch ? tFlags == value : (tFlags & value) == value;
@@ -228,7 +219,7 @@ std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const 
 
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
 
-    return std::shared_ptr<ll::ComputeNode> {new ll::ComputeNode {m_device, descriptor, m_interpreter}};
+    return std::make_shared<ll::ComputeNode>(m_device, descriptor, m_interpreter);
 }
 
 
@@ -258,7 +249,7 @@ ll::ComputeNodeDescriptor Session::createComputeNodeDescriptor(const std::string
 
 std::shared_ptr<ll::ContainerNode> Session::createContainerNode(const ll::ContainerNodeDescriptor& descriptor) {
 
-    return std::shared_ptr<ll::ContainerNode> {new ll::ContainerNode {m_interpreter, descriptor}};
+    return std::make_shared<ll::ContainerNode>(m_interpreter, descriptor);
 }
 
 
@@ -336,26 +327,31 @@ void Session::loadLibrary(const std::string& filename) {
 
     constexpr const auto LUA_EXTENSION = ".lua";
     constexpr const auto SPV_EXTENSION = ".spv";
+    constexpr const auto EXTENSION_LENGTH = 4;
 
     auto archive = ll::impl::ZipArchive {filename};
     const auto numberFiles = archive.numberFiles();
     for (auto i = 0u; i < numberFiles; ++i) {
-        
-        auto stat = archive.getFileStat(i);
-        auto filepath = fs::path{stat.m_filename};
 
-        if (filepath.extension().string() == LUA_EXTENSION) {
-            
+        auto stat = archive.getFileStat(i);
+        auto filepath = std::string{stat.m_filename};
+
+        // ignore filepaths whose length is less than the extension length
+        if (filepath.size() < EXTENSION_LENGTH) {
+            continue;
+        }
+
+        if (filepath.compare(filepath.size() - EXTENSION_LENGTH, EXTENSION_LENGTH, LUA_EXTENSION) == 0) {
+
             auto luaScript = archive.uncompressTextFile(stat);
             script(luaScript);
         }
-        else if (filepath.extension().string() == SPV_EXTENSION) {
+        else if (filepath.compare(filepath.size() - EXTENSION_LENGTH, EXTENSION_LENGTH, SPV_EXTENSION) == 0) {
             auto spirv = archive.uncompressBinaryFile(stat);
 
             auto program = createProgram(spirv);
-            auto programName = filepath.parent_path().append(filepath.stem().string());
-
-            setProgram(programName.string(), program);
+            auto programName = filepath.substr(0, filepath.size() - EXTENSION_LENGTH);
+            setProgram(programName, program);
         }
     }
 }
@@ -363,26 +359,10 @@ void Session::loadLibrary(const std::string& filename) {
 
 void Session::initDevice() {
 
-    auto instance = vk::Instance {};
-
-    auto appInfo = vk::ApplicationInfo()
-                   .setPApplicationName("lluvia")
-                   .setApplicationVersion(0)
-                   .setEngineVersion(0)
-                   .setPEngineName("lluvia")
-                   .setApiVersion(VK_MAKE_VERSION(1, 0, 65));
-
-    auto instanceInfo = vk::InstanceCreateInfo()
-                        .setPApplicationInfo(&appInfo);
-
-    const auto result = vk::createInstance(&instanceInfo, nullptr, &instance);
-    ll::throwSystemErrorIf(result == vk::Result::eErrorIncompatibleDriver,
-                           ll::ErrorCode::InconpatibleDriver, "Inconpatible driver.");
-
-    m_instance = std::make_shared<ll::vulkan::Instance>(instance);
+    m_instance = std::make_shared<ll::vulkan::Instance>(m_descriptor.isDebugEnabled());
 
     const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
-    ll::throwSystemErrorIf(physicalDevices.size() == 0,
+    ll::throwSystemErrorIf(physicalDevices.empty(),
         ll::ErrorCode::PhysicalDevicesNotFound, "No physical devices found in the system");
 
     // TODO: let user to choose physical device
@@ -408,6 +388,7 @@ void Session::initDevice() {
                          .setPEnabledFeatures(&desiredFeatures);
 
     auto device = physicalDevice.createDevice(devCreateInfo);
+    VULKAN_HPP_DEFAULT_DISPATCHER.init(device);
 
     m_device = std::make_shared<ll::vulkan::Device>(device, physicalDevice, computeQueueFamilyIndex, m_instance);
 }
@@ -417,7 +398,7 @@ uint32_t Session::findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice
     const auto queueProperties = physicalDevice.getQueueFamilyProperties();
 
     auto queueIndex = uint32_t {0};
-    for (auto prop : queueProperties) {
+    for (const auto& prop : queueProperties) {
 
         const auto compute = ((prop.queueFlags & vk::QueueFlagBits::eCompute) == vk::QueueFlagBits::eCompute);
 

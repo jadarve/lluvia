@@ -1,7 +1,7 @@
 """
 """
 
-load("//lluvia/bazel/glsl:def.bzl", "glsl_shader")
+load("@lluvia//lluvia/bazel/glsl:def.bzl", "glsl_shader")
 load("@rules_pkg//:pkg.bzl", "pkg_zip")
 load("@rules_pkg//experimental:pkg_filegroup.bzl", "pkg_filegroup")
 
@@ -40,7 +40,6 @@ def ll_node(
             builder,
         ],
         prefix = prefix,
-        # strip_prefix = TODO,
         visibility = visibility,
     )
 

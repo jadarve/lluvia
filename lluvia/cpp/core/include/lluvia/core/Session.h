@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/SessionDescriptor.h"
 
 namespace ll {
 
@@ -71,6 +72,19 @@ public:
 
     */
     static std::shared_ptr<ll::Session> create();
+
+    /**
+    @brief      Creates a new ll::Session object.
+
+    @param[in]  descriptor for this session.
+
+    @return     A new session.
+
+    @throws     std::system_error with error code ll::ErrorCode::PhysicalDevicesNotFound
+                if not physical devices are available.
+
+    */
+    static std::shared_ptr<ll::Session> create(const ll::SessionDescriptor& descriptor);
 
 
     Session(const Session& session)              = delete;
@@ -148,7 +162,7 @@ public:
     @throws     std::system_error With error code ll::ErrorCode::MemoryCreationError
                                   if no memory was found that matched the requested flags.
     */
-    std::shared_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags flags, const uint64_t pageSize, bool exactFlagsMatch = false);
+    std::shared_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch = false);
 
     
     /**
@@ -346,11 +360,14 @@ public:
 
 
 private:
+    static uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice);
+
     // Session objects should be created through factory methods
-    Session();
+    Session(const ll::SessionDescriptor& descriptor);
 
     void initDevice();
-    uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice);
+
+    const ll::SessionDescriptor              m_descriptor;
 
     std::shared_ptr<ll::vulkan::Instance>    m_instance;
     std::shared_ptr<ll::vulkan::Device>      m_device;

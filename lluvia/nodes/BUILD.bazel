@@ -1,11 +1,12 @@
-load("@//lluvia/bazel/node:def.bzl", "ll_node_library")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node_library")
 
 
 ll_node_library(
     name = "lluvia_node_library",
-    prefix = "nodes",
+    prefix = "lluvia",
     nodes = [
-        "//lluvia/nodes/lluvia:Sobel"
+        "//lluvia/nodes/lluvia:Sobel",
+        "//lluvia/nodes/lluvia:RGBA2Gray",
     ],
     visibility = ["//visibility:public"]
 )

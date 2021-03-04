@@ -17,7 +17,7 @@ TEST_CASE("DurationRecording", "test_Duration")
 
     using memflags = vk::MemoryPropertyFlagBits;
 
-    auto session = ll::Session::create();
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
@@ -62,4 +62,6 @@ TEST_CASE("DurationRecording", "test_Duration")
     auto ns = duration->getDuration();
     
     std::cout << "NANOSECONDS: " << ns.count() << std::endl;
+
+    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
