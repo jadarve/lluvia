@@ -359,66 +359,7 @@ void Session::loadLibrary(const std::string& filename) {
 
 void Session::initDevice() {
 
-
-
-    // WTF: with this app info and create into, everything works!
-//    auto appInfo = vk::ApplicationInfo()
-//                   .setPApplicationName("lluvia")
-//                   .setApplicationVersion(0)
-//                   .setEngineVersion(0)
-//                   .setPEngineName("lluvia")
-//                   .setApiVersion(VK_MAKE_VERSION(1u, 2u, 162u));
-//
-//
-//    const auto extensions = std::vector<const char*>{"VK_EXT_debug_utils"};
-//    const auto layers = std::vector<const char*>{"VK_LAYER_KHRONOS_validation"};
-//
-//    vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
-//            .setEnabledExtensionCount(extensions.size())
-//            .setPpEnabledExtensionNames(&extensions[0])
-//            .setEnabledLayerCount(layers.size())
-//            .setPpEnabledLayerNames(&layers[0])
-//            .setPApplicationInfo(&appInfo);
-
-//    auto appInfo = vk::ApplicationInfo()
-//                   .setPApplicationName("lluvia")
-//                   .setApplicationVersion(0)
-//                   .setEngineVersion(0)
-//                   .setPEngineName("lluvia");
-////                   .setApiVersion(VK_MAKE_VERSION(1u, 0u, 65u));
-//
-//    auto instanceInfo = vk::InstanceCreateInfo()
-//                        .setPApplicationInfo(&appInfo);
-//
-//    auto requiredLayers = getRequiredLayersNames();
-//    if (!requiredLayers.empty()) {
-//        instanceInfo.setEnabledLayerCount(requiredLayers.size())
-//                    .setPpEnabledLayerNames(&requiredLayers[0]);
-//    }
-//
-//    auto requiredExtensions = getRequiredExtensionNames();
-//    if (!requiredExtensions.empty()) {
-//        for (const auto& name : requiredExtensions) {
-//            std::cout << "EXTENSION: " << name << std::endl;
-//        }
-//
-//        instanceInfo.setEnabledExtensionCount(requiredExtensions.size())
-//                    .setPpEnabledExtensionNames(&requiredExtensions[0]);
-//    }
-//
-//    for (const auto& name : requiredLayers) {
-//        std::cout << "LAYER: " << name << std::endl;
-//    }
-//
-
     m_instance = std::make_shared<ll::vulkan::Instance>(m_descriptor.isDebugEnabled());
-
-//    auto dispatchLoaderDynamic = vk::DispatchLoaderDynamic(instance, vkGetInstanceProcAddr);
-//    ll::throwSystemErrorIf(dispatchLoaderDynamic.vkCreateDebugUtilsMessengerEXT == nullptr, ErrorCode::ExtensionNotFound, "initDevice(): bad dispatcher");
-
-//    m_dispatchLoaderDynamic = vk::DispatchLoaderDynamic(instance, vkGetInstanceProcAddr);
-//    m_dispatchLoaderDynamic.init(instance, vkGetInstanceProcAddr);
-//    ll::throwSystemErrorIf(m_dispatchLoaderDynamic.vkCreateDebugUtilsMessengerEXT == nullptr, ErrorCode::ExtensionNotFound, "initDevice(): bad dispatcher");
 
     const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
     ll::throwSystemErrorIf(physicalDevices.empty(),
