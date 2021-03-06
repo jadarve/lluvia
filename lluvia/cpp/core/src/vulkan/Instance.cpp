@@ -37,9 +37,9 @@ Instance::Instance(bool debugEnabled):
     const auto layers = getRequiredLayersNames();
 
     vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
-            .setEnabledExtensionCount(extensions.size())
+            .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size()))
             .setPpEnabledExtensionNames(&extensions[0])
-            .setEnabledLayerCount(layers.size())
+            .setEnabledLayerCount(static_cast<uint32_t>(layers.size()))
             .setPpEnabledLayerNames(&layers[0])
             .setPApplicationInfo(&appInfo);
 

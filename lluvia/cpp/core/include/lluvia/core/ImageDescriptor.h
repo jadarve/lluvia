@@ -18,7 +18,7 @@
 #include <tuple>
 #include <type_traits>
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 
 namespace ll {

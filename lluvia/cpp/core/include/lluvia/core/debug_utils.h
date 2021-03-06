@@ -8,7 +8,7 @@
 #ifndef LLUVIA_CORE_DEBUG_UTILS_H_
 #define LLUVIA_CORE_DEBUG_UTILS_H_
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 namespace ll {
 
