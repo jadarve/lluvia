@@ -28,18 +28,6 @@
 #include "lluvia/core/vulkan/Device.h"
 #include "lluvia/core/vulkan/Instance.h"
 
-#if defined(__GNUC__)
-// Ensure we get the 64-bit variants of the CRT's file I/O calls
-#ifndef _FILE_OFFSET_BITS
-#define _FILE_OFFSET_BITS 64
-#endif
-#ifndef _LARGEFILE64_SOURCE
-#define _LARGEFILE64_SOURCE 1
-#endif
-#endif
-
-#include "miniz.h"
-
 #include <cstring>
 #include <algorithm>
 #include <exception>

@@ -33,6 +33,17 @@ cc_library (
             "-Wnon-virtual-dtor",
             "-pedantic",
         ],
+        "//lluvia:android": [
+            "-std=c++17",
+            "-stdlib=libstdc++",
+            "-Werror",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wshorten-64-to-32",
+            "-Wnon-virtual-dtor",
+            "-pedantic",
+        ],
         "//lluvia:windows": [
             "/std:c++17",
             "/w",

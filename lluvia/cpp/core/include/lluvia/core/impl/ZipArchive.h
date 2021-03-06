@@ -8,6 +8,16 @@
 #ifndef LLUVIA_CORE_IMPL_ZIP_ARCHIVE_H_
 #define LLUVIA_CORE_IMPL_ZIP_ARCHIVE_H_
 
+#if defined(__GNUC__)
+// Ensure we get the 64-bit variants of the CRT's file I/O calls
+#ifndef _FILE_OFFSET_BITS
+#define _FILE_OFFSET_BITS 64
+#endif
+#ifndef _LARGEFILE64_SOURCE
+#define _LARGEFILE64_SOURCE 1
+#endif
+#endif
+
 #include "miniz.h"
 
 #include <string>
