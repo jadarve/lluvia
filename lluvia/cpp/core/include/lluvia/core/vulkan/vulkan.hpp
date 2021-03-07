@@ -1,6 +1,9 @@
 #ifndef LLUVIA_CORE_VULKAN_VULKAN_HPP_
 #define LLUVIA_CORE_VULKAN_VULKAN_HPP_
 
+// Disable some diagnostics before including vulkan.hpp
+// This is necessary as the .cpp files of the core library
+// have more strict checks.
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wall"
 #pragma clang diagnostic ignored "-Wextra"
