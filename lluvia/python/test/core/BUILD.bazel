@@ -72,6 +72,6 @@ py_test (
     ],
     data = [
         "//lluvia/python/src:pyx_library",
-        "//lluvia/cpp/core/test/nodes:test_node_library.runfiles",
+        "//lluvia/cpp/core/test/nodes:test_node_library",
     ]
 )
