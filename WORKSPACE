@@ -59,8 +59,8 @@ cc_library(
 
 new_local_repository(
     name = "numpy_linux",
-    path = "/usr/local/lib/python3.6/dist-packages/numpy/core",
-#    path = "/usr/lib/python3/dist-packages/numpy/core",
+#    path = "/usr/local/lib/python3.6/dist-packages/numpy/core",
+    path = "/usr/lib/python3/dist-packages/numpy/core",
     build_file_content = """
 cc_library(
     name = "numpy_cc_library",
