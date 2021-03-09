@@ -32,7 +32,7 @@ mz_zip_archive_file_stat ZipArchive::getFileStat(const size_t i) {
     ll::throwSystemErrorIf(i >= numberFiles(), ll::ErrorCode::IOError, "File index must be less than the number of files in the archive.");
 
     auto stat = mz_zip_archive_file_stat{};
-    ll::throwSystemErrorIf(!mz_zip_reader_file_stat(&mArchive, i, &stat), ll::ErrorCode::IOError, "Error reading file stats from zip archive");
+    ll::throwSystemErrorIf(!mz_zip_reader_file_stat(&mArchive, static_cast<mz_uint>(i), &stat), ll::ErrorCode::IOError, "Error reading file stats from zip archive");
 
     return stat;
 }

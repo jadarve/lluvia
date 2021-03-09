@@ -14,7 +14,7 @@ ll_node(
 
 ll_node_library(
     name = "test_node_library",
-    prefix = "nodes",
+    strip_prefix = "/lluvia/cpp/core/test",
     nodes = [
         ":Assign"
     ],

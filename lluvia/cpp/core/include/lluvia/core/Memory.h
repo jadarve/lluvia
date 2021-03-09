@@ -16,7 +16,7 @@
 #include <tuple>
 #include <vector>
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 #include "lluvia/core/impl/MemoryFreeSpaceManager.h"
 #include "lluvia/core/impl/enum_utils.h"

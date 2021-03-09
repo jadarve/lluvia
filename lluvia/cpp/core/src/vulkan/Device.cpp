@@ -84,7 +84,12 @@ void Device::run(const ll::CommandBuffer& cmdBuffer) {
         .setCommandBufferCount(1)
         .setPCommandBuffers(&cmdBuffer.getVkCommandBuffer());
 
-    m_queue.submit(1, &submitInfo, nullptr);
+    auto result = m_queue.submit(1, &submitInfo, nullptr);
+
+    ll::throwSystemErrorIf(result != vk::Result::eSuccess,
+            ll::ErrorCode::VulkanError,
+            "error submitting command buffer for execution.");
+
     m_queue.waitIdle();
 }
 

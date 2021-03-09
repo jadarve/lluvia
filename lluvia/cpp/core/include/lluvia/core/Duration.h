@@ -11,7 +11,7 @@
 #include <chrono>
 #include <memory>
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 namespace ll {
 
@@ -26,7 +26,7 @@ public:
     Duration(const Duration& duration)  = delete;
     Duration(Duration&& duration) = delete;
 
-    Duration(const std::shared_ptr<ll::vulkan::Device>& device);
+    Duration(const std::shared_ptr<ll::vulkan::Device> device);
 
     ~Duration();
 

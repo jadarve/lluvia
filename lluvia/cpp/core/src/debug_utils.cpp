@@ -16,14 +16,19 @@ bool hasReceivedVulkanWarningMessages() {
     return messagesReceived;
 }
 
-VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
+#ifdef __ANDROID__
+
+VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+        VkDebugUtilsMessageTypeFlagsEXT messageType,
+        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+        void* pUserData) {
+
+    // from https://developer.android.com/ndk/guides/graphics/validation-layer
 
     if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
         messagesReceived.store(true, std::memory_order_release);
     }
-
-#ifdef __ANDROID__
-    // from https://developer.android.com/ndk/guides/graphics/validation-layer
 
     const char validation[]      = "Validation";
     const char performance[]     = "Performance";
@@ -60,15 +65,29 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBits
                        messageIdName,
                        messageIdNumber,
                        message);
-#else
+
+    return VK_FALSE;
+}
+
+#else // Other Operating Systems
+
+VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+        __attribute__((unused)) VkDebugUtilsMessageTypeFlagsEXT messageType,
+        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+        __attribute__((unused)) void* pUserData) {
+
+    if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+        messagesReceived.store(true, std::memory_order_release);
+    }
 
     if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
         std::cerr << "Lluvia: " << pCallbackData->pMessage << std::endl;
     }
 
-#endif
-
     return VK_FALSE;
 }
+
+#endif
 
 } // namespace ll

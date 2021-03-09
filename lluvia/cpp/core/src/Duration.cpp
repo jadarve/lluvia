@@ -1,11 +1,12 @@
 #include "lluvia/core/Duration.h"
 
 #include "lluvia/core/vulkan/Device.h"
+#include "lluvia/core/error.h"
 
 namespace ll {
 
-Duration::Duration(const std::shared_ptr<ll::vulkan::Device>& device):
-    m_device {device} {
+Duration::Duration(const std::shared_ptr<ll::vulkan::Device> device):
+    m_device {std::move(device)} {
 
     // there will be two queries, one for the start time
     // and another one for the end time.
@@ -32,7 +33,7 @@ int64_t Duration::getNanoseconds() const {
 
     auto queryData = std::array<int64_t, 2> {};
 
-    m_device->get().getQueryPoolResults(
+    auto result = m_device->get().getQueryPoolResults(
         m_queryPool,
         getStartTimeQueryIndex(),
         uint32_t{2},
@@ -41,6 +42,10 @@ int64_t Duration::getNanoseconds() const {
         sizeof(int64_t),
         vk::QueryResultFlagBits::e64 | vk::QueryResultFlagBits::eWait
     );
+
+    ll::throwSystemErrorIf(result != vk::Result::eSuccess,
+            ll::ErrorCode::VulkanError,
+            "error obtaining duration value");
 
     return queryData[1] - queryData[0];
 }

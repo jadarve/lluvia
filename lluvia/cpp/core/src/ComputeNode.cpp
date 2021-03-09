@@ -74,7 +74,11 @@ void ComputeNode::initPortBindings() {
         .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
         .setPPoolSizes(descriptorPoolSizes.data());
 
-    m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool);
+    ll::throwSystemErrorIf(
+            m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool) != vk::Result::eSuccess,
+            ll::ErrorCode::VulkanError,
+            "error creating descriptor pool for compute node."
+            );
 
     // only one descriptor set for this Node object
     vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
@@ -82,7 +86,11 @@ void ComputeNode::initPortBindings() {
         .setDescriptorSetCount(1)
         .setPSetLayouts(&m_descriptorSetLayout);
 
-    m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet);
+    ll::throwSystemErrorIf(
+            m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet) != vk::Result::eSuccess,
+            ll::ErrorCode::VulkanError,
+            "error allocating descriptor set."
+            );
 }
 
 
@@ -122,7 +130,7 @@ void ComputeNode::initPipeline() {
     if (pushConstants.getSize() != 0) {
         auto pushConstantRange = vk::PushConstantRange()
             .setOffset(0)
-            .setSize(pushConstants.getSize())
+            .setSize(static_cast<uint32_t>(pushConstants.getSize()))
             .setStageFlags(vk::ShaderStageFlagBits::eCompute);
 
         pipeLayoutInfo.setPushConstantRangeCount(1);
@@ -298,7 +306,7 @@ void ComputeNode::record(ll::CommandBuffer& commandBuffer) const {
         vkCommandBuffer.pushConstants(m_pipelineLayout,
             vk::ShaderStageFlagBits::eCompute,
             0,
-            pushConstants.getSize(),
+            static_cast<uint32_t>(pushConstants.getSize()),
             pushConstants.getPtr());
     }
     

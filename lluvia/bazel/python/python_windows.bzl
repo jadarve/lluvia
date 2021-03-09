@@ -1,3 +1,6 @@
+"""
+"""
+
 def _impl(repository_ctx):
   result = repository_ctx.execute(["python", "-c", "from distutils.sysconfig import get_config_var; print(get_config_var('prefix'))"])
   prefix = result.stdout.splitlines()[0]

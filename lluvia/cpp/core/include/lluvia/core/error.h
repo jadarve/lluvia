@@ -47,6 +47,7 @@ enum class ErrorCode : int32_t {
     LayerNotFound,             /**< A layer required to create a Session was not found */
     ExtensionNotFound,         /**< An extension required to create a Session was not found */
     PipelineCreationError,     /**< Error creating a vulkan pipeline object */
+    VulkanError                /**< Error calling a vulkan function that does not fit on any of the categories above */
 };
 
 namespace impl {
@@ -54,7 +55,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 24> ErrorCodeStrings{{
+constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 25> ErrorCodeStrings{{
     std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
     std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
     std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
@@ -79,6 +80,7 @@ constexpr const std::array<std::tuple<const char *, ll::ErrorCode>, 24> ErrorCod
     std::make_tuple("LayerNotFound", ll::ErrorCode::LayerNotFound),
     std::make_tuple("ExtensionNotFound", ll::ErrorCode::ExtensionNotFound),
     std::make_tuple("PipelineCreationError", ll::ErrorCode::PipelineCreationError),
+    std::make_tuple("VulkanError", ll::ErrorCode::VulkanError)
 }};
 
 } // namespace impl

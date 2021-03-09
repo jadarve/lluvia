@@ -29,7 +29,7 @@
 
 #include "lluvia/core/impl/LuaLibrary.h"
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 #include <iostream>
 

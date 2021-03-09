@@ -10,7 +10,7 @@
 
 #include "lluvia/core/types.h"
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 #include <array>
 #include <cmath>

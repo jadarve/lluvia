@@ -14,7 +14,7 @@
 #include "lluvia/core/Object.h"
 #include "lluvia/core/impl/enum_utils.h"
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 #include <array>
 #include <cstdint>
@@ -191,7 +191,7 @@ public:
     struct BufferMapDeleter{
 
         template<typename T>
-        void operator ()(T* ptr) const {
+        void operator ()(__attribute__((unused)) T* ptr) const {
             buffer->unmap();
         }
 

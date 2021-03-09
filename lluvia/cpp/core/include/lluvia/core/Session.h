@@ -8,7 +8,7 @@
 #ifndef LLUVIA_CORE_SESSION_H_
 #define LLUVIA_CORE_SESSION_H_
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 #include <cstdint>
 #include <map>

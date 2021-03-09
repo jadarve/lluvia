@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 
 namespace ll {

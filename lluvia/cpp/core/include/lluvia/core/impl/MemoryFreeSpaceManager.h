@@ -14,7 +14,7 @@
 #include <vector>
 #include <tuple>
 
-#include <vulkan/vulkan.hpp>
+#include "lluvia/core/vulkan/vulkan.hpp"
 
 #include "lluvia/core/MemoryAllocationInfo.h"
 
