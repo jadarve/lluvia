@@ -60,6 +60,21 @@ function ll.castNode(node)
     return castTable[node.type](node)
 end
 
+
+function ll.isValidImage(img, expectedChannelCount, expectedChannelType)
+
+    local desc = img.imageDescriptor
+    
+    if desc.channelType ~= expectedChannelType then
+        return "expecting channel type " .. expectedChannelType .. ' got: ' .. desc.channelType
+    end
+
+    if desc.channelCount ~= expectedChannelCount then
+        return "expecting channel count " .. expectedChannelCount .. ' got: ' .. desc.channelCount
+    end
+
+    return nil
+end
 -----------------------------------------------------------
 --                     Session
 -----------------------------------------------------------
@@ -98,11 +113,23 @@ function ll.createContainerNode(name)
     return ll.activeSession:createContainerNode(name)
 end
 
+function ll.getGoodComputeLocalShape(dimensions)
+
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:getGoodComputeLocalShape(dimensions)
+end
+
 
 -----------------------------------------------------------
 --                 ComputeNodeBuilder
 -----------------------------------------------------------
 ll.ComputeNodeBuilder = ll.class()
+
+-- default documentation string
+ll.ComputeNodeBuilder.doc = ""
 
 function ll.ComputeNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')
@@ -117,6 +144,9 @@ end
 --                 ContainerNodeBuilder
 -----------------------------------------------------------
 ll.ContainerNodeBuilder = ll.class()
+
+-- default documentation string
+ll.ContainerNodeBuilder.doc = ""
 
 function ll.ContainerNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')
@@ -191,14 +221,13 @@ end
 --
 -- @param name The name of the descriptor. It is also used
 --             for looking for the program in the registry.
-function ll.ComputeNodeDescriptor:init(name)
+function ll.ComputeNodeDescriptor:init(name, dimensions)
 
     self.builderName  = name
     self.program      = ll.getProgram(name)
     self.functionName = 'main'
 
-    -- FIXME: this one should be platform dependent
-    self.localShape   = ll.vec3ui.new(32, 32, 1)
+    self.localShape   = ll.getGoodComputeLocalShape(dimensions)
     self.gridShape    = ll.vec3ui.new(1, 1, 1)
 end
 

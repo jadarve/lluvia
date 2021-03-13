@@ -298,7 +298,8 @@ void registerTypes(sol::table& lib) {
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createComputeNode,
-        "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createContainerNode
+        "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createContainerNode,
+        "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape
         );
 
     lib.new_usertype<ll::Memory>("Memory",
