@@ -344,6 +344,19 @@ void Session::loadLibrary(const std::string& filename) {
     }
 }
 
+ll::vec3ui Session::getGoodComputeLocalShape(ll::ComputeDimension dimensions) const noexcept {
+
+    // FIXME: add device-specific logic
+    switch(dimensions) {
+        case ll::ComputeDimension::D1:
+            return ll::vec3ui{1024, 1, 1};
+        case ll::ComputeDimension::D2:
+            return ll::vec3ui{32, 32, 1};
+        case ll::ComputeDimension::D3:
+            return ll::vec3ui{16, 16, 4};
+    }
+}
+
 
 void Session::initDevice() {
 

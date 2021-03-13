@@ -179,6 +179,29 @@ end
 -----------------------------------------------------------
 --                ComputeNodeDescriptor
 -----------------------------------------------------------
+
+--- Initialize the descriptor.
+--
+-- The initialization includes:
+-- - Setting the descriptor buildderName to name
+-- - Looking for the program with the same name in the registry.
+-- - Setting program functionName to main.
+-- - Setting the gridShape to (1, 1, 1)
+-- - Setting the localShape to 
+--
+-- @param name The name of the descriptor. It is also used
+--             for looking for the program in the registry.
+function ll.ComputeNodeDescriptor:init(name)
+
+    self.builderName  = name
+    self.program      = ll.getProgram(name)
+    self.functionName = 'main'
+
+    -- FIXME: this one should be platform dependent
+    self.localShape   = ll.vec3ui.new(32, 32, 1)
+    self.gridShape    = ll.vec3ui.new(1, 1, 1)
+end
+
 function ll.ComputeNodeDescriptor:setParameter(name, value)
 
     -- this workaround is needed in order to call

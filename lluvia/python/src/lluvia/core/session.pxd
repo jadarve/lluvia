@@ -16,10 +16,12 @@ from libcpp.vector cimport vector
 
 from lluvia.core cimport vulkan as vk
 from lluvia.core.command_buffer cimport _CommandBuffer
+from lluvia.core.compute_dimension cimport _ComputeDimension
 from lluvia.core.duration cimport _Duration
 from lluvia.core.memory cimport _Memory
 from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode
 from lluvia.core.program cimport _Program
+from lluvia.core.types cimport _vec3ui
 
 
 cdef extern from 'lluvia/core/Session.h' namespace 'll':
@@ -59,6 +61,8 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         void scriptFile(const string& filename) except +
 
         void loadLibrary(const string& filename) except +
+
+        _vec3ui getGoodComputeLocalShape(_ComputeDimension dimensions) const
 
 
 cdef class Session:
