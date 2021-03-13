@@ -2,27 +2,22 @@ local builder = ll.class(ll.ComputeNodeBuilder)
 
 builder.name = 'lluvia/color/RGBA2Gray'
 builder.doc = [[
+Converts a RGB image to gray scale.
 
-RGB to Gray
-===========
-
-Converts a RGB image to gray scale. The gray scale value is computed as:
+The gray scale value is computed as:
 
 	gray = dot(RGBA, vec4(0.29899999, 0.58700001, 0.114, 0.0))    
 
 Inputs
 ------
- 
-* **in_rgba:** rgba8ui ImageView.
-
+in_rgba : ImageView.
+    rgba8ui image.
 
 Outputs
 -------
-
-* **out_gray:** r8ui ImageView
-    
-    The output gray scale image in range [0, 255]. The output is allocated in the
-    same memory as in_rgba
+out_gray : ImageView
+    r8ui image. Thre gray scale values are in the range [0, 255]. This image is allocated in the
+    same memory as in_rgba.
 
 ]]
 

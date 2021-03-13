@@ -357,6 +357,17 @@ ll::vec3ui Session::getGoodComputeLocalShape(ll::ComputeDimension dimensions) co
     }
 }
 
+std::string Session::help(const std::string& builderName) const {
+
+    constexpr auto lua = R"(
+        local builderName = ...
+        local builder = ll.getNodeBuilder(builderName)
+        return builder.doc
+    )";
+
+    return m_interpreter->loadAndRun<std::string>(lua, builderName);
+}
+
 
 void Session::initDevice() {
 

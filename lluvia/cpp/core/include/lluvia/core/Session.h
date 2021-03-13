@@ -367,6 +367,15 @@ public:
     */
     ll::vec3ui getGoodComputeLocalShape(ll::ComputeDimension dimensions) const noexcept;
 
+    /**
+    @brief      Returns the help string of a given node builder.
+
+    @param[in]  builderName  The builder name.
+
+    @return     The help string of the builder.
+    */
+    std::string help(const std::string& builderName) const;
+
 
 private:
     static uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice);

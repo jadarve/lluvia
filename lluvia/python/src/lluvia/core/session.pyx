@@ -654,3 +654,20 @@ cdef class Session:
         cdef _vec3ui localShape = self.__session.get().getGoodComputeLocalShape(<_ComputeDimension>dimensions)
 
         return (localShape.x, localShape.y, localShape.z)
+
+    def help(self, str builderName):
+        """
+        Returns the help string of a given node builder.
+
+        Parameters
+        ----------
+        builderName : str
+            The builder name
+
+        Returns
+        -------
+        helpString : str
+            The help string.
+        """
+
+        return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')
