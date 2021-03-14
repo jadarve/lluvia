@@ -9,3 +9,23 @@ ll_node(
     ],
     visibility = ["//visibility:public"]
 )
+
+ll_node(
+    name = "RGBA2HSVA",
+    shader = "RGBA2HSVA.comp",
+    builder = 'RGBA2HSVA.lua',
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)
+
+ll_node(
+    name = "HSVA2RGBA",
+    shader = "HSVA2RGBA.comp",
+    builder = 'HSVA2RGBA.lua',
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library"
+    ],
+    visibility = ["//visibility:public"]
+)

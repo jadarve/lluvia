@@ -38,19 +38,24 @@ See https://en.wikipedia.org/wiki/HSL_and_HSV for more details.
 */
 vec4 color_rgba2hsva(const uvec4 RGBA, const float minChroma) {
 
-    const float r = float(RGBA.x) / 255.0;
-    const float g = float(RGBA.y) / 255.0;
-    const float b = float(RGBA.z) / 255.0;
-    const float a = float(RGBA.a) / 255.;
+    const float r = float(RGBA.r) / 255.0;
+    const float g = float(RGBA.g) / 255.0;
+    const float b = float(RGBA.b) / 255.0;
+    const float a = float(RGBA.a) / 255.0;
+
+    const uint M_ui = max(RGBA.r, max(RGBA.g, RGBA.b));
 
     const float M = max(r, max(g, b));
     const float m = min(r, min(g, b));
     const float C = M - m;
 
+    // Better compare the integer values RGBA.r, RGBA.g and M_ui than
+    // their floating point counter parts. This way, comparison is
+    // exact.
     float H = C <= minChroma ? 0 :
-              M == r ? mod((g - b) / C, 6) :
-              M == g ? ((b - r) / C) + 2 :
-                       ((r - g) / C) + 4;
+              M_ui == RGBA.r ? mod((g - b) / C, 6) :
+              M_ui == RGBA.g ? ((b - r) / C) + 2 :
+                               ((r - g) / C) + 4;
     
     H = radians(60 * H);
     const float V = M;

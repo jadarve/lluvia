@@ -27,6 +27,8 @@ function builder.newDescriptor()
 
     desc:init(builder.name, ll.ComputeDimension.D2)
 
+    -- TOTHINK: increased port contracts by checking internal attributes of the PortType
+    -- For ImageView, check all image attributes + image view attributes.
     desc:addPort(ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
 
@@ -38,6 +40,7 @@ function builder.onNodeInit(node)
     local in_rgba = node:getPort('in_rgba')
 
     -- validate in_rgba is actually a rgba8ui image
+    -- TODO: remove once port-contracts are implemented
     local err = ll.isValidImage(in_rgba, ll.ChannelCount.C4, ll.ChannelType.Uint8)
     if err ~= nil then
         error(builder.name .. ': error validating in_rgba: ' .. err)
@@ -54,7 +57,7 @@ function builder.onNodeInit(node)
     imgDesc.width = width
     imgDesc.height = height
     imgDesc.depth = depth
-    imgDesc.channelCount = 1
+    imgDesc.channelCount = ll.ChannelCount.C1
     imgDesc.channelType = ll.ChannelType.Uint8
 
     local imgViewDesc = ll.ImageViewDescriptor.new()
