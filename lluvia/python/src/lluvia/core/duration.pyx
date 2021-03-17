@@ -8,6 +8,9 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
+__all__ = [
+    'Duration'
+]
 
 cdef _buildDuration(shared_ptr[_Duration] ptr):
 
