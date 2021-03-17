@@ -40,6 +40,16 @@ ll_node(
     ],
 )
 
+cc_test(
+    name = "RGBA2HSVA_test_cc",
+    srcs = ["RGBA2HSVA_test.cpp"],
+    copts = CC_TEST_COPTS,
+    data = [
+        ":RGBA2HSVA_runfiles",
+    ],
+    deps = CC_TEST_DEPS,
+)
+
 ll_node(
     name = "HSVA2RGBA",
     builder = "HSVA2RGBA.lua",
@@ -48,4 +58,14 @@ ll_node(
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
     ],
+)
+
+cc_test(
+    name = "HSVA2RGBA_test_cc",
+    srcs = ["HSVA2RGBA_test.cpp"],
+    copts = CC_TEST_COPTS,
+    data = [
+        ":HSVA2RGBA_runfiles",
+    ],
+    deps = CC_TEST_DEPS,
 )
