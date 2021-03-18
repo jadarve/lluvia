@@ -27,6 +27,10 @@ from lluvia.core import impl
 from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
 from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+
+from lluvia.core.enums.compute_dimension cimport ComputeDimension
+from lluvia.core.compute_dimension cimport _ComputeDimension
+
 from lluvia.core.memory cimport Memory, _Memory, _buildMemory
 from lluvia.core.program cimport Program
 
@@ -37,6 +41,7 @@ from lluvia.core.node cimport ComputeNode,\
                               _buildComputeNode,\
                               _buildContainerNode
 
+from lluvia.core.types cimport _vec3ui
 
 __all__ = [
     'createSession',
@@ -627,3 +632,42 @@ cdef class Session:
             desc.addPort(port)
 
         return self.createComputeNode(desc)
+
+    def getGoodComputeLocalShape(self, ComputeDimension dimensions):
+        """
+        Returns the suggested local grid shape for compute nodes given the number of dimensions.
+
+        The local shape depends on the underlying device used.
+
+        Parameters
+        ----------
+        dimensions : ComputeDimension
+            The number of compute dimensions
+
+        Returns
+        -------
+        localShape : 3-tuple
+            The suggested local shape.
+
+        """
+
+        cdef _vec3ui localShape = self.__session.get().getGoodComputeLocalShape(<_ComputeDimension>dimensions)
+
+        return (localShape.x, localShape.y, localShape.z)
+
+    def help(self, str builderName):
+        """
+        Returns the help string of a given node builder.
+
+        Parameters
+        ----------
+        builderName : str
+            The builder name
+
+        Returns
+        -------
+        helpString : str
+            The help string.
+        """
+
+        return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')

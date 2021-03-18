@@ -20,6 +20,8 @@
 
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/SessionDescriptor.h"
+#include "lluvia/core/ComputeDimension.h"
+#include "lluvia/core/types.h"
 
 namespace ll {
 
@@ -357,6 +359,22 @@ public:
                                   some problem reading the library archive.
     */
     void loadLibrary(const std::string& filename);
+
+    /**
+    @brief      Returns the suggested local grid shape for compute nodes given the number of dimensions.
+
+    The local shape depends on the underlying device.
+    */
+    ll::vec3ui getGoodComputeLocalShape(ll::ComputeDimension dimensions) const noexcept;
+
+    /**
+    @brief      Returns the help string of a given node builder.
+
+    @param[in]  builderName  The builder name.
+
+    @return     The help string of the builder.
+    */
+    std::string help(const std::string& builderName) const;
 
 
 private:

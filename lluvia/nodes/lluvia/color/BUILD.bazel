@@ -1,11 +1,71 @@
+"""
+"""
+
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/bazel:config.bzl", "CC_TEST_COPTS")
+
+CC_TEST_DEPS = [
+    "@lluvia//lluvia/cpp/core:core_cc_library",
+    "@catch//:catch_cc_library",
+]
 
 ll_node(
     name = "RGBA2Gray",
+    builder = "RGBA2Gray.lua",
     shader = "RGBA2Gray.comp",
-    builder = 'RGBA2Gray.lua',
+    visibility = ["//visibility:public"],
     deps = [
-        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library"
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
     ],
-    visibility = ["//visibility:public"]
+)
+
+cc_test(
+    name = "RGBA2Gray_test_cc",
+    srcs = ["RGBA2Gray_test.cpp"],
+    copts = CC_TEST_COPTS,
+    data = [
+        ":RGBA2Gray_runfiles",
+    ],
+    deps = CC_TEST_DEPS,
+)
+
+ll_node(
+    name = "RGBA2HSVA",
+    builder = "RGBA2HSVA.lua",
+    shader = "RGBA2HSVA.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+cc_test(
+    name = "RGBA2HSVA_test_cc",
+    srcs = ["RGBA2HSVA_test.cpp"],
+    copts = CC_TEST_COPTS,
+    data = [
+        ":RGBA2HSVA_runfiles",
+    ],
+    deps = CC_TEST_DEPS,
+)
+
+ll_node(
+    name = "HSVA2RGBA",
+    builder = "HSVA2RGBA.lua",
+    shader = "HSVA2RGBA.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+cc_test(
+    name = "HSVA2RGBA_test_cc",
+    srcs = ["HSVA2RGBA_test.cpp"],
+    copts = CC_TEST_COPTS,
+    data = [
+        ":HSVA2RGBA_runfiles",
+    ],
+    deps = CC_TEST_DEPS,
 )

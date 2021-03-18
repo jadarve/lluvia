@@ -1,12 +1,5 @@
 /**
-rgba2gray_8ui.comp
-
-RGBA to Gray color conversion.
-
-The gray color value is computed as:
-
-gray = dot(RGBA, vec4(0.29899999, 0.58700001, 0.114, 0.0))
-
+RGBA2Gray.comp
 
 Parameters
 ----------

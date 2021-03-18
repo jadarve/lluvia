@@ -24,6 +24,7 @@ pyx_library (
         "lluvia/core/__init__.py",
         "lluvia/core/command_buffer.pxd",
         "lluvia/core/command_buffer.pyx",
+        "lluvia/core/compute_dimension.pxd",
         "lluvia/core/core_buffer.pxd",
         "lluvia/core/core_buffer.pyx",
         "lluvia/core/core_object.pxd",

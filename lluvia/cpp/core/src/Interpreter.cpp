@@ -9,6 +9,7 @@
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
+#include "lluvia/core/ComputeDimension.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/ContainerNode.h"
@@ -56,6 +57,7 @@ void registerTypes(sol::table& lib) {
     ///////////////////////////////////////////////////////
     registerEnum<ll::ChannelCount, ll::impl::ChannelCountStrings.size(), ll::impl::ChannelCountStrings>(lib, "ChannelCount");
     registerEnum<ll::ChannelType, ll::impl::ChannelTypeStrings.size(), ll::impl::ChannelTypeStrings>(lib, "ChannelType");
+    registerEnum<ll::ComputeDimension, ll::impl::ComputeDimensionStrings.size(), ll::impl::ComputeDimensionStrings>(lib, "ComputeDimension");
     registerEnum<ll::ImageAddressMode, ll::impl::ImageAddressModeStrings.size(), ll::impl::ImageAddressModeStrings>(lib, "ImageAddressMode");
     registerEnum<ll::ImageAxis, ll::impl::ImageAxisStrings.size(), ll::impl::ImageAxisStrings>(lib, "ImageAxis");
     registerEnum<ll::ImageFilterMode, ll::impl::ImageFilterModeStrings.size(), ll::impl::ImageFilterModeStrings>(lib, "ImageFilterMode");
@@ -296,7 +298,8 @@ void registerTypes(sol::table& lib) {
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createComputeNode,
-        "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createContainerNode
+        "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createContainerNode,
+        "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape
         );
 
     lib.new_usertype<ll::Memory>("Memory",

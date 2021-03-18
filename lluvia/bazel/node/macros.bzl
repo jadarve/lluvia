@@ -6,11 +6,11 @@ load("@rules_pkg//:pkg.bzl", "pkg_zip")
 load("@rules_pkg//experimental:pkg_filegroup.bzl", "pkg_filegroup")
 
 def ll_node(
-    name,
-    shader,
-    builder,
-    deps = None,
-    visibility = None):
+        name,
+        shader,
+        builder,
+        deps = None,
+        visibility = None):
     """
     Declares a new node
 
@@ -28,10 +28,10 @@ def ll_node(
         name = shader_name,
         shader = shader,
         deps = deps,
-        visibility = visibility
+        visibility = visibility,
     )
 
-    pkg_filegroup (
+    pkg_filegroup(
         name = name,
         srcs = [
             shader_name,
@@ -40,12 +40,20 @@ def ll_node(
         visibility = visibility,
     )
 
+    native.filegroup(
+        name = name + "_runfiles",
+        srcs = [
+            shader_name,
+            builder,
+        ],
+        visibility = visibility,
+    )
 
 def ll_node_library(
-    name,
-    nodes = [],
-    strip_prefix = "",
-    visibility = None):
+        name,
+        nodes = [],
+        strip_prefix = "",
+        visibility = None):
     """
     Declares a node library
 
