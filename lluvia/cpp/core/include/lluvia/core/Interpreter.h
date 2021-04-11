@@ -33,12 +33,12 @@ class Interpreter {
 
 public:
     Interpreter();
-    Interpreter(const Interpreter& interpreter) = default;
+    Interpreter(const Interpreter& interpreter) = delete;
     Interpreter(Interpreter&& interpreter)      = default;
 
     ~Interpreter();
 
-    Interpreter& operator = (const Interpreter& interpreter) = default;
+    Interpreter& operator = (const Interpreter& interpreter) = delete;
     Interpreter& operator = (Interpreter&& interpreter)      = default;
 
     void run(const std::string& code);

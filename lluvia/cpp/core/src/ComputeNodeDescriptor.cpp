@@ -213,7 +213,7 @@ std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterB
 
     auto bindings = std::vector<vk::DescriptorSetLayoutBinding>(m_ports.size());
 
-    for(const auto it : m_ports) {
+    for(const auto& it : m_ports) {
 
         const auto& port = it.second;
         auto binding = vk::DescriptorSetLayoutBinding {}
