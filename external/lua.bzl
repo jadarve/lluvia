@@ -3,20 +3,6 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
 
-config_setting(
-    name = "on_linux",
-    constraint_values = [
-        "@platforms//os:linux",
-    ],
-)
-
-config_setting(
-    name = "on_windows",
-    constraint_values = [
-        "@platforms//os:windows",
-    ],
-)
-
 cc_library (
     name = "lua_cc_library",
     srcs = glob(
@@ -27,8 +13,11 @@ cc_library (
     strip_include_prefix = "src",
     linkstatic = True,
     local_defines = select({
-        ":on_linux": ["LUA_USE_LINUX"],
-        ":on_windows": [],
+        "@lluvia//lluvia:linux": [
+            "LUA_USE_LINUX"
+        ],
+        "//conditions:default": [
+        ]
     }),
     visibility = ["//visibility:public"],
 )
@@ -40,10 +29,18 @@ cc_binary (
         ":lua_cc_library"
     ],
     linkstatic = True,
-    linkopts = [
-        "-lm",
-        "-ldl"
-    ],
+    linkopts = select({
+        "@lluvia//lluvia:linux": [
+            "-lm",
+            "-ldl"
+        ],
+        "@lluvia//lluvia:android": [
+            "-lm",
+            "-ldl"
+        ],
+        "//conditions:default": [
+        ]
+    }),
     visibility = ["//visibility:public"],
 )
 
@@ -54,9 +51,18 @@ cc_binary (
         ":lua_cc_library"
     ],
     linkstatic = True,
-    linkopts = [
-        "-lm",
-        "-ldl"
-    ],
+    linkopts = select({
+        "@lluvia//lluvia:linux": [
+            "-lm",
+            "-ldl"
+        ],
+        "@lluvia//lluvia:android": [
+            "-lm",
+            "-ldl"
+        ],
+        "//conditions:default": [
+
+        ]
+    }),
     visibility = ["//visibility:public"],
 )
