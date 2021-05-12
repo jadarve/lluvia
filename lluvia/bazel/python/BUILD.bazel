@@ -1,0 +1,33 @@
+load("@bazel_tools//tools/python:toolchain.bzl", "py_runtime_pair")
+
+# SEE https://github.com/bazelbuild/bazel/issues/7899
+
+py_runtime(
+    name = "lluvia_py2_runtime",
+    interpreter_path = select({
+        "@lluvia//lluvia:linux": "/usr/local/bin/python2",
+        "@lluvia//lluvia:windows": "C:/Python27/python.exe",
+    }),
+    python_version = "PY2",
+)
+
+py_runtime(
+    name = "lluvia_py3_runtime",
+    interpreter_path = select({
+        "@lluvia//lluvia:linux": "/usr/local/bin/python3",
+        "@lluvia//lluvia:windows": "C:/Users/juana/AppData/Local/Microsoft/WindowsApps/python3.exe",
+    }),
+    python_version = "PY3",
+)
+
+py_runtime_pair(
+    name = "lluvia_py_runtime_pair",
+    py2_runtime = ":lluvia_py2_runtime",
+    py3_runtime = ":lluvia_py3_runtime",
+)
+
+toolchain(
+    name = "python_toolchain",
+    toolchain = ":lluvia_py_runtime_pair",
+    toolchain_type = "@bazel_tools//tools/python:toolchain_type",
+)

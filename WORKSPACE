@@ -18,6 +18,8 @@ lluvia_workspace()
 # Python configuration
 ###########################################################
 
+register_toolchains("@lluvia//lluvia/bazel/python:python_toolchain")
+
 git_repository(
     name = "rules_python",
     remote = "https://github.com/bazelbuild/rules_python.git",
@@ -107,7 +109,3 @@ http_archive(
 )
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
-
-
-# FIXME: workaround for Windows 10
-register_toolchains("@//:python_toolchain")
