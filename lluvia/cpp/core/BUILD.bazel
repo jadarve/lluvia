@@ -22,7 +22,7 @@ cc_library (
     hdrs = glob(["include/**/*.h", "include/**/*.hpp"]) + [":core_lua_cc_library_header"],
     strip_include_prefix = "include/",
     copts = select({
-        "//lluvia:linux": [
+        "@lluvia//lluvia:linux": [
             "-std=c++17",
             "-stdlib=libstdc++",
             "-Werror",
@@ -33,35 +33,36 @@ cc_library (
             "-Wnon-virtual-dtor",
             "-pedantic",
         ],
-        "//lluvia:android": [
-            "-std=c++17",
-            "-stdlib=libstdc++",
-            "-Werror",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wshorten-64-to-32",
-            "-Wnon-virtual-dtor",
-            "-pedantic",
-        ],
-        "//lluvia:windows": [
+        # FIXME: this config is triggered for Windows builds
+        # "@lluvia//lluvia:android": [
+        #     "-std=c++17",
+        #     "-stdlib=libstdc++",
+        #     "-Werror",
+        #     "-Wall",
+        #     "-Wextra",
+        #     "-Wshadow",
+        #     "-Wshorten-64-to-32",
+        #     "-Wnon-virtual-dtor",
+        #     "-pedantic",
+        # ],
+        "@lluvia//lluvia:windows": [
             "/std:c++17",
             "/w",
         ],
     }),
     linkstatic = True,
     linkopts = select({
-        "//lluvia:linux": [
+        "@lluvia//lluvia:linux": [
             "-lvulkan",
             "-lm",
             "-ldl",
         ],
-        "//lluvia:android": [
+        "@lluvia//lluvia:android": [
             "-lvulkan",
             "-lm",
             "-ldl",
         ],
-        "//lluvia:windows": [],
+        "@lluvia//lluvia:windows": [],
     }),
     deps = [
         "@sol//:sol_cc_library",
@@ -69,7 +70,7 @@ cc_library (
         "@miniz//:miniz_cc_library",
         "@vulkan//:vulkan_cc_library",
     ] + select({
-        "//lluvia:windows": [
+        "@lluvia//lluvia:windows": [
             "@vulkan_windows//:vulkan",
         ],
         "//conditions:default": [],

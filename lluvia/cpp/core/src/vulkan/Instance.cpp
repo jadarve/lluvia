@@ -96,7 +96,7 @@ std::vector<const char*> Instance::getRequiredLayersNames() {
 
         for (const auto& layerName : layerNames) {
 
-            auto predicate = [&layerName](const vk::LayerProperties& props) { return std::string(props.layerName) == layerName;};
+            auto predicate = [&layerName](const vk::LayerProperties& props) { return std::string(std::begin(props.layerName), std::end(props.layerName)) == layerName;};
             const auto it = std::find_if(std::begin(availableLayers), std::end(availableLayers), predicate);
 
             if (it != std::end(availableLayers)) {
@@ -121,7 +121,7 @@ std::vector<const char*> Instance::getRequiredExtensionNames() {
 
         const auto availableExtensions = vk::enumerateInstanceExtensionProperties(std::string{"VK_LAYER_KHRONOS_validation"});
 
-        auto predicate = [](const vk::ExtensionProperties& props) { return std::string(props.extensionName) == debugUtilsExtensionName;};
+        auto predicate = [&](const vk::ExtensionProperties& props) { return std::string(std::begin(props.extensionName), std::end(props.extensionName)) == debugUtilsExtensionName;};
 
         auto it = std::find_if(std::begin(availableExtensions), std::end(availableExtensions), predicate);
         ll::throwSystemErrorIf(it == std::end(availableExtensions), ll::ErrorCode::ExtensionNotFound, std::string("extension not found: ") + debugUtilsExtensionName);

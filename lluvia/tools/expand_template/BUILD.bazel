@@ -13,6 +13,7 @@ py_binary(
   name = "expand_template",
   srcs = ["expand_template.py"],
   python_version = "PY3",
+  srcs_version = "PY3",
   data = [
     ":test_data"
   ],

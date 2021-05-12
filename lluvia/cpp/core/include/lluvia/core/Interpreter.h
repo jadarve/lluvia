@@ -63,7 +63,24 @@ public:
                                  "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
         }
 
-        return static_cast<T>(scriptResult);
+        // return static_cast<T>(scriptResult);
+        return scriptResult.get<T>();
+    }
+
+    template<typename... Args>
+    void loadAndRunNoReturn(const std::string&& code, Args&&... args) {
+
+        auto loadCode = load(std::forward<const std::string>(code));
+
+        auto scriptFunction = static_cast<sol::protected_function>(loadCode);
+        sol::protected_function_result scriptResult = scriptFunction(std::forward<Args>(args)...);
+
+        if (!scriptResult.valid()) {
+            const sol::error err = scriptResult;
+
+            ll::throwSystemError(ll::ErrorCode::InterpreterError,
+                                 "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+        }
     }
 
 private:
