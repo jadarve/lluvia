@@ -16,6 +16,6 @@ cc_library(
         "//conditions:default": [
             "--std=c++17"
         ]
-    })
+    }),
     visibility = ["//visibility:public"],
 )

@@ -43,41 +43,19 @@ pip_import (
 load("@python_deps//:requirements.bzl", "pip_install")
 pip_install()
 
+###########################################################
+# OS CONFIGURATION
+###########################################################
 
-# TODO: need to support python 3.5, 3.6, ...
-new_local_repository(
-    name = "python_linux",
-    path = "/usr",
-    build_file_content = """
-cc_library(
-    name = "python3-lib",
-    srcs = ["lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6.so"],
-    hdrs = glob(["include/python3.6/*.h"]),
-    includes = ["include/python3.6"],
-    visibility = ["//visibility:public"]
-)
-    """
-)
+# Linux
+load("//lluvia/bazel/python:linux.bzl", "python_linux", "numpy_linux")
+python_linux(name = "python_linux")
+numpy_linux(name = "numpy_linux")
 
-new_local_repository(
-    name = "numpy_linux",
-#    path = "/usr/local/lib/python3.6/dist-packages/numpy/core",
-    path = "/usr/lib/python3/dist-packages/numpy/core",
-    build_file_content = """
-cc_library(
-    name = "numpy_cc_library",
-    hdrs = glob(["include/**/*.h"]),
-    strip_include_prefix = "include",
-    includes = ["include/numpy"],
-    visibility = ["//visibility:public"]
-)
-    """
-)
-
-
-load("//lluvia/bazel/python:python_windows.bzl", "python_configure", "numpy_configure")
-python_configure(name = "python_windows")
-numpy_configure(name = "numpy_windows")
+# Windows
+load("//lluvia/bazel/python:windows.bzl", "python_windows", "numpy_windows")
+python_windows(name = "python_windows")
+numpy_windows(name = "numpy_windows")
 
 # TODO: set path as env variable
 new_local_repository(

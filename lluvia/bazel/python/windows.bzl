@@ -2,9 +2,11 @@
 """
 
 def _impl(repository_ctx):
+
   result = repository_ctx.execute(["python", "-c", "from distutils.sysconfig import get_config_var; print(get_config_var('prefix'))"])
   prefix = result.stdout.splitlines()[0]
   repository_ctx.symlink(prefix, "python")
+
   file_content = """
 cc_library(
     name = "python3-lib",
@@ -14,16 +16,12 @@ cc_library(
     visibility = ["//visibility:public"]
 )
 """
-  repository_ctx.file("BUILD", file_content)
 
-python_configure = repository_rule(
-    implementation=_impl,
-    local = True,
-    environ = []
-)
+  repository_ctx.file("BUILD", file_content)
 
 
 def _impl_numpy(repository_ctx):
+
   result = repository_ctx.execute(["python", "-c", "from distutils.sysconfig import get_config_var; print(get_config_var('LIBDEST'))"])
   prefix = result.stdout.splitlines()[0] + "/site-packages/numpy/core"
   repository_ctx.symlink(prefix, "numpy")
@@ -36,9 +34,17 @@ cc_library(
     visibility = ["//visibility:public"]
 )
 """
+  
   repository_ctx.file("BUILD", file_content)
 
-numpy_configure = repository_rule(
+
+python_windows = repository_rule(
+    implementation=_impl,
+    local = True,
+    environ = []
+)
+
+numpy_windows = repository_rule(
     implementation=_impl_numpy,
     local = True,
     environ = []
