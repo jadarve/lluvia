@@ -17,15 +17,16 @@ lluvia_workspace()
 ###########################################################
 # Python configuration
 ###########################################################
-
-register_toolchains("@lluvia//lluvia/bazel/python:python_toolchain")
-
 git_repository(
     name = "rules_python",
     remote = "https://github.com/bazelbuild/rules_python.git",
     commit = "6ed1fe53f8b36ecd404d98634d8e7411531cd6f8",
     shallow_since = "1564776078 -0400",
 )
+
+# CONFIGURE: go to lluvia/bazel/python/BUILD.bazel and change the paths
+#            of the python interpreters according to your installation.
+register_toolchains("@lluvia//lluvia/bazel/python:python_toolchain")
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
