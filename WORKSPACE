@@ -48,6 +48,10 @@ pip_install()
 # OS CONFIGURATION
 ###########################################################
 
+# TODO: Room for improvement here. I should be able to have a single
+#       version of both python_lib and numpy_lib regardless of the
+#       operating system.
+
 # Linux
 load("//lluvia/bazel/python:linux.bzl", "python_linux", "numpy_linux")
 python_linux(name = "python_linux")
@@ -58,7 +62,7 @@ load("//lluvia/bazel/python:windows.bzl", "python_windows", "numpy_windows")
 python_windows(name = "python_windows")
 numpy_windows(name = "numpy_windows")
 
-# TODO: set path as env variable
+# CONFIGURE: set path according to your installation
 new_local_repository(
     name = "vulkan_windows",
     path = "C:/VulkanSDK/1.2.170.0",
