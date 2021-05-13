@@ -31,7 +31,7 @@ Instance::Instance(bool debugEnabled):
             .setApplicationVersion(0)
             .setEngineVersion(0)
             .setPEngineName("lluvia")
-            .setApiVersion(VK_MAKE_VERSION(1u, 2u, 162u));
+            .setApiVersion(VK_MAKE_VERSION(1u, 2u, 176u));
 
     const auto extensions = getRequiredExtensionNames();
     const auto layers = getRequiredLayersNames();

@@ -9,7 +9,7 @@
 
 namespace ll {
 
-auto messagesReceived = std::atomic_bool{false};
+std::atomic_bool messagesReceived {false};
 
 bool hasReceivedVulkanWarningMessages() {
 

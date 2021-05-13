@@ -57,11 +57,11 @@ cc_library (
             "-lm",
             "-ldl",
         ],
-        "@lluvia//lluvia:android": [
-            "-lvulkan",
-            "-lm",
-            "-ldl",
-        ],
+        # "@lluvia//lluvia:android": [
+        #     "-lvulkan",
+        #     "-lm",
+        #     "-ldl",
+        # ],
         "@lluvia//lluvia:windows": [],
     }),
     deps = [

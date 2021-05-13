@@ -65,7 +65,7 @@ numpy_windows(name = "numpy_windows")
 # CONFIGURE: set path according to your installation
 new_local_repository(
     name = "vulkan_windows",
-    path = "C:/VulkanSDK/1.2.170.0",
+    path = "C:/VulkanSDK/1.2.176.1",
     build_file_content = """
 cc_library(
     name = "vulkan",
