@@ -24,9 +24,9 @@ git_repository(
     shallow_since = "1564776078 -0400",
 )
 
-# CONFIGURE: go to lluvia/bazel/python/BUILD.bazel and change the paths
+# CONFIGURE: go to platform/BUILD.bazel and change the paths
 #            of the python interpreters according to your installation.
-register_toolchains("@lluvia//lluvia/bazel/python:python_toolchain")
+register_toolchains("@lluvia//platform:python_toolchain")
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
@@ -45,7 +45,7 @@ load("@python_deps//:requirements.bzl", "pip_install")
 pip_install()
 
 ###########################################################
-# OS CONFIGURATION
+# PLATFORM CONFIGURATION
 ###########################################################
 
 # TODO: Room for improvement here. I should be able to have a single
@@ -53,29 +53,17 @@ pip_install()
 #       operating system.
 
 # Linux
-load("//lluvia/bazel/python:linux.bzl", "python_linux", "numpy_linux")
+load("//platform/linux:python.bzl", "python_linux", "numpy_linux")
 python_linux(name = "python_linux")
 numpy_linux(name = "numpy_linux")
 
 # Windows
-load("//lluvia/bazel/python:windows.bzl", "python_windows", "numpy_windows")
+load("//platform/windows:python.bzl", "python_windows", "numpy_windows")
 python_windows(name = "python_windows")
 numpy_windows(name = "numpy_windows")
 
-# CONFIGURE: set path according to your installation
-new_local_repository(
-    name = "vulkan_windows",
-    path = "C:/VulkanSDK/1.2.176.1",
-    build_file_content = """
-cc_library(
-    name = "vulkan",
-    srcs = ["Lib/vulkan-1.lib"],
-    hdrs = glob(["Include/**/*.h"]),
-    includes = ["Include"],
-    visibility = ["//visibility:public"]
-)
-    """
-)
+load("//platform/windows:vulkan_sdk.bzl", "vulkan_windows")
+vulkan_windows(name = "vulkan_windows")
 
 
 ###########################################################
