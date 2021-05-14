@@ -13,7 +13,7 @@ cc_library (
     strip_include_prefix = "src",
     linkstatic = True,
     local_defines = select({
-        "@lluvia//lluvia:linux": [
+        "@lluvia//:linux": [
             "LUA_USE_LINUX"
         ],
         "//conditions:default": [
@@ -30,11 +30,11 @@ cc_binary (
     ],
     linkstatic = True,
     linkopts = select({
-        "@lluvia//lluvia:linux": [
+        "@lluvia//:linux": [
             "-lm",
             "-ldl"
         ],
-        "@lluvia//lluvia:android": [
+        "@lluvia//:android": [
             "-lm",
             "-ldl"
         ],
@@ -52,11 +52,11 @@ cc_binary (
     ],
     linkstatic = True,
     linkopts = select({
-        "@lluvia//lluvia:linux": [
+        "@lluvia//:linux": [
             "-lm",
             "-ldl"
         ],
-        "@lluvia//lluvia:android": [
+        "@lluvia//:android": [
             "-lm",
             "-ldl"
         ],

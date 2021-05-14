@@ -22,7 +22,7 @@ cc_library (
     hdrs = glob(["include/**/*.h", "include/**/*.hpp"]) + [":core_lua_cc_library_header"],
     strip_include_prefix = "include/",
     copts = select({
-        "@lluvia//lluvia:linux": [
+        "@lluvia//:linux": [
             "-std=c++17",
             "-stdlib=libstdc++",
             "-Werror",
@@ -34,7 +34,7 @@ cc_library (
             "-pedantic",
         ],
         # FIXME: this config is triggered for Windows builds
-        # "@lluvia//lluvia:android": [
+        # "@lluvia//:android": [
         #     "-std=c++17",
         #     "-stdlib=libstdc++",
         #     "-Werror",
@@ -45,24 +45,24 @@ cc_library (
         #     "-Wnon-virtual-dtor",
         #     "-pedantic",
         # ],
-        "@lluvia//lluvia:windows": [
+        "@lluvia//:windows": [
             "/std:c++17",
             "/w",
         ],
     }),
     linkstatic = True,
     linkopts = select({
-        "@lluvia//lluvia:linux": [
+        "@lluvia//:linux": [
             "-lvulkan",
             "-lm",
             "-ldl",
         ],
-        # "@lluvia//lluvia:android": [
+        # "@lluvia//:android": [
         #     "-lvulkan",
         #     "-lm",
         #     "-ldl",
         # ],
-        "@lluvia//lluvia:windows": [],
+        "@lluvia//:windows": [],
     }),
     deps = [
         "@sol//:sol_cc_library",
@@ -70,7 +70,7 @@ cc_library (
         "@miniz//:miniz_cc_library",
         "@vulkan//:vulkan_cc_library",
     ] + select({
-        "@lluvia//lluvia:windows": [
+        "@lluvia//:windows": [
             "@vulkan_windows//:vulkan",
         ],
         "//conditions:default": [],

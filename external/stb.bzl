@@ -7,10 +7,10 @@ cc_library(
         "stb_image_write.h",
     ],
     copts = select({
-        "@lluvia//lluvia:linux": [
+        "@lluvia//:linux": [
             "--std=c++17"
         ],
-        "@lluvia//lluvia:windows": [
+        "@lluvia//:windows": [
             "/std:c++17"
         ],
         "//conditions:default": [

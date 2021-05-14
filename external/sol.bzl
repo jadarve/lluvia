@@ -5,10 +5,10 @@ cc_library(
     hdrs = glob(["single/include/sol/*.hpp"]),
     strip_include_prefix = "single/include/",
     copts = ({
-        "@lluvia//lluvia:linux": [
+        "@lluvia//:linux": [
             "--std=c++17",
         ],
-        "@lluvia//lluvia:windows": [
+        "@lluvia//:windows": [
             "/std:c++17",
             "/w",
         ],
