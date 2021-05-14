@@ -72,7 +72,7 @@ def _glsl_shader(ctx):
 
     isWindows = select(
         {
-            "@lluvia//lluvia:windows": True,
+            "@lluvia//:windows": True,
             "//conditions:default" : False
         }
     )
