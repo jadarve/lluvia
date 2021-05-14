@@ -1,6 +1,9 @@
 """
 """
 
+# TODO: How does this behave in other operating systems?
+load("@vulkan_windows//:glslc.bzl", glslc_windows = "glslc")
+
 GlslInfo = provider(fields=[
     "includes",
     "headers"
@@ -82,7 +85,7 @@ def _glsl_shader(ctx):
             inputs = inputs,
             outputs = [spirv],
             arguments = [args],
-            executable = "C:/VulkanSDK/1.2.176.1/Bin/glslc",
+            executable = glslc_windows,
             progress_message = "compiling GLSL",
             mnemonic = 'GLSLC'
         )
