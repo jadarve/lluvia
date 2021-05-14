@@ -70,18 +70,31 @@ def _glsl_shader(ctx):
     args.add("-o", spirv)
     args.add(shader.path)
 
-    # cmd = "glslc -o %s %s" % (spirv.path, shader.path)
-    cmd = "glslc $@"
-    # cmd = "C:/VulkanSDK/1.2.135.0/Bin/glslc $@"
-
-    ctx.actions.run_shell(
-        inputs = inputs,
-        outputs = [spirv],
-        arguments = [args],
-        command = cmd,
-        progress_message = "compiling GLSL",
-        mnemonic = 'GLSLC'
+    isWindows = select(
+        {
+            "@lluvia//lluvia:windows": True,
+            "//conditions:default" : False
+        }
     )
+
+    if isWindows:
+        ctx.actions.run(
+            inputs = inputs,
+            outputs = [spirv],
+            arguments = [args],
+            executable = "C:/VulkanSDK/1.2.176.1/Bin/glslc",
+            progress_message = "compiling GLSL",
+            mnemonic = 'GLSLC'
+        )
+    else:
+        ctx.actions.run_shell(
+            inputs = inputs,
+            outputs = [spirv],
+            arguments = [args],
+            command = "glslc $@",
+            progress_message = "compiling GLSL",
+            mnemonic = 'GLSLC'
+        )
 
     runfiles = ctx.runfiles(
         files = [spirv]
