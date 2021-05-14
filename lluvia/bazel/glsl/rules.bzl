@@ -73,18 +73,16 @@ def _glsl_shader(ctx):
     args.add("-o", spirv)
     args.add(shader.path)
 
-    isWindows = select(
-        {
-            "@lluvia//:windows": True,
-            "//conditions:default" : False
-        }
-    )
+    # CONFIGURE: set this value accordingly.
+    is_windows = False
 
-    if isWindows:
+    if is_windows:
         ctx.actions.run(
             inputs = inputs,
             outputs = [spirv],
             arguments = [args],
+
+            # CONFIGURE: set to a proper path.
             executable = "C:/VulkanSDK/1.2.176.1/Bin/glslc",
             # executable = glslc_windows,
             progress_message = "compiling GLSL",
