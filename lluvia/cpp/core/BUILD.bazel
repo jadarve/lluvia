@@ -3,7 +3,7 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@lluvia//lluvia/bazel/expand_template:def.bzl", "expand_template")
-load("@lluvia//lluvia/bazel:config.bzl", "CC_TEST_COPTS")
+load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
 
 expand_template(
     name = "core_lua_cc_library_header",
