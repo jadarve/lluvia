@@ -5,8 +5,6 @@
  * \license Apache 2.0, see LICENSE for more details
  */
 
-#include <memory>
-
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
@@ -17,6 +15,7 @@
 // reserve space for the dynamic dispatch loader function pointers.
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
+#include <memory>
 
 // This class mimics the way ll::vulkan::Instance works
 class InstanceWrapper {
