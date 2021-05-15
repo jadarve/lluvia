@@ -1,0 +1,48 @@
+"""
+"""
+
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@lluvia//lluvia/bazel/expand_template:def.bzl", "expand_template")
+load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
+
+
+linkopts = select({
+    "@lluvia//:linux": [
+        "-lvulkan",
+        "-lm",
+        "-ldl",
+    ],
+    "@lluvia//:windows": [],
+})
+
+deps = [
+    "@catch//:catch_cc_library",
+] + select({
+    # TODO: I should add @vulkan_linux//:vulkan_cc_library for consistency
+    "@lluvia//:windows": [
+        "@vulkan_windows//:vulkan_cc_library",
+    ],
+    "//conditions:default": [],
+})
+
+cc_test (
+    name = "test_InstanceCreation",
+    srcs = ["test_InstanceCreation.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = deps,
+    linkopts = linkopts,
+)
+
+cc_test (
+    name = "test_InstanceCreationDynamicDispatch",
+    srcs = ["test_InstanceCreationDynamicDispatch.cpp"],
+    deps = deps,
+    linkopts = linkopts,
+)
+
+cc_test (
+    name = "test_InstanceWrapper",
+    srcs = ["test_InstanceWrapper.cpp"],
+    deps = deps,
+    linkopts = linkopts,
+)

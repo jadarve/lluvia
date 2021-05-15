@@ -20,12 +20,12 @@ VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 namespace ll::vulkan {
 
 Instance::Instance(bool debugEnabled):
-    m_debugEnabled{debugEnabled} {
-
-    auto dl = vk::DynamicLoader{};
-    auto vkGetInstanceProcAddr = dl.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
+    m_loader {},
+    m_debugEnabled {debugEnabled} {
+    
+    auto vkGetInstanceProcAddr = m_loader.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
     VULKAN_HPP_DEFAULT_DISPATCHER.init(vkGetInstanceProcAddr);
-
+    
     auto appInfo = vk::ApplicationInfo()
             .setPApplicationName("lluvia")
             .setApplicationVersion(0)

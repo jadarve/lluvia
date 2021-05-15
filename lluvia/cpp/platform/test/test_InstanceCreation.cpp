@@ -11,7 +11,7 @@
 #include <vulkan/vulkan.hpp>
 
 
-TEST_CASE("create_instance", "test_VulkanDriver") {
+TEST_CASE("create_instance", "test_InstanceCreation") {
 
     const vk::ApplicationInfo appInfo = vk::ApplicationInfo()
             .setPApplicationName("lluvia")

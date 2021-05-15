@@ -12,7 +12,7 @@ def _impl(repository_ctx):
 
     file_content = """
 cc_library(
-    name = "vulkan",
+    name = "vulkan_cc_library",
     srcs = ["vulkan_sdk_windows/Lib/vulkan-1.lib"],
     hdrs = glob(["vulkan_sdk_windows/Include/**/*.h"]),
     includes = ["vulkan_sdk_windows/Include"],
