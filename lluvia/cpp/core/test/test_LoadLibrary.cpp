@@ -12,12 +12,18 @@
 #include <iostream>
 #include "lluvia/core.h"
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
+
 
 TEST_CASE("LoadLibrary", "test_LoadLibrary") {
 
+    auto runfiles = Runfiles::CreateForTest(nullptr);
+    REQUIRE(runfiles != nullptr);
+
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
 
-    REQUIRE_NOTHROW(session->loadLibrary("lluvia/cpp/core/test/nodes/test_node_library.zip"));
+    REQUIRE_NOTHROW(session->loadLibrary(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/test_node_library.zip")));
 
     auto program = session->getProgram("nodes/Assign");
     REQUIRE(program != nullptr);

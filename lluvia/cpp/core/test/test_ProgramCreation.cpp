@@ -94,8 +94,7 @@ TEST_CASE("NullProgram", "test_ProgramCreation") {
 
 TEST_CASE("FromFile", "test_ProgramCreation") {
 
-    auto error = std::string{};
-    auto runfiles = Runfiles::CreateForTest(&error);
+    auto runfiles = Runfiles::CreateForTest(nullptr);
     REQUIRE(runfiles != nullptr);
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));

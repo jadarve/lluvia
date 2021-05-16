@@ -11,9 +11,15 @@
 #include <iostream>
 #include "lluvia/core.h"
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
+
 
 TEST_CASE("DurationRecording", "test_Duration")
 {
+
+    auto runfiles = Runfiles::CreateForTest(nullptr);
+    REQUIRE(runfiles != nullptr);
 
     using memflags = vk::MemoryPropertyFlagBits;
 
@@ -27,7 +33,7 @@ TEST_CASE("DurationRecording", "test_Duration")
     const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize * sizeof(float));
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv"));
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()

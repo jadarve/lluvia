@@ -236,6 +236,7 @@ cc_test (
     deps = [
         "@miniz//:miniz_cc_library",
         "@catch//:catch_cc_library",
+        "@bazel_tools//tools/cpp/runfiles:runfiles",
     ],
     data = [
         "//lluvia/cpp/core/test/nodes:node_files",

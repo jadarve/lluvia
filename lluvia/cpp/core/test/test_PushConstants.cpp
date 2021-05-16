@@ -14,6 +14,9 @@
 
 #include "lluvia/core.h"
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
+
 TEST_CASE("Creation", "test_PushConstants") {
 
     constexpr auto a = int32_t {789456};
@@ -61,6 +64,9 @@ TEST_CASE("BadSize", "test_PushConstants") {
 
 TEST_CASE("ComputeNode", "test_PushConstants") {
 
+    auto runfiles = Runfiles::CreateForTest(nullptr);
+    REQUIRE(runfiles != nullptr);
+
     constexpr const float constantValue = 3.1415f;
     constexpr const size_t N{32};
 
@@ -70,7 +76,7 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
     auto constants = ll::PushConstants{};
     constants.setFloat(3.1415f);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/pushConstants.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/pushConstants.spv"));
 
     auto desc = ll::ComputeNodeDescriptor{}
         .setFunctionName("main")
@@ -112,6 +118,9 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
 TEST_CASE("Push2Constants", "test_PushConstants")
 {
 
+    auto runfiles = Runfiles::CreateForTest(nullptr);
+    REQUIRE(runfiles != nullptr);
+
     constexpr const float firstValue  = 3.1415f;
     constexpr const float secondValue = 0.7896f;
     constexpr const size_t N{32};
@@ -123,7 +132,7 @@ TEST_CASE("Push2Constants", "test_PushConstants")
     constants.pushFloat(firstValue);
     constants.pushFloat(secondValue);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/pushConstants2.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/pushConstants2.spv"));
 
     auto desc = ll::ComputeNodeDescriptor{}
                     .setFunctionName("main")
