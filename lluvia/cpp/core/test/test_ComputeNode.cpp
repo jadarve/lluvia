@@ -12,8 +12,15 @@
 #include <iostream>
 #include "lluvia/core.h"
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
+
 
 TEST_CASE("BufferAssignment", "test_ComputeNode") {
+
+    auto error = std::string{};
+    auto runfiles = Runfiles::CreateForTest(&error);
+    REQUIRE(runfiles != nullptr);
 
     constexpr const size_t length = 128;
     constexpr const size_t size = sizeof(float);
@@ -30,7 +37,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto buffer = hostMemory->createBuffer(length*sizeof(float));
     REQUIRE(buffer != nullptr);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv"));
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -70,6 +77,10 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
 
 TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
 
+    auto error = std::string{};
+    auto runfiles = Runfiles::CreateForTest(&error);
+    REQUIRE(runfiles != nullptr);
+
     using memflags = vk::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
@@ -83,7 +94,7 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
     REQUIRE(buffer != nullptr);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv"));
     REQUIRE(program != nullptr);
 
     session->setProgram("assign", program);

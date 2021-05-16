@@ -83,6 +83,7 @@ cc_library (
 CORE_TEST_DEPS = [
     ":core_cc_library",
     "@catch//:catch_cc_library",
+    "@bazel_tools//tools/cpp/runfiles:runfiles",
 ]
 
 cc_test (
