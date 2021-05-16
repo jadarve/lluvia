@@ -49,7 +49,8 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setFilterMode(ll::ImageFilterMode::Nearest)
                         .setAddressMode(ll::ImageAddressMode::ClampToEdge)
-                        .setNormalizedCoordinates(false);
+                        .setNormalizedCoordinates(false)
+                        .setIsSampled(false);
 
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);

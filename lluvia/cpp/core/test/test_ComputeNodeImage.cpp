@@ -12,10 +12,14 @@
 #include <iostream>
 #include "lluvia/core.h"
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
 
 TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
-    std::cout << "test_ComputeNodeImage: textureToBuffer" << std::endl;
+    auto error = std::string{};
+    auto runfiles = Runfiles::CreateForTest(&error);
+    REQUIRE(runfiles != nullptr);
 
     constexpr const uint32_t WIDTH = 32u;
     constexpr const uint32_t HEIGHT = 32u;
@@ -55,6 +59,8 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
     auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize()*sizeof(uint32_t));
+    REQUIRE(stageBuffer != nullptr);
+    REQUIRE(outputBuffer != nullptr);
 
     {
         auto bufMapped = stageBuffer->map<uint8_t[]>();
@@ -68,6 +74,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     }
 
     auto image = deviceMemory->createImage(imgDesc);
+    REQUIRE(image != nullptr);
 
     auto imgViewDesc = ll::ImageViewDescriptor {}
                         .setNormalizedCoordinates(false)
@@ -78,7 +85,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/textureToBuffer.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/textureToBuffer.spv"));
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -107,7 +114,6 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     node->init();
 
     cmdBuffer->run(*node);
-
     cmdBuffer->end();
 
     session->run(*cmdBuffer);
@@ -135,7 +141,9 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
 
 TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
 
-    std::cout << "test_ComputeNodeImage: imageToBuffer" << std::endl;
+    auto error = std::string{};
+    auto runfiles = Runfiles::CreateForTest(&error);
+    REQUIRE(runfiles != nullptr);
 
     constexpr const uint32_t WIDTH = 32u;
     constexpr const uint32_t HEIGHT = 32u;
@@ -198,7 +206,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/imageToBuffer.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/imageToBuffer.spv"));
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()

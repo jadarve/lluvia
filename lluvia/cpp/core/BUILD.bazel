@@ -143,6 +143,13 @@ cc_test (
 )
 
 cc_test (
+    name = "test_ImageLayout",
+    srcs = ["test/test_ImageLayout.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = CORE_TEST_DEPS,
+)
+
+cc_test (
     name = "test_Instance",
     srcs = ["test/test_Instance.cpp"],
     copts = CC_TEST_COPTS,
@@ -159,6 +166,13 @@ cc_test (
 cc_test (
     name = "test_Interpreter",
     srcs = ["test/test_Interpreter.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = CORE_TEST_DEPS,
+)
+
+cc_test (
+    name = "test_MemoryBarrier",
+    srcs = ["test/test_MemoryBarrier.cpp"],
     copts = CC_TEST_COPTS,
     deps = CORE_TEST_DEPS,
 )
