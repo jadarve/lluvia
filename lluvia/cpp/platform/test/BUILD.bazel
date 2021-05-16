@@ -48,3 +48,11 @@ cc_test (
     deps = deps,
     linkopts = linkopts,
 )
+
+cc_test (
+    name = "test_DebugExtensions",
+    srcs = ["test_DebugExtensions.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = deps,
+    linkopts = linkopts,
+)
