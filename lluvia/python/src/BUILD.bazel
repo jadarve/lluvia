@@ -1,5 +1,5 @@
 load("@python_deps//:requirements.bzl", "requirement")
-load("//lluvia/bazel/cython:def.bzl", "pyx_library")
+load("@lluvia//lluvia/bazel/cython:def.bzl", "pyx_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -64,6 +64,9 @@ pyx_library (
         "@lluvia//:windows":[
             "/std:c++17",
             "/w",
+            "/nologo",
+            "/INCREMENTAL:NO",
+            "/DLL",
         ],
         "@lluvia//:linux": [
             "--std=c++17",
@@ -92,6 +95,8 @@ pyx_library (
             "-D_FORTIFY_SOURCE=2",
         ],
         "@lluvia//:windows": [
+            "/MANIFESTUAC:NO",
+            "/MANIFEST:EMBED,ID=2",
         ],
     }),
     visibility = ["//visibility:public"]

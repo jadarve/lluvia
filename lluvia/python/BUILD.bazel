@@ -24,7 +24,7 @@ py_wheel(
     ],
     description_file = "//:readme_file",
     distribution = "lluvia",
-    homepage = "lluvia.io",
+    homepage = "lluvia.ai",
     python_tag = "py3",
     strip_path_prefixes = [
         "lluvia/python/src",

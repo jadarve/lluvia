@@ -74,7 +74,7 @@ def _glsl_shader(ctx):
     args.add(shader.path)
 
     # CONFIGURE: set this value accordingly.
-    is_windows = False
+    is_windows = True
 
     if is_windows:
         ctx.actions.run(
