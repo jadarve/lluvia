@@ -1,6 +1,5 @@
 load("@//lluvia/bazel/node:def.bzl", "ll_node", "ll_node_library")
 
-
 ll_node(
     name = "Assign",
     shader = "Assign.comp",
@@ -10,7 +9,6 @@ ll_node(
     ],
     visibility = ["//visibility:public"]
 )
-
 
 ll_node_library(
     name = "test_node_library",

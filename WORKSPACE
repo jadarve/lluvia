@@ -62,8 +62,9 @@ load("//platform/windows:python.bzl", "python_windows", "numpy_windows")
 python_windows(name = "python_windows")
 numpy_windows(name = "numpy_windows")
 
-load("//platform/windows:vulkan_sdk.bzl", "vulkan_windows")
-vulkan_windows(name = "vulkan_windows")
+# REMOVE once rules_vulkan work
+# load("//platform/windows:vulkan_sdk.bzl", "vulkan_windows")
+# vulkan_windows(name = "vulkan_windows")
 
 
 ###########################################################
@@ -80,3 +81,12 @@ http_archive(
 )
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
+
+
+local_repository(
+    name = "rules_vulkan",
+    path = "C:/Users/juana/Documents/GitHub/rules_vulkan",
+)
+
+load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
+vulkan_repositories()
