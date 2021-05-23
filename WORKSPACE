@@ -62,10 +62,6 @@ load("//platform/windows:python.bzl", "python_windows", "numpy_windows")
 python_windows(name = "python_windows")
 numpy_windows(name = "numpy_windows")
 
-# REMOVE once rules_vulkan work
-# load("//platform/windows:vulkan_sdk.bzl", "vulkan_windows")
-# vulkan_windows(name = "vulkan_windows")
-
 
 ###########################################################
 # Packaging rules
