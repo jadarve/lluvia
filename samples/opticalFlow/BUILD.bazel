@@ -1,4 +1,4 @@
-load("@//lluvia/bazel/glsl:def.bzl", "glsl_shader")
+load("@rules_vulkan//glsl:defs.bzl", "glsl_shader")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 cc_binary(

@@ -1,4 +1,4 @@
-load("@//lluvia/bazel/glsl:def.bzl", "glsl_shader")
+load("@rules_vulkan//glsl:defs.bzl", "glsl_shader")
 
 glsl_shader(
     name = "assign_shader",
