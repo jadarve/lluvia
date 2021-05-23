@@ -78,10 +78,10 @@ http_archive(
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
 
-
-local_repository(
+git_repository(
     name = "rules_vulkan",
-    path = "C:/Users/juana/Documents/GitHub/rules_vulkan",
+    remote = "https://github.com/jadarve/rules_vulkan.git",
+    tag = "v0.0.1"
 )
 
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
