@@ -24,8 +24,9 @@ git_repository(
     shallow_since = "1564776078 -0400",
 )
 
-# CONFIGURE: go to platform/BUILD.bazel and change the paths
+# CONFIGURE: go to platform/values.bzl and change the paths
 #            of the python interpreters according to your installation.
+#            Only the values for your OS matter.
 register_toolchains("@lluvia//platform:python_toolchain")
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
