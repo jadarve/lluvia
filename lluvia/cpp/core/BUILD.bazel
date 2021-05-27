@@ -3,7 +3,7 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@lluvia//lluvia/bazel/expand_template:def.bzl", "expand_template")
-load("@lluvia//lluvia/bazel:config.bzl", "CC_TEST_COPTS")
+load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
 
 expand_template(
     name = "core_lua_cc_library_header",
@@ -22,7 +22,7 @@ cc_library (
     hdrs = glob(["include/**/*.h", "include/**/*.hpp"]) + [":core_lua_cc_library_header"],
     strip_include_prefix = "include/",
     copts = select({
-        "//lluvia:linux": [
+        "@lluvia//:linux": [
             "-std=c++17",
             "-stdlib=libstdc++",
             "-Werror",
@@ -33,35 +33,36 @@ cc_library (
             "-Wnon-virtual-dtor",
             "-pedantic",
         ],
-        "//lluvia:android": [
-            "-std=c++17",
-            "-stdlib=libstdc++",
-            "-Werror",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wshorten-64-to-32",
-            "-Wnon-virtual-dtor",
-            "-pedantic",
-        ],
-        "//lluvia:windows": [
+        # FIXME: this config is triggered for Windows builds
+        # "@lluvia//:android": [
+        #     "-std=c++17",
+        #     "-stdlib=libstdc++",
+        #     "-Werror",
+        #     "-Wall",
+        #     "-Wextra",
+        #     "-Wshadow",
+        #     "-Wshorten-64-to-32",
+        #     "-Wnon-virtual-dtor",
+        #     "-pedantic",
+        # ],
+        "@lluvia//:windows": [
             "/std:c++17",
             "/w",
         ],
     }),
     linkstatic = True,
     linkopts = select({
-        "//lluvia:linux": [
+        "@lluvia//:linux": [
             "-lvulkan",
             "-lm",
             "-ldl",
         ],
-        "//lluvia:android": [
-            "-lvulkan",
-            "-lm",
-            "-ldl",
-        ],
-        "//lluvia:windows": [],
+        # "@lluvia//:android": [
+        #     "-lvulkan",
+        #     "-lm",
+        #     "-ldl",
+        # ],
+        "@lluvia//:windows": [],
     }),
     deps = [
         "@sol//:sol_cc_library",
@@ -69,8 +70,9 @@ cc_library (
         "@miniz//:miniz_cc_library",
         "@vulkan//:vulkan_cc_library",
     ] + select({
-        "//lluvia:windows": [
-            "@vulkan_windows//:vulkan",
+        # TODO: I should add @vulkan_linux//:vulkan_cc_library for consistency
+        "@lluvia//:windows": [
+            "@vulkan_windows//:vulkan_cc_library",
         ],
         "//conditions:default": [],
     }),
@@ -81,6 +83,7 @@ cc_library (
 CORE_TEST_DEPS = [
     ":core_cc_library",
     "@catch//:catch_cc_library",
+    "@bazel_tools//tools/cpp/runfiles:runfiles",
 ]
 
 cc_test (
@@ -140,6 +143,13 @@ cc_test (
 )
 
 cc_test (
+    name = "test_ImageLayout",
+    srcs = ["test/test_ImageLayout.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = CORE_TEST_DEPS,
+)
+
+cc_test (
     name = "test_Instance",
     srcs = ["test/test_Instance.cpp"],
     copts = CC_TEST_COPTS,
@@ -156,6 +166,13 @@ cc_test (
 cc_test (
     name = "test_Interpreter",
     srcs = ["test/test_Interpreter.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = CORE_TEST_DEPS,
+)
+
+cc_test (
+    name = "test_MemoryBarrier",
+    srcs = ["test/test_MemoryBarrier.cpp"],
     copts = CC_TEST_COPTS,
     deps = CORE_TEST_DEPS,
 )
@@ -192,13 +209,6 @@ cc_test (
 )
 
 cc_test (
-    name = "test_VulkanDriver",
-    srcs = ["test/test_VulkanDriver.cpp"],
-    copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
-)
-
-cc_test (
     name = "test_PushConstants",
     srcs = ["test/test_PushConstants.cpp"],
     copts = CC_TEST_COPTS,
@@ -226,6 +236,7 @@ cc_test (
     deps = [
         "@miniz//:miniz_cc_library",
         "@catch//:catch_cc_library",
+        "@bazel_tools//tools/cpp/runfiles:runfiles",
     ],
     data = [
         "//lluvia/cpp/core/test/nodes:node_files",

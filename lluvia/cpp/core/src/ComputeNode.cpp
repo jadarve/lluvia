@@ -331,7 +331,7 @@ void ComputeNode::onInit() {
                 builder.onNodeInit(node)
             )";
 
-            shared_interpreter->loadAndRun<void>(lua, builderName, shared_from_this());
+            shared_interpreter->loadAndRunNoReturn(lua, builderName, shared_from_this());
 
         } else {
             ll::throwSystemError(ll::ErrorCode::SessionLost, "Attempt to access the Lua interpreter of a Session already destroyed.");

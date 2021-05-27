@@ -3,11 +3,12 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
-load("@lluvia//lluvia/bazel:config.bzl", "CC_TEST_COPTS")
+load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
 
 CC_TEST_DEPS = [
     "@lluvia//lluvia/cpp/core:core_cc_library",
     "@catch//:catch_cc_library",
+    "@bazel_tools//tools/cpp/runfiles:runfiles",
 ]
 
 ll_node(

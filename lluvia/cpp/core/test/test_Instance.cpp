@@ -16,9 +16,13 @@
 
 TEST_CASE("create_instance", "test_Instance") {
 
-    auto instance = std::make_unique<ll::vulkan::Instance>(false);
+    {
+        auto instance = std::make_unique<ll::vulkan::Instance>(false);
 
-    REQUIRE(instance != nullptr);
+        REQUIRE(instance != nullptr);
+    }
+
+    std::cout << "test_instance: finish" << std::endl;
 }
 
 

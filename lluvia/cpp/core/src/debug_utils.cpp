@@ -9,7 +9,7 @@
 
 namespace ll {
 
-auto messagesReceived = std::atomic_bool{false};
+std::atomic_bool messagesReceived {false};
 
 bool hasReceivedVulkanWarningMessages() {
 
@@ -73,9 +73,9 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 
 VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-        __attribute__((unused)) VkDebugUtilsMessageTypeFlagsEXT messageType,
+        [[maybe_unused]] VkDebugUtilsMessageTypeFlagsEXT messageType,
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-        __attribute__((unused)) void* pUserData) {
+        [[maybe_unused]] void* pUserData) {
 
     if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
         messagesReceived.store(true, std::memory_order_release);

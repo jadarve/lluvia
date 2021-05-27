@@ -1,21 +1,7 @@
 load("@python_deps//:requirements.bzl", "requirement")
-load("//lluvia/bazel/cython:def.bzl", "pyx_library")
+load("@lluvia//lluvia/bazel/cython:def.bzl", "pyx_library")
 
 package(default_visibility = ["//visibility:public"])
-
-config_setting(
-    name = "on_linux",
-    constraint_values = [
-        "@platforms//os:linux",
-    ],
-)
-
-config_setting(
-    name = "on_windows",
-    constraint_values = [
-        "@platforms//os:windows",
-    ],
-)
 
 pyx_library (
     name = "pyx_library",
@@ -62,24 +48,27 @@ pyx_library (
         "//lluvia/cpp/core:core_cc_library",
         "@lua//:lua_cc_library",
     ] + select({
-        ":on_windows": [
+        "@lluvia//:windows": [
             "@python_windows//:python3-lib",
             "@numpy_windows//:numpy_cc_library",
         ],
-        ":on_linux": [
+        "@lluvia//:linux": [
             "@python_linux//:python3-lib",
             "@numpy_linux//:numpy_cc_library",
         ],
     }),
-    py_deps = [
-        requirement("numpy"),
-    ],
+    # py_deps = [
+    #     requirement("numpy"),
+    # ],
     copts = select({
-        ":on_windows":[
+        "@lluvia//:windows":[
             "/std:c++17",
             "/w",
+            "/nologo",
+            "/INCREMENTAL:NO",
+            "/DLL",
         ],
-        ":on_linux": [
+        "@lluvia//:linux": [
             "--std=c++17",
             "-stdlib=libstdc++",
             "-fwrapv",
@@ -91,7 +80,7 @@ pyx_library (
         ],
     }),
     linkopts = select({
-        ":on_linux": [
+        "@lluvia//:linux": [
             "-lvulkan",
             "-lm",
             "-ldl",
@@ -105,7 +94,9 @@ pyx_library (
             "-Wdate-time",
             "-D_FORTIFY_SOURCE=2",
         ],
-        ":on_windows": [
+        "@lluvia//:windows": [
+            "/MANIFESTUAC:NO",
+            "/MANIFEST:EMBED,ID=2",
         ],
     }),
     visibility = ["//visibility:public"]

@@ -2,10 +2,10 @@
 """
 
 CC_TEST_COPTS = select({
-    "//lluvia:linux": [
+    "@lluvia//:linux": [
       "-std=c++17",
     ],
-    "//lluvia:windows": [
+    "@lluvia//:windows": [
       "/std:c++17",
       "/w",
     ],

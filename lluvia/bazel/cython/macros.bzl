@@ -73,7 +73,9 @@ def pyx_library(
     shared_objects = []
     for filename in pyx_srcs:
 
-        cy_compile_target = filename[:-4] + "_cy_compile"
+        filename_noextension = filename[:-4] # remove .pyx
+
+        cy_compile_target = filename_noextension + "_cy_compile"
         cy_compile (
             name = cy_compile_target,
             pyx = filename,
@@ -81,9 +83,8 @@ def pyx_library(
             directives = directives
         )
 
-        shared_object_name = filename[:-4] + ".so"
         cc_binary (
-            name = shared_object_name,
+            name = filename_noextension + "_library",
             srcs = [cy_compile_target],
             deps = deps,
             linkshared = True,
@@ -91,6 +92,19 @@ def pyx_library(
             copts = copts,
             linkopts = linkopts,
             visibility = ["//visibility:public"]
+        )
+
+        # for Windows, need to rename the extension of the cc_binary from .dll to .pyd
+        shared_object_name = filename_noextension
+
+        cp_input = filename_noextension + "_library"
+        cp_output = filename_noextension + ".pyd"
+        native.genrule(
+            name = shared_object_name,
+            srcs = [cp_input],
+            outs = [cp_output],
+            cmd = "cp $(location {0}) $(location {1})".format(cp_input, cp_output),
+            cmd_bat = "copy $(location {0}) $(location {1})".format(cp_input, cp_output),
         )
 
         shared_objects.append(shared_object_name)

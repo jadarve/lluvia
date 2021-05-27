@@ -35,8 +35,8 @@ private:
     std::vector<const char*> getRequiredLayersNames();
     std::vector<const char*> getRequiredExtensionNames();
 
+    vk::DynamicLoader            m_loader;
     vk::Instance                 m_instance;
-    vk::DispatchLoaderDynamic    m_dispatchLoaderDynamic;
     vk::DebugUtilsMessengerEXT   m_debugMessenger;
     bool                         m_debugEnabled;
 };

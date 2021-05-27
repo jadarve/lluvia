@@ -20,18 +20,18 @@ VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 namespace ll::vulkan {
 
 Instance::Instance(bool debugEnabled):
-    m_debugEnabled{debugEnabled} {
-
-    auto dl = vk::DynamicLoader{};
-    auto vkGetInstanceProcAddr = dl.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
+    m_loader {},
+    m_debugEnabled {debugEnabled} {
+    
+    auto vkGetInstanceProcAddr = m_loader.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
     VULKAN_HPP_DEFAULT_DISPATCHER.init(vkGetInstanceProcAddr);
-
+    
     auto appInfo = vk::ApplicationInfo()
             .setPApplicationName("lluvia")
             .setApplicationVersion(0)
             .setEngineVersion(0)
             .setPEngineName("lluvia")
-            .setApiVersion(VK_MAKE_VERSION(1u, 2u, 162u));
+            .setApiVersion(VK_MAKE_VERSION(1u, 2u, 176u));
 
     const auto extensions = getRequiredExtensionNames();
     const auto layers = getRequiredLayersNames();
@@ -92,11 +92,11 @@ std::vector<const char*> Instance::getRequiredLayersNames() {
 
     if (m_debugEnabled) {
 
-        const auto availableLayers = vk::enumerateInstanceLayerProperties();
+        const auto availableLayers = vk::enumerateInstanceLayerProperties(VULKAN_HPP_DEFAULT_DISPATCHER);
 
         for (const auto& layerName : layerNames) {
 
-            auto predicate = [&layerName](const vk::LayerProperties& props) { return std::string(props.layerName) == layerName;};
+            auto predicate = [&layerName](const vk::LayerProperties& props) { return std::string(static_cast<const char*>(props.layerName)) == layerName;};
             const auto it = std::find_if(std::begin(availableLayers), std::end(availableLayers), predicate);
 
             if (it != std::end(availableLayers)) {
@@ -119,9 +119,9 @@ std::vector<const char*> Instance::getRequiredExtensionNames() {
 
     if (m_debugEnabled) {
 
-        const auto availableExtensions = vk::enumerateInstanceExtensionProperties(std::string{"VK_LAYER_KHRONOS_validation"});
+        const auto availableExtensions = vk::enumerateInstanceExtensionProperties(std::string{"VK_LAYER_KHRONOS_validation"}, VULKAN_HPP_DEFAULT_DISPATCHER);
 
-        auto predicate = [](const vk::ExtensionProperties& props) { return std::string(props.extensionName) == debugUtilsExtensionName;};
+        auto predicate = [&](const vk::ExtensionProperties& props) { return std::string(static_cast<const char*>(props.extensionName)) == debugUtilsExtensionName;};
 
         auto it = std::find_if(std::begin(availableExtensions), std::end(availableExtensions), predicate);
         ll::throwSystemErrorIf(it == std::end(availableExtensions), ll::ErrorCode::ExtensionNotFound, std::string("extension not found: ") + debugUtilsExtensionName);

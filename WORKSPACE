@@ -17,13 +17,17 @@ lluvia_workspace()
 ###########################################################
 # Python configuration
 ###########################################################
-
 git_repository(
     name = "rules_python",
     remote = "https://github.com/bazelbuild/rules_python.git",
     commit = "6ed1fe53f8b36ecd404d98634d8e7411531cd6f8",
     shallow_since = "1564776078 -0400",
 )
+
+# CONFIGURE: go to platform/values.bzl and change the paths
+#            of the python interpreters according to your installation.
+#            Only the values for your OS matter.
+register_toolchains("@lluvia//platform:python_toolchain")
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
@@ -41,55 +45,23 @@ pip_import (
 load("@python_deps//:requirements.bzl", "pip_install")
 pip_install()
 
+###########################################################
+# PLATFORM CONFIGURATION
+###########################################################
 
-# TODO: need to support python 3.5, 3.6, ...
-new_local_repository(
-    name = "python_linux",
-    path = "/usr",
-    build_file_content = """
-cc_library(
-    name = "python3-lib",
-    srcs = ["lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6.so"],
-    hdrs = glob(["include/python3.6/*.h"]),
-    includes = ["include/python3.6"],
-    visibility = ["//visibility:public"]
-)
-    """
-)
+# TODO: Room for improvement here. I should be able to have a single
+#       version of both python_lib and numpy_lib regardless of the
+#       operating system.
 
-new_local_repository(
-    name = "numpy_linux",
-#    path = "/usr/local/lib/python3.6/dist-packages/numpy/core",
-    path = "/usr/lib/python3/dist-packages/numpy/core",
-    build_file_content = """
-cc_library(
-    name = "numpy_cc_library",
-    hdrs = glob(["include/**/*.h"]),
-    strip_include_prefix = "include",
-    includes = ["include/numpy"],
-    visibility = ["//visibility:public"]
-)
-    """
-)
+# Linux
+load("//platform/linux:python.bzl", "python_linux", "numpy_linux")
+python_linux(name = "python_linux")
+numpy_linux(name = "numpy_linux")
 
-
-load("//lluvia/bazel/python:python_windows.bzl", "python_configure", "numpy_configure")
-python_configure(name = "python_windows")
-numpy_configure(name = "numpy_windows")
-
-new_local_repository(
-    name = "vulkan_windows",
-    path = "C:/VulkanSDK/1.2.135.0",
-    build_file_content = """
-cc_library(
-    name = "vulkan",
-    srcs = ["Lib/vulkan-1.lib"],
-    hdrs = glob(["Include/**/*.h"]),
-    includes = ["Include"],
-    visibility = ["//visibility:public"]
-)
-    """
-)
+# Windows
+load("//platform/windows:python.bzl", "python_windows", "numpy_windows")
+python_windows(name = "python_windows")
+numpy_windows(name = "numpy_windows")
 
 
 ###########################################################
@@ -106,3 +78,12 @@ http_archive(
 )
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
+
+git_repository(
+    name = "rules_vulkan",
+    remote = "https://github.com/jadarve/rules_vulkan.git",
+    tag = "v0.0.1"
+)
+
+load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
+vulkan_repositories()

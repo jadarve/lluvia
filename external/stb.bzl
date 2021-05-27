@@ -6,8 +6,16 @@ cc_library(
         "stb_image.h",
         "stb_image_write.h",
     ],
-    copts = [
-        "--std=c++17",
-    ],
+    copts = select({
+        "@lluvia//:linux": [
+            "--std=c++17"
+        ],
+        "@lluvia//:windows": [
+            "/std:c++17"
+        ],
+        "//conditions:default": [
+            "--std=c++17"
+        ]
+    }),
     visibility = ["//visibility:public"],
 )

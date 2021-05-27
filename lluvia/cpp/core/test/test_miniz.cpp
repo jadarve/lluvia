@@ -19,6 +19,9 @@
 #include <iostream>
 #include <vector>
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
+
 std::vector<uint8_t> readFile(const std::string& path, std::vector<uint8_t>& out) {
 
     // auto out = std::vector<uint8_t>();
@@ -39,6 +42,9 @@ std::vector<uint8_t> readFile(const std::string& path, std::vector<uint8_t>& out
 
 TEST_CASE("ComparedContent", "test_miniz") {
 
+    auto runfiles = Runfiles::CreateForTest(nullptr);
+    REQUIRE(runfiles != nullptr);
+
     // read a lua file
     // read a spirv file
     // read a .zip file containing both (a ll_node_library target)
@@ -47,8 +53,8 @@ TEST_CASE("ComparedContent", "test_miniz") {
     // read lua and spirv files
     auto lua_file = std::vector<uint8_t> {};
     auto spirv_file = std::vector<uint8_t> {};
-    REQUIRE_NOTHROW(readFile("lluvia/cpp/core/test/nodes/Assign.lua", lua_file));
-    REQUIRE_NOTHROW(readFile("lluvia/cpp/core/test/nodes/Assign.spv", spirv_file));
+    REQUIRE_NOTHROW(readFile(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/Assign.lua"), lua_file));
+    REQUIRE_NOTHROW(readFile(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/Assign.spv"), spirv_file));
 
     // read zip archive
     auto zip_archive = mz_zip_archive {};
@@ -56,7 +62,7 @@ TEST_CASE("ComparedContent", "test_miniz") {
     // Now try to open the archive.
     memset(&zip_archive, 0, sizeof(zip_archive));
 
-    mz_bool status = mz_zip_reader_init_file(&zip_archive, "lluvia/cpp/core/test/nodes/test_node_library.zip", 0);
+    mz_bool status = mz_zip_reader_init_file(&zip_archive, runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/test_node_library.zip").c_str(), 0);
     REQUIRE(status == true);
     
     // Get and print information about each file in the archive.

@@ -131,14 +131,18 @@ void CommandBuffer::copyImageToImage(const ll::Image &src, const ll::Image &dst)
 
 void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout) {
 
+    // FIXME: compute according to current and new layout
+    const auto srcAccessFlags = vk::AccessFlags{vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite};
+    const auto dstAccessFlags = vk::AccessFlags{vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite};
+
     auto barrier = vk::ImageMemoryBarrier {}
                     .setOldLayout(image.m_vkLayout)
                     .setNewLayout(newLayout)
-                    .setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
-                    .setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+                    .setSrcQueueFamilyIndex(m_device->getComputeFamilyQueueIndex())
+                    .setDstQueueFamilyIndex(m_device->getComputeFamilyQueueIndex())
                     .setImage(image.m_vkImage)
-                    .setSrcAccessMask(vk::AccessFlagBits::eMemoryRead)      // TODO ???
-                    .setDstAccessMask(vk::AccessFlagBits::eMemoryWrite);    // TODO ???
+                    .setSrcAccessMask(srcAccessFlags)
+                    .setDstAccessMask(dstAccessFlags);
 
     barrier.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
     barrier.subresourceRange.setBaseMipLevel(0);
@@ -146,10 +150,10 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
     barrier.subresourceRange.setBaseArrayLayer(0);
     barrier.subresourceRange.setLayerCount(1);
 
-
     m_commandBuffer.pipelineBarrier(
-        vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
-        vk::DependencyFlagBits::eDeviceGroupKHR,
+        vk::PipelineStageFlagBits::eComputeShader,
+        vk::PipelineStageFlagBits::eComputeShader,
+        vk::DependencyFlags{}, // see https://vulkan.lunarg.com/doc/view/1.2.176.1/windows/1.2-extensions/vkspec.html#synchronization-device-local-dependencies
         0, nullptr,
         0, nullptr,
         1, &barrier);
@@ -173,7 +177,7 @@ void CommandBuffer::memoryBarrier() {
 
     m_commandBuffer.pipelineBarrier(
         vk::PipelineStageFlagBits::eComputeShader, vk::PipelineStageFlagBits::eComputeShader,
-        vk::DependencyFlagBits::eDeviceGroupKHR,
+        vk::DependencyFlags{},
         1, &barrier,
         0, nullptr,
         0, nullptr);

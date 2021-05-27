@@ -11,6 +11,8 @@
 #include <iostream>
 #include "lluvia/core.h"
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
 
 /**
 SPIR-V for assign.comp shader
@@ -92,10 +94,17 @@ TEST_CASE("NullProgram", "test_ProgramCreation") {
 
 TEST_CASE("FromFile", "test_ProgramCreation") {
 
+    auto runfiles = Runfiles::CreateForTest(nullptr);
+    REQUIRE(runfiles != nullptr);
+
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
+    auto program = std::shared_ptr<ll::Program> {nullptr};
+    REQUIRE_NOTHROW([&](){
+        auto path = runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv");
+        program = session->createProgram(path);
+    }());
     REQUIRE(program != nullptr);
 
     REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
@@ -128,12 +137,19 @@ TEST_CASE("FromSPIRV_empty", "test_ProgramCreation") {
 
 TEST_CASE("SetInProgramRegistry", "test_ProgramCreation") {
 
-    std::cout << "SetInProgramRegistry" << std::endl;
+    auto error = std::string{};
+    auto runfiles = Runfiles::CreateForTest(&error);
+    REQUIRE(runfiles != nullptr);
+
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    auto program = session->createProgram("lluvia/cpp/core/test/glsl/assign.spv");
+    auto program = std::shared_ptr<ll::Program> {nullptr};
+    REQUIRE_NOTHROW([&](){
+        auto path = runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv");
+        program = session->createProgram(path);
+    }());
     REQUIRE(program != nullptr);
 
     session->setProgram("assign", program);

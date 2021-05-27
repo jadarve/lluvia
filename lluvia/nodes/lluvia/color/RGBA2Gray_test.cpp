@@ -12,8 +12,13 @@
 #include <memory>
 #include "lluvia/core.h"
 
+#include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
 
 TEST_CASE("goodUse", "RGBA2Gray_test") {
+
+    auto runfiles = Runfiles::CreateForTest(nullptr);
+    REQUIRE(runfiles != nullptr);
 
     ///////////////////////////////////////////////////////
     // Create a session and a memory
@@ -27,11 +32,11 @@ TEST_CASE("goodUse", "RGBA2Gray_test") {
     ///////////////////////////////////////////////////////
     // Register program and builder
     ///////////////////////////////////////////////////////
-    auto program = session->createProgram("lluvia/nodes/lluvia/color/RGBA2Gray.spv");
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.spv"));
     REQUIRE(program != nullptr);
     session->setProgram("lluvia/color/RGBA2Gray", program);
 
-    REQUIRE_NOTHROW(session->scriptFile("lluvia/nodes/lluvia/color/RGBA2Gray.lua"));
+    REQUIRE_NOTHROW(session->scriptFile(runfiles->Rlocation("lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.lua")));
 
     ///////////////////////////////////////////////////////
     // Create the inputs
