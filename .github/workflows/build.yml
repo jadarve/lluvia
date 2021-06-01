@@ -18,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install Python dependencies
-      run: pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe
+      run: |
+        sudo apt install -y python3-dev
+        pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe
     - name: Install Vulkan SDK
       run: |
         wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
