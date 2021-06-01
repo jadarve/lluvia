@@ -17,6 +17,8 @@ jobs:
     name: Linux build
     runs-on: ubuntu-latest
     steps:
+    - name: Install Python dependencies
+      run: pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe
     - name: Install Vulkan SDK
       run: |
         wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
@@ -25,7 +27,6 @@ jobs:
         sudo apt install -y vulkan-sdk
     - name: Install Bazel
       run: |
-        sudo apt install -y apt-transport-https curl gnupg
         curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
         sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
         echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
