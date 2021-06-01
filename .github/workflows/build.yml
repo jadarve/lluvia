@@ -33,5 +33,10 @@ jobs:
         sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
         echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
     - uses: actions/checkout@v1
-    - name: Build
+    - name: Build CPP
       run: bazel build //lluvia/cpp/...
+    - name: Build Python
+      run: |
+        bazel build //lluvia/python/...
+        ls -la /usr/lib/python3.8/
+      

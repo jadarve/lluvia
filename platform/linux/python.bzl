@@ -11,6 +11,8 @@ def _impl(repository_ctx):
 
     # In a typical linux install, prefix equals to "/usr"
     prefix, version = result.stdout.splitlines()
+    print("PREFIX:", prefix)
+    print("VERSION:", version)
     
     # creates a symbolink link of the system's Python into this repo
     repository_ctx.symlink(prefix, "python3")
