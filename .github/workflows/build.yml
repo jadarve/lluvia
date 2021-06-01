@@ -19,7 +19,7 @@ jobs:
     steps:
     - name: Install Python dependencies
       run: |
-        sudo apt install -y python3-dev
+        sudo apt install -y python3.8-dev
         pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe
     - name: Install Vulkan SDK
       run: |
@@ -38,6 +38,7 @@ jobs:
     - name: Build Python
       run: |
         ls -la /usr/lib/python3.8/
+        ls -la /usr/include/python3.8/
         bazel build //lluvia/python/...
         
       
