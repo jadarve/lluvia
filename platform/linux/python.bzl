@@ -17,10 +17,11 @@ def _impl(repository_ctx):
     # creates a symbolink link of the system's Python into this repo
     repository_ctx.symlink(prefix, "python3")
 
+    #config-3.8-x86_64-linux-gnu
     template = """
 cc_library(
     name = "python3-lib",
-    srcs = ["python3/lib/python<VERSION>/config-<VERSION>m-x86_64-linux-gnu/libpython<VERSION>.so"],
+    srcs = ["python3/lib/python<VERSION>/config-<VERSION>-x86_64-linux-gnu/libpython<VERSION>.so"],
     hdrs = glob(["python3/include/python<VERSION>/*.h"]),
     includes = ["python3/include/python<VERSION>"],
     strip_include_prefix = "python3/include/python<VERSION>",
