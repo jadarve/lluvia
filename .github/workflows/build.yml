@@ -15,7 +15,7 @@ jobs:
 
   linux:
     name: Linux build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - name: Install Python dependencies
       run: |
@@ -27,11 +27,6 @@ jobs:
         sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.176-focal.list https://packages.lunarg.com/vulkan/1.2.176/lunarg-vulkan-1.2.176-focal.list
         sudo apt update
         sudo apt install -y vulkan-sdk
-    - name: Install Bazel
-      run: |
-        curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
-        sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
-        echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
     - uses: actions/checkout@v1
     - name: Build CPP
       run: bazel build //lluvia/cpp/...
