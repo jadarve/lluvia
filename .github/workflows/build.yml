@@ -71,7 +71,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build
       run: |
-        $Env:Path += ";C:/Python27"
         $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
-        bazel build //lluvia/cpp/...
+        $Env:Path += ";C:/Python27"
+        $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
+        bazel build //lluvia/...
       
