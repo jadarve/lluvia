@@ -42,8 +42,8 @@ jobs:
       run: pip3 install cython numpy pytest jinja2 markupsafe
     - name: Install Vulkan SDK
       run: |
-        wget https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe
-        ./VulkanSDK-1.2.176.1-Installer.exe /S
+        wget -O VulkanSDK-Installer.exe https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe
+        ./VulkanSDK-Installer.exe /S
     - uses: actions/checkout@v1
     - name: Build
       run: bazel build //lluvia/cpp/...
