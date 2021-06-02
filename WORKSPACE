@@ -36,14 +36,14 @@ py_repositories()
 load("@rules_python//python:pip.bzl", "pip_repositories", "pip_import")
 pip_repositories()
 
-pip_import (
-   name = "python_deps",
-   requirements = "//:requirements.txt",
-   python_interpreter = "python3",
-)
+# pip_import (
+#    name = "python_deps",
+#    requirements = "//:requirements.txt",
+#    python_interpreter = "python3",
+# )
 
-load("@python_deps//:requirements.bzl", "pip_install")
-pip_install()
+# load("@python_deps//:requirements.bzl", "pip_install")
+# pip_install()
 
 ###########################################################
 # PLATFORM CONFIGURATION
