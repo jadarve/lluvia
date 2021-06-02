@@ -58,6 +58,6 @@ jobs:
     - name: Build
       run: |
         $Env:Path += ";C:/Python27"
-        $Env:VULKAN_SDK = "C:\VulkanSDK\1.2.176.1"
+        $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
         bazel build //lluvia/cpp/...
       
