@@ -37,11 +37,11 @@ jobs:
     steps:
     - name: Install tools
       run: |
-        choco install wget
-        choco install python2
+        choco install --no-progress wget
+        choco install --no-progress python2
     - name: Install Python dependencies
       run: |
-        pip2 install jinja2
+        python -m pip install jinja2
         pip3 install cython numpy pytest jinja2 markupsafe
     - name: Where is python3
       run: |
