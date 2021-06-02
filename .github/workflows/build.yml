@@ -47,10 +47,16 @@ jobs:
       run: |
         where.exe python3
         where.exe python
+    # - name: Install Vulkan SDK
+    #   run: |
+    #     wget -O VulkanSDK-Installer.exe https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe
+    #     ./VulkanSDK-Installer.exe /S
     - name: Install Vulkan SDK
+      # from https://github.com/actions/virtual-environments/issues/18#issuecomment-561944259
       run: |
-        wget -O VulkanSDK-Installer.exe https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe
-        ./VulkanSDK-Installer.exe /S
+          Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
+          $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
+          $installer.WaitForExit();
     - name: Get Environment Variables
       run: |
         Get-ChildItem Env:
