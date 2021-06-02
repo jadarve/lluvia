@@ -44,7 +44,11 @@ jobs:
       run: |
         wget -O VulkanSDK-Installer.exe https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe
         ./VulkanSDK-Installer.exe /S
+    - name: Get VULKAN_SDK
+      run: Get-ChildItem Env:
     - uses: actions/checkout@v1
     - name: Build
-      run: bazel build //lluvia/cpp/...
+      run: |
+        $Env:VULKAN_SDK = "C:\VulkanSDK\1.2.176.1"
+        bazel build //lluvia/cpp/...
       
