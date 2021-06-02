@@ -38,8 +38,14 @@ jobs:
     - name: Install tools
       run: |
         choco install wget
+        choco install python2
     - name: Install Python dependencies
-      run: pip3 install cython numpy pytest jinja2 markupsafe
+      run: |
+        pip2 install jinja2
+        pip3 install cython numpy pytest jinja2 markupsafe
+    - name: Where is python3
+      run: |
+        where.exe python3
     - name: Install Vulkan SDK
       run: |
         wget -O VulkanSDK-Installer.exe https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe
