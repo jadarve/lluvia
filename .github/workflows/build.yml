@@ -46,6 +46,7 @@ jobs:
     - name: Where is python3
       run: |
         where.exe python3
+        where.exe python
     - name: Install Vulkan SDK
       run: |
         wget -O VulkanSDK-Installer.exe https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe
@@ -56,6 +57,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build
       run: |
+        $Env:Path += ";C:/Python27"
         $Env:VULKAN_SDK = "C:\VulkanSDK\1.2.176.1"
         bazel build //lluvia/cpp/...
       
