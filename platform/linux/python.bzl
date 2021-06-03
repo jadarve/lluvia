@@ -2,24 +2,36 @@
 """
 
 def _impl(repository_ctx):
-  
-    result = repository_ctx.execute(
+
+    pyconfig_prefix_result = repository_ctx.execute(
+        [
+            "python3-config",
+            "--prefix",
+            "--configdir"
+        ]
+    )
+
+    prefix, configdir = pyconfig_prefix_result.stdout.splitlines()
+    
+    pyversion_result =  repository_ctx.execute(
         ["python3",
          "-c", 
-         "import platform; from distutils.sysconfig import get_config_var; print(get_config_var('prefix')); print('.'.join(platform.python_version_tuple()[:2]))"
+         "import platform; print('.'.join(platform.python_version_tuple()[:2]))"
         ])
 
-    # In a typical linux install, prefix equals to "/usr"
-    prefix, version = result.stdout.splitlines()
+    version = pyversion_result.stdout.splitlines()[0]
     
     # creates a symbolink link of the system's Python into this repo
     repository_ctx.symlink(prefix, "python3")
 
+    # this will make the config dir to point to the folder references by the symbolic link
+    configdir = configdir.replace(prefix, "python3")
+
     template = """
 cc_library(
     name = "python3-lib",
-    srcs = ["python3/lib/python<VERSION>/config-<VERSION>m-x86_64-linux-gnu/libpython<VERSION>.so"],
-    hdrs = glob(["python3/include/python<VERSION>/*.h"]),
+    srcs = ["<CONFIG_DIR>/libpython<VERSION>.so"],
+    hdrs = glob(["python3/include/python<VERSION>/**/*.h"]),
     includes = ["python3/include/python<VERSION>"],
     strip_include_prefix = "python3/include/python<VERSION>",
     visibility = ["//visibility:public"]
@@ -27,7 +39,7 @@ cc_library(
 """
 
     # this replaces the "<VERSION>" string in the template with the actual Python3 version found (e.g., 3.6)
-    repo_cotent = template.replace("<VERSION>", version)
+    repo_cotent = template.replace("<CONFIG_DIR>", configdir).replace("<VERSION>", version)
 
     repository_ctx.file("BUILD.bazel", repo_cotent)
 

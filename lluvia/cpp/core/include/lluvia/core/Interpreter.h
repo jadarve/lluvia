@@ -10,6 +10,7 @@
 
 #include <cstdint>
 #include <cstdlib>
+#include <limits>
 #include <memory>
 #include <string>
 #include <type_traits>

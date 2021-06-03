@@ -1,4 +1,3 @@
-load("@python_deps//:requirements.bzl", "requirement")
 load("@lluvia//lluvia/bazel/cython:def.bzl", "pyx_library")
 
 package(default_visibility = ["//visibility:public"])
@@ -57,9 +56,6 @@ pyx_library (
             "@numpy_linux//:numpy_cc_library",
         ],
     }),
-    # py_deps = [
-    #     requirement("numpy"),
-    # ],
     copts = select({
         "@lluvia//:windows":[
             "/std:c++17",
