@@ -28,4 +28,3 @@ jobs:
         $Env:Path += ";C:/Python27"
         $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
         bazel build //lluvia/...
-      
