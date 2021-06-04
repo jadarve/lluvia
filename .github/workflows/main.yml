@@ -25,10 +25,10 @@ jobs:
       run: |
         mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-any-linux.whl
     - uses: actions/upload-artifact@v2
-      working-directory: bazel-bin/lluvia/python
+      name: Upload Python Wheel
       with:
         name: python-wheel-linux
-        path: lluvia-0.0.1-py3-none-any-linux.whl
+        path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any-linux.whl
   
   build-windows:
     name: Build Windows
@@ -61,10 +61,9 @@ jobs:
         mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-any-windows.whl
     - uses: actions/upload-artifact@v2
       name: Upload Python Wheel
-      working-directory: bazel-bin/lluvia/python
       with:
         name: python-wheel-windows
-        path: lluvia-0.0.1-py3-none-any-windows.whl
+        path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any-windows.whl
   
   upload-release:
     name: Upload release
@@ -76,14 +75,16 @@ jobs:
         name: Download Python wheel Linux
         with:
           name: python-wheel-linux
-          path: lluvia-0.0.1-py3-none-any-linux.whl
+          path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any-linux.whl
       - uses: actions/download-artifact@v2
         name: Download Python wheel Windows
         with:
           name: python-wheel-windows
-          path: lluvia-0.0.1-py3-none-any-windows.whl
+          path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any-windows.whl
       - name: List files
         run: |
+          ls -la
+          cd bazel-bin/lluvia/python
           ls -la
 
 # jobs:
