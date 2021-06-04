@@ -21,10 +21,12 @@ jobs:
     - name: Build
       run: bazel build //...
     - name: Prepare Python Wheel
+      if: startsWith(github.ref, 'refs/tags/')
       working-directory: bazel-bin/lluvia/python
       run: |
         mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-linux_x86_64.whl
     - uses: actions/upload-artifact@v2
+      if: startsWith(github.ref, 'refs/tags/')
       name: Upload Python Wheel
       with:
         name: python-wheel-linux
@@ -56,10 +58,12 @@ jobs:
         $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
         bazel build //lluvia/...
     - name: Prepare Python Wheel
+      if: startsWith(github.ref, 'refs/tags/')
       working-directory: bazel-bin/lluvia/python
       run: |
         mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-win_amd64.whl
     - uses: actions/upload-artifact@v2
+      if: startsWith(github.ref, 'refs/tags/')
       name: Upload Python Wheel
       with:
         name: python-wheel-windows
@@ -69,6 +73,7 @@ jobs:
     name: Upload release
     runs-on: ubuntu-20.04
     needs: [build-linux, build-windows]
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -86,23 +91,12 @@ jobs:
           ls -la
           cd bazel-bin/lluvia/python
           ls -la
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
-#       - name: Build
-#         run: echo ${{ github.sha }} > Release.txt
-#       - name: Test
-#         run: cat Release.txt
-#       - name: Release
-#         uses: softprops/action-gh-release@v1
-#         if: startsWith(github.ref, 'refs/tags/')
-#         with:
-#           files: |
-#             Release.txt
-#             LICENSE
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
+            bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
