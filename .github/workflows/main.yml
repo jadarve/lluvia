@@ -22,13 +22,10 @@ jobs:
       run: bazel build //...
     - name: Prepare Python Wheel
       working-directory: bazel-bin/lluvia/python
-      # if: startsWith(github.ref, 'refs/tags/')
       run: |
         mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-any-linux.whl
-    - name: Upload Python Wheel
+    - uses: actions/upload-artifact@v2
       working-directory: bazel-bin/lluvia/python
-      # if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-artifact@v2
       with:
         name: python-wheel-linux
         path: lluvia-0.0.1-py3-none-any-linux.whl
@@ -60,13 +57,11 @@ jobs:
         bazel build //lluvia/...
     - name: Prepare Python Wheel
       working-directory: bazel-bin/lluvia/python
-      # if: startsWith(github.ref, 'refs/tags/')
       run: |
         mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-any-windows.whl
-    - name: Upload Python Wheel
+    - uses: actions/upload-artifact@v2
+      name: Upload Python Wheel
       working-directory: bazel-bin/lluvia/python
-      # if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-artifact@v2
       with:
         name: python-wheel-windows
         path: lluvia-0.0.1-py3-none-any-windows.whl
@@ -77,13 +72,13 @@ jobs:
     needs: [build-linux, build-windows]
     steps:
       - uses: actions/checkout@v2
-      - name: Download Python wheel Linux
-        uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2
+        name: Download Python wheel Linux
         with:
           name: python-wheel-linux
           path: lluvia-0.0.1-py3-none-any-linux.whl
-      - name: Download Python wheel Windows
-        uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2
+        name: Download Python wheel Windows
         with:
           name: python-wheel-windows
           path: lluvia-0.0.1-py3-none-any-windows.whl
