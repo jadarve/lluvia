@@ -96,8 +96,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        body: Trying to create a release...
         with:
+          body: Trying to create a release...
           files: |
             lluvia-0.0.1-py3-none-linux_x86_64.whl
             lluvia-0.0.1-py3-none-win_amd64.whl
