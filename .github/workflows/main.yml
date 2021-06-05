@@ -86,17 +86,18 @@ jobs:
         with:
           name: python-wheel-windows
           path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
-      - name: List files
+      - name: Prepare release files
         run: |
-          ls -la
-          cd bazel-bin/lluvia/python
+          mv bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl .
+          mv bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl .
           ls -la
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
-            bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        body: Trying to create a release...
+        with:
+          files: |
+            lluvia-0.0.1-py3-none-linux_x86_64.whl
+            lluvia-0.0.1-py3-none-win_amd64.whl
