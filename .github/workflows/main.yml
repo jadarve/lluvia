@@ -86,6 +86,10 @@ jobs:
         with:
           name: python-wheel-windows
           path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
+      - name: Check release files
+        working-directory: bazel-bin/lluvia/python
+        run: |
+          ls -la
       - name: Prepare release files
         run: |
           mv bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl .
@@ -100,4 +104,5 @@ jobs:
           body: Trying to create a release...
           files: |
             lluvia-0.0.1-py3-none-linux_x86_64.whl
-            lluvia-0.0.1-py3-none-win_amd64.whl
+
+# lluvia-0.0.1-py3-none-win_amd64.whl
