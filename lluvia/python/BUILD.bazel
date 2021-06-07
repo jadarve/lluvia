@@ -1,4 +1,5 @@
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
+load("@lluvia//:version.bzl", "VERSION")
 
 py_package(
     name = "lluvia_package",
@@ -29,7 +30,7 @@ py_wheel(
     strip_path_prefixes = [
         "lluvia/python/src",
     ],
-    version = "0.0.1",
+    version = VERSION,
     deps = [":lluvia_package"],
     visibility = ["//visibility:public"]
 )
