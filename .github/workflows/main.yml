@@ -31,78 +31,87 @@ jobs:
       with:
         name: python-wheel-linux
         path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
-  
-  build-windows:
-    name: Build Windows
-    runs-on: windows-2019
-    steps:
-    - name: Install tools
-      run: |
-        choco install --no-progress wget
-        choco install --no-progress python2
-    - name: Install Python dependencies
-      run: |
-        python -m pip install jinja2
-        pip3 install cython numpy pytest jinja2 markupsafe
-    - name: Install Vulkan SDK
-      # from https://github.com/actions/virtual-environments/issues/18#issuecomment-561944259
-      run: |
-          Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
-          $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
-          $installer.WaitForExit();
-    - uses: actions/checkout@v1
-    - name: Build
-      run: |
-        $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
-        $Env:Path += ";C:/Python27"
-        $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
-        bazel build //lluvia/...
-    - name: Prepare Python Wheel
+    - uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
-      working-directory: bazel-bin/lluvia/python
-      run: |
-        mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-win_amd64.whl
-    - uses: actions/upload-artifact@v2
-      if: startsWith(github.ref, 'refs/tags/')
-      name: Upload Python Wheel
+      name: Upload release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: python-wheel-windows
-        path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
+        body: Trying to create a release...
+        files: |
+          bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
   
-  upload-release:
-    name: Upload release
-    runs-on: ubuntu-20.04
-    needs: [build-linux, build-windows]
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        name: Download Python wheel Linux
-        with:
-          name: python-wheel-linux
-          path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
-      - uses: actions/download-artifact@v2
-        name: Download Python wheel Windows
-        with:
-          name: python-wheel-windows
-          path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
-      - name: Check release files
-        working-directory: bazel-bin/lluvia/python
-        run: |
-          ls -la
-      - name: Prepare release files
-        run: |
-          mv bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl .
-          mv bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl .
-          ls -la
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          body: Trying to create a release...
-          files: |
-            lluvia-0.0.1-py3-none-linux_x86_64.whl
+  # build-windows:
+  #   name: Build Windows
+  #   runs-on: windows-2019
+  #   steps:
+  #   - name: Install tools
+  #     run: |
+  #       choco install --no-progress wget
+  #       choco install --no-progress python2
+  #   - name: Install Python dependencies
+  #     run: |
+  #       python -m pip install jinja2
+  #       pip3 install cython numpy pytest jinja2 markupsafe
+  #   - name: Install Vulkan SDK
+  #     # from https://github.com/actions/virtual-environments/issues/18#issuecomment-561944259
+  #     run: |
+  #         Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
+  #         $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
+  #         $installer.WaitForExit();
+  #   - uses: actions/checkout@v1
+  #   - name: Build
+  #     run: |
+  #       $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
+  #       $Env:Path += ";C:/Python27"
+  #       $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
+  #       bazel build //lluvia/...
+  #   - name: Prepare Python Wheel
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     working-directory: bazel-bin/lluvia/python
+  #     run: |
+  #       mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-win_amd64.whl
+  #   - uses: actions/upload-artifact@v2
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     name: Upload Python Wheel
+  #     with:
+  #       name: python-wheel-windows
+  #       path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
+  
+  # upload-release:
+  #   name: Upload release
+  #   runs-on: ubuntu-20.04
+  #   needs: [build-linux, build-windows]
+  #   if: startsWith(github.ref, 'refs/tags/')
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/download-artifact@v2
+  #       name: Download Python wheel Linux
+  #       with:
+  #         name: python-wheel-linux
+  #         path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
+  #     - uses: actions/download-artifact@v2
+  #       name: Download Python wheel Windows
+  #       with:
+  #         name: python-wheel-windows
+  #         path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
+  #     - name: Check release files
+  #       working-directory: bazel-bin/lluvia/python
+  #       run: |
+  #         ls -la
+  #     - name: Prepare release files
+  #       run: |
+  #         mv bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl .
+  #         mv bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl .
+  #         ls -la
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v1
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         body: Trying to create a release...
+  #         files: |
+  #           lluvia-0.0.1-py3-none-linux_x86_64.whl
 
 # lluvia-0.0.1-py3-none-win_amd64.whl
