@@ -20,17 +20,18 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build
       run: bazel build //...
-    - name: Prepare release assets
-      if: startsWith(github.ref, 'refs/tags/')
-      working-directory: bazel-bin/lluvia/python
-      run: |
-        mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-linux_x86_64.whl
-    - uses: actions/upload-artifact@v2
-      if: startsWith(github.ref, 'refs/tags/')
-      name: Upload release assets
-      with:
-        name: release-assets-linux
-        path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
+    # TODO: uncomment once I can reliably create python wheels
+    # - name: Prepare release assets
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   working-directory: bazel-bin/lluvia/python
+    #   run: |
+    #     mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-linux_x86_64.whl
+    # - uses: actions/upload-artifact@v2
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   name: Upload release assets
+    #   with:
+    #     name: release-assets-linux
+    #     path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
   
   build-windows:
     name: Build Windows
@@ -57,45 +58,45 @@ jobs:
         $Env:Path += ";C:/Python27"
         $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
         bazel build //lluvia/...
-    - name: Prepare release assets
-      if: startsWith(github.ref, 'refs/tags/')
-      working-directory: bazel-bin/lluvia/python
-      run: |
-        mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-win_amd64.whl
-    - uses: actions/upload-artifact@v2
-      if: startsWith(github.ref, 'refs/tags/')
-      name: Upload release assets
-      with:
-        name: release-assets-windows
-        path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
+    # TODO: uncomment once I can reliably create python wheels
+    # - name: Prepare release assets
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   working-directory: bazel-bin/lluvia/python
+    #   run: |
+    #     mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-win_amd64.whl
+    # - uses: actions/upload-artifact@v2
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   name: Upload release assets
+    #   with:
+    #     name: release-assets-windows
+    #     path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
   
-  upload-release:
-    name: Upload release
-    runs-on: ubuntu-20.04
-    needs: [build-linux, build-windows]
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - uses: actions/download-artifact@v2
-        name: Download release assets for linux
-        with:
-          name: release-assets-linux
-          # the path where the assets will be decompressed
-          path: linux
-      - uses: actions/download-artifact@v2
-        name: Download release assets for windows
-        with:
-          name: release-assets-windows
-          # the path where the assets will be decompressed
-          path: windows
-      - name: Check release files
-        run: |
-          ls -la
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: |
-            linux/lluvia-0.0.1-py3-none-linux_x86_64.whl
-            windows/lluvia-0.0.1-py3-none-win_amd64.whl
+  # TODO: uncomment once I can reliably create python wheels
+  # upload-release:
+  #   name: Upload release
+  #   runs-on: ubuntu-20.04
+  #   needs: [build-linux, build-windows]
+  #   if: startsWith(github.ref, 'refs/tags/')
+  #   steps:
+  #     - uses: actions/download-artifact@v2
+  #       name: Download release assets for linux
+  #       with:
+  #         name: release-assets-linux
+  #         path: linux
+  #     - uses: actions/download-artifact@v2
+  #       name: Download release assets for windows
+  #       with:
+  #         name: release-assets-windows
+  #         path: windows
+  #     - name: Check release files
+  #       run: |
+  #         ls -la
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v1
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         files: |
+  #           linux/lluvia-0.0.1-py3-none-linux_x86_64.whl
+  #           windows/lluvia-0.0.1-py3-none-win_amd64.whl
