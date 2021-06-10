@@ -70,7 +70,8 @@ def pyx_library(
             py_init.append(src)
 
     # Invoke cython to produce the shared object libraries.
-    shared_objects = []
+    shared_objects_linux = []
+    shared_objects_windows = []
     for filename in pyx_srcs:
 
         filename_noextension = filename[:-4] # remove .pyx
@@ -98,24 +99,50 @@ def pyx_library(
         shared_object_name = filename_noextension
 
         cp_input = filename_noextension + "_library"
-        cp_output = filename_noextension + ".pyd"
+
+        ########################################
+        # Generate shared libraries for Linux
+        ########################################
+        cp_output_linux = filename_noextension + ".so"
+        shared_object_name_linux = shared_object_name + "_linux"
         native.genrule(
-            name = shared_object_name,
+            name = shared_object_name_linux,
             srcs = [cp_input],
-            outs = [cp_output],
-            cmd = "cp $(location {0}) $(location {1})".format(cp_input, cp_output),
-            cmd_bat = "copy $(location {0}) $(location {1})".format(cp_input, cp_output),
+            outs = [cp_output_linux],
+            cmd = "cp $(location {0}) $(location {1})".format(cp_input, cp_output_linux),
         )
 
-        shared_objects.append(shared_object_name)
+        shared_objects_linux.append(shared_object_name_linux)
 
+        ########################################
+        # Generate shared libraries for Windows
+        ########################################
+        cp_output_windows = filename_noextension + ".pyd"
+        shared_object_name_windows = shared_object_name + "_windows"
+        native.genrule(
+            name = shared_object_name_windows,
+            srcs = [cp_input],
+            outs = [cp_output_windows],
+            cmd = "cp $(location {0}) $(location {1})".format(cp_input, cp_output_windows),
+            cmd_bat = "copy $(location {0}) $(location {1})".format(cp_input, cp_output_windows)
+        )
+
+        shared_objects_windows.append(shared_object_name_windows)
+
+    shared_objects = select({
+            "@lluvia//:linux": shared_objects_linux,
+            "@lluvia//:windows": shared_objects_windows,
+            # TODO: MacOS
+            "//conditions:default": [],
+        })
+    
     # Now create a py_library with these shared objects as data.
     py_library(
         name = name,
         srcs = py_srcs,
         deps = py_deps,
         srcs_version = srcs_version,
-        data = shared_objects + pxd_srcs,
+        data = pxd_srcs + shared_objects,
         testonly = testonly,
         **kwargs
     )

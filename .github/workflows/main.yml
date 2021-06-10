@@ -1,0 +1,102 @@
+name: main
+
+on: [push]
+
+jobs:
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Install Python dependencies
+      run: |
+        sudo apt install -y python3.8-dev
+        pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe
+    - name: Install Vulkan SDK
+      run: |
+        wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+        sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.176-focal.list https://packages.lunarg.com/vulkan/1.2.176/lunarg-vulkan-1.2.176-focal.list
+        sudo apt update
+        sudo apt install -y vulkan-sdk
+    - uses: actions/checkout@v1
+    - name: Build
+      run: bazel build //...
+    # TODO: uncomment once I can reliably create python wheels
+    # - name: Prepare release assets
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   working-directory: bazel-bin/lluvia/python
+    #   run: |
+    #     mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-linux_x86_64.whl
+    # - uses: actions/upload-artifact@v2
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   name: Upload release assets
+    #   with:
+    #     name: release-assets-linux
+    #     path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
+  
+  build-windows:
+    name: Build Windows
+    runs-on: windows-2019
+    steps:
+    - name: Install tools
+      run: |
+        choco install --no-progress wget
+        choco install --no-progress python2
+    - name: Install Python dependencies
+      run: |
+        python -m pip install jinja2
+        pip3 install cython numpy pytest jinja2 markupsafe
+    - name: Install Vulkan SDK
+      # from https://github.com/actions/virtual-environments/issues/18#issuecomment-561944259
+      run: |
+          Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
+          $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
+          $installer.WaitForExit();
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
+        $Env:Path += ";C:/Python27"
+        $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
+        bazel build //lluvia/...
+    # TODO: uncomment once I can reliably create python wheels
+    # - name: Prepare release assets
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   working-directory: bazel-bin/lluvia/python
+    #   run: |
+    #     mv lluvia-0.0.1-py3-none-any.whl lluvia-0.0.1-py3-none-win_amd64.whl
+    # - uses: actions/upload-artifact@v2
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   name: Upload release assets
+    #   with:
+    #     name: release-assets-windows
+    #     path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-win_amd64.whl
+  
+  # TODO: uncomment once I can reliably create python wheels
+  # upload-release:
+  #   name: Upload release
+  #   runs-on: ubuntu-20.04
+  #   needs: [build-linux, build-windows]
+  #   if: startsWith(github.ref, 'refs/tags/')
+  #   steps:
+  #     - uses: actions/download-artifact@v2
+  #       name: Download release assets for linux
+  #       with:
+  #         name: release-assets-linux
+  #         path: linux
+  #     - uses: actions/download-artifact@v2
+  #       name: Download release assets for windows
+  #       with:
+  #         name: release-assets-windows
+  #         path: windows
+  #     - name: Check release files
+  #       run: |
+  #         ls -la
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v1
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         files: |
+  #           linux/lluvia-0.0.1-py3-none-linux_x86_64.whl
+  #           windows/lluvia-0.0.1-py3-none-win_amd64.whl
