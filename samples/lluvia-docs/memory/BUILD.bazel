@@ -1,0 +1,32 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS", "CC_TEST_DEPS")
+
+cc_test (
+    name = "test_enumerateMemories",
+    srcs = [
+        "test_enumerateMemories.cpp",
+    ],
+    copts = CC_TEST_COPTS,
+    deps = CC_TEST_DEPS,
+    visibility = ["//visibility:public"],
+)
+
+cc_test (
+    name = "test_createMemory",
+    srcs = [
+        "test_createMemory.cpp",
+    ],
+    copts = CC_TEST_COPTS,
+    deps = CC_TEST_DEPS,
+    visibility = ["//visibility:public"],
+)
+
+cc_test (
+    name = "test_createObjects",
+    srcs = [
+        "test_createObjects.cpp",
+    ],
+    copts = CC_TEST_COPTS,
+    deps = CC_TEST_DEPS,
+    visibility = ["//visibility:public"],
+)

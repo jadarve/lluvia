@@ -49,9 +49,19 @@ __all__ = [
 ]
 
 
-def createSession():
+def createSession(bool enableDebug = False):
     """
     Creates a new lluvia.Session object.
+
+    Parameters
+    ----------
+    enableDebug : bool defaults to False.
+        Whether or not to enable the debug extensions on the GPU
+        device. When enabled, the vulkan VK_LAYER_KHRONOS_validation
+        layer is activated, and messages about bad usage of the API
+        will appear.
+
+        Disable debug for reducing overhead.
 
     Returns
     -------
@@ -59,8 +69,11 @@ def createSession():
         New session.
     """
 
+    cdef _SessionDescriptor desc = _SessionDescriptor()
+    desc.enableDebug(enableDebug)
+
     cdef Session out = Session()
-    out.__session = _Session.create()
+    out.__session = _Session.create(desc)
     return out
 
 
