@@ -1,0 +1,12 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS", "CC_TEST_DEPS")
+
+cc_test (
+    name = "test_sessionCreate",
+    srcs = [
+        "test_sessionCreate.cpp",
+    ],
+    copts = CC_TEST_COPTS,
+    deps = CC_TEST_DEPS,
+    visibility = ["//visibility:public"],
+)

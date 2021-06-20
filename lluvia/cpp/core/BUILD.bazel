@@ -3,7 +3,7 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@lluvia//lluvia/bazel/expand_template:def.bzl", "expand_template")
-load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
+load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS", "CC_TEST_DEPS")
 
 expand_template(
     name = "core_lua_cc_library_header",
@@ -79,46 +79,39 @@ cc_library (
     visibility = ["//visibility:public"]
 )
 
-
-CORE_TEST_DEPS = [
-    ":core_cc_library",
-    "@catch//:catch_cc_library",
-    "@bazel_tools//tools/cpp/runfiles:runfiles",
-]
-
 cc_test (
     name = "test_Base64",
     srcs = ["test/test_Base64.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_BufferCopy",
     srcs = ["test/test_BufferCopy.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_BufferCreation",
     srcs = ["test/test_BufferCreation.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_BufferMapping",
     srcs = ["test/test_BufferMapping.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_ComputeNode",
     srcs = ["test/test_ComputeNode.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
     data = [
         "//lluvia/cpp/core/test/glsl:assign_shader"
     ]
@@ -128,7 +121,7 @@ cc_test (
     name = "test_ComputeNodeImage",
     srcs = ["test/test_ComputeNodeImage.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
     data = [
         "//lluvia/cpp/core/test/glsl:image_to_buffer_shader",
         "//lluvia/cpp/core/test/glsl:texture_to_buffer_shader"
@@ -139,56 +132,56 @@ cc_test (
     name = "test_ImageCreation",
     srcs = ["test/test_ImageCreation.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_ImageLayout",
     srcs = ["test/test_ImageLayout.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_Instance",
     srcs = ["test/test_Instance.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_ImageCopy",
     srcs = ["test/test_ImageCopy.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_Interpreter",
     srcs = ["test/test_Interpreter.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_MemoryBarrier",
     srcs = ["test/test_MemoryBarrier.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_MemoryFreeSpaceManager",
     srcs = ["test/test_MemoryFreeSpaceManager.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_ProgramCreation",
     srcs = ["test/test_ProgramCreation.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
     data = [
         "//lluvia/cpp/core/test/glsl:assign_shader"
     ]
@@ -198,21 +191,21 @@ cc_test (
     name = "test_SessionCreation",
     srcs = ["test/test_SessionCreation.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_utils",
     srcs = ["test/test_utils.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
 )
 
 cc_test (
     name = "test_PushConstants",
     srcs = ["test/test_PushConstants.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
     data = [
         "//lluvia/cpp/core/test/glsl:pushConstants_shader",
         "//lluvia/cpp/core/test/glsl:pushConstants2_shader",
@@ -223,7 +216,7 @@ cc_test (
     name = "test_Duration",
     srcs = ["test/test_Duration.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
     data = [
         "//lluvia/cpp/core/test/glsl:assign_shader"
     ]
@@ -248,7 +241,7 @@ cc_test (
     name = "test_LoadLibrary",
     srcs = ["test/test_LoadLibrary.cpp"],
     copts = CC_TEST_COPTS,
-    deps = CORE_TEST_DEPS,
+    deps = CC_TEST_DEPS,
     data = [
         "//lluvia/cpp/core/test/nodes:node_files"
     ]

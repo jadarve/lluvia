@@ -12,9 +12,12 @@ namespace ll {
 class SessionDescriptor {
 
 public:
-
     /**
     @brief     Enable validation layers and debug callbacks for this session.
+
+    When enabled, the vulkan VK_LAYER_KHRONOS_validation
+    layer is activated, and messages about bad usage of the API
+    will appear.
 
     @param[in] enable whether or not debug is enabled.
 

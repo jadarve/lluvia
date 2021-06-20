@@ -23,6 +23,15 @@ from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNo
 from lluvia.core.program cimport _Program
 from lluvia.core.types cimport _vec3ui
 
+cdef extern from 'lluvia/core/SessionDescriptor.h' namespace 'll':
+
+    cdef cppclass _SessionDescriptor 'll::SessionDescriptor':
+
+        _SessionDescriptor()
+
+        _SessionDescriptor& enableDebug(bool enable)
+        bool isDebugEnabled()
+
 
 cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
@@ -30,6 +39,9 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         @staticmethod
         shared_ptr[_Session] create()
+
+        @staticmethod
+        shared_ptr[_Session] create(const _SessionDescriptor& descriptor) except +
 
         vector[vk.MemoryPropertyFlags] getSupportedMemoryFlags() const
 
