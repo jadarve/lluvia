@@ -36,4 +36,4 @@ cd lluvia
 bazel build --curses=no //lluvia/python:lluvia_wheel
 
 # Install
-pip3 install lluvia/bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl
+pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl
