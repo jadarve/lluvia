@@ -12,6 +12,7 @@ import subprocess
 import tempfile
 import sys
 import io
+import os
 
 from libcpp cimport nullptr
 from cython.operator cimport dereference as deref
@@ -43,13 +44,16 @@ from lluvia.core.node cimport ComputeNode,\
 
 from lluvia.core.types cimport _vec3ui
 
+import lluvia.nodes as llnodes
+import lluvia.glsl.lib as llGslsLib
+
 __all__ = [
     'createSession',
     'Session'
 ]
 
 
-def createSession(bool enableDebug = False):
+def createSession(bool enableDebug = False, bool loadNodeLibrary = True):
     """
     Creates a new lluvia.Session object.
 
@@ -62,6 +66,10 @@ def createSession(bool enableDebug = False):
         will appear.
 
         Disable debug for reducing overhead.
+    
+    loadNodeLibrary : bool defaults to True.
+        Whether or not the standard Lluvia node library should be loaded
+        as part of the session creation.
 
     Returns
     -------
@@ -72,9 +80,13 @@ def createSession(bool enableDebug = False):
     cdef _SessionDescriptor desc = _SessionDescriptor()
     desc.enableDebug(enableDebug)
 
-    cdef Session out = Session()
-    out.__session = _Session.create(desc)
-    return out
+    cdef Session session = Session()
+    session.__session = _Session.create(desc)
+
+    if loadNodeLibrary:
+        session.loadLibrary(os.path.join(llnodes.__path__[0], 'lluvia_node_library.zip'))
+
+    return session
 
 
 cdef class Session:
@@ -546,12 +558,17 @@ cdef class Session:
 
             command = ['glslc', '-o', outputFile.name] + compileFlags
 
-            if includeDirs is not None:
+            if includeDirs is None:
+                includeDirs = list()
+            
+            elif type(includeDirs) is str:
+                includeDirs = [includeDirs]
 
-                if type(includeDirs) is str:
-                    includeDirs = [includeDirs]
-
-                for incDir in includeDirs:
+            # add the GLSL library embedded with the Python package
+            includeDirs.append(llGslsLib.__path__[0])
+            
+            # add -I flags
+            for incDir in includeDirs:
                     command += ['-I', incDir]
 
             command.append(shaderFile.name)

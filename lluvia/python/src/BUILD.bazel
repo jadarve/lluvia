@@ -37,6 +37,9 @@ pyx_library (
         "lluvia/core/impl/*.py",
         "lluvia/core/impl/*.pyx",
         "lluvia/core/impl/*.pxd",
+    ]) + glob([
+        "lluvia/nodes/**/*py",
+        "lluvia/glsl/**/*py",
     ]),
     srcs_version = "PY3",
     directives = [
