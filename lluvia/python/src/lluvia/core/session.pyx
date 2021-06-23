@@ -68,8 +68,8 @@ def createSession(bool enableDebug = False, bool loadNodeLibrary = True):
         Disable debug for reducing overhead.
     
     loadNodeLibrary : bool defaults to True.
-        Whether or not the standard Lluvia node library should be loaded
-        as part of the session creation.
+        Whether or not the standard Lluvia node library embedded in the
+        Python package should be loaded as part of the session creation.
 
     Returns
     -------
@@ -509,7 +509,8 @@ cdef class Session:
 
     def compileProgram(self, shaderCode,
                        includeDirs=None,
-                       compileFlags=['-Werror']):
+                       compileFlags=['-Werror'],
+                       includeGlslLibrary=True):
         """
         Compiles a Program from GLSL shader code.
 
@@ -531,6 +532,9 @@ cdef class Session:
         compileFlags : list of strings. Defaults to ['-Werror'].
             Extra compile flags to pass to glslc.
 
+        includeGlslLibrary : bool defaults to True.
+            Whether or not the standard Lluvia GLSL library embedded in the
+            Python package should be included (using -I).
 
         Returns
         -------
@@ -565,7 +569,8 @@ cdef class Session:
                 includeDirs = [includeDirs]
 
             # add the GLSL library embedded with the Python package
-            includeDirs.append(llGslsLib.__path__[0])
+            if includeGlslLibrary:
+                includeDirs.append(llGslsLib.__path__[0])
             
             # add -I flags
             for incDir in includeDirs:
@@ -593,7 +598,8 @@ cdef class Session:
                            localSize=(1, 1, 1),
                            gridSize=(1, 1, 1),
                            includeDirs=None,
-                           compileFlags=['-Werror']):
+                           compileFlags=['-Werror'],
+                           includeGlslLibrary=True):
         """
         Compiles a ComputeNode from GLSL shader code.
 
@@ -632,6 +638,10 @@ cdef class Session:
         compileFlags : list of strings. Defaults to ['-Werror'].
             Extra compile flags to pass to glslc.
 
+        includeGlslLibrary : bool defaults to True.
+            Whether or not the standard Lluvia GLSL library embedded in the
+            Python package should be included (using -I).
+
 
         Returns
         -------
@@ -652,7 +662,8 @@ cdef class Session:
         desc = ComputeNodeDescriptor()
         desc.program = self.compileProgram(shaderCode,
                                            includeDirs,
-                                           compileFlags)
+                                           compileFlags,
+                                           includeGlslLibrary)
         desc.functionName = functionName
         desc.builderName = builderName
         desc.grid = gridSize
