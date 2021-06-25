@@ -38,6 +38,32 @@ function ll.getNodeBuilder(name)
 end
 
 
+function ll.getNodeBuilderDescriptors()
+    
+    local sortedKeys = {}
+    for k in pairs(ll.nodeBuilders) do
+        table.insert(sortedKeys, k)
+    end
+    
+    table.sort(sortedKeys, function(a, b) return a:lower() < b:lower() end)
+    
+    local output = {}
+    for _, name in ipairs(sortedKeys) do
+        local builder = ll.nodeBuilders[name]
+        
+        -- finds the summary string
+        local firstLineIndex = builder.doc:find('\n')
+        local summary = builder.doc:sub(1, firstLineIndex-1)
+
+        local desc = ll.NodeBuilderDescriptor.new(builder.type, name, summary)
+        
+        table.insert(output, desc)
+    end
+    
+    return output
+end
+
+
 function ll.castObject(obj)
 
     castTable = {

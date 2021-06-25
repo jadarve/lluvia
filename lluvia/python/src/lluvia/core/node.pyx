@@ -97,6 +97,28 @@ cdef class PortDescriptor:
                                           self.direction.name,
                                           self.type.name)
 
+cdef class NodeBuilderDescriptor:
+
+    def __init__(self, NodeType nodeType, str name, str summary):
+
+        self.__descriptor.nodeType = <_NodeType> nodeType
+        self.__descriptor.name = impl.encodeString(name)
+        self.__descriptor.summary = impl.encodeString(summary)
+
+    property nodeType:
+        def __get__(self):
+            return NodeType_t(<uint32_t> self.__descriptor.nodeType)
+
+    property name:
+        def __get__(self):
+            return str(self.__descriptor.name, 'utf-8')
+
+    property summary:
+        def __get__(self):
+            return str(self.__descriptor.summary, 'utf-8')
+    
+    def __str__(self):
+        return '{0:30s} : {1:9s} : {2:s}'.format(self.name, self.nodeType.name, self.summary)
 
 cdef class ComputeNodeDescriptor:
 

@@ -25,6 +25,7 @@
 #include "core/Memory.h"
 #include "core/MemoryAllocationInfo.h"
 #include "core/Node.h"
+#include "core/NodeBuilderDescriptor.h"
 #include "core/Parameter.h"
 #include "core/Program.h"
 #include "core/PushConstants.h"

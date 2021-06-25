@@ -21,6 +21,7 @@
 #include "lluvia/core/Memory.h"
 #include "lluvia/core/MemoryAllocationInfo.h"
 #include "lluvia/core/Node.h"
+#include "lluvia/core/NodeBuilderDescriptor.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Parameter.h"
 #include "lluvia/core/Program.h"
@@ -169,6 +170,13 @@ void registerTypes(sol::table& lib) {
         "int32", sol::property(&ll::PushConstants::getInt32, &ll::PushConstants::setInt32),
         "pushFloat", &ll::PushConstants::pushFloat,
         "pushInt32", &ll::PushConstants::pushInt32
+    );
+
+    lib.new_usertype<ll::NodeBuilderDescriptor>("NodeBuilderDescriptor",
+        sol::constructors<ll::NodeBuilderDescriptor(), ll::NodeBuilderDescriptor(ll::NodeType, const std::string&, const std::string&)>(),
+        "name", &ll::NodeBuilderDescriptor::name,
+        "summary", &ll::NodeBuilderDescriptor::summary,
+        "nodeType", &ll::NodeBuilderDescriptor::nodeType
     );
 
     ///////////////////////////////////////////////////////
@@ -328,7 +336,7 @@ Interpreter::Interpreter() :
     m_lua {std::make_unique<sol::state>()} {
 
     // load default libraries
-    m_lua->open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
+    m_lua->open_libraries(sol::lib::base, sol::lib::math, sol::lib::string, sol::lib::table);
 
     // ll and impl namespaces
     m_lib = (*m_lua)["ll"].get_or_create<sol::table>();

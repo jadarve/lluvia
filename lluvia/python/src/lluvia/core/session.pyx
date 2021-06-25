@@ -27,7 +27,7 @@ from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
 from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits, NodeType
 
 from lluvia.core.enums.compute_dimension cimport ComputeDimension
 from lluvia.core.compute_dimension cimport _ComputeDimension
@@ -39,6 +39,7 @@ from lluvia.core.node cimport ComputeNode,\
                               ComputeNodeDescriptor,\
                               ContainerNodeDescriptor,\
                               ContainerNode,\
+                              NodeBuilderDescriptor,\
                               _buildComputeNode,\
                               _buildContainerNode
 
@@ -298,6 +299,28 @@ cdef class Session:
             raise KeyError('program "{0}" not found'.format(name))
 
         return out
+
+    def getNodeBuilderDescriptors(self):
+        """
+        Gets the node builder descriptors currently registered.
+
+        Returns
+        -------
+        descriptors : list of NodeBuilderDescriptor
+            The list of descriptors.
+        """
+
+        cdef vector[_NodeBuilderDescriptor] descriptors = self.__session.get().getNodeBuilderDescriptors()
+
+        output = list()
+        for d in descriptors:
+            
+            desc = NodeBuilderDescriptor(NodeType.Compute,
+                impl.decodeString(d.name), impl.decodeString(d.summary))
+
+            output.append(desc)
+
+        return output
 
     def createComputeNodeDescriptor(self, str builderName):
         """

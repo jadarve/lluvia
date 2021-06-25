@@ -205,6 +205,24 @@ std::shared_ptr<ll::Program> Session::getProgram(const std::string& name) const 
 }
 
 
+std::vector<ll::NodeBuilderDescriptor> Session::getNodeBuilderDescriptors() const {
+
+    constexpr auto lua = R"(
+        local fromCpp = ...
+        local descriptors = ll.getNodeBuilderDescriptors()
+
+        for _, v in ipairs(descriptors) do
+            table.insert(fromCpp, v)
+        end
+    )";
+
+    auto output = std::vector<ll::NodeBuilderDescriptor>{};
+    m_interpreter->loadAndRunNoReturn(lua, output);
+    
+    return output;
+}
+
+
 std::shared_ptr<ll::ComputeNode> Session::createComputeNode(const ll::ComputeNodeDescriptor& descriptor) {
 
     return std::make_shared<ll::ComputeNode>(m_device, descriptor, m_interpreter);

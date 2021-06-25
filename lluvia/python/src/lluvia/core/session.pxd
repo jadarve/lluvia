@@ -19,7 +19,7 @@ from lluvia.core.command_buffer cimport _CommandBuffer
 from lluvia.core.compute_dimension cimport _ComputeDimension
 from lluvia.core.duration cimport _Duration
 from lluvia.core.memory cimport _Memory
-from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode
+from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode, _NodeBuilderDescriptor
 from lluvia.core.program cimport _Program
 from lluvia.core.types cimport _vec3ui
 
@@ -60,6 +60,8 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         void setProgram(const string& name, const shared_ptr[_Program]& program)
         shared_ptr[_Program] getProgram(const string& name) except +
+
+        vector[_NodeBuilderDescriptor] getNodeBuilderDescriptors() except +
 
         unique_ptr[_Duration] createDuration() except +
 
