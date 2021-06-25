@@ -1,5 +1,38 @@
 local builder = ll.class(ll.ComputeNodeBuilder)
 
+builder.name = 'lluvia/Sobel'
+builder.doc = [[
+Process a gray image with the Sobel gradient filter.
+
+The in_gray image is filtered with the Sobel masks:
+
+         [-1/4    0    1/4]
+    Sx = [-1/2    0    1/2]
+         [-1/4    0    1/4]
+        
+         [-1/4  -1/2  -1/4]
+    Sy = [  0     0     0 ]
+         [1/4    1/2   1/4]
+
+The result out_gradient is computed as:
+
+    out_gradient.x = in_gray * Sx
+    out_gradient.y = in_gray * Sy
+
+The border is clamped to the edges of the image.
+
+Inputs
+------
+in_gray : ImageView
+    r8ui image.
+
+Outputs
+-------
+out_gradient : ImageView
+    rg32f image. The image gradient.
+
+]]
+
 function builder.newDescriptor() 
     
     local desc = ll.ComputeNodeDescriptor.new()
@@ -44,4 +77,4 @@ function builder.onNodeInit(node)
     node:configureGridShape(ll.vec3ui.new(out_gray.width, out_gray.height, 1))
 end
 
-ll.registerNodeBuilder('Sobel', builder)
+ll.registerNodeBuilder(builder.name, builder)

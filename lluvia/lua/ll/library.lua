@@ -128,8 +128,8 @@ end
 -----------------------------------------------------------
 ll.ComputeNodeBuilder = ll.class()
 
--- default documentation string
-ll.ComputeNodeBuilder.doc = ""
+ll.ComputeNodeBuilder.type = ll.NodeType.Compute
+ll.ComputeNodeBuilder.doc  = ""
 
 function ll.ComputeNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')
@@ -145,8 +145,8 @@ end
 -----------------------------------------------------------
 ll.ContainerNodeBuilder = ll.class()
 
--- default documentation string
-ll.ContainerNodeBuilder.doc = ""
+ll.ContainerNodeBuilder.type = ll.NodeType.Container
+ll.ContainerNodeBuilder.doc  = ""
 
 function ll.ContainerNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')
