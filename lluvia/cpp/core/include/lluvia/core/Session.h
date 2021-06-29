@@ -21,6 +21,7 @@
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/SessionDescriptor.h"
 #include "lluvia/core/ComputeDimension.h"
+#include "lluvia/core/NodeBuilderDescriptor.h"
 #include "lluvia/core/types.h"
 
 namespace ll {
@@ -231,6 +232,12 @@ public:
      */
     std::shared_ptr<ll::Program> getProgram(const std::string& name) const;
 
+    /**
+    @brief      Gets the node builder descriptors currently registered.
+    
+    @return     The node builder descriptors.
+    */
+    std::vector<ll::NodeBuilderDescriptor> getNodeBuilderDescriptors() const;
 
     /**
     @brief      Creates a compute node.

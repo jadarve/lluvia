@@ -8,9 +8,13 @@ py_package(
         "lluvia.core",
         "lluvia.core.enums",
         "lluvia.core.impl",
+        "lluvia.core.resources",
     ],
     deps = [
-        "//lluvia/python/src:pyx_library"
+        "//lluvia/python/src:pyx_library",
+        "//lluvia/nodes:lluvia_node_library",
+        "//lluvia/glsl/lib:lluvia_glsl_library",
+        "//lluvia/resources:resources",
     ],
     visibility = ["//visibility:public"]
 )

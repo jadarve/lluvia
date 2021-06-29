@@ -65,6 +65,16 @@ cdef extern from 'lluvia/core/PushConstants.h' namespace 'll':
         float getInt32() const
 
 
+cdef extern from 'lluvia/core/NodeBuilderDescriptor.h' namespace 'll':
+
+    cdef struct _NodeBuilderDescriptor 'll::NodeBuilderDescriptor':
+
+        _NodeType nodeType
+        string name
+        string summary
+        
+
+
 cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
 
     cdef cppclass _ComputeNodeDescriptor 'll::ComputeNodeDescriptor':
@@ -183,6 +193,10 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
 
 cdef class PortDescriptor:
     cdef _PortDescriptor __descriptor
+
+
+cdef class NodeBuilderDescriptor:
+    cdef _NodeBuilderDescriptor __descriptor
 
 
 cdef class ComputeNodeDescriptor:

@@ -12,6 +12,7 @@ import subprocess
 import tempfile
 import sys
 import io
+import os
 
 from libcpp cimport nullptr
 from cython.operator cimport dereference as deref
@@ -26,7 +27,7 @@ from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
 from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits, NodeType
 
 from lluvia.core.enums.compute_dimension cimport ComputeDimension
 from lluvia.core.compute_dimension cimport _ComputeDimension
@@ -38,10 +39,14 @@ from lluvia.core.node cimport ComputeNode,\
                               ComputeNodeDescriptor,\
                               ContainerNodeDescriptor,\
                               ContainerNode,\
+                              NodeBuilderDescriptor,\
                               _buildComputeNode,\
                               _buildContainerNode
 
 from lluvia.core.types cimport _vec3ui
+
+import lluvia.nodes as llnodes
+import lluvia.glsl.lib as llGslsLib
 
 __all__ = [
     'createSession',
@@ -49,7 +54,7 @@ __all__ = [
 ]
 
 
-def createSession(bool enableDebug = False):
+def createSession(bool enableDebug = False, bool loadNodeLibrary = True):
     """
     Creates a new lluvia.Session object.
 
@@ -62,6 +67,10 @@ def createSession(bool enableDebug = False):
         will appear.
 
         Disable debug for reducing overhead.
+    
+    loadNodeLibrary : bool defaults to True.
+        Whether or not the standard Lluvia node library embedded in the
+        Python package should be loaded as part of the session creation.
 
     Returns
     -------
@@ -72,9 +81,13 @@ def createSession(bool enableDebug = False):
     cdef _SessionDescriptor desc = _SessionDescriptor()
     desc.enableDebug(enableDebug)
 
-    cdef Session out = Session()
-    out.__session = _Session.create(desc)
-    return out
+    cdef Session session = Session()
+    session.__session = _Session.create(desc)
+
+    if loadNodeLibrary:
+        session.loadLibrary(os.path.join(llnodes.__path__[0], 'lluvia_node_library.zip'))
+
+    return session
 
 
 cdef class Session:
@@ -287,6 +300,28 @@ cdef class Session:
 
         return out
 
+    def getNodeBuilderDescriptors(self):
+        """
+        Gets the node builder descriptors currently registered.
+
+        Returns
+        -------
+        descriptors : list of NodeBuilderDescriptor
+            The list of descriptors.
+        """
+
+        cdef vector[_NodeBuilderDescriptor] descriptors = self.__session.get().getNodeBuilderDescriptors()
+
+        output = list()
+        for d in descriptors:
+            
+            desc = NodeBuilderDescriptor(NodeType.Compute,
+                impl.decodeString(d.name), impl.decodeString(d.summary))
+
+            output.append(desc)
+
+        return output
+
     def createComputeNodeDescriptor(self, str builderName):
         """
         Creates a ComputeNodeDescriptor from its name in the registry.
@@ -497,7 +532,8 @@ cdef class Session:
 
     def compileProgram(self, shaderCode,
                        includeDirs=None,
-                       compileFlags=['-Werror']):
+                       compileFlags=['-Werror'],
+                       includeGlslLibrary=True):
         """
         Compiles a Program from GLSL shader code.
 
@@ -519,6 +555,9 @@ cdef class Session:
         compileFlags : list of strings. Defaults to ['-Werror'].
             Extra compile flags to pass to glslc.
 
+        includeGlslLibrary : bool defaults to True.
+            Whether or not the standard Lluvia GLSL library embedded in the
+            Python package should be included (using -I).
 
         Returns
         -------
@@ -546,12 +585,18 @@ cdef class Session:
 
             command = ['glslc', '-o', outputFile.name] + compileFlags
 
-            if includeDirs is not None:
+            if includeDirs is None:
+                includeDirs = list()
+            
+            elif type(includeDirs) is str:
+                includeDirs = [includeDirs]
 
-                if type(includeDirs) is str:
-                    includeDirs = [includeDirs]
-
-                for incDir in includeDirs:
+            # add the GLSL library embedded with the Python package
+            if includeGlslLibrary:
+                includeDirs.append(llGslsLib.__path__[0])
+            
+            # add -I flags
+            for incDir in includeDirs:
                     command += ['-I', incDir]
 
             command.append(shaderFile.name)
@@ -576,7 +621,8 @@ cdef class Session:
                            localSize=(1, 1, 1),
                            gridSize=(1, 1, 1),
                            includeDirs=None,
-                           compileFlags=['-Werror']):
+                           compileFlags=['-Werror'],
+                           includeGlslLibrary=True):
         """
         Compiles a ComputeNode from GLSL shader code.
 
@@ -615,6 +661,10 @@ cdef class Session:
         compileFlags : list of strings. Defaults to ['-Werror'].
             Extra compile flags to pass to glslc.
 
+        includeGlslLibrary : bool defaults to True.
+            Whether or not the standard Lluvia GLSL library embedded in the
+            Python package should be included (using -I).
+
 
         Returns
         -------
@@ -635,7 +685,8 @@ cdef class Session:
         desc = ComputeNodeDescriptor()
         desc.program = self.compileProgram(shaderCode,
                                            includeDirs,
-                                           compileFlags)
+                                           compileFlags,
+                                           includeGlslLibrary)
         desc.functionName = functionName
         desc.builderName = builderName
         desc.grid = gridSize

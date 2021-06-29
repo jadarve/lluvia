@@ -20,7 +20,6 @@ def isStringLike(s):
 
     return type(s) is str or type(s) is bytes
 
-
 def encodeString(s):
     """
     Returns a string variable properly encoded
@@ -43,3 +42,28 @@ def encodeString(s):
 
     # Python 2
     return s
+
+def  decodeString(s):
+    """
+    Returns a Python str object created from s.
+
+    Parameters
+    ----------
+    s : str or bytes
+        String content to decode
+
+    Returns
+    -------
+    decoded : str.
+        Decoded string 
+    """
+
+    if isStringLike(s):
+        
+        if type(s) is str:
+            return s
+        else:
+            return str(s, 'utf-8')
+
+    else:
+        raise RuntimeError("s must be a string-like objects")

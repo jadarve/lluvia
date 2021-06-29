@@ -38,6 +38,32 @@ function ll.getNodeBuilder(name)
 end
 
 
+function ll.getNodeBuilderDescriptors()
+    
+    local sortedKeys = {}
+    for k in pairs(ll.nodeBuilders) do
+        table.insert(sortedKeys, k)
+    end
+    
+    table.sort(sortedKeys, function(a, b) return a:lower() < b:lower() end)
+    
+    local output = {}
+    for _, name in ipairs(sortedKeys) do
+        local builder = ll.nodeBuilders[name]
+        
+        -- finds the summary string
+        local firstLineIndex = builder.doc:find('\n')
+        local summary = builder.doc:sub(1, firstLineIndex-1)
+
+        local desc = ll.NodeBuilderDescriptor.new(builder.type, name, summary)
+        
+        table.insert(output, desc)
+    end
+    
+    return output
+end
+
+
 function ll.castObject(obj)
 
     castTable = {
@@ -128,8 +154,8 @@ end
 -----------------------------------------------------------
 ll.ComputeNodeBuilder = ll.class()
 
--- default documentation string
-ll.ComputeNodeBuilder.doc = ""
+ll.ComputeNodeBuilder.type = ll.NodeType.Compute
+ll.ComputeNodeBuilder.doc  = ""
 
 function ll.ComputeNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')
@@ -145,8 +171,8 @@ end
 -----------------------------------------------------------
 ll.ContainerNodeBuilder = ll.class()
 
--- default documentation string
-ll.ContainerNodeBuilder.doc = ""
+ll.ContainerNodeBuilder.type = ll.NodeType.Container
+ll.ContainerNodeBuilder.doc  = ""
 
 function ll.ContainerNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')

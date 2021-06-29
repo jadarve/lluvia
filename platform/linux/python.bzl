@@ -3,16 +3,6 @@
 
 def _impl(repository_ctx):
 
-    pyconfig_prefix_result = repository_ctx.execute(
-        [
-            "python3-config",
-            "--prefix",
-            "--configdir"
-        ]
-    )
-
-    prefix, configdir = pyconfig_prefix_result.stdout.splitlines()
-    
     pyversion_result =  repository_ctx.execute(
         ["python3",
          "-c", 
@@ -20,6 +10,17 @@ def _impl(repository_ctx):
         ])
 
     version = pyversion_result.stdout.splitlines()[0]
+
+    pyconfig_prefix_result = repository_ctx.execute(
+        [
+            # run the specific python3.X-config tool
+            "python{0}-config".format(version),
+            "--prefix",
+            "--configdir"
+        ]
+    )
+
+    prefix, configdir = pyconfig_prefix_result.stdout.splitlines()
     
     # creates a symbolink link of the system's Python into this repo
     repository_ctx.symlink(prefix, "python3")
@@ -39,9 +40,9 @@ cc_library(
 """
 
     # this replaces the "<VERSION>" string in the template with the actual Python3 version found (e.g., 3.6)
-    repo_cotent = template.replace("<CONFIG_DIR>", configdir).replace("<VERSION>", version)
+    repo_content = template.replace("<CONFIG_DIR>", configdir).replace("<VERSION>", version)
 
-    repository_ctx.file("BUILD.bazel", repo_cotent)
+    repository_ctx.file("BUILD.bazel", repo_content)
 
 
 def _impl_numpy(repository_ctx):

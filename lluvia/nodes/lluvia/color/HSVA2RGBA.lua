@@ -2,7 +2,6 @@ local builder = ll.class(ll.ComputeNodeBuilder)
 
 builder.name = 'lluvia/color/HSVA2RGBA'
 builder.doc = [[
-
 Converts a HSV image to RGB color space.
 
 The conversion follows the formulae presented in https://en.wikipedia.org/wiki/HSL_and_HSV.
