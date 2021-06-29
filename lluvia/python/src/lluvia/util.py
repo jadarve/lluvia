@@ -16,7 +16,8 @@ import numpy as np
 __all__ = [
     'calculateGridSize',
     'loadNodes',
-    'readRGBA'
+    'readRGBA',
+    'readSampleImage'
 ]
 
 
@@ -62,6 +63,45 @@ def readRGBA(path):
     """
 
     img = imageio.imread(path)
+    RGBA = np.zeros(img.shape[:-1] + tuple([4]), dtype=img.dtype)
+    RGBA[..., :3] = img
+
+    return RGBA
+
+def readSampleImage(name):
+    """
+    Reads a sample image packed with Lluvia.
+
+    The available images are:
+
+    * mouse
+    * koala
+
+    Parameters
+    ----------
+    name : str
+        The name of the image
+
+    Returns
+    -------
+    RGBA : np.ndarray
+        RGBA image
+    """
+
+    # From https://stackoverflow.com/questions/6028000/how-to-read-a-static-file-from-inside-a-python-package
+    try:
+        import importlib.resources as pkg_resources
+    except ImportError:
+        # Try backported to PY<37 `importlib_resources`.
+        import importlib_resources as pkg_resources
+    
+    import lluvia.resources as rsc
+
+    arr = pkg_resources.read_binary(rsc, name + '.jpg')
+
+    imreader = imageio.get_reader(arr, '.jpg')
+    img = imreader.get_data(0)
+
     RGBA = np.zeros(img.shape[:-1] + tuple([4]), dtype=img.dtype)
     RGBA[..., :3] = img
 

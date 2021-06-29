@@ -1,7 +1,8 @@
 filegroup(
     name = "resources",
     srcs = [
-        "autumn.jpg"
+        "mouse.jpg",
+        "koala.jpg",
     ],
     visibility = ["//visibility:public"]
 )
