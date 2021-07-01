@@ -19,7 +19,7 @@ from lluvia.core cimport image
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
 from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
-from lluvia.core.enums.image cimport ChannelType
+from lluvia.core.enums.image cimport ChannelType, ImageFilterMode, ImageAddressMode
 from lluvia.core.enums.image import ImageUsageFlagBits
 from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
 from lluvia.core.session cimport Session
@@ -445,6 +445,93 @@ cdef class Memory:
         
         return img
 
+    def createImageViewFromHost(self,
+                            np.ndarray arr,
+                            usageFlags=[ImageUsageFlagBits.Storage,
+                                        ImageUsageFlagBits.Sampled, 
+                                        ImageUsageFlagBits.TransferSrc, 
+                                        ImageUsageFlagBits.TransferDst],
+                            ImageFilterMode filterMode=ImageFilterMode.Nearest,
+                            ImageAddressMode addressMode=ImageAddressMode.Repeat,
+                            bool normalizedCoordinates=False,
+                            bool sampled=False):
+        """
+        Creates a lluvia.Image object from a Numpy array.
+
+        The numpy array can have between 1 and 4 dimensions. Images
+        can be 1D, 2D or 3D and can have up to 4 color channels. The
+        width, height, depth and channels of the image are resolved
+        as follows.
+
+        if arr.ndim is 1: create a 1D image
+        if arr.ndim is 2: create a 2D image with one color channel.
+        if arr.ndim is 3: create a 2D image with the number of channels
+            given by the length of the third dimension.
+        if arr.ndim is 4: create a 3D image with the number of channels
+            given by the length of the fourth dimension.
+
+        Notice that for creating 1D images with several color channels,
+        one needs to specify the 4 dimensions [length, 1, 1, channels].
+
+        The image's channel type is deduced from arr.dtype.
+
+
+        Parameters
+        ----------
+        arr : Numpy array.
+
+        usageFlags : string or list of strings.
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
+
+        filterMode : str. Defaults to 'Nearest'.
+            Filtering more for reading pixels within a shader. Possible
+            values are defined in lluvia.ImageFilterMode:
+                - Nearest
+                - Linear
+
+        addressMode : str. Defaults to 'Repeat'.
+            Addressing mode for reading pixels that are outside of the image
+            boundaries. Possible values are defined in lluvia.ImageAddressMode:
+                - Repeat
+                - MirroredRepeat
+                - ClampToEdge
+                - ClampToBorder
+                - MirrorClampToEdge
+
+        normalizedCoordinates : bool. Defaults to False.
+            Tells whether or not to use normalized coordinates to read
+            pixels within a shader.
+
+        sampled : bool. Defaults to False.
+            Tells whether or not to use a sampler object for reading
+            pixels within a shader.
+        
+        Returns
+        -------
+        img : lluvia.Image
+            A new Image object.
+
+
+        Raises
+        ------
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if arr.dtype is incompatible with image ChannelType.
+        RuntimeError : if the image cannot be created from this memory.
+        """
+
+        image = self.createImageFromHost(arr, usageFlags)
+
+        return image.createImageView(filterMode, addressMode, normalizedCoordinates, sampled)
 
     def __getImageShape(self, shape):
         """
