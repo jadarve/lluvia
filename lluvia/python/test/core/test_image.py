@@ -7,7 +7,7 @@ def test_creation():
 
     import lluvia as ll
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
 
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
@@ -39,7 +39,7 @@ def test_incorrectSize():
 
     import lluvia as ll
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
 
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
@@ -66,11 +66,11 @@ def test_imageFromHost():
 
     import lluvia as ll
 
-    img = imageio.imread('lluvia/resources/autumn.jpg')
+    img = imageio.imread('lluvia/resources/mouse.jpg')
     imgRGBA = np.zeros(img.shape[:-1] + tuple([4]), dtype=img.dtype)
     imgRGBA[..., :3] = img
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
     mem = session.createMemory()
 
     devImg = mem.createImageFromHost(imgRGBA)

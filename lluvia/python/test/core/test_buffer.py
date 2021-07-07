@@ -7,7 +7,7 @@ def test_creation():
 
     import lluvia as ll
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
     size = 512
@@ -29,7 +29,7 @@ def test_fromHost():
 
     import lluvia as ll
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
     mem = session.createMemory()
 
     dtype = np.uint8

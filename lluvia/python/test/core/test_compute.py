@@ -6,7 +6,7 @@ def test_compile():
 
     import lluvia as ll
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
     memory = session.createMemory()
 
     shaderCode = """

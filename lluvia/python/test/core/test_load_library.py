@@ -8,7 +8,7 @@ def test_load_library():
 
     print("LL_PATH: ", ll.__path__)
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
     session.loadLibrary('lluvia/cpp/core/test/nodes/test_node_library.zip')
 
     desc = session.createComputeNodeDescriptor('nodes/Assign')
