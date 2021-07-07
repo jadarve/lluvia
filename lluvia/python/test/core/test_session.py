@@ -1,12 +1,15 @@
 
 import pytest
+import sys
+import os
+from rules_python.python.runfiles import runfiles
 
 
 def test_session():
 
     import lluvia as ll
 
-    ll.createSession()
+    ll.createSession(loadNodeLibrary = False)
 
 
 def test_memoryFlags():
@@ -24,7 +27,7 @@ def test_memoryFlags():
 
     import lluvia as ll
 
-    session = ll.createSession()
+    session = ll.createSession(loadNodeLibrary = False)
     memFlags = session.getSupportedMemoryPropertyFlags()
 
     devFlagsFound = False
