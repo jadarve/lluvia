@@ -10,7 +10,7 @@
 
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/impl/enum_utils.h"
-#include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/types.h"
 

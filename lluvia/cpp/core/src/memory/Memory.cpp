@@ -5,7 +5,7 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#include "lluvia/core/Memory.h"
+#include "lluvia/core/memory/Memory.h"
 
 #include "lluvia/core/Buffer.h"
 #include "lluvia/core/error.h"
@@ -13,7 +13,7 @@
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/ImageViewDescriptor.h"
-#include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Session.h"
 
 #include "lluvia/core/vulkan/Device.h"

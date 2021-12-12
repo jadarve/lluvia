@@ -9,8 +9,8 @@
 #define LLUVIA_CORE_BUFFER_H_
 
 #include "lluvia/core/error.h"
-#include "lluvia/core/Memory.h"
-#include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/memory/Memory.h"
+#include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/impl/enum_utils.h"
 

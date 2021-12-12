@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_
-#define LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_
+#ifndef LLUVIA_CORE_MEMORY_MEMORY_ALLOCATION_INFO_H_
+#define LLUVIA_CORE_MEMORY_MEMORY_ALLOCATION_INFO_H_
 
 #include <cstdint>
 #include <ostream>
@@ -48,4 +48,4 @@ Parameter allocInfo is printed with format "[offset, size, leftPadding, page]".
 */
 std::ostream& operator<< (std::ostream &out, const ll::MemoryAllocationInfo& allocInfo);
 
-#endif // LLUVIA_CORE_MEMORY_ALLOCATION_INFO_H_
+#endif // LLUVIA_CORE_MEMORY_MEMORY_ALLOCATION_INFO_H_

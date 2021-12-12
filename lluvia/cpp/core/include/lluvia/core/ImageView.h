@@ -12,7 +12,7 @@
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/ImageViewDescriptor.h"
-#include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/memory/MemoryAllocationInfo.h"
 
 #include <memory>
 

@@ -20,7 +20,7 @@
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"
 #include "lluvia/core/Interpreter.h"
-#include "lluvia/core/Memory.h"
+#include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/Program.h"
 
 #include "lluvia/core/impl/ZipArchive.h"

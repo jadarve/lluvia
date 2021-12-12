@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_MEMORY_H_
-#define LLUVIA_CORE_MEMORY_H_
+#ifndef LLUVIA_CORE_MEMORY_MEMORY_H_
+#define LLUVIA_CORE_MEMORY_MEMORY_H_
 
 
 #include <array>
@@ -18,7 +18,7 @@
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-#include "lluvia/core/impl/MemoryFreeSpaceManager.h"
+#include "lluvia/core/memory/MemoryFreeSpaceManager.h"
 #include "lluvia/core/impl/enum_utils.h"
 
 namespace ll {
@@ -330,4 +330,4 @@ friend class ll::Image;
 
 } // namespace ll
 
-#endif // LLUVIA_CORE_MEMORY_H_
+#endif // LLUVIA_CORE_MEMORY_MEMORY_H_

@@ -1,4 +1,4 @@
-#include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/memory/MemoryAllocationInfo.h"
 
 std::ostream& operator<< (std::ostream &out, const ll::MemoryAllocationInfo& allocInfo) {
     out << "["  << allocInfo.offset;

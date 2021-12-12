@@ -7,7 +7,7 @@
 
 #include "lluvia/core/Buffer.h"
 
-#include "lluvia/core/Memory.h"
+#include "lluvia/core/memory/Memory.h"
 
 namespace ll {
 

@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_IMPL_MEMORY_FREE_SPACE_MANAGER_H_
-#define LLUVIA_CORE_IMPL_MEMORY_FREE_SPACE_MANAGER_H_
+#ifndef LLUVIA_CORE_MEMORY_MEMORY_FREE_SPACE_MANAGER_H_
+#define LLUVIA_CORE_MEMORY_MEMORY_FREE_SPACE_MANAGER_H_
 
 
 #include <memory>
@@ -16,7 +16,7 @@
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-#include "lluvia/core/MemoryAllocationInfo.h"
+#include "lluvia/core/memory/MemoryAllocationInfo.h"
 
 namespace ll {
 namespace impl {
@@ -72,4 +72,4 @@ private:
 } // namespace impl
 } // namespace ll
 
-#endif // LLUVIA_CORE_IMPL_MEMORY_FREE_SPACE_MANAGER_H_
+#endif // LLUVIA_CORE_MEMORY_MEMORY_FREE_SPACE_MANAGER_H_

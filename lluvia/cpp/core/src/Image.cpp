@@ -10,7 +10,7 @@
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ImageView.h"
 #include "lluvia/core/ImageViewDescriptor.h"
-#include "lluvia/core/Memory.h"
+#include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/Session.h"
 
 #include "lluvia/core/vulkan/Device.h"
