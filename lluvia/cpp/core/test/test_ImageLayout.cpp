@@ -17,7 +17,7 @@ TEST_CASE("UndefinedToGeneral", "test_ImageLayout") {
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    const auto memoryFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
     
     auto memory = session->createMemory(memoryFlags, 1024*1024*4, false);
     REQUIRE(memory != nullptr);

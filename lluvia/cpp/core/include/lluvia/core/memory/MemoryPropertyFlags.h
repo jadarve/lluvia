@@ -16,7 +16,6 @@
 // FIXME: move methods from there to lluvia/core/enums/enums.h
 #include "lluvia/core/impl/enum_utils.h"
 
-
 namespace ll {
 
 enum class MemoryPropertyFlagBits : ll::enum_t {

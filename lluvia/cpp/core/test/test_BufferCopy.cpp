@@ -11,7 +11,7 @@
 #include <iostream>
 #include "lluvia/core.h"
 
-using memflags = vk::MemoryPropertyFlagBits;
+using memflags = ll::MemoryPropertyFlagBits;
 
 
 TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
@@ -20,8 +20,8 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     constexpr const auto bufferSize = length*sizeof(int);
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
-    const auto hostMemFlags   = memflags::eHostVisible | memflags::eHostCoherent;;
-    const auto deviceMemFlags = memflags::eDeviceLocal;
+    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;;
+    const auto deviceMemFlags = memflags::DeviceLocal;
         
     auto hostMemory = session->createMemory(hostMemFlags, bufferSize, false);
     REQUIRE(hostMemory != nullptr);

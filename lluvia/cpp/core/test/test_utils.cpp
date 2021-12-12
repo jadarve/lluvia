@@ -10,7 +10,7 @@
 
 #include "lluvia/core.h"
 
-using memflags = vk::MemoryPropertyFlagBits;
+using memflags = ll::MemoryPropertyFlagBits;
 #ifdef _WIN32
 #define __attribute__()
 #endif
@@ -19,7 +19,7 @@ using memflags = vk::MemoryPropertyFlagBits;
 TEST_CASE("createInitImage", "test_utils") {
 
     // Constants
-    const auto memoryFlags = memflags::eDeviceLocal;
+    const auto memoryFlags = memflags::DeviceLocal;
 
     const auto width = uint32_t {1080};
     const auto height = uint32_t {1920};
@@ -44,7 +44,7 @@ TEST_CASE("createInitImage", "test_utils") {
 TEST_CASE("configureGraph", "test_utils") {
 
     // Constants
-    const auto memoryFlags = memflags::eDeviceLocal;
+    const auto memoryFlags = memflags::DeviceLocal;
 
     const auto width = uint32_t {1080};
     const auto height = uint32_t {1920};

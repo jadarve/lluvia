@@ -49,7 +49,7 @@ Memory::~Memory() {
 }
 
 
-vk::MemoryPropertyFlags Memory::getMemoryPropertyFlags() const noexcept {
+ll::MemoryPropertyFlags Memory::getMemoryPropertyFlags() const noexcept {
     return m_heapInfo.flags;
 }
 
@@ -65,7 +65,7 @@ uint32_t Memory::getPageCount() const noexcept {
 
 
 bool Memory::isMappable() const noexcept {
-    return (m_heapInfo.flags & vk::MemoryPropertyFlagBits::eHostVisible) == vk::MemoryPropertyFlagBits::eHostVisible;
+    return (m_heapInfo.flags & ll::MemoryPropertyFlagBits::HostVisible) == ll::MemoryPropertyFlagBits::HostVisible;
 }
 
 

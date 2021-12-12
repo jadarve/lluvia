@@ -17,11 +17,14 @@
 #include <typeinfo>
 #include <vector>
 
-#define LL_CONSTEXPR 
+// #include "lluvia/core/vulkan/vulkan.hpp"
+
+#define LL_CONSTEXPR constexpr
 
 namespace ll {
 
 using enum_t = uint32_t;
+
 
 template<typename BitType, typename MaskType = enum_t>
 class Flags {
@@ -30,6 +33,10 @@ public:
     Flags() = default;
     Flags(const Flags<BitType, MaskType>& f) = default;
     Flags(Flags<BitType, MaskType>&& f) = default;
+
+    constexpr Flags(BitType bit) noexcept:
+        m_mask{static_cast<MaskType>(bit)} {
+    }
 
     explicit Flags(MaskType mask):
         m_mask {mask} {

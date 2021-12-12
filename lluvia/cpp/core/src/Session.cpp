@@ -68,7 +68,7 @@ Session::Session(const ll::SessionDescriptor& descriptor):
     m_interpreter->setActiveSession(this);
 
     m_hostMemory = createMemory(
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent,
         0, false);
 }
 
@@ -134,13 +134,15 @@ std::shared_ptr<ll::Memory> Session::createMemory(const ll::MemoryPropertyFlags&
 
         const auto &memType = memProperties.memoryTypes[i];
 
-        if (compareFlags(memType.propertyFlags, flags, exactFlagsMatch)) {
+        const auto llMemoryPropertyFlags = ll::MemoryPropertyFlags{static_cast<ll::enum_t>(memType.propertyFlags)};
+
+        if (compareFlags(llMemoryPropertyFlags, flags, exactFlagsMatch)) {
 
             auto heapInfo = ll::VkHeapInfo{};
 
             heapInfo.typeIndex = i;
             heapInfo.size = memProperties.memoryHeaps[memType.heapIndex].size;
-            heapInfo.flags = memType.propertyFlags;
+            heapInfo.flags = llMemoryPropertyFlags;
             heapInfo.familyQueueIndices = std::vector<uint32_t>{m_device->getComputeFamilyQueueIndex()};
 
             // can throw exception. Invariants of Session are kept.

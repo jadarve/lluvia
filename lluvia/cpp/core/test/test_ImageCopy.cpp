@@ -11,7 +11,7 @@
 #include <iostream>
 #include "lluvia/core.h"
 
-using memflags = vk::MemoryPropertyFlagBits;
+using memflags = ll::MemoryPropertyFlagBits;
 
 TEST_CASE("ImageToImage", "ImageCopyTest") {
 
@@ -24,8 +24,8 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
         | vk::ImageUsageFlagBits::eTransferSrc
         | vk::ImageUsageFlagBits::eTransferDst};
 
-    const auto deviceMemFlags = memflags::eDeviceLocal;
-    const auto hostMemFlags = memflags::eHostCoherent | memflags::eHostVisible;
+    const auto deviceMemFlags = memflags::DeviceLocal;
+    const auto hostMemFlags = memflags::HostCoherent | memflags::HostVisible;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);

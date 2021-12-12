@@ -28,13 +28,13 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
                                               | vk::ImageUsageFlagBits::eSampled
                                               | vk::ImageUsageFlagBits::eTransferDst};
 
-    using memflags = vk::MemoryPropertyFlagBits;
+    using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
-    const auto deviceMemFlags = memflags::eDeviceLocal;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    const auto deviceMemFlags = memflags::DeviceLocal;
     const auto pageSize = uint64_t {1024*1024*4};
 
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);
@@ -152,13 +152,13 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
                                               | vk::ImageUsageFlagBits::eSampled
                                               | vk::ImageUsageFlagBits::eTransferDst};
 
-    using memflags = vk::MemoryPropertyFlagBits;
+    using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
-    const auto deviceMemFlags = memflags::eDeviceLocal;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    const auto deviceMemFlags = memflags::DeviceLocal;
     const auto pageSize = uint64_t {1024*1024*4};
 
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);

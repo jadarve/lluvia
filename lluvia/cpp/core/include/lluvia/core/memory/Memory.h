@@ -173,7 +173,7 @@ public:
     
     @return     The memory property flags.
     */
-    vk::MemoryPropertyFlags getMemoryPropertyFlags() const noexcept;
+    ll::MemoryPropertyFlags getMemoryPropertyFlags() const noexcept;
 
     /**
     @brief      Gets the page size.
