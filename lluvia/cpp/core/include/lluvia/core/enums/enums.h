@@ -38,7 +38,7 @@ public:
         m_mask{static_cast<MaskType>(bit)} {
     }
 
-    explicit Flags(MaskType mask):
+    constexpr explicit Flags(MaskType mask):
         m_mask {mask} {
     }
 

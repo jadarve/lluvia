@@ -92,19 +92,19 @@ vk::PhysicalDeviceMemoryProperties Session::getPhysicalDeviceMemoryProperties() 
 }
 
 
-std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
+std::vector<ll::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 
     const auto memProperties = m_device->getPhysicalDevice().getMemoryProperties();
-          auto memoryFlags   = std::vector<vk::MemoryPropertyFlags> {};
+          auto memoryFlags   = std::vector<ll::MemoryPropertyFlags> {};
 
     memoryFlags.reserve(memProperties.memoryTypeCount);
 
     for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
 
-        const auto flags = memProperties.memoryTypes[i].propertyFlags;
+        const auto flags = ll::impl::fromVkMemoryPropertyFlags(memProperties.memoryTypes[i].propertyFlags);
 
         // filter out flags with all bits set to 0
-        if (flags == vk::MemoryPropertyFlags()) continue;
+        if (flags == ll::MemoryPropertyFlags{}) continue;
 
         // insert flags if it is not present in memoryFlags
         if (std::find(memoryFlags.begin(), memoryFlags.end(), flags) == memoryFlags.end()) {
@@ -134,15 +134,15 @@ std::shared_ptr<ll::Memory> Session::createMemory(const ll::MemoryPropertyFlags&
 
         const auto &memType = memProperties.memoryTypes[i];
 
-        const auto llMemoryPropertyFlags = ll::MemoryPropertyFlags{static_cast<ll::enum_t>(memType.propertyFlags)};
+        const auto memoryPropertyFlags = ll::impl::fromVkMemoryPropertyFlags(memType.propertyFlags);
 
-        if (compareFlags(llMemoryPropertyFlags, flags, exactFlagsMatch)) {
+        if (compareFlags(memoryPropertyFlags, flags, exactFlagsMatch)) {
 
             auto heapInfo = ll::VkHeapInfo{};
 
             heapInfo.typeIndex = i;
             heapInfo.size = memProperties.memoryHeaps[memType.heapIndex].size;
-            heapInfo.flags = llMemoryPropertyFlags;
+            heapInfo.flags = memoryPropertyFlags;
             heapInfo.familyQueueIndices = std::vector<uint32_t>{m_device->getComputeFamilyQueueIndex()};
 
             // can throw exception. Invariants of Session are kept.

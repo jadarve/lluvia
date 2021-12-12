@@ -70,7 +70,7 @@ int main(int argc, const char** argv) {
 
     const auto channelType        = ll::ChannelType::Uint8;
     const auto imageSize          = image.width*image.height*image.channels*ll::getChannelTypeSize(channelType);
-    const auto inputImageMemFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    const auto inputImageMemFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
 
 
     auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
@@ -90,7 +90,7 @@ int main(int argc, const char** argv) {
         auto inputImage = memory->createImage(imgDesc);
 
     // stage buffer
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    const auto hostMemFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
     auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
     auto stageBuffer        = hostMemory->createBuffer(imageSize);
 

@@ -132,7 +132,7 @@ public:
     
     @return     The supported memory flags.
     */
-    std::vector<vk::MemoryPropertyFlags> getSupportedMemoryFlags() const;
+    std::vector<ll::MemoryPropertyFlags> getSupportedMemoryFlags() const;
 
 
     /**

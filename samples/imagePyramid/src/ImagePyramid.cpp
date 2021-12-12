@@ -31,7 +31,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
     auto channelType = inputImage->getChannelType();
 
     const auto pageSize = uint64_t {inputImage->getSize()};
-    const auto memFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    const auto memFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
 
     memory = session->createMemory(memFlags, pageSize, false);
     assert(memory != nullptr);
@@ -200,7 +200,7 @@ void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_
     const auto currentLayout = image->getLayout();
 
     // create host visible memory
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    const auto hostMemFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
     auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
     auto hostImage          = hostMemory->createBuffer(imageSize);
 

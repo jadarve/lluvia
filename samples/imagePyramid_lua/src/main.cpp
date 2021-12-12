@@ -63,7 +63,7 @@ void writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image>
     const auto currentLayout = image->getLayout();
 
     // create host visible memory
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    const auto hostMemFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
     auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
     auto hostImage          = hostMemory->createBuffer(imageSize);
 
@@ -114,7 +114,7 @@ int main(int argc, char const* argv[]) {
     const auto image     = readImage(imagePath.string());
     const auto imageSize = image.width*image.height*image.channels*ll::getChannelTypeSize(ll::ChannelType::Uint8);
 
-    auto memory = session->createMemory(vk::MemoryPropertyFlagBits::eDeviceLocal, 0);
+    auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0);
 
     const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
                                               | vk::ImageUsageFlagBits::eSampled
@@ -137,7 +137,7 @@ int main(int argc, char const* argv[]) {
 
     // transfer image to in_RGBA
     // stage buffer
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    const auto hostMemFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
     auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
     auto stageBuffer        = hostMemory->createBuffer(imageSize);
 

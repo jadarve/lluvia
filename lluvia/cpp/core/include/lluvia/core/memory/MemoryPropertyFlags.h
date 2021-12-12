@@ -49,6 +49,11 @@ inline constexpr MemoryPropertyFlags operator^(MemoryPropertyFlagBits bit0, Memo
 
 namespace impl {
 
+
+    constexpr ll::MemoryPropertyFlags fromVkMemoryPropertyFlags(const vk::MemoryPropertyFlags& flags) noexcept {
+        return ll::MemoryPropertyFlags{static_cast<ll::enum_t>(flags)};
+    }
+
     /**
     String values for Vulkan VkMemoryPropertyFlagBits values.
 

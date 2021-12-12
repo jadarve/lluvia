@@ -12,7 +12,7 @@ TEST_CASE("CreateMemory", "test_createMemory")
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const vk::MemoryPropertyFlags deviceFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    const ll::MemoryPropertyFlags deviceFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
 
     std::shared_ptr<ll::Memory> deviceMemory = session->createMemory(deviceFlags, 32*1024*1024, false);
     REQUIRE(deviceMemory != nullptr);

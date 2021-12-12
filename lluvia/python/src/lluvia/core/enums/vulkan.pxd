@@ -22,12 +22,12 @@ cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
         _BufferUsageFlagBits_VertexBuffer       'vk::BufferUsageFlagBits::eVertexBuffer'
 
 
-    cdef enum _MemoryPropertyFlagBits 'vk::MemoryPropertyFlagBits':
-        _MemoryPropertyFlagBits_DeviceLocal     'vk::MemoryPropertyFlagBits::eDeviceLocal'
-        _MemoryPropertyFlagBits_HostCached      'vk::MemoryPropertyFlagBits::eHostCached'
-        _MemoryPropertyFlagBits_HostCoherent    'vk::MemoryPropertyFlagBits::eHostCoherent'
-        _MemoryPropertyFlagBits_HostVisible     'vk::MemoryPropertyFlagBits::eHostVisible'
-        _MemoryPropertyFlagBits_LazilyAllocated 'vk::MemoryPropertyFlagBits::eLazilyAllocated'
+    # cdef enum _MemoryPropertyFlagBits 'vk::MemoryPropertyFlagBits':
+    #     _MemoryPropertyFlagBits_DeviceLocal     'vk::MemoryPropertyFlagBits::eDeviceLocal'
+    #     _MemoryPropertyFlagBits_HostCached      'vk::MemoryPropertyFlagBits::eHostCached'
+    #     _MemoryPropertyFlagBits_HostCoherent    'vk::MemoryPropertyFlagBits::eHostCoherent'
+    #     _MemoryPropertyFlagBits_HostVisible     'vk::MemoryPropertyFlagBits::eHostVisible'
+    #     _MemoryPropertyFlagBits_LazilyAllocated 'vk::MemoryPropertyFlagBits::eLazilyAllocated'
 
 
     cdef enum _ImageLayout 'vk::ImageLayout':
@@ -120,12 +120,12 @@ cpdef enum BufferUsageFlagBits:
     VertexBuffer       = <uint32_t> _BufferUsageFlagBits_VertexBuffer
 
 
-cpdef enum MemoryPropertyFlagBits:
-    DeviceLocal     = <uint32_t> _MemoryPropertyFlagBits_DeviceLocal
-    HostCached      = <uint32_t> _MemoryPropertyFlagBits_HostCached
-    HostCoherent    = <uint32_t> _MemoryPropertyFlagBits_HostCoherent
-    HostVisible     = <uint32_t> _MemoryPropertyFlagBits_HostVisible
-    LazilyAllocated = <uint32_t> _MemoryPropertyFlagBits_LazilyAllocated
+# cpdef enum MemoryPropertyFlagBits:
+#     DeviceLocal     = <uint32_t> _MemoryPropertyFlagBits_DeviceLocal
+#     HostCached      = <uint32_t> _MemoryPropertyFlagBits_HostCached
+#     HostCoherent    = <uint32_t> _MemoryPropertyFlagBits_HostCoherent
+#     HostVisible     = <uint32_t> _MemoryPropertyFlagBits_HostVisible
+#     LazilyAllocated = <uint32_t> _MemoryPropertyFlagBits_LazilyAllocated
 
 
 cpdef enum ImageLayout:

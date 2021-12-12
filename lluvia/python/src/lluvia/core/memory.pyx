@@ -18,7 +18,7 @@ from lluvia.core cimport core_buffer
 from lluvia.core cimport image
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+from lluvia.core.enums import BufferUsageFlagBits
 from lluvia.core.enums.image cimport ChannelType, ImageFilterMode, ImageAddressMode
 from lluvia.core.enums.image import ImageUsageFlagBits
 from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
@@ -95,8 +95,8 @@ cdef class Memory:
             Memory flags for this memory.
             """
 
-            cdef uint32_t vkFlags_u32 = <uint32_t> self.__memory.get().getMemoryPropertyFlags()
-            return impl.expandFlagBits(vkFlags_u32, MemoryPropertyFlagBits)
+            cdef uint32_t flags_u32 = <uint32_t> self.__memory.get().getMemoryPropertyFlags()
+            return impl.expandFlagBits(flags_u32, MemoryPropertyFlagBits)
 
     property pageSize:
         def __get__(self):

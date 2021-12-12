@@ -27,12 +27,14 @@ from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
 from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits, NodeType
+from lluvia.core.enums import BufferUsageFlagBits, NodeType
 
 from lluvia.core.enums.compute_dimension cimport ComputeDimension
 from lluvia.core.compute_dimension cimport _ComputeDimension
 
-from lluvia.core.memory cimport Memory, _Memory, _buildMemory
+from lluvia.core.memory cimport MemoryPropertyFlags, Memory, _Memory, _buildMemory
+from lluvia.core.memory import MemoryPropertyFlagBits
+
 from lluvia.core.program cimport Program
 
 from lluvia.core.node cimport ComputeNode,\
@@ -119,7 +121,7 @@ cdef class Session:
             by this session.
         """
 
-        cdef vector[vk.MemoryPropertyFlags] vkFlags = self.__session.get().getSupportedMemoryFlags()
+        cdef vector[MemoryPropertyFlags] vkFlags = self.__session.get().getSupportedMemoryFlags()
 
         supportedMemoryFlags = list()
 
@@ -206,9 +208,9 @@ cdef class Session:
         """
 
         cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
-        cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
+        cdef MemoryPropertyFlags cflags = <MemoryPropertyFlags> flattenFlags
 
-        return _buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
+        return _buildMemory(self.__session.get().createMemory(cflags, pageSize, exactFlagsMatch), self)
 
     def createProgram(self, str path):
         """

@@ -27,7 +27,7 @@ TEST_CASE("goodUse", "RGBA2HSVA_test") {
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    auto memory = session->createMemory(vk::MemoryPropertyFlagBits::eDeviceLocal, 0, false);
+    auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
     ///////////////////////////////////////////////////////

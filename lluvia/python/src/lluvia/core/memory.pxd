@@ -13,12 +13,26 @@ from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
+# FIXME: delete
 from lluvia.core cimport vulkan as vk
+
 from lluvia.core.core_buffer cimport _Buffer
 from lluvia.core.image cimport _Image, _ImageDescriptor
 from lluvia.core.session cimport Session
 
-cdef extern from 'lluvia/core/MemoryAllocationInfo.h' namespace 'll':
+cdef extern from 'lluvia/core/memory/MemoryPropertyFlags.h' namespace 'll':
+
+    cdef cppclass MemoryPropertyFlags 'll::MemoryPropertyFlags':
+        pass
+    
+    cdef enum _MemoryPropertyFlagBits 'll::MemoryPropertyFlagBits':
+        _MemoryPropertyFlagBits_DeviceLocal     'll::MemoryPropertyFlagBits::DeviceLocal'
+        _MemoryPropertyFlagBits_HostCached      'll::MemoryPropertyFlagBits::HostCached'
+        _MemoryPropertyFlagBits_HostCoherent    'll::MemoryPropertyFlagBits::HostCoherent'
+        _MemoryPropertyFlagBits_HostVisible     'll::MemoryPropertyFlagBits::HostVisible'
+
+
+cdef extern from 'lluvia/core/memory/MemoryAllocationInfo.h' namespace 'll':
 
     cdef struct _MemoryAllocationInfo 'll::MemoryAllocationInfo':
         uint64_t offset
@@ -27,11 +41,12 @@ cdef extern from 'lluvia/core/MemoryAllocationInfo.h' namespace 'll':
         uint32_t page
 
 
-cdef extern from 'lluvia/core/Memory.h' namespace 'll':
+cdef extern from 'lluvia/core/memory/Memory.h' namespace 'll':
 
     cdef cppclass _Memory 'll::Memory':
 
-        vk.MemoryPropertyFlags getMemoryPropertyFlags() const
+        # vk.MemoryPropertyFlags getMemoryPropertyFlags() const
+        MemoryPropertyFlags getMemoryPropertyFlags() const
         uint64_t getPageSize()  const
         uint32_t getPageCount() const
         bool isMappable() const
@@ -39,6 +54,14 @@ cdef extern from 'lluvia/core/Memory.h' namespace 'll':
 
         shared_ptr[_Buffer] createBuffer(const uint64_t size, const vk.BufferUsageFlags usageFlags) except +
         shared_ptr[_Image] createImage(const _ImageDescriptor& descriptor) except +
+
+
+cpdef enum MemoryPropertyFlagBits:
+    DeviceLocal     = <uint32_t> _MemoryPropertyFlagBits_DeviceLocal
+    HostCached      = <uint32_t> _MemoryPropertyFlagBits_HostCached
+    HostCoherent    = <uint32_t> _MemoryPropertyFlagBits_HostCoherent
+    HostVisible     = <uint32_t> _MemoryPropertyFlagBits_HostVisible
+    # LazilyAllocated = <uint32_t> _MemoryPropertyFlagBits_LazilyAllocated
 
 
 cdef class MemoryAllocationInfo:
