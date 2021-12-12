@@ -23,6 +23,7 @@
 #include "lluvia/core/ComputeDimension.h"
 #include "lluvia/core/NodeBuilderDescriptor.h"
 #include "lluvia/core/types.h"
+#include "lluvia/core/memory/MemoryPropertyFlags.h"
 
 namespace ll {
 
@@ -165,7 +166,7 @@ public:
     @throws     std::system_error With error code ll::ErrorCode::MemoryCreationError
                                   if no memory was found that matched the requested flags.
     */
-    std::shared_ptr<ll::Memory> createMemory(const vk::MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch = false);
+    std::shared_ptr<ll::Memory> createMemory(const ll::MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch = false);
 
     
     /**

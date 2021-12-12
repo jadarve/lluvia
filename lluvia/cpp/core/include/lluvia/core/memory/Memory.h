@@ -18,6 +18,7 @@
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
+#include "lluvia/core/memory/MemoryPropertyFlags.h"
 #include "lluvia/core/memory/MemoryFreeSpaceManager.h"
 #include "lluvia/core/impl/enum_utils.h"
 
@@ -36,53 +37,53 @@ class ImageViewDescriptor;
 class Session;
 
 
-namespace impl {
+// namespace impl {
 
-    /**
-    String values for Vulkan VkMemoryPropertyFlagBits values.
+//     /**
+//     String values for Vulkan VkMemoryPropertyFlagBits values.
 
-    See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
-    */
-    constexpr const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings {{
-        std::make_tuple("DeviceLocal"     , vk::MemoryPropertyFlagBits::eDeviceLocal),
-        std::make_tuple("HostCached"      , vk::MemoryPropertyFlagBits::eHostCached),
-        std::make_tuple("HostCoherent"    , vk::MemoryPropertyFlagBits::eHostCoherent),
-        std::make_tuple("HostVisible"     , vk::MemoryPropertyFlagBits::eHostVisible),
-        std::make_tuple("LazilyAllocated" , vk::MemoryPropertyFlagBits::eLazilyAllocated),
-    }};
+//     See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
+//     */
+//     constexpr const std::array<std::tuple<const char*, vk::MemoryPropertyFlagBits>, 5> VkMemoryPropertyFlagBitsStrings {{
+//         std::make_tuple("DeviceLocal"     , vk::MemoryPropertyFlagBits::eDeviceLocal),
+//         std::make_tuple("HostCached"      , vk::MemoryPropertyFlagBits::eHostCached),
+//         std::make_tuple("HostCoherent"    , vk::MemoryPropertyFlagBits::eHostCoherent),
+//         std::make_tuple("HostVisible"     , vk::MemoryPropertyFlagBits::eHostVisible),
+//         std::make_tuple("LazilyAllocated" , vk::MemoryPropertyFlagBits::eLazilyAllocated),
+//     }};
 
-} // namespace impl
-
-
-/**
-@brief      Converts from a string vector to Vulkan MemoryPropertyFlags.
-
-The comparison between string values is case sensitive.
-
-See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
-
-@param[in]  flagsVector  The flags vector. Their values must be contained
-                         in impl::VkMemoryPropertyFlagBitsStrings.
-
-@return     The reconstructed Vulkan MemoryPropertyFlags.
-*/
-inline vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std::string>& flagsVector) noexcept {
-    return impl::vectorStringToFlags<vk::MemoryPropertyFlags, vk::MemoryPropertyFlagBits, impl::VkMemoryPropertyFlagBitsStrings.size(), impl::VkMemoryPropertyFlagBitsStrings>(flagsVector);
-}
+// } // namespace impl
 
 
-/**
-@brief      Converts from Vulkan MemoryPropertyFlags to a vector of strings.
+// /**
+// @brief      Converts from a string vector to Vulkan MemoryPropertyFlags.
 
-See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
+// The comparison between string values is case sensitive.
 
-@param[in]  flags  The Vulkan flags.
+// See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
 
-@return     A vector of string values. Each element is one of impl::VkMemoryPropertyFlagBitsStrings
-*/
-inline std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPropertyFlags flags) noexcept {
-    return impl::flagsToVectorString<vk::MemoryPropertyFlags, vk::MemoryPropertyFlagBits, impl::VkMemoryPropertyFlagBitsStrings.size(), impl::VkMemoryPropertyFlagBitsStrings>(flags);
-}
+// @param[in]  flagsVector  The flags vector. Their values must be contained
+//                          in impl::VkMemoryPropertyFlagBitsStrings.
+
+// @return     The reconstructed Vulkan MemoryPropertyFlags.
+// */
+// inline vk::MemoryPropertyFlags vectorStringToMemoryPropertyFlags(const std::vector<std::string>& flagsVector) noexcept {
+//     return impl::vectorStringToFlags<vk::MemoryPropertyFlags, vk::MemoryPropertyFlagBits, impl::VkMemoryPropertyFlagBitsStrings.size(), impl::VkMemoryPropertyFlagBitsStrings>(flagsVector);
+// }
+
+
+// /**
+// @brief      Converts from Vulkan MemoryPropertyFlags to a vector of strings.
+
+// See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
+
+// @param[in]  flags  The Vulkan flags.
+
+// @return     A vector of string values. Each element is one of impl::VkMemoryPropertyFlagBitsStrings
+// */
+// inline std::vector<std::string> memoryPropertyFlagsToVectorString(const vk::MemoryPropertyFlags flags) noexcept {
+//     return impl::flagsToVectorString<vk::MemoryPropertyFlags, vk::MemoryPropertyFlagBits, impl::VkMemoryPropertyFlagBitsStrings.size(), impl::VkMemoryPropertyFlagBitsStrings>(flags);
+// }
 
 
 /**
@@ -103,7 +104,7 @@ struct VkHeapInfo {
     /**
     Memory properties. See @VULKAN_DOC#VkMemoryPropertyFlagBits
     */
-    vk::MemoryPropertyFlags flags;
+    ll::MemoryPropertyFlags flags;
 
     /**
     Family queue indices this memory will be used on.
