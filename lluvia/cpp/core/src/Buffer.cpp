@@ -5,7 +5,7 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#include "lluvia/core/Buffer.h"
+#include "lluvia/core/buffer/Buffer.h"
 
 #include "lluvia/core/memory/Memory.h"
 

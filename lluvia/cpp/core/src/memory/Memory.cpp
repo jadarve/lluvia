@@ -7,7 +7,7 @@
 
 #include "lluvia/core/memory/Memory.h"
 
-#include "lluvia/core/Buffer.h"
+#include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/error.h"
 #include "lluvia/core/Image.h"
 #include "lluvia/core/ImageDescriptor.h"

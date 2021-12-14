@@ -20,7 +20,8 @@ namespace ll {
 enum class BufferUsageFlagBits : ll::enum_t {
     StorageBuffer = static_cast<ll::enum_t>(vk::BufferUsageFlagBits::eStorageBuffer),
     TransferDst = static_cast<ll::enum_t>(vk::BufferUsageFlagBits::eTransferDst),
-    TransferSrc = static_cast<ll::enum_t>(vk::BufferUsageFlagBits::eTransferSrc)
+    TransferSrc = static_cast<ll::enum_t>(vk::BufferUsageFlagBits::eTransferSrc),
+    UniformBuffer = static_cast<ll::enum_t>(vk::BufferUsageFlagBits::eUniformBuffer)
 };
 
 
@@ -49,10 +50,11 @@ namespace impl {
         return vk::BufferUsageFlags{static_cast<VkFlags>(flags)};
     }
 
-    constexpr const std::array<std::tuple<const char *, ll::BufferUsageFlagBits>, 3> BufferUsageFlagBitsStrings{{
+    constexpr const std::array<std::tuple<const char *, ll::BufferUsageFlagBits>, 4> BufferUsageFlagBitsStrings{{
         std::make_tuple("StorageBuffer", ll::BufferUsageFlagBits::StorageBuffer),
         std::make_tuple("TransferDst", ll::BufferUsageFlagBits::TransferDst),
-        std::make_tuple("TransferSrc", ll::BufferUsageFlagBits::TransferSrc)
+        std::make_tuple("TransferSrc", ll::BufferUsageFlagBits::TransferSrc),
+        std::make_tuple("UniformBuffer", ll::BufferUsageFlagBits::UniformBuffer)
     }};
 
 } // namespace impl

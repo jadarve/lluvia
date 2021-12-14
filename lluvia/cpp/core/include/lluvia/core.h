@@ -8,7 +8,8 @@
 #ifndef LLUVIA_CORE_H_
 #define LLUVIA_CORE_H_
 
-#include "core/Buffer.h"
+#include "core/buffer/Buffer.h"
+#include "core/buffer/BufferUsageFlags.h"
 #include "core/CommandBuffer.h"
 #include "core/ComputeNode.h"
 #include "core/ComputeNodeDescriptor.h"
@@ -23,6 +24,7 @@
 #include "core/ImageViewDescriptor.h"
 #include "core/Interpreter.h"
 #include "core/memory/Memory.h"
+#include "core/memory/MemoryPropertyFlags.h"
 #include "core/memory/MemoryAllocationInfo.h"
 #include "core/Node.h"
 #include "core/NodeBuilderDescriptor.h"

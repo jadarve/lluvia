@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_BUFFER_H_
-#define LLUVIA_CORE_BUFFER_H_
+#ifndef LLUVIA_CORE_BUFFER_BUFFER_H_
+#define LLUVIA_CORE_BUFFER_BUFFER_H_
 
 #include "lluvia/core/error.h"
 #include "lluvia/core/buffer/BufferUsageFlags.h"
@@ -311,4 +311,4 @@ friend class ll::Session;
 
 } // namespace ll
 
-#endif // LLUVIA_CORE_BUFFER_H_
+#endif // LLUVIA_CORE_BUFFER_BUFFER_H_

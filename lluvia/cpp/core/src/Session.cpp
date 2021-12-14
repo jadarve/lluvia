@@ -9,7 +9,7 @@
 #define VULKAN_HPP_DISPATCH_LOADER_DYNAMIC 1
 #include "lluvia/core/Session.h"
 
-#include "lluvia/core/Buffer.h"
+#include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"

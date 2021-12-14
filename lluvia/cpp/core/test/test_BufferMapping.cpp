@@ -97,7 +97,7 @@ TEST_CASE("MapAndSet", "test_BufferMapping") {
     const auto p = params{789456, 3.1415};
     
 
-    auto uniformBuffer = uniformMemory->createBuffer(sizeof(p), vk::BufferUsageFlagBits::eUniformBuffer);
+    auto uniformBuffer = uniformMemory->createBuffer(sizeof(p), ll::BufferUsageFlagBits::UniformBuffer);
     REQUIRE(uniformBuffer != nullptr);
     
     uniformBuffer->mapAndSet(p);

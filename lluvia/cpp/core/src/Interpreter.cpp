@@ -7,7 +7,7 @@
 
 #include "lluvia/core/Interpreter.h"
 
-#include "lluvia/core/Buffer.h"
+#include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeDimension.h"
 #include "lluvia/core/ComputeNode.h"
