@@ -5,7 +5,7 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#include "lluvia/core/ImageViewDescriptor.h"
+#include "lluvia/core/image/ImageViewDescriptor.h"
 
 
 namespace ll {

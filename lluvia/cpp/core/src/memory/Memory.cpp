@@ -9,10 +9,10 @@
 
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/error.h"
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageDescriptor.h"
-#include "lluvia/core/ImageView.h"
-#include "lluvia/core/ImageViewDescriptor.h"
+#include "lluvia/core/image/Image.h"
+#include "lluvia/core/image/ImageDescriptor.h"
+#include "lluvia/core/image/ImageView.h"
+#include "lluvia/core/image/ImageViewDescriptor.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Session.h"
 

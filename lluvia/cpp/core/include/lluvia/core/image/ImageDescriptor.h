@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
-#define LLUVIA_CORE_IMAGE_DESCRIPTOR_H_
+#ifndef LLUVIA_CORE_IMAGE_IMAGE_DESCRIPTOR_H_
+#define LLUVIA_CORE_IMAGE_IMAGE_DESCRIPTOR_H_
 
 #include "lluvia/core/error.h"
 #include "lluvia/core/impl/enum_utils.h"
@@ -469,4 +469,4 @@ private:
 
 } // namespace ll
 
-#endif /* LLUVIA_CORE_IMAGE_DESCRIPTOR_H_ */
+#endif /* LLUVIA_CORE_IMAGE_IMAGE_DESCRIPTOR_H_ */

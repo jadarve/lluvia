@@ -5,10 +5,10 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_IMAGE_H_
-#define LLUVIA_CORE_IMAGE_H_
+#ifndef LLUVIA_CORE_IMAGE_IMAGE_H_
+#define LLUVIA_CORE_IMAGE_IMAGE_H_
 
-#include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
@@ -445,4 +445,4 @@ friend class ll::Session;
 
 } // namespace ll
 
-#endif /* LLUVIA_CORE_IMAGE_H_ */
+#endif /* LLUVIA_CORE_IMAGE_IMAGE_H_ */

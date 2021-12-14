@@ -8,8 +8,8 @@
 #include "lluvia/core/utils.h"
 
 #include "lluvia/core/CommandBuffer.h"
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/image/Image.h"
+#include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/Session.h"
 

@@ -1,7 +1,7 @@
 #include "lluvia/core/vulkan/Device.h"
 
 #include "lluvia/core/error.h"
-#include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/CommandBuffer.h"
 
 namespace ll::vulkan {

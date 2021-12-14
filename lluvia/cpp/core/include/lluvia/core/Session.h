@@ -18,7 +18,7 @@
 #include <tuple>
 #include <vector>
 
-#include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/SessionDescriptor.h"
 #include "lluvia/core/ComputeDimension.h"
 #include "lluvia/core/NodeBuilderDescriptor.h"

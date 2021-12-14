@@ -5,13 +5,13 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_IMAGE_VIEW_H_
-#define LLUVIA_CORE_IMAGE_VIEW_H_
+#ifndef LLUVIA_CORE_IMAGE_IMAGE_VIEW_H_
+#define LLUVIA_CORE_IMAGE_IMAGE_VIEW_H_
 
 #include "lluvia/core/Object.h"
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageDescriptor.h"
-#include "lluvia/core/ImageViewDescriptor.h"
+#include "lluvia/core/image/Image.h"
+#include "lluvia/core/image/ImageDescriptor.h"
+#include "lluvia/core/image/ImageViewDescriptor.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
 
 #include <memory>
@@ -363,4 +363,4 @@ friend class ComputeNode;
 
 } // namespace ll
 
-#endif /* LLUVIA_CORE_IMAGE_VIEW_H_ */
+#endif /* LLUVIA_CORE_IMAGE_IMAGE_VIEW_H_ */

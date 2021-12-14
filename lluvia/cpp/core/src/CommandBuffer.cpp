@@ -3,8 +3,8 @@
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/Duration.h"
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageView.h"
+#include "lluvia/core/image/Image.h"
+#include "lluvia/core/image/ImageView.h"
 
 #include "lluvia/core/vulkan/Device.h"
 

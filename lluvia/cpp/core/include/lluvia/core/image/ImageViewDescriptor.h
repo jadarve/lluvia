@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_IMAGE_VIEW_DESCRIPTOR_H_
-#define LLUVIA_CORE_IMAGE_VIEW_DESCRIPTOR_H_
+#ifndef LLUVIA_CORE_IMAGE_IMAGE_VIEW_DESCRIPTOR_H_
+#define LLUVIA_CORE_IMAGE_IMAGE_VIEW_DESCRIPTOR_H_
 
 #include "lluvia/core/impl/enum_utils.h"
 
@@ -337,4 +337,4 @@ private:
 
 } // namespace ll
 
-#endif /* LLUVIA_CORE_IMAGE_VIEW_DESCRIPTOR_H_ */
+#endif /* LLUVIA_CORE_IMAGE_IMAGE_VIEW_DESCRIPTOR_H_ */

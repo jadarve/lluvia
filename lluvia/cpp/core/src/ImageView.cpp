@@ -5,10 +5,10 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#include "lluvia/core/ImageView.h"
+#include "lluvia/core/image/ImageView.h"
 
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageViewDescriptor.h"
+#include "lluvia/core/image/Image.h"
+#include "lluvia/core/image/ImageViewDescriptor.h"
 #include "lluvia/core/memory/Memory.h"
 
 #include "lluvia/core/vulkan/Device.h"
