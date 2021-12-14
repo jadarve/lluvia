@@ -18,6 +18,7 @@
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
+#include "lluvia/core/buffer/BufferUsageFlags.h"
 #include "lluvia/core/memory/MemoryPropertyFlags.h"
 #include "lluvia/core/memory/MemoryFreeSpaceManager.h"
 #include "lluvia/core/impl/enum_utils.h"
@@ -242,7 +243,7 @@ public:
 
     @return     A new ll::Buffer object.
     */
-    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size, const vk::BufferUsageFlags usageFlags);
+    std::shared_ptr<ll::Buffer> createBuffer(const uint64_t size, const ll::BufferUsageFlags usageFlags);
 
 
     /**

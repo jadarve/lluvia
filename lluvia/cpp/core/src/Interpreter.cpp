@@ -68,7 +68,7 @@ void registerTypes(sol::table& lib) {
     registerEnum<ll::ParameterType, ll::impl::ParameterTypeStrings.size(), ll::impl::ParameterTypeStrings>(lib, "ParameterType");
     registerEnum<ll::PortDirection, ll::impl::PortDirectionStrings.size(), ll::impl::PortDirectionStrings>(lib, "PortDirection");
     registerEnum<ll::PortType, ll::impl::PortTypeStrings.size(), ll::impl::PortTypeStrings>(lib, "PortType");
-    registerEnum<vk::BufferUsageFlagBits, ll::impl::VkBufferUsageFlagBitsStrings.size(), ll::impl::VkBufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
+    registerEnum<ll::BufferUsageFlagBits, ll::impl::BufferUsageFlagBitsStrings.size(), ll::impl::BufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
     registerEnum<vk::ImageLayout, ll::impl::VkImageLayoutStrings.size(), ll::impl::VkImageLayoutStrings>(lib, "ImageLayout");
     registerEnum<vk::ImageUsageFlagBits, ll::impl::VkImageUsageFlagBitsStrings.size(), ll::impl::VkImageUsageFlagBitsStrings>(lib, "ImageUsageFlagBits");
     registerEnum<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(lib, "ImageTiling");

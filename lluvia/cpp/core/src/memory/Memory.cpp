@@ -81,9 +81,9 @@ bool Memory::isPageMappable(const uint32_t page) const noexcept {
 
 std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size) {
 
-    const auto usageFlags = vk::BufferUsageFlags { vk::BufferUsageFlagBits::eStorageBuffer
-                                                 | vk::BufferUsageFlagBits::eTransferSrc
-                                                 | vk::BufferUsageFlagBits::eTransferDst};
+    const auto usageFlags = ll::BufferUsageFlags { ll::BufferUsageFlagBits::StorageBuffer
+                                                 | ll::BufferUsageFlagBits::TransferSrc
+                                                 | ll::BufferUsageFlagBits::TransferDst};
 
     return createBuffer(size, usageFlags);
 }
@@ -92,16 +92,18 @@ std::shared_ptr<ll::Buffer> Memory::createBufferWithUnsafeFlags(const uint64_t s
 
     // no check of the actual bits of usageFlags is performed
     return createBuffer(size,
-        static_cast<vk::BufferUsageFlags>(usageFlags));
+        static_cast<ll::BufferUsageFlags>(usageFlags));
 }
 
 
-std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const vk::BufferUsageFlags usageFlags) {
+std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const ll::BufferUsageFlags usageFlags) {
+
+    const auto vkBufferUsageFlags = ll::impl::toVkBufferUsageFlags(usageFlags);
 
     vk::BufferCreateInfo bufferInfo = vk::BufferCreateInfo()
                                       .setSharingMode(vk::SharingMode::eExclusive)
                                       .setSize(size)
-                                      .setUsage(usageFlags)
+                                      .setUsage(vkBufferUsageFlags)
                                       .setQueueFamilyIndexCount(static_cast<uint32_t>(m_heapInfo.familyQueueIndices.size()))
                                       .setPQueueFamilyIndices(m_heapInfo.familyQueueIndices.data());
 

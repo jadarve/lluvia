@@ -9,6 +9,7 @@
 #define LLUVIA_CORE_BUFFER_H_
 
 #include "lluvia/core/error.h"
+#include "lluvia/core/buffer/BufferUsageFlags.h"
 #include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
@@ -35,57 +36,57 @@ class ComputeNode;
 class Session;
 
 
-namespace impl {
+// namespace impl {
 
-    /**
-    String values for Vulkan VkBufferUsageFlagBits values.
+//     /**
+//     String values for Vulkan VkBufferUsageFlagBits values.
 
-    See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
-    */
-    constexpr const std::array<std::tuple<const char*, vk::BufferUsageFlagBits>, 9> VkBufferUsageFlagBitsStrings {{
-        std::make_tuple("IndexBuffer"        , vk::BufferUsageFlagBits::eIndexBuffer),
-        std::make_tuple("IndirectBuffer"     , vk::BufferUsageFlagBits::eIndirectBuffer),
-        std::make_tuple("StorageBuffer"      , vk::BufferUsageFlagBits::eStorageBuffer),
-        std::make_tuple("StorageTexelBuffer" , vk::BufferUsageFlagBits::eStorageTexelBuffer),
-        std::make_tuple("TransferDst"        , vk::BufferUsageFlagBits::eTransferDst),
-        std::make_tuple("TransferSrc"        , vk::BufferUsageFlagBits::eTransferSrc),
-        std::make_tuple("UniformBuffer"      , vk::BufferUsageFlagBits::eUniformBuffer),
-        std::make_tuple("UniformTexelBuffer" , vk::BufferUsageFlagBits::eUniformTexelBuffer),
-        std::make_tuple("VertexBuffer"       , vk::BufferUsageFlagBits::eVertexBuffer),
-    }};
+//     See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
+//     */
+//     constexpr const std::array<std::tuple<const char*, vk::BufferUsageFlagBits>, 9> VkBufferUsageFlagBitsStrings {{
+//         std::make_tuple("IndexBuffer"        , vk::BufferUsageFlagBits::eIndexBuffer),
+//         std::make_tuple("IndirectBuffer"     , vk::BufferUsageFlagBits::eIndirectBuffer),
+//         std::make_tuple("StorageBuffer"      , vk::BufferUsageFlagBits::eStorageBuffer),
+//         std::make_tuple("StorageTexelBuffer" , vk::BufferUsageFlagBits::eStorageTexelBuffer),
+//         std::make_tuple("TransferDst"        , vk::BufferUsageFlagBits::eTransferDst),
+//         std::make_tuple("TransferSrc"        , vk::BufferUsageFlagBits::eTransferSrc),
+//         std::make_tuple("UniformBuffer"      , vk::BufferUsageFlagBits::eUniformBuffer),
+//         std::make_tuple("UniformTexelBuffer" , vk::BufferUsageFlagBits::eUniformTexelBuffer),
+//         std::make_tuple("VertexBuffer"       , vk::BufferUsageFlagBits::eVertexBuffer),
+//     }};
 
-} // namespace impl
-
-
-/**
-@brief      Converts from a string vector to Vulkan BufferUsageFlags.
-
-The comparison between string values is case sensitive.
-
-See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
-
-@param[in]  flagsVector  The flags vector. Their values must be contained
-                         in impl::VkBufferUsageFlagBitsStrings.
-
-@return     The reconstructed Vulkan BufferUsageFlags.
-*/
-inline vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector) noexcept {
-    return impl::vectorStringToFlags<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flagsVector);
-}
+// } // namespace impl
 
 
-/**
-@brief      Converst from Vulkan BufferUsageFlags to a vector of strings.
+// /**
+// @brief      Converts from a string vector to Vulkan BufferUsageFlags.
 
-See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
+// The comparison between string values is case sensitive.
 
-@param[in]  flags  The Vulkan flags.
+// See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
 
-@return     A vector of string values. Each element is one of impl::VkBufferUsageFlagBitsStrings
-*/
-inline std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags) noexcept {
-    return impl::flagsToVectorString<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flags);
-}
+// @param[in]  flagsVector  The flags vector. Their values must be contained
+//                          in impl::VkBufferUsageFlagBitsStrings.
+
+// @return     The reconstructed Vulkan BufferUsageFlags.
+// */
+// inline vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector) noexcept {
+//     return impl::vectorStringToFlags<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flagsVector);
+// }
+
+
+// /**
+// @brief      Converst from Vulkan BufferUsageFlags to a vector of strings.
+
+// See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
+
+// @param[in]  flags  The Vulkan flags.
+
+// @return     A vector of string values. Each element is one of impl::VkBufferUsageFlagBitsStrings
+// */
+// inline std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags) noexcept {
+//     return impl::flagsToVectorString<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flags);
+// }
 
 
 /**
@@ -160,7 +161,7 @@ public:
     
     @return     The usage flags.
     */
-    vk::BufferUsageFlags getUsageFlags() const noexcept;
+    ll::BufferUsageFlags getUsageFlags() const noexcept;
 
 
     /**
@@ -279,14 +280,14 @@ public:
 
 
 private:
-    Buffer( const vk::Buffer tVkBuffer, const vk::BufferUsageFlags tVkUsageFlags,
-            const std::shared_ptr<ll::Memory>& tMemory, const ll::MemoryAllocationInfo& tAllocInfo,
-            const uint64_t tRequestedSize);
+    Buffer( const vk::Buffer vkBuffer, const ll::BufferUsageFlags usageFlags,
+            const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
+            const uint64_t requestedSize);
 
     void unmap();
 
     vk::Buffer                  m_vkBuffer;
-    vk::BufferUsageFlags        m_vkUsageFlags;
+    ll::BufferUsageFlags        m_usageFlags;
 
     ll::MemoryAllocationInfo    m_allocInfo;
 

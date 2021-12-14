@@ -12,14 +12,14 @@
 namespace ll {
 
 
-Buffer::Buffer( const vk::Buffer tVkBuffer, const vk::BufferUsageFlags tVkUsageFlags,
-                const std::shared_ptr<ll::Memory>& tMemory, const ll::MemoryAllocationInfo& tAllocInfo,
-                const uint64_t tRequestedSize):
-    m_vkBuffer         {tVkBuffer},
-    m_vkUsageFlags     {tVkUsageFlags},
-    m_allocInfo        (tAllocInfo),
-    m_requestedSize    {tRequestedSize},
-    m_memory           {tMemory} {
+Buffer::Buffer( const vk::Buffer vkBuffer, const ll::BufferUsageFlags usageFlags,
+                const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
+                const uint64_t requestedSize):
+    m_vkBuffer         {vkBuffer},
+    m_usageFlags       {usageFlags},
+    m_allocInfo        (allocInfo),
+    m_requestedSize    {requestedSize},
+    m_memory           {memory} {
 }
 
 
@@ -48,13 +48,13 @@ const std::shared_ptr<ll::Memory>& Buffer::getMemory() const noexcept {
 }
 
 
-vk::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
-    return m_vkUsageFlags;
+ll::BufferUsageFlags Buffer::getUsageFlags() const noexcept {
+    return m_usageFlags;
 }
 
 
 uint32_t Buffer::getUsageFlagsUnsafe() const noexcept {
-    return static_cast<uint32_t>(m_vkUsageFlags);
+    return static_cast<uint32_t>(m_usageFlags);
 }
 
 
