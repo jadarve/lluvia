@@ -13,10 +13,7 @@ from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-# FIXME: delete
-from lluvia.core cimport vulkan as vk
-
-from lluvia.core.core_buffer cimport _Buffer
+from lluvia.core.core_buffer cimport _Buffer, BufferUsageFlags
 from lluvia.core.image cimport _Image, _ImageDescriptor
 from lluvia.core.session cimport Session
 
@@ -52,7 +49,7 @@ cdef extern from 'lluvia/core/memory/Memory.h' namespace 'll':
         bool isMappable() const
         bool isPageMappable(const uint64_t page) const
 
-        shared_ptr[_Buffer] createBuffer(const uint64_t size, const vk.BufferUsageFlags usageFlags) except +
+        shared_ptr[_Buffer] createBuffer(const uint64_t size, const BufferUsageFlags usageFlags) except +
         shared_ptr[_Image] createImage(const _ImageDescriptor& descriptor) except +
 
 

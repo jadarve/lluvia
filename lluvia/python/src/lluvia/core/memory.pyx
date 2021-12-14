@@ -15,10 +15,11 @@ cimport numpy as np
 import numpy as np
 
 from lluvia.core cimport core_buffer
+from lluvia.core.core_buffer import BufferUsageFlagBits
 from lluvia.core cimport image
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.enums import BufferUsageFlagBits
+# from lluvia.core.enums import BufferUsageFlagBits
 from lluvia.core.enums.image cimport ChannelType, ImageFilterMode, ImageAddressMode
 from lluvia.core.enums.image import ImageUsageFlagBits
 from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
@@ -184,9 +185,9 @@ cdef class Memory:
             raise ValueError('Size must be greater than zero, got: {0}'.format(size))
 
         cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, BufferUsageFlagBits)
-        cdef vk.BufferUsageFlags vkUsageFlags = <vk.BufferUsageFlags> flattenFlags
+        cdef core_buffer.BufferUsageFlags _usageFlags = <core_buffer.BufferUsageFlags> flattenFlags
 
-        return core_buffer._buildBuffer(self.__memory.get().createBuffer(size, vkUsageFlags), self.session, self)
+        return core_buffer._buildBuffer(self.__memory.get().createBuffer(size, _usageFlags), self.session, self)
 
 
     def createBufferFromHost(self, np.ndarray arr,

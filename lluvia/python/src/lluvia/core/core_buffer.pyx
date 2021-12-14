@@ -16,8 +16,10 @@ cimport numpy as np
 import numpy as np
 
 from lluvia.core import impl
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits
+
 from lluvia.core.memory cimport Memory, MemoryAllocationInfo, _buildMemory
+from lluvia.core.memory import MemoryPropertyFlagBits
+
 from lluvia.core.session cimport Session
 
 
@@ -59,8 +61,8 @@ cdef class Buffer:
             Usage flags for this buffer.
             """
 
-            cdef uint32_t vkFlags_u32 = <uint32_t> self.__buffer.get().getUsageFlags()
-            return impl.expandFlagBits(vkFlags_u32, BufferUsageFlagBits)
+            cdef uint32_t flags_u32 = <uint32_t> self.__buffer.get().getUsageFlags()
+            return impl.expandFlagBits(flags_u32, BufferUsageFlagBits)
 
     property size:
         def __get__(self):

@@ -10,16 +10,16 @@ from libc.stdint cimport uint32_t
 
 cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
 
-    cdef enum _BufferUsageFlagBits:
-        _BufferUsageFlagBits_IndexBuffer        'vk::BufferUsageFlagBits::eIndexBuffer'
-        _BufferUsageFlagBits_IndirectBuffer     'vk::BufferUsageFlagBits::eIndirectBuffer'
-        _BufferUsageFlagBits_StorageBuffer      'vk::BufferUsageFlagBits::eStorageBuffer'
-        _BufferUsageFlagBits_StorageTexelBuffer 'vk::BufferUsageFlagBits::eStorageTexelBuffer'
-        _BufferUsageFlagBits_TransferDst        'vk::BufferUsageFlagBits::eTransferDst'
-        _BufferUsageFlagBits_TransferSrc        'vk::BufferUsageFlagBits::eTransferSrc'
-        _BufferUsageFlagBits_UniformBuffer      'vk::BufferUsageFlagBits::eUniformBuffer'
-        _BufferUsageFlagBits_UniformTexelBuffer 'vk::BufferUsageFlagBits::eUniformTexelBuffer'
-        _BufferUsageFlagBits_VertexBuffer       'vk::BufferUsageFlagBits::eVertexBuffer'
+    # cdef enum _BufferUsageFlagBits:
+    #     _BufferUsageFlagBits_IndexBuffer        'vk::BufferUsageFlagBits::eIndexBuffer'
+    #     _BufferUsageFlagBits_IndirectBuffer     'vk::BufferUsageFlagBits::eIndirectBuffer'
+    #     _BufferUsageFlagBits_StorageBuffer      'vk::BufferUsageFlagBits::eStorageBuffer'
+    #     _BufferUsageFlagBits_StorageTexelBuffer 'vk::BufferUsageFlagBits::eStorageTexelBuffer'
+    #     _BufferUsageFlagBits_TransferDst        'vk::BufferUsageFlagBits::eTransferDst'
+    #     _BufferUsageFlagBits_TransferSrc        'vk::BufferUsageFlagBits::eTransferSrc'
+    #     _BufferUsageFlagBits_UniformBuffer      'vk::BufferUsageFlagBits::eUniformBuffer'
+    #     _BufferUsageFlagBits_UniformTexelBuffer 'vk::BufferUsageFlagBits::eUniformTexelBuffer'
+    #     _BufferUsageFlagBits_VertexBuffer       'vk::BufferUsageFlagBits::eVertexBuffer'
 
 
     # cdef enum _MemoryPropertyFlagBits 'vk::MemoryPropertyFlagBits':
@@ -108,16 +108,16 @@ cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
         _Format_R64G64B64A64Sfloat 'vk::Format::eR64G64B64A64Sfloat'
 
 
-cpdef enum BufferUsageFlagBits:
-    IndexBuffer        = <uint32_t> _BufferUsageFlagBits_IndexBuffer
-    IndirectBuffer     = <uint32_t> _BufferUsageFlagBits_IndirectBuffer
-    StorageBuffer      = <uint32_t> _BufferUsageFlagBits_StorageBuffer
-    StorageTexelBuffer = <uint32_t> _BufferUsageFlagBits_StorageTexelBuffer
-    TransferDst        = <uint32_t> _BufferUsageFlagBits_TransferDst
-    TransferSrc        = <uint32_t> _BufferUsageFlagBits_TransferSrc
-    UniformBuffer      = <uint32_t> _BufferUsageFlagBits_UniformBuffer
-    UniformTexelBuffer = <uint32_t> _BufferUsageFlagBits_UniformTexelBuffer
-    VertexBuffer       = <uint32_t> _BufferUsageFlagBits_VertexBuffer
+# cpdef enum BufferUsageFlagBits:
+#     IndexBuffer        = <uint32_t> _BufferUsageFlagBits_IndexBuffer
+#     IndirectBuffer     = <uint32_t> _BufferUsageFlagBits_IndirectBuffer
+#     StorageBuffer      = <uint32_t> _BufferUsageFlagBits_StorageBuffer
+#     StorageTexelBuffer = <uint32_t> _BufferUsageFlagBits_StorageTexelBuffer
+#     TransferDst        = <uint32_t> _BufferUsageFlagBits_TransferDst
+#     TransferSrc        = <uint32_t> _BufferUsageFlagBits_TransferSrc
+#     UniformBuffer      = <uint32_t> _BufferUsageFlagBits_UniformBuffer
+#     UniformTexelBuffer = <uint32_t> _BufferUsageFlagBits_UniformTexelBuffer
+#     VertexBuffer       = <uint32_t> _BufferUsageFlagBits_VertexBuffer
 
 
 # cpdef enum MemoryPropertyFlagBits:
