@@ -110,8 +110,8 @@ ImageDescriptor::ImageDescriptor(const uint32_t depth,
                                  const uint32_t width,
                                  const ll::ChannelCount channelCount,
                                  const ll::ChannelType channelType,
-                                 const vk::ImageUsageFlags usageFlags,
-                                 const vk::ImageTiling tiling):
+                                 const ll::ImageUsageFlags usageFlags,
+                                 const ll::ImageTiling tiling):
     m_channelType  {channelType},
     m_channelCount {channelCount},
     m_tiling       {tiling},
@@ -179,14 +179,14 @@ ImageDescriptor& ImageDescriptor::setShape(const ll::vec3ui& shape) noexcept {
 }
 
 
-ImageDescriptor& ImageDescriptor::setUsageFlags(const vk::ImageUsageFlags flags) noexcept {
+ImageDescriptor& ImageDescriptor::setUsageFlags(const ll::ImageUsageFlags flags) noexcept {
 
     m_usageFlags = flags;
     return *this;
 }
 
 
-ImageDescriptor& ImageDescriptor::setTiling(const vk::ImageTiling tTiling) noexcept {
+ImageDescriptor& ImageDescriptor::setTiling(const ll::ImageTiling tTiling) noexcept {
 
     m_tiling = tTiling;
     return *this;
@@ -243,19 +243,19 @@ vk::Format ImageDescriptor::getFormat() const noexcept {
 }
 
 
-vk::ImageUsageFlags ImageDescriptor::getUsageFlags() const noexcept {
+ll::ImageUsageFlags ImageDescriptor::getUsageFlags() const noexcept {
     return m_usageFlags;
 }
 
 
-vk::ImageTiling ImageDescriptor::getTiling() const noexcept {
+ll::ImageTiling ImageDescriptor::getTiling() const noexcept {
     return m_tiling;
 }
 
 
 ImageDescriptor& ImageDescriptor::setUsageFlagsUnsafe(const uint32_t flags) noexcept {
 
-    m_usageFlags = static_cast<vk::ImageUsageFlags>(flags);
+    m_usageFlags = static_cast<ll::ImageUsageFlags>(flags);
     return *this;
 }
 

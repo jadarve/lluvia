@@ -27,7 +27,7 @@ constexpr const uint32_t CAPACITY_INCREASE = 32;
 
 namespace ll {
 
-constexpr const vk::ImageLayout InitialImageLayout = vk::ImageLayout::eUndefined;
+constexpr const ll::ImageLayout InitialImageLayout = ll::ImageLayout::Undefined;
 
 
 Memory::Memory(
@@ -201,12 +201,12 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
                     .setImageType(descriptor.getImageType())
                     .setArrayLayers(1)
                     .setMipLevels(1)
-                    .setTiling(descriptor.getTiling())
+                    .setTiling(ll::impl::toVkImageTiling(descriptor.getTiling()))
                     .setSamples(vk::SampleCountFlagBits::e1)
                     .setSharingMode(vk::SharingMode::eExclusive)
-                    .setUsage(descriptor.getUsageFlags())
+                    .setUsage(ll::impl::toVkImageUsageFlags(descriptor.getUsageFlags()))
                     .setFormat(descriptor.getFormat())
-                    .setInitialLayout(InitialImageLayout);
+                    .setInitialLayout(ll::impl::toVkImageLayout(InitialImageLayout));
 
     auto vkImage = m_device->get().createImage(imgInfo);
 

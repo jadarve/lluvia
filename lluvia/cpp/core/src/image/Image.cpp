@@ -24,13 +24,13 @@ Image::Image(
     const ll::ImageDescriptor& descriptor,
     const std::shared_ptr<ll::Memory>& memory,
     const ll::MemoryAllocationInfo& allocInfo,
-    const vk::ImageLayout layout) :
+    const ll::ImageLayout layout) :
 
     m_device       {device},
     m_descriptor   {descriptor},
     m_allocInfo    (allocInfo),
     m_vkImage      {vkImage},
-    m_vkLayout     {layout},
+    m_layout     {layout},
     m_memory       {memory} {
 
 }
@@ -67,7 +67,7 @@ const ll::ImageDescriptor& Image::getDescriptor() const noexcept {
 }
 
 
-vk::ImageUsageFlags Image::getUsageFlags() const noexcept {
+ll::ImageUsageFlags Image::getUsageFlags() const noexcept {
     return m_descriptor.getUsageFlags();
 }
 
@@ -77,12 +77,12 @@ uint32_t Image::getUsageFlagsUnsafe() const noexcept {
 }
 
 
-vk::ImageLayout Image::getLayout() const noexcept {
-    return m_vkLayout;
+ll::ImageLayout Image::getLayout() const noexcept {
+    return m_layout;
 }
 
 
-vk::ImageTiling Image::getTiling() const noexcept {
+ll::ImageTiling Image::getTiling() const noexcept {
     return m_descriptor.getTiling();
 }
 
@@ -119,7 +119,7 @@ std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescrip
     return std::shared_ptr<ll::ImageView> {new ll::ImageView {m_device, shared_from_this(), tDescriptor}};
 }
 
-void Image::changeImageLayout(const vk::ImageLayout newLayout) {
+void Image::changeImageLayout(const ll::ImageLayout newLayout) {
 
     auto cmdBuffer = m_device->createCommandBuffer();
 

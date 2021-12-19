@@ -14,6 +14,9 @@
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/ContainerNode.h"
 #include "lluvia/core/ContainerNodeDescriptor.h"
+#include "lluvia/core/image/ImageUsageFlags.h"
+#include "lluvia/core/image/ImageLayout.h"
+#include "lluvia/core/image/ImageTiling.h"
 #include "lluvia/core/image/Image.h"
 #include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/image/ImageView.h"
@@ -69,9 +72,9 @@ void registerTypes(sol::table& lib) {
     registerEnum<ll::PortDirection, ll::impl::PortDirectionStrings.size(), ll::impl::PortDirectionStrings>(lib, "PortDirection");
     registerEnum<ll::PortType, ll::impl::PortTypeStrings.size(), ll::impl::PortTypeStrings>(lib, "PortType");
     registerEnum<ll::BufferUsageFlagBits, ll::impl::BufferUsageFlagBitsStrings.size(), ll::impl::BufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
-    registerEnum<vk::ImageLayout, ll::impl::VkImageLayoutStrings.size(), ll::impl::VkImageLayoutStrings>(lib, "ImageLayout");
-    registerEnum<vk::ImageUsageFlagBits, ll::impl::VkImageUsageFlagBitsStrings.size(), ll::impl::VkImageUsageFlagBitsStrings>(lib, "ImageUsageFlagBits");
-    registerEnum<vk::ImageTiling, ll::impl::VkImageTilingStrings.size(), ll::impl::VkImageTilingStrings>(lib, "ImageTiling");
+    registerEnum<ll::ImageLayout, ll::impl::ImageLayoutStrings.size(), ll::impl::ImageLayoutStrings>(lib, "ImageLayout");
+    registerEnum<ll::ImageUsageFlagBits, ll::impl::ImageUsageFlagBitsStrings.size(), ll::impl::ImageUsageFlagBitsStrings>(lib, "ImageUsageFlagBits");
+    registerEnum<ll::ImageTiling, ll::impl::ImageTilingStrings.size(), ll::impl::ImageTilingStrings>(lib, "ImageTiling");
 
     ///////////////////////////////////////////////////////
     // Types

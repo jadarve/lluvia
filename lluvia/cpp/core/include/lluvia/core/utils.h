@@ -9,6 +9,7 @@
 #define LLUVIA_CORE_UTILS_H_
 
 #include "lluvia/core/types.h"
+#include "lluvia/core/image/ImageLayout.h"
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
@@ -104,7 +105,7 @@ std::shared_ptr<ll::Image> createAndInitImage(
     std::shared_ptr<ll::Session>& session,
     std::shared_ptr<ll::Memory>& memory,
     const ll::ImageDescriptor& desc,
-    const vk::ImageLayout initialLayout=vk::ImageLayout::eGeneral);
+    const ll::ImageLayout initialLayout=ll::ImageLayout::General);
 
 
 /**
@@ -114,7 +115,7 @@ std::shared_ptr<ll::Image> createAndInitImage(
 @param      memory          The memory used for allocating the image.
 @param[in]  imgDescriptor   The image descriptor.
 @param[in]  viewDescriptor  The view descriptor.
-@param[in]  initialLayout   The initial layout. Defaults to vk::ImageLayout::eGeneral.
+@param[in]  initialLayout   The initial layout. Defaults to ll::ImageLayout::eGeneral.
 
 @return     A new ll::ImageViewObject.
 */
@@ -123,7 +124,7 @@ std::shared_ptr<ll::ImageView> createAndInitImageView(
     std::shared_ptr<ll::Memory>& memory,
     const ll::ImageDescriptor& imgDescriptor,
     const ll::ImageViewDescriptor& viewDescriptor,
-    const vk::ImageLayout initialLayout=vk::ImageLayout::eGeneral);
+    const ll::ImageLayout initialLayout=ll::ImageLayout::General);
 
 } // namespace ll
 

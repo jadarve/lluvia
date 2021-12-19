@@ -10,6 +10,7 @@
 
 #include <memory>
 
+#include "lluvia/core/image/ImageLayout.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
 
@@ -160,7 +161,7 @@ public:
     @param      image      The image
     @param[in]  newLayout  The new layout
     */
-    void changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout);
+    void changeImageLayout(ll::Image& image, const ll::ImageLayout newLayout);
 
     /**
     @brief      Change \p imageView underlying image layout.
@@ -175,7 +176,7 @@ public:
     @param      imageView  The image view.
     @param[in]  newLayout  The new layout
     */
-    void changeImageLayout(ll::ImageView& imageView, const vk::ImageLayout newLayout);
+    void changeImageLayout(ll::ImageView& imageView, const ll::ImageLayout newLayout);
 
 
     /**

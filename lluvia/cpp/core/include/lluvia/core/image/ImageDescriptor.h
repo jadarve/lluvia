@@ -9,6 +9,8 @@
 #define LLUVIA_CORE_IMAGE_IMAGE_DESCRIPTOR_H_
 
 #include "lluvia/core/error.h"
+#include "lluvia/core/image/ImageTiling.h"
+#include "lluvia/core/image/ImageUsageFlags.h"
 #include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/types.h"
 
@@ -227,8 +229,8 @@ public:
                     const uint32_t width,
                     const ll::ChannelCount channelCount,
                     const ll::ChannelType channelType,
-                    const vk::ImageUsageFlags usageFlags,
-                    const vk::ImageTiling tiling);
+                    const ll::ImageUsageFlags usageFlags,
+                    const ll::ImageTiling tiling);
 
     ~ImageDescriptor()                                              = default;
     
@@ -305,7 +307,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageDescriptor& setUsageFlags(const vk::ImageUsageFlags flags) noexcept;
+    ImageDescriptor& setUsageFlags(const ll::ImageUsageFlags flags) noexcept;
 
 
     /**
@@ -327,7 +329,7 @@ public:
     
     @return     A reference to this object.
     */
-    ImageDescriptor& setTiling(const vk::ImageTiling tTiling) noexcept;
+    ImageDescriptor& setTiling(const ll::ImageTiling tTiling) noexcept;
 
 
     /**
@@ -431,14 +433,14 @@ public:
 
     @return     The usage flags.
     */
-    vk::ImageUsageFlags getUsageFlags() const noexcept;
+    ll::ImageUsageFlags getUsageFlags() const noexcept;
 
     /**
     @brief      Gets the vulkan image tiling.
     
     @return     The image tiling.
     */
-    vk::ImageTiling getTiling() const noexcept;
+    ll::ImageTiling getTiling() const noexcept;
 
     /**
     @brief      Gets the usage flags casted to an integer type.
@@ -459,11 +461,11 @@ private:
     // z : depth
     ll::vec3ui m_shape               {1, 1, 1};
 
-    vk::ImageTiling m_tiling         {vk::ImageTiling::eOptimal};
-    vk::ImageUsageFlags m_usageFlags {vk::ImageUsageFlagBits::eStorage |
-                                      vk::ImageUsageFlagBits::eSampled |
-                                      vk::ImageUsageFlagBits::eTransferSrc |
-                                      vk::ImageUsageFlagBits::eTransferDst};
+    ll::ImageTiling m_tiling         {ll::ImageTiling::Optimal};
+    ll::ImageUsageFlags m_usageFlags {ll::ImageUsageFlagBits::Storage |
+                                      ll::ImageUsageFlagBits::Sampled |
+                                      ll::ImageUsageFlagBits::TransferSrc |
+                                      ll::ImageUsageFlagBits::TransferDst};
 };
 
 

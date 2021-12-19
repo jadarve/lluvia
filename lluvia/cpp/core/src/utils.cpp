@@ -135,7 +135,7 @@ std::shared_ptr<ll::Image> createAndInitImage(
     std::shared_ptr<ll::Session>& session,
     std::shared_ptr<ll::Memory>& memory,
     const ll::ImageDescriptor& desc,
-    const vk::ImageLayout initialLayout) {
+    const ll::ImageLayout initialLayout) {
 
     std::shared_ptr<ll::Image> image = memory->createImage(desc);
 
@@ -158,7 +158,7 @@ std::shared_ptr<ll::ImageView> createAndInitImageView(
     std::shared_ptr<ll::Memory>& memory,
     const ll::ImageDescriptor& imgDescriptor,
     const ll::ImageViewDescriptor& viewDescriptor,
-    const vk::ImageLayout initialLayout) {
+    const ll::ImageLayout initialLayout) {
 
     auto image = createAndInitImage(session, memory, imgDescriptor, initialLayout);
     

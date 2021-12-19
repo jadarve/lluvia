@@ -1,6 +1,8 @@
 #include "lluvia/core/vulkan/Device.h"
 
 #include "lluvia/core/error.h"
+#include "lluvia/core/image/ImageUsageFlags.h"
+#include "lluvia/core/image/ImageTiling.h"
 #include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/CommandBuffer.h"
 
@@ -56,8 +58,8 @@ bool Device::isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) c
 
     auto result = m_physicalDevice.getImageFormatProperties(descriptor.getFormat(),
         descriptor.getImageType(), 
-        descriptor.getTiling(), 
-        descriptor.getUsageFlags(),
+        ll::impl::toVkImageTiling(descriptor.getTiling()), 
+        ll::impl::toVkImageUsageFlags(descriptor.getUsageFlags()),
         vk::ImageCreateFlags {},
         &formatProperties);
 

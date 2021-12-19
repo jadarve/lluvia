@@ -84,7 +84,7 @@ const ll::ImageDescriptor& ImageView::getImageDescriptor() const noexcept {
 }
 
 
-vk::ImageUsageFlags ImageView::getUsageFlags() const noexcept {
+ll::ImageUsageFlags ImageView::getUsageFlags() const noexcept {
     return m_image->getUsageFlags();
 }
 
@@ -94,12 +94,12 @@ uint32_t ImageView::getUsageFlagsUnsafe() const noexcept {
 }
 
 
-vk::ImageLayout ImageView::getLayout() const noexcept {
+ll::ImageLayout ImageView::getLayout() const noexcept {
     return m_image->getLayout();
 }
 
 
-vk::ImageTiling ImageView::getTiling() const noexcept {
+ll::ImageTiling ImageView::getTiling() const noexcept {
     return m_image->getTiling();
 }
 
@@ -139,7 +139,7 @@ const ll::ImageViewDescriptor& ImageView::getDescriptor() const noexcept {
 }
 
 
-void ImageView::changeImageLayout(const vk::ImageLayout newLayout) {
+void ImageView::changeImageLayout(const ll::ImageLayout newLayout) {
     m_image->changeImageLayout(newLayout);
 }
 

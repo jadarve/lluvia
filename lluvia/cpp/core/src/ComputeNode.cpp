@@ -398,7 +398,7 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
     auto descImgInfo = vk::DescriptorImageInfo {}
         .setSampler(imgView->m_vkSampler)
         .setImageView(imgView->m_vkImageView)
-        .setImageLayout(imgView->m_image->m_vkLayout);
+        .setImageLayout(ll::impl::toVkImageLayout(imgView->m_image->m_layout));
 
     auto writeDescSet = vk::WriteDescriptorSet()
         .setDstSet(m_descriptorSet)

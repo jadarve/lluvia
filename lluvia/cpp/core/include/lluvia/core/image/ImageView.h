@@ -213,7 +213,7 @@ public:
 
     @return     The usage flags.
     */
-    vk::ImageUsageFlags getUsageFlags() const noexcept;
+    ll::ImageUsageFlags getUsageFlags() const noexcept;
 
 
     /**
@@ -236,7 +236,7 @@ public:
     
     @return     The image layout.
     */
-    vk::ImageLayout getLayout() const noexcept;
+    ll::ImageLayout getLayout() const noexcept;
 
 
     /**
@@ -244,7 +244,7 @@ public:
     
     @return     The image tiling.
     */
-    vk::ImageTiling getTiling() const noexcept;
+    ll::ImageTiling getTiling() const noexcept;
 
 
     /**
@@ -330,7 +330,7 @@ public:
     
     @param[in]  newLayout  The new layout
     */
-    void changeImageLayout(const vk::ImageLayout newLayout);
+    void changeImageLayout(const ll::ImageLayout newLayout);
 
     /**
     @brief      Immediately clears the image pixels to zero.

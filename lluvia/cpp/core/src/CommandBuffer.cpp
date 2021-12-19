@@ -83,7 +83,8 @@ void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({dst.getWidth(), dst.getHeight(), dst.getDepth()});
 
-    m_commandBuffer.copyBufferToImage(src.m_vkBuffer, dst.m_vkImage, dst.m_vkLayout, 1, &copyInfo);
+    m_commandBuffer.copyBufferToImage(src.m_vkBuffer, dst.m_vkImage,
+        ll::impl::toVkImageLayout(dst.m_layout), 1, &copyInfo);
 }
 
 
@@ -103,7 +104,8 @@ void CommandBuffer::copyImageToBuffer(const ll::Image& src, const ll::Buffer& ds
         .setImageOffset({0, 0, 0})
         .setImageExtent({src.getWidth(), src.getHeight(), src.getDepth()});
 
-    m_commandBuffer.copyImageToBuffer(src.m_vkImage, src.m_vkLayout, dst.m_vkBuffer, 1, &copyInfo);
+    m_commandBuffer.copyImageToBuffer(src.m_vkImage, 
+        ll::impl::toVkImageLayout(src.m_layout), dst.m_vkBuffer, 1, &copyInfo);
 }
 
 void CommandBuffer::copyImageToImage(const ll::Image &src, const ll::Image &dst) {
@@ -122,22 +124,22 @@ void CommandBuffer::copyImageToImage(const ll::Image &src, const ll::Image &dst)
         .setExtent({src.getWidth(), src.getHeight(), src.getDepth()});
 
     m_commandBuffer.copyImage(src.m_vkImage,
-        src.m_vkLayout,
+        ll::impl::toVkImageLayout(src.m_layout),
         dst.m_vkImage,
-        dst.m_vkLayout,
+        ll::impl::toVkImageLayout(dst.m_layout),
         1,
         &copyRegion);
 }
 
-void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout newLayout) {
+void CommandBuffer::changeImageLayout(ll::Image& image, const ll::ImageLayout newLayout) {
 
     // FIXME: compute according to current and new layout
     const auto srcAccessFlags = vk::AccessFlags{vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite};
     const auto dstAccessFlags = vk::AccessFlags{vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite};
 
     auto barrier = vk::ImageMemoryBarrier {}
-                    .setOldLayout(image.m_vkLayout)
-                    .setNewLayout(newLayout)
+                    .setOldLayout(ll::impl::toVkImageLayout(image.m_layout))
+                    .setNewLayout(ll::impl::toVkImageLayout(newLayout))
                     .setSrcQueueFamilyIndex(m_device->getComputeFamilyQueueIndex())
                     .setDstQueueFamilyIndex(m_device->getComputeFamilyQueueIndex())
                     .setImage(image.m_vkImage)
@@ -159,10 +161,10 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const vk::ImageLayout ne
         1, &barrier);
 
     // FIXME: this should be set only after the pipelineBarrier is executed
-    image.m_vkLayout = newLayout;
+    image.m_layout = newLayout;
 }
 
-void CommandBuffer::changeImageLayout(ll::ImageView& imageView, const vk::ImageLayout newLayout) {
+void CommandBuffer::changeImageLayout(ll::ImageView& imageView, const ll::ImageLayout newLayout) {
 
     this->changeImageLayout(*(imageView.getImage()), newLayout);
 }
@@ -195,7 +197,8 @@ void CommandBuffer::clearImage(ll::Image &image) {
                     .setBaseArrayLayer(0)
                     .setLayerCount(1);
 
-    m_commandBuffer.clearColorImage(image.m_vkImage, image.m_vkLayout, clearColor, range);
+    m_commandBuffer.clearColorImage(image.m_vkImage,
+        ll::impl::toVkImageLayout(image.m_layout), clearColor, range);
 }
 
 void CommandBuffer::durationStart(ll::Duration &duration) {
