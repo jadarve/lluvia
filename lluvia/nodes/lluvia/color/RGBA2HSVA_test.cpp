@@ -47,7 +47,7 @@ TEST_CASE("goodUse", "RGBA2HSVA_test") {
             .setHeight(480)
             .setChannelType(ll::ChannelType::Uint8)
             .setChannelCount(ll::ChannelCount::C4)
-            .setUsageFlags(vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst);
+            .setUsageFlags(ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst);
 
     auto in_rgba_viewDesc = ll::ImageViewDescriptor {}
             .setFilterMode(ll::ImageFilterMode::Nearest)
