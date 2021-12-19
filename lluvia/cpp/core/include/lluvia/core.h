@@ -16,7 +16,13 @@
 #include "core/buffer/BufferUsageFlags.h"
 
 #include "core/image/Image.h"
+#include "core/image/ImageAddressMode.h"
+#include "core/image/ImageAxis.h"
 #include "core/image/ImageDescriptor.h"
+#include "core/image/ImageFilterMode.h"
+#include "core/image/ImageLayout.h"
+#include "core/image/ImageTiling.h"
+#include "core/image/ImageUsageFlags.h"
 #include "core/image/ImageView.h"
 #include "core/image/ImageViewDescriptor.h"
 
