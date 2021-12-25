@@ -16,13 +16,17 @@ import numpy as np
 
 from lluvia.core cimport core_buffer
 from lluvia.core.core_buffer import BufferUsageFlagBits
-from lluvia.core cimport image
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-# from lluvia.core.enums import BufferUsageFlagBits
-from lluvia.core.enums.image cimport ChannelType, ImageFilterMode, ImageAddressMode
-from lluvia.core.enums.image import ImageUsageFlagBits
-from lluvia.core.enums.vulkan cimport ImageLayout, ImageTiling
+
+from lluvia.core.image cimport image
+from lluvia.core.image.image cimport _ChannelType, ChannelType, _ChannelCount, Image, _ImageDescriptor
+from lluvia.core.image.image_filter_mode cimport ImageFilterMode
+from lluvia.core.image.image_address_mode cimport ImageAddressMode
+from lluvia.core.image.image_usage_flags cimport _ImageUsageFlags, ImageUsageFlagBits
+from lluvia.core.image.image_layout cimport ImageLayout
+from lluvia.core.image.image_tiling cimport _ImageTiling, ImageTiling
+
 from lluvia.core.session cimport Session
 
 
@@ -354,16 +358,16 @@ cdef class Memory:
         depth, height, width, channels = self.__getImageShape(shape)
 
         cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ImageUsageFlagBits)
-        cdef vk.ImageUsageFlags vkUsageFlags = <vk.ImageUsageFlags> flattenFlags
-        cdef vk.ImageTiling tiling = <vk.ImageTiling> ImageTiling.Optimal
+        cdef _ImageUsageFlags vkUsageFlags = <_ImageUsageFlags> flattenFlags
+        cdef _ImageTiling tiling = <_ImageTiling> ImageTiling.Optimal
 
-        cdef image._ChannelType cType = <image._ChannelType> channelType
+        cdef _ChannelType cType = <_ChannelType> channelType
 
-        cdef image._ChannelCount cCount = image.castChannelCount[uint32_t](channels)
+        cdef _ChannelCount cCount = image.castChannelCount[uint32_t](channels)
 
-        cdef image._ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
+        cdef _ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
 
-        cdef image.Image img = image._buildImage(self.__memory.get().createImage(desc), self.session, self)
+        cdef Image img = image._buildImage(self.__memory.get().createImage(desc), self.session, self)
         img.changeLayout(ImageLayout.General)
 
         return img

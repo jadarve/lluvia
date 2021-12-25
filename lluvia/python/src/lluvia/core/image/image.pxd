@@ -13,21 +13,51 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
+from lluvia.core.image.image_address_mode cimport _ImageAddressMode
+from lluvia.core.image.image_axis cimport _ImageAxis
+from lluvia.core.image.image_filter_mode cimport _ImageFilterMode
+from lluvia.core.image.image_layout cimport _ImageLayout
+from lluvia.core.image.image_tiling cimport _ImageTiling
+from lluvia.core.image.image_usage_flags cimport _ImageUsageFlags
+
 from lluvia.core cimport vulkan as vk
 from lluvia.core.core_object cimport _Object
-from lluvia.core.enums cimport image as img_enums
 from lluvia.core.memory cimport _Memory, _MemoryAllocationInfo
 from lluvia.core.memory cimport Memory
 from lluvia.core.session cimport Session
 
 
-cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
+cdef extern from 'lluvia/core/image/ImageDescriptor.h' namespace 'll':
 
     cdef cppclass _ChannelType 'll::ChannelType':
         pass
 
     cdef cppclass _ChannelCount 'll::ChannelCount':
         pass
+
+    cdef enum _ChannelTypeBits 'll::ChannelType':
+        _ChannelTypeBits_Uint8   'll::ChannelType::Uint8'
+        _ChannelTypeBits_Int8    'll::ChannelType::Int8'
+
+        _ChannelTypeBits_Uint16  'll::ChannelType::Uint16'
+        _ChannelTypeBits_Int16   'll::ChannelType::Int16'
+        _ChannelTypeBits_Float16 'll::ChannelType::Float16'
+
+        _ChannelTypeBits_Uint32  'll::ChannelType::Uint32'
+        _ChannelTypeBits_Int32   'll::ChannelType::Int32'
+        _ChannelTypeBits_Float32 'll::ChannelType::Float32'
+
+        _ChannelTypeBits_Uint64  'll::ChannelType::Uint64'
+        _ChannelTypeBits_Int64   'll::ChannelType::Int64'
+        _ChannelTypeBits_Float64 'll::ChannelType::Float64'
+
+
+    cdef enum _ChannelCountBits 'll::ChannelCount':
+        _ChannelCountBits_C1 'll::ChannelCount::C1'
+        _ChannelCountBits_C2 'll::ChannelCount::C2'
+        _ChannelCountBits_C3 'll::ChannelCount::C3'
+        _ChannelCountBits_C4 'll::ChannelCount::C4'
+
 
     _ChannelCount castChannelCount[T](T c) except +
     uint64_t getChannelTypeSize(_ChannelType type)
@@ -40,8 +70,8 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
                     const uint32_t depth,
                     _ChannelCount channelCount,
                     _ChannelType channelType,
-                    vk.ImageUsageFlags usageFlags,
-                    vk.ImageTiling tiling)
+                    _ImageUsageFlags usageFlags,
+                    _ImageTiling tiling)
 
 
         _ImageDescriptor& setChannelType(const _ChannelType type)
@@ -60,7 +90,7 @@ cdef extern from 'lluvia/core/ImageDescriptor.h' namespace 'll':
         vk.Format getFormat()         const
 
 
-cdef extern from 'lluvia/core/Image.h' namespace 'll':
+cdef extern from 'lluvia/core/image/Image.h' namespace 'll':
 
     cdef cppclass _Image 'll::Image' (_Object):
 
@@ -69,8 +99,8 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
 
-        vk.ImageUsageFlags getUsageFlags() const
-        vk.ImageLayout     getLayout()     const
+        _ImageUsageFlags getUsageFlags() const
+        _ImageLayout     getLayout()     const
 
         _ChannelType getChannelType()    const
         uint64_t getChannelTypeSize()    const
@@ -84,7 +114,7 @@ cdef extern from 'lluvia/core/Image.h' namespace 'll':
         void clear() except +
 
 
-cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
+cdef extern from 'lluvia/core/image/ImageViewDescriptor.h' namespace 'll':
 
     cdef cppclass _ImageAxis 'll::ImageAxis':
         pass
@@ -119,7 +149,7 @@ cdef extern from 'lluvia/core/ImageViewDescriptor.h' namespace 'll':
         bool isSampled() const
 
 
-cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
+cdef extern from 'lluvia/core/image/ImageView.h' namespace 'll':
 
     cdef cppclass _ImageView 'll::ImageView':
 
@@ -131,8 +161,8 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
         uint64_t getSize() const
         _MemoryAllocationInfo getAllocationInfo() const
 
-        vk.ImageUsageFlags getUsageFlags() const
-        vk.ImageLayout     getLayout()     const
+        _ImageUsageFlags getUsageFlags() const
+        _ImageLayout     getLayout()     const
 
         _ChannelType getChannelType()    const
         uint64_t getChannelTypeSize()    const
@@ -142,6 +172,28 @@ cdef extern from 'lluvia/core/ImageView.h' namespace 'll':
         uint32_t getDepth()              const
 
         void clear() except +
+
+cpdef enum ChannelType:
+    Uint8   = <uint32_t> _ChannelTypeBits_Uint8
+    Int8    = <uint32_t> _ChannelTypeBits_Int8
+
+    Uint16  = <uint32_t> _ChannelTypeBits_Uint16
+    Int16   = <uint32_t> _ChannelTypeBits_Int16
+    Float16 = <uint32_t> _ChannelTypeBits_Float16
+
+    Uint32  = <uint32_t> _ChannelTypeBits_Uint32
+    Int32   = <uint32_t> _ChannelTypeBits_Int32
+    Float32 = <uint32_t> _ChannelTypeBits_Float32
+
+    Uint64  = <uint32_t> _ChannelTypeBits_Uint64
+    Int64   = <uint32_t> _ChannelTypeBits_Int64
+    Float64 = <uint32_t> _ChannelTypeBits_Float64
+
+cpdef enum ChannelCount:
+    C1 = <uint32_t> _ChannelCountBits_C1
+    C2 = <uint32_t> _ChannelCountBits_C2
+    C3 = <uint32_t> _ChannelCountBits_C3
+    C4 = <uint32_t> _ChannelCountBits_C4
 
 
 cdef _buildImage(shared_ptr[_Image] ptr, Session session, Memory memory)

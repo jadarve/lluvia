@@ -25,7 +25,7 @@
 
 namespace ll {
 
-
+// FIXME: move enums to their own file.
 /**
 @brief      Supported image channel types.
 

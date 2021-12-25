@@ -14,7 +14,8 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 
 from lluvia.core.core_buffer cimport _Buffer, BufferUsageFlags
-from lluvia.core.image cimport _Image, _ImageDescriptor
+from lluvia.core.image.image cimport _Image, _ImageDescriptor
+
 from lluvia.core.session cimport Session
 
 cdef extern from 'lluvia/core/memory/MemoryPropertyFlags.h' namespace 'll':

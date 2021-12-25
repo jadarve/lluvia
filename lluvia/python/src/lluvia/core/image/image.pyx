@@ -17,14 +17,16 @@ cimport numpy as np
 
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.enums import BufferUsageFlagBits, ChannelType, ImageUsageFlagBits
-from lluvia.core.enums.image cimport ImageFilterMode, ImageAddressMode
-from lluvia.core.enums.image import ImageAddressMode as ImageAddressMode_t
-from lluvia.core.enums.image import ImageFilterMode as ImageFilterMode_t
-from lluvia.core.enums.vulkan cimport ImageLayout
-from lluvia.core.enums.vulkan import ImageLayout as ImageLayout_t
 from lluvia.core.memory cimport Memory, MemoryAllocationInfo, _buildMemory
 from lluvia.core.session cimport Session
+
+
+from lluvia.core.core_buffer cimport BufferUsageFlagBits
+
+from lluvia.core.image.image_usage_flags cimport ImageUsageFlagBits
+from lluvia.core.image.image_filter_mode cimport _ImageFilterMode, ImageFilterMode
+from lluvia.core.image.image_address_mode cimport _ImageAddressMode, ImageAddressMode
+from lluvia.core.image.image_layout cimport _ImageLayout, ImageLayout
 
 
 __all__ = [
@@ -164,7 +166,7 @@ cdef class Image:
 
     property layout:
         def __get__(self):
-            return ImageLayout_t(<uint32_t> self.__image.get().getLayout())
+            return ImageLayout(<uint32_t> self.__image.get().getLayout())
 
     def changeLayout(self, ImageLayout newLayout):
         """
@@ -505,23 +507,23 @@ cdef class ImageView:
 
     property layout:
         def __get__(self):
-            return ImageLayout_t(<uint32_t> self.__imageView.get().getLayout())
+            return ImageLayout(<uint32_t> self.__imageView.get().getLayout())
 
     property filterMode:
         def __get__(self):
-            return ImageFilterMode_t(<uint32_t> self.__imageView.get().getDescriptor().getFilterMode())
+            return ImageFilterMode(<uint32_t> self.__imageView.get().getDescriptor().getFilterMode())
 
     property addressModeU:
         def __get__(self):
-            return ImageAddressMode_t(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeU())
+            return ImageAddressMode(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeU())
 
     property addressModeV:
         def __get__(self):
-            return ImageAddressMode_t(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeV())
+            return ImageAddressMode(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeV())
 
     property addressModeW:
         def __get__(self):
-            return ImageAddressMode_t(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeW())
+            return ImageAddressMode(<uint32_t> self.__imageView.get().getDescriptor().getAddressModeW())
 
     property normalizedCoordinates:
         def __get__(self):

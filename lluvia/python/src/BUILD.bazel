@@ -15,8 +15,6 @@ pyx_library (
         "lluvia/core/core_object.pxd",
         "lluvia/core/duration.pxd",
         "lluvia/core/duration.pyx",
-        "lluvia/core/image.pxd",
-        "lluvia/core/image.pyx",
         "lluvia/core/memory.pxd",
         "lluvia/core/memory.pyx",
         "lluvia/core/node.pxd",
@@ -31,6 +29,10 @@ pyx_library (
         "lluvia/core/vulkan.pxd",
         "lluvia/util.py",
     ] + glob([
+        "lluvia/core/image/*.py",
+        "lluvia/core/image/*.pyx",
+        "lluvia/core/image/*.pxd",
+    ]) + glob([
         "lluvia/core/enums/*.py",
         "lluvia/core/enums/*.pyx",
         "lluvia/core/enums/*.pxd",

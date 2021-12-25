@@ -26,7 +26,7 @@ from lluvia.core.enums.node cimport NodeState, NodeType, PortDirection, PortType
 from lluvia.core.enums.node import NodeType as NodeType_t
 from lluvia.core.enums.node import PortDirection as PortDirection_t
 from lluvia.core.enums.node import PortType as PortType_t
-from lluvia.core.image cimport Image, ImageView, _ImageView, _buildImageView
+from lluvia.core.image.image cimport Image, ImageView, _ImageView, _buildImageView
 from lluvia.core.impl.stdcpp cimport static_pointer_cast
 from lluvia.core.memory cimport Memory, _Memory
 from lluvia.core.parameter cimport Parameter

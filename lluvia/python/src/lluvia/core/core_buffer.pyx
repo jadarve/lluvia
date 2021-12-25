@@ -23,7 +23,7 @@ from lluvia.core.memory import MemoryPropertyFlagBits
 from lluvia.core.session cimport Session
 
 
-__all__ = ['Buffer']
+__all__ = ['Buffer', 'BufferUsageFlagBits']
 
 
 cdef _buildBuffer(shared_ptr[_Buffer] ptr, Session session, Memory memory):
