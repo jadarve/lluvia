@@ -8,6 +8,8 @@
 #ifndef LLUVIA_CORE_PARAMETER_H_
 #define LLUVIA_CORE_PARAMETER_H_
 
+#include "lluvia/core/enums/enums.h"
+
 #include <array>
 #include <cstdint>
 #include <tuple>
@@ -18,7 +20,7 @@
 namespace ll {
 
 
-enum class ParameterType : uint32_t {
+enum class ParameterType : ll::enum_t {
     Int   = 0,
     Float = 1
 };

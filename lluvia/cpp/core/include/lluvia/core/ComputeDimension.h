@@ -11,12 +11,14 @@
 #include <array>
 #include <tuple>
 
+#include "lluvia/core/enums/enums.h"
+
 namespace ll {
 
 /**
 @brief      Supported compute dimensions.
 */
-enum class ComputeDimension : uint32_t {
+enum class ComputeDimension : ll::enum_t {
     D1 = 1,
     D2 = 2,
     D3 = 3

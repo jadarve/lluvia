@@ -11,7 +11,7 @@
 #include "lluvia/core/error.h"
 #include "lluvia/core/image/ImageTiling.h"
 #include "lluvia/core/image/ImageUsageFlags.h"
-#include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/enums/enums.h"
 #include "lluvia/core/types.h"
 
 #include <array>
@@ -31,7 +31,7 @@ namespace ll {
 
 @sa         ll::impl::ChannelTypeStrings string values for this enumeration.
 */
-enum class ChannelType : uint32_t {
+enum class ChannelType : ll::enum_t {
     Uint8   = 0,    /**< 8-bit unsigned int. */
     Int8    = 1,    /**< 8-bit signed int. */
 
@@ -52,7 +52,7 @@ enum class ChannelType : uint32_t {
 /**
 @brief      Supported image channel count.
 */
-enum class ChannelCount : uint32_t {
+enum class ChannelCount : ll::enum_t {
     C1 = 1,
     C2 = 2,
     C3 = 3,

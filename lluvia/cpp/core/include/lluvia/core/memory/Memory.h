@@ -21,7 +21,6 @@
 #include "lluvia/core/buffer/BufferUsageFlags.h"
 #include "lluvia/core/memory/MemoryPropertyFlags.h"
 #include "lluvia/core/memory/MemoryFreeSpaceManager.h"
-#include "lluvia/core/impl/enum_utils.h"
 
 namespace ll {
 

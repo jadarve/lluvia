@@ -10,9 +10,6 @@
 
 #include "lluvia/core/enums/enums.h"
 
-// FIXME: move methods from there to lluvia/core/enums/enums.h
-#include "lluvia/core/impl/enum_utils.h"
-
 namespace ll
 {
 

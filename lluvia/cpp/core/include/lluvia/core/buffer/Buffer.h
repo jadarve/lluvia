@@ -13,7 +13,6 @@
 #include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
-#include "lluvia/core/impl/enum_utils.h"
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
@@ -34,59 +33,6 @@ class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
 class Session;
-
-
-// namespace impl {
-
-//     /**
-//     String values for Vulkan VkBufferUsageFlagBits values.
-
-//     See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
-//     */
-//     constexpr const std::array<std::tuple<const char*, vk::BufferUsageFlagBits>, 9> VkBufferUsageFlagBitsStrings {{
-//         std::make_tuple("IndexBuffer"        , vk::BufferUsageFlagBits::eIndexBuffer),
-//         std::make_tuple("IndirectBuffer"     , vk::BufferUsageFlagBits::eIndirectBuffer),
-//         std::make_tuple("StorageBuffer"      , vk::BufferUsageFlagBits::eStorageBuffer),
-//         std::make_tuple("StorageTexelBuffer" , vk::BufferUsageFlagBits::eStorageTexelBuffer),
-//         std::make_tuple("TransferDst"        , vk::BufferUsageFlagBits::eTransferDst),
-//         std::make_tuple("TransferSrc"        , vk::BufferUsageFlagBits::eTransferSrc),
-//         std::make_tuple("UniformBuffer"      , vk::BufferUsageFlagBits::eUniformBuffer),
-//         std::make_tuple("UniformTexelBuffer" , vk::BufferUsageFlagBits::eUniformTexelBuffer),
-//         std::make_tuple("VertexBuffer"       , vk::BufferUsageFlagBits::eVertexBuffer),
-//     }};
-
-// } // namespace impl
-
-
-// /**
-// @brief      Converts from a string vector to Vulkan BufferUsageFlags.
-
-// The comparison between string values is case sensitive.
-
-// See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
-
-// @param[in]  flagsVector  The flags vector. Their values must be contained
-//                          in impl::VkBufferUsageFlagBitsStrings.
-
-// @return     The reconstructed Vulkan BufferUsageFlags.
-// */
-// inline vk::BufferUsageFlags vectorStringToBufferUsageFLags(const std::vector<std::string>& flagsVector) noexcept {
-//     return impl::vectorStringToFlags<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flagsVector);
-// }
-
-
-// /**
-// @brief      Converst from Vulkan BufferUsageFlags to a vector of strings.
-
-// See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
-
-// @param[in]  flags  The Vulkan flags.
-
-// @return     A vector of string values. Each element is one of impl::VkBufferUsageFlagBitsStrings
-// */
-// inline std::vector<std::string> bufferUsageFlagsToVectorString(const vk::BufferUsageFlags flags) noexcept {
-//     return impl::flagsToVectorString<vk::BufferUsageFlags, vk::BufferUsageFlagBits, impl::VkBufferUsageFlagBitsStrings.size(), impl::VkBufferUsageFlagBitsStrings>(flags);
-// }
 
 
 /**

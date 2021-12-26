@@ -12,7 +12,6 @@
 #include "lluvia/core/image/ImageUsageFlags.h"
 #include "lluvia/core/image/ImageLayout.h"
 #include "lluvia/core/image/ImageTiling.h"
-#include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/types.h"

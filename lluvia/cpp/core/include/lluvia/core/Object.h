@@ -8,7 +8,7 @@
 #ifndef LLUVIA_CORE_OBJECT_H_
 #define LLUVIA_CORE_OBJECT_H_
 
-#include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/enums/enums.h"
 
 #include <algorithm>
 #include <array>
@@ -26,7 +26,7 @@ Each value represent one of the ll::Object child classes.
 
 @sa ll::impl::ObjectTypeStrings string values for this enum.
 */
-enum class ObjectType : uint32_t {
+enum class ObjectType : ll::enum_t {
     Buffer     = 0,     /**< value for ll::Buffer. */
     Image      = 1,     /**< value for ll::Image. */
     ImageView  = 2      /**< value for ll::ImageView. */

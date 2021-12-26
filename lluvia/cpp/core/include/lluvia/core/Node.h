@@ -8,13 +8,12 @@
 #ifndef LLUVIA_CORE_NODE_H_
 #define LLUVIA_CORE_NODE_H_
 
-#include "lluvia/core/impl/enum_utils.h"
-
 #include <cstdint>
 #include <string>
 #include <memory>
 
 #include "lluvia/core/vulkan/vulkan.hpp"
+#include "lluvia/core/enums/enums.h"
 
 namespace ll {
 
@@ -28,7 +27,7 @@ class Parameter;
 
 @sa ll::Node
 */
-enum class NodeState : uint32_t {
+enum class NodeState : ll::enum_t {
     Created = 0,
     Init    = 1
 };
@@ -37,7 +36,7 @@ enum class NodeState : uint32_t {
 /**
 @brief      Class for node type.
 */
-enum class NodeType : uint32_t {
+enum class NodeType : ll::enum_t {
     Compute   = 0, /**<  value for ll::ComputeNode type. */
     Container = 1  /**<  value for ll::ContainerNode type. */
 };
@@ -46,7 +45,7 @@ enum class NodeType : uint32_t {
 /**
 @brief      Class for port direction.
 */
-enum class PortDirection : uint32_t {
+enum class PortDirection : ll::enum_t {
     In  = 0, /**< The port is an input to this node. */
     Out = 1  /**< The port is an output to this node. */
 };
@@ -57,7 +56,7 @@ enum class PortDirection : uint32_t {
 
 @sa ll::impl::ParameterTypeStrings string values for this enum.
 */
-enum class PortType : uint32_t {
+enum class PortType : ll::enum_t {
     Buffer           = 0,   /**< value for ll::Buffer type. */
     ImageView        = 1,   /**< value for ll::ImageView without pixel sampler.*/
     SampledImageView = 2,   /**< value for ll::ImageView objects coupled with a pixel sampler. */
