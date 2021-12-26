@@ -82,7 +82,7 @@ rules_pkg_dependencies()
 git_repository(
     name = "rules_vulkan",
     remote = "https://github.com/jadarve/rules_vulkan.git",
-    tag = "v0.0.2"
+    tag = "v0.0.4"
 )
 
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")

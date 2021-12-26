@@ -7,7 +7,7 @@ function builder.newDescriptor()
     desc.builderName  = 'nodes/Assign'
     desc.localShape   = ll.vec3ui.new(32, 1, 1)
     desc.gridShape    = ll.vec3ui.new(1, 1, 1)
-    desc.program      = ll.getProgram('nodes/Assign')
+    desc.program      = ll.getProgram('nodes/Assign.comp')
     desc.functionName = 'main'
 
     desc:addPort(ll.PortDescriptor.new(0, 'out_buffer', ll.PortDirection.Out, ll.PortType.Buffer))

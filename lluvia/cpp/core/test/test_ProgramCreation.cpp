@@ -102,7 +102,7 @@ TEST_CASE("FromFile", "test_ProgramCreation") {
 
     auto program = std::shared_ptr<ll::Program> {nullptr};
     REQUIRE_NOTHROW([&](){
-        auto path = runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv");
+        auto path = runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.comp.spv");
         program = session->createProgram(path);
     }());
     REQUIRE(program != nullptr);
@@ -147,7 +147,7 @@ TEST_CASE("SetInProgramRegistry", "test_ProgramCreation") {
 
     auto program = std::shared_ptr<ll::Program> {nullptr};
     REQUIRE_NOTHROW([&](){
-        auto path = runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv");
+        auto path = runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.comp.spv");
         program = session->createProgram(path);
     }());
     REQUIRE(program != nullptr);
