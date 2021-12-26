@@ -24,21 +24,21 @@ def test_create():
         assert(f in flags)
 
 
-# def test_fromHost():
+def test_fromHost():
 
-#     import lluvia as ll
+    import lluvia as ll
 
-#     session = ll.createSession(loadNodeLibrary = False)
-#     mem = session.createMemory()
+    session = ll.createSession(loadNodeLibrary = False)
+    mem = session.createMemory()
 
-#     dtype = np.uint8
+    dtype = np.uint8
 
-#     arr = np.arange(0, 64, dtype=dtype)
-#     buf = mem.createBufferFromHost(arr)
-#     copy = buf.toHost(dtype=dtype)
+    arr = np.arange(0, 64, dtype=dtype)
+    buf = mem.createBufferFromHost(arr)
+    copy = buf.toHost(dtype=dtype)
 
-#     for i in range(len(arr)):
-#         assert(arr[i] == copy[i])
+    for i in range(len(arr)):
+        assert(arr[i] == copy[i])
 
 
 if __name__ == "__main__":
