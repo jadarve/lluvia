@@ -17,15 +17,13 @@
 #include <typeinfo>
 #include <vector>
 
-// #include "lluvia/core/vulkan/vulkan.hpp"
-
-#define LL_CONSTEXPR constexpr
 
 namespace ll {
 
+// Every lluvia enum should by typed as enum_t
 using enum_t = uint32_t;
 
-
+// This class is copied from vk::Flags in vulkan.hpp
 template<typename BitType, typename MaskType = enum_t>
 class Flags {
 
@@ -45,49 +43,49 @@ public:
     ~Flags() = default;
 
     // relational operators
-    LL_CONSTEXPR bool operator<(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr bool operator<(Flags<BitType, MaskType> const &rhs) const noexcept {
         return m_mask < rhs.m_mask;
     }
 
-    LL_CONSTEXPR bool operator<=(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr bool operator<=(Flags<BitType, MaskType> const &rhs) const noexcept {
         return m_mask <= rhs.m_mask;
     }
 
-    LL_CONSTEXPR bool operator>(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr bool operator>(Flags<BitType, MaskType> const &rhs) const noexcept {
         return m_mask > rhs.m_mask;
     }
 
-    LL_CONSTEXPR bool operator>=(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr bool operator>=(Flags<BitType, MaskType> const &rhs) const noexcept {
         return m_mask >= rhs.m_mask;
     }
 
-    LL_CONSTEXPR bool operator==(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr bool operator==(Flags<BitType, MaskType> const &rhs) const noexcept {
         return m_mask == rhs.m_mask;
     }
 
-    LL_CONSTEXPR bool operator!=(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr bool operator!=(Flags<BitType, MaskType> const &rhs) const noexcept {
         return m_mask != rhs.m_mask;
     }
 
     // logical operator
-    LL_CONSTEXPR bool operator!() const noexcept {
+    constexpr bool operator!() const noexcept {
         return !m_mask;
     }
 
     // bitwise operators
-    LL_CONSTEXPR Flags<BitType, MaskType> operator&(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr Flags<BitType, MaskType> operator&(Flags<BitType, MaskType> const &rhs) const noexcept {
         return Flags<BitType, MaskType>(m_mask & rhs.m_mask);
     }
 
-    LL_CONSTEXPR Flags<BitType, MaskType> operator|(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr Flags<BitType, MaskType> operator|(Flags<BitType, MaskType> const &rhs) const noexcept {
         return Flags<BitType, MaskType>(m_mask | rhs.m_mask);
     }
 
-    LL_CONSTEXPR Flags<BitType, MaskType> operator^(Flags<BitType, MaskType> const &rhs) const noexcept {
+    constexpr Flags<BitType, MaskType> operator^(Flags<BitType, MaskType> const &rhs) const noexcept {
         return Flags<BitType, MaskType>(m_mask ^ rhs.m_mask);
     }
 
-    // LL_CONSTEXPR Flags<BitType, MaskType> operator~() const noexcept {
+    // constexpr Flags<BitType, MaskType> operator~() const noexcept {
     //     return Flags<BitType, MaskType>(m_mask ^ FlagTraits<BitType>::allFlags);
     // }
 
@@ -113,11 +111,11 @@ public:
     }
 
     // cast operators
-    explicit LL_CONSTEXPR operator bool() const noexcept {
+    explicit constexpr operator bool() const noexcept {
         return !!m_mask;
     }
 
-    explicit LL_CONSTEXPR operator MaskType() const noexcept {
+    explicit constexpr operator MaskType() const noexcept {
         return m_mask;
     }
 
