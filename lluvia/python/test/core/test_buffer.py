@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 
-def test_creation():
+def test_create():
 
     import lluvia as ll
 
@@ -12,8 +12,7 @@ def test_creation():
 
     size = 512
     # some flags different to the default values of mem.createBuffer()
-    flags = [ll.BufferUsageFlagBits.IndexBuffer,
-             ll.BufferUsageFlagBits.UniformBuffer]
+    flags = [ll.BufferUsageFlagBits.UniformBuffer]
 
     buf = mem.createBuffer(size, flags)
 
@@ -25,21 +24,21 @@ def test_creation():
         assert(f in flags)
 
 
-def test_fromHost():
+# def test_fromHost():
 
-    import lluvia as ll
+#     import lluvia as ll
 
-    session = ll.createSession(loadNodeLibrary = False)
-    mem = session.createMemory()
+#     session = ll.createSession(loadNodeLibrary = False)
+#     mem = session.createMemory()
 
-    dtype = np.uint8
+#     dtype = np.uint8
 
-    arr = np.arange(0, 64, dtype=dtype)
-    buf = mem.createBufferFromHost(arr)
-    copy = buf.toHost(dtype=dtype)
+#     arr = np.arange(0, 64, dtype=dtype)
+#     buf = mem.createBufferFromHost(arr)
+#     copy = buf.toHost(dtype=dtype)
 
-    for i in range(len(arr)):
-        assert(arr[i] == copy[i])
+#     for i in range(len(arr)):
+#         assert(arr[i] == copy[i])
 
 
 if __name__ == "__main__":

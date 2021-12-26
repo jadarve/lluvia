@@ -59,15 +59,16 @@ def pyx_library(
 
     for src in srcs:
 
-        if src.endswith(".pyx") or (src.endswith(".py") and src[:-3] + ".pxd" in srcs):
+        if src.endswith("__init__.py"):
+            py_init.append(src)
+            py_srcs.append(src)
+        elif src.endswith(".pyx") or (src.endswith(".py") and src[:-3] + ".pxd" in srcs):
             pyx_srcs.append(src)
         elif src.endswith(".py"):
             py_srcs.append(src)
         else:
             pxd_srcs.append(src)
 
-        if src.endswith("__init__.py"):
-            py_init.append(src)
 
     # Invoke cython to produce the shared object libraries.
     shared_objects_linux = []

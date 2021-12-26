@@ -1,7 +1,7 @@
 # cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
 
 """
-    lluvia.core.core_buffer
+    lluvia.core.buffer
     ------------------
 
     :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
@@ -17,13 +17,21 @@ import numpy as np
 
 from lluvia.core import impl
 
-from lluvia.core.memory cimport Memory, MemoryAllocationInfo, _buildMemory
-from lluvia.core.memory import MemoryPropertyFlagBits
+from lluvia.core.buffer.buffer_usage_flags import BufferUsageFlagBits
+
+# wrap python symbols in ll_memory module
+import lluvia.core.memory as ll_memory
+
+# c-imported symbols
+from lluvia.core.memory.memory cimport Memory, _buildMemory
+from lluvia.core.memory.memory_allocation_info cimport MemoryAllocationInfo
 
 from lluvia.core.session cimport Session
 
 
-__all__ = ['Buffer', 'BufferUsageFlagBits']
+__all__ = [
+    'Buffer'
+]
 
 
 cdef _buildBuffer(shared_ptr[_Buffer] ptr, Session session, Memory memory):
@@ -146,8 +154,8 @@ cdef class Buffer:
         ######################
 
         # create a stage buffer and copy the content of arr to it
-        mapFlags = [MemoryPropertyFlagBits.HostVisible,
-                    MemoryPropertyFlagBits.HostCoherent]
+        mapFlags = [ll_memory.MemoryPropertyFlagBits.HostVisible,
+                    ll_memory.MemoryPropertyFlagBits.HostCoherent]
         cdef Memory mappableMemory = self.session.createMemory(mapFlags,
                                                                  sizeBytes,
                                                                  False)
@@ -210,8 +218,8 @@ cdef class Buffer:
         ######################
 
         # create a stage buffer and copy the content of arr to it
-        mapFlags = [MemoryPropertyFlagBits.HostVisible,
-                    MemoryPropertyFlagBits.HostCoherent]
+        mapFlags = [ll_memory.MemoryPropertyFlagBits.HostVisible,
+                    ll_memory.MemoryPropertyFlagBits.HostCoherent]
         cdef Memory mappableMemory = self.session.createMemory(mapFlags,
                                                                  sizeBytes,
                                                                  False)

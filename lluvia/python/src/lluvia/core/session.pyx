@@ -23,29 +23,41 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
-from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
-from lluvia.core.enums import BufferUsageFlagBits, NodeType
 
-from lluvia.core.enums.compute_dimension cimport ComputeDimension
-from lluvia.core.compute_dimension cimport _ComputeDimension
+# Import all Python symbols defined in the module's __init__.py and wrap them in ll_memory
+import lluvia.core.memory as ll_memory
 
-from lluvia.core.memory cimport MemoryPropertyFlags, Memory, _Memory, _buildMemory
-from lluvia.core.memory import MemoryPropertyFlagBits
+# Import all C-types needed by Cython
+from lluvia.core.memory.memory cimport _buildMemory, _Memory, Memory
+from lluvia.core.memory.memory_property_flags cimport _MemoryPropertyFlags
 
-from lluvia.core.program cimport Program
 
-from lluvia.core.node cimport ComputeNode,\
-                              ComputeNodeDescriptor,\
-                              ContainerNodeDescriptor,\
-                              ContainerNode,\
-                              NodeBuilderDescriptor,\
-                              _buildComputeNode,\
-                              _buildContainerNode
+# from lluvia.core cimport vulkan as vk
+# from lluvia.core import impl
+# from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
+# from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
+# from lluvia.core.enums import NodeType
 
-from lluvia.core.types cimport _vec3ui
+# from lluvia.core.core_buffer import BufferUsageFlagBits
+
+# from lluvia.core.enums.compute_dimension cimport ComputeDimension
+# from lluvia.core.compute_dimension cimport _ComputeDimension
+
+# from lluvia.core.memory cimport MemoryPropertyFlags, Memory, _Memory, _buildMemory
+# from lluvia.core.memory import MemoryPropertyFlagBits
+
+# from lluvia.core.program cimport Program
+
+# from lluvia.core.node cimport ComputeNode,\
+#                               ComputeNodeDescriptor,\
+#                               ContainerNodeDescriptor,\
+#                               ContainerNode,\
+#                               NodeBuilderDescriptor,\
+#                               _buildComputeNode,\
+#                               _buildContainerNode
+
+# from lluvia.core.types cimport _vec3ui
 
 import lluvia.nodes as llnodes
 import lluvia.glsl.lib as llGslsLib
@@ -121,15 +133,15 @@ cdef class Session:
             by this session.
         """
 
-        cdef vector[MemoryPropertyFlags] vkFlags = self.__session.get().getSupportedMemoryFlags()
+        cdef vector[_MemoryPropertyFlags] supportedFlags = self.__session.get().getSupportedMemoryFlags()
 
         supportedMemoryFlags = list()
 
         cdef uint32_t flags_u32 = 0
-        for flags in vkFlags:
+        for flags in supportedFlags:
 
             flags_u32 = <uint32_t> flags
-            flagBits = impl.expandFlagBits(flags_u32, MemoryPropertyFlagBits)
+            flagBits = impl.expandFlagBits(flags_u32, ll_memory.MemoryPropertyFlagBits)
             supportedMemoryFlags.append(flagBits)
 
         return supportedMemoryFlags
@@ -150,7 +162,7 @@ cdef class Session:
         return mem
 
     def createMemory(self,
-                     flags=MemoryPropertyFlagBits.DeviceLocal,
+                     flags=ll_memory.MemoryPropertyFlagBits.DeviceLocal,
                      uint64_t pageSize=33554432L,
                      bool exactFlagsMatch=False):
         """
@@ -207,533 +219,533 @@ cdef class Session:
 
         """
 
-        cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
-        cdef MemoryPropertyFlags cflags = <MemoryPropertyFlags> flattenFlags
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, ll_memory.MemoryPropertyFlagBits)
+        cdef _MemoryPropertyFlags cflags = <_MemoryPropertyFlags> flattenFlags
 
         return _buildMemory(self.__session.get().createMemory(cflags, pageSize, exactFlagsMatch), self)
 
-    def createProgram(self, str path):
-        """
-        Creates a Program object reading the SPIR-V code from a given file.
+    # def createProgram(self, str path):
+    #     """
+    #     Creates a Program object reading the SPIR-V code from a given file.
 
-        Parameters
-        ----------
-        path : string
-            path to the file where the SPIR-V code is stored.
-
-
-        Returns
-        -------
-        program : lluvia.Program
+    #     Parameters
+    #     ----------
+    #     path : string
+    #         path to the file where the SPIR-V code is stored.
 
 
-        Raises
-        ------
-        IOError : if there is any problem reading the file at the given path.
-        """
-
-        cdef Program prog = Program()
-
-        try:
-            prog.__program = self.__session.get().createProgram(impl.encodeString(path))
-            return prog
-
-        except IOError as e:
-            raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
-
-    def setProgram(self, str name, program):
-        """
-        Sets a program into the registry with a given name
-
-        Parameters
-        ----------
-        name : string
-            The name of the program in the registry.
-
-        program : string or lluvia.Program.
-            If string, this parameter denotes a path to a SPIR-V file used to
-            build the program. This is equivalent to call
-            `session.setProgram(name, session.createProgram(program))`
-
-        Raises
-        ------
-        ValueError: if program's type is not string nor lluvia.Program
-        """
-
-        cdef Program p = Program()
-
-        # if it is a path
-        if type(program) is str:
-            p = self.createProgram(program)
-
-        elif type(program) is Program:
-            p = program
-
-        else:
-            raise ValueError('Unknown type {0}, expecting string or ll.Program'.format(type(program)))
-
-        self.__session.get().setProgram(impl.encodeString(name), p.__program)
-
-    def getProgram(self, str name):
-        """
-        Returns a program from the registry
-
-        Parameters
-        ----------
-        name : string.
-            Name of the program.
+    #     Returns
+    #     -------
+    #     program : lluvia.Program
 
 
-        Returns
-        -------
-        program : lluvia.Program
-            The program.
+    #     Raises
+    #     ------
+    #     IOError : if there is any problem reading the file at the given path.
+    #     """
 
-        Raises
-        ------
-        KeyError : if the program does not exists in the registry
-        """
+    #     cdef Program prog = Program()
 
-        cdef Program out = Program()
-        out.__program = self.__session.get().getProgram(impl.encodeString(name))
+    #     try:
+    #         prog.__program = self.__session.get().createProgram(impl.encodeString(path))
+    #         return prog
 
-        if out.__program == nullptr:
-            raise KeyError('program "{0}" not found'.format(name))
+    #     except IOError as e:
+    #         raise IOError('Error reading SPIR-V file at: {0}. Error: {1}'.format(path, e))
 
-        return out
+    # def setProgram(self, str name, program):
+    #     """
+    #     Sets a program into the registry with a given name
 
-    def getNodeBuilderDescriptors(self):
-        """
-        Gets the node builder descriptors currently registered.
+    #     Parameters
+    #     ----------
+    #     name : string
+    #         The name of the program in the registry.
 
-        Returns
-        -------
-        descriptors : list of NodeBuilderDescriptor
-            The list of descriptors.
-        """
+    #     program : string or lluvia.Program.
+    #         If string, this parameter denotes a path to a SPIR-V file used to
+    #         build the program. This is equivalent to call
+    #         `session.setProgram(name, session.createProgram(program))`
 
-        cdef vector[_NodeBuilderDescriptor] descriptors = self.__session.get().getNodeBuilderDescriptors()
+    #     Raises
+    #     ------
+    #     ValueError: if program's type is not string nor lluvia.Program
+    #     """
 
-        output = list()
-        for d in descriptors:
+    #     cdef Program p = Program()
+
+    #     # if it is a path
+    #     if type(program) is str:
+    #         p = self.createProgram(program)
+
+    #     elif type(program) is Program:
+    #         p = program
+
+    #     else:
+    #         raise ValueError('Unknown type {0}, expecting string or ll.Program'.format(type(program)))
+
+    #     self.__session.get().setProgram(impl.encodeString(name), p.__program)
+
+    # def getProgram(self, str name):
+    #     """
+    #     Returns a program from the registry
+
+    #     Parameters
+    #     ----------
+    #     name : string.
+    #         Name of the program.
+
+
+    #     Returns
+    #     -------
+    #     program : lluvia.Program
+    #         The program.
+
+    #     Raises
+    #     ------
+    #     KeyError : if the program does not exists in the registry
+    #     """
+
+    #     cdef Program out = Program()
+    #     out.__program = self.__session.get().getProgram(impl.encodeString(name))
+
+    #     if out.__program == nullptr:
+    #         raise KeyError('program "{0}" not found'.format(name))
+
+    #     return out
+
+    # def getNodeBuilderDescriptors(self):
+    #     """
+    #     Gets the node builder descriptors currently registered.
+
+    #     Returns
+    #     -------
+    #     descriptors : list of NodeBuilderDescriptor
+    #         The list of descriptors.
+    #     """
+
+    #     cdef vector[_NodeBuilderDescriptor] descriptors = self.__session.get().getNodeBuilderDescriptors()
+
+    #     output = list()
+    #     for d in descriptors:
             
-            desc = NodeBuilderDescriptor(NodeType.Compute,
-                impl.decodeString(d.name), impl.decodeString(d.summary))
+    #         desc = NodeBuilderDescriptor(NodeType.Compute,
+    #             impl.decodeString(d.name), impl.decodeString(d.summary))
 
-            output.append(desc)
+    #         output.append(desc)
 
-        return output
+    #     return output
 
-    def createComputeNodeDescriptor(self, str builderName):
-        """
-        Creates a ComputeNodeDescriptor from its name in the registry.
+    # def createComputeNodeDescriptor(self, str builderName):
+    #     """
+    #     Creates a ComputeNodeDescriptor from its name in the registry.
 
-        Parameters
-        ----------
-        builderName : string.
-            Name of the builder.
+    #     Parameters
+    #     ----------
+    #     builderName : string.
+    #         Name of the builder.
         
-        Returns
-        -------
-        desc : lluvia.ComputeNodeDescriptor.
-            The descriptor
+    #     Returns
+    #     -------
+    #     desc : lluvia.ComputeNodeDescriptor.
+    #         The descriptor
         
-        Raises
-        ------
-        RuntimeError : if builderName is not in the registry.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if builderName is not in the registry.
+    #     """
 
-        cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
-        desc.__descriptor = self.__session.get().createComputeNodeDescriptor(impl.encodeString(builderName))
-        return desc
+    #     cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
+    #     desc.__descriptor = self.__session.get().createComputeNodeDescriptor(impl.encodeString(builderName))
+    #     return desc
 
-    def createComputeNode(self, desc):
-        """
-        Creates a ComputeNode from a given descriptor or builder name.
+    # def createComputeNode(self, desc):
+    #     """
+    #     Creates a ComputeNode from a given descriptor or builder name.
 
-        Parameters
-        ----------
-        desc : string or lluvia.ComputeNodeDescriptor
-            If string, denotes the builder name used to create the ComputeNodeDescriptor for this node.
-            Otherwise, a valid lluvia.ComputeNodeDescriptor must be provided.
+    #     Parameters
+    #     ----------
+    #     desc : string or lluvia.ComputeNodeDescriptor
+    #         If string, denotes the builder name used to create the ComputeNodeDescriptor for this node.
+    #         Otherwise, a valid lluvia.ComputeNodeDescriptor must be provided.
 
-        Returns
-        -------
-        node : lluvia.ComputeNode
+    #     Returns
+    #     -------
+    #     node : lluvia.ComputeNode
 
-        Raises
-        ------
-        RuntimeError : if desc is a string and the node builder is not found in the registry.
-        ValueError   : if desc type is not string nor ComputeNodeDescriptor.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if desc is a string and the node builder is not found in the registry.
+    #     ValueError   : if desc type is not string nor ComputeNodeDescriptor.
+    #     """
 
-        cdef ComputeNodeDescriptor d = ComputeNodeDescriptor()
+    #     cdef ComputeNodeDescriptor d = ComputeNodeDescriptor()
 
-        if type(desc) is str:
-            d = self.createComputeNodeDescriptor(desc)
+    #     if type(desc) is str:
+    #         d = self.createComputeNodeDescriptor(desc)
 
-        elif type(desc) is ComputeNodeDescriptor:
-            d = desc
+    #     elif type(desc) is ComputeNodeDescriptor:
+    #         d = desc
 
-        else:
-            raise ValueError('Unknown type {0}, expecting string or ComputeNodeDescriptor'.format(type(desc)))
+    #     else:
+    #         raise ValueError('Unknown type {0}, expecting string or ComputeNodeDescriptor'.format(type(desc)))
 
-        return _buildComputeNode(self.__session.get().createComputeNode(d.__descriptor), self)
+    #     return _buildComputeNode(self.__session.get().createComputeNode(d.__descriptor), self)
 
-    def createContainerNodeDescriptor(self, str builderName):
-        """
-        Creates a ContainerNodeDescriptor from its name in the registry.
+    # def createContainerNodeDescriptor(self, str builderName):
+    #     """
+    #     Creates a ContainerNodeDescriptor from its name in the registry.
 
-        Parameters
-        ----------
-        builderName : string.
-            Name of the builder.
+    #     Parameters
+    #     ----------
+    #     builderName : string.
+    #         Name of the builder.
         
-        Returns
-        -------
-        desc : lluvia.ContainerNodeDescriptor.
-            The descriptor
+    #     Returns
+    #     -------
+    #     desc : lluvia.ContainerNodeDescriptor.
+    #         The descriptor
         
-        Raises
-        ------
-        RuntimeError : if builderName is not in the registry.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if builderName is not in the registry.
+    #     """
 
-        cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
-        desc.__descriptor = self.__session.get().createContainerNodeDescriptor(impl.encodeString(builderName))
-        return desc
+    #     cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
+    #     desc.__descriptor = self.__session.get().createContainerNodeDescriptor(impl.encodeString(builderName))
+    #     return desc
 
-    def createContainerNode(self, desc):
-        """
-        Creates a ComputeNode from a given descriptor or builder name.
+    # def createContainerNode(self, desc):
+    #     """
+    #     Creates a ComputeNode from a given descriptor or builder name.
 
-        Parameters
-        ----------
-        desc : string or lluvia.ContainerNodeDescriptor
-            If string, denotes the builder name used to create the ContainerNodeDescriptor for this node.
-            Otherwise, a valid lluvia.ContainerNodeDescriptor must be provided.
+    #     Parameters
+    #     ----------
+    #     desc : string or lluvia.ContainerNodeDescriptor
+    #         If string, denotes the builder name used to create the ContainerNodeDescriptor for this node.
+    #         Otherwise, a valid lluvia.ContainerNodeDescriptor must be provided.
 
-        Returns
-        -------
-        node : lluvia.ComputeNode
+    #     Returns
+    #     -------
+    #     node : lluvia.ComputeNode
 
-        Raises
-        ------
-        RuntimeError : if desc is a string and the node builder is not found in the registry.
-        ValueError   : if desc type is not string nor ContainerNodeDescriptor.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if desc is a string and the node builder is not found in the registry.
+    #     ValueError   : if desc type is not string nor ContainerNodeDescriptor.
+    #     """
 
-        cdef ContainerNodeDescriptor d = ContainerNodeDescriptor()
+    #     cdef ContainerNodeDescriptor d = ContainerNodeDescriptor()
 
-        if type(desc) is str:
-            d = self.createContainerNodeDescriptor(desc)
+    #     if type(desc) is str:
+    #         d = self.createContainerNodeDescriptor(desc)
 
-        elif type(desc) is ContainerNodeDescriptor:
-            d = desc
+    #     elif type(desc) is ContainerNodeDescriptor:
+    #         d = desc
 
-        else:
-            raise ValueError('Unknown type {0}, expecting string or ContainerNodeDescriptor'.format(type(desc)))
+    #     else:
+    #         raise ValueError('Unknown type {0}, expecting string or ContainerNodeDescriptor'.format(type(desc)))
 
-        return _buildContainerNode(self.__session.get().createContainerNode(d.__descriptor), self)
+    #     return _buildContainerNode(self.__session.get().createContainerNode(d.__descriptor), self)
 
-    def createDuration(self):
-        """
-        Creates a Duration object.
+    # def createDuration(self):
+    #     """
+    #     Creates a Duration object.
 
-        Returns
-        -------
-        d : ll.Duration.
-            A new Duration object.
-        """
+    #     Returns
+    #     -------
+    #     d : ll.Duration.
+    #         A new Duration object.
+    #     """
 
-        return _buildDuration(shared_ptr[_Duration](moveDuration(self.__session.get().createDuration())))
+    #     return _buildDuration(shared_ptr[_Duration](moveDuration(self.__session.get().createDuration())))
 
-    def createCommandBuffer(self):
-        """
-        Creates a command buffer object.
+    # def createCommandBuffer(self):
+    #     """
+    #     Creates a command buffer object.
 
-        Command buffers are used to record commands to be executed
-        by the device. Once the recording finishes, the command buffer
-        can be sent for execution using the `run` method.
+    #     Command buffers are used to record commands to be executed
+    #     by the device. Once the recording finishes, the command buffer
+    #     can be sent for execution using the `run` method.
 
-        Raises
-        ------
-        RuntimeError : if the command buffer cannot be created.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if the command buffer cannot be created.
+    #     """
 
-        return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
+    #     return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
 
-    def script(self, str code):
-        """
-        Runs a Lua script in the session's interpreter
+    # def script(self, str code):
+    #     """
+    #     Runs a Lua script in the session's interpreter
 
-        Parameters
-        ----------
-        code : string
-            The Lua code.
-        """
+    #     Parameters
+    #     ----------
+    #     code : string
+    #         The Lua code.
+    #     """
 
-        self.__session.get().script(impl.encodeString(code))
+    #     self.__session.get().script(impl.encodeString(code))
 
-    def scriptFile(self, str filename):
-        """
-        Read and run a Lua script file in the session's interpreter
+    # def scriptFile(self, str filename):
+    #     """
+    #     Read and run a Lua script file in the session's interpreter
 
-        Parameters
-        ----------
-        code : string
-            Path to the script file.
-        """
+    #     Parameters
+    #     ----------
+    #     code : string
+    #         Path to the script file.
+    #     """
 
-        self.__session.get().scriptFile(impl.encodeString(filename))
+    #     self.__session.get().scriptFile(impl.encodeString(filename))
 
-    def loadLibrary(self, str filename):
-        """
-        Loads a library made of SPIR-V shader code and Lua scripts.
+    # def loadLibrary(self, str filename):
+    #     """
+    #     Loads a library made of SPIR-V shader code and Lua scripts.
 
-        Parameters
-        ----------
-        filename : string
-            Path to the library file. The file must be a valid
-            zip archive.
+    #     Parameters
+    #     ----------
+    #     filename : string
+    #         Path to the library file. The file must be a valid
+    #         zip archive.
 
-        Raises
-        ------
-        RuntimeError : if there is problem reading the library file.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if there is problem reading the library file.
+    #     """
 
-        self.__session.get().loadLibrary(impl.encodeString(filename))
+    #     self.__session.get().loadLibrary(impl.encodeString(filename))
 
-    def run(self, obj):
-        """
-        Runs a CommandBuffer or ComputeNode
+    # def run(self, obj):
+    #     """
+    #     Runs a CommandBuffer or ComputeNode
 
-        Parameters
-        ----------
-        obj : CommandBuffer or ComputeNode
-        """
+    #     Parameters
+    #     ----------
+    #     obj : CommandBuffer or ComputeNode
+    #     """
 
-        cdef ComputeNode node = None
-        cdef ContainerNode containerNode = None
-        cdef CommandBuffer cmdBuffer = None
+    #     cdef ComputeNode node = None
+    #     cdef ContainerNode containerNode = None
+    #     cdef CommandBuffer cmdBuffer = None
 
-        if type(obj) == ComputeNode:
-            node = obj
-            self.__session.get().run(deref(node.__node.get()))
+    #     if type(obj) == ComputeNode:
+    #         node = obj
+    #         self.__session.get().run(deref(node.__node.get()))
 
-        elif type(obj) == ContainerNode:
-            containerNode = obj
-            self.__session.get().run(deref(containerNode.__node.get()))
+    #     elif type(obj) == ContainerNode:
+    #         containerNode = obj
+    #         self.__session.get().run(deref(containerNode.__node.get()))
 
-        elif type(obj) == CommandBuffer:
-            cmdBuffer = obj
-            self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
+    #     elif type(obj) == CommandBuffer:
+    #         cmdBuffer = obj
+    #         self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
 
-        else:
-            raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
+    #     else:
+    #         raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
 
-    def compileProgram(self, shaderCode,
-                       includeDirs=None,
-                       compileFlags=['-Werror'],
-                       includeGlslLibrary=True):
-        """
-        Compiles a Program from GLSL shader code.
+    # def compileProgram(self, shaderCode,
+    #                    includeDirs=None,
+    #                    compileFlags=['-Werror'],
+    #                    includeGlslLibrary=True):
+    #     """
+    #     Compiles a Program from GLSL shader code.
 
-        This method assumes that glslc command is avialable in the system.
-
-
-        Parameters
-        ----------
-        shaderCode : file or str.
-            If file, it must contain the GLSL code of the shader to compile.
-            The file is not closed during the execution of this method.
-
-            If str,  it must be valid GLSL code. A temporal file is created and
-            its path is passed to glslc for compilation.
-
-        includeDirs : list of strings. Defaults to None.
-            List of include directories to pass to glslc through -I flag.
-
-        compileFlags : list of strings. Defaults to ['-Werror'].
-            Extra compile flags to pass to glslc.
-
-        includeGlslLibrary : bool defaults to True.
-            Whether or not the standard Lluvia GLSL library embedded in the
-            Python package should be included (using -I).
-
-        Returns
-        -------
-        program : lluvia.Program.
-            Compiled program.
+    #     This method assumes that glslc command is avialable in the system.
 
 
-        Raises
-        ------
-        RuntimeError : if the compilation fails.
-        """
+    #     Parameters
+    #     ----------
+    #     shaderCode : file or str.
+    #         If file, it must contain the GLSL code of the shader to compile.
+    #         The file is not closed during the execution of this method.
 
-        shaderFile = None
+    #         If str,  it must be valid GLSL code. A temporal file is created and
+    #         its path is passed to glslc for compilation.
 
-        if type(shaderCode) is not str:
-            shaderFile = shaderCode
+    #     includeDirs : list of strings. Defaults to None.
+    #         List of include directories to pass to glslc through -I flag.
 
-        else:
-            shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
-            shaderFile.file.write(impl.encodeString(shaderCode))
-            shaderFile.file.flush()
+    #     compileFlags : list of strings. Defaults to ['-Werror'].
+    #         Extra compile flags to pass to glslc.
 
-        # temp file for SPIR-V output
-        with tempfile.NamedTemporaryFile(suffix='.spv') as outputFile:
+    #     includeGlslLibrary : bool defaults to True.
+    #         Whether or not the standard Lluvia GLSL library embedded in the
+    #         Python package should be included (using -I).
 
-            command = ['glslc', '-o', outputFile.name] + compileFlags
+    #     Returns
+    #     -------
+    #     program : lluvia.Program.
+    #         Compiled program.
 
-            if includeDirs is None:
-                includeDirs = list()
+
+    #     Raises
+    #     ------
+    #     RuntimeError : if the compilation fails.
+    #     """
+
+    #     shaderFile = None
+
+    #     if type(shaderCode) is not str:
+    #         shaderFile = shaderCode
+
+    #     else:
+    #         shaderFile = tempfile.NamedTemporaryFile(suffix='.comp')
+    #         shaderFile.file.write(impl.encodeString(shaderCode))
+    #         shaderFile.file.flush()
+
+    #     # temp file for SPIR-V output
+    #     with tempfile.NamedTemporaryFile(suffix='.spv') as outputFile:
+
+    #         command = ['glslc', '-o', outputFile.name] + compileFlags
+
+    #         if includeDirs is None:
+    #             includeDirs = list()
             
-            elif type(includeDirs) is str:
-                includeDirs = [includeDirs]
+    #         elif type(includeDirs) is str:
+    #             includeDirs = [includeDirs]
 
-            # add the GLSL library embedded with the Python package
-            if includeGlslLibrary:
-                includeDirs.append(llGslsLib.__path__[0])
+    #         # add the GLSL library embedded with the Python package
+    #         if includeGlslLibrary:
+    #             includeDirs.append(llGslsLib.__path__[0])
             
-            # add -I flags
-            for incDir in includeDirs:
-                    command += ['-I', incDir]
+    #         # add -I flags
+    #         for incDir in includeDirs:
+    #                 command += ['-I', incDir]
 
-            command.append(shaderFile.name)
-            command = ' '.join(command)
+    #         command.append(shaderFile.name)
+    #         command = ' '.join(command)
 
-            proc = subprocess.Popen(command,
-                                    shell=True,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE)
-            proc.wait()
+    #         proc = subprocess.Popen(command,
+    #                                 shell=True,
+    #                                 stdout=subprocess.PIPE,
+    #                                 stderr=subprocess.PIPE)
+    #         proc.wait()
 
-            if proc.returncode != 0:
-                raise RuntimeError(proc.stderr.read())
+    #         if proc.returncode != 0:
+    #             raise RuntimeError(proc.stderr.read())
 
-            return self.createProgram(outputFile.name)
+    #         return self.createProgram(outputFile.name)
 
-    def compileComputeNode(self,
-                           ports,
-                           shaderCode,
-                           functionName='main',
-                           builderName='',
-                           localSize=(1, 1, 1),
-                           gridSize=(1, 1, 1),
-                           includeDirs=None,
-                           compileFlags=['-Werror'],
-                           includeGlslLibrary=True):
-        """
-        Compiles a ComputeNode from GLSL shader code.
+    # def compileComputeNode(self,
+    #                        ports,
+    #                        shaderCode,
+    #                        functionName='main',
+    #                        builderName='',
+    #                        localSize=(1, 1, 1),
+    #                        gridSize=(1, 1, 1),
+    #                        includeDirs=None,
+    #                        compileFlags=['-Werror'],
+    #                        includeGlslLibrary=True):
+    #     """
+    #     Compiles a ComputeNode from GLSL shader code.
 
-        This method assumes that glslc command is avialable in the system.
+    #     This method assumes that glslc command is avialable in the system.
 
-        Parameters
-        ----------
-        ports : list of PortDescriptor.
-            List of port descriptors the compute node receives.
+    #     Parameters
+    #     ----------
+    #     ports : list of PortDescriptor.
+    #         List of port descriptors the compute node receives.
 
-        shaderCode : file or str.
-            If file, it must contain the GLSL code of the shader to compile.
-            The file is not closed during the execution of this method.
+    #     shaderCode : file or str.
+    #         If file, it must contain the GLSL code of the shader to compile.
+    #         The file is not closed during the execution of this method.
 
-            If str,  it must be valid GLSL code. A temporal file is created and
-            its path is passed to glslc for compilation.
+    #         If str,  it must be valid GLSL code. A temporal file is created and
+    #         its path is passed to glslc for compilation.
 
-        functionName : str. Defaults to 'main'.
-            Function name whitin the shader the compute node will execute.
+    #     functionName : str. Defaults to 'main'.
+    #         Function name whitin the shader the compute node will execute.
 
-        builderName : str. Defaults to '' (empty string).
-            Builder name associated to this node.
+    #     builderName : str. Defaults to '' (empty string).
+    #         Builder name associated to this node.
 
-        localSize : list or tuple of length 3. Defaults to (1, 1, 1).
-            Local group size for each XYZ dimension. Each value
-            must be greater or equal to 1.
+    #     localSize : list or tuple of length 3. Defaults to (1, 1, 1).
+    #         Local group size for each XYZ dimension. Each value
+    #         must be greater or equal to 1.
 
-        gridSize : list or tuple of length 3. Defaults to (1, 1, 1).
-            Grid size for each XYZ dimension. The grid size defines
-            the number of local groups in each dimension. Each value
-            must be greater or equal to 1.
+    #     gridSize : list or tuple of length 3. Defaults to (1, 1, 1).
+    #         Grid size for each XYZ dimension. The grid size defines
+    #         the number of local groups in each dimension. Each value
+    #         must be greater or equal to 1.
 
-        includeDirs : list of strings. Defaults to None.
-            List of include directories to pass to glslc through -I flag.
+    #     includeDirs : list of strings. Defaults to None.
+    #         List of include directories to pass to glslc through -I flag.
 
-        compileFlags : list of strings. Defaults to ['-Werror'].
-            Extra compile flags to pass to glslc.
+    #     compileFlags : list of strings. Defaults to ['-Werror'].
+    #         Extra compile flags to pass to glslc.
 
-        includeGlslLibrary : bool defaults to True.
-            Whether or not the standard Lluvia GLSL library embedded in the
-            Python package should be included (using -I).
-
-
-        Returns
-        -------
-        node : lluvia.ComputeNode.
-            Compiled node.
+    #     includeGlslLibrary : bool defaults to True.
+    #         Whether or not the standard Lluvia GLSL library embedded in the
+    #         Python package should be included (using -I).
 
 
-        Raises
-        ------
-        RuntimeError : if the compilation fails.
+    #     Returns
+    #     -------
+    #     node : lluvia.ComputeNode.
+    #         Compiled node.
 
 
-        See also
-        --------
-        compileProgram : Compiles a Program from GLSL shader code.
-        """
+    #     Raises
+    #     ------
+    #     RuntimeError : if the compilation fails.
 
-        desc = ComputeNodeDescriptor()
-        desc.program = self.compileProgram(shaderCode,
-                                           includeDirs,
-                                           compileFlags,
-                                           includeGlslLibrary)
-        desc.functionName = functionName
-        desc.builderName = builderName
-        desc.grid = gridSize
-        desc.local = localSize
 
-        for port in ports:
-            desc.addPort(port)
+    #     See also
+    #     --------
+    #     compileProgram : Compiles a Program from GLSL shader code.
+    #     """
 
-        return self.createComputeNode(desc)
+    #     desc = ComputeNodeDescriptor()
+    #     desc.program = self.compileProgram(shaderCode,
+    #                                        includeDirs,
+    #                                        compileFlags,
+    #                                        includeGlslLibrary)
+    #     desc.functionName = functionName
+    #     desc.builderName = builderName
+    #     desc.grid = gridSize
+    #     desc.local = localSize
 
-    def getGoodComputeLocalShape(self, ComputeDimension dimensions):
-        """
-        Returns the suggested local grid shape for compute nodes given the number of dimensions.
+    #     for port in ports:
+    #         desc.addPort(port)
 
-        The local shape depends on the underlying device used.
+    #     return self.createComputeNode(desc)
 
-        Parameters
-        ----------
-        dimensions : ComputeDimension
-            The number of compute dimensions
+    # def getGoodComputeLocalShape(self, ComputeDimension dimensions):
+    #     """
+    #     Returns the suggested local grid shape for compute nodes given the number of dimensions.
 
-        Returns
-        -------
-        localShape : 3-tuple
-            The suggested local shape.
+    #     The local shape depends on the underlying device used.
 
-        """
+    #     Parameters
+    #     ----------
+    #     dimensions : ComputeDimension
+    #         The number of compute dimensions
 
-        cdef _vec3ui localShape = self.__session.get().getGoodComputeLocalShape(<_ComputeDimension>dimensions)
+    #     Returns
+    #     -------
+    #     localShape : 3-tuple
+    #         The suggested local shape.
 
-        return (localShape.x, localShape.y, localShape.z)
+    #     """
 
-    def help(self, str builderName):
-        """
-        Returns the help string of a given node builder.
+    #     cdef _vec3ui localShape = self.__session.get().getGoodComputeLocalShape(<_ComputeDimension>dimensions)
 
-        Parameters
-        ----------
-        builderName : str
-            The builder name
+    #     return (localShape.x, localShape.y, localShape.z)
 
-        Returns
-        -------
-        helpString : str
-            The help string.
-        """
+    # def help(self, str builderName):
+    #     """
+    #     Returns the help string of a given node builder.
 
-        return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')
+    #     Parameters
+    #     ----------
+    #     builderName : str
+    #         The builder name
+
+    #     Returns
+    #     -------
+    #     helpString : str
+    #         The help string.
+    #     """
+
+    #     return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')
