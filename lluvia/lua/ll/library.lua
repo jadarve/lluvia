@@ -250,7 +250,7 @@ end
 function ll.ComputeNodeDescriptor:init(name, dimensions)
 
     self.builderName  = name
-    self.program      = ll.getProgram(name)
+    self.program      = ll.getProgram(name .. '.comp')
     self.functionName = 'main'
 
     self.localShape   = ll.getGoodComputeLocalShape(dimensions)
