@@ -70,14 +70,14 @@ int main(int argc, const char** argv) {
 
     const auto channelType        = ll::ChannelType::Uint8;
     const auto imageSize          = image.width*image.height*image.channels*ll::getChannelTypeSize(channelType);
-    const auto inputImageMemFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    const auto inputImageMemFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
 
 
     auto session = std::shared_ptr<ll::Session> {ll::Session::create()};
 
     auto memory = session->createMemory(inputImageMemFlags, imageSize, false);
 
-    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eTransferSrc;
+    const auto imgFlags = ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::TransferDst | ll::ImageUsageFlagBits::TransferSrc;
 
     auto imgDesc = ll::ImageDescriptor{1,
                                        static_cast<uint32_t>(image.height),
@@ -90,7 +90,7 @@ int main(int argc, const char** argv) {
         auto inputImage = memory->createImage(imgDesc);
 
     // stage buffer
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    const auto hostMemFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
     auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
     auto stageBuffer        = hostMemory->createBuffer(imageSize);
 
@@ -106,9 +106,9 @@ int main(int argc, const char** argv) {
     // change input image layout to general
     auto imgCopyCmdBuffer = session->createCommandBuffer();
     imgCopyCmdBuffer->begin();
-    imgCopyCmdBuffer->changeImageLayout(*inputImage, vk::ImageLayout::eTransferDstOptimal);
+    imgCopyCmdBuffer->changeImageLayout(*inputImage, ll::ImageLayout::TransferDstOptimal);
     imgCopyCmdBuffer->copyBufferToImage(*stageBuffer, *inputImage);
-    imgCopyCmdBuffer->changeImageLayout(*inputImage, vk::ImageLayout::eGeneral);
+    imgCopyCmdBuffer->changeImageLayout(*inputImage, ll::ImageLayout::General);
     imgCopyCmdBuffer->end();
     session->run(*imgCopyCmdBuffer);
 

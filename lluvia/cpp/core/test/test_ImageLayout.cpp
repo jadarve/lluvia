@@ -17,14 +17,14 @@ TEST_CASE("UndefinedToGeneral", "test_ImageLayout") {
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto memoryFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    const auto memoryFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
     
     auto memory = session->createMemory(memoryFlags, 1024*1024*4, false);
     REQUIRE(memory != nullptr);
 
-    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
-                                              | vk::ImageUsageFlagBits::eSampled
-                                              | vk::ImageUsageFlagBits::eTransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
+                                              | ll::ImageUsageFlagBits::Sampled
+                                              | ll::ImageUsageFlagBits::TransferDst};
 
     auto desc = ll::ImageDescriptor{}
                     .setWidth(640)
@@ -41,7 +41,7 @@ TEST_CASE("UndefinedToGeneral", "test_ImageLayout") {
     REQUIRE(cmdBuffer != nullptr);
 
     cmdBuffer->begin();
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
+    cmdBuffer->changeImageLayout(*image, ll::ImageLayout::General);
     cmdBuffer->end();
     
     std::cout << "running command buffer" << std::endl;

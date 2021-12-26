@@ -8,7 +8,7 @@
 #ifndef LLUVIA_CORE_ERROR_H_
 #define LLUVIA_CORE_ERROR_H_
 
-#include "lluvia/core/impl/enum_utils.h"
+#include "lluvia/core/enums/enums.h"
 
 #include <array>
 #include <string>
@@ -22,7 +22,7 @@ namespace ll {
 /**
 @brief      Error codes
 */
-enum class ErrorCode : int32_t {
+enum class ErrorCode : ll::enum_t {
     EnumConversionFailed,      /**< Conversion between enum types failed */
     MemoryMapFailed,           /**< Memory mapping operation (map or unmap) failed */
     ObjectAllocationError,     /**< Error trying to allocate objects in a memory */

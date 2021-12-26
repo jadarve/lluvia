@@ -15,12 +15,12 @@ TEST_CASE("DebugEnabled", "test_enumerateMemories")
     std::shared_ptr<ll::Session> session = ll::Session::create(desc);
     REQUIRE(session != nullptr);
 
-    std::vector<vk::MemoryPropertyFlags> flagsVector = session->getSupportedMemoryFlags();
+    std::vector<ll::MemoryPropertyFlags> flagsVector = session->getSupportedMemoryFlags();
 
     for(int i = 0; i < flagsVector.size(); ++i) {
-        const vk::MemoryPropertyFlags &flags = flagsVector[i];
+        const ll::MemoryPropertyFlags &flags = flagsVector[i];
         
         std::cout << "Memory index: " << i << std::endl;
-        std::cout << "    Supported flags: " << vk::to_string(flags) << std::endl;
+        // std::cout << "    Supported flags: " << ll::to_string(flags) << std::endl;
     }
 }

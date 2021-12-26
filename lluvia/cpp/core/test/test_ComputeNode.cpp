@@ -25,12 +25,12 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     constexpr const size_t length = 128;
     constexpr const size_t size = sizeof(float);
 
-    using memflags = vk::MemoryPropertyFlagBits;
+    using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
     auto hostMemory = session->createMemory(hostMemFlags, length * size, false);
     REQUIRE(hostMemory != nullptr);
 
@@ -81,12 +81,12 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
     auto runfiles = Runfiles::CreateForTest(&error);
     REQUIRE(runfiles != nullptr);
 
-    using memflags = vk::MemoryPropertyFlagBits;
+    using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
     auto hostMemory = session->createMemory(hostMemFlags, 1024*4, false);
     REQUIRE(hostMemory != nullptr);
 

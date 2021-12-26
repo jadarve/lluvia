@@ -24,17 +24,17 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     constexpr const uint32_t WIDTH = 32u;
     constexpr const uint32_t HEIGHT = 32u;
 
-    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
-                                              | vk::ImageUsageFlagBits::eSampled
-                                              | vk::ImageUsageFlagBits::eTransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
+                                              | ll::ImageUsageFlagBits::Sampled
+                                              | ll::ImageUsageFlagBits::TransferDst};
 
-    using memflags = vk::MemoryPropertyFlagBits;
+    using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
-    const auto deviceMemFlags = memflags::eDeviceLocal;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    const auto deviceMemFlags = memflags::DeviceLocal;
     const auto pageSize = uint64_t {1024*1024*4};
 
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);
@@ -103,9 +103,9 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
     REQUIRE(cmdBuffer != nullptr);
 
     cmdBuffer->begin();
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferDstOptimal);
+    cmdBuffer->changeImageLayout(*image, ll::ImageLayout::TransferDstOptimal);
     cmdBuffer->copyBufferToImage(*stageBuffer, *image);
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
+    cmdBuffer->changeImageLayout(*image, ll::ImageLayout::General);
 
     // the image view can only be bound after the underlying
     // image is in the correct layout.
@@ -148,17 +148,17 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     constexpr const uint32_t WIDTH = 32u;
     constexpr const uint32_t HEIGHT = 32u;
 
-    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
-                                              | vk::ImageUsageFlagBits::eSampled
-                                              | vk::ImageUsageFlagBits::eTransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
+                                              | ll::ImageUsageFlagBits::Sampled
+                                              | ll::ImageUsageFlagBits::TransferDst};
 
-    using memflags = vk::MemoryPropertyFlagBits;
+    using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
-    const auto deviceMemFlags = memflags::eDeviceLocal;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    const auto deviceMemFlags = memflags::DeviceLocal;
     const auto pageSize = uint64_t {1024*1024*4};
 
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);
@@ -224,9 +224,9 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
     REQUIRE(cmdBuffer != nullptr);
 
     cmdBuffer->begin();
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferDstOptimal);
+    cmdBuffer->changeImageLayout(*image, ll::ImageLayout::TransferDstOptimal);
     cmdBuffer->copyBufferToImage(*stageBuffer, *image);
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eGeneral);
+    cmdBuffer->changeImageLayout(*image, ll::ImageLayout::General);
 
     // the image view can only be bound after the underlying
     // image is in the correct layout.

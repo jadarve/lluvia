@@ -12,10 +12,12 @@ from cython.operator cimport dereference as deref
 
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.core_buffer cimport Buffer
+from lluvia.core.buffer.buffer cimport Buffer
 from lluvia.core.duration cimport Duration
-from lluvia.core.enums.vulkan cimport ImageLayout
-from lluvia.core.image cimport Image
+
+from lluvia.core.image.image_layout cimport _ImageLayout, ImageLayout
+from lluvia.core.image.image cimport Image
+
 from lluvia.core.node cimport ComputeNode
 
 
@@ -171,21 +173,14 @@ cdef class CommandBuffer:
             defined in lluvia.ImageLayout:
                 - Undefined
                 - General
-                - ColorAttachmentOptimal
-                - DepthStencilAttachmentOptimal
-                - DepthStencilReadOnlyOptimal
                 - ShaderReadOnlyOptimal
                 - TransferSrcOptimal
                 - TransferDstOptimal
                 - Preinitialized
-                - PresentSrcKHR
-                - SharedPresentKHR
-                - DepthReadOnlyStencilAttachmentOptimalKHR
-                - DepthAttachmentStencilReadOnlyOptimalKHR
         """
 
-        cdef vk.ImageLayout vkLayout = <vk.ImageLayout> newLayout
-        self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), vkLayout)
+        cdef _ImageLayout _layout = <_ImageLayout> newLayout
+        self.__commandBuffer.get().changeImageLayout(deref(img.__image.get()), _layout)
 
     def clearImage(self, Image img):
         """

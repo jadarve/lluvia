@@ -5,7 +5,7 @@
 #include <vector>
 #include <tuple>
 
-#include "lluvia/core/impl/MemoryFreeSpaceManager.h"
+#include "lluvia/core/memory/MemoryFreeSpaceManager.h"
 
 
 using namespace ll;

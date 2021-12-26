@@ -19,16 +19,16 @@ from cython.operator cimport dereference as deref
 
 from lluvia.core import impl
 from lluvia.core.command_buffer cimport CommandBuffer
-from lluvia.core.core_buffer cimport Buffer, _Buffer, _buildBuffer
+from lluvia.core.buffer.buffer cimport Buffer, _Buffer, _buildBuffer
 from lluvia.core.core_object cimport _Object
 from lluvia.core.enums.core_object import ObjectType
 from lluvia.core.enums.node cimport NodeState, NodeType, PortDirection, PortType
 from lluvia.core.enums.node import NodeType as NodeType_t
 from lluvia.core.enums.node import PortDirection as PortDirection_t
 from lluvia.core.enums.node import PortType as PortType_t
-from lluvia.core.image cimport Image, ImageView, _ImageView, _buildImageView
+from lluvia.core.image.image cimport Image, ImageView, _ImageView, _buildImageView
 from lluvia.core.impl.stdcpp cimport static_pointer_cast
-from lluvia.core.memory cimport Memory, _Memory
+from lluvia.core.memory.memory cimport Memory, _Memory
 from lluvia.core.parameter cimport Parameter
 from lluvia.core.program cimport Program, _Program
 from lluvia.core.session cimport Session

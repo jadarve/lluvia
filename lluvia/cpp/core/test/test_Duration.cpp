@@ -21,12 +21,12 @@ TEST_CASE("DurationRecording", "test_Duration")
     auto runfiles = Runfiles::CreateForTest(nullptr);
     REQUIRE(runfiles != nullptr);
 
-    using memflags = vk::MemoryPropertyFlagBits;
+    using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::eHostVisible | memflags::eHostCoherent;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
     auto hostMemory = session->createMemory(hostMemFlags, 1024 * 4, false);
     REQUIRE(hostMemory != nullptr);
 

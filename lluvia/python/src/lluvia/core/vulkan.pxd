@@ -8,17 +8,11 @@
 
 cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
 
-    cdef cppclass MemoryPropertyFlags 'vk::MemoryPropertyFlags':
-        pass
+    # cdef cppclass ImageUsageFlags 'vk::ImageUsageFlags':
+    #     pass
 
-    cdef cppclass BufferUsageFlags 'vk::BufferUsageFlags':
-        pass
-
-    cdef cppclass ImageUsageFlags 'vk::ImageUsageFlags':
-        pass
-
-    cdef cppclass ImageLayout 'vk::ImageLayout':
-        pass
+    # cdef cppclass ImageLayout 'vk::ImageLayout':
+    #     pass
 
     cdef cppclass ImageType 'vk::ImageType':
         pass
@@ -26,5 +20,5 @@ cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
     cdef cppclass Format 'vk::Format':
         pass
 
-    cdef cppclass ImageTiling 'vk::ImageTiling':
-        pass
+    # cdef cppclass ImageTiling 'vk::ImageTiling':
+    #     pass

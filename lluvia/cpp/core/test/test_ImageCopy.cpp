@@ -11,21 +11,21 @@
 #include <iostream>
 #include "lluvia/core.h"
 
-using memflags = vk::MemoryPropertyFlagBits;
+using memflags = ll::MemoryPropertyFlagBits;
 
 TEST_CASE("ImageToImage", "ImageCopyTest") {
 
     constexpr const auto width  = 128;
     constexpr const auto height = 128;
     constexpr const auto pageSize = 32 * 1024 * 1024;
-    const vk::ImageUsageFlags imgUsageFlags = {
-          vk::ImageUsageFlagBits::eStorage
-        | vk::ImageUsageFlagBits::eSampled
-        | vk::ImageUsageFlagBits::eTransferSrc
-        | vk::ImageUsageFlagBits::eTransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = {
+          ll::ImageUsageFlagBits::Storage
+        | ll::ImageUsageFlagBits::Sampled
+        | ll::ImageUsageFlagBits::TransferSrc
+        | ll::ImageUsageFlagBits::TransferDst};
 
-    const auto deviceMemFlags = memflags::eDeviceLocal;
-    const auto hostMemFlags = memflags::eHostCoherent | memflags::eHostVisible;
+    const auto deviceMemFlags = memflags::DeviceLocal;
+    const auto hostMemFlags = memflags::HostCoherent | memflags::HostVisible;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -66,9 +66,9 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     REQUIRE(copyCmdBuffer != nullptr);
 
     copyCmdBuffer->begin();
-    copyCmdBuffer->changeImageLayout(*src, vk::ImageLayout::eTransferDstOptimal);
+    copyCmdBuffer->changeImageLayout(*src, ll::ImageLayout::TransferDstOptimal);
     copyCmdBuffer->copyBufferToImage(*srcBuffer, *src);
-    copyCmdBuffer->changeImageLayout(*src, vk::ImageLayout::eGeneral);
+    copyCmdBuffer->changeImageLayout(*src, ll::ImageLayout::General);
     copyCmdBuffer->end();
 
     session->run(*copyCmdBuffer);
@@ -77,8 +77,8 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     REQUIRE(cmdBuffer != nullptr);
 
     cmdBuffer->begin();
-    cmdBuffer->changeImageLayout(*src, vk::ImageLayout::eTransferSrcOptimal);
-    cmdBuffer->changeImageLayout(*dst, vk::ImageLayout::eTransferDstOptimal);
+    cmdBuffer->changeImageLayout(*src, ll::ImageLayout::TransferSrcOptimal);
+    cmdBuffer->changeImageLayout(*dst, ll::ImageLayout::TransferDstOptimal);
     cmdBuffer->copyImageToImage(*src, *dst);
     cmdBuffer->end();
 
@@ -90,9 +90,9 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     auto dstCopyCmdBuffer = session->createCommandBuffer();
     REQUIRE(dstCopyCmdBuffer != nullptr);
     dstCopyCmdBuffer->begin();
-    dstCopyCmdBuffer->changeImageLayout(*dst, vk::ImageLayout::eTransferSrcOptimal);
+    dstCopyCmdBuffer->changeImageLayout(*dst, ll::ImageLayout::TransferSrcOptimal);
     dstCopyCmdBuffer->copyImageToBuffer(*dst, *dstBuffer);
-    dstCopyCmdBuffer->changeImageLayout(*dst, vk::ImageLayout::eGeneral);
+    dstCopyCmdBuffer->changeImageLayout(*dst, ll::ImageLayout::General);
     dstCopyCmdBuffer->end();
 
     session->run(*dstCopyCmdBuffer);

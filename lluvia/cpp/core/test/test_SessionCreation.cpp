@@ -50,8 +50,8 @@ TEST_CASE("MemoryFlags", "SessionCreationTest") {
 
     auto memoryFlags = session->getSupportedMemoryFlags();
 
-    auto hostVisibleCoherentFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
-    auto deviceLocalFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;
+    auto hostVisibleCoherentFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
+    auto deviceLocalFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
 
     auto hostFlagsFound = false;
     auto deviceFlagsFound = false;

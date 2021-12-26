@@ -6,8 +6,8 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
+from .buffer import *
 from .command_buffer import *
-from .core_buffer import Buffer
 from .duration import *
 from .enums import *
 from .image import *

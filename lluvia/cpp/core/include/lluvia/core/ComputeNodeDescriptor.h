@@ -8,7 +8,6 @@
 #ifndef LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_
 #define LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_
 
-#include "lluvia/core/impl/enum_utils.h"
 #include "lluvia/core/Node.h"
 #include "lluvia/core/Parameter.h"
 #include "lluvia/core/PushConstants.h"

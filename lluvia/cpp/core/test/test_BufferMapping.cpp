@@ -13,14 +13,14 @@
 
 #include "lluvia/core.h"
 
-using memflags = vk::MemoryPropertyFlagBits;
+using memflags = ll::MemoryPropertyFlagBits;
 
 
 TEST_CASE("DifferentPage", "test_BufferMapping") {
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
 
-    const auto hostMemFlags   = memflags::eHostVisible | memflags::eHostCoherent;;
+    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;;
 
     constexpr const auto bufferSize = 256u;
         
@@ -51,7 +51,7 @@ TEST_CASE("SamePage", "test_BufferMapping") {
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags   = memflags::eHostVisible | memflags::eHostCoherent;;
+    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;;
 
     constexpr const auto pageSize   = 1024u;
     constexpr const auto bufferSize = pageSize / 2;
@@ -97,7 +97,7 @@ TEST_CASE("MapAndSet", "test_BufferMapping") {
     const auto p = params{789456, 3.1415};
     
 
-    auto uniformBuffer = uniformMemory->createBuffer(sizeof(p), vk::BufferUsageFlagBits::eUniformBuffer);
+    auto uniformBuffer = uniformMemory->createBuffer(sizeof(p), ll::BufferUsageFlagBits::UniformBuffer);
     REQUIRE(uniformBuffer != nullptr);
     
     uniformBuffer->mapAndSet(p);

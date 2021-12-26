@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 
-def test_creation():
+def test_create():
 
     import lluvia as ll
 
@@ -12,8 +12,7 @@ def test_creation():
 
     size = 512
     # some flags different to the default values of mem.createBuffer()
-    flags = [ll.BufferUsageFlagBits.IndexBuffer,
-             ll.BufferUsageFlagBits.UniformBuffer]
+    flags = [ll.BufferUsageFlagBits.UniformBuffer]
 
     buf = mem.createBuffer(size, flags)
 

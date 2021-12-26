@@ -23,16 +23,25 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
+
+# Import all Python symbols defined in the module's __init__.py and wrap them in ll_memory
+import lluvia.core.memory as ll_memory
+
+# Import all C-types needed by Cython
+from lluvia.core.memory.memory cimport _buildMemory, _Memory, Memory
+from lluvia.core.memory.memory_property_flags cimport _MemoryPropertyFlags
+
 from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
 from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
-from lluvia.core.enums import BufferUsageFlagBits, MemoryPropertyFlagBits, NodeType
 
 from lluvia.core.enums.compute_dimension cimport ComputeDimension
 from lluvia.core.compute_dimension cimport _ComputeDimension
 
-from lluvia.core.memory cimport Memory, _Memory, _buildMemory
+# from lluvia.core cimport vulkan as vk
+from lluvia.core import impl
+from lluvia.core.enums import NodeType
+
 from lluvia.core.program cimport Program
 
 from lluvia.core.node cimport ComputeNode,\
@@ -119,15 +128,15 @@ cdef class Session:
             by this session.
         """
 
-        cdef vector[vk.MemoryPropertyFlags] vkFlags = self.__session.get().getSupportedMemoryFlags()
+        cdef vector[_MemoryPropertyFlags] supportedFlags = self.__session.get().getSupportedMemoryFlags()
 
         supportedMemoryFlags = list()
 
         cdef uint32_t flags_u32 = 0
-        for flags in vkFlags:
+        for flags in supportedFlags:
 
             flags_u32 = <uint32_t> flags
-            flagBits = impl.expandFlagBits(flags_u32, MemoryPropertyFlagBits)
+            flagBits = impl.expandFlagBits(flags_u32, ll_memory.MemoryPropertyFlagBits)
             supportedMemoryFlags.append(flagBits)
 
         return supportedMemoryFlags
@@ -148,7 +157,7 @@ cdef class Session:
         return mem
 
     def createMemory(self,
-                     flags=MemoryPropertyFlagBits.DeviceLocal,
+                     flags=ll_memory.MemoryPropertyFlagBits.DeviceLocal,
                      uint64_t pageSize=33554432L,
                      bool exactFlagsMatch=False):
         """
@@ -205,10 +214,10 @@ cdef class Session:
 
         """
 
-        cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, MemoryPropertyFlagBits)
-        cdef vk.MemoryPropertyFlags vkFlags = <vk.MemoryPropertyFlags> flattenFlags
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(flags, ll_memory.MemoryPropertyFlagBits)
+        cdef _MemoryPropertyFlags cflags = <_MemoryPropertyFlags> flattenFlags
 
-        return _buildMemory(self.__session.get().createMemory(vkFlags, pageSize, exactFlagsMatch), self)
+        return _buildMemory(self.__session.get().createMemory(cflags, pageSize, exactFlagsMatch), self)
 
     def createProgram(self, str path):
         """
@@ -529,6 +538,7 @@ cdef class Session:
 
         else:
             raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
+
 
     def compileProgram(self, shaderCode,
                        includeDirs=None,

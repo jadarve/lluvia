@@ -10,15 +10,9 @@ pyx_library (
         "lluvia/core/command_buffer.pxd",
         "lluvia/core/command_buffer.pyx",
         "lluvia/core/compute_dimension.pxd",
-        "lluvia/core/core_buffer.pxd",
-        "lluvia/core/core_buffer.pyx",
         "lluvia/core/core_object.pxd",
         "lluvia/core/duration.pxd",
         "lluvia/core/duration.pyx",
-        "lluvia/core/image.pxd",
-        "lluvia/core/image.pyx",
-        "lluvia/core/memory.pxd",
-        "lluvia/core/memory.pyx",
         "lluvia/core/node.pxd",
         "lluvia/core/node.pyx",
         "lluvia/core/parameter.pxd",
@@ -30,14 +24,31 @@ pyx_library (
         "lluvia/core/types.pxd",
         "lluvia/core/vulkan.pxd",
         "lluvia/util.py",
-    ] + glob([
+    ] +
+    glob([
+        "lluvia/core/buffer/*.py",
+        "lluvia/core/buffer/*.pyx",
+        "lluvia/core/buffer/*.pxd",
+    ]) +
+    glob([
+        "lluvia/core/image/*.py",
+        "lluvia/core/image/*.pyx",
+        "lluvia/core/image/*.pxd",
+    ]) +
+    glob([
+        "lluvia/core/memory/*.py",
+        "lluvia/core/memory/*.pyx",
+        "lluvia/core/memory/*.pxd",
+    ]) +
+    glob([
         "lluvia/core/enums/*.py",
         "lluvia/core/enums/*.pyx",
         "lluvia/core/enums/*.pxd",
         "lluvia/core/impl/*.py",
         "lluvia/core/impl/*.pyx",
         "lluvia/core/impl/*.pxd",
-    ]) + glob([
+    ]) +
+    glob([
         "lluvia/nodes/**/*py",
         "lluvia/glsl/**/*py",
         "lluvia/resources/**/*py",

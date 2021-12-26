@@ -14,11 +14,13 @@ from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from lluvia.core cimport vulkan as vk
+from lluvia.core.memory.memory cimport _Memory
+from lluvia.core.memory.memory_property_flags cimport _MemoryPropertyFlags
+
 from lluvia.core.command_buffer cimport _CommandBuffer
 from lluvia.core.compute_dimension cimport _ComputeDimension
 from lluvia.core.duration cimport _Duration
-from lluvia.core.memory cimport _Memory
+
 from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode, _NodeBuilderDescriptor
 from lluvia.core.program cimport _Program
 from lluvia.core.types cimport _vec3ui
@@ -43,11 +45,11 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         @staticmethod
         shared_ptr[_Session] create(const _SessionDescriptor& descriptor) except +
 
-        vector[vk.MemoryPropertyFlags] getSupportedMemoryFlags() const
+        vector[_MemoryPropertyFlags] getSupportedMemoryFlags() const
 
         shared_ptr[_Memory] getHostMemory() except +
 
-        shared_ptr[_Memory] createMemory(const vk.MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch) except +
+        shared_ptr[_Memory] createMemory(const _MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch) except +
         shared_ptr[_Program] createProgram(const string& spirvPath) except +
 
         _ComputeNodeDescriptor createComputeNodeDescriptor(const string& builderName) except +

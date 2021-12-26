@@ -9,7 +9,7 @@
 #define VULKAN_HPP_DISPATCH_LOADER_DYNAMIC 1
 #include "lluvia/core/Session.h"
 
-#include "lluvia/core/Buffer.h"
+#include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNode.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
@@ -17,10 +17,10 @@
 #include "lluvia/core/ContainerNodeDescriptor.h"
 #include "lluvia/core/Duration.h"
 #include "lluvia/core/error.h"
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageDescriptor.h"
+#include "lluvia/core/image/Image.h"
+#include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/Interpreter.h"
-#include "lluvia/core/Memory.h"
+#include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/Program.h"
 
 #include "lluvia/core/impl/ZipArchive.h"
@@ -68,7 +68,7 @@ Session::Session(const ll::SessionDescriptor& descriptor):
     m_interpreter->setActiveSession(this);
 
     m_hostMemory = createMemory(
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent,
         0, false);
 }
 
@@ -92,19 +92,19 @@ vk::PhysicalDeviceMemoryProperties Session::getPhysicalDeviceMemoryProperties() 
 }
 
 
-std::vector<vk::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
+std::vector<ll::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 
     const auto memProperties = m_device->getPhysicalDevice().getMemoryProperties();
-          auto memoryFlags   = std::vector<vk::MemoryPropertyFlags> {};
+          auto memoryFlags   = std::vector<ll::MemoryPropertyFlags> {};
 
     memoryFlags.reserve(memProperties.memoryTypeCount);
 
     for (auto i = 0u; i < memProperties.memoryTypeCount; ++ i) {
 
-        const auto flags = memProperties.memoryTypes[i].propertyFlags;
+        const auto flags = ll::impl::fromVkMemoryPropertyFlags(memProperties.memoryTypes[i].propertyFlags);
 
         // filter out flags with all bits set to 0
-        if (flags == vk::MemoryPropertyFlags()) continue;
+        if (flags == ll::MemoryPropertyFlags{}) continue;
 
         // insert flags if it is not present in memoryFlags
         if (std::find(memoryFlags.begin(), memoryFlags.end(), flags) == memoryFlags.end()) {
@@ -122,7 +122,7 @@ bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) 
 }
 
 
-std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch) {
+std::shared_ptr<ll::Memory> Session::createMemory(const ll::MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch) {
     
     auto compareFlags = [](const auto &tFlags, const auto &value, bool tExactFlagsMatch) {
         return tExactFlagsMatch ? tFlags == value : (tFlags & value) == value;
@@ -134,13 +134,15 @@ std::shared_ptr<ll::Memory> Session::createMemory(const vk::MemoryPropertyFlags&
 
         const auto &memType = memProperties.memoryTypes[i];
 
-        if (compareFlags(memType.propertyFlags, flags, exactFlagsMatch)) {
+        const auto memoryPropertyFlags = ll::impl::fromVkMemoryPropertyFlags(memType.propertyFlags);
+
+        if (compareFlags(memoryPropertyFlags, flags, exactFlagsMatch)) {
 
             auto heapInfo = ll::VkHeapInfo{};
 
             heapInfo.typeIndex = i;
             heapInfo.size = memProperties.memoryHeaps[memType.heapIndex].size;
-            heapInfo.flags = memType.propertyFlags;
+            heapInfo.flags = memoryPropertyFlags;
             heapInfo.familyQueueIndices = std::vector<uint32_t>{m_device->getComputeFamilyQueueIndex()};
 
             // can throw exception. Invariants of Session are kept.

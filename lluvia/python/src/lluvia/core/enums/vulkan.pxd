@@ -10,47 +10,6 @@ from libc.stdint cimport uint32_t
 
 cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
 
-    cdef enum _BufferUsageFlagBits:
-        _BufferUsageFlagBits_IndexBuffer        'vk::BufferUsageFlagBits::eIndexBuffer'
-        _BufferUsageFlagBits_IndirectBuffer     'vk::BufferUsageFlagBits::eIndirectBuffer'
-        _BufferUsageFlagBits_StorageBuffer      'vk::BufferUsageFlagBits::eStorageBuffer'
-        _BufferUsageFlagBits_StorageTexelBuffer 'vk::BufferUsageFlagBits::eStorageTexelBuffer'
-        _BufferUsageFlagBits_TransferDst        'vk::BufferUsageFlagBits::eTransferDst'
-        _BufferUsageFlagBits_TransferSrc        'vk::BufferUsageFlagBits::eTransferSrc'
-        _BufferUsageFlagBits_UniformBuffer      'vk::BufferUsageFlagBits::eUniformBuffer'
-        _BufferUsageFlagBits_UniformTexelBuffer 'vk::BufferUsageFlagBits::eUniformTexelBuffer'
-        _BufferUsageFlagBits_VertexBuffer       'vk::BufferUsageFlagBits::eVertexBuffer'
-
-
-    cdef enum _MemoryPropertyFlagBits 'vk::MemoryPropertyFlagBits':
-        _MemoryPropertyFlagBits_DeviceLocal     'vk::MemoryPropertyFlagBits::eDeviceLocal'
-        _MemoryPropertyFlagBits_HostCached      'vk::MemoryPropertyFlagBits::eHostCached'
-        _MemoryPropertyFlagBits_HostCoherent    'vk::MemoryPropertyFlagBits::eHostCoherent'
-        _MemoryPropertyFlagBits_HostVisible     'vk::MemoryPropertyFlagBits::eHostVisible'
-        _MemoryPropertyFlagBits_LazilyAllocated 'vk::MemoryPropertyFlagBits::eLazilyAllocated'
-
-
-    cdef enum _ImageLayout 'vk::ImageLayout':
-        _ImageLayout_Undefined                                'vk::ImageLayout::eUndefined'
-        _ImageLayout_General                                  'vk::ImageLayout::eGeneral'
-        _ImageLayout_ColorAttachmentOptimal                   'vk::ImageLayout::eColorAttachmentOptimal'
-        _ImageLayout_DepthStencilAttachmentOptimal            'vk::ImageLayout::eDepthStencilAttachmentOptimal'
-        _ImageLayout_DepthStencilReadOnlyOptimal              'vk::ImageLayout::eDepthStencilReadOnlyOptimal'
-        _ImageLayout_ShaderReadOnlyOptimal                    'vk::ImageLayout::eShaderReadOnlyOptimal'
-        _ImageLayout_TransferSrcOptimal                       'vk::ImageLayout::eTransferSrcOptimal'
-        _ImageLayout_TransferDstOptimal                       'vk::ImageLayout::eTransferDstOptimal'
-        _ImageLayout_Preinitialized                           'vk::ImageLayout::ePreinitialized'
-        _ImageLayout_PresentSrcKHR                            'vk::ImageLayout::ePresentSrcKHR'
-        _ImageLayout_SharedPresentKHR                         'vk::ImageLayout::eSharedPresentKHR'
-        _ImageLayout_DepthReadOnlyStencilAttachmentOptimalKHR 'vk::ImageLayout::eDepthReadOnlyStencilAttachmentOptimalKHR'
-        _ImageLayout_DepthAttachmentStencilReadOnlyOptimalKHR 'vk::ImageLayout::eDepthAttachmentStencilReadOnlyOptimalKHR'
-
-
-    cdef enum _ImageTiling 'vk::ImageTiling':
-        _ImageTiling_Optimal 'vk::ImageTiling::eOptimal'
-        _ImageTiling_Linear  'vk::ImageTiling::eLinear'
-
-
     cdef enum _ImageType 'vk::ImageType':
         _ImageType_1D 'vk::ImageType::e1D'
         _ImageType_2D 'vk::ImageType::e2D'
@@ -106,48 +65,6 @@ cdef extern from 'vulkan/vulkan.hpp' namespace 'vk':
         _Format_R64G64B64A64Uint   'vk::Format::eR64G64B64A64Uint'
         _Format_R64G64B64A64Sint   'vk::Format::eR64G64B64A64Sint'
         _Format_R64G64B64A64Sfloat 'vk::Format::eR64G64B64A64Sfloat'
-
-
-cpdef enum BufferUsageFlagBits:
-    IndexBuffer        = <uint32_t> _BufferUsageFlagBits_IndexBuffer
-    IndirectBuffer     = <uint32_t> _BufferUsageFlagBits_IndirectBuffer
-    StorageBuffer      = <uint32_t> _BufferUsageFlagBits_StorageBuffer
-    StorageTexelBuffer = <uint32_t> _BufferUsageFlagBits_StorageTexelBuffer
-    TransferDst        = <uint32_t> _BufferUsageFlagBits_TransferDst
-    TransferSrc        = <uint32_t> _BufferUsageFlagBits_TransferSrc
-    UniformBuffer      = <uint32_t> _BufferUsageFlagBits_UniformBuffer
-    UniformTexelBuffer = <uint32_t> _BufferUsageFlagBits_UniformTexelBuffer
-    VertexBuffer       = <uint32_t> _BufferUsageFlagBits_VertexBuffer
-
-
-cpdef enum MemoryPropertyFlagBits:
-    DeviceLocal     = <uint32_t> _MemoryPropertyFlagBits_DeviceLocal
-    HostCached      = <uint32_t> _MemoryPropertyFlagBits_HostCached
-    HostCoherent    = <uint32_t> _MemoryPropertyFlagBits_HostCoherent
-    HostVisible     = <uint32_t> _MemoryPropertyFlagBits_HostVisible
-    LazilyAllocated = <uint32_t> _MemoryPropertyFlagBits_LazilyAllocated
-
-
-cpdef enum ImageLayout:
-    Undefined                                = <uint32_t> _ImageLayout_Undefined
-    General                                  = <uint32_t> _ImageLayout_General
-    ColorAttachmentOptimal                   = <uint32_t> _ImageLayout_ColorAttachmentOptimal
-    DepthStencilAttachmentOptimal            = <uint32_t> _ImageLayout_DepthStencilAttachmentOptimal
-    DepthStencilReadOnlyOptimal              = <uint32_t> _ImageLayout_DepthStencilReadOnlyOptimal
-    ShaderReadOnlyOptimal                    = <uint32_t> _ImageLayout_ShaderReadOnlyOptimal
-    TransferSrcOptimal                       = <uint32_t> _ImageLayout_TransferSrcOptimal
-    TransferDstOptimal                       = <uint32_t> _ImageLayout_TransferDstOptimal
-    Preinitialized                           = <uint32_t> _ImageLayout_Preinitialized
-    PresentSrcKHR                            = <uint32_t> _ImageLayout_PresentSrcKHR
-    SharedPresentKHR                         = <uint32_t> _ImageLayout_SharedPresentKHR
-    DepthReadOnlyStencilAttachmentOptimalKHR = <uint32_t> _ImageLayout_DepthReadOnlyStencilAttachmentOptimalKHR
-    DepthAttachmentStencilReadOnlyOptimalKHR = <uint32_t> _ImageLayout_DepthAttachmentStencilReadOnlyOptimalKHR
-
-
-cpdef enum ImageTiling:
-    Optimal = <uint32_t> _ImageTiling_Optimal
-    Linear  = <uint32_t> _ImageTiling_Linear
-
 
 cpdef enum Format:
     R8Uint             = <uint32_t> _Format_R8Uint

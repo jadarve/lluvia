@@ -7,12 +7,12 @@
 
 #include "lluvia/core/ComputeNode.h"
 
-#include "lluvia/core/Buffer.h"
+#include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeNodeDescriptor.h"
 #include "lluvia/core/error.h"
-#include "lluvia/core/Image.h"
-#include "lluvia/core/ImageView.h"
+#include "lluvia/core/image/Image.h"
+#include "lluvia/core/image/ImageView.h"
 #include "lluvia/core/Interpreter.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
@@ -398,7 +398,7 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
     auto descImgInfo = vk::DescriptorImageInfo {}
         .setSampler(imgView->m_vkSampler)
         .setImageView(imgView->m_vkImageView)
-        .setImageLayout(imgView->m_image->m_vkLayout);
+        .setImageLayout(ll::impl::toVkImageLayout(imgView->m_image->m_layout));
 
     auto writeDescSet = vk::WriteDescriptorSet()
         .setDstSet(m_descriptorSet)

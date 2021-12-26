@@ -13,11 +13,10 @@ py_library(
     visibility = ["//visibility:public"]
 )
 
-
 py_test (
-    name = "test_buffer",
+    name = "test_session",
     srcs = [
-        "test_buffer.py"
+        "test_session.py"
     ],
     deps = TEST_DEPS,
     legacy_create_init = False,
@@ -27,9 +26,21 @@ py_test (
 )
 
 py_test (
-    name = "test_compute",
+    name = "test_memory",
     srcs = [
-        "test_compute.py"
+        "test_memory.py"
+    ],
+    deps = TEST_DEPS,
+    legacy_create_init = False,
+    data = [
+        "//lluvia/python/src:pyx_library"
+    ]
+)
+
+py_test (
+    name = "test_buffer",
+    srcs = [
+        "test_buffer.py"
     ],
     deps = TEST_DEPS,
     legacy_create_init = False,
@@ -52,9 +63,35 @@ py_test (
 )
 
 py_test (
-    name = "test_session",
+    name = "test_image_view",
     srcs = [
-        "test_session.py"
+        "test_image_view.py"
+    ],
+    deps = TEST_DEPS,
+    legacy_create_init = False,
+    data = [
+        "//lluvia/python/src:pyx_library",
+        "//lluvia/resources:resources",
+    ]
+)
+
+py_test (
+    name = "test_duration",
+    srcs = [
+        "test_duration.py"
+    ],
+    deps = TEST_DEPS,
+    legacy_create_init = False,
+    data = [
+        "//lluvia/python/src:pyx_library",
+        "//lluvia/resources:resources",
+    ]
+)
+
+py_test (
+    name = "test_compute",
+    srcs = [
+        "test_compute.py"
     ],
     deps = TEST_DEPS,
     legacy_create_init = False,

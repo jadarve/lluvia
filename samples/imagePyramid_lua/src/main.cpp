@@ -63,14 +63,14 @@ void writeImage(std::shared_ptr<ll::Session> session, std::shared_ptr<ll::Image>
     const auto currentLayout = image->getLayout();
 
     // create host visible memory
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    const auto hostMemFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
     auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
     auto hostImage          = hostMemory->createBuffer(imageSize);
 
     auto cmdBuffer = session->createCommandBuffer();
 
     cmdBuffer->begin();
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferSrcOptimal);
+    cmdBuffer->changeImageLayout(*image, ll::ImageLayout::TransferSrcOptimal);
     cmdBuffer->copyImageToBuffer(*image, *hostImage);
     cmdBuffer->changeImageLayout(*image, currentLayout);
     cmdBuffer->end();
@@ -114,12 +114,12 @@ int main(int argc, char const* argv[]) {
     const auto image     = readImage(imagePath.string());
     const auto imageSize = image.width*image.height*image.channels*ll::getChannelTypeSize(ll::ChannelType::Uint8);
 
-    auto memory = session->createMemory(vk::MemoryPropertyFlagBits::eDeviceLocal, 0);
+    auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0);
 
-    const vk::ImageUsageFlags imgUsageFlags = { vk::ImageUsageFlagBits::eStorage
-                                              | vk::ImageUsageFlagBits::eSampled
-                                              | vk::ImageUsageFlagBits::eTransferDst
-                                              | vk::ImageUsageFlagBits::eTransferSrc};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
+                                              | ll::ImageUsageFlagBits::Sampled
+                                              | ll::ImageUsageFlagBits::TransferDst
+                                              | ll::ImageUsageFlagBits::TransferSrc};
 
     auto imgDesc = ll::ImageDescriptor{1,
                                              static_cast<uint32_t>(image.height),
@@ -132,12 +132,12 @@ int main(int argc, char const* argv[]) {
                                 .setIsSampled(false)
                                 .setNormalizedCoordinates(false);
 
-    auto in_RGBA = ll::createAndInitImageView(session, memory, imgDesc, viewDesc, vk::ImageLayout::eGeneral);
+    auto in_RGBA = ll::createAndInitImageView(session, memory, imgDesc, viewDesc, ll::ImageLayout::General);
 
 
     // transfer image to in_RGBA
     // stage buffer
-    const auto hostMemFlags = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;
+    const auto hostMemFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
     auto hostMemory         = session->createMemory(hostMemFlags, imageSize);
     auto stageBuffer        = hostMemory->createBuffer(imageSize);
 
@@ -152,9 +152,9 @@ int main(int argc, char const* argv[]) {
     // change input image layout to general
     auto imgCopyCmdBuffer = session->createCommandBuffer();
     imgCopyCmdBuffer->begin();
-    imgCopyCmdBuffer->changeImageLayout(*in_RGBA, vk::ImageLayout::eTransferDstOptimal);
+    imgCopyCmdBuffer->changeImageLayout(*in_RGBA, ll::ImageLayout::TransferDstOptimal);
     imgCopyCmdBuffer->copyBufferToImage(*stageBuffer, *in_RGBA->getImage());
-    imgCopyCmdBuffer->changeImageLayout(*in_RGBA, vk::ImageLayout::eGeneral);
+    imgCopyCmdBuffer->changeImageLayout(*in_RGBA, ll::ImageLayout::General);
     imgCopyCmdBuffer->end();
     session->run(*imgCopyCmdBuffer);
 
