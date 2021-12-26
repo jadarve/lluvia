@@ -18,7 +18,7 @@ from lluvia.core.duration cimport Duration
 from lluvia.core.image.image_layout cimport _ImageLayout, ImageLayout
 from lluvia.core.image.image cimport Image
 
-# from lluvia.core.node cimport ComputeNode
+from lluvia.core.node cimport ComputeNode
 
 
 __all__ = ['CommandBuffer']
@@ -189,20 +189,20 @@ cdef class CommandBuffer:
 
         self.__commandBuffer.get().clearImage(deref(img.__image.get()))
 
-    # def run(self, ComputeNode node):
-    #     """
-    #     Records running a compute node.
+    def run(self, ComputeNode node):
+        """
+        Records running a compute node.
 
-    #     This operation uses node.grid to dispatch the compute shader. After
-    #     the call of this method, node.grid can be changed to a new value.
+        This operation uses node.grid to dispatch the compute shader. After
+        the call of this method, node.grid can be changed to a new value.
 
-    #     Parameters
-    #     ----------
-    #     node : ComputeNode.
-    #         The compute node.
-    #     """
+        Parameters
+        ----------
+        node : ComputeNode.
+            The compute node.
+        """
 
-    #     self.__commandBuffer.get().run(deref(node.__node))
+        self.__commandBuffer.get().run(deref(node.__node))
 
     def memoryBarrier(self):
         """

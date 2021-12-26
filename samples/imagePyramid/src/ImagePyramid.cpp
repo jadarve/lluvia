@@ -42,7 +42,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
 
     // create downsampled images
-    const auto imgFlags = vk::ImageUsageFlagBits::eStorage | vk::ImageUsageFlagBits::eTransferSrc;
+    const auto imgFlags = ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::TransferSrc;
     
     auto imgDesc = ll::ImageDescriptor {1, height, width, channels, channelType};
     imgDesc.setUsageFlags(imgFlags);
@@ -54,7 +54,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
     // push the image view corresponding to the image pyramid at level 0
     // that is, the original resolution image
     imageViewsY.push_back(inputImage->createImageView(imgViewDesc));
-    cmdBuffer->changeImageLayout(*inputImage, vk::ImageLayout::eGeneral);
+    cmdBuffer->changeImageLayout(*inputImage, ll::ImageLayout::General);
 
     for (auto i = 0u; i < levels; ++i) {
 
@@ -66,7 +66,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
         auto imgViewDownX = memory->createImageView(imgDesc, imgViewDesc);
         imageViewsX.push_back(imgViewDownX);
-        cmdBuffer->changeImageLayout(*imgViewDownX, vk::ImageLayout::eGeneral);
+        cmdBuffer->changeImageLayout(*imgViewDownX, ll::ImageLayout::General);
 
         std::cout << "X: [" << imgViewDownX->getWidth() << ", " << imgViewDownX->getHeight() << ", " << imgViewDownX->getChannelCount<uint32_t>() << "]: " << imgViewDownX->getAllocationInfo() << std::endl;
 
@@ -76,7 +76,7 @@ void ImagePyramid::init(std::shared_ptr<ll::Session> session) {
 
         auto imgViewDownY = memory->createImageView(imgDesc, imgViewDesc);
         imageViewsY.push_back(imgViewDownY);
-        cmdBuffer->changeImageLayout(*imgViewDownY, vk::ImageLayout::eGeneral);
+        cmdBuffer->changeImageLayout(*imgViewDownY, ll::ImageLayout::General);
 
         std::cout << "Y: [" << imgViewDownY->getWidth() << ", " << imgViewDownY->getHeight() << "]: " << imgViewDownY->getAllocationInfo() << std::endl;
     }
@@ -207,7 +207,7 @@ void ImagePyramid::writeImage(std::shared_ptr<ll::Session> session, std::shared_
     auto cmdBuffer = session->createCommandBuffer();
 
     cmdBuffer->begin();
-    cmdBuffer->changeImageLayout(*image, vk::ImageLayout::eTransferSrcOptimal);
+    cmdBuffer->changeImageLayout(*image, ll::ImageLayout::TransferSrcOptimal);
     cmdBuffer->copyImageToBuffer(*image, *hostImage);
     cmdBuffer->changeImageLayout(*image, currentLayout);
     cmdBuffer->end();

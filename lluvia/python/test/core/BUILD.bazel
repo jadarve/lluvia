@@ -50,18 +50,6 @@ py_test (
 )
 
 py_test (
-    name = "test_compute",
-    srcs = [
-        "test_compute.py"
-    ],
-    deps = TEST_DEPS,
-    legacy_create_init = False,
-    data = [
-        "//lluvia/python/src:pyx_library"
-    ]
-)
-
-py_test (
     name = "test_image",
     srcs = [
         "test_image.py"
@@ -84,6 +72,31 @@ py_test (
     data = [
         "//lluvia/python/src:pyx_library",
         "//lluvia/resources:resources",
+    ]
+)
+
+py_test (
+    name = "test_duration",
+    srcs = [
+        "test_duration.py"
+    ],
+    deps = TEST_DEPS,
+    legacy_create_init = False,
+    data = [
+        "//lluvia/python/src:pyx_library",
+        "//lluvia/resources:resources",
+    ]
+)
+
+py_test (
+    name = "test_compute",
+    srcs = [
+        "test_compute.py"
+    ],
+    deps = TEST_DEPS,
+    legacy_create_init = False,
+    data = [
+        "//lluvia/python/src:pyx_library"
     ]
 )
 
