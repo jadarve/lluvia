@@ -17,13 +17,13 @@ from libcpp.vector cimport vector
 from lluvia.core.memory.memory cimport _Memory
 from lluvia.core.memory.memory_property_flags cimport _MemoryPropertyFlags
 
-# # from lluvia.core cimport vulkan as vk
-# from lluvia.core.command_buffer cimport _CommandBuffer
-# from lluvia.core.compute_dimension cimport _ComputeDimension
-# from lluvia.core.duration cimport _Duration
+from lluvia.core.command_buffer cimport _CommandBuffer
+from lluvia.core.compute_dimension cimport _ComputeDimension
+from lluvia.core.duration cimport _Duration
+
 # from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode, _NodeBuilderDescriptor
 # from lluvia.core.program cimport _Program
-# from lluvia.core.types cimport _vec3ui
+from lluvia.core.types cimport _vec3ui
 
 cdef extern from 'lluvia/core/SessionDescriptor.h' namespace 'll':
 
@@ -65,22 +65,22 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
         # vector[_NodeBuilderDescriptor] getNodeBuilderDescriptors() except +
 
-        # unique_ptr[_Duration] createDuration() except +
+        unique_ptr[_Duration] createDuration() except +
 
-        # unique_ptr[_CommandBuffer] createCommandBuffer() except +
+        unique_ptr[_CommandBuffer] createCommandBuffer() except +
 
         # void run(const _ComputeNode& node) except +
         # void run(const _ContainerNode& node) except +
-        # void run(const _CommandBuffer& cmdBuffer) except +
+        void run(const _CommandBuffer& cmdBuffer) except +
 
-        # void script(const string& code) except +
-        # void scriptFile(const string& filename) except +
+        void script(const string& code) except +
+        void scriptFile(const string& filename) except +
 
-        # void loadLibrary(const string& filename) except +
+        void loadLibrary(const string& filename) except +
 
-        # _vec3ui getGoodComputeLocalShape(_ComputeDimension dimensions) const
+        _vec3ui getGoodComputeLocalShape(_ComputeDimension dimensions) const
 
-        # string help(const string& builderName) except +
+        string help(const string& builderName) except +
 
 
 cdef class Session:

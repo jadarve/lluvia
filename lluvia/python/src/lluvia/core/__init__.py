@@ -19,5 +19,6 @@
 
 
 from .buffer import *
+from .image import *
 from .memory import *
 from .session import *

@@ -7,12 +7,12 @@ pyx_library (
     srcs = [
         "lluvia/__init__.py",
         "lluvia/core/__init__.py",
-        # "lluvia/core/command_buffer.pxd",
-        # "lluvia/core/command_buffer.pyx",
-        # "lluvia/core/compute_dimension.pxd",
+        "lluvia/core/command_buffer.pxd",
+        "lluvia/core/command_buffer.pyx",
+        "lluvia/core/compute_dimension.pxd",
         "lluvia/core/core_object.pxd",
-        # "lluvia/core/duration.pxd",
-        # "lluvia/core/duration.pyx",
+        "lluvia/core/duration.pxd",
+        "lluvia/core/duration.pyx",
         # "lluvia/core/node.pxd",
         # "lluvia/core/node.pyx",
         # "lluvia/core/parameter.pxd",
@@ -30,11 +30,11 @@ pyx_library (
         "lluvia/core/buffer/*.pyx",
         "lluvia/core/buffer/*.pxd",
     ]) +
-    # glob([
-    #     "lluvia/core/image/*.py",
-    #     "lluvia/core/image/*.pyx",
-    #     "lluvia/core/image/*.pxd",
-    # ]) +
+    glob([
+        "lluvia/core/image/*.py",
+        "lluvia/core/image/*.pyx",
+        "lluvia/core/image/*.pxd",
+    ]) +
     glob([
         "lluvia/core/memory/*.py",
         "lluvia/core/memory/*.pyx",

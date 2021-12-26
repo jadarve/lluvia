@@ -15,29 +15,31 @@ from libcpp.memory cimport shared_ptr
 cimport numpy as np
 import numpy as np
 
-# from lluvia.core cimport core_buffer
-# # from lluvia.core import core_buffer
-# from lluvia.core.core_buffer cimport BufferUsageFlagBits
-# # from lluvia.core.core_buffer cimport BufferUsageFlagBits
-
 
 from lluvia.core.memory.memory_property_flags cimport MemoryPropertyFlagBits
 
+#################################################
+# Buffer
+#################################################
 import lluvia.core.buffer as ll_buffer
-
 from lluvia.core.buffer.buffer cimport Buffer, _BufferUsageFlags, _buildBuffer
+
+#################################################
+# Image
+#################################################
+import lluvia.core.image as ll_image
+
+from lluvia.core.image cimport image
+from lluvia.core.image.image cimport _ChannelType, ChannelType, _ChannelCount, Image, _ImageDescriptor
+from lluvia.core.image.image_filter_mode cimport ImageFilterMode
+from lluvia.core.image.image_address_mode cimport ImageAddressMode
+from lluvia.core.image.image_usage_flags cimport _ImageUsageFlags, ImageUsageFlagBits
+from lluvia.core.image.image_layout cimport ImageLayout
+from lluvia.core.image.image_tiling cimport _ImageTiling, ImageTiling
+
 
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-
-
-# from lluvia.core.image cimport image
-# from lluvia.core.image.image cimport _ChannelType, ChannelType, _ChannelCount, Image, _ImageDescriptor
-# from lluvia.core.image.image_filter_mode cimport ImageFilterMode
-# from lluvia.core.image.image_address_mode cimport ImageAddressMode
-# from lluvia.core.image.image_usage_flags cimport _ImageUsageFlags, ImageUsageFlagBits
-# from lluvia.core.image.image_layout cimport ImageLayout
-# from lluvia.core.image.image_tiling cimport _ImageTiling, ImageTiling
 
 from lluvia.core.session cimport Session
 
@@ -261,296 +263,296 @@ cdef class Memory:
         return self.createBuffer(sizeBytes, usageFlags)
 
 
-    # def createImage(self, shape,
-    #                 ChannelType channelType=ChannelType.Uint8,
-    #                 usageFlags=[ImageUsageFlagBits.Storage,
-    #                             ImageUsageFlagBits.Sampled,
-    #                             ImageUsageFlagBits.TransferSrc,
-    #                             ImageUsageFlagBits.TransferDst]):
-    #     """
-    #     Creates a new image allocated in this memory.
+    def createImage(self, shape,
+                    ChannelType channelType=ll_image.ChannelType.Uint8,
+                    usageFlags=[ll_image.ImageUsageFlagBits.Storage,
+                                ll_image.ImageUsageFlagBits.Sampled,
+                                ll_image.ImageUsageFlagBits.TransferSrc,
+                                ll_image.ImageUsageFlagBits.TransferDst]):
+        """
+        Creates a new image allocated in this memory.
 
 
-    #     Parameters
-    #     ----------
-    #     shape : list or tuple of length 1, 2, 3 or 4.
-    #         Shape of the image (depth, height , width, channels). Each dimension
-    #         must be greater than zero. The number of channels must in the range [1, 4].
-    #         If one or more dimensions are missing, they are set to 1 by default.
+        Parameters
+        ----------
+        shape : list or tuple of length 1, 2, 3 or 4.
+            Shape of the image (depth, height , width, channels). Each dimension
+            must be greater than zero. The number of channels must in the range [1, 4].
+            If one or more dimensions are missing, they are set to 1 by default.
 
-    #         The shape is interpreted as follows:
+            The shape is interpreted as follows:
 
-    #             if len(shape) is 1:
-    #                 depth    = 1
-    #                 height   = 1
-    #                 width    = shape[0]
-    #                 channels = 1
+                if len(shape) is 1:
+                    depth    = 1
+                    height   = 1
+                    width    = shape[0]
+                    channels = 1
 
-    #             elif len(shape) is 2:
-    #                 depth    = 1
-    #                 height   = shape[0]
-    #                 width    = shape[1]
-    #                 channels = 1
+                elif len(shape) is 2:
+                    depth    = 1
+                    height   = shape[0]
+                    width    = shape[1]
+                    channels = 1
 
-    #             elif len(shape) is 3:
-    #                 depth    = 1
-    #                 height   = shape[0]
-    #                 width    = shape[1]
-    #                 channels = shape[2]
+                elif len(shape) is 3:
+                    depth    = 1
+                    height   = shape[0]
+                    width    = shape[1]
+                    channels = shape[2]
 
-    #             else:
-    #                 depth    = shape[0]
-    #                 height   = shape[1]
-    #                 width    = shape[2]
-    #                 channels = shape[3]
+                else:
+                    depth    = shape[0]
+                    height   = shape[1]
+                    width    = shape[2]
+                    channels = shape[3]
 
-    #     channelType : ll.ChannelType. Defaults to ll.ChannelType.Uint8.
-    #         Channel type.
+        channelType : ll.ChannelType. Defaults to ll.ChannelType.Uint8.
+            Channel type.
 
-    #     usageFlags : ImageUsageFlagBits or list of ImageUsageFlagBits.
-    #         Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
-    #         Image usage flags. It must be a combination of th strings defined
-    #         in lluvia.ImageUsageFlags:
+        usageFlags : ImageUsageFlagBits or list of ImageUsageFlagBits.
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
 
-    #             - TransferSrc
-    #             - TransferDst
-    #             - Sampled
-    #             - Storage
-    #             - ColorAttachment
-    #             - DepthStencilAttachment
-    #             - TransientAttachment
-    #             - InputAttachment
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
 
-    #     Returns
-    #     -------
-    #     image : new Image object.
-
-
-    #     Raises
-    #     ------
-    #     ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
-    #                    if any parameter is not within its required range.
-    #     """
-
-    #     depth, height, width, channels = self.__getImageShape(shape)
-
-    #     cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ImageUsageFlagBits)
-    #     cdef _ImageUsageFlags vkUsageFlags = <_ImageUsageFlags> flattenFlags
-    #     cdef _ImageTiling tiling = <_ImageTiling> ImageTiling.Optimal
-
-    #     cdef _ChannelType cType = <_ChannelType> channelType
-
-    #     cdef _ChannelCount cCount = image.castChannelCount[uint32_t](channels)
-
-    #     cdef _ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
-
-    #     cdef Image img = image._buildImage(self.__memory.get().createImage(desc), self.session, self)
-    #     img.changeLayout(ImageLayout.General)
-
-    #     return img
+        Returns
+        -------
+        image : new Image object.
 
 
-    # def createImageFromHost(self,
-    #                         np.ndarray arr,
-    #                         usageFlags=[ImageUsageFlagBits.Storage,
-    #                                     ImageUsageFlagBits.Sampled, 
-    #                                     ImageUsageFlagBits.TransferSrc, 
-    #                                     ImageUsageFlagBits.TransferDst]):
-    #     """
-    #     Creates a lluvia.Image object from a Numpy array.
+        Raises
+        ------
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if any parameter is not within its required range.
+        """
 
-    #     The numpy array can have between 1 and 4 dimensions. Images
-    #     can be 1D, 2D or 3D and can have up to 4 color channels. The
-    #     width, height, depth and channels of the image are resolved
-    #     as follows.
+        depth, height, width, channels = self.__getImageShape(shape)
 
-    #     if arr.ndim is 1: create a 1D image
-    #     if arr.ndim is 2: create a 2D image with one color channel.
-    #     if arr.ndim is 3: create a 2D image with the number of channels
-    #         given by the length of the third dimension.
-    #     if arr.ndim is 4: create a 3D image with the number of channels
-    #         given by the length of the fourth dimension.
+        cdef uint32_t flattenFlags = impl.flattenFlagBits(usageFlags, ll_image.ImageUsageFlagBits)
+        cdef _ImageUsageFlags vkUsageFlags = <_ImageUsageFlags> flattenFlags
+        cdef _ImageTiling tiling = <_ImageTiling> ImageTiling.Optimal
 
-    #     Notice that for creating 1D images with several color channels,
-    #     one needs to specify the 4 dimensions [length, 1, 1, channels].
+        cdef _ChannelType cType = <_ChannelType> channelType
 
-    #     The image's channel type is deduced from arr.dtype.
+        cdef _ChannelCount cCount = image.castChannelCount[uint32_t](channels)
+
+        cdef _ImageDescriptor desc = image._ImageDescriptor(depth, height, width, cCount, cType, vkUsageFlags, tiling)
+
+        cdef Image img = image._buildImage(self.__memory.get().createImage(desc), self.session, self)
+        img.changeLayout(ll_image.ImageLayout.General)
+
+        return img
 
 
-    #     Parameters
-    #     ----------
-    #     arr : Numpy array.
+    def createImageFromHost(self,
+                            np.ndarray arr,
+                            usageFlags=[ll_image.ImageUsageFlagBits.Storage,
+                                        ll_image.ImageUsageFlagBits.Sampled, 
+                                        ll_image.ImageUsageFlagBits.TransferSrc, 
+                                        ll_image.ImageUsageFlagBits.TransferDst]):
+        """
+        Creates a lluvia.Image object from a Numpy array.
 
-    #     usageFlags : string or list of strings.
-    #         Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
-    #         Image usage flags. It must be a combination of th strings defined
-    #         in lluvia.ImageUsageFlags:
-    #             - TransferSrc
-    #             - TransferDst
-    #             - Sampled
-    #             - Storage
-    #             - ColorAttachment
-    #             - DepthStencilAttachment
-    #             - TransientAttachment
-    #             - InputAttachment
+        The numpy array can have between 1 and 4 dimensions. Images
+        can be 1D, 2D or 3D and can have up to 4 color channels. The
+        width, height, depth and channels of the image are resolved
+        as follows.
+
+        if arr.ndim is 1: create a 1D image
+        if arr.ndim is 2: create a 2D image with one color channel.
+        if arr.ndim is 3: create a 2D image with the number of channels
+            given by the length of the third dimension.
+        if arr.ndim is 4: create a 3D image with the number of channels
+            given by the length of the fourth dimension.
+
+        Notice that for creating 1D images with several color channels,
+        one needs to specify the 4 dimensions [length, 1, 1, channels].
+
+        The image's channel type is deduced from arr.dtype.
 
 
-    #     Returns
-    #     -------
-    #     img : lluvia.Image
-    #         A new Image object.
+        Parameters
+        ----------
+        arr : Numpy array.
+
+        usageFlags : string or list of strings.
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
 
 
-    #     Raises
-    #     ------
-    #     ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
-    #                    if arr.dtype is incompatible with image ChannelType.
-    #     RuntimeError : if the image cannot be created from this memory.
-    #     """
+        Returns
+        -------
+        img : lluvia.Image
+            A new Image object.
 
-    #     from lluvia.core.image import ImageChannelTypeToNumpyMap
 
-    #     shape = [arr.shape[n] for n in range(arr.ndim)]
-    #     depth, height, width, channels = self.__getImageShape(shape)
+        Raises
+        ------
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if arr.dtype is incompatible with image ChannelType.
+        RuntimeError : if the image cannot be created from this memory.
+        """
 
-    #     channelType = None
-    #     for llChannelType, dtype in ImageChannelTypeToNumpyMap.items():
-    #         if dtype == arr.dtype:
-    #             channelType = llChannelType
-    #             break
+        # from lluvia.core.image.image import ImageChannelTypeToNumpyMap
 
-    #     if channelType is None:
-    #         raise ValueError('arr parameter has unsupported dtype: {0}'.format(arr.dtype))
+        shape = [arr.shape[n] for n in range(arr.ndim)]
+        depth, height, width, channels = self.__getImageShape(shape)
 
-    #     img = self.createImage((depth, height, width, channels), channelType, usageFlags)
-    #     img.fromHost(arr)
+        channelType = None
+        for llChannelType, dtype in ll_image.ImageChannelTypeToNumpyMap.items():
+            if dtype == arr.dtype:
+                channelType = llChannelType
+                break
+
+        if channelType is None:
+            raise ValueError('arr parameter has unsupported dtype: {0}'.format(arr.dtype))
+
+        img = self.createImage((depth, height, width, channels), channelType, usageFlags)
+        img.fromHost(arr)
         
-    #     return img
+        return img
 
-    # def createImageViewFromHost(self,
-    #                         np.ndarray arr,
-    #                         usageFlags=[ImageUsageFlagBits.Storage,
-    #                                     ImageUsageFlagBits.Sampled, 
-    #                                     ImageUsageFlagBits.TransferSrc, 
-    #                                     ImageUsageFlagBits.TransferDst],
-    #                         ImageFilterMode filterMode=ImageFilterMode.Nearest,
-    #                         ImageAddressMode addressMode=ImageAddressMode.Repeat,
-    #                         bool normalizedCoordinates=False,
-    #                         bool sampled=False):
-    #     """
-    #     Creates a lluvia.Image object from a Numpy array.
+    def createImageViewFromHost(self,
+                            np.ndarray arr,
+                            usageFlags=[ll_image.ImageUsageFlagBits.Storage,
+                                        ll_image.ImageUsageFlagBits.Sampled, 
+                                        ll_image.ImageUsageFlagBits.TransferSrc, 
+                                        ll_image.ImageUsageFlagBits.TransferDst],
+                            ImageFilterMode filterMode=ll_image.ImageFilterMode.Nearest,
+                            ImageAddressMode addressMode=ll_image.ImageAddressMode.Repeat,
+                            bool normalizedCoordinates=False,
+                            bool sampled=False):
+        """
+        Creates a lluvia.Image object from a Numpy array.
 
-    #     The numpy array can have between 1 and 4 dimensions. Images
-    #     can be 1D, 2D or 3D and can have up to 4 color channels. The
-    #     width, height, depth and channels of the image are resolved
-    #     as follows.
+        The numpy array can have between 1 and 4 dimensions. Images
+        can be 1D, 2D or 3D and can have up to 4 color channels. The
+        width, height, depth and channels of the image are resolved
+        as follows.
 
-    #     if arr.ndim is 1: create a 1D image
-    #     if arr.ndim is 2: create a 2D image with one color channel.
-    #     if arr.ndim is 3: create a 2D image with the number of channels
-    #         given by the length of the third dimension.
-    #     if arr.ndim is 4: create a 3D image with the number of channels
-    #         given by the length of the fourth dimension.
+        if arr.ndim is 1: create a 1D image
+        if arr.ndim is 2: create a 2D image with one color channel.
+        if arr.ndim is 3: create a 2D image with the number of channels
+            given by the length of the third dimension.
+        if arr.ndim is 4: create a 3D image with the number of channels
+            given by the length of the fourth dimension.
 
-    #     Notice that for creating 1D images with several color channels,
-    #     one needs to specify the 4 dimensions [length, 1, 1, channels].
+        Notice that for creating 1D images with several color channels,
+        one needs to specify the 4 dimensions [length, 1, 1, channels].
 
-    #     The image's channel type is deduced from arr.dtype.
+        The image's channel type is deduced from arr.dtype.
 
 
-    #     Parameters
-    #     ----------
-    #     arr : Numpy array.
+        Parameters
+        ----------
+        arr : Numpy array.
 
-    #     usageFlags : string or list of strings.
-    #         Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
-    #         Image usage flags. It must be a combination of th strings defined
-    #         in lluvia.ImageUsageFlags:
-    #             - TransferSrc
-    #             - TransferDst
-    #             - Sampled
-    #             - Storage
-    #             - ColorAttachment
-    #             - DepthStencilAttachment
-    #             - TransientAttachment
-    #             - InputAttachment
+        usageFlags : string or list of strings.
+            Defaults to ['Storage', 'Sampled', 'TransferSrc', 'TransferDst'].
+            Image usage flags. It must be a combination of th strings defined
+            in lluvia.ImageUsageFlags:
+                - TransferSrc
+                - TransferDst
+                - Sampled
+                - Storage
+                - ColorAttachment
+                - DepthStencilAttachment
+                - TransientAttachment
+                - InputAttachment
 
-    #     filterMode : str. Defaults to 'Nearest'.
-    #         Filtering more for reading pixels within a shader. Possible
-    #         values are defined in lluvia.ImageFilterMode:
-    #             - Nearest
-    #             - Linear
+        filterMode : str. Defaults to 'Nearest'.
+            Filtering more for reading pixels within a shader. Possible
+            values are defined in lluvia.ImageFilterMode:
+                - Nearest
+                - Linear
 
-    #     addressMode : str. Defaults to 'Repeat'.
-    #         Addressing mode for reading pixels that are outside of the image
-    #         boundaries. Possible values are defined in lluvia.ImageAddressMode:
-    #             - Repeat
-    #             - MirroredRepeat
-    #             - ClampToEdge
-    #             - ClampToBorder
-    #             - MirrorClampToEdge
+        addressMode : str. Defaults to 'Repeat'.
+            Addressing mode for reading pixels that are outside of the image
+            boundaries. Possible values are defined in lluvia.ImageAddressMode:
+                - Repeat
+                - MirroredRepeat
+                - ClampToEdge
+                - ClampToBorder
+                - MirrorClampToEdge
 
-    #     normalizedCoordinates : bool. Defaults to False.
-    #         Tells whether or not to use normalized coordinates to read
-    #         pixels within a shader.
+        normalizedCoordinates : bool. Defaults to False.
+            Tells whether or not to use normalized coordinates to read
+            pixels within a shader.
 
-    #     sampled : bool. Defaults to False.
-    #         Tells whether or not to use a sampler object for reading
-    #         pixels within a shader.
+        sampled : bool. Defaults to False.
+            Tells whether or not to use a sampler object for reading
+            pixels within a shader.
         
-    #     Returns
-    #     -------
-    #     img : lluvia.Image
-    #         A new Image object.
+        Returns
+        -------
+        img : lluvia.Image
+            A new Image object.
 
 
-    #     Raises
-    #     ------
-    #     ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
-    #                    if arr.dtype is incompatible with image ChannelType.
-    #     RuntimeError : if the image cannot be created from this memory.
-    #     """
+        Raises
+        ------
+        ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or
+                       if arr.dtype is incompatible with image ChannelType.
+        RuntimeError : if the image cannot be created from this memory.
+        """
 
-    #     image = self.createImageFromHost(arr, usageFlags)
+        image = self.createImageFromHost(arr, usageFlags)
 
-    #     return image.createImageView(filterMode, addressMode, normalizedCoordinates, sampled)
+        return image.createImageView(filterMode, addressMode, normalizedCoordinates, sampled)
 
-    # def __getImageShape(self, shape):
-    #     """
-    #     Calculates the lluvia image shape given a tuple
-    #     """
+    def __getImageShape(self, shape):
+        """
+        Calculates the lluvia image shape given a tuple
+        """
 
-    #     if len(shape) not in [1, 2, 3, 4]:
-    #         raise ValueError('invalid number of dimensions. Expected 1, 2, 3 or 4')
+        if len(shape) not in [1, 2, 3, 4]:
+            raise ValueError('invalid number of dimensions. Expected 1, 2, 3 or 4')
 
-    #     cdef uint32_t width    = 0
-    #     cdef uint32_t height   = 0
-    #     cdef uint32_t depth    = 0
-    #     cdef uint32_t channels = 0
+        cdef uint32_t width    = 0
+        cdef uint32_t height   = 0
+        cdef uint32_t depth    = 0
+        cdef uint32_t channels = 0
 
-    #     ndim = len(shape)
-    #     if ndim is 1:
-    #         depth    = 1
-    #         height   = 1
-    #         width    = shape[0]
-    #         channels = 1
+        ndim = len(shape)
+        if ndim is 1:
+            depth    = 1
+            height   = 1
+            width    = shape[0]
+            channels = 1
 
-    #     elif ndim is 2:
-    #         depth    = 1
-    #         height   = shape[0]
-    #         width    = shape[1]
-    #         channels = 1
+        elif ndim is 2:
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = 1
 
-    #     elif ndim is 3:
-    #         depth    = 1
-    #         height   = shape[0]
-    #         width    = shape[1]
-    #         channels = shape[2]
+        elif ndim is 3:
+            depth    = 1
+            height   = shape[0]
+            width    = shape[1]
+            channels = shape[2]
 
-    #     else:
-    #         depth    = shape[0]
-    #         height   = shape[1]
-    #         width    = shape[2]
-    #         channels = shape[3]
+        else:
+            depth    = shape[0]
+            height   = shape[1]
+            width    = shape[2]
+            channels = shape[3]
 
-    #     return depth, height, width, channels
+        return depth, height, width, channels

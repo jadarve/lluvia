@@ -13,12 +13,13 @@ from libcpp.memory cimport shared_ptr, unique_ptr
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from lluvia.core.core_buffer cimport _Buffer
+from lluvia.core.buffer.buffer cimport _Buffer
 from lluvia.core.image.image cimport _Image
 from lluvia.core.image.image_layout cimport _ImageLayout
-from lluvia.core.node cimport _ComputeNode
 from lluvia.core.duration cimport _Duration
 from lluvia.core.session cimport Session
+
+# from lluvia.core.node cimport _ComputeNode
 
 cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
 
@@ -27,7 +28,7 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
         void begin() except +
         void end() except +
 
-        void run(const _ComputeNode& node) except +
+        # void run(const _ComputeNode& node) except +
 
         void copyBuffer(const _Buffer& src, const _Buffer& dst) except +
         void copyBufferToImage(const _Buffer& src, const _Image& dst) except +

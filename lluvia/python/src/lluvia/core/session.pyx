@@ -32,17 +32,17 @@ import lluvia.core.memory as ll_memory
 from lluvia.core.memory.memory cimport _buildMemory, _Memory, Memory
 from lluvia.core.memory.memory_property_flags cimport _MemoryPropertyFlags
 
+from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
+from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
+
+from lluvia.core.enums.compute_dimension cimport ComputeDimension
+from lluvia.core.compute_dimension cimport _ComputeDimension
 
 # from lluvia.core cimport vulkan as vk
 # from lluvia.core import impl
-# from lluvia.core.command_buffer cimport CommandBuffer, _CommandBuffer, move, _buildCommandBuffer
-# from lluvia.core.duration cimport Duration, _Duration, moveDuration, _buildDuration
 # from lluvia.core.enums import NodeType
 
 # from lluvia.core.core_buffer import BufferUsageFlagBits
-
-# from lluvia.core.enums.compute_dimension cimport ComputeDimension
-# from lluvia.core.compute_dimension cimport _ComputeDimension
 
 # from lluvia.core.memory cimport MemoryPropertyFlags, Memory, _Memory, _buildMemory
 # from lluvia.core.memory import MemoryPropertyFlagBits
@@ -460,89 +460,99 @@ cdef class Session:
 
     #     return _buildDuration(shared_ptr[_Duration](moveDuration(self.__session.get().createDuration())))
 
-    # def createCommandBuffer(self):
-    #     """
-    #     Creates a command buffer object.
+    def createCommandBuffer(self):
+        """
+        Creates a command buffer object.
 
-    #     Command buffers are used to record commands to be executed
-    #     by the device. Once the recording finishes, the command buffer
-    #     can be sent for execution using the `run` method.
+        Command buffers are used to record commands to be executed
+        by the device. Once the recording finishes, the command buffer
+        can be sent for execution using the `run` method.
 
-    #     Raises
-    #     ------
-    #     RuntimeError : if the command buffer cannot be created.
-    #     """
+        Raises
+        ------
+        RuntimeError : if the command buffer cannot be created.
+        """
 
-    #     return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
+        return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
 
-    # def script(self, str code):
-    #     """
-    #     Runs a Lua script in the session's interpreter
+    def script(self, str code):
+        """
+        Runs a Lua script in the session's interpreter
 
-    #     Parameters
-    #     ----------
-    #     code : string
-    #         The Lua code.
-    #     """
+        Parameters
+        ----------
+        code : string
+            The Lua code.
+        """
 
-    #     self.__session.get().script(impl.encodeString(code))
+        self.__session.get().script(impl.encodeString(code))
 
-    # def scriptFile(self, str filename):
-    #     """
-    #     Read and run a Lua script file in the session's interpreter
+    def scriptFile(self, str filename):
+        """
+        Read and run a Lua script file in the session's interpreter
 
-    #     Parameters
-    #     ----------
-    #     code : string
-    #         Path to the script file.
-    #     """
+        Parameters
+        ----------
+        code : string
+            Path to the script file.
+        """
 
-    #     self.__session.get().scriptFile(impl.encodeString(filename))
+        self.__session.get().scriptFile(impl.encodeString(filename))
 
-    # def loadLibrary(self, str filename):
-    #     """
-    #     Loads a library made of SPIR-V shader code and Lua scripts.
+    def loadLibrary(self, str filename):
+        """
+        Loads a library made of SPIR-V shader code and Lua scripts.
 
-    #     Parameters
-    #     ----------
-    #     filename : string
-    #         Path to the library file. The file must be a valid
-    #         zip archive.
+        Parameters
+        ----------
+        filename : string
+            Path to the library file. The file must be a valid
+            zip archive.
 
-    #     Raises
-    #     ------
-    #     RuntimeError : if there is problem reading the library file.
-    #     """
+        Raises
+        ------
+        RuntimeError : if there is problem reading the library file.
+        """
 
-    #     self.__session.get().loadLibrary(impl.encodeString(filename))
+        self.__session.get().loadLibrary(impl.encodeString(filename))
 
-    # def run(self, obj):
-    #     """
-    #     Runs a CommandBuffer or ComputeNode
+    def run(self, obj):
+        """
+        Runs a CommandBuffer or ComputeNode
 
-    #     Parameters
-    #     ----------
-    #     obj : CommandBuffer or ComputeNode
-    #     """
+        Parameters
+        ----------
+        obj : CommandBuffer or ComputeNode
+        """
 
-    #     cdef ComputeNode node = None
-    #     cdef ContainerNode containerNode = None
-    #     cdef CommandBuffer cmdBuffer = None
+        # cdef ComputeNode node = None
+        # cdef ContainerNode containerNode = None
+        # cdef CommandBuffer cmdBuffer = None
 
-    #     if type(obj) == ComputeNode:
-    #         node = obj
-    #         self.__session.get().run(deref(node.__node.get()))
+        # if type(obj) == ComputeNode:
+        #     node = obj
+        #     self.__session.get().run(deref(node.__node.get()))
 
-    #     elif type(obj) == ContainerNode:
-    #         containerNode = obj
-    #         self.__session.get().run(deref(containerNode.__node.get()))
+        # elif type(obj) == ContainerNode:
+        #     containerNode = obj
+        #     self.__session.get().run(deref(containerNode.__node.get()))
 
-    #     elif type(obj) == CommandBuffer:
-    #         cmdBuffer = obj
-    #         self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
+        # elif type(obj) == CommandBuffer:
+        #     cmdBuffer = obj
+        #     self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
 
-    #     else:
-    #         raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
+        # else:
+        #     raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
+
+        # FIXME: delete this block once ComputeNode works
+        cdef CommandBuffer cmdBuffer = None
+
+        if type(obj) == CommandBuffer:
+            cmdBuffer = obj
+            self.__session.get().run(deref(cmdBuffer.__commandBuffer.get()))
+
+        else:
+            raise RuntimeError('Unsupported obj type: %s'.format(type(obj)))
 
     # def compileProgram(self, shaderCode,
     #                    includeDirs=None,
@@ -733,19 +743,19 @@ cdef class Session:
 
     #     return (localShape.x, localShape.y, localShape.z)
 
-    # def help(self, str builderName):
-    #     """
-    #     Returns the help string of a given node builder.
+    def help(self, str builderName):
+        """
+        Returns the help string of a given node builder.
 
-    #     Parameters
-    #     ----------
-    #     builderName : str
-    #         The builder name
+        Parameters
+        ----------
+        builderName : str
+            The builder name
 
-    #     Returns
-    #     -------
-    #     helpString : str
-    #         The help string.
-    #     """
+        Returns
+        -------
+        helpString : str
+            The help string.
+        """
 
-    #     return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')
+        return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')

@@ -17,21 +17,38 @@ cimport numpy as np
 
 from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.memory cimport Memory, MemoryAllocationInfo, _buildMemory
 from lluvia.core.session cimport Session
 
-
-from lluvia.core.core_buffer cimport BufferUsageFlagBits
-
+from lluvia.core.image.image_usage_flags import ImageUsageFlagBits
 from lluvia.core.image.image_usage_flags cimport ImageUsageFlagBits
+
+from lluvia.core.image.image_filter_mode import ImageFilterMode
 from lluvia.core.image.image_filter_mode cimport _ImageFilterMode, ImageFilterMode
+
+from lluvia.core.image.image_address_mode import ImageAddressMode
 from lluvia.core.image.image_address_mode cimport _ImageAddressMode, ImageAddressMode
+
+from lluvia.core.image.image_layout import ImageLayout
 from lluvia.core.image.image_layout cimport _ImageLayout, ImageLayout
+
+#################################################
+# Memory
+#################################################
+import lluvia.core.memory as ll_memory
+from lluvia.core.memory.memory cimport Memory, _buildMemory
+from lluvia.core.memory.memory_allocation_info cimport MemoryAllocationInfo
+
+#################################################
+# Buffer
+#################################################
+import lluvia.core.buffer as ll_buffer
 
 
 __all__ = [
     'Image',
     'ImageView',
+    'ChannelType',
+    'ChannelCount',
     'ImageChannelTypeToNumpyMap'
 ]
 
@@ -311,9 +328,9 @@ cdef class Image:
             nextLayout = ImageLayout.General
 
         stageBuffer   = self.memory.createBuffer(output.nbytes,
-                                                   [BufferUsageFlagBits.StorageBuffer,
-                                                    BufferUsageFlagBits.TransferSrc,
-                                                    BufferUsageFlagBits.TransferDst])
+                                                   [ll_buffer.BufferUsageFlagBits.StorageBuffer,
+                                                    ll_buffer.BufferUsageFlagBits.TransferSrc,
+                                                    ll_buffer.BufferUsageFlagBits.TransferDst])
 
         cmdBuffer     = self.session.createCommandBuffer()
 

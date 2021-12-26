@@ -20,10 +20,12 @@ from lluvia.core.image.image_layout cimport _ImageLayout
 from lluvia.core.image.image_tiling cimport _ImageTiling
 from lluvia.core.image.image_usage_flags cimport _ImageUsageFlags
 
+from lluvia.core.memory.memory cimport _Memory, Memory
+from lluvia.core.memory.memory_allocation_info cimport _MemoryAllocationInfo
+
 from lluvia.core cimport vulkan as vk
 from lluvia.core.core_object cimport _Object
-from lluvia.core.memory cimport _Memory, _MemoryAllocationInfo
-from lluvia.core.memory cimport Memory
+
 from lluvia.core.session cimport Session
 
 

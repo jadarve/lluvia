@@ -16,7 +16,7 @@ from lluvia.core.memory.memory_property_flags cimport _MemoryPropertyFlags
 from lluvia.core.buffer.buffer cimport _Buffer
 from lluvia.core.buffer.buffer_usage_flags cimport _BufferUsageFlags
 
-# from lluvia.core.image.image cimport _Image, _ImageDescriptor
+from lluvia.core.image.image cimport _Image, _ImageDescriptor
 
 from lluvia.core.session cimport Session
 
@@ -31,7 +31,7 @@ cdef extern from 'lluvia/core/memory/Memory.h' namespace 'll':
         bool isPageMappable(const uint64_t page) const
 
         shared_ptr[_Buffer] createBuffer(const uint64_t size, const _BufferUsageFlags usageFlags) except +
-        # shared_ptr[_Image] createImage(const _ImageDescriptor& descriptor) except +
+        shared_ptr[_Image] createImage(const _ImageDescriptor& descriptor) except +
 
 
 cdef _buildMemory(shared_ptr[_Memory] ptr, Session session)
