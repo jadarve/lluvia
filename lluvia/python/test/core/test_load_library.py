@@ -14,7 +14,7 @@ def test_load_library():
     desc = session.createComputeNodeDescriptor('nodes/Assign')
     assert(desc != None)
 
-    program = session.getProgram('nodes/Assign')
+    program = session.getProgram('nodes/Assign.comp')
     assert(program != None)
 
     node = session.createComputeNode("nodes/Assign")

@@ -37,7 +37,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
     auto buffer = hostMemory->createBuffer(length*sizeof(float));
     REQUIRE(buffer != nullptr);
 
-    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv"));
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.comp.spv"));
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
@@ -94,10 +94,10 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
     auto buffer = hostMemory->createBuffer(bufferSize*sizeof(float));
     REQUIRE(buffer != nullptr);
 
-    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv"));
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.comp.spv"));
     REQUIRE(program != nullptr);
 
-    session->setProgram("assign", program);
+    session->setProgram("assign.comp", program);
 
     // register the node builder
     session->script(R"(
@@ -110,7 +110,7 @@ function builder.newDescriptor()
     desc.builderName  = 'assign'
     desc.localShape   = ll.vec3ui.new(32, 32, 1)
     desc.gridShape    = ll.vec3ui.new(1, 1, 1)
-    desc.program      = ll.getProgram('assign')
+    desc.program      = ll.getProgram('assign.comp')
     desc.functionName = 'main'
 
     desc:addPort(ll.PortDescriptor.new(0, 'out_buffer', ll.PortDirection.Out, ll.PortType.Buffer))

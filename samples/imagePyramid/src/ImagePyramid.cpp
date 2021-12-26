@@ -97,8 +97,8 @@ void ImagePyramid::initComputeNodes(std::shared_ptr<ll::Session> session) {
     //
     // layout(binding = 0, rgba8ui) uniform uimage2D inputImage;
     // layout(binding = 1, rgba8ui) uniform uimage2D outputImage;
-    auto programX = session->createProgram("samples/imagePyramid/glsl/imageDownsampleX.spv");
-    auto programY = session->createProgram("samples/imagePyramid/glsl/imageDownsampleY.spv");
+    auto programX = session->createProgram("samples/imagePyramid/glsl/imageDownsampleX.comp.spv");
+    auto programY = session->createProgram("samples/imagePyramid/glsl/imageDownsampleY.comp.spv");
 
     assert(programX != nullptr);
     assert(programY != nullptr);

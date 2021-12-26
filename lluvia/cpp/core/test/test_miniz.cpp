@@ -54,7 +54,7 @@ TEST_CASE("ComparedContent", "test_miniz") {
     auto lua_file = std::vector<uint8_t> {};
     auto spirv_file = std::vector<uint8_t> {};
     REQUIRE_NOTHROW(readFile(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/Assign.lua"), lua_file));
-    REQUIRE_NOTHROW(readFile(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/Assign.spv"), spirv_file));
+    REQUIRE_NOTHROW(readFile(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/Assign.comp.spv"), spirv_file));
 
     // read zip archive
     auto zip_archive = mz_zip_archive {};

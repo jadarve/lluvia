@@ -7,7 +7,7 @@ function builder.newDescriptor()
     desc.builderName  = 'ImageDownsampleY'
     desc.localShape   = ll.vec3ui.new(32, 32, 1)
     desc.gridShape    = ll.vec3ui.new(1, 1, 1)
-    desc.program      = ll.getProgram('ImageDownsampleY')
+    desc.program      = ll.getProgram('ImageDownsampleY.comp')
     desc.functionName = 'main'
 
     desc:addPort(ll.PortDescriptor.new(0, 'in_RGBA', ll.PortDirection.In, ll.PortType.ImageView))

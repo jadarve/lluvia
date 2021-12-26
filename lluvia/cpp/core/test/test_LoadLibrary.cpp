@@ -25,7 +25,7 @@ TEST_CASE("LoadLibrary", "test_LoadLibrary") {
 
     REQUIRE_NOTHROW(session->loadLibrary(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/test_node_library.zip")));
 
-    auto program = session->getProgram("nodes/Assign");
+    auto program = session->getProgram("nodes/Assign.comp");
     REQUIRE(program != nullptr);
 
     auto desc = ll::ComputeNodeDescriptor{};

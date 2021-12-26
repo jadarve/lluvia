@@ -33,9 +33,9 @@ TEST_CASE("goodUse", "HSVA2RGBA_test") {
     ///////////////////////////////////////////////////////
     // Register program and builder
     ///////////////////////////////////////////////////////
-    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/nodes/lluvia/color/HSVA2RGBA.spv"));
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/nodes/lluvia/color/HSVA2RGBA.comp.spv"));
     REQUIRE(program != nullptr);
-    session->setProgram("lluvia/color/HSVA2RGBA", program);
+    session->setProgram("lluvia/color/HSVA2RGBA.comp", program);
 
     REQUIRE_NOTHROW(session->scriptFile(runfiles->Rlocation("lluvia/lluvia/nodes/lluvia/color/HSVA2RGBA.lua")));
 

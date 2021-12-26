@@ -33,7 +33,7 @@ TEST_CASE("DurationRecording", "test_Duration")
     const auto bufferSize = 128;
     auto buffer = hostMemory->createBuffer(bufferSize * sizeof(float));
 
-    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.spv"));
+    auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.comp.spv"));
     REQUIRE(program != nullptr);
 
     auto nodeDescriptor = ll::ComputeNodeDescriptor()
