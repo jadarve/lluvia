@@ -101,8 +101,8 @@ int main(int argc, char const* argv[]) {
     auto session = ll::Session::create();
 
     // register programs and node builders
-    session->setProgram("ImageDownsampleX", session->createProgram("samples/imagePyramid_lua/glsl/ImageDownsampleX.spv"));
-    session->setProgram("ImageDownsampleY", session->createProgram("samples/imagePyramid_lua/glsl/ImageDownsampleY.spv"));
+    session->setProgram("ImageDownsampleX.comp", session->createProgram("samples/imagePyramid_lua/glsl/ImageDownsampleX.comp.spv"));
+    session->setProgram("ImageDownsampleY.comp", session->createProgram("samples/imagePyramid_lua/glsl/ImageDownsampleY.comp.spv"));
 
     session->scriptFile("samples/imagePyramid_lua/lua/ImageDownsampleX.lua");
     session->scriptFile("samples/imagePyramid_lua/lua/ImageDownsampleY.lua");
