@@ -17,9 +17,10 @@ jobs:
         sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.176-focal.list https://packages.lunarg.com/vulkan/1.2.176/lunarg-vulkan-1.2.176-focal.list
         sudo apt update
         sudo apt install -y vulkan-sdk
+        vulkaninfo
     - uses: actions/checkout@v1
     - name: Build
-      run: bazel build //...
+      run: bazel test //lluvia/cpp/...
     # TODO: uncomment once I can reliably create python wheels
     # - name: Prepare release assets
     #   if: startsWith(github.ref, 'refs/tags/')
@@ -33,31 +34,31 @@ jobs:
     #     name: release-assets-linux
     #     path: bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-linux_x86_64.whl
   
-  build-windows:
-    name: Build Windows
-    runs-on: windows-2019
-    steps:
-    - name: Install tools
-      run: |
-        choco install --no-progress wget
-        choco install --no-progress python2
-    - name: Install Python dependencies
-      run: |
-        python -m pip install jinja2
-        pip3 install cython numpy pytest jinja2 markupsafe
-    - name: Install Vulkan SDK
-      # from https://github.com/actions/virtual-environments/issues/18#issuecomment-561944259
-      run: |
-          Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
-          $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
-          $installer.WaitForExit();
-    - uses: actions/checkout@v1
-    - name: Build
-      run: |
-        $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
-        $Env:Path += ";C:/Python27"
-        $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
-        bazel build //lluvia/...
+  # build-windows:
+  #   name: Build Windows
+  #   runs-on: windows-2019
+  #   steps:
+  #   - name: Install tools
+  #     run: |
+  #       choco install --no-progress wget
+  #       choco install --no-progress python2
+  #   - name: Install Python dependencies
+  #     run: |
+  #       python -m pip install jinja2
+  #       pip3 install cython numpy pytest jinja2 markupsafe
+  #   - name: Install Vulkan SDK
+  #     # from https://github.com/actions/virtual-environments/issues/18#issuecomment-561944259
+  #     run: |
+  #         Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
+  #         $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
+  #         $installer.WaitForExit();
+  #   - uses: actions/checkout@v1
+  #   - name: Build
+  #     run: |
+  #       $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
+  #       $Env:Path += ";C:/Python27"
+  #       $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
+  #       bazel build //lluvia/...
     # TODO: uncomment once I can reliably create python wheels
     # - name: Prepare release assets
     #   if: startsWith(github.ref, 'refs/tags/')
