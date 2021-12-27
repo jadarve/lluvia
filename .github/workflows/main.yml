@@ -17,9 +17,9 @@ jobs:
         sudo apt update
         sudo apt full-upgrade
         sudo apt install mesa-utils
-    - name: Check Mesa
-      run: |
-        glxinfo | grep Mesa
+    # - name: Check Mesa
+    #   run: |
+    #     glxinfo | grep Mesa
     - name: Install Vulkan SDK
       run: |
         wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
