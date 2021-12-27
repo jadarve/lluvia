@@ -16,6 +16,7 @@ jobs:
         sudo add-apt-repository ppa:kisak/kisak-mesa
         sudo apt update
         sudo apt full-upgrade
+        sudo apt install mesa-utils
     - name: Check Mesa
       run: |
         glxinfo | grep Mesa
