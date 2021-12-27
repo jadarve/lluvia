@@ -16,6 +16,8 @@ jobs:
         sudo add-apt-repository ppa:kisak/kisak-mesa
         sudo apt update
         sudo apt full-upgrade
+    - name: Check Mesa
+      run: |
         glxinfo | grep Mesa
     - name: Install Vulkan SDK
       run: |
