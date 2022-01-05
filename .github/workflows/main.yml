@@ -25,11 +25,12 @@ jobs:
         wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
         sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.176-focal.list https://packages.lunarg.com/vulkan/1.2.176/lunarg-vulkan-1.2.176-focal.list
         sudo apt update
-        sudo apt install -y vulkan-sdk
+        sudo apt upgrade
+        sudo apt install -y vulkan-sdk mesa-vulkan-drivers
         vulkaninfo
-    - uses: actions/checkout@v1
-    - name: Build
-      run: bazel test //lluvia/cpp/...
+    # - uses: actions/checkout@v1
+    # - name: Build
+    #   run: bazel test //lluvia/cpp/...
     # TODO: uncomment once I can reliably create python wheels
     # - name: Prepare release assets
     #   if: startsWith(github.ref, 'refs/tags/')
