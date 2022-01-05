@@ -28,9 +28,9 @@ jobs:
         sudo apt upgrade
         sudo apt install -y vulkan-sdk mesa-vulkan-drivers
         vulkaninfo
-    # - uses: actions/checkout@v1
-    # - name: Build
-    #   run: bazel test //lluvia/cpp/...
+    - uses: actions/checkout@v1
+    - name: Build
+      run: bazel test //...
     # TODO: uncomment once I can reliably create python wheels
     # - name: Prepare release assets
     #   if: startsWith(github.ref, 'refs/tags/')
