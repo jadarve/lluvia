@@ -1,5 +1,4 @@
 import pytest
-import imageio
 import numpy as np
 
 
