@@ -65,10 +65,9 @@ def test_incorrectSize():
 def test_createFromHost():
 
     import lluvia as ll
+    import lluvia.util as ll_util
 
-    img = imageio.imread('lluvia/resources/mouse.jpg')
-    imgRGBA = np.zeros(img.shape[:-1] + tuple([4]), dtype=img.dtype)
-    imgRGBA[..., :3] = img
+    imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
 
     session = ll.createSession(loadNodeLibrary = False)
     mem = session.createMemory()
