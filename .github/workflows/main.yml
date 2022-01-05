@@ -17,9 +17,6 @@ jobs:
         sudo apt update
         sudo apt full-upgrade
         sudo apt install mesa-utils
-    # - name: Check Mesa
-    #   run: |
-    #     glxinfo | grep Mesa
     - name: Install Vulkan SDK
       run: |
         wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
@@ -30,7 +27,9 @@ jobs:
         vulkaninfo
     - uses: actions/checkout@v1
     - name: Build
-      run: bazel test //...
+      run: bazel build //...
+    - name: Test
+      run: bazel test --test_output=errors //...
     # TODO: uncomment once I can reliably create python wheels
     # - name: Prepare release assets
     #   if: startsWith(github.ref, 'refs/tags/')
