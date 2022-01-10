@@ -1,10 +1,10 @@
 import pytest
 import numpy as np
 
-def test_createFromImageWithDefaultParams():
+import lluvia as ll
+import lluvia.util as ll_util
 
-    import lluvia as ll
-    import lluvia.util as ll_util
+def test_createFromImageWithDefaultParams():
 
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
 
@@ -27,9 +27,6 @@ def test_createFromImageWithDefaultParams():
 
 def test_createFromMemoryWithDefaultParams():
 
-    import lluvia as ll
-    import lluvia.util as ll_util
-
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
 
     session = ll.createSession(loadNodeLibrary=False)
@@ -48,9 +45,6 @@ def test_createFromMemoryWithDefaultParams():
 
 def test_createSampled():
 
-    import lluvia as ll
-    import lluvia.util as ll_util
-
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
 
     session = ll.createSession(loadNodeLibrary=False)
@@ -62,8 +56,5 @@ def test_createSampled():
     assert(imgView.sampled == True)
 
 if __name__ == "__main__":
-
-    from config import add_lluvia_import_path
-    add_lluvia_import_path()
 
     raise SystemExit(pytest.main([__file__]))

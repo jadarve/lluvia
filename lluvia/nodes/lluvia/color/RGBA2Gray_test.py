@@ -1,10 +1,11 @@
+import sys
 import pytest
 import numpy as np
 import lluvia as ll
 
 def test_compile():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(loadNodeLibrary=False)
     memory = session.createMemory()
 
     shaderCode = """

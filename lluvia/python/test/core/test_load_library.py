@@ -1,12 +1,8 @@
 
 import pytest
-
+import lluvia as ll
 
 def test_load_library():
-
-    import lluvia as ll
-
-    print("LL_PATH: ", ll.__path__)
 
     session = ll.createSession(loadNodeLibrary = False)
     session.loadLibrary('lluvia/cpp/core/test/nodes/test_node_library.zip')
@@ -22,8 +18,5 @@ def test_load_library():
 
 
 if __name__ == "__main__":
-
-    from config import add_lluvia_import_path
-    add_lluvia_import_path()
 
     raise SystemExit(pytest.main([__file__]))

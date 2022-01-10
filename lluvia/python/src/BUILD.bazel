@@ -54,6 +54,9 @@ pyx_library (
         "lluvia/resources/**/*py",
     ]),
     srcs_version = "PY3",
+    imports = [
+        "."
+    ],
     directives = [
         "--3str",
         "--cplus"
