@@ -2,67 +2,44 @@ import sys
 import pytest
 import numpy as np
 import lluvia as ll
+import lluvia.util as ll_util
 
-def test_compile():
+from rules_python.python.runfiles import runfiles
 
-    session = ll.createSession(loadNodeLibrary=False)
-    memory = session.createMemory()
+def test_goodUse():
 
-    shaderCode = """
-    #version 450
+    r = runfiles.Create()
+    programPath = r.Rlocation('lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.comp.spv')
+    scriptPath = r.Rlocation('lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.lua')
+    nodeName = 'lluvia/color/RGBA2Gray'
+    programName = 'lluvia/color/RGBA2Gray.comp'
 
-    // default values for the local group size as well as
-    // indexes for the specialization constants to override them.
-    layout (
-        local_size_x_id = 1, local_size_x = 1,
-        local_size_y_id = 2, local_size_y = 1,
-        local_size_z_id = 3, local_size_z = 1
-    ) in;
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
+    memory = session.createMemory(flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
 
-    layout(binding = 0) buffer in0  {int A[]; };
-    layout(binding = 1) buffer in1  {int B[]; };
-    layout(binding = 2) buffer out0 {int C[]; };
+    program = session.createProgram(programPath)
+    session.setProgram(programName, program)
+    session.scriptFile(scriptPath)
+    
+    node = session.createComputeNode(nodeName)
 
-    void main() {
-        const uint index = gl_GlobalInvocationID.x;
-        C[index] = A[index] + B[index];
-    }
-    """
+    imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
+    in_rgba = memory.createImageViewFromHost(imgRGBA)
 
-    localLength = 32
-    gridLength = 4
-    length = gridLength * localLength
-
-    dtype = np.int32
-
-    A_host = np.arange(0, length, dtype=dtype)
-    B_host = np.arange(0, length, dtype=dtype)
-    C_host = A_host + B_host
-
-    A = memory.createBufferFromHost(A_host)
-    B = memory.createBufferFromHost(B_host)
-    C = memory.createBufferLike(A_host)
-
-    ports = [
-        ll.PortDescriptor(0, 'in_A', ll.PortDirection.In, ll.PortType.Buffer),
-        ll.PortDescriptor(1, 'in_B', ll.PortDirection.In, ll.PortType.Buffer),
-        ll.PortDescriptor(2, 'out_C', ll.PortDirection.Out, ll.PortType.Buffer)
-    ]
-
-    node = session.compileComputeNode(ports,
-                                      shaderCode,
-                                      'main',
-                                      localSize=(localLength, 1, 1),
-                                      gridSize=(gridLength, 1, 1))
-
-    node.bind('in_A', A)
-    node.bind('in_B', B)
-    node.bind('out_C', C)
+    node.bind('in_rgba', in_rgba)
     node.init()
-    node.run()
 
-    C_copy = C.toHost(dtype=dtype)
-    assert((C_copy == C_host).all())
+    out_gray = node.getPort('out_gray')
+    assert(out_gray is not None)
+    assert(out_gray.width == in_rgba.width)
+    assert(out_gray.height == in_rgba.height)
+    assert(out_gray.depth == in_rgba.depth)
+    assert(out_gray.channelType == ll.ChannelType.Uint8)
+    assert(out_gray.channels == 1)
+
+    session.run(node)
+
+    assert(not ll.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

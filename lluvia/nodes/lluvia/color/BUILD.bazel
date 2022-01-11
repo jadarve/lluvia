@@ -37,11 +37,13 @@ py_test(
     srcs = ["RGBA2Gray_test.py"],
     data = [
         ":RGBA2Gray_runfiles",
+        "//lluvia/resources:resources"
     ],
     # deps = PY_TEST_DEPS,
     legacy_create_init = False,
     deps = [
         "//lluvia/python/src:pyx_library",
+        "@rules_python//python/runfiles",
     ]
 )
 
