@@ -65,6 +65,17 @@ cc_test(
     deps = CC_TEST_DEPS,
 )
 
+py_test(
+    name = "RGBA2HSVA_test",
+    srcs = ["RGBA2HSVA_test.py"],
+    data = [
+        ":RGBA2HSVA_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
 ll_node(
     name = "HSVA2RGBA",
     builder = "HSVA2RGBA.lua",
@@ -83,4 +94,15 @@ cc_test(
         ":HSVA2RGBA_runfiles",
     ],
     deps = CC_TEST_DEPS,
+)
+
+py_test(
+    name = "HSVA2RGBA_test",
+    srcs = ["HSVA2RGBA_test.py"],
+    data = [
+        ":HSVA2RGBA_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
 )

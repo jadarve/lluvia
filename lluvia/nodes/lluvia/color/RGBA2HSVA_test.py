@@ -7,13 +7,13 @@ import lluvia_test as ll_test
 
 def test_goodUse():
 
-    nodeName = 'lluvia/color/RGBA2Gray'
+    nodeName = 'lluvia/color/RGBA2HSVA'
 
     session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     ll_test.loadNode(session,
-                     programPath='lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.comp.spv',
-                     programName='lluvia/color/RGBA2Gray.comp',
-                     scriptPath='lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.lua'
+                     programPath='lluvia/lluvia/nodes/lluvia/color/RGBA2HSVA.comp.spv',
+                     programName='lluvia/color/RGBA2HSVA.comp',
+                     scriptPath='lluvia/lluvia/nodes/lluvia/color/RGBA2HSVA.lua'
                      )
 
     node = session.createComputeNode(nodeName)
@@ -27,13 +27,13 @@ def test_goodUse():
     node.bind('in_rgba', in_rgba)
     node.init()
 
-    out_gray = node.getPort('out_gray')
-    assert(out_gray is not None)
-    assert(out_gray.width == in_rgba.width)
-    assert(out_gray.height == in_rgba.height)
-    assert(out_gray.depth == in_rgba.depth)
-    assert(out_gray.channelType == ll.ChannelType.Uint8)
-    assert(out_gray.channels == 1)
+    out_hsva = node.getPort('out_hsva')
+    assert(out_hsva is not None)
+    assert(out_hsva.width == in_rgba.width)
+    assert(out_hsva.height == in_rgba.height)
+    assert(out_hsva.depth == in_rgba.depth)
+    assert(out_hsva.channelType == ll.ChannelType.Float32)
+    assert(out_hsva.channels == 4)
 
     session.run(node)
 
