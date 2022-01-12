@@ -240,7 +240,7 @@ end
 --
 -- The initialization includes:
 -- - Setting the descriptor buildderName to name
--- - Looking for the program with the same name in the registry.
+-- - Looking for the program with the same name plus the .comp extension in the registry.
 -- - Setting program functionName to main.
 -- - Setting the gridShape to (1, 1, 1)
 -- - Setting the localShape to 

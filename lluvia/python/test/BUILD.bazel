@@ -1,0 +1,17 @@
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name="lluvia_test_py_library",
+    srcs=glob([
+        "lluvia_test/*.py"
+    ]),
+    srcs_version = "PY3",
+    imports = [
+        "."
+    ],
+    deps = [
+        "//lluvia/python/src:pyx_library",
+        "@rules_python//python/runfiles",
+    ],
+    visibility=["//visibility:public"]
+)

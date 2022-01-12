@@ -5,6 +5,8 @@ load("@rules_cc//cc:defs.bzl", "cc_test")
 load("@rules_python//python:defs.bzl", "py_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
 
 CC_TEST_DEPS = [
     "@lluvia//lluvia/cpp/core:core_cc_library",
@@ -39,12 +41,8 @@ py_test(
         ":RGBA2Gray_runfiles",
         "//lluvia/resources:resources"
     ],
-    # deps = PY_TEST_DEPS,
-    legacy_create_init = False,
-    deps = [
-        "//lluvia/python/src:pyx_library",
-        "@rules_python//python/runfiles",
-    ]
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
 )
 
 ll_node(

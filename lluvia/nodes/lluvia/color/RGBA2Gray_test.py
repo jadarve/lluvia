@@ -3,25 +3,23 @@ import pytest
 import numpy as np
 import lluvia as ll
 import lluvia.util as ll_util
+import lluvia_test as ll_test
 
-from rules_python.python.runfiles import runfiles
 
 def test_goodUse():
 
-    r = runfiles.Create()
-    programPath = r.Rlocation('lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.comp.spv')
-    scriptPath = r.Rlocation('lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.lua')
     nodeName = 'lluvia/color/RGBA2Gray'
-    programName = 'lluvia/color/RGBA2Gray.comp'
 
     session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
-    memory = session.createMemory(flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
-
-    program = session.createProgram(programPath)
-    session.setProgram(programName, program)
-    session.scriptFile(scriptPath)
+    ll_test.loadNode(session,
+                  programPath='lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.comp.spv',
+                  programName='lluvia/color/RGBA2Gray.comp',
+                  scriptPath='lluvia/lluvia/nodes/lluvia/color/RGBA2Gray.lua'
+    )
     
     node = session.createComputeNode(nodeName)
+
+    memory = session.createMemory(flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
 
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
     in_rgba = memory.createImageViewFromHost(imgRGBA)
