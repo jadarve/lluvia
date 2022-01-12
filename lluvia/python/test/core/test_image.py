@@ -1,10 +1,8 @@
 import pytest
 import numpy as np
-
+import lluvia as ll
 
 def test_create():
-
-    import lluvia as ll
 
     session = ll.createSession(loadNodeLibrary = False)
 
@@ -37,8 +35,6 @@ def test_create():
 
 def test_incorrectSize():
 
-    import lluvia as ll
-
     session = ll.createSession(loadNodeLibrary = False)
 
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
@@ -63,8 +59,6 @@ def test_incorrectSize():
 
 
 def test_createFromHost():
-
-    import lluvia as ll
     import lluvia.util as ll_util
 
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
@@ -86,8 +80,6 @@ def test_createFromHost():
     assert((hostImg[:] == imgRGBA[:]).all())
 
 def test_fromAndToHost():
-
-    import lluvia as ll
     import lluvia.util as ll_util
 
     session = ll.createSession(loadNodeLibrary=False)
@@ -108,8 +100,6 @@ def test_fromAndToHost():
 
 def test_changeLayout():
 
-    import lluvia as ll
-
     session = ll.createSession(loadNodeLibrary=False)
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
@@ -120,8 +110,6 @@ def test_changeLayout():
 
 
 def test_clear():
-
-    import lluvia as ll
 
     session = ll.createSession(loadNodeLibrary=False)
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
@@ -135,8 +123,5 @@ def test_clear():
     assert((hostImg[:] == 0).all())
 
 if __name__ == "__main__":
-
-    from config import add_lluvia_import_path
-    add_lluvia_import_path()
 
     raise SystemExit(pytest.main([__file__]))

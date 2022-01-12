@@ -1,28 +1,13 @@
-load("@rules_python//python:defs.bzl", "py_library", "py_test")
-
-TEST_DEPS = [
-    ":config_test",
-    "@rules_python//python/runfiles"
-]
-
-py_library(
-    name = "config_test",
-    srcs = [
-        "config.py",
-    ],
-    visibility = ["//visibility:public"]
-)
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
 py_test (
     name = "test_session",
     srcs = [
         "test_session.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
-    data = [
-        "//lluvia/python/src:pyx_library"
-    ]
+    deps = PY_TEST_DEPS,
 )
 
 py_test (
@@ -30,11 +15,8 @@ py_test (
     srcs = [
         "test_memory.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
-    data = [
-        "//lluvia/python/src:pyx_library"
-    ]
+    deps = PY_TEST_DEPS,
 )
 
 py_test (
@@ -42,11 +24,8 @@ py_test (
     srcs = [
         "test_buffer.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
-    data = [
-        "//lluvia/python/src:pyx_library"
-    ]
+    deps = PY_TEST_DEPS,
 )
 
 py_test (
@@ -54,12 +33,11 @@ py_test (
     srcs = [
         "test_image.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
     data = [
-        "//lluvia/python/src:pyx_library",
         "//lluvia/resources:resources",
-    ]
+    ],
+    deps = PY_TEST_DEPS,
 )
 
 py_test (
@@ -67,12 +45,11 @@ py_test (
     srcs = [
         "test_image_view.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
     data = [
-        "//lluvia/python/src:pyx_library",
         "//lluvia/resources:resources",
-    ]
+    ],
+    deps = PY_TEST_DEPS,
 )
 
 py_test (
@@ -80,12 +57,11 @@ py_test (
     srcs = [
         "test_duration.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
     data = [
-        "//lluvia/python/src:pyx_library",
         "//lluvia/resources:resources",
-    ]
+    ],
+    deps = PY_TEST_DEPS,
 )
 
 py_test (
@@ -93,9 +69,8 @@ py_test (
     srcs = [
         "test_compute.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
-    data = [
+    deps = [
         "//lluvia/python/src:pyx_library"
     ]
 )
@@ -105,10 +80,9 @@ py_test (
     srcs = [
         "test_load_library.py"
     ],
-    deps = TEST_DEPS,
     legacy_create_init = False,
     data = [
-        "//lluvia/python/src:pyx_library",
         "//lluvia/cpp/core/test/nodes:test_node_library",
-    ]
+    ],
+    deps = PY_TEST_DEPS,
 )

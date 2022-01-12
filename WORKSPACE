@@ -17,11 +17,11 @@ lluvia_workspace()
 ###########################################################
 # Python configuration
 ###########################################################
-git_repository(
+http_archive(
     name = "rules_python",
-    remote = "https://github.com/bazelbuild/rules_python.git",
-    commit = "6ed1fe53f8b36ecd404d98634d8e7411531cd6f8",
-    shallow_since = "1564776078 -0400",
+    sha256 = "a30abdfc7126d497a7698c29c46ea9901c6392d6ed315171a6df5ce433aa4502",
+    strip_prefix = "rules_python-0.6.0",
+    url = "https://github.com/bazelbuild/rules_python/archive/0.6.0.tar.gz",
 )
 
 # CONFIGURE: go to platform/values.bzl and change the paths
@@ -33,7 +33,7 @@ load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
 # Only needed if using the packaging rules.
-load("@rules_python//python:pip.bzl", "pip_repositories", "pip_import")
+load("@rules_python//python:pip.bzl", "pip_repositories")
 pip_repositories()
 
 # pip_import (

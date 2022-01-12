@@ -1,8 +1,6 @@
 
 import pytest
-import sys
-import os
-
+import lluvia as ll
 
 def test_memoryFlags():
     """
@@ -16,8 +14,6 @@ def test_memoryFlags():
         There must be at least one memory type with the
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
     """
-
-    import lluvia as ll
 
     session = ll.createSession(loadNodeLibrary=False)
     assert(session is not None)
@@ -41,8 +37,6 @@ def test_memoryFlags():
 
 def test_createMemoryWithDefaultValues():
 
-    import lluvia as ll
-
     session = ll.createSession(loadNodeLibrary=False)
     assert(session is not None)
 
@@ -51,8 +45,6 @@ def test_createMemoryWithDefaultValues():
 
 
 def test_createHostMemory():
-
-    import lluvia as ll
 
     session = ll.createSession(loadNodeLibrary=False)
     assert(session is not None)
@@ -65,8 +57,6 @@ def test_createHostMemory():
 
 
 def test_createDeviceMemory():
-    
-    import lluvia as ll
 
     session = ll.createSession(loadNodeLibrary=False)
     assert(session is not None)
@@ -78,8 +68,5 @@ def test_createDeviceMemory():
 
 
 if __name__ == "__main__":
-
-    from config import add_lluvia_import_path
-    add_lluvia_import_path()
 
     raise SystemExit(pytest.main([__file__]))

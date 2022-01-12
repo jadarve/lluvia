@@ -1,10 +1,8 @@
 import pytest
 import numpy as np
-
+import lluvia as ll
 
 def test_compile():
-
-    import lluvia as ll
 
     session = ll.createSession(loadNodeLibrary = False)
     memory = session.createMemory()
@@ -67,8 +65,5 @@ def test_compile():
 
 
 if __name__ == "__main__":
-
-    from config import add_lluvia_import_path
-    add_lluvia_import_path()
 
     raise SystemExit(pytest.main([__file__]))

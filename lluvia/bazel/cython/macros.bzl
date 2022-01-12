@@ -10,6 +10,7 @@ def pyx_library(
         deps = [],
         py_deps = [],
         srcs = [],
+        imports = [],
         testonly = False,
         srcs_version = "PY2AND3",
         directives = [
@@ -37,6 +38,8 @@ def pyx_library(
             Pure Python dependencies of the final library.
         srcs: list of files.
             .py, .pyx, or .pxd files to either compile or pass through.
+        imports: list of strings
+            List of import paths passed to the py_library target.
         testonly: boolean.
             Defaults to False.
         srcs_version: str.
@@ -142,6 +145,7 @@ def pyx_library(
         name = name,
         srcs = py_srcs,
         deps = py_deps,
+        imports = imports,
         srcs_version = srcs_version,
         data = pxd_srcs + shared_objects,
         testonly = testonly,

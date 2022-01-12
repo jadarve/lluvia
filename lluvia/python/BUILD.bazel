@@ -1,4 +1,4 @@
-load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
+load("@rules_python//python:packaging.bzl", "py_package", "py_wheel")
 load("@lluvia//:version.bzl", "VERSION")
 
 py_package(

@@ -1,9 +1,12 @@
 """
 """
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@rules_python//python:defs.bzl", "py_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
 
 CC_TEST_DEPS = [
     "@lluvia//lluvia/cpp/core:core_cc_library",
@@ -22,13 +25,24 @@ ll_node(
 )
 
 cc_test(
-    name = "RGBA2Gray_test_cc",
+    name = "RGBA2Gray_cc_test",
     srcs = ["RGBA2Gray_test.cpp"],
     copts = CC_TEST_COPTS,
     data = [
         ":RGBA2Gray_runfiles",
     ],
     deps = CC_TEST_DEPS,
+)
+
+py_test(
+    name = "RGBA2Gray_test",
+    srcs = ["RGBA2Gray_test.py"],
+    data = [
+        ":RGBA2Gray_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
 )
 
 ll_node(
@@ -42,13 +56,24 @@ ll_node(
 )
 
 cc_test(
-    name = "RGBA2HSVA_test_cc",
+    name = "RGBA2HSVA_cc_test",
     srcs = ["RGBA2HSVA_test.cpp"],
     copts = CC_TEST_COPTS,
     data = [
         ":RGBA2HSVA_runfiles",
     ],
     deps = CC_TEST_DEPS,
+)
+
+py_test(
+    name = "RGBA2HSVA_test",
+    srcs = ["RGBA2HSVA_test.py"],
+    data = [
+        ":RGBA2HSVA_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
 )
 
 ll_node(
@@ -62,11 +87,22 @@ ll_node(
 )
 
 cc_test(
-    name = "HSVA2RGBA_test_cc",
+    name = "HSVA2RGBA_cc_test",
     srcs = ["HSVA2RGBA_test.cpp"],
     copts = CC_TEST_COPTS,
     data = [
         ":HSVA2RGBA_runfiles",
     ],
     deps = CC_TEST_DEPS,
+)
+
+py_test(
+    name = "HSVA2RGBA_test",
+    srcs = ["HSVA2RGBA_test.py"],
+    data = [
+        ":HSVA2RGBA_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
 )
