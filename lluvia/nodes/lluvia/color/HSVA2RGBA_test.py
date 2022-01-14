@@ -12,9 +12,9 @@ def test_goodUse():
 
     session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     ll_test.loadNode(session,
+                     builderPath='lluvia/lluvia/nodes/lluvia/color/HSVA2RGBA.lua',
                      programPath='lluvia/lluvia/nodes/lluvia/color/HSVA2RGBA.comp.spv',
-                     programName='lluvia/color/HSVA2RGBA.comp',
-                     scriptPath='lluvia/lluvia/nodes/lluvia/color/HSVA2RGBA.lua'
+                     programName='lluvia/color/HSVA2RGBA.comp'
                      )
 
     node = session.createComputeNode(nodeName)

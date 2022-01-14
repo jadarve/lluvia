@@ -9,6 +9,9 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2Gray",
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2HSVA",
         "@lluvia//lluvia/nodes/lluvia/color:HSVA2RGBA",
+        "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleX_r8ui",
+        "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleY_r8ui",
+        "@lluvia//lluvia/nodes/lluvia/imgproc:ImagePyramid_r8ui",
     ],
     visibility = ["//visibility:public"]
 )

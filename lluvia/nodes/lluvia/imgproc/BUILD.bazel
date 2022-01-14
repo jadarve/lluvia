@@ -1,0 +1,70 @@
+"""
+"""
+
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
+
+ll_node(
+    name = "ImageDownsampleX_r8ui",
+    builder = "ImageDownsampleX_r8ui.lua",
+    shader = "ImageDownsampleX_r8ui.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ImageDownsampleX_r8ui_test",
+    srcs = ["ImageDownsampleX_r8ui_test.py"],
+    data = [
+        ":ImageDownsampleX_r8ui_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "ImageDownsampleY_r8ui",
+    builder = "ImageDownsampleY_r8ui.lua",
+    shader = "ImageDownsampleY_r8ui.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ImageDownsampleY_r8ui_test",
+    srcs = ["ImageDownsampleY_r8ui_test.py"],
+    data = [
+        ":ImageDownsampleY_r8ui_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "ImagePyramid_r8ui",
+    builder = "ImagePyramid_r8ui.lua",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ImagePyramid_r8ui_test",
+    srcs = ["ImagePyramid_r8ui_test.py"],
+    data = [
+        ":ImagePyramid_r8ui_runfiles",
+        ":ImageDownsampleX_r8ui_runfiles",
+        ":ImageDownsampleY_r8ui_runfiles",
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
