@@ -78,4 +78,4 @@ function builder.onNodeInit(node)
 end
 
 -- register builder in the system
-ll.registerNodeBuilder(builder.name, builder)
+ll.registerNodeBuilder(builder)

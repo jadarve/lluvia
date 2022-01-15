@@ -44,6 +44,7 @@ TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
 
     constexpr auto lua = R"(
         local builder = ll.class(ll.ComputeNodeBuilder)
+        builder.name = 'TestNode'
 
         function builder.newDescriptor() 
             
@@ -64,7 +65,7 @@ TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
             ll.logd('TestNode', 'onNodeInit')
         end
 
-        ll.registerNodeBuilder('TestNode', builder)
+        ll.registerNodeBuilder(builder)
 
     )";
 

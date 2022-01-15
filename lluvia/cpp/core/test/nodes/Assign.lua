@@ -1,4 +1,5 @@
 local builder = ll.class(ll.ComputeNodeBuilder)
+builder.name = 'nodes/Assign'
 
 function builder.newDescriptor() 
     
@@ -23,4 +24,4 @@ function builder.onNodeInit(node)
     node:configureGridShape(ll.vec3ui.new(N, 1, 1))
 end
 
-ll.registerNodeBuilder('nodes/Assign', builder)
+ll.registerNodeBuilder(builder)

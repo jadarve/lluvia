@@ -102,6 +102,7 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode") {
     // register the node builder
     session->script(R"(
 local builder = ll.class(ll.ComputeNodeBuilder)
+builder.name = 'assign'
 
 function builder.newDescriptor() 
     
@@ -128,7 +129,7 @@ function builder.onNodeInit(node)
 
 end
 
-ll.registerNodeBuilder('assign', builder)
+ll.registerNodeBuilder(builder)
         )");
 
     auto desc = session->createComputeNodeDescriptor("assign");

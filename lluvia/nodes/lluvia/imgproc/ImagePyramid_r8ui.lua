@@ -111,4 +111,4 @@ function builder.onNodeRecord(node, cmdBuffer)
 end
 
 
-ll.registerNodeBuilder(builder.name, builder)
+ll.registerNodeBuilder(builder)
