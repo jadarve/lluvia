@@ -19,7 +19,7 @@ from lluvia.core.image.image_layout cimport _ImageLayout
 from lluvia.core.duration cimport _Duration
 from lluvia.core.session cimport Session
 
-from lluvia.core.node cimport _ComputeNode
+from lluvia.core.node cimport _ComputeNode, _ContainerNode
 
 cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
 
@@ -29,6 +29,7 @@ cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
         void end() except +
 
         void run(const _ComputeNode& node) except +
+        void run(const _ContainerNode& node) except +
 
         void copyBuffer(const _Buffer& src, const _Buffer& dst) except +
         void copyBufferToImage(const _Buffer& src, const _Image& dst) except +

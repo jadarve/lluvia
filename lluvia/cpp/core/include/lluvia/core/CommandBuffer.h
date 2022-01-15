@@ -23,6 +23,7 @@ class CommandPool;
 
 class Buffer;
 class ComputeNode;
+class ContainerNode;
 class Duration;
 class Image;
 class ImageView;
@@ -103,6 +104,12 @@ public:
     */
     void run(const ll::ComputeNode& node);
 
+    /**
+    @brief      Records running a ll::ContainerNode
+
+    @param[in]  node  The node
+    */
+    void run(const ll::ContainerNode& node);
 
     /**
     @brief      Copies \p src buffer into \p dst.
