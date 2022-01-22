@@ -26,3 +26,143 @@ py_test(
     deps = PY_TEST_DEPS,
     legacy_create_init = False
 )
+
+ll_node(
+    name = "FlowPredictPayloadX",
+    builder = "FlowPredictPayloadX.lua",
+    shader = "FlowPredictPayloadX.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "FlowPredictPayloadX_test",
+    srcs = ["FlowPredictPayloadX_test.py"],
+    data = [
+        ":FlowPredictPayloadX_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowPredictPayloadY",
+    builder = "FlowPredictPayloadY.lua",
+    shader = "FlowPredictPayloadY.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "FlowPredictPayloadY_test",
+    srcs = ["FlowPredictPayloadY_test.py"],
+    data = [
+        ":FlowPredictPayloadY_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowPredictX",
+    builder = "FlowPredictX.lua",
+    shader = "FlowPredictX.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "FlowPredictX_test",
+    srcs = ["FlowPredictX_test.py"],
+    data = [
+        ":FlowPredictX_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowPredictY",
+    builder = "FlowPredictY.lua",
+    shader = "FlowPredictY.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "FlowPredictY_test",
+    srcs = ["FlowPredictY_test.py"],
+    data = [
+        ":FlowPredictY_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowSmooth",
+    builder = "FlowSmooth.lua",
+    shader = "FlowSmooth.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "FlowSmooth_test",
+    srcs = ["FlowSmooth_test.py"],
+    data = [
+        ":FlowSmooth_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowUpdate",
+    builder = "FlowUpdate.lua",
+    shader = "FlowUpdate.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "FlowUpdate_test",
+    srcs = ["FlowUpdate_test.py"],
+    data = [
+        ":FlowUpdate_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowUpdateDelta",
+    builder = "FlowUpdateDelta.lua",
+    shader = "FlowUpdateDelta.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "FlowUpdateDelta_test",
+    srcs = ["FlowUpdateDelta_test.py"],
+    data = [
+        ":FlowUpdateDelta_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
