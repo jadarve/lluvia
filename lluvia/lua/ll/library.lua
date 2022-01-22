@@ -35,7 +35,14 @@ end
 
 
 function ll.getNodeBuilder(name)
-    return ll.nodeBuilders[name]
+    
+    local builder = ll.nodeBuilders[name]
+    
+    if builder == nil then
+        error('builder not found: ' .. name)
+    end
+
+    return builder
 end
 
 

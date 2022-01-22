@@ -51,10 +51,7 @@ py_test(
 ll_node(
     name = "ImagePyramid_r8ui",
     builder = "ImagePyramid_r8ui.lua",
-    visibility = ["//visibility:public"],
-    deps = [
-        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
-    ],
+    visibility = ["//visibility:public"]
 )
 
 py_test(

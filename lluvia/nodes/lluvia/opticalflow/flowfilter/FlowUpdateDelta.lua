@@ -26,7 +26,7 @@ in_delta_flow : Imageview
 in_gray_old : ImageView
     r32f image. The input gray-scale image at current time step.
 
-in_flow : Imageview
+in_flow : SampledImageview
     rg32f image. The current estimation of the optical flow from a level
     above in the pyramid. This image view has half the resolution
     of the other inputs.

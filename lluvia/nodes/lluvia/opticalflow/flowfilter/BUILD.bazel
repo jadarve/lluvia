@@ -166,3 +166,114 @@ py_test(
     deps = PY_TEST_DEPS,
     legacy_create_init = False
 )
+
+ll_node(
+    name = "FlowPredict",
+    builder = "FlowPredict.lua",
+    visibility = ["//visibility:public"]
+)
+
+py_test(
+    name = "FlowPredict_test",
+    srcs = ["FlowPredict_test.py"],
+    data = [
+        ":FlowPredict_runfiles",
+        ":FlowPredictX_runfiles",
+        ":FlowPredictY_runfiles",
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowPredictPayload",
+    builder = "FlowPredictPayload.lua",
+    visibility = ["//visibility:public"]
+)
+
+py_test(
+    name = "FlowPredictPayload_test",
+    srcs = ["FlowPredictPayload_test.py"],
+    data = [
+        ":FlowPredictPayload_runfiles",
+        ":FlowPredictPayloadX_runfiles",
+        ":FlowPredictPayloadY_runfiles",
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowFilterSimple",
+    builder = "FlowFilterSimple.lua",
+    visibility = ["//visibility:public"]
+)
+
+py_test(
+    name = "FlowFilterSimple_test",
+    srcs = ["FlowFilterSimple_test.py"],
+    data = [
+        ":FlowFilterSimple_runfiles",
+        ":FlowPredict_runfiles",
+        ":FlowPredictX_runfiles",
+        ":FlowPredictY_runfiles",
+        ":FlowUpdate_runfiles",
+        ":FlowSmooth_runfiles",
+        ":ImageModel_runfiles",
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowFilterDelta",
+    builder = "FlowFilterDelta.lua",
+    visibility = ["//visibility:public"]
+)
+
+py_test(
+    name = "FlowFilterDelta_test",
+    srcs = ["FlowFilterDelta_test.py"],
+    data = [
+        ":FlowFilterDelta_runfiles",
+        ":FlowPredictPayload_runfiles",
+        ":FlowPredictPayloadX_runfiles",
+        ":FlowPredictPayloadY_runfiles",
+        ":FlowUpdateDelta_runfiles",
+        ":FlowSmooth_runfiles",
+        ":ImageModel_runfiles",
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "FlowFilter",
+    builder = "FlowFilter.lua",
+    visibility = ["//visibility:public"]
+)
+
+py_test(
+    name = "FlowFilter_test",
+    srcs = ["FlowFilter_test.py"],
+    data = [
+        ":FlowFilter_runfiles",
+        ":FlowFilterSimple_runfiles",
+        ":FlowFilterDelta_runfiles",
+        ":FlowPredict_runfiles",
+        ":FlowPredictX_runfiles",
+        ":FlowPredictY_runfiles",
+        ":FlowUpdate_runfiles",
+        ":FlowPredictPayload_runfiles",
+        ":FlowPredictPayloadX_runfiles",
+        ":FlowPredictPayloadY_runfiles",
+        ":FlowUpdateDelta_runfiles",
+        ":FlowSmooth_runfiles",
+        ":ImageModel_runfiles",
+        "@lluvia//lluvia/nodes/lluvia/imgproc:ImagePyramid_r8ui_runfiles",
+        "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleX_r8ui_runfiles",
+        "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleY_r8ui_runfiles",
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)

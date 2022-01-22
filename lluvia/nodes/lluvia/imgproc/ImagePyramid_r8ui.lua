@@ -24,6 +24,10 @@ out_gray_0 : ImageView.
     r8ui image. The base level of the pyramid. This corresponds to in_gray.
     Other levels are named `out_gray_1`, to `out_gray_{levels - 1}`
 
+out_gray : ImageView
+    r8ui image. The output at the top level of the pyramid. This is equivalent
+    to `out_gray_{levels - 1}`
+
 ]]
 
 function builder.newDescriptor()

@@ -29,7 +29,7 @@ out_gray : ImageView
     r32f image. Predicted scalar field.
 
 out_vector : ImageView
-    rg32f image. 
+    rg32f image. Predicted vector field.
 
 ]]
 
