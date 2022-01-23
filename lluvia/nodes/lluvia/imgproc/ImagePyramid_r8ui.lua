@@ -61,6 +61,7 @@ function builder.onNodeInit(node)
     -- Pass through the input to the output
     if levels == 1 then
         node:bind('out_gray_0', in_gray)
+        node:bind('out_gray', in_gray)
     end
 
     for i = 1, levels -1 do

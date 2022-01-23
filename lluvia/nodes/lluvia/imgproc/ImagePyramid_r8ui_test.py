@@ -48,6 +48,15 @@ def test_deafaultLevelsValue():
     assert(out_gray_0.channelType == ll.ChannelType.Uint8)
     assert(out_gray_0.channels == 1)
 
+    # top level alias
+    out_gray = node.getPort('out_gray')
+    assert(out_gray is not None)
+    assert(out_gray.width == in_gray.width)
+    assert(out_gray.height == in_gray.height)
+    assert(out_gray.depth == in_gray.depth)
+    assert(out_gray.channelType == ll.ChannelType.Uint8)
+    assert(out_gray.channels == 1)
+
     session.run(node)
 
     assert(not ll.hasReceivedVulkanWarningMessages())
@@ -86,6 +95,16 @@ def test_withSeveralLevels():
 
         width = np.floor(width / 2.0)
         height = np.floor(height / 2.0)
+    
+    # top level alias
+    out_gray = node.getPort('out_gray')
+    assert(out_gray is not None)
+    assert(out_gray.width == np.floor(in_gray.width / float(2**(levels-1))))
+    assert(out_gray.height == np.floor(in_gray.height / float(2**(levels-1))))
+    assert(out_gray.depth == in_gray.depth)
+    assert(out_gray.channelType == ll.ChannelType.Uint8)
+    assert(out_gray.channels == 1)
+
 
     session.run(node)
 
