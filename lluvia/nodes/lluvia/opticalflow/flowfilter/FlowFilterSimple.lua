@@ -13,7 +13,7 @@ Parameters
 gamma : float. Defaults to 0.01
     The filter gains for the update step.
 
-maxflow : float. Defaults to 1.0
+max_flow : float. Defaults to 1.0
     The max magnitude allowed for the optical flow output.
 
 smooth_iterations : int. Defaults to 1.
@@ -45,7 +45,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:setParameter('maxflow', 1)
+    desc:setParameter('max_flow', 1)
     desc:setParameter('gamma', 0.01)
     desc:setParameter('smooth_iterations', 1)
 
@@ -58,10 +58,10 @@ function builder.onNodeInit(node)
     ll.logd(node.descriptor.builderName, 'onNodeInit')
 
     local gamma = node:getParameter('gamma')
-    local maxflow = node:getParameter('maxflow')
+    local max_flow = node:getParameter('max_flow')
     local smooth_iterations = node:getParameter('smooth_iterations')
 
-    ll.logd(node.descriptor.builderName, 'onNodeInit: maxflow', maxflow)
+    ll.logd(node.descriptor.builderName, 'onNodeInit: max_flow', max_flow)
 
     local in_gray = node:getPort('in_gray')
 
@@ -86,13 +86,13 @@ function builder.onNodeInit(node)
     predict_inflow:changeImageLayout(ll.ImageLayout.General)
 
     local predictor = ll.createContainerNode('lluvia/opticalflow/flowfilter/FlowPredict')
-    predictor:setParameter('maxflow', maxflow)
+    predictor:setParameter('max_flow', max_flow)
     predictor:bind('in_flow', predict_inflow)
     predictor:init()
 
     local update = ll.createComputeNode('lluvia/opticalflow/flowfilter/FlowUpdate')
     update:setParameter('gamma', gamma)
-    update:setParameter('maxflow', maxflow)
+    update:setParameter('max_flow', max_flow)
     update:bind('in_gray', imageModel:getPort('out_gray'))
     update:bind('in_gradient', imageModel:getPort('out_gradient'))
     update:bind('in_flow', predictor:getPort('out_flow'))

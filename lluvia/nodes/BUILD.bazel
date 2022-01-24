@@ -25,7 +25,7 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdate",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdateDelta",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:ImageModel",
-        "@lluvia//lluvia/nodes/lluvia/viz:Vector2DField2RGBA",
+        "@lluvia//lluvia/nodes/lluvia/viz:Flow2RGBA",
     ],
     visibility = ["//visibility:public"]
 )

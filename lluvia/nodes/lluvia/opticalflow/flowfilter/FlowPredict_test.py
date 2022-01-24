@@ -31,7 +31,7 @@ def test_goodUse():
     in_flow = memory.createImageViewFromHost(
         np.zeros((480, 640, 2), dtype=np.float32))
 
-    node.setParameter('maxflow', ll.Parameter(4))
+    node.setParameter('max_flow', ll.Parameter(4))
     node.bind('in_flow', in_flow)
     node.init()
 

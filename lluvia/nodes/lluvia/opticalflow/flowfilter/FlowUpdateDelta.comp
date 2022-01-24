@@ -16,14 +16,14 @@ layout(binding = 7, rg32f) uniform image2D out_delta_flow;
 
 layout(push_constant) uniform const_0 {
     float gamma;
-    float maxflow;
+    float max_flow;
 } params;
 
 
 void main() {
 
     const float gamma = params.gamma;
-    const float maxflow = params.maxflow;
+    const float max_flow = params.max_flow;
 
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(in_gray);
@@ -70,7 +70,7 @@ void main() {
     delta_flow_new = needSanitize? vec2(0) : delta_flow_new;
 
     // truncate
-    delta_flow_new = clamp(delta_flow_new, vec2(-maxflow), vec2(maxflow));
+    delta_flow_new = clamp(delta_flow_new, vec2(-max_flow), vec2(max_flow));
 
     //#################################
     // Optical flow computation
@@ -87,7 +87,7 @@ void main() {
     flow_new = needSanitize? vec2(0) : flow_new;
 
     // truncate
-    flow_new = clamp(flow_new, vec2(-maxflow), vec2(maxflow));
+    flow_new = clamp(flow_new, vec2(-max_flow), vec2(max_flow));
 
     imageStore(out_flow, coords, vec4(flow_new.x, flow_new.y, 0, 0));
     imageStore(out_gray, coords, vec4(gray));

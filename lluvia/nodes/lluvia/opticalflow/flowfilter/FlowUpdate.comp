@@ -11,13 +11,13 @@ layout(binding = 4, rg32f) uniform image2D out_flow;
 
 layout(push_constant) uniform const_0 {
     float gamma;
-    float maxflow;
+    float max_flow;
 } params;
 
 void main() {
 
     const float gamma = params.gamma;
-    const float maxflow = params.maxflow;
+    const float max_flow = params.max_flow;
 
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(in_gray);
@@ -55,7 +55,7 @@ void main() {
 
     vec2 flow_new = rdet * (M * q);
 
-    flow_new = clamp(flow_new, vec2(-maxflow), vec2(maxflow));
+    flow_new = clamp(flow_new, vec2(-max_flow), vec2(max_flow));
 
     // sanitize
     flow_new.x = isinf(flow_new.x) || isnan(flow_new.x)? 0.0f : flow_new.x;

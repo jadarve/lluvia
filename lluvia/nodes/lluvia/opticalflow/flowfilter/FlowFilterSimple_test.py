@@ -48,7 +48,7 @@ def test_goodUse():
     in_gray = memory.createImageViewFromHost(
         np.zeros((480, 640), dtype=np.uint8))
 
-    node.setParameter('maxflow', ll.Parameter(4))
+    node.setParameter('max_flow', ll.Parameter(4))
     node.setParameter('smooth_iterations', ll.Parameter(2))
     node.bind('in_gray', in_gray)
     node.init()

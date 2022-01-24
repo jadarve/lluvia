@@ -84,7 +84,6 @@ def test_multipleLevels():
         np.zeros((480, 640), dtype=np.uint8))
 
     node.setParameter('maxflow', ll.Parameter(4))
-    # node.setParameter('levels', ll.Parameter(1))
     node.setParameter('smooth_iterations', ll.Parameter(2))
     node.bind('in_gray', in_gray)
     node.init()

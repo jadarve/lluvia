@@ -7,13 +7,13 @@ Computes a forward prediction of an optical flow field.
 The prediction is computed as a series of X and Y predictions using
 the FlowPredictX and FlowPredictY compute nodes.
 
-Based on the value of maxflow parameter, the time step dt is calculated as:
+Based on the value of max_flow parameter, the time step dt is calculated as:
 
-dt = 1.0 / ceil(maxflow)
+dt = 1.0 / ceil(max_flow)
 
 Parameters
 ----------
-maxflow : float. Defaults to 1.0
+max_flow : float. Defaults to 1.0
     The max magnitude of any flow vector in in_flow field.
 
 Inputs
@@ -37,7 +37,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(1, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    desc:setParameter('maxflow', 1.0)
+    desc:setParameter('max_flow', 1.0)
 
     return desc
 end
@@ -45,12 +45,12 @@ end
 
 function builder.onNodeInit(node)
 
-    local maxflow = node.descriptor:getParameter('maxflow')
-    ll.logd(node.descriptor.builderName, 'onNodeInit: maxflow:', maxflow)
+    local max_flow = node.descriptor:getParameter('max_flow')
+    ll.logd(node.descriptor.builderName, 'onNodeInit: max_flow:', max_flow)
 
-    -- maxflow could be any floating number. The round-up value
+    -- max_flow could be any floating number. The round-up value
     -- is the number of iterations to propagate.
-    local N = math.ceil(maxflow)
+    local N = math.ceil(max_flow)
 
     local dt = 1.0 / N
     ll.logd(node.descriptor.builderName, 'onNodeInit: dt:', dt)
@@ -96,8 +96,8 @@ function builder.onNodeRecord(node, cmdBuffer)
 
     ll.logd(node.descriptor.builderName, 'onNodeRecord')
 
-    local maxflow = node.descriptor:getParameter('maxflow')
-    local N = math.ceil(maxflow)
+    local max_flow = node.descriptor:getParameter('max_flow')
+    local N = math.ceil(max_flow)
 
     for i = 1, N do
         ll.logd(node.descriptor.builderName, 'onNodeRecord: iteration:', i)

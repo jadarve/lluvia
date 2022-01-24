@@ -9,7 +9,7 @@ Parameters
 gamma : float. Defaults to 0.01
     The filter gains for the update step.
 
-maxflow : float. Defaults to 1.0
+max_flow : float. Defaults to 1.0
     The max magnitude allowed for the optical flow output.
 
 Inputs
@@ -66,7 +66,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(7, 'out_delta_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     desc:setParameter('gamma', 0.01)
-    desc:setParameter('maxflow', 1.0)
+    desc:setParameter('max_flow', 1.0)
 
     return desc
 end
@@ -75,11 +75,11 @@ function builder.onNodeInit(node)
     ll.logd(node.descriptor.builderName, 'onNodeInit')
 
     local gamma = node:getParameter('gamma')
-    local maxflow = node:getParameter('maxflow')
+    local max_flow = node:getParameter('max_flow')
 
     local pushConstants = ll.PushConstants.new()
     pushConstants:pushFloat(gamma)
-    pushConstants:pushFloat(maxflow)
+    pushConstants:pushFloat(max_flow)
 
     local in_flow = node:getPort('in_flow')
     local in_gray = node:getPort('in_gray')
