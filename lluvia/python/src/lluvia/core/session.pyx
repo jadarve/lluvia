@@ -324,7 +324,7 @@ cdef class Session:
         output = list()
         for d in descriptors:
             
-            desc = NodeBuilderDescriptor(NodeType.Compute,
+            desc = NodeBuilderDescriptor(NodeType(<uint32_t> d.nodeType),
                 impl.decodeString(d.name), impl.decodeString(d.summary))
 
             output.append(desc)

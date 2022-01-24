@@ -18,7 +18,7 @@ from lluvia.core.duration cimport Duration
 from lluvia.core.image.image_layout cimport _ImageLayout, ImageLayout
 from lluvia.core.image.image cimport Image
 
-from lluvia.core.node cimport ComputeNode
+from lluvia.core.node cimport ComputeNode, ContainerNode
 
 
 __all__ = ['CommandBuffer']
@@ -189,20 +189,29 @@ cdef class CommandBuffer:
 
         self.__commandBuffer.get().clearImage(deref(img.__image.get()))
 
-    def run(self, ComputeNode node):
+    def run(self, node):
         """
-        Records running a compute node.
-
-        This operation uses node.grid to dispatch the compute shader. After
-        the call of this method, node.grid can be changed to a new value.
+        Records running a compute or container node.
 
         Parameters
         ----------
-        node : ComputeNode.
-            The compute node.
+        node : ComputeNode or ContainerNode.
+            The node to run.
         """
 
-        self.__commandBuffer.get().run(deref(node.__node))
+        cdef ComputeNode computeNode = ComputeNode()
+        cdef ContainerNode containerNode = ContainerNode()
+
+        if type(node) is ComputeNode:
+            computeNode = node
+            self.__commandBuffer.get().run(deref(computeNode.__node))    
+
+        elif type(node) is ContainerNode:
+            containerNode = node
+            self.__commandBuffer.get().run(deref(containerNode.__node))
+        
+        else:
+            raise ValueError('Unknown type, expecing ll.ComputeNode or ll.ContainerNode, got: {0}'.format(type(node)))
 
     def memoryBarrier(self):
         """

@@ -7,8 +7,8 @@ load("@rules_pkg//experimental:pkg_filegroup.bzl", "pkg_filegroup")
 
 def ll_node(
         name,
-        shader,
         builder,
+        shader=None,
         deps = None,
         visibility = None):
     """
@@ -16,36 +16,35 @@ def ll_node(
 
     Args:
         name:
-        shader:
         builder:
+        shader:
         deps:
         visibility:
     """
 
-    shader_name = name + "_shader"
+    srcs = [builder]
 
-    glsl_shader(
-        name = shader_name,
-        shader = shader,
-        deps = deps,
-        visibility = visibility,
-    )
+    if shader != None:
+        shader_name = name + "_shader"
+
+        glsl_shader(
+            name = shader_name,
+            shader = shader,
+            deps = deps,
+            visibility = visibility,
+        )
+
+        srcs.append(shader_name)
 
     pkg_filegroup(
         name = name,
-        srcs = [
-            shader_name,
-            builder,
-        ],
+        srcs = srcs,
         visibility = visibility,
     )
 
     native.filegroup(
         name = name + "_runfiles",
-        srcs = [
-            shader_name,
-            builder,
-        ],
+        srcs = srcs,
         visibility = visibility,
     )
 

@@ -1,0 +1,27 @@
+"""
+"""
+
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
+
+ll_node(
+    name = "Flow2RGBA",
+    builder = "Flow2RGBA.lua",
+    shader = "Flow2RGBA.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "Flow2RGBA_test",
+    srcs = ["Flow2RGBA_test.py"],
+    data = [
+        ":Flow2RGBA_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)

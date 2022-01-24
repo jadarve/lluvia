@@ -28,13 +28,21 @@ function ll.class(base)
 end
 
 
-function ll.registerNodeBuilder(name, builder)
-    ll.nodeBuilders[name] = builder
+function ll.registerNodeBuilder(builder)
+    -- TODO: add validation on builder.name not empty?
+    ll.nodeBuilders[builder.name] = builder
 end
 
 
 function ll.getNodeBuilder(name)
-    return ll.nodeBuilders[name]
+    
+    local builder = ll.nodeBuilders[name]
+    
+    if builder == nil then
+        error('builder not found: ' .. name)
+    end
+
+    return builder
 end
 
 
@@ -156,6 +164,7 @@ ll.ComputeNodeBuilder = ll.class()
 
 ll.ComputeNodeBuilder.type = ll.NodeType.Compute
 ll.ComputeNodeBuilder.doc  = ""
+ll.ComputeNodeDescriptor.name = ""
 
 function ll.ComputeNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')
@@ -173,6 +182,7 @@ ll.ContainerNodeBuilder = ll.class()
 
 ll.ContainerNodeBuilder.type = ll.NodeType.Container
 ll.ContainerNodeBuilder.doc  = ""
+ll.ContainerNodeBuilder.name = ""
 
 function ll.ContainerNodeBuilder.newDescriptor()
     error('newDescriptor must be implemented by child classes')

@@ -2,6 +2,7 @@
 
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/ContainerNode.h"
 #include "lluvia/core/Duration.h"
 #include "lluvia/core/image/Image.h"
 #include "lluvia/core/image/ImageView.h"
@@ -50,6 +51,10 @@ void CommandBuffer::run(const ll::ComputeNode& node) {
     node.record(*this);
 }
 
+void CommandBuffer::run(const ll::ContainerNode& node) {
+
+    node.record(*this);
+}
 
 void CommandBuffer::copyBuffer(const ll::Buffer& src, const ll::Buffer& dst) {
 

@@ -332,7 +332,7 @@ void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::CommandBuffer>("CommandBuffer",
         sol::no_constructor,
-        "run", &ll::CommandBuffer::run,
+        "run",  (void (ll::CommandBuffer::*)(const ll::ComputeNode& node)) &ll::CommandBuffer::run,
         "memoryBarrier", &ll::CommandBuffer::memoryBarrier
         );
 }

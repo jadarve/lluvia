@@ -380,16 +380,17 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
     // validate that imgView can be bound at index position.
     const auto& vkBinding = m_parameterBindings.at(port.binding);
     const auto portType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
-    
-    if (isSampled) {
-        ll::throwSystemErrorIf(portType != ll::PortType::SampledImageView, ll::ErrorCode::PortBindingError,
-            "Port [" + port.name + "] of type ll::Imageview (sampled) cannot be bound at position ["
-            + std::to_string(port.binding) + "] as port type is not ll::PortType::SampledImageView, got: " + std::to_string(static_cast<int32_t>(portType)));
-    }
-    else {
-        ll::throwSystemErrorIf(portType != ll::PortType::ImageView, ll::ErrorCode::PortBindingError,
-            "Port [" + port.name + "] of type ll::Imageview cannot be bound at position ["
-            + std::to_string(port.binding) + "] as port type is not ll::PortType::ImageView, got: " + std::to_string(static_cast<int32_t>(portType)));
+
+    if (portType == ll::PortType::ImageView) {
+        ll::throwSystemErrorIf(isSampled, ll::ErrorCode::PortBindingError,
+            "Port [" + port.name + "] cannot be bound at position [" + std::to_string(port.binding) + 
+            "], expecting ll::PortType::ImageView, got: ll::PortType::SampledImageView");
+
+    } else if(portType == ll::PortType::SampledImageView) {
+        
+        ll::throwSystemErrorIf(!isSampled, ll::ErrorCode::PortBindingError,
+            "Port [" + port.name + "] cannot be bound at position [" + std::to_string(port.binding) + 
+            "], expecting ll::PortType::SampledImageView, got: ll::PortType::ImageView");
     }
 
     // binding

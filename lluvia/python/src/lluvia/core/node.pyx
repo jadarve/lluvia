@@ -118,7 +118,7 @@ cdef class NodeBuilderDescriptor:
             return str(self.__descriptor.summary, 'utf-8')
     
     def __str__(self):
-        return '{0:30s} : {1:9s} : {2:s}'.format(self.name, self.nodeType.name, self.summary)
+        return '{0:40s} : {1:9s} : {2:s}'.format(self.name, self.nodeType.name, self.summary)
 
 cdef class ComputeNodeDescriptor:
 

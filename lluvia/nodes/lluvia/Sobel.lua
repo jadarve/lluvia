@@ -77,4 +77,4 @@ function builder.onNodeInit(node)
     node:configureGridShape(ll.vec3ui.new(out_gray.width, out_gray.height, 1))
 end
 
-ll.registerNodeBuilder(builder.name, builder)
+ll.registerNodeBuilder(builder)
