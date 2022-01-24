@@ -9,7 +9,7 @@ Optical flow filter demo.
 Usage
 -----
 
-LL_PATH='<Lluvia root path>' ./opticalFlow.py \
+./opticalFlow.py \
     --levels=4 \
     --max_flow=10 \
     <INPUT_VIDEO>
@@ -19,59 +19,8 @@ LL_PATH='<Lluvia root path>' ./opticalFlow.py \
 """
 
 import argparse
-import importlib
-import os
-import sys
-
 import cv2
-
-# Lluvia modules, they need to be imported at runtime.
-ll = None
-util = None
-
-
-def importLluvia(basePath):
-
-    global ll
-    global util
-
-    pythonPath = os.path.join(basePath, 'build/python/lib.linux-x86_64-3.6')
-    pythonPathWin = os.path.join(basePath, 'build/python/lib.win-amd64-3.8')
-
-    sys.path.append(pythonPath)
-    sys.path.append(pythonPathWin)
-
-    ll = importlib.import_module('lluvia')
-    util = importlib.import_module('lluvia.util')
-
-
-def initLluvia(basePath):
-
-    glslPath = os.path.join(basePath, 'bazel-bin/samples/opticalFlow/glsl')
-    luaPath = os.path.join(basePath, 'samples/opticalFlow/lua')
-
-    session = ll.createSession()
-    util.loadNodes(session, glslPath, luaPath)
-
-    return session
-
-
-def initFlowFilter(session, args):
-
-    desc = session.createContainerNodeDescriptor('FlowFilter')
-    flowFilter = session.createContainerNode(desc)
-    flowFilter.setParameter('levels', ll.Parameter(args.levels))
-    flowFilter.setParameter('gamma', ll.Parameter(args.gamma))
-    flowFilter.setParameter('gamma_low', ll.Parameter(args.gamma_low))
-    flowFilter.setParameter('max_flow', ll.Parameter(args.max_flow))
-    flowFilter.setParameter('smooth_iterations',
-                            ll.Parameter(args.smooth_iterations))
-
-    desc = session.createComputeNodeDescriptor('Flow2RGBA')
-    flowToColor = session.createComputeNode(desc)
-    flowToColor.setParameter('max_flow', ll.Parameter(args.max_flow))
-
-    return flowFilter, flowToColor
+import lluvia as ll
 
 
 def parseArguments():
@@ -97,25 +46,11 @@ def main():
 
     args = parseArguments()
 
-    lluviaBasePath = None
-    try:
-        lluviaBasePath = os.environ['LL_PATH']
-    except KeyError:
-        print('Error reading LL_PATH environ variable')
-        exit(-1)
+    ###########################################################################
+    session = ll.createSession()
+    memory = session.createMemory([ll.MemoryPropertyFlagBits.DeviceLocal])
 
-    sys.path.append(os.path.join(
-        lluviaBasePath, 'build/python/lib.linux-x86_64-3.6'))
-    # for windows:
-    sys.path.append(os.path.join(
-        lluviaBasePath, 'python/src'))
-
-    importLluvia(lluviaBasePath)
-
-    session = initLluvia(lluviaBasePath)
-    memory = session.createMemory()
-    flowFilter, flowToColor = initFlowFilter(session, args)
-
+    ###########################################################################
     cap = cv2.VideoCapture(args.input_file)
     r, img = cap.read()
     print('IMAGE SHAPE: ', img.shape)
@@ -125,23 +60,42 @@ def main():
         exit(-1)
 
     RGBA = cv2.cvtColor(img, cv2.COLOR_BGR2RGBA)
+    in_rgba = memory.createImageViewFromHost(RGBA)
 
-    in_rgba = memory.createImageFromHost(RGBA).createImageView()
-    flowFilter.bind('in_rgba', in_rgba)
+    ###########################################################################
+    RGBA2Gray = session.createComputeNode('lluvia/color/RGBA2Gray')
+    RGBA2Gray.bind('in_rgba', in_rgba)
+    RGBA2Gray.init()
+
+    flowFilter = session.createContainerNode('lluvia/opticalflow/flowfilter/FlowFilter')
+    flowFilter.setParameter('levels', ll.Parameter(args.levels))
+    flowFilter.setParameter('max_flow', ll.Parameter(args.max_flow))
+    flowFilter.setParameter('smooth_iterations', ll.Parameter(args.smooth_iterations))
+    flowFilter.setParameter('gamma', ll.Parameter(args.gamma))
+    flowFilter.setParameter('gamma_low', ll.Parameter(args.gamma_low))
+    flowFilter.bind('in_gray', RGBA2Gray.getPort('out_gray'))
     flowFilter.init()
 
-    flowToColor.bind('in_flow', flowFilter.getPort('out_flow'))
-    flowToColor.init()
+    flow2RGBA = session.createComputeNode('lluvia/viz/Flow2RGBA')
+    flow2RGBA.setParameter('max_flow', ll.Parameter(args.max_flow))
+    flow2RGBA.bind('in_flow', flowFilter.getPort('out_flow'))
+    flow2RGBA.init()
 
+    ###########################################################################
     duration = session.createDuration()
 
     cmdBuffer = session.createCommandBuffer()
     cmdBuffer.begin()
+    cmdBuffer.run(RGBA2Gray)
+    cmdBuffer.memoryBarrier()
+
+    # Duration is recorded for the actual algorithm execution, not the input/output conversions
     cmdBuffer.durationStart(duration)
-    flowFilter.record(cmdBuffer)
+    cmdBuffer.run(flowFilter)
     cmdBuffer.memoryBarrier()
     cmdBuffer.durationEnd(duration)
-    cmdBuffer.run(flowToColor)
+
+    cmdBuffer.run(flow2RGBA)
     cmdBuffer.end()
 
     width = in_rgba.width
@@ -158,8 +112,8 @@ def main():
         in_rgba.fromHost(RGBA)
         session.run(cmdBuffer)
 
-        flowColor = flowToColor.getPort('out_rgba').toHost()
-        flowBGR = cv2.cvtColor(flowColor, cv2.COLOR_RGBA2BGR)
+        out_rgba = flow2RGBA.getPort('out_rgba').toHost()
+        flowBGR = cv2.cvtColor(out_rgba, cv2.COLOR_RGBA2BGR)
 
         ms = duration.nanoseconds * 1e-6
 
