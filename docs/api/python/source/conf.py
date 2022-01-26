@@ -14,13 +14,13 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 import sys
-sys.path.append('../../../../bazel-bin/lluvia/python/')
+sys.path.append('build/python/')
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'lluvia'
-copyright = '2020, Juan David Adarve Bermudez'
+copyright = '2022, Juan David Adarve Bermudez'
 author = 'Juan David Adarve Bermudez'
 
 # The full version, including alpha/beta/rc tags
