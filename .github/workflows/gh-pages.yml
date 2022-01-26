@@ -34,7 +34,7 @@ jobs:
           git submodule update --init --recursive --depth 1
           cd docs/site
           npm install
-          hugo --minify
+          hugo --environment "gh-pages" --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

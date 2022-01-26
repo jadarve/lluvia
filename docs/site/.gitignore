@@ -5,3 +5,6 @@ resources/_gen/
 
 # NPM
 node_modules/
+
+# generated API docs
+static/api/
