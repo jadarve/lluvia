@@ -28,6 +28,11 @@ jobs:
           mkdir -p docs/site/static/api/cpp
           cd docs/api/cpp
           doxygen Doxyfile
+      
+      - name: Generate Python API
+        run: |
+          bazel build //lluvia/python:lluvia_wheel
+          pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl -t docs/api/python/build/python
 
       - name: Build Site
         run: |
