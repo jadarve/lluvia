@@ -23,6 +23,7 @@ jobs:
 
       - name: Generate CPP API
         run: |
+          sudo apt install doxygen
           # output for the generated doc
           mkdir -p docs/site/static/api/cpp
           cd docs/api/cpp
