@@ -23,6 +23,7 @@ jobs:
 
       - name: Build
         run: |
+          git submodule update --init --recursive --depth 1
           cd docs/site
           npm install
           hugo --minify
