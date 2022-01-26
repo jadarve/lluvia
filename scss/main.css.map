@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "main.css",
-	"sourceRoot": "/home/runner/work/lluvia/lluvia/docs/site",
+	"sourceRoot": "/home/runner/work/lluvia/lluvia/doc/site",
 	"sources": [
 		"themes/docsy/assets/scss/main.scss",
 		"themes/docsy/assets/scss/support/_functions.scss",
