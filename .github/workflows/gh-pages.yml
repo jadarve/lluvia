@@ -21,7 +21,14 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
-      - name: Build
+      - name: Generate CPP API
+        run: |
+          # output for the generated doc
+          mkdir -p docs/site/static/api/cpp
+          cd docs/api/cpp
+          doxygen Doxyfile
+
+      - name: Build Site
         run: |
           git submodule update --init --recursive --depth 1
           cd docs/site
