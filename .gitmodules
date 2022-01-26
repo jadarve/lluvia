@@ -1,3 +1,3 @@
-[submodule "docs/site/themes/docsy"]
-	path = docs/site/themes/docsy
+[submodule "doc/site/themes/docsy"]
+	path = doc/site/themes/docsy
 	url = https://github.com/google/docsy.git

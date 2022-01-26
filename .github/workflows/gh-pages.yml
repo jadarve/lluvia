@@ -43,24 +43,24 @@ jobs:
         run: |
           sudo apt install doxygen graphviz
           # output for the generated doc
-          mkdir -p docs/site/static/api/cpp
-          cd docs/api/cpp
+          mkdir -p doc/site/static/api/cpp
+          cd doc/api/cpp
           doxygen Doxyfile
       
       - name: Generate Python API
         run: |
           bazel build //lluvia/python:lluvia_wheel
-          pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t docs/api/python/build/python
+          pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/python/build/python
 
-          mkdir -p docs/site/static/api/
-          cd docs/api/python
+          mkdir -p doc/site/static/api/
+          cd doc/api/python
           make html
           mv build/html ../../site/static/api/python
 
       - name: Build Site
         run: |
           git submodule update --init --recursive --depth 1
-          cd docs/site
+          cd doc/site
           npm install
           hugo --environment "gh-pages" --minify
 
@@ -69,4 +69,4 @@ jobs:
         # if: github.ref == 'refs/heads/107_docs'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/site/public
+          publish_dir: ./doc/site/public
