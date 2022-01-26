@@ -13,7 +13,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           sudo apt install -y python3.8-dev
-          pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe imageio sphinx sphinxcontrib-napoleon
+          pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe imageio sphinx sphinxcontrib-napoleon sphinx-rtd-theme
       - name: Install Mesa
         run: |
           sudo add-apt-repository ppa:kisak/kisak-mesa
