@@ -14,21 +14,26 @@
 <link rel=icon type=image/png href=/lluvia/favicons/android-96x96.png sizes=96x96>
 <link rel=icon type=image/png href=/lluvia/favicons/android-144x144.png sizes=144x144>
 <link rel=icon type=image/png href=/lluvia/favicons/android-192x192.png sizes=192x192>
-<title>404 Page not found | Lluvia</title>
-<meta name=description content>
-<meta property="og:title" content="404 Page not found">
+<title>Node system | Lluvia</title>
+<meta name=description content="%%{init: {'theme': 'neutral', 'themeVariables': {'fontSize': '32px', 'primaryColor': '#FF0000'}}}%%
+
+classDiagram
+
+    class Session
+    class Memory …">
+<meta property="og:title" content="Node system">
 <meta property="og:description" content="Lluvia compute engine">
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://jadarve.github.io/lluvia/404.html"><meta property="og:site_name" content="Lluvia">
-<meta itemprop=name content="404 Page not found">
+<meta property="og:url" content="http://jadarve.github.io/lluvia/docs/reference/node_system/"><meta property="og:site_name" content="Lluvia">
+<meta itemprop=name content="Node system">
 <meta itemprop=description content="Lluvia compute engine"><meta name=twitter:card content="summary">
-<meta name=twitter:title content="404 Page not found">
+<meta name=twitter:title content="Node system">
 <meta name=twitter:description content="Lluvia compute engine">
 <link rel=preload href=/lluvia/scss/main.min.c58ce5d45149df8e10859c3eb1022295682982407b61dc69aa80c9ba066ffb49.css as=style>
 <link href=/lluvia/scss/main.min.c58ce5d45149df8e10859c3eb1022295682982407b61dc69aa80c9ba066ffb49.css rel=stylesheet integrity>
 <script src=https://code.jquery.com/jquery-3.6.0.min.js integrity=sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK crossorigin=anonymous></script>
 </head>
-<body class=td-404>
+<body class=td-section>
 <header>
 <nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
 <a class=navbar-brand href=/lluvia/>
@@ -53,15 +58,170 @@
 <div class="navbar-nav d-none d-lg-block"></div>
 </nav>
 </header>
-<div class="container-fluid td-default td-outer">
-<main role=main class=td-main>
-<main id=main>
-<div>
-<h1 id=title>Not found</h1>
-<p>Oops! This page doesn't exist. Try going back to our <a href=/lluvia/>home page</a>.</p>
+<div class="container-fluid td-outer">
+<div class=td-main>
+<div class="row flex-xl-nowrap">
+<aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+<div id=td-sidebar-menu class=td-sidebar__inner>
+<form class="td-sidebar__search d-flex align-items-center">
+<button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-docs-nav aria-expanded=false aria-label="Toggle section navigation">
+</button>
+</form>
+<nav class="collapse td-sidebar-nav" id=td-section-nav>
+<ul class="td-sidebar-nav__section pr-md-3 ul-0">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-lluviadocs-li>
+<a href=/lluvia/docs/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-lluviadocs><span>Docs</span></a>
+<ul class=ul-1>
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsabout-li>
+<a href=/lluvia/docs/about/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsabout><span>About</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsgettingstarted-li>
+<a href=/lluvia/docs/gettingstarted/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsgettingstarted><span>Getting started</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsgettingstartedinstallation-li>
+<a href=/lluvia/docs/gettingstarted/installation/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsgettingstartedinstallation><span>Installation</span></a>
+<ul class="ul-3 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsgettingstartedinstallationlinux-li>
+<a href=/lluvia/docs/gettingstarted/installation/linux/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsgettingstartedinstallationlinux><span>Ubuntu 20.04</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsgettingstartedinstallationwindows-li>
+<a href=/lluvia/docs/gettingstarted/installation/windows/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsgettingstartedinstallationwindows><span>Windows 10</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-lluviadocsreference-li>
+<a href=/lluvia/docs/reference/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreference><span>Reference</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencesession-li>
+<a href=/lluvia/docs/reference/session/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencesession><span>Session</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencememory-li>
+<a href=/lluvia/docs/reference/memory/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencememory><span>Memory</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsreferenceobjects-li>
+<a href=/lluvia/docs/reference/objects/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreferenceobjects><span>Objects</span></a>
+<ul class="ul-3 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferenceobjectsbuffer-li>
+<a href=/lluvia/docs/reference/objects/buffer/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsbuffer><span>Buffer</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferenceobjectsimage-li>
+<a href=/lluvia/docs/reference/objects/image/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsimage><span>Image</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferenceobjectsimage_view-li>
+<a href=/lluvia/docs/reference/objects/image_view/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsimage_view><span>ImageView</span></a>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-lluviadocsreferencenode_system-li>
+<a href=/lluvia/docs/reference/node_system/ class="align-left pl-0 active td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreferencenode_system><span class=td-sidebar-nav-active-item>Node system</span></a>
+<ul class="ul-3 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencenode_systemcompute_node-li>
+<a href=/lluvia/docs/reference/node_system/compute_node/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemcompute_node><span>Compute nodes</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencenode_systemcontainer_node-li>
+<a href=/lluvia/docs/reference/node_system/container_node/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemcontainer_node><span>Container nodes</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencenode_systemrunning-li>
+<a href=/lluvia/docs/reference/node_system/running/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemrunning><span>Running</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsexamples-li>
+<a href=/lluvia/docs/examples/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsexamples><span>Examples</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsexamples1-optical_flow-li>
+<a href=/lluvia/docs/examples/1-optical_flow/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsexamples1-optical_flow><span>Real-time optical flow</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</aside>
+<aside class="d-none d-xl-block col-xl-2 td-sidebar-toc d-print-none">
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+<a href=https://github.com/jadarve/lluvia/tree/master/content/en/docs/reference/node_system/_index.md class=td-page-meta--view target=_blank rel=noopener><i class="fa fa-file-alt fa-fw"></i> View page source</a>
+<a href=https://github.com/jadarve/lluvia/edit/master/content/en/docs/reference/node_system/_index.md class=td-page-meta--edit target=_blank rel=noopener><i class="fa fa-edit fa-fw"></i> Edit this page</a>
+<a href="https://github.com/jadarve/lluvia/new/master/content/en/docs/reference/node_system/_index.md?filename=change-me.md&value=---%0Atitle%3A+%22Long+Page+Title%22%0AlinkTitle%3A+%22Short+Nav+Title%22%0Aweight%3A+100%0Adescription%3A+%3E-%0A+++++Page+description+for+heading+and+indexes.%0A---%0A%0A%23%23+Heading%0A%0AEdit+this+template+to+create+your+new+page.%0A%0A%2A+Give+it+a+good+name%2C+ending+in+%60.md%60+-+e.g.+%60getting-started.md%60%0A%2A+Edit+the+%22front+matter%22+section+at+the+top+of+the+page+%28weight+controls+how+its+ordered+amongst+other+pages+in+the+same+directory%3B+lowest+number+first%29.%0A%2A+Add+a+good+commit+message+at+the+bottom+of+the+page+%28%3C80+characters%3B+use+the+extended+description+field+for+more+detail%29.%0A%2A+Create+a+new+branch+so+you+can+preview+your+new+file+and+request+a+review+via+Pull+Request.%0A" class=td-page-meta--child target=_blank rel=noopener><i class="fa fa-edit fa-fw"></i> Create child page</a>
+<a href="https://github.com/jadarve/lluvia/issues/new?title=Node%20system" class=td-page-meta--issue target=_blank rel=noopener><i class="fab fa-github fa-fw"></i> Create documentation issue</a>
+<a href=https://github.com/jadarve/lluvia/issues/new class=td-page-meta--project-issue target=_blank rel=noopener><i class="fas fa-tasks fa-fw"></i> Create project issue</a>
+</div>
+</aside>
+<main class="col-12 col-md-9 col-xl-8 pl-md-5" role=main>
+<nav aria-label=breadcrumb class=td-breadcrumbs>
+<ol class=breadcrumb>
+<li class=breadcrumb-item>
+<a href=http://jadarve.github.io/lluvia/docs/>Docs</a>
+</li>
+<li class=breadcrumb-item>
+<a href=http://jadarve.github.io/lluvia/docs/reference/>Reference</a>
+</li>
+<li class="breadcrumb-item active" aria-current=page>
+<a href=http://jadarve.github.io/lluvia/docs/reference/node_system/>Node system</a>
+</li>
+</ol>
+</nav>
+<div class=td-content>
+<h1>Node system</h1>
+<header class=article-meta>
+</header>
+<pre tabindex=0><code class=language-mermaid data-lang=mermaid>%%{init: {'theme': 'neutral', 'themeVariables': {'fontSize': '32px', 'primaryColor': '#FF0000'}}}%%
+
+classDiagram
+
+    class Session
+    class Memory
+    class Program
+    
+    class Buffer
+    class Image
+    class ImageView
+
+    class Node
+    class ComputeNode
+    class ContainerNode
+
+    class CommandBuffer
+
+    Session &quot;1&quot; --&gt; &quot;*&quot; Memory
+    Session &quot;1&quot; --&gt; &quot;*&quot; Node
+    Session &quot;1&quot; --&gt; &quot;*&quot; CommandBuffer
+
+    Memory &quot;1&quot; --&gt; &quot;*&quot; Buffer: allocates
+    Memory &quot;1&quot; --&gt; &quot;*&quot; Image: allocates
+    Image &quot;1&quot; --&gt; &quot;*&quot; ImageView: creates
+
+    Node &lt;|-- ComputeNode
+    Node &lt;|-- ContainerNode
+
+    ComputeNode &quot;1&quot; --&gt; &quot;1&quot; Program
+
+    ContainerNode &quot;1&quot; --&gt; &quot;*&quot; ComputeNode: contains
+    ContainerNode &quot;1&quot; --&gt; &quot;*&quot; ContainerNode: contains
+</code></pre>
+<div class=section-index>
+<hr class=panel-line>
+<div class=entry>
+<h5>
+<a href=/lluvia/docs/reference/node_system/compute_node/>Compute nodes</a>
+</h5>
+<p></p>
+</div>
+<div class=entry>
+<h5>
+<a href=/lluvia/docs/reference/node_system/container_node/>Container nodes</a>
+</h5>
+<p></p>
+</div>
+<div class=entry>
+<h5>
+<a href=/lluvia/docs/reference/node_system/running/>Running</a>
+</h5>
+<p></p>
+</div>
+</div>
+<div class="text-muted mt-5 pt-3 border-top">
+Last modified January 25, 2022: <a href=https://github.com/jadarve/lluvia/commit/498b7f2ba5e04b9214c2eef9e00e0c80b8647336>Added docs and theme from lluvia-docs. (498b7f2)</a>
+</div>
 </div>
 </main>
-</main>
+</div>
+</div>
 <footer class="bg-dark py-5 row d-print-none">
 <div class="container-fluid mx-sm-5">
 <div class=row>
