@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImageView &mdash; lluvia 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Memory" href="Memory.html" />
+    <link rel="prev" title="Image" href="Image.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> lluvia
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandBuffer.html">CommandBuffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComputeNode.html">ComputeNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComputeNodeDescriptor.html">ComputeNodeDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ContainerNode.html">ContainerNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ContainerNodeDescriptor.html">ContainerNodeDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Duration.html">Duration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Image.html">Image</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ImageView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MemoryAllocationInfo.html">MemoryAllocationInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Parameter.html">Parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PortDescriptor.html">PortDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Program.html">Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Session.html">Session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../enumerations/index.html">Enumerations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lluvia</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Classes</a> &raquo;</li>
+      <li>ImageView</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/classes/ImageView.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="imageview">
+<h1>ImageView<a class="headerlink" href="#imageview" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lluvia.core.ImageView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">ImageView</span></span><a class="headerlink" href="#lluvia.core.ImageView" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.addressModeU">
+<span class="sig-name descname"><span class="pre">addressModeU</span></span><a class="headerlink" href="#lluvia.core.ImageView.addressModeU" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.addressModeV">
+<span class="sig-name descname"><span class="pre">addressModeV</span></span><a class="headerlink" href="#lluvia.core.ImageView.addressModeV" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.addressModeW">
+<span class="sig-name descname"><span class="pre">addressModeW</span></span><a class="headerlink" href="#lluvia.core.ImageView.addressModeW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.allocationInfo">
+<span class="sig-name descname"><span class="pre">allocationInfo</span></span><a class="headerlink" href="#lluvia.core.ImageView.allocationInfo" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.changeLayout">
+<span class="sig-name descname"><span class="pre">changeLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageLayout</span> <span class="pre">newLayout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.changeLayout" title="Permalink to this definition"></a></dt>
+<dd><p>Changes the layout of the underlying image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>newLayout</strong> (<em>str.</em>) – <dl class="simple">
+<dt>The new layout. Its value must be one of the values defined in lluvia.ImageLayout:</dt><dd><ul class="simple">
+<li><p>Undefined</p></li>
+<li><p>General</p></li>
+<li><p>ColorAttachmentOptimal</p></li>
+<li><p>DepthStencilAttachmentOptimal</p></li>
+<li><p>DepthStencilReadOnlyOptimal</p></li>
+<li><p>ShaderReadOnlyOptimal</p></li>
+<li><p>TransferSrcOptimal</p></li>
+<li><p>TransferDstOptimal</p></li>
+<li><p>Preinitialized</p></li>
+<li><p>PresentSrcKHR</p></li>
+<li><p>SharedPresentKHR</p></li>
+<li><p>DepthReadOnlyStencilAttachmentOptimalKHR</p></li>
+<li><p>DepthAttachmentStencilReadOnlyOptimalKHR</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.channelType">
+<span class="sig-name descname"><span class="pre">channelType</span></span><a class="headerlink" href="#lluvia.core.ImageView.channelType" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#lluvia.core.ImageView.channels" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.clear" title="Permalink to this definition"></a></dt>
+<dd><p>Clears the pixels in the image to zero.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.depth">
+<span class="sig-name descname"><span class="pre">depth</span></span><a class="headerlink" href="#lluvia.core.ImageView.depth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.filterMode">
+<span class="sig-name descname"><span class="pre">filterMode</span></span><a class="headerlink" href="#lluvia.core.ImageView.filterMode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.fromHost">
+<span class="sig-name descname"><span class="pre">fromHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndarray</span> <span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.fromHost" title="Permalink to this definition"></a></dt>
+<dd><p>Copies the content of a numpy array to this image view.</p>
+<p>The shape of the array must comply with the following rules.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>If arr.ndim == 1, then this image must be 1D</dt><dd><p>(height, depth and channels equal to 1) and
+img.width == arr.shape[0]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If arr.ndim == 2, then this image must be 2D</dt><dd><p>(depth and channels equal to 1) and
+img.height == arr.shape[0] and img.width == arr.shape[1].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If arr.ndim == 3, then this image must be 2D (depth equal to 1)</dt><dd><p>with the number of channels equal to arr.shape[2].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If arr.ndim == 4, then this image must be 3D and</dt><dd><p>img.depth == arr.shape[0] and img.height == arr.shape[1] and
+img.width == arr.shape[2] and img.chhanels == arr.chape[3]</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>arr</strong> (<em>numpy.ndarray.</em>) – </p>
+</dd>
+</dl>
+<p>:raises ValueError : if arr does not match this image shape.:</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.height">
+<span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#lluvia.core.ImageView.height" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.image">
+<span class="sig-name descname"><span class="pre">image</span></span><a class="headerlink" href="#lluvia.core.ImageView.image" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.layout">
+<span class="sig-name descname"><span class="pre">layout</span></span><a class="headerlink" href="#lluvia.core.ImageView.layout" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.memory">
+<span class="sig-name descname"><span class="pre">memory</span></span><a class="headerlink" href="#lluvia.core.ImageView.memory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.normalizedCoordinates">
+<span class="sig-name descname"><span class="pre">normalizedCoordinates</span></span><a class="headerlink" href="#lluvia.core.ImageView.normalizedCoordinates" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.sampled">
+<span class="sig-name descname"><span class="pre">sampled</span></span><a class="headerlink" href="#lluvia.core.ImageView.sampled" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#lluvia.core.ImageView.session" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.shape">
+<span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#lluvia.core.ImageView.shape" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.size">
+<span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#lluvia.core.ImageView.size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.toHost">
+<span class="sig-name descname"><span class="pre">toHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndarray</span> <span class="pre">output=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.toHost" title="Permalink to this definition"></a></dt>
+<dd><p>Copies the content of this image view into a numpy host array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>numpy.ndarray. Defaults to None.</em>) – </p>
+</dd>
+</dl>
+<p>:raises ValueError : if output is different than None and does not match this image shape.:</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.usageFlags">
+<span class="sig-name descname"><span class="pre">usageFlags</span></span><a class="headerlink" href="#lluvia.core.ImageView.usageFlags" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.width">
+<span class="sig-name descname"><span class="pre">width</span></span><a class="headerlink" href="#lluvia.core.ImageView.width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Image.html" class="btn btn-neutral float-left" title="Image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Memory.html" class="btn btn-neutral float-right" title="Memory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Juan David Adarve Bermudez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

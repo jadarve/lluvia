@@ -1,8 +1,0 @@
-digraph "Graphical Class Hierarchy"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node0 [label="ll::Buffer::BufferMapDeleter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$dd/d14/structll_1_1Buffer_1_1BufferMapDeleter.html",tooltip="Deleter for unmapping buffers from host memory."];
-}

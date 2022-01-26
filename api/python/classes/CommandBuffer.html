@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CommandBuffer &mdash; lluvia 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ComputeNode" href="ComputeNode.html" />
+    <link rel="prev" title="Buffer" href="Buffer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> lluvia
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Buffer.html">Buffer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CommandBuffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComputeNode.html">ComputeNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComputeNodeDescriptor.html">ComputeNodeDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ContainerNode.html">ContainerNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ContainerNodeDescriptor.html">ContainerNodeDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Duration.html">Duration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageView.html">ImageView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MemoryAllocationInfo.html">MemoryAllocationInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Parameter.html">Parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PortDescriptor.html">PortDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Program.html">Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Session.html">Session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../enumerations/index.html">Enumerations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lluvia</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Classes</a> &raquo;</li>
+      <li>CommandBuffer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/classes/CommandBuffer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="commandbuffer">
+<h1>CommandBuffer<a class="headerlink" href="#commandbuffer" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">CommandBuffer</span></span><a class="headerlink" href="#lluvia.core.CommandBuffer" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.begin">
+<span class="sig-name descname"><span class="pre">begin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.begin" title="Permalink to this definition"></a></dt>
+<dd><p>Begin recording.</p>
+<p>This method should be called before any record operation. Otherwise
+the behaviour is undefined.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.changeImageLayout">
+<span class="sig-name descname"><span class="pre">changeImageLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newLayout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.changeImageLayout" title="Permalink to this definition"></a></dt>
+<dd><p>Changes image layout.</p>
+<p>The actual change in image layout is performed when this command buffer
+is submitted to execution. However, calling <cite>image.getLayout()</cite>
+right after this call will return the new layout value.</p>
+<p>This is necessary to keep track of the current image layout of
+p image parameter after this call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>Image.</em>) – The image.</p></li>
+<li><p><strong>newLayout</strong> (<em>lluvia.ImageLayout.</em>) – <p>The new layout. Its value must be one of the values
+defined in lluvia.ImageLayout:</p>
+<blockquote>
+<div><ul>
+<li><p>Undefined</p></li>
+<li><p>General</p></li>
+<li><p>ShaderReadOnlyOptimal</p></li>
+<li><p>TransferSrcOptimal</p></li>
+<li><p>TransferDstOptimal</p></li>
+<li><p>Preinitialized</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.clearImage">
+<span class="sig-name descname"><span class="pre">clearImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.clearImage" title="Permalink to this definition"></a></dt>
+<dd><p>Clears the pixels of the image to zero.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyBuffer">
+<span class="sig-name descname"><span class="pre">copyBuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyBuffer" title="Permalink to this definition"></a></dt>
+<dd><p>Copies src buffer to dst.</p>
+<p>The parameters must satisfy <cite>dst.size &gt;= src.size</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>Buffer.</em>) – Source buffer.</p></li>
+<li><p><strong>dst</strong> (<em>Buffer.</em>) – Destination buffer.</p></li>
+</ul>
+</dd>
+</dl>
+<p>:raises RuntimeError : if dst.size &lt; src.size:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyBufferToImage">
+<span class="sig-name descname"><span class="pre">copyBufferToImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyBufferToImage" title="Permalink to this definition"></a></dt>
+<dd><p>Copies the content of src Buffer to dst Image</p>
+<p>No size check is currently being tested.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>Buffer.</em>) – Source Buffer.</p></li>
+<li><p><strong>dst</strong> (<em>Image.</em>) – Source Image.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyImageToBuffer">
+<span class="sig-name descname"><span class="pre">copyImageToBuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyImageToBuffer" title="Permalink to this definition"></a></dt>
+<dd><p>Copies the content of src Image to dst Buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>Image.</em>) – Source image.</p></li>
+<li><p><strong>dst</strong> (<em>Buffer.</em>) – Destination buffer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyImageToImage">
+<span class="sig-name descname"><span class="pre">copyImageToImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyImageToImage" title="Permalink to this definition"></a></dt>
+<dd><p>Copies the content of src Image to dst Image.</p>
+<p>The image parameters must be in the following layouts:</p>
+<ul class="simple">
+<li><p>src: TransferSrcOptimal</p></li>
+<li><p>dst: TransferDstOptimal</p></li>
+</ul>
+<p>This method does not check if the images are in the correct
+layout. The results are undefined if the images are in
+any other layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>Image.</em>) – Source image.</p></li>
+<li><p><strong>dst</strong> (<em>Image.</em>) – Destination buffer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.durationEnd">
+<span class="sig-name descname"><span class="pre">durationEnd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.durationEnd" title="Permalink to this definition"></a></dt>
+<dd><p>Stops recording the elapsed time between two points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>Duration.</em>) – The duration object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.durationStart">
+<span class="sig-name descname"><span class="pre">durationStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.durationStart" title="Permalink to this definition"></a></dt>
+<dd><p>Starts recording the elapsed time between two points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>Duration.</em>) – The duration object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.end">
+<span class="sig-name descname"><span class="pre">end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.end" title="Permalink to this definition"></a></dt>
+<dd><p>Ends recording.</p>
+<p>Any following call to recording methods after this call have undefined
+behavior.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.memoryBarrier">
+<span class="sig-name descname"><span class="pre">memoryBarrier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.memoryBarrier" title="Permalink to this definition"></a></dt>
+<dd><p>Inserts a memory barrier.</p>
+<p>TODO: details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.run" title="Permalink to this definition"></a></dt>
+<dd><p>Records running a compute or container node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="ComputeNode.html#lluvia.core.ComputeNode" title="lluvia.core.ComputeNode"><em>ComputeNode</em></a><em> or </em><em>ContainerNode.</em>) – The node to run.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.CommandBuffer.session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#lluvia.core.CommandBuffer.session" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Buffer.html" class="btn btn-neutral float-left" title="Buffer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ComputeNode.html" class="btn btn-neutral float-right" title="ComputeNode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Juan David Adarve Bermudez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

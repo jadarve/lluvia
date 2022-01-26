@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Format &mdash; lluvia 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ImageAddressMode" href="ImageAddressMode.html" />
+    <link rel="prev" title="ComputeDimension" href="ComputeDimension.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> lluvia
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classes/index.html">Classes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Enumerations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="BufferUsageFlagBits.html">BufferUsageFlagBits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ChannelCount.html">ChannelCount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ChannelType.html">ChannelType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComputeDimension.html">ComputeDimension</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageAddressMode.html">ImageAddressMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageAxis.html">ImageAxis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageFilterMode.html">ImageFilterMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageLayout.html">ImageLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageTiling.html">ImageTiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageType.html">ImageType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageUsageFlagBits.html">ImageUsageFlagBits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MemoryPropertyFlagBits.html">MemoryPropertyFlagBits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NodeState.html">NodeState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NodeType.html">NodeType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ParameterType.html">ParameterType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PortDirection.html">PortDirection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PortType.html">PortType</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lluvia</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Enumerations</a> &raquo;</li>
+      <li>Format</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/enumerations/Format.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="format">
+<h1>Format<a class="headerlink" href="#format" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lluvia.core.Format">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">Format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Format" title="Permalink to this definition"></a></dt>
+<dd><p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16B16A16Sfloat">
+<span class="sig-name descname"><span class="pre">R16G16B16A16Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">97</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16B16A16Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16B16A16Sint">
+<span class="sig-name descname"><span class="pre">R16G16B16A16Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">96</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16B16A16Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16B16A16Uint">
+<span class="sig-name descname"><span class="pre">R16G16B16A16Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">95</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16B16A16Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16B16Sfloat">
+<span class="sig-name descname"><span class="pre">R16G16B16Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">90</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16B16Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16B16Sint">
+<span class="sig-name descname"><span class="pre">R16G16B16Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">89</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16B16Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16B16Uint">
+<span class="sig-name descname"><span class="pre">R16G16B16Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">88</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16B16Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16Sfloat">
+<span class="sig-name descname"><span class="pre">R16G16Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">83</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16Sint">
+<span class="sig-name descname"><span class="pre">R16G16Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">82</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16G16Uint">
+<span class="sig-name descname"><span class="pre">R16G16Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">81</span></em><a class="headerlink" href="#lluvia.core.Format.R16G16Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16Sfloat">
+<span class="sig-name descname"><span class="pre">R16Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">76</span></em><a class="headerlink" href="#lluvia.core.Format.R16Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16Sint">
+<span class="sig-name descname"><span class="pre">R16Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">75</span></em><a class="headerlink" href="#lluvia.core.Format.R16Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R16Uint">
+<span class="sig-name descname"><span class="pre">R16Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">74</span></em><a class="headerlink" href="#lluvia.core.Format.R16Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32B32A32Sfloat">
+<span class="sig-name descname"><span class="pre">R32G32B32A32Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">109</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32B32A32Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32B32A32Sint">
+<span class="sig-name descname"><span class="pre">R32G32B32A32Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">108</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32B32A32Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32B32A32Uint">
+<span class="sig-name descname"><span class="pre">R32G32B32A32Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">107</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32B32A32Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32B32Sfloat">
+<span class="sig-name descname"><span class="pre">R32G32B32Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">106</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32B32Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32B32Sint">
+<span class="sig-name descname"><span class="pre">R32G32B32Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">105</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32B32Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32B32Uint">
+<span class="sig-name descname"><span class="pre">R32G32B32Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">104</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32B32Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32Sfloat">
+<span class="sig-name descname"><span class="pre">R32G32Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">103</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32Sint">
+<span class="sig-name descname"><span class="pre">R32G32Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">102</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32G32Uint">
+<span class="sig-name descname"><span class="pre">R32G32Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">101</span></em><a class="headerlink" href="#lluvia.core.Format.R32G32Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32Sfloat">
+<span class="sig-name descname"><span class="pre">R32Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#lluvia.core.Format.R32Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32Sint">
+<span class="sig-name descname"><span class="pre">R32Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">99</span></em><a class="headerlink" href="#lluvia.core.Format.R32Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R32Uint">
+<span class="sig-name descname"><span class="pre">R32Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">98</span></em><a class="headerlink" href="#lluvia.core.Format.R32Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64B64A64Sfloat">
+<span class="sig-name descname"><span class="pre">R64G64B64A64Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">121</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64B64A64Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64B64A64Sint">
+<span class="sig-name descname"><span class="pre">R64G64B64A64Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">120</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64B64A64Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64B64A64Uint">
+<span class="sig-name descname"><span class="pre">R64G64B64A64Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">119</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64B64A64Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64B64Sfloat">
+<span class="sig-name descname"><span class="pre">R64G64B64Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">118</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64B64Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64B64Sint">
+<span class="sig-name descname"><span class="pre">R64G64B64Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">117</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64B64Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64B64Uint">
+<span class="sig-name descname"><span class="pre">R64G64B64Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">116</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64B64Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64Sfloat">
+<span class="sig-name descname"><span class="pre">R64G64Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">115</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64Sint">
+<span class="sig-name descname"><span class="pre">R64G64Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">114</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64G64Uint">
+<span class="sig-name descname"><span class="pre">R64G64Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">113</span></em><a class="headerlink" href="#lluvia.core.Format.R64G64Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64Sfloat">
+<span class="sig-name descname"><span class="pre">R64Sfloat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">112</span></em><a class="headerlink" href="#lluvia.core.Format.R64Sfloat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64Sint">
+<span class="sig-name descname"><span class="pre">R64Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">111</span></em><a class="headerlink" href="#lluvia.core.Format.R64Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R64Uint">
+<span class="sig-name descname"><span class="pre">R64Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">110</span></em><a class="headerlink" href="#lluvia.core.Format.R64Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8G8B8A8Sint">
+<span class="sig-name descname"><span class="pre">R8G8B8A8Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#lluvia.core.Format.R8G8B8A8Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8G8B8A8Uint">
+<span class="sig-name descname"><span class="pre">R8G8B8A8Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">41</span></em><a class="headerlink" href="#lluvia.core.Format.R8G8B8A8Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8G8B8Sint">
+<span class="sig-name descname"><span class="pre">R8G8B8Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#lluvia.core.Format.R8G8B8Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8G8B8Uint">
+<span class="sig-name descname"><span class="pre">R8G8B8Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#lluvia.core.Format.R8G8B8Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8G8Sint">
+<span class="sig-name descname"><span class="pre">R8G8Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21</span></em><a class="headerlink" href="#lluvia.core.Format.R8G8Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8G8Uint">
+<span class="sig-name descname"><span class="pre">R8G8Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#lluvia.core.Format.R8G8Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8Sint">
+<span class="sig-name descname"><span class="pre">R8Sint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#lluvia.core.Format.R8Sint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Format.R8Uint">
+<span class="sig-name descname"><span class="pre">R8Uint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#lluvia.core.Format.R8Uint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ComputeDimension.html" class="btn btn-neutral float-left" title="ComputeDimension" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ImageAddressMode.html" class="btn btn-neutral float-right" title="ImageAddressMode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Juan David Adarve Bermudez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory &mdash; lluvia 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MemoryAllocationInfo" href="MemoryAllocationInfo.html" />
+    <link rel="prev" title="ImageView" href="ImageView.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> lluvia
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CommandBuffer.html">CommandBuffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComputeNode.html">ComputeNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ComputeNodeDescriptor.html">ComputeNodeDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ContainerNode.html">ContainerNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ContainerNodeDescriptor.html">ContainerNodeDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Duration.html">Duration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageView.html">ImageView</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MemoryAllocationInfo.html">MemoryAllocationInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Parameter.html">Parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PortDescriptor.html">PortDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Program.html">Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Session.html">Session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../enumerations/index.html">Enumerations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lluvia</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Classes</a> &raquo;</li>
+      <li>Memory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/classes/Memory.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="memory">
+<h1>Memory<a class="headerlink" href="#memory" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lluvia.core.Memory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">Memory</span></span><a class="headerlink" href="#lluvia.core.Memory" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.createBuffer">
+<span class="sig-name descname"><span class="pre">createBuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">uint64_t</span> <span class="pre">size,</span> <span class="pre">usageFlags=[ll_buffer.BufferUsageFlagBits.StorageBuffer,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferSrc,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferDst]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createBuffer" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new buffer allocated into this memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>uint64_t greater than zero.</em>) – The size of the buffer in bytes.</p></li>
+<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/BufferUsageFlagBits.html#lluvia.core.BufferUsageFlagBits" title="lluvia.core.BufferUsageFlagBits"><em>BufferUsageFlagBits</em></a><em> or </em><em>list of BufferUsageFlagBits.</em>) – <dl class="simple">
+<dt>Defaults to:</dt><dd><dl class="simple">
+<dt>[BufferUsageFlagBits.StorageBuffer,</dt><dd><p>BufferUsageFlagBits.TransferSrc,
+BufferUsageFlagBits.TransferDst]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Usage flags for this buffer. It must be a combination of the
+values defined in lluvia.BufferUsageFlagBits:</p>
+<blockquote>
+<div><ul>
+<li><p>IndexBuffer</p></li>
+<li><p>IndirectBuffer</p></li>
+<li><p>StorageBuffer</p></li>
+<li><p>StorageTexelBuffer</p></li>
+<li><p>TransferDst</p></li>
+<li><p>TransferSrc</p></li>
+<li><p>UniformBuffer</p></li>
+<li><p>UniformTexelBuffer</p></li>
+<li><p>VertexBuffer</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buf</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>lluvia.Buffer object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.createBufferFromHost">
+<span class="sig-name descname"><span class="pre">createBufferFromHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">ndarray</span> <span class="pre">arr,</span> <span class="pre">usageFlags=[ll_buffer.BufferUsageFlagBits.StorageBuffer,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferSrc,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferDst]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createBufferFromHost" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a buffer from a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>np.ndarray.</em>) – Numpy array from which the buffer will be created from. The content
+of the array will be copied into the buffer.</p></li>
+<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/BufferUsageFlagBits.html#lluvia.core.BufferUsageFlagBits" title="lluvia.core.BufferUsageFlagBits"><em>BufferUsageFlagBits</em></a><em> or </em><em>list of BufferUsageFlagBits.</em>) – <dl class="simple">
+<dt>Defaults to:</dt><dd><dl class="simple">
+<dt>[BufferUsageFlagBits.StorageBuffer,</dt><dd><p>BufferUsageFlagBits.TransferSrc,
+BufferUsageFlagBits.TransferDst]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Usage flags for this buffer. It must be a combination of the
+values defined in lluvia.BufferUsageFlagBits:</p>
+<blockquote>
+<div><ul>
+<li><p>IndexBuffer</p></li>
+<li><p>IndirectBuffer</p></li>
+<li><p>StorageBuffer</p></li>
+<li><p>StorageTexelBuffer</p></li>
+<li><p>TransferDst</p></li>
+<li><p>TransferSrc</p></li>
+<li><p>UniformBuffer</p></li>
+<li><p>UniformTexelBuffer</p></li>
+<li><p>VertexBuffer</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – Buffer object with the same content as the input array parameter.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Buffer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.createBufferLike">
+<span class="sig-name descname"><span class="pre">createBufferLike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usageFlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[ll_buffer.BufferUsageFlagBits.StorageBuffer,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferSrc,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferDst]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createBufferLike" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a Buffer with the same size in bytes as the other parameter</p>
+<p>The memory allocated to this buffer is not filled with any value
+at the moment of creation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<em>Numpy ndarray</em><em> or </em><em>lluvia Buffer</em><em> or </em><em>Image.</em>) – </p></li>
+<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/BufferUsageFlagBits.html#lluvia.core.BufferUsageFlagBits" title="lluvia.core.BufferUsageFlagBits"><em>BufferUsageFlagBits</em></a><em> or </em><em>list of BufferUsageFlagBits.</em>) – <dl class="simple">
+<dt>Defaults to:</dt><dd><dl class="simple">
+<dt>[BufferUsageFlagBits.StorageBuffer,</dt><dd><p>BufferUsageFlagBits.TransferSrc,
+BufferUsageFlagBits.TransferDst]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Usage flags for this buffer. It must be a combination of the
+values defined in lluvia.BufferUsageFlagBits:</p>
+<blockquote>
+<div><ul>
+<li><p>IndexBuffer</p></li>
+<li><p>IndirectBuffer</p></li>
+<li><p>StorageBuffer</p></li>
+<li><p>StorageTexelBuffer</p></li>
+<li><p>TransferDst</p></li>
+<li><p>TransferSrc</p></li>
+<li><p>UniformBuffer</p></li>
+<li><p>UniformTexelBuffer</p></li>
+<li><p>VertexBuffer</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buf</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>lluvia.Buffer object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.createImage">
+<span class="sig-name descname"><span class="pre">createImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">shape,</span> <span class="pre">ChannelType</span> <span class="pre">channelType=ll_image.ChannelType.Uint8,</span> <span class="pre">usageFlags=[ll_image.ImageUsageFlagBits.Storage,</span> <span class="pre">ll_image.ImageUsageFlagBits.Sampled,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferSrc,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferDst]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createImage" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new image allocated in this memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>list</em><em> or </em><em>tuple of length 1</em><em>, </em><em>2</em><em>, </em><em>3</em><em> or </em><em>4.</em>) – <p>Shape of the image (depth, height , width, channels). Each dimension
+must be greater than zero. The number of channels must in the range [1, 4].
+If one or more dimensions are missing, they are set to 1 by default.</p>
+<p>The shape is interpreted as follows:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if len(shape) is 1:</dt><dd><p>depth    = 1
+height   = 1
+width    = shape[0]
+channels = 1</p>
+</dd>
+<dt>elif len(shape) is 2:</dt><dd><p>depth    = 1
+height   = shape[0]
+width    = shape[1]
+channels = 1</p>
+</dd>
+<dt>elif len(shape) is 3:</dt><dd><p>depth    = 1
+height   = shape[0]
+width    = shape[1]
+channels = shape[2]</p>
+</dd>
+<dt>else:</dt><dd><p>depth    = shape[0]
+height   = shape[1]
+width    = shape[2]
+channels = shape[3]</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>channelType</strong> (<em>ll.ChannelType. Defaults to ll.ChannelType.Uint8.</em>) – Channel type.</p></li>
+<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/ImageUsageFlagBits.html#lluvia.core.ImageUsageFlagBits" title="lluvia.core.ImageUsageFlagBits"><em>ImageUsageFlagBits</em></a><em> or </em><em>list of ImageUsageFlagBits.</em>) – <p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
+Image usage flags. It must be a combination of th strings defined
+in lluvia.ImageUsageFlags:</p>
+<blockquote>
+<div><ul>
+<li><p>TransferSrc</p></li>
+<li><p>TransferDst</p></li>
+<li><p>Sampled</p></li>
+<li><p>Storage</p></li>
+<li><p>ColorAttachment</p></li>
+<li><p>DepthStencilAttachment</p></li>
+<li><p>TransientAttachment</p></li>
+<li><p>InputAttachment</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>image</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>new Image object.</p>
+</dd>
+</dl>
+<p>:raises ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or: if any parameter is not within its required range.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.createImageFromHost">
+<span class="sig-name descname"><span class="pre">createImageFromHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">ndarray</span> <span class="pre">arr,</span> <span class="pre">usageFlags=[ll_image.ImageUsageFlagBits.Storage,</span> <span class="pre">ll_image.ImageUsageFlagBits.Sampled,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferSrc,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferDst]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createImageFromHost" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a lluvia.Image object from a Numpy array.</p>
+<p>The numpy array can have between 1 and 4 dimensions. Images
+can be 1D, 2D or 3D and can have up to 4 color channels. The
+width, height, depth and channels of the image are resolved
+as follows.</p>
+<p>if arr.ndim is 1: create a 1D image
+if arr.ndim is 2: create a 2D image with one color channel.
+if arr.ndim is 3: create a 2D image with the number of channels</p>
+<blockquote>
+<div><p>given by the length of the third dimension.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>if arr.ndim is 4: create a 3D image with the number of channels</dt><dd><p>given by the length of the fourth dimension.</p>
+</dd>
+</dl>
+<p>Notice that for creating 1D images with several color channels,
+one needs to specify the 4 dimensions [length, 1, 1, channels].</p>
+<p>The image’s channel type is deduced from arr.dtype.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>Numpy array.</em>) – </p></li>
+<li><p><strong>usageFlags</strong> (<em>string</em><em> or </em><em>list of strings.</em>) – <p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
+Image usage flags. It must be a combination of th strings defined
+in lluvia.ImageUsageFlags:</p>
+<blockquote>
+<div><ul>
+<li><p>TransferSrc</p></li>
+<li><p>TransferDst</p></li>
+<li><p>Sampled</p></li>
+<li><p>Storage</p></li>
+<li><p>ColorAttachment</p></li>
+<li><p>DepthStencilAttachment</p></li>
+<li><p>TransientAttachment</p></li>
+<li><p>InputAttachment</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>img</strong> – A new Image object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>lluvia.Image</p>
+</dd>
+</dl>
+<p>:raises ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or: if arr.dtype is incompatible with image ChannelType.
+:raises RuntimeError : if the image cannot be created from this memory.:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.createImageViewFromHost">
+<span class="sig-name descname"><span class="pre">createImageViewFromHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">ndarray</span> <span class="pre">arr,</span> <span class="pre">usageFlags=[ll_image.ImageUsageFlagBits.Storage,</span> <span class="pre">ll_image.ImageUsageFlagBits.Sampled,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferSrc,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferDst],</span> <span class="pre">ImageFilterMode</span> <span class="pre">filterMode=ll_image.ImageFilterMode.Nearest,</span> <span class="pre">ImageAddressMode</span> <span class="pre">addressMode=ll_image.ImageAddressMode.Repeat,</span> <span class="pre">bool</span> <span class="pre">normalizedCoordinates=False,</span> <span class="pre">bool</span> <span class="pre">sampled=False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createImageViewFromHost" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a lluvia.Image object from a Numpy array.</p>
+<p>The numpy array can have between 1 and 4 dimensions. Images
+can be 1D, 2D or 3D and can have up to 4 color channels. The
+width, height, depth and channels of the image are resolved
+as follows.</p>
+<p>if arr.ndim is 1: create a 1D image
+if arr.ndim is 2: create a 2D image with one color channel.
+if arr.ndim is 3: create a 2D image with the number of channels</p>
+<blockquote>
+<div><p>given by the length of the third dimension.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>if arr.ndim is 4: create a 3D image with the number of channels</dt><dd><p>given by the length of the fourth dimension.</p>
+</dd>
+</dl>
+<p>Notice that for creating 1D images with several color channels,
+one needs to specify the 4 dimensions [length, 1, 1, channels].</p>
+<p>The image’s channel type is deduced from arr.dtype.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>Numpy array.</em>) – </p></li>
+<li><p><strong>usageFlags</strong> (<em>string</em><em> or </em><em>list of strings.</em>) – <p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
+Image usage flags. It must be a combination of th strings defined
+in lluvia.ImageUsageFlags:</p>
+<blockquote>
+<div><ul>
+<li><p>TransferSrc</p></li>
+<li><p>TransferDst</p></li>
+<li><p>Sampled</p></li>
+<li><p>Storage</p></li>
+<li><p>ColorAttachment</p></li>
+<li><p>DepthStencilAttachment</p></li>
+<li><p>TransientAttachment</p></li>
+<li><p>InputAttachment</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>filterMode</strong> (<em>str. Defaults to 'Nearest'.</em>) – <p>Filtering more for reading pixels within a shader. Possible
+values are defined in lluvia.ImageFilterMode:</p>
+<blockquote>
+<div><ul>
+<li><p>Nearest</p></li>
+<li><p>Linear</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>addressMode</strong> (<em>str. Defaults to 'Repeat'.</em>) – <p>Addressing mode for reading pixels that are outside of the image
+boundaries. Possible values are defined in lluvia.ImageAddressMode:</p>
+<blockquote>
+<div><ul>
+<li><p>Repeat</p></li>
+<li><p>MirroredRepeat</p></li>
+<li><p>ClampToEdge</p></li>
+<li><p>ClampToBorder</p></li>
+<li><p>MirrorClampToEdge</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>normalizedCoordinates</strong> (<em>bool. Defaults to False.</em>) – Tells whether or not to use normalized coordinates to read
+pixels within a shader.</p></li>
+<li><p><strong>sampled</strong> (<em>bool. Defaults to False.</em>) – Tells whether or not to use a sampler object for reading
+pixels within a shader.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>img</strong> – A new Image object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>lluvia.Image</p>
+</dd>
+</dl>
+<p>:raises ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or: if arr.dtype is incompatible with image ChannelType.
+:raises RuntimeError : if the image cannot be created from this memory.:</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Memory.isMappable">
+<span class="sig-name descname"><span class="pre">isMappable</span></span><a class="headerlink" href="#lluvia.core.Memory.isMappable" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.Memory.isPageMappable">
+<span class="sig-name descname"><span class="pre">isPageMappable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">page</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.isPageMappable" title="Permalink to this definition"></a></dt>
+<dd><p>Determines if page is currently available to be mapped.</p>
+<p>This test checks if page is available to be mapped to host-memory by
+a given objects such as a Buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>page</strong> (<em>uint64_t</em>) – Page number.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>True if page is mappable, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Memory.memoryFlags">
+<span class="sig-name descname"><span class="pre">memoryFlags</span></span><a class="headerlink" href="#lluvia.core.Memory.memoryFlags" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Memory.pageCount">
+<span class="sig-name descname"><span class="pre">pageCount</span></span><a class="headerlink" href="#lluvia.core.Memory.pageCount" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Memory.pageSize">
+<span class="sig-name descname"><span class="pre">pageSize</span></span><a class="headerlink" href="#lluvia.core.Memory.pageSize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lluvia.core.Memory.session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#lluvia.core.Memory.session" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ImageView.html" class="btn btn-neutral float-left" title="ImageView" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MemoryAllocationInfo.html" class="btn btn-neutral float-right" title="MemoryAllocationInfo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Juan David Adarve Bermudez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
