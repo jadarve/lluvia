@@ -1,0 +1,72 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master  # Set a branch to deploy
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install Python dependencies
+        run: |
+          sudo apt install -y python3.8-dev
+          pip3 install --no-cache-dir cython numpy pytest jinja2 markupsafe imageio sphinx sphinxcontrib-napoleon sphinx-rtd-theme
+      - name: Install Mesa
+        run: |
+          sudo add-apt-repository ppa:kisak/kisak-mesa
+          sudo apt update
+          sudo apt full-upgrade
+          sudo apt install mesa-utils
+      - name: Install Vulkan SDK
+        run: |
+          wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+          sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.176-focal.list https://packages.lunarg.com/vulkan/1.2.176/lunarg-vulkan-1.2.176-focal.list
+          sudo apt update
+          sudo apt upgrade
+          sudo apt install -y vulkan-sdk mesa-vulkan-drivers
+          vulkaninfo
+      - uses: actions/checkout@v2
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Generate CPP API
+        run: |
+          sudo apt install doxygen graphviz
+          # output for the generated doc
+          mkdir -p doc/site/static/api/cpp
+          cd doc/api/cpp
+          doxygen Doxyfile
+      
+      - name: Generate Python API
+        run: |
+          bazel build //lluvia/python:lluvia_wheel
+          pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/python/build/python
+
+          mkdir -p doc/site/static/api/
+          cd doc/api/python
+          make html
+          mv build/html ../../site/static/api/python
+
+      - name: Build Site
+        run: |
+          git submodule update --init --recursive --depth 1
+          cd doc/site
+          npm install
+          hugo --environment "gh-pages" --minify
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/site/public

@@ -236,7 +236,8 @@ cdef class Session:
 
         Raises
         ------
-        IOError : if there is any problem reading the file at the given path.
+        IOError
+            If there is any problem reading the file at the given path.
         """
 
         cdef Program prog = Program()
@@ -264,7 +265,8 @@ cdef class Session:
 
         Raises
         ------
-        ValueError: if program's type is not string nor lluvia.Program
+        ValueError
+            If program's type is not string nor lluvia.Program
         """
 
         cdef Program p = Program()
@@ -298,7 +300,8 @@ cdef class Session:
 
         Raises
         ------
-        KeyError : if the program does not exists in the registry
+        KeyError
+            If the program does not exists in the registry
         """
 
         cdef Program out = Program()
@@ -347,7 +350,8 @@ cdef class Session:
         
         Raises
         ------
-        RuntimeError : if builderName is not in the registry.
+        RuntimeError
+            If builderName is not in the registry.
         """
 
         cdef ComputeNodeDescriptor desc = ComputeNodeDescriptor()
@@ -370,8 +374,11 @@ cdef class Session:
 
         Raises
         ------
-        RuntimeError : if desc is a string and the node builder is not found in the registry.
-        ValueError   : if desc type is not string nor ComputeNodeDescriptor.
+        RuntimeError
+            If desc is a string and the node builder is not found in the registry.
+
+        ValueError
+            If desc type is not string nor ComputeNodeDescriptor.
         """
 
         cdef ComputeNodeDescriptor d = ComputeNodeDescriptor()
@@ -403,7 +410,8 @@ cdef class Session:
         
         Raises
         ------
-        RuntimeError : if builderName is not in the registry.
+        RuntimeError
+            If builderName is not in the registry.
         """
 
         cdef ContainerNodeDescriptor desc = ContainerNodeDescriptor()
@@ -426,8 +434,11 @@ cdef class Session:
 
         Raises
         ------
-        RuntimeError : if desc is a string and the node builder is not found in the registry.
-        ValueError   : if desc type is not string nor ContainerNodeDescriptor.
+        RuntimeError
+            If desc is a string and the node builder is not found in the registry.
+
+        ValueError
+            If desc type is not string nor ContainerNodeDescriptor.
         """
 
         cdef ContainerNodeDescriptor d = ContainerNodeDescriptor()
@@ -465,7 +476,8 @@ cdef class Session:
 
         Raises
         ------
-        RuntimeError : if the command buffer cannot be created.
+        RuntimeError
+            If the command buffer cannot be created.
         """
 
         return _buildCommandBuffer(shared_ptr[_CommandBuffer](move(self.__session.get().createCommandBuffer())), self)
@@ -506,7 +518,8 @@ cdef class Session:
 
         Raises
         ------
-        RuntimeError : if there is problem reading the library file.
+        RuntimeError
+            If there is problem reading the library file.
         """
 
         self.__session.get().loadLibrary(impl.encodeString(filename))
@@ -577,7 +590,8 @@ cdef class Session:
 
         Raises
         ------
-        RuntimeError : if the compilation fails.
+        RuntimeError
+            If the compilation fails.
         """
 
         shaderFile = None
@@ -675,17 +689,15 @@ cdef class Session:
             Whether or not the standard Lluvia GLSL library embedded in the
             Python package should be included (using -I).
 
-
         Returns
         -------
         node : lluvia.ComputeNode.
             Compiled node.
 
-
         Raises
         ------
-        RuntimeError : if the compilation fails.
-
+        RuntimeError
+            If the compilation fails.
 
         See also
         --------

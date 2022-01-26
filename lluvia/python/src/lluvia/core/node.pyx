@@ -301,7 +301,7 @@ cdef class ComputeNode:
 
     def bind(self, str name, obj):
         """
-        Binds an object as parater to this node.
+        Binds an object as parameter to this node.
 
 
         Parameters
