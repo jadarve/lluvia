@@ -1,0 +1,36 @@
+var error_8h =
+[
+    [ "ErrorCategory", "d4/d64/classll_1_1ErrorCategory.html", "d4/d64/classll_1_1ErrorCategory" ],
+    [ "ErrorCode", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0", [
+      [ "EnumConversionFailed", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a7939c7574f03e6c51c2815bec3d7c3cd", null ],
+      [ "MemoryMapFailed", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0ae91db4f2789beda1270ae95031e563a3", null ],
+      [ "ObjectAllocationError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a51304b05fc0658cec44ee76d8bd5a282", null ],
+      [ "PortBindingError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a3e57c5fae35084ce6381be8b378e5242", null ],
+      [ "InvalidShaderFunctionName", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0abae1bfbe5f737cb699aa10eaae2b842b", null ],
+      [ "InvalidShaderProgram", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0aa158b9eb552e7d16afbb577376387177", null ],
+      [ "BufferCopyError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a0776e1fd23aa7ed56e6062af9b46dab2", null ],
+      [ "ProgramCompilationError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a14453f9ce99ea74ccde1c9d60800a1c6", null ],
+      [ "InvalidLocalShape", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0acc64d8de5b06a87b8a25df61ab3f4987", null ],
+      [ "InvalidGridShape", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0ad7efba634da7810690768f1ff084143f", null ],
+      [ "BadEnumCasting", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a0e0ed7431b5be811cf24ceec89983b46", null ],
+      [ "PhysicalDevicesNotFound", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a737b1adc29711de5ddf1eff9a1818614", null ],
+      [ "KeyNotFound", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0aa645e4cfc8d16be330607ad52aec5f98", null ],
+      [ "MemoryCreationError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a4ec6cc8c92635d469f189294f1adee9a", null ],
+      [ "InvalidNodeState", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a83690443c770c787f8d7d54190cdaa6e", null ],
+      [ "InterpreterError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a95a60ecf490ca03e136002a9295acf69", null ],
+      [ "PushConstantError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a6bae26c0d2abf1bd4b383e8de32598ee", null ],
+      [ "IOError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a5206bd7472156351d2d9a99633ac9580", null ],
+      [ "InvalidArgument", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a253ca7dd096ee0956cccee4d376cab8b", null ],
+      [ "InstanceCreationError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a6d352b645612ab602ca1ce13f47dedf3", null ],
+      [ "SessionLost", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a22bf1a4d7abe40178831d3c1faf99b54", null ],
+      [ "LayerNotFound", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a2e6fc58c55f2bb7c5b3653673fdf4fbd", null ],
+      [ "ExtensionNotFound", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a57ebb20495fbd21690127a155537a163", null ],
+      [ "PipelineCreationError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0ae8cc8f3c0d652c5925f9bd0abd89fcb6", null ],
+      [ "VulkanError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a4c24679109b687a11d336f5347fea4f2", null ]
+    ] ],
+    [ "createErrorCode", "da/d41/error_8h.html#ae052844ef951c56c69e98b7aa8b79b33", null ],
+    [ "errorCodeToString", "da/d41/error_8h.html#a58c2e0ab4e8fd702ae39df9315c3473a", null ],
+    [ "throwSystemError", "da/d41/error_8h.html#a940c7361e550cccb56aac17d4ec4adaa", null ],
+    [ "throwSystemErrorIf", "da/d41/error_8h.html#a68e3e175f88faa87be6809a4636842e4", null ],
+    [ "ErrorCodeStrings", "da/d41/error_8h.html#a1e2434ab5589626f52049145fd42cd15", null ]
+];
