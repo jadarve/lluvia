@@ -23,7 +23,8 @@ jobs:
 
       - name: Build
         run: |
-          cd docs
+          cd docs/site
+          npm install
           hugo --minify
 
       - name: Deploy
@@ -31,4 +32,4 @@ jobs:
         # if: github.ref == 'refs/heads/107_docs'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/public
+          publish_dir: ./docs/site/public

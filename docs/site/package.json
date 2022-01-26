@@ -1,0 +1,21 @@
+{
+  "name": "lluvia",
+  "version": "1.0.0",
+  "description": "lluvia.ai",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jadarve/lluvia.git"
+  },
+  "author": "Juan David Adarve Bermudez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jadarve/lluvia/issues"
+  },
+  "homepage": "https://github.com/jadarve/lluvia",
+  "dependencies": {
+    "postcss": "8.3.1",
+    "postcss-cli": "8.3.1",
+    "autoprefixer": "10.2.6"
+  }
+}

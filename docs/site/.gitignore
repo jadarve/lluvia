@@ -1,0 +1,7 @@
+# Hugo generated site
+public/
+
+resources/_gen/
+
+# NPM
+node_modules/

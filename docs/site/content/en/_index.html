@@ -1,0 +1,35 @@
++++
+title = "Lluvia"
+linkTitle = "Lluvia"
+
++++
+
+{{< blocks/cover title="Welcome to Lluvia!" image_anchor="top" height="full" color="primary" >}}
+<div class="mx-auto">
+    <a class="btn btn-lg btn-primary mr-3 mb-4" href="{{< relref "/about" >}}">
+        Learn More <i class="fas fa-arrow-alt-circle-right ml-2"></i>
+    </a>
+    <a class="btn btn-lg btn-secondary mr-3 mb-4" href="https://github.com/jadarve/lluvia">
+        Download <i class="fab fa-github ml-2 "></i>
+    </a>
+    <p class="lead mt-5">A real-time compute engine for computer vision</p>
+    {{< blocks/link-down color="info" id="overview" >}}
+</div>
+{{< /blocks/cover >}}
+
+{{% blocks/lead color="primary" %}}
+Lluvia is a computer vision engine designed for real-time applications. Users can describe algorithms as a compute graph which is dispatched for execution on the GPU. Lluvia uses the Vulkan API, allowing it to run the same algorithm on different GPU platforms.
+{{% /blocks/lead %}}
+
+{{< blocks/section color="dark" type="features">}}
+
+{{% blocks/feature icon="fa-lightbulb" title="Get Started!" url="/docs/gettingstarted/" %}}
+See how you can use Lluvia for quick development of performant algorithms.
+{{% /blocks/feature %}}
+
+
+{{% blocks/feature icon="fab fa-github" title="Contributions welcome!" url="https://github.com/jadarve/lluvia" %}}
+We do a [Pull Request](https://github.com/jadarve/lluvia/pulls) contributions workflow on **GitHub**. New users are always welcome!
+{{% /blocks/feature %}}
+
+{{< /blocks/section >}}
