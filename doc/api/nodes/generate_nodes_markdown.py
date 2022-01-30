@@ -57,9 +57,11 @@ def main():
 
     session = ll.createSession()
 
+    # templates used to render the _index.md and {node_name}.md pages
     indexTemplate = jinja2.Template(source=indexTemplateSource, trim_blocks=True)
     template = jinja2.Template(source=templateSource, trim_blocks=True)
 
+    # Frist, create all the folders with their respective _index.md page
     for dirPathToCreate in foldersToCreate(session.getNodeBuilderDescriptors()):
 
         dirPath = os.path.join(basePath, dirPathToCreate)
@@ -78,7 +80,7 @@ def main():
             renderedOut = indexTemplate.render(templateArgs)
             f.write(renderedOut)
 
-
+    # Second, process each node and generate its markdown page
     for desc in session.getNodeBuilderDescriptors():
         print('processing: {0}'.format(desc.name))
 
