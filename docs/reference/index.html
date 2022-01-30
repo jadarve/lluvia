@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.92.0">
+<meta name=generator content="Hugo 0.92.1">
 <meta name=robots content="noindex, nofollow">
 <link rel="shortcut icon" href=/lluvia/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/lluvia/favicons/apple-touch-icon-180x180.png sizes=180x180>
@@ -36,10 +36,13 @@
 <div class="td-navbar-nav-scroll ml-md-auto" id=main_navbar>
 <ul class="navbar-nav mt-2 mt-lg-0">
 <li class="nav-item mr-4 mb-2 mb-lg-0">
-<a class=nav-link href=/lluvia/docs/><span>Documentation</span></a>
+<a class=nav-link href=https://github.com/jadarve/lluvia target=_blank><span>GitHub</span></a>
 </li>
 <li class="nav-item mr-4 mb-2 mb-lg-0">
-<a class=nav-link href=https://github.com/jadarve/lluvia target=_blank><span>GitHub</span></a>
+<a class="nav-link active" href=/lluvia/docs/><span class=active>Documentation</span></a>
+</li>
+<li class="nav-item mr-4 mb-2 mb-lg-0">
+<a class=nav-link href=/lluvia/nodes/><span>Node Library</span></a>
 </li>
 <li class="nav-item mr-4 mb-2 mb-lg-0">
 <a class=nav-link href=/lluvia/api/cpp/index.html><span>C++ API</span></a>
@@ -61,63 +64,81 @@
 <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-docs-nav aria-expanded=false aria-label="Toggle section navigation">
 </button>
 </form>
-<nav class="collapse td-sidebar-nav" id=td-section-nav>
+<nav class="collapse td-sidebar-nav foldable-nav" id=td-section-nav>
 <ul class="td-sidebar-nav__section pr-md-3 ul-0">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-lluviadocs-li>
-<a href=/lluvia/docs/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-lluviadocs><span>Docs</span></a>
+<a href=/lluvia/docs/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-lluviadocs><span>Documentation</span></a>
 <ul class=ul-1>
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsabout-li>
-<a href=/lluvia/docs/about/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsabout><span>About</span></a>
+<input type=checkbox id=m-lluviadocsabout-check>
+<label for=m-lluviadocsabout-check><a href=/lluvia/docs/about/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsabout><span>About</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsgettingstarted-li>
-<a href=/lluvia/docs/gettingstarted/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsgettingstarted><span>Getting started</span></a>
+<input type=checkbox id=m-lluviadocsgettingstarted-check>
+<label for=m-lluviadocsgettingstarted-check><a href=/lluvia/docs/gettingstarted/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsgettingstarted><span>Getting started</span></a></label>
 <ul class="ul-2 foldable">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsgettingstartedinstallation-li>
-<a href=/lluvia/docs/gettingstarted/installation/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsgettingstartedinstallation><span>Installation</span></a>
+<input type=checkbox id=m-lluviadocsgettingstartedinstallation-check>
+<label for=m-lluviadocsgettingstartedinstallation-check><a href=/lluvia/docs/gettingstarted/installation/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsgettingstartedinstallation><span>Installation</span></a></label>
 <ul class="ul-3 foldable">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsgettingstartedinstallationlinux-li>
-<a href=/lluvia/docs/gettingstarted/installation/linux/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsgettingstartedinstallationlinux><span>Ubuntu 20.04</span></a>
+<input type=checkbox id=m-lluviadocsgettingstartedinstallationlinux-check>
+<label for=m-lluviadocsgettingstartedinstallationlinux-check><a href=/lluvia/docs/gettingstarted/installation/linux/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsgettingstartedinstallationlinux><span>Ubuntu 20.04</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsgettingstartedinstallationwindows-li>
-<a href=/lluvia/docs/gettingstarted/installation/windows/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsgettingstartedinstallationwindows><span>Windows 10</span></a>
+<input type=checkbox id=m-lluviadocsgettingstartedinstallationwindows-check>
+<label for=m-lluviadocsgettingstartedinstallationwindows-check><a href=/lluvia/docs/gettingstarted/installation/windows/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsgettingstartedinstallationwindows><span>Windows 10</span></a></label>
 </li>
 </ul>
 </li>
 </ul>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-lluviadocsreference-li>
-<a href=/lluvia/docs/reference/ class="align-left pl-0 active td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreference><span class=td-sidebar-nav-active-item>Reference</span></a>
+<input type=checkbox id=m-lluviadocsreference-check checked>
+<label for=m-lluviadocsreference-check><a href=/lluvia/docs/reference/ class="align-left pl-0 active td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreference><span class=td-sidebar-nav-active-item>Reference</span></a></label>
 <ul class="ul-2 foldable">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencesession-li>
-<a href=/lluvia/docs/reference/session/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencesession><span>Session</span></a>
+<input type=checkbox id=m-lluviadocsreferencesession-check>
+<label for=m-lluviadocsreferencesession-check><a href=/lluvia/docs/reference/session/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencesession><span>Session</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencememory-li>
-<a href=/lluvia/docs/reference/memory/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencememory><span>Memory</span></a>
+<input type=checkbox id=m-lluviadocsreferencememory-check>
+<label for=m-lluviadocsreferencememory-check><a href=/lluvia/docs/reference/memory/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencememory><span>Memory</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsreferenceobjects-li>
-<a href=/lluvia/docs/reference/objects/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreferenceobjects><span>Objects</span></a>
+<input type=checkbox id=m-lluviadocsreferenceobjects-check>
+<label for=m-lluviadocsreferenceobjects-check><a href=/lluvia/docs/reference/objects/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreferenceobjects><span>Objects</span></a></label>
 <ul class="ul-3 foldable">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferenceobjectsbuffer-li>
-<a href=/lluvia/docs/reference/objects/buffer/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsbuffer><span>Buffer</span></a>
+<input type=checkbox id=m-lluviadocsreferenceobjectsbuffer-check>
+<label for=m-lluviadocsreferenceobjectsbuffer-check><a href=/lluvia/docs/reference/objects/buffer/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsbuffer><span>Buffer</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferenceobjectsimage-li>
-<a href=/lluvia/docs/reference/objects/image/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsimage><span>Image</span></a>
+<input type=checkbox id=m-lluviadocsreferenceobjectsimage-check>
+<label for=m-lluviadocsreferenceobjectsimage-check><a href=/lluvia/docs/reference/objects/image/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsimage><span>Image</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferenceobjectsimage_view-li>
-<a href=/lluvia/docs/reference/objects/image_view/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsimage_view><span>ImageView</span></a>
+<input type=checkbox id=m-lluviadocsreferenceobjectsimage_view-check>
+<label for=m-lluviadocsreferenceobjectsimage_view-check><a href=/lluvia/docs/reference/objects/image_view/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferenceobjectsimage_view><span>ImageView</span></a></label>
 </li>
 </ul>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsreferencenode_system-li>
-<a href=/lluvia/docs/reference/node_system/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreferencenode_system><span>Node system</span></a>
+<input type=checkbox id=m-lluviadocsreferencenode_system-check>
+<label for=m-lluviadocsreferencenode_system-check><a href=/lluvia/docs/reference/node_system/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsreferencenode_system><span>Node system</span></a></label>
 <ul class="ul-3 foldable">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencenode_systemcompute_node-li>
-<a href=/lluvia/docs/reference/node_system/compute_node/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemcompute_node><span>Compute nodes</span></a>
+<input type=checkbox id=m-lluviadocsreferencenode_systemcompute_node-check>
+<label for=m-lluviadocsreferencenode_systemcompute_node-check><a href=/lluvia/docs/reference/node_system/compute_node/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemcompute_node><span>Compute nodes</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencenode_systemcontainer_node-li>
-<a href=/lluvia/docs/reference/node_system/container_node/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemcontainer_node><span>Container nodes</span></a>
+<input type=checkbox id=m-lluviadocsreferencenode_systemcontainer_node-check>
+<label for=m-lluviadocsreferencenode_systemcontainer_node-check><a href=/lluvia/docs/reference/node_system/container_node/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemcontainer_node><span>Container nodes</span></a></label>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsreferencenode_systemrunning-li>
-<a href=/lluvia/docs/reference/node_system/running/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemrunning><span>Running</span></a>
+<input type=checkbox id=m-lluviadocsreferencenode_systemrunning-check>
+<label for=m-lluviadocsreferencenode_systemrunning-check><a href=/lluvia/docs/reference/node_system/running/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsreferencenode_systemrunning><span>Running</span></a></label>
 </li>
 </ul>
 </li>
 </ul>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-lluviadocsexamples-li>
-<a href=/lluvia/docs/examples/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsexamples><span>Examples</span></a>
+<input type=checkbox id=m-lluviadocsexamples-check>
+<label for=m-lluviadocsexamples-check><a href=/lluvia/docs/examples/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-lluviadocsexamples><span>Examples</span></a></label>
 <ul class="ul-2 foldable">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-lluviadocsexamples1-optical_flow-li>
-<a href=/lluvia/docs/examples/1-optical_flow/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsexamples1-optical_flow><span>Real-time optical flow</span></a>
+<input type=checkbox id=m-lluviadocsexamples1-optical_flow-check>
+<label for=m-lluviadocsexamples1-optical_flow-check><a href=/lluvia/docs/examples/1-optical_flow/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-lluviadocsexamples1-optical_flow><span>Real-time optical flow</span></a></label>
 </li>
 </ul>
 </li>
@@ -140,7 +161,7 @@
 <nav aria-label=breadcrumb class=td-breadcrumbs>
 <ol class=breadcrumb>
 <li class=breadcrumb-item>
-<a href=/lluvia/docs/>Docs</a>
+<a href=/lluvia/docs/>Documentation</a>
 </li>
 <li class="breadcrumb-item active" aria-current=page>
 <a href=/lluvia/docs/reference/>Reference</a>
@@ -222,7 +243,7 @@ Last modified January 26, 2022: <a href=https://github.com/jadarve/lluvia/commit
 <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
 <ul class="list-inline mb-0">
 <li class="list-inline-item mx-2 h3" data-toggle=tooltip data-placement=top title=GitHub aria-label=GitHub>
-<a class=text-white target=_blank rel=noopener href=https://github.com/google/docsy aria-label=GitHub>
+<a class=text-white target=_blank rel=noopener href=https://github.com/jadarve/lluvia aria-label=GitHub>
 <i class="fab fa-github"></i>
 </a>
 </li>
