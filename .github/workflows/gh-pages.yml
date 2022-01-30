@@ -3,7 +3,7 @@ name: github pages
 on:
   push:
     branches:
-      - 109_node_library_web_doc  # Set a branch to deploy
+      - master  # Set a branch to deploy
   pull_request:
 
 jobs:
