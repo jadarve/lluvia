@@ -3,7 +3,7 @@ name: github pages
 on:
   push:
     branches:
-      - master  # Set a branch to deploy
+      - 109_node_library_web_doc  # Set a branch to deploy
   pull_request:
 
 jobs:
@@ -56,6 +56,14 @@ jobs:
           cd doc/api/python
           make html
           mv build/html ../../site/static/api/python
+      
+      - name: Generate Node documentation
+        run: |
+          bazel build //lluvia/python:lluvia_wheel
+          pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/nodes/build/python
+
+          cd doc/api/nodes
+           ./generate_nodes_markdown.py ../../site/content/en/nodes
 
       - name: Build Site
         run: |
