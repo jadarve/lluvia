@@ -15,6 +15,9 @@
 #include "core/buffer/Buffer.h"
 #include "core/buffer/BufferUsageFlags.h"
 
+#include "core/device/DeviceDescriptor.h"
+#include "core/device/DeviceType.h"
+
 #include "core/image/Image.h"
 #include "core/image/ImageAddressMode.h"
 #include "core/image/ImageAxis.h"

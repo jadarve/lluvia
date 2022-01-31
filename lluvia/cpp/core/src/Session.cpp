@@ -46,6 +46,29 @@ std::shared_ptr<ll::Session> Session::create(const ll::SessionDescriptor& descri
     return std::shared_ptr<Session>{new Session(descriptor)};
 }
 
+std::vector<ll::DeviceDescriptor> Session::getAvailableDevices() {
+
+    auto devices = std::vector<ll::DeviceDescriptor>{};
+
+    auto vulkanInstance = std::make_shared<ll::vulkan::Instance>(false);
+    const auto vulkanPhysicalDevices = vulkanInstance->get().enumeratePhysicalDevices();
+
+    for (const auto vkPhysicalDevice : vulkanPhysicalDevices) {
+
+        const auto vkDeviceProperties = vkPhysicalDevice.getProperties();
+
+        auto desc = DeviceDescriptor{
+            vkDeviceProperties.deviceID,
+            ll::impl::fromVkPhysicalDeviceType(vkDeviceProperties.deviceType),
+            vkDeviceProperties.deviceName
+            };
+
+        devices.push_back(desc);
+    }
+
+    return devices;
+}
+
 std::vector<vk::LayerProperties> Session::getVulkanInstanceLayerProperties() {
     
     return vk::enumerateInstanceLayerProperties();
@@ -60,6 +83,9 @@ std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties() {
 Session::Session(const ll::SessionDescriptor& descriptor):
     m_descriptor {descriptor} {
 
+    m_instance = std::make_shared<ll::vulkan::Instance>(m_descriptor.isDebugEnabled());
+
+    initDescriptor();
     initDevice();
 
     // by sending a raw pointer, I avoid a circular reference
@@ -388,17 +414,42 @@ std::string Session::help(const std::string& builderName) const {
     return m_interpreter->loadAndRun<std::string>(lua, builderName);
 }
 
+void Session::initDescriptor() {
+
+    // assign the device descriptor if it is present in the session descriptor
+    if (m_descriptor.getDeviceDescriptor().has_value()) {
+        m_deviceDescriptor = m_descriptor.getDeviceDescriptor().value();
+    } else {
+
+        // otherwise, select the first available device
+        const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
+        ll::throwSystemErrorIf(physicalDevices.empty(),
+                               ll::ErrorCode::PhysicalDevicesNotFound, "No physical devices found in the system");
+        
+        auto physicalDevice = physicalDevices[0];
+
+        m_deviceDescriptor = DeviceDescriptor{
+            physicalDevice.getProperties().deviceID,
+            ll::impl::fromVkPhysicalDeviceType(physicalDevice.getProperties().deviceType),
+            physicalDevice.getProperties().deviceName};
+    }
+}
 
 void Session::initDevice() {
-
-    m_instance = std::make_shared<ll::vulkan::Instance>(m_descriptor.isDebugEnabled());
 
     const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
     ll::throwSystemErrorIf(physicalDevices.empty(),
         ll::ErrorCode::PhysicalDevicesNotFound, "No physical devices found in the system");
 
-    // TODO: let user to choose physical device
-    auto physicalDevice = m_instance->get().enumeratePhysicalDevices()[0];
+    auto findPhysicalDeviceCondition = [this](const vk::PhysicalDevice& physicalDevice) {
+        return physicalDevice.getProperties().deviceID == m_deviceDescriptor.id;
+    };
+    
+    auto it = std::find_if(physicalDevices.cbegin(), physicalDevices.cend(), findPhysicalDeviceCondition);
+    ll::throwSystemErrorIf(it == physicalDevices.cend(),
+        ll::ErrorCode::PhysicalDevicesNotFound, "Unable to find physical device with id: " + std::to_string(m_deviceDescriptor.id));
+
+    auto physicalDevice = *it;
 
     const auto queuePriority = 1.0f;
 
