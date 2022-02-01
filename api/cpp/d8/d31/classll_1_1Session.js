@@ -14,6 +14,7 @@ var classll_1_1Session =
     [ "createMemory", "d8/d31/classll_1_1Session.html#aa0069d6265aebd1a8c528806f44d652d", null ],
     [ "createProgram", "d8/d31/classll_1_1Session.html#a06e2822d75b75fc5b324bb261adbe3d6", null ],
     [ "createProgram", "d8/d31/classll_1_1Session.html#ad37db16974b3a0e91f4fbf21346d3eb8", null ],
+    [ "getDeviceDescriptor", "d8/d31/classll_1_1Session.html#a066bff0a56cb34fc688831da57cf4467", null ],
     [ "getGoodComputeLocalShape", "d8/d31/classll_1_1Session.html#a8263f2cfd84e73952ffa2b5ed90cc3ef", null ],
     [ "getHostMemory", "d8/d31/classll_1_1Session.html#a13ed0f34e36cf61b16392a556d3ae29f", null ],
     [ "getNodeBuilderDescriptors", "d8/d31/classll_1_1Session.html#a30cf7859c5aff13663e53a0e3c4ec07d", null ],

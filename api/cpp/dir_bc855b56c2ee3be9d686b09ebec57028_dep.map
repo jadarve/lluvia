@@ -1,20 +1,24 @@
 <map id="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core" name="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core">
-<area shape="rect" id="node4" href="dir_92a4c020cb4b5ec0f0ce2919dbb7a217.html" title="image" alt="" coords="112,159,184,207"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000005_000008.html" title="3" alt="" coords="161,135,170,150"/>
-<area shape="rect" id="node2" href="dir_967a028f6f39b50d010b5fb93194f8e4.html" title="buffer" alt="" coords="91,351,163,399"/>
-<area shape="rect" id="node3" href="dir_da59ab6b5443fd86cec998b3c3275be8.html" title="enums" alt="" coords="37,447,109,495"/>
-<area shape="rect" id="edge3-headlabel" href="dir_000006_000007.html" title="1" alt="" coords="98,428,107,442"/>
-<area shape="rect" id="node6" href="dir_80b2a097659ee8dce628d765c1800a8d.html" title="memory" alt="" coords="88,255,165,303"/>
-<area shape="rect" id="edge4-headlabel" href="dir_000006_000010.html" title="2" alt="" coords="123,314,132,329"/>
-<area shape="rect" id="node7" href="dir_1e4ae25c95f15484ce5038c70c50741b.html" title="vulkan" alt="" coords="144,447,216,495"/>
-<area shape="rect" id="edge2-headlabel" href="dir_000006_000011.html" title="2" alt="" coords="161,419,170,434"/>
-<area shape="rect" id="edge6-headlabel" href="dir_000008_000007.html" title="7" alt="" coords="68,420,77,434"/>
-<area shape="rect" id="edge7-headlabel" href="dir_000008_000010.html" title="2" alt="" coords="139,231,149,246"/>
-<area shape="rect" id="edge5-headlabel" href="dir_000008_000011.html" title="7" alt="" coords="189,422,198,437"/>
-<area shape="rect" id="node5" href="dir_56380ee61975d35702346b4de2da1e6d.html" title="impl" alt="" coords="37,63,109,111"/>
-<area shape="rect" id="edge8-headlabel" href="dir_000010_000006.html" title="1" alt="" coords="121,325,131,339"/>
-<area shape="rect" id="edge10-headlabel" href="dir_000010_000007.html" title="1" alt="" coords="73,420,83,435"/>
-<area shape="rect" id="edge9-headlabel" href="dir_000010_000011.html" title="3" alt="" coords="187,421,197,436"/>
-<area shape="rect" id="clust2" href="dir_bc855b56c2ee3be9d686b09ebec57028.html" alt="" coords="27,52,227,505"/>
-<area shape="rect" id="clust1" href="dir_e599967250dff34f76fc59a8c1ae5366.html" title="lluvia" alt="" coords="16,16,237,516"/>
+<area shape="rect" id="node3" href="dir_81ebb610690f554d97b7d48f3858e8da.html" title="device" alt="" coords="64,351,136,399"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000005_000007.html" title="2" alt="" coords="114,327,123,342"/>
+<area shape="rect" id="node5" href="dir_92a4c020cb4b5ec0f0ce2919dbb7a217.html" title="image" alt="" coords="180,159,252,207"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000005_000009.html" title="3" alt="" coords="217,133,226,147"/>
+<area shape="rect" id="node2" href="dir_967a028f6f39b50d010b5fb93194f8e4.html" title="buffer" alt="" coords="187,351,259,399"/>
+<area shape="rect" id="node4" href="dir_da59ab6b5443fd86cec998b3c3275be8.html" title="enums" alt="" coords="213,447,285,495"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000006_000008.html" title="1" alt="" coords="241,419,251,434"/>
+<area shape="rect" id="node7" href="dir_80b2a097659ee8dce628d765c1800a8d.html" title="memory" alt="" coords="184,255,261,303"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000006_000011.html" title="2" alt="" coords="219,314,228,329"/>
+<area shape="rect" id="node8" href="dir_1e4ae25c95f15484ce5038c70c50741b.html" title="vulkan" alt="" coords="91,447,163,495"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000006_000012.html" title="2" alt="" coords="164,433,174,447"/>
+<area shape="rect" id="edge10-headlabel" href="dir_000007_000008.html" title="1" alt="" coords="197,423,207,437"/>
+<area shape="rect" id="edge9-headlabel" href="dir_000007_000012.html" title="1" alt="" coords="119,419,128,434"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000009_000008.html" title="7" alt="" coords="272,426,281,441"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000009_000011.html" title="2" alt="" coords="224,229,233,243"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000009_000012.html" title="7" alt="" coords="79,421,88,436"/>
+<area shape="rect" id="node6" href="dir_56380ee61975d35702346b4de2da1e6d.html" title="impl" alt="" coords="64,63,136,111"/>
+<area shape="rect" id="edge11-headlabel" href="dir_000011_000006.html" title="1" alt="" coords="217,325,227,339"/>
+<area shape="rect" id="edge13-headlabel" href="dir_000011_000008.html" title="1" alt="" coords="269,425,279,440"/>
+<area shape="rect" id="edge12-headlabel" href="dir_000011_000012.html" title="3" alt="" coords="144,425,153,439"/>
+<area shape="rect" id="clust2" href="dir_bc855b56c2ee3be9d686b09ebec57028.html" alt="" coords="27,52,323,505"/>
+<area shape="rect" id="clust1" href="dir_e599967250dff34f76fc59a8c1ae5366.html" title="lluvia" alt="" coords="16,16,333,516"/>
 </map>

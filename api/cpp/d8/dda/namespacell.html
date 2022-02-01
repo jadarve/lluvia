@@ -118,6 +118,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ContainerNodeDescriptor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for describing a container node.  <a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d56/structll_1_1DeviceDescriptor.html">DeviceDescriptor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/dfd/classll_1_1Duration.html">Duration</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d64/classll_1_1ErrorCategory.html">ErrorCategory</a></td></tr>
@@ -201,6 +203,17 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a81ba6255774692f90547d7da5cb544cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Supported compute dimensions.  <a href="../../d8/dda/namespacell.html#a81ba6255774692f90547d7da5cb544cf">More...</a><br /></td></tr>
 <tr class="separator:a81ba6255774692f90547d7da5cb544cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40bce76015f8f53e108c074b8c079093"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093">DeviceType</a> : ll::enum_t { <br />
+&#160;&#160;<a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093a6311ae17c1ee52b36e68aaf4ad066387">DeviceType::Other</a> = static_cast&lt;ll::enum_t&gt;(vk::PhysicalDeviceType::eOther), 
+<a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093a579514915ed87acffb605512eb600384">DeviceType::DiscreteGPU</a> = static_cast&lt;ll::enum_t&gt;(vk::PhysicalDeviceType::eDiscreteGpu), 
+<a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093ab70d66f5b58172fec7e22dc11d0484a9">DeviceType::IntegratedGPU</a> = static_cast&lt;ll::enum_t&gt;(vk::PhysicalDeviceType::eIntegratedGpu), 
+<a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093af3f30276e28d22974fca049daff66986">DeviceType::VirtualGPU</a> = static_cast&lt;ll::enum_t&gt;(vk::PhysicalDeviceType::eVirtualGpu), 
+<br />
+&#160;&#160;<a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093a2b55387dd066c5bac646ac61543d152d">DeviceType::CPU</a> = static_cast&lt;ll::enum_t&gt;(vk::PhysicalDeviceType::eCpu)
+<br />
+ }</td></tr>
+<tr class="memdesc:a40bce76015f8f53e108c074b8c079093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Image axis enumeration.  <a href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093">More...</a><br /></td></tr>
+<tr class="separator:a40bce76015f8f53e108c074b8c079093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af534378bc7cfaf87120ad129f1451ae0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0">ErrorCode</a> : ll::enum_t { <br />
 &#160;&#160;<a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a7939c7574f03e6c51c2815bec3d7c3cd">ErrorCode::EnumConversionFailed</a>, 
 <a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0ae91db4f2789beda1270ae95031e563a3">ErrorCode::MemoryMapFailed</a>, 
@@ -363,6 +376,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a035677a0c3c779c5df22a42f10fe1d13"><td class="memItemLeft" align="right" valign="top">VKAPI_ATTR VkBool32 VKAPI_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a035677a0c3c779c5df22a42f10fe1d13">debugCallback</a> (VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)</td></tr>
 <tr class="memdesc:a035677a0c3c779c5df22a42f10fe1d13"><td class="mdescLeft">&#160;</td><td class="mdescRight">debug callback function to receive messages from the vulkan debug messenger.  <a href="../../d8/dda/namespacell.html#a035677a0c3c779c5df22a42f10fe1d13">More...</a><br /></td></tr>
 <tr class="separator:a035677a0c3c779c5df22a42f10fe1d13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d5bd5f70738a18c0d77541009b286fb"><td class="memTemplParams" colspan="2">template&lt;typename T  = std::string&gt; </td></tr>
+<tr class="memitem:a9d5bd5f70738a18c0d77541009b286fb"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a9d5bd5f70738a18c0d77541009b286fb">deviceTypeToString</a> (<a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093">ll::DeviceType</a> &amp;&amp;deviceType) noexcept</td></tr>
+<tr class="separator:a9d5bd5f70738a18c0d77541009b286fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c540672e3506c9633f9013b862b1472"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1c540672e3506c9633f9013b862b1472"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093">ll::DeviceType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a1c540672e3506c9633f9013b862b1472">stringToDeviceType</a> (T &amp;&amp;stringValue)</td></tr>
+<tr class="separator:a1c540672e3506c9633f9013b862b1472"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58c2e0ab4e8fd702ae39df9315c3473a"><td class="memTemplParams" colspan="2">template&lt;typename T  = std::string&gt; </td></tr>
 <tr class="memitem:a58c2e0ab4e8fd702ae39df9315c3473a"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a58c2e0ab4e8fd702ae39df9315c3473a">errorCodeToString</a> (<a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0">ll::ErrorCode</a> &amp;&amp;value) noexcept</td></tr>
 <tr class="memdesc:a58c2e0ab4e8fd702ae39df9315c3473a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts from <a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0" title="Error codes.">ll::ErrorCode</a> enum value to std::string.  <a href="../../d8/dda/namespacell.html#a58c2e0ab4e8fd702ae39df9315c3473a">More...</a><br /></td></tr>
@@ -701,6 +720,37 @@ Functions</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a81ba6255774692f90547d7da5cb544cfa4a4079e06eb2f7ba7a12821c7c58a3f6"></a>D1&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a81ba6255774692f90547d7da5cb544cfac4d62b6dcca08e5caf06c01889282859"></a>D2&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a81ba6255774692f90547d7da5cb544cfaa3deb6e481689f1d3303caecb8a6c401"></a>D3&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a40bce76015f8f53e108c074b8c079093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40bce76015f8f53e108c074b8c079093">&#9670;&nbsp;</a></span>DeviceType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093">ll::DeviceType</a> : <a class="el" href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/da6/classll_1_1Image.html" title="Objects to manage images.">Image</a> axis enumeration. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a40bce76015f8f53e108c074b8c079093a6311ae17c1ee52b36e68aaf4ad066387"></a>Other&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a40bce76015f8f53e108c074b8c079093a579514915ed87acffb605512eb600384"></a>DiscreteGPU&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a40bce76015f8f53e108c074b8c079093ab70d66f5b58172fec7e22dc11d0484a9"></a>IntegratedGPU&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a40bce76015f8f53e108c074b8c079093af3f30276e28d22974fca049daff66986"></a>VirtualGPU&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a40bce76015f8f53e108c074b8c079093a2b55387dd066c5bac646ac61543d152d"></a>CPU&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -1527,6 +1577,34 @@ template&lt;typename F  = float&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false to continue the execution of the app. </dd></dl>
+
+</div>
+</div>
+<a id="a9d5bd5f70738a18c0d77541009b286fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d5bd5f70738a18c0d77541009b286fb">&#9670;&nbsp;</a></span>deviceTypeToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T  = std::string&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T ll::deviceTypeToString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093">ll::DeviceType</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>deviceType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2457,6 +2535,34 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a1c540672e3506c9633f9013b862b1472"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c540672e3506c9633f9013b862b1472">&#9670;&nbsp;</a></span>stringToDeviceType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093">ll::DeviceType</a> ll::stringToDeviceType </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramname"><em>stringValue</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

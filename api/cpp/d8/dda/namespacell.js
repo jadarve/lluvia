@@ -8,6 +8,7 @@ var namespacell =
     [ "ComputeNodeDescriptor", "dd/de8/classll_1_1ComputeNodeDescriptor.html", "dd/de8/classll_1_1ComputeNodeDescriptor" ],
     [ "ContainerNode", "d5/d2d/classll_1_1ContainerNode.html", "d5/d2d/classll_1_1ContainerNode" ],
     [ "ContainerNodeDescriptor", "d7/da8/classll_1_1ContainerNodeDescriptor.html", "d7/da8/classll_1_1ContainerNodeDescriptor" ],
+    [ "DeviceDescriptor", "dc/d56/structll_1_1DeviceDescriptor.html", "dc/d56/structll_1_1DeviceDescriptor" ],
     [ "Duration", "db/dfd/classll_1_1Duration.html", "db/dfd/classll_1_1Duration" ],
     [ "ErrorCategory", "d4/d64/classll_1_1ErrorCategory.html", "d4/d64/classll_1_1ErrorCategory" ],
     [ "Flags", "d7/dc6/classll_1_1Flags.html", "d7/dc6/classll_1_1Flags" ],
