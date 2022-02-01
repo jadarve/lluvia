@@ -9,7 +9,24 @@
 #include "catch2/catch.hpp"
 
 #include <iostream>
+#include <vector>
+
 #include "lluvia/core.h"
+
+TEST_CASE("GetAvaialableDevices", "SessionCreationTest") {
+
+    const auto availableDevices = ll::Session::getAvailableDevices();
+
+    for(const auto& desc : availableDevices) {
+        auto deviceType = desc.deviceType;
+
+        std::cout << "ID: " << desc.id
+                  << " name: " << desc.name
+                  << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceType)) << std::endl;
+    }
+
+    REQUIRE(availableDevices.size() != 0);
+}
 
 TEST_CASE("DefaultParameters", "SessionCreationTest") {
 
@@ -27,6 +44,25 @@ TEST_CASE("DebugEnabled", "SessionCreationTest") {
     REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
 }
 
+TEST_CASE("MultipleDevicesAvailable", "SessionCreationTest") {
+
+    const auto availableDevices = ll::Session::getAvailableDevices();
+
+    for(auto deviceDesc : availableDevices) {
+
+        std::cout << "ID: " << deviceDesc.id
+                  << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceDesc.deviceType))
+                  << " name: " << deviceDesc.name << std::endl;
+
+        auto desc = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
+
+        auto session = ll::Session::create(desc);
+
+        auto sessionDeviceDesc = session->getDeviceDescriptor();
+
+        REQUIRE(deviceDesc == sessionDeviceDesc);
+    }
+}
 
 /**
  * Test that the returned memory flags meet the Vulkan speficiation

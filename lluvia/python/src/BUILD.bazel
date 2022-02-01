@@ -33,6 +33,11 @@ pyx_library (
         "lluvia/core/buffer/*.pxd",
     ]) +
     glob([
+        "lluvia/core/device/*.py",
+        "lluvia/core/device/*.pyx",
+        "lluvia/core/device/*.pxd",
+    ]) +
+    glob([
         "lluvia/core/image/*.py",
         "lluvia/core/image/*.pyx",
         "lluvia/core/image/*.pxd",

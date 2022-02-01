@@ -4,8 +4,12 @@
 @copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
-#ifndef LLUVIA_CORE_SESSIONDESCRIPTOR_H_
-#define LLUVIA_CORE_SESSIONDESCRIPTOR_H_
+#ifndef LLUVIA_CORE_SESSION_DESCRIPTOR_H_
+#define LLUVIA_CORE_SESSION_DESCRIPTOR_H_
+
+#include <optional>
+
+#include "lluvia/core/device/DeviceDescriptor.h"
 
 namespace ll {
 
@@ -31,10 +35,21 @@ public:
      */
     bool isDebugEnabled() const noexcept;
 
+    /**
+    @brief   Sets the device descriptor used to create a session
+
+    @return    A reference to this object.
+     */
+    SessionDescriptor &setDeviceDescriptor(const ll::DeviceDescriptor &deviceDescriptor) noexcept;
+
+    const std::optional<ll::DeviceDescriptor>& getDeviceDescriptor() const noexcept;
+
 private:
     bool m_enableDebug {false};
+
+    std::optional<ll::DeviceDescriptor> m_deviceDescriptor {};
 };
 
 } // namespace ll
 
-#endif //LLUVIA_CORE_SESSIONDESCRIPTOR_H_
+#endif //LLUVIA_CORE_SESSION_DESCRIPTOR_H_

@@ -18,4 +18,14 @@ bool SessionDescriptor::isDebugEnabled() const noexcept {
     return m_enableDebug;
 }
 
+SessionDescriptor& SessionDescriptor::setDeviceDescriptor(const ll::DeviceDescriptor &deviceDescriptor) noexcept {
+
+    m_deviceDescriptor = deviceDescriptor;
+    return *this;
+}
+
+const std::optional<ll::DeviceDescriptor>& SessionDescriptor::getDeviceDescriptor() const noexcept {
+    return m_deviceDescriptor;
+}
+
 } // namespace ll

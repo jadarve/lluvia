@@ -28,6 +28,8 @@ from lluvia.core import impl
 # Import all Python symbols defined in the module's __init__.py and wrap them in ll_memory
 import lluvia.core.memory as ll_memory
 
+from lluvia.core.device.device_descriptor cimport DeviceDescriptor, _DeviceDescriptor
+
 # Import all C-types needed by Cython
 from lluvia.core.memory.memory cimport _buildMemory, _Memory, Memory
 from lluvia.core.memory.memory_property_flags cimport _MemoryPropertyFlags
@@ -58,12 +60,38 @@ import lluvia.nodes as llnodes
 import lluvia.glsl.lib as llGslsLib
 
 __all__ = [
+    'getAvailableDevices',
     'createSession',
     'Session'
 ]
 
+def getAvailableDevices():
+    """
+    Returns the list of available devices.
 
-def createSession(bool enableDebug = False, bool loadNodeLibrary = True):
+    Returns
+    -------
+    devices : list
+        The list of ll.DeviceDescriptors avaiable to create a session from.
+
+    See Also
+    --------
+    createSession : Creates a new lluvia.Session object.
+    """
+    cdef vector[_DeviceDescriptor] devices = _Session.getAvailableDevices()
+
+    output = list()
+    cdef DeviceDescriptor desc
+    for dev in devices:
+        desc = DeviceDescriptor()
+        desc.__desc = dev
+
+        output.append(desc)
+    
+    return output
+
+
+def createSession(bool enableDebug = False, bool loadNodeLibrary = True, DeviceDescriptor device = None):
     """
     Creates a new lluvia.Session object.
 
@@ -80,15 +108,26 @@ def createSession(bool enableDebug = False, bool loadNodeLibrary = True):
     loadNodeLibrary : bool defaults to True.
         Whether or not the standard Lluvia node library embedded in the
         Python package should be loaded as part of the session creation.
+    
+    device : ll.DeviceDescriptor. Defaults to None.
+        The device used to create the session from. If None, the session will
+        be created from the first device available in getAvailableDevices.
 
     Returns
     -------
     session : Session.
         New session.
+    
+    See Also
+    --------
+    getAvailableDevices : Returns the list of available devices.
     """
 
     cdef _SessionDescriptor desc = _SessionDescriptor()
     desc.enableDebug(enableDebug)
+
+    if device is not None:
+        desc.setDeviceDescriptor(device.__desc)
 
     cdef Session session = Session()
     session.__session = _Session.create(desc)
@@ -107,6 +146,12 @@ cdef class Session:
     def __dealloc__(self):
         # nothing to do
         pass
+
+    property deviceDescriptor:
+        def __get__(self):
+            cdef DeviceDescriptor desc = DeviceDescriptor()
+            desc.__desc = self.__session.get().getDeviceDescriptor()
+            return desc
 
     def getSupportedMemoryPropertyFlags(self):
         """

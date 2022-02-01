@@ -21,6 +21,7 @@ from lluvia.core.command_buffer cimport _CommandBuffer
 from lluvia.core.compute_dimension cimport _ComputeDimension
 from lluvia.core.duration cimport _Duration
 
+from lluvia.core.device.device_descriptor cimport _DeviceDescriptor
 from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode, _NodeBuilderDescriptor
 from lluvia.core.program cimport _Program
 from lluvia.core.types cimport _vec3ui
@@ -34,6 +35,8 @@ cdef extern from 'lluvia/core/SessionDescriptor.h' namespace 'll':
         _SessionDescriptor& enableDebug(bool enable)
         bool isDebugEnabled()
 
+        _SessionDescriptor& setDeviceDescriptor(const _DeviceDescriptor& deviceDescriptor)
+
 
 cdef extern from 'lluvia/core/Session.h' namespace 'll':
 
@@ -45,7 +48,12 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         @staticmethod
         shared_ptr[_Session] create(const _SessionDescriptor& descriptor) except +
 
+        @staticmethod
+        vector[_DeviceDescriptor] getAvailableDevices() except +
+
         vector[_MemoryPropertyFlags] getSupportedMemoryFlags() const
+
+        const _DeviceDescriptor& getDeviceDescriptor()
 
         shared_ptr[_Memory] getHostMemory() except +
 

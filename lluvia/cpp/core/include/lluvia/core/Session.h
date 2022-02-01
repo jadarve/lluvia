@@ -18,6 +18,7 @@
 #include <tuple>
 #include <vector>
 
+#include "lluvia/core/device/DeviceDescriptor.h"
 #include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/SessionDescriptor.h"
 #include "lluvia/core/ComputeDimension.h"
@@ -50,6 +51,13 @@ class Program;
 class Session : public std::enable_shared_from_this<ll::Session> {
 
 public:
+    /**
+    @brief      Gets the available devices.
+
+    @return     The avaiable devices.
+    */
+    static std::vector<ll::DeviceDescriptor> getAvailableDevices();
+
     /**
     @brief      Gets the Vulkan instance layer properties available to this machine.
     
@@ -133,6 +141,14 @@ public:
     @return     The supported memory flags.
     */
     std::vector<ll::MemoryPropertyFlags> getSupportedMemoryFlags() const;
+
+
+    /**
+    @brief Gets the device descriptor associated to this session
+    
+    @return The device descriptor
+     */
+    const ll::DeviceDescriptor& getDeviceDescriptor() const noexcept;
 
 
     /**
@@ -391,9 +407,11 @@ private:
     // Session objects should be created through factory methods
     Session(const ll::SessionDescriptor& descriptor);
 
+    void initDescriptor();
     void initDevice();
 
     const ll::SessionDescriptor              m_descriptor;
+    ll::DeviceDescriptor                     m_deviceDescriptor;
 
     std::shared_ptr<ll::vulkan::Instance>    m_instance;
     std::shared_ptr<ll::vulkan::Device>      m_device;
