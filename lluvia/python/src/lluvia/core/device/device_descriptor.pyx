@@ -23,14 +23,38 @@ cdef class DeviceDescriptor:
         pass
     
     property id:
+        """
+        The device ID
+
+        Returns
+        -------
+        id : uint
+        """
+
         def __get__(self):
             return self.__desc.id
     
     property name:
+        """
+        The device name
+
+        Returns
+        -------
+        name : str
+        """
+
         def __get__(self):
             return str(self.__desc.name, 'utf-8')
 
     property deviceType:
+        """
+        The device type
+
+        Returns
+        -------
+        deviceType : DeviceType
+        """
+
         def __get__(self):
             return DeviceType(<uint32_t> self.__desc.deviceType)
 

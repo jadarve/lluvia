@@ -71,8 +71,8 @@ def getAvailableDevices():
 
     Returns
     -------
-    devices : list
-        The list of ll.DeviceDescriptors avaiable to create a session from.
+    devices : list of DeviceDescriptor
+        The list of DeviceDescriptor avaiable to create a session from.
 
     See Also
     --------
