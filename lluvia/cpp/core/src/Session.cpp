@@ -142,6 +142,10 @@ std::vector<ll::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const {
 }
 
 
+const ll::DeviceDescriptor& Session::getDeviceDescriptor() const noexcept {
+    return m_deviceDescriptor;
+}
+
 bool Session::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept {
 
     return m_device->isImageDescriptorSupported(descriptor);
@@ -420,7 +424,6 @@ void Session::initDescriptor() {
     if (m_descriptor.getDeviceDescriptor().has_value()) {
         m_deviceDescriptor = m_descriptor.getDeviceDescriptor().value();
     } else {
-
         // otherwise, select the first available device
         const auto physicalDevices = m_instance->get().enumeratePhysicalDevices();
         ll::throwSystemErrorIf(physicalDevices.empty(),

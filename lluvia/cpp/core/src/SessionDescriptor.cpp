@@ -20,12 +20,11 @@ bool SessionDescriptor::isDebugEnabled() const noexcept {
 
 SessionDescriptor& SessionDescriptor::setDeviceDescriptor(const ll::DeviceDescriptor &deviceDescriptor) noexcept {
 
-    m_deviceDescriptor = std::optional<ll::DeviceDescriptor>{deviceDescriptor};
+    m_deviceDescriptor = deviceDescriptor;
     return *this;
 }
 
-std::optional<ll::DeviceDescriptor> SessionDescriptor::getDeviceDescriptor() const noexcept {
-
+const std::optional<ll::DeviceDescriptor>& SessionDescriptor::getDeviceDescriptor() const noexcept {
     return m_deviceDescriptor;
 }
 

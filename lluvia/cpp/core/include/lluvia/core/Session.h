@@ -144,6 +144,14 @@ public:
 
 
     /**
+    @brief Gets the device descriptor associated to this session
+    
+    @return The device descriptor
+     */
+    const ll::DeviceDescriptor& getDeviceDescriptor() const noexcept;
+
+
+    /**
     @brief      Determines if parameters in image descriptor are supported for image creation.
 
     This method tests whether or not the combination of image shape, tiling

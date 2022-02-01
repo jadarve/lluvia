@@ -16,10 +16,16 @@
 
 namespace ll {
 
-using DeviceDescriptor = struct {
+struct DeviceDescriptor {
     uint32_t id;
     ll::DeviceType deviceType;
     std::string name;
+
+    bool operator==(const DeviceDescriptor &other) const {
+        return id == other.id &&
+               deviceType == other.deviceType &&
+               name == other.name;
+    }
 };
 
 } // namespace ll

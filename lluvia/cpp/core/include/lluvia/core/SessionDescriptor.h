@@ -42,7 +42,7 @@ public:
      */
     SessionDescriptor &setDeviceDescriptor(const ll::DeviceDescriptor &deviceDescriptor) noexcept;
 
-    std::optional<ll::DeviceDescriptor> getDeviceDescriptor() const noexcept;
+    const std::optional<ll::DeviceDescriptor>& getDeviceDescriptor() const noexcept;
 
 private:
     bool m_enableDebug {false};

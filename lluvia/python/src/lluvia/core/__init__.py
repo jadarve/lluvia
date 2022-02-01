@@ -9,6 +9,7 @@
 from .buffer import *
 from .command_buffer import *
 from .debug_utils import *
+from .device import *
 from .duration import *
 from .enums import *
 from .image import *

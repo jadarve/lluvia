@@ -51,13 +51,17 @@ TEST_CASE("MultipleDevicesAvailable", "SessionCreationTest") {
     for(const auto& deviceDesc : availableDevices) {
         auto deviceType = deviceDesc.deviceType;
 
-        std::cout << "ID: " << deviceDesc.id
+        std::cout << "used ID: " << deviceDesc.id
                   << " name: " << deviceDesc.name
                   << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceType)) << std::endl;
 
         auto desc = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
 
-        auto session = ll::Session::create();
+        auto session = ll::Session::create(desc);
+
+        auto sessionDeviceDesc = session->getDeviceDescriptor();
+
+        REQUIRE(deviceDesc == sessionDeviceDesc);
     }
 }
 
