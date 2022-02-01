@@ -5,6 +5,7 @@ Enumerations
    :maxdepth: 2
 
    BufferUsageFlagBits
+   DeviceType
    ChannelCount
    ChannelType
    ComputeDimension

@@ -85,6 +85,27 @@
 </dl>
 </section>
 <dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.getAvailableDevices">
+<span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">getAvailableDevices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.getAvailableDevices" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the list of available devices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>devices</strong> – The list of DeviceDescriptor avaiable to create a session from.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of DeviceDescriptor</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#lluvia.core.createSession" title="lluvia.core.createSession"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createSession()</span></code></a></dt><dd><p>Creates a new lluvia.Session object.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.createSession">
 <span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">createSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">enableDebug=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">loadNodeLibrary=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DeviceDescriptor</span> <span class="pre">device=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.createSession" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new lluvia.Session object.</p>
@@ -113,7 +134,7 @@ be created from the first device available in getAvailableDevices.</p></li>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAvailableDevices()</span></code></dt><dd><p>Returns the list of available devices.</p>
+<dt><a class="reference internal" href="#lluvia.core.getAvailableDevices" title="lluvia.core.getAvailableDevices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAvailableDevices()</span></code></a></dt><dd><p>Returns the list of available devices.</p>
 </dd>
 </dl>
 </div>

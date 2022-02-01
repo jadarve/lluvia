@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PortDescriptor &mdash; lluvia 0.0.1 documentation</title>
+  <title>DeviceDescriptor &mdash; lluvia 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Program" href="Program.html" />
-    <link rel="prev" title="Parameter" href="Parameter.html" /> 
+    <link rel="next" title="Duration" href="Duration.html" />
+    <link rel="prev" title="ContainerNodeDescriptor" href="ContainerNodeDescriptor.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,14 +47,14 @@
 <li class="toctree-l2"><a class="reference internal" href="ComputeNodeDescriptor.html">ComputeNodeDescriptor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ContainerNode.html">ContainerNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ContainerNodeDescriptor.html">ContainerNodeDescriptor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DeviceDescriptor.html">DeviceDescriptor</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DeviceDescriptor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Duration.html">Duration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ImageView.html">ImageView</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Memory.html">Memory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="MemoryAllocationInfo.html">MemoryAllocationInfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Parameter.html">Parameter</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">PortDescriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PortDescriptor.html">PortDescriptor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Program.html">Program</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Session.html">Session</a></li>
 </ul>
@@ -77,9 +77,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Classes</a> &raquo;</li>
-      <li>PortDescriptor</li>
+      <li>DeviceDescriptor</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/classes/PortDescriptor.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/classes/DeviceDescriptor.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -87,35 +87,57 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="portdescriptor">
-<h1>PortDescriptor<a class="headerlink" href="#portdescriptor" title="Permalink to this headline"></a></h1>
+  <section id="devicedescriptor">
+<h1>DeviceDescriptor<a class="headerlink" href="#devicedescriptor" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="lluvia.core.PortDescriptor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">PortDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uint32_t</span> <span class="pre">binding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PortDirection</span> <span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PortType</span> <span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.PortDescriptor" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="lluvia.core.DeviceDescriptor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">DeviceDescriptor</span></span><a class="headerlink" href="#lluvia.core.DeviceDescriptor" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="lluvia.core.PortDescriptor.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.PortDescriptor.__init__" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="lluvia.core.DeviceDescriptor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.DeviceDescriptor.__init__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lluvia.core.PortDescriptor.binding">
-<span class="sig-name descname"><span class="pre">binding</span></span><a class="headerlink" href="#lluvia.core.PortDescriptor.binding" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="lluvia.core.DeviceDescriptor.deviceType">
+<span class="sig-name descname"><span class="pre">deviceType</span></span><a class="headerlink" href="#lluvia.core.DeviceDescriptor.deviceType" title="Permalink to this definition"></a></dt>
+<dd><p>The device type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>deviceType</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../enumerations/DeviceType.html#lluvia.core.DeviceType" title="lluvia.core.DeviceType">DeviceType</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lluvia.core.PortDescriptor.direction">
-<span class="sig-name descname"><span class="pre">direction</span></span><a class="headerlink" href="#lluvia.core.PortDescriptor.direction" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="lluvia.core.DeviceDescriptor.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#lluvia.core.DeviceDescriptor.id" title="Permalink to this definition"></a></dt>
+<dd><p>The device ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>id</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>uint</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="lluvia.core.PortDescriptor.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#lluvia.core.PortDescriptor.name" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lluvia.core.PortDescriptor.type">
-<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#lluvia.core.PortDescriptor.type" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="lluvia.core.DeviceDescriptor.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#lluvia.core.DeviceDescriptor.name" title="Permalink to this definition"></a></dt>
+<dd><p>The device name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>name</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -125,8 +147,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Parameter.html" class="btn btn-neutral float-left" title="Parameter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Program.html" class="btn btn-neutral float-right" title="Program" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ContainerNodeDescriptor.html" class="btn btn-neutral float-left" title="ContainerNodeDescriptor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Duration.html" class="btn btn-neutral float-right" title="Duration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -94,9 +94,11 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes/Memory.html#lluvia.core.Memory.__init__">__init__() (lluvia.core.Memory method)</a>
+      <li><a href="classes/DeviceDescriptor.html#lluvia.core.DeviceDescriptor.__init__">__init__() (lluvia.core.DeviceDescriptor method)</a>
 
       <ul>
+        <li><a href="classes/Memory.html#lluvia.core.Memory.__init__">(lluvia.core.Memory method)</a>
+</li>
         <li><a href="classes/MemoryAllocationInfo.html#lluvia.core.MemoryAllocationInfo.__init__">(lluvia.core.MemoryAllocationInfo method)</a>
 </li>
         <li><a href="classes/Parameter.html#lluvia.core.Parameter.__init__">(lluvia.core.Parameter method)</a>
@@ -230,10 +232,10 @@
 </li>
       <li><a href="classes/ComputeNode.html#lluvia.core.ComputeNode">ComputeNode (class in lluvia.core)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/ComputeNodeDescriptor.html#lluvia.core.ComputeNodeDescriptor">ComputeNodeDescriptor (class in lluvia.core)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="enumerations/NodeType.html#lluvia.core.NodeType.Container">Container (lluvia.core.NodeType attribute)</a>
 </li>
       <li><a href="classes/ContainerNode.html#lluvia.core.ContainerNode">ContainerNode (class in lluvia.core)</a>
@@ -249,6 +251,8 @@
       <li><a href="classes/CommandBuffer.html#lluvia.core.CommandBuffer.copyImageToBuffer">copyImageToBuffer() (lluvia.core.CommandBuffer method)</a>
 </li>
       <li><a href="classes/CommandBuffer.html#lluvia.core.CommandBuffer.copyImageToImage">copyImageToImage() (lluvia.core.CommandBuffer method)</a>
+</li>
+      <li><a href="enumerations/DeviceType.html#lluvia.core.DeviceType.CPU">CPU (lluvia.core.DeviceType attribute)</a>
 </li>
       <li><a href="classes/Memory.html#lluvia.core.Memory.createBuffer">createBuffer() (lluvia.core.Memory method)</a>
 </li>
@@ -302,13 +306,21 @@
         <li><a href="classes/ImageView.html#lluvia.core.ImageView.depth">(lluvia.core.ImageView attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="classes/DeviceDescriptor.html#lluvia.core.DeviceDescriptor">DeviceDescriptor (class in lluvia.core)</a>
+</li>
       <li><a href="classes/Session.html#lluvia.core.Session.deviceDescriptor">deviceDescriptor (lluvia.core.Session attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="enumerations/MemoryPropertyFlagBits.html#lluvia.core.MemoryPropertyFlagBits.DeviceLocal">DeviceLocal (lluvia.core.MemoryPropertyFlagBits attribute)</a>
 </li>
+      <li><a href="enumerations/DeviceType.html#lluvia.core.DeviceType">DeviceType (class in lluvia.core)</a>
+</li>
+      <li><a href="classes/DeviceDescriptor.html#lluvia.core.DeviceDescriptor.deviceType">deviceType (lluvia.core.DeviceDescriptor attribute)</a>
+</li>
       <li><a href="classes/PortDescriptor.html#lluvia.core.PortDescriptor.direction">direction (lluvia.core.PortDescriptor attribute)</a>
+</li>
+      <li><a href="enumerations/DeviceType.html#lluvia.core.DeviceType.DiscreteGPU">DiscreteGPU (lluvia.core.DeviceType attribute)</a>
 </li>
       <li><a href="classes/Duration.html#lluvia.core.Duration">Duration (class in lluvia.core)</a>
 </li>
@@ -371,6 +383,8 @@
       <li><a href="enumerations/ImageLayout.html#lluvia.core.ImageLayout.General">General (lluvia.core.ImageLayout attribute)</a>
 </li>
       <li><a href="classes/Parameter.html#lluvia.core.Parameter.get">get() (lluvia.core.Parameter method)</a>
+</li>
+      <li><a href="modules/core.html#lluvia.core.getAvailableDevices">getAvailableDevices() (lluvia.core method)</a>
 </li>
       <li><a href="classes/Session.html#lluvia.core.Session.getGoodComputeLocalShape">getGoodComputeLocalShape() (lluvia.core.Session method)</a>
 </li>
@@ -456,6 +470,8 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="classes/DeviceDescriptor.html#lluvia.core.DeviceDescriptor.id">id (lluvia.core.DeviceDescriptor attribute)</a>
+</li>
       <li><a href="classes/Image.html#lluvia.core.Image">Image (class in lluvia.core)</a>
 </li>
       <li><a href="classes/ImageView.html#lluvia.core.ImageView.image">image (lluvia.core.ImageView attribute)</a>
@@ -501,6 +517,8 @@
       <li><a href="enumerations/ChannelType.html#lluvia.core.ChannelType.Int64">Int64 (lluvia.core.ChannelType attribute)</a>
 </li>
       <li><a href="enumerations/ChannelType.html#lluvia.core.ChannelType.Int8">Int8 (lluvia.core.ChannelType attribute)</a>
+</li>
+      <li><a href="enumerations/DeviceType.html#lluvia.core.DeviceType.IntegratedGPU">IntegratedGPU (lluvia.core.DeviceType attribute)</a>
 </li>
       <li><a href="classes/Buffer.html#lluvia.core.Buffer.isMappable">isMappable (lluvia.core.Buffer attribute)</a>
 
@@ -619,14 +637,18 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes/PortDescriptor.html#lluvia.core.PortDescriptor.name">name (lluvia.core.PortDescriptor attribute)</a>
+      <li><a href="classes/DeviceDescriptor.html#lluvia.core.DeviceDescriptor.name">name (lluvia.core.DeviceDescriptor attribute)</a>
+
+      <ul>
+        <li><a href="classes/PortDescriptor.html#lluvia.core.PortDescriptor.name">(lluvia.core.PortDescriptor attribute)</a>
 </li>
+      </ul></li>
       <li><a href="classes/Duration.html#lluvia.core.Duration.nanoseconds">nanoseconds (lluvia.core.Duration attribute)</a>
-</li>
-      <li><a href="enumerations/ImageFilterMode.html#lluvia.core.ImageFilterMode.Nearest">Nearest (lluvia.core.ImageFilterMode attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="enumerations/ImageFilterMode.html#lluvia.core.ImageFilterMode.Nearest">Nearest (lluvia.core.ImageFilterMode attribute)</a>
+</li>
       <li><a href="enumerations/NodeState.html#lluvia.core.NodeState">NodeState (class in lluvia.core)</a>
 </li>
       <li><a href="enumerations/NodeType.html#lluvia.core.NodeType">NodeType (class in lluvia.core)</a>
@@ -641,9 +663,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="classes/MemoryAllocationInfo.html#lluvia.core.MemoryAllocationInfo.offset">offset (lluvia.core.MemoryAllocationInfo attribute)</a>
 </li>
+      <li><a href="enumerations/ImageTiling.html#lluvia.core.ImageTiling.Optimal">Optimal (lluvia.core.ImageTiling attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="enumerations/ImageTiling.html#lluvia.core.ImageTiling.Optimal">Optimal (lluvia.core.ImageTiling attribute)</a>
+      <li><a href="enumerations/DeviceType.html#lluvia.core.DeviceType.Other">Other (lluvia.core.DeviceType attribute)</a>
 </li>
       <li><a href="enumerations/PortDirection.html#lluvia.core.PortDirection.Out">Out (lluvia.core.PortDirection attribute)</a>
 </li>
@@ -948,6 +972,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="enumerations/ImageAxis.html#lluvia.core.ImageAxis.V">V (lluvia.core.ImageAxis attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="enumerations/DeviceType.html#lluvia.core.DeviceType.VirtualGPU">VirtualGPU (lluvia.core.DeviceType attribute)</a>
 </li>
   </ul></td>
 </tr></table>
