@@ -11,6 +11,7 @@ Classes
    ComputeNodeDescriptor
    ContainerNode
    ContainerNodeDescriptor
+   DeviceDescriptor
    Duration
    Image
    ImageView
