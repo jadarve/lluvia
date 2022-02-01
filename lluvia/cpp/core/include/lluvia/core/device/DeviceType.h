@@ -50,13 +50,13 @@ constexpr const std::array<std::tuple<const char *, ll::DeviceType>, 5> DeviceTy
 
 
 template <typename T = std::string>
-inline T deviceTypeToString(ll::DeviceType &&axis) noexcept
+inline T deviceTypeToString(ll::DeviceType&& deviceType) noexcept
 {
-    return impl::enumToString<ll::DeviceType, ll::impl::DeviceTypeStrings.size(), ll::impl::DeviceTypeStrings>(std::forward<ll::DeviceType>(axis));
+    return impl::enumToString<ll::DeviceType, ll::impl::DeviceTypeStrings.size(), ll::impl::DeviceTypeStrings>(std::forward<ll::DeviceType>(deviceType));
 }
 
 template <typename T>
-inline ll::DeviceType stringToDeviceType(T &&stringValue)
+inline ll::DeviceType stringToDeviceType(T&& stringValue)
 {
     return impl::stringToEnum<ll::DeviceType, T, ll::impl::DeviceTypeStrings.size(), ll::impl::DeviceTypeStrings>(std::forward<T>(stringValue));
 }

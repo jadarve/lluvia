@@ -35,7 +35,7 @@ cdef class DeviceDescriptor:
             return DeviceType(<uint32_t> self.__desc.deviceType)
 
     def __str__(self):
-        return 'id: {0} type: {1} name: {2}'.format(self.id, self.deviceType.name, self.name)
+        return 'id: {0:<4d} type: {1:13s} name: {2}'.format(self.id, self.deviceType.name, self.name)
 
     def __eq__(self, other):
 
