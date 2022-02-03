@@ -145,7 +145,7 @@ limitations under the License.
                     }
 
                     var query = $(this).val();
-                    var searchPage = "/lluvia/search/?q=" + query;
+                    var searchPage = "/search/?q=" + query;
                     document.location = searchPage;
 
                     return false;
