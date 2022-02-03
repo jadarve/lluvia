@@ -76,7 +76,7 @@ jobs:
         run: |
           # Copy CNAME file to the generated public folder
           # This is needed for the "gh-pages" branch to properly point to the custom domain
-          cp CNAME /doc/site/public
+          cp CNAME doc/site/public
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
