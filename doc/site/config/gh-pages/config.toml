@@ -1,2 +1,3 @@
 # See https://discourse.gohugo.io/t/docsy-theme-not-rendering-using-github-pages/28109/2
-baseURL = "/lluvia"
+# NOTE: No need for /lluvia anymore as I started using a custom domain.
+baseURL = "/"
