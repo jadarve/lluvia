@@ -42,7 +42,7 @@ from lluvia.core.compute_dimension cimport _ComputeDimension
 
 # from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.enums import NodeType
+from lluvia.core.node_new import NodeType
 
 from lluvia.core.program cimport Program
 

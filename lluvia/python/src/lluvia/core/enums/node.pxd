@@ -11,10 +11,6 @@ from libc.stdint cimport uint32_t
 
 cdef extern from "lluvia/core/Node.h" namespace 'll':
 
-    cdef enum _NodeType 'll::NodeType':
-        _NodeType_Compute    'll::NodeType::Compute'
-        _NodeType_Container  'll::NodeType::Container'
-
     cdef enum _PortDirection 'll::PortDirection':
         _PortDirection_In  'll::PortDirection::In'
         _PortDirection_Out 'll::PortDirection::Out'
@@ -23,11 +19,6 @@ cdef extern from "lluvia/core/Node.h" namespace 'll':
         _PortType_Buffer           'll::PortType::Buffer'
         _PortType_ImageView        'll::PortType::ImageView'
         _PortType_SampledImageView 'll::PortType::SampledImageView'
-
-
-cpdef enum NodeType:
-    Compute   = <uint32_t> _NodeType_Compute
-    Container = <uint32_t> _NodeType_Container
 
 
 cpdef enum PortDirection:

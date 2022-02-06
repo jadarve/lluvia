@@ -16,6 +16,7 @@
 #include "lluvia/core/enums/enums.h"
 
 #include "lluvia/core/node/NodeState.h"
+#include "lluvia/core/node/NodeType.h"
 
 namespace ll {
 
@@ -23,14 +24,6 @@ class Object;
 class CommandBuffer;
 class Parameter;
 
-
-/**
-@brief      Class for node type.
-*/
-enum class NodeType : ll::enum_t {
-    Compute   = 0, /**<  value for ll::ComputeNode type. */
-    Container = 1  /**<  value for ll::ContainerNode type. */
-};
 
 
 /**
@@ -55,17 +48,6 @@ enum class PortType : ll::enum_t {
 
 
 namespace impl {
-
-    /**
-     @brief Node type string values used for converting ll::NodeType to std::string and vice-versa.
-
-     @sa ll::NodeType enum values for this array.
-     */
-    constexpr const std::array<std::tuple<const char*, ll::NodeType>, 2> NodeTypeStrings {{
-        std::make_tuple("Compute"   , ll::NodeType::Compute),
-        std::make_tuple("Container" , ll::NodeType::Container)
-    }};
-
 
     /**
      @brief Port direction string values used for converting ll::PortDirection to std::string and vice-versa.

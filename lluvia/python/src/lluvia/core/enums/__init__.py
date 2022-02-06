@@ -7,6 +7,6 @@
 """
 
 from .compute_dimension import ComputeDimension
-from .node import NodeType, PortDirection, PortType
+from .node import PortDirection, PortType
 from .vulkan import Format, ImageType
 from .parameter import ParameterType
