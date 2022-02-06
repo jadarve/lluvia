@@ -1,6 +1,6 @@
 """
-    lluvia.core.enums.node
-    ----------------------
+    lluvia.core.node.port_type
+    --------------------------
 
     :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
@@ -8,8 +8,7 @@
 
 from libc.stdint cimport uint32_t
 
-
-cdef extern from "lluvia/core/Node.h" namespace 'll':
+cdef extern from "lluvia/core/node/PortType.h" namespace 'll':
 
     cdef enum _PortType 'll::PortType':
         _PortType_Buffer           'll::PortType::Buffer'
