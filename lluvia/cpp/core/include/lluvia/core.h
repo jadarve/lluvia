@@ -29,6 +29,8 @@
 #include "core/image/ImageView.h"
 #include "core/image/ImageViewDescriptor.h"
 
+#include "core/node/NodeState.h"
+
 #include "core/CommandBuffer.h"
 #include "core/ComputeNode.h"
 #include "core/ComputeNodeDescriptor.h"

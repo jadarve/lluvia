@@ -13,6 +13,7 @@ from .duration import *
 from .enums import *
 from .image import *
 from .memory import *
+from .node_new import *
 from .node import *
 from .parameter import *
 from .program import *

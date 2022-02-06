@@ -11,10 +11,6 @@ from libc.stdint cimport uint32_t
 
 cdef extern from "lluvia/core/Node.h" namespace 'll':
 
-    cdef enum _NodeState 'll::NodeState':
-        _NodeState_Created 'll::NodeState::Created'
-        _NodeState_Init    'll::NodeState::Init'
-
     cdef enum _NodeType 'll::NodeType':
         _NodeType_Compute    'll::NodeType::Compute'
         _NodeType_Container  'll::NodeType::Container'
@@ -27,11 +23,6 @@ cdef extern from "lluvia/core/Node.h" namespace 'll':
         _PortType_Buffer           'll::PortType::Buffer'
         _PortType_ImageView        'll::PortType::ImageView'
         _PortType_SampledImageView 'll::PortType::SampledImageView'
-
-
-cpdef enum NodeState:
-    Created = <uint32_t> _NodeState_Created
-    Init    = <uint32_t> _NodeState_Init
 
 
 cpdef enum NodeType:

@@ -15,22 +15,13 @@
 #include "lluvia/core/vulkan/vulkan.hpp"
 #include "lluvia/core/enums/enums.h"
 
+#include "lluvia/core/node/NodeState.h"
+
 namespace ll {
 
 class Object;
 class CommandBuffer;
 class Parameter;
-
-
-/**
-@brief      Class for node state.
-
-@sa ll::Node
-*/
-enum class NodeState : ll::enum_t {
-    Created = 0,
-    Init    = 1
-};
 
 
 /**
@@ -64,17 +55,6 @@ enum class PortType : ll::enum_t {
 
 
 namespace impl {
-
-    /**
-     @brief Node state string values used for converting ll::NodeState to std::string and vice-versa.
-
-     @sa ll::NodeState enum values for this array.
-     */
-    constexpr const std::array<std::tuple<const char*, ll::NodeState>, 2> NodeStateStrings {{
-        std::make_tuple("Created" , ll::NodeState::Created),
-        std::make_tuple("Init"    , ll::NodeState::Init)
-    }};
-
 
     /**
      @brief Node type string values used for converting ll::NodeType to std::string and vice-versa.

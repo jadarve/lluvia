@@ -22,10 +22,6 @@ from lluvia.core.types cimport _vec3ui
 
 cdef extern from 'lluvia/core/Node.h' namespace 'll':
 
-    cdef cppclass _NodeState 'll::NodeState':
-        pass
-
-
     cdef cppclass _NodeType 'll::NodeType':
         pass
 

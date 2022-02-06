@@ -46,6 +46,11 @@ pyx_library (
         "lluvia/core/memory/*.pxd",
     ]) +
     glob([
+        "lluvia/core/node_new/*.py",
+        "lluvia/core/node_new/*.pyx",
+        "lluvia/core/node_new/*.pxd",
+    ]) +
+    glob([
         "lluvia/core/enums/*.py",
         "lluvia/core/enums/*.pyx",
         "lluvia/core/enums/*.pxd",
