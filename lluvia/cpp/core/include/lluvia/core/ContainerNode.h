@@ -8,7 +8,7 @@
 #ifndef LLUVIA_CORE_CONTAINER_NODE_H_
 #define LLUVIA_CORE_CONTAINER_NODE_H_
 
-#include "lluvia/core/Node.h"
+#include "lluvia/core/node/Node.h"
 #include "lluvia/core/ContainerNodeDescriptor.h"
 
 #include <map>

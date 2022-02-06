@@ -9,7 +9,7 @@
 #define LLUVIA_CORE_CONTAINER_DESCRIPTOR_NODE_H_
 
 #include "lluvia/core/types.h"
-#include "lluvia/core/Node.h"
+#include "lluvia/core/node/Node.h"
 #include "lluvia/core/Parameter.h"
 
 #include <map>

@@ -26,7 +26,7 @@
 #include "lluvia/core/image/ImageViewDescriptor.h"
 #include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
-#include "lluvia/core/Node.h"
+#include "lluvia/core/node/Node.h"
 #include "lluvia/core/NodeBuilderDescriptor.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Parameter.h"

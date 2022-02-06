@@ -9,7 +9,7 @@
 from libc.stdint cimport uint32_t
 
 
-cdef extern from "lluvia/core/Node.h" namespace 'll':
+cdef extern from "lluvia/core/node/PortDirection.h" namespace 'll':
 
     cdef enum _PortDirection 'll::PortDirection':
         _PortDirection_In  'll::PortDirection::In'

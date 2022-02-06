@@ -12,7 +12,7 @@ from libcpp.string cimport string
 from lluvia.core.node_new.port_direction cimport _PortDirection
 from lluvia.core.node_new.port_type cimport _PortType
 
-cdef extern from 'lluvia/core/Node.h' namespace 'll':
+cdef extern from 'lluvia/core/node/PortDescriptor.h' namespace 'll':
 
     cdef struct _PortDescriptor 'll::PortDescriptor':
         uint32_t binding

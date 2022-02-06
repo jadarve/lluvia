@@ -33,6 +33,8 @@
 #include "core/node/NodeType.h"
 #include "core/node/PortDirection.h"
 #include "core/node/PortType.h"
+#include "core/node/PortDescriptor.h"
+#include "core/node/Node.h"
 
 #include "core/CommandBuffer.h"
 #include "core/ComputeNode.h"
@@ -42,7 +44,6 @@
 #include "core/Duration.h"
 #include "core/error.h"
 #include "core/Interpreter.h"
-#include "core/Node.h"
 #include "core/NodeBuilderDescriptor.h"
 #include "core/Parameter.h"
 #include "core/Program.h"

@@ -23,11 +23,7 @@ from lluvia.core.node_new.node_type cimport _NodeType
 from lluvia.core.node_new.port_direction cimport _PortDirection
 from lluvia.core.node_new.port_type cimport _PortType
 from lluvia.core.node_new.port_descriptor cimport _PortDescriptor
-
-cdef extern from 'lluvia/core/Node.h' namespace 'll':
-
-    cdef cppclass _Node 'll::Node':
-        _NodeType getType() const
+from lluvia.core.node_new.node cimport _Node
 
 
 cdef extern from 'lluvia/core/PushConstants.h' namespace 'll':

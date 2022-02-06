@@ -9,7 +9,7 @@
 #define LLUVIA_CORE_COMPUTE_NODE_H_
 
 #include "lluvia/core/ComputeNodeDescriptor.h"
-#include "lluvia/core/Node.h"
+#include "lluvia/core/node/Node.h"
 
 #include <cstdint>
 #include <map>

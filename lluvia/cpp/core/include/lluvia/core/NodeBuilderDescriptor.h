@@ -8,7 +8,7 @@
 #ifndef LLUVIA_CORE_NODE_BUILDER_DESCRIPTOR_H_
 #define LLUVIA_CORE_NODE_BUILDER_DESCRIPTOR_H_
 
-#include "lluvia/core/Node.h"
+#include "lluvia/core/node/Node.h"
 
 #include <string>
 
