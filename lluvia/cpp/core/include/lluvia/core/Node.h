@@ -19,35 +19,13 @@
 #include "lluvia/core/node/NodeType.h"
 #include "lluvia/core/node/PortDirection.h"
 #include "lluvia/core/node/PortType.h"
+#include "lluvia/core/node/PortDescriptor.h"
 
 namespace ll {
 
 class Object;
 class CommandBuffer;
 class Parameter;
-
-
-// using PortDescriptor = struct {
-struct PortDescriptor {
-
-    PortDescriptor() {}
-    PortDescriptor(uint32_t pBinding,
-                   const std::string& pName,
-                   ll::PortDirection pDirection,
-                   ll::PortType pType) :
-        binding {pBinding},
-        name {pName},
-        direction {pDirection},
-        type {pType} {}
-
-    /**
-    Binding number within shader program.
-    */
-    uint32_t binding                {0};
-    std::string name                {};
-    ll::PortDirection direction     {ll::PortDirection::In};
-    ll::PortType type               {ll::PortType::Buffer};
-};
 
 
 class Node {
