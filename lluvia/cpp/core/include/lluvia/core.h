@@ -31,6 +31,7 @@
 
 #include "core/node/NodeState.h"
 #include "core/node/NodeType.h"
+#include "core/node/PortDirection.h"
 
 #include "core/CommandBuffer.h"
 #include "core/ComputeNode.h"

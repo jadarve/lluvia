@@ -17,22 +17,13 @@
 
 #include "lluvia/core/node/NodeState.h"
 #include "lluvia/core/node/NodeType.h"
+#include "lluvia/core/node/PortDirection.h"
 
 namespace ll {
 
 class Object;
 class CommandBuffer;
 class Parameter;
-
-
-
-/**
-@brief      Class for port direction.
-*/
-enum class PortDirection : ll::enum_t {
-    In  = 0, /**< The port is an input to this node. */
-    Out = 1  /**< The port is an output to this node. */
-};
 
 
 /**
@@ -48,16 +39,6 @@ enum class PortType : ll::enum_t {
 
 
 namespace impl {
-
-    /**
-     @brief Port direction string values used for converting ll::PortDirection to std::string and vice-versa.
-
-     @sa ll::PortDirection enum values for this array.
-     */
-    constexpr const std::array<std::tuple<const char*, ll::PortDirection>, 2> PortDirectionStrings {{
-        std::make_tuple("In"  , ll::PortDirection::In),
-        std::make_tuple("Out" , ll::PortDirection::Out)
-    }};
 
     /**
     @brief Port type string values used for converting ll::PortType to std::string and vice-versa.

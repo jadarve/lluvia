@@ -20,12 +20,9 @@ from lluvia.core.session cimport Session
 from lluvia.core.types cimport _vec3ui
 
 from lluvia.core.node_new.node_type cimport _NodeType
+from lluvia.core.node_new.port_direction cimport _PortDirection
 
 cdef extern from 'lluvia/core/Node.h' namespace 'll':
-
-    cdef cppclass _PortDirection 'll::PortDirection':
-        pass
-
 
     cdef cppclass _PortType 'll::PortType':
         pass

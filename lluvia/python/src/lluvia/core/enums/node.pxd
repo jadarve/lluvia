@@ -11,19 +11,10 @@ from libc.stdint cimport uint32_t
 
 cdef extern from "lluvia/core/Node.h" namespace 'll':
 
-    cdef enum _PortDirection 'll::PortDirection':
-        _PortDirection_In  'll::PortDirection::In'
-        _PortDirection_Out 'll::PortDirection::Out'
-
     cdef enum _PortType 'll::PortType':
         _PortType_Buffer           'll::PortType::Buffer'
         _PortType_ImageView        'll::PortType::ImageView'
         _PortType_SampledImageView 'll::PortType::SampledImageView'
-
-
-cpdef enum PortDirection:
-    In  = <uint32_t> _PortDirection_In
-    Out = <uint32_t> _PortDirection_Out
 
 
 cpdef enum PortType:
