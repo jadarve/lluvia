@@ -11,8 +11,6 @@ pyx_library (
         "lluvia/core/command_buffer.pyx",
         "lluvia/core/compute_dimension.pxd",
         "lluvia/core/core_object.pxd",
-        "lluvia/core/debug_utils.pxd",
-        "lluvia/core/debug_utils.pyx",
         "lluvia/core/duration.pxd",
         "lluvia/core/duration.pyx",
         "lluvia/core/node.pxd",

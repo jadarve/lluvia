@@ -26,5 +26,5 @@ TEST_CASE("EmptyCommandBuffer", "test_MemoryBarrier") {
     
     session->run(*cmdBuffer);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

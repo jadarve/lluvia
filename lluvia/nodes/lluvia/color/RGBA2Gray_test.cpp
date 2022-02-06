@@ -95,5 +95,5 @@ TEST_CASE("goodUse", "RGBA2Gray_test") {
     ///////////////////////////////////////////////////////
     // Validate good usage of Vulkan :)
     ///////////////////////////////////////////////////////
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

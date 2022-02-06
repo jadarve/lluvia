@@ -86,3 +86,12 @@ py_test (
     ],
     deps = PY_TEST_DEPS,
 )
+
+py_test (
+    name = "test_debug_utils",
+    srcs = [
+        "test_debug_utils.py"
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)

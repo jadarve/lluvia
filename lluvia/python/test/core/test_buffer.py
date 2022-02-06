@@ -5,7 +5,7 @@ import lluvia as ll
 
 def test_create():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
     size = 512
@@ -20,11 +20,13 @@ def test_create():
     # check that all flags have the correct value
     for f in buf.usageFlags:
         assert(f in flags)
+    
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 def test_fromHost():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     mem = session.createMemory()
 
     dtype = np.uint8
@@ -35,6 +37,8 @@ def test_fromHost():
 
     for i in range(len(arr)):
         assert(arr[i] == copy[i])
+    
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

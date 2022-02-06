@@ -42,7 +42,7 @@ TEST_CASE("DifferentPage", "test_BufferMapping") {
     auto ptr1 = buffer1->map<uint8_t>();
     auto ptr2 = buffer2->map<uint8_t>();
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -75,7 +75,7 @@ TEST_CASE("SamePage", "test_BufferMapping") {
     // the second one should throw an exception
     REQUIRE_THROWS_AS(buffer2->map<uint8_t>(), std::system_error);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -112,5 +112,5 @@ TEST_CASE("MapAndSet", "test_BufferMapping") {
     REQUIRE(p.a == pGet.a);
     REQUIRE(p.b == pGet.b);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

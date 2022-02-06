@@ -37,7 +37,7 @@ TEST_CASE("createInitImage", "test_utils") {
     // could create several images at the same time
     auto image = ll::createAndInitImage(session, memory, imgDesc, ll::ImageLayout::General);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -73,5 +73,5 @@ TEST_CASE("configureGraph", "test_utils") {
 
     // {RGBA->getWidth(), RGBA->getHeight(), RGBA->getDepth()}
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

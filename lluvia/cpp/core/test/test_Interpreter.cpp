@@ -72,5 +72,5 @@ TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
     REQUIRE_NOTHROW(session->script(lua));
 
     REQUIRE_THROWS_AS(session->createComputeNodeDescriptor("TestNode"), std::system_error);
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

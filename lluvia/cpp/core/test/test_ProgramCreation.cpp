@@ -107,7 +107,7 @@ TEST_CASE("FromFile", "test_ProgramCreation") {
     }());
     REQUIRE(program != nullptr);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -119,7 +119,7 @@ TEST_CASE("FromSPIRV", "test_ProgramCreation") {
     auto program = session->createProgram(spirv);
     REQUIRE(program != nullptr);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -132,7 +132,7 @@ TEST_CASE("FromSPIRV_empty", "test_ProgramCreation") {
 
     REQUIRE_THROWS_AS(session->createProgram(emptySpirv), std::system_error);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 TEST_CASE("SetInProgramRegistry", "test_ProgramCreation") {
@@ -155,7 +155,7 @@ TEST_CASE("SetInProgramRegistry", "test_ProgramCreation") {
     session->setProgram("assign", program);
     // session and program should be destroyed gracefully.
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -188,5 +188,5 @@ Validation(ERROR): msg_code: 5: Object: VK_NULL_HANDLE (Type = 0) | SPIR-V modul
     REQUIRE_NOTHROW(session->createProgram(spirvCorrupted));
 
      // I expect to receive a warning message
-     REQUIRE(ll::hasReceivedVulkanWarningMessages());
+     REQUIRE(session->hasReceivedVulkanWarningMessages());
  }

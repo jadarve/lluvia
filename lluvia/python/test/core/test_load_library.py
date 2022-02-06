@@ -4,7 +4,7 @@ import lluvia as ll
 
 def test_load_library():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary = False)
     session.loadLibrary('lluvia/cpp/core/test/nodes/test_node_library.zip')
 
     desc = session.createComputeNodeDescriptor('nodes/Assign')
@@ -15,6 +15,8 @@ def test_load_library():
 
     node = session.createComputeNode("nodes/Assign")
     assert(node != None)
+
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

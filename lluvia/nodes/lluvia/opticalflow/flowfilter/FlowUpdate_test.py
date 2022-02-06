@@ -45,7 +45,7 @@ def test_goodUse():
 
     session.run(node)
 
-    assert(not ll.hasReceivedVulkanWarningMessages())
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

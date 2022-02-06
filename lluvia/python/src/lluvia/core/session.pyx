@@ -802,3 +802,15 @@ cdef class Session:
         """
 
         return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')
+
+    def hasReceivedVulkanWarningMessages(self):
+        """
+        Tells whether or not this session has triggered Vulkan warning messages
+
+        Returns
+        -------
+        b : bool
+            Whether or not Vulkan warning messages have been received
+        """
+
+        return self.__session.get().hasReceivedVulkanWarningMessages()

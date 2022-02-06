@@ -100,6 +100,6 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
         REQUIRE(areEqual == true);
     } // unmap hostPtr and secPtr
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 

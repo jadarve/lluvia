@@ -246,3 +246,13 @@ cc_test (
         "//lluvia/cpp/core/test/nodes:node_files"
     ]
 )
+
+cc_test (
+    name = "test_debug_utils",
+    srcs = ["test/test_debug_utils.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = CC_TEST_DEPS,
+    data = [
+        "//lluvia/cpp/core/test/nodes:node_files"
+    ]
+)

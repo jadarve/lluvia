@@ -418,6 +418,11 @@ std::string Session::help(const std::string& builderName) const {
     return m_interpreter->loadAndRun<std::string>(lua, builderName);
 }
 
+bool Session::hasReceivedVulkanWarningMessages() const noexcept {
+
+    return m_instance->hasReceivedVulkanWarningMessages();
+}
+
 void Session::initDescriptor() {
 
     // assign the device descriptor if it is present in the session descriptor

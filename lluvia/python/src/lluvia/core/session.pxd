@@ -89,6 +89,7 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         _vec3ui getGoodComputeLocalShape(_ComputeDimension dimensions) const
 
         string help(const string& builderName) except +
+        bool hasReceivedVulkanWarningMessages() except +
 
 
 cdef class Session:

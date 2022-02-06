@@ -48,6 +48,6 @@ TEST_CASE("UndefinedToGeneral", "test_ImageLayout") {
     session->run(*cmdBuffer);
     std::cout << "command buffer run successfully" << std::endl;
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 

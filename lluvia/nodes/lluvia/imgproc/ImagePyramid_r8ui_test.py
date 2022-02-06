@@ -59,7 +59,7 @@ def test_deafaultLevelsValue():
 
     session.run(node)
 
-    assert(not ll.hasReceivedVulkanWarningMessages())
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 def test_withSeveralLevels():
@@ -108,7 +108,7 @@ def test_withSeveralLevels():
 
     session.run(node)
 
-    assert(not ll.hasReceivedVulkanWarningMessages())
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

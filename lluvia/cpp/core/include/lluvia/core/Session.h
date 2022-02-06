@@ -400,6 +400,15 @@ public:
     */
     std::string help(const std::string& builderName) const;
 
+    /**
+    @brief      Tells whether or not this session has triggered Vulkan warning messages.
+
+    For this method to return a correct value, the session must be created enabling debug.
+
+    @return     Whether or not vulkan warning messages have been received.
+    */
+    bool hasReceivedVulkanWarningMessages() const noexcept;
+
 
 private:
     static uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice);

@@ -38,7 +38,7 @@ TEST_CASE("DeviceLocalBuffer", "test_BufferCreation") {
     auto buffer = memory->createBuffer(100);
     REQUIRE(buffer != nullptr);
     REQUIRE(buffer->getSize() == 100);
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -56,7 +56,7 @@ TEST_CASE("HostVisibleCoherentCached", "test_BufferCreation") {
     auto buffer = memory->createBuffer(100);
     REQUIRE(buffer != nullptr);
     REQUIRE(buffer->getSize() == 100);
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -74,5 +74,5 @@ TEST_CASE("BufferSizeEqualPageSize", "test_BufferCreation") {
     auto buffer3 = memory->createBuffer(2048); REQUIRE(buffer3 != nullptr); REQUIRE(buffer3->getSize() == 2048);
     auto buffer4 = memory->createBuffer(4096); REQUIRE(buffer4 != nullptr); REQUIRE(buffer4->getSize() == 4096);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

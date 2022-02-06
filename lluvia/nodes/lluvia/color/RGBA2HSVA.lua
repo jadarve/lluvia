@@ -11,6 +11,8 @@ Parameters
 min_chroma : float in [0, 1]. Defaults to 0.0.
     The minimum chromacity allowed in the conversion. If the chromacity of a given
     pixel is less than min_chroma, then the hue value is set to 0.
+float_precision : int. Defaults to 32.
+    Floating point precision used to alloate out_hsva. Possible values: [16, 32].
 
 Inputs
 ------
@@ -37,6 +39,7 @@ function builder.newDescriptor()
     desc:init(builder.name, ll.ComputeDimension.D2)
 
     desc:setParameter('min_chroma', 0.0)
+    desc:setParameter('float_precision', 32)
 
     -- TOTHINK: increased port contracts by checking internal attributes of the PortType
     -- For ImageView, check all image attributes + image view attributes.
@@ -47,6 +50,8 @@ function builder.newDescriptor()
 end
 
 function builder.onNodeInit(node)
+
+    local float_precision = node:getParameter('float_precision')
 
     -------------------------------------------------------
     -- push constants
@@ -85,7 +90,15 @@ function builder.onNodeInit(node)
     imgDesc.height = height
     imgDesc.depth = depth
     imgDesc.channelCount = ll.ChannelCount.C4
-    imgDesc.channelType = ll.ChannelType.Float32
+
+    -- factor out in a function
+    if float_precision == 16 then
+        imgDesc.channelType = ll.ChannelType.Float16
+    elseif float_precision == 32 then
+        imgDesc.channelType = ll.ChannelType.Float32
+    else
+        error(builder.name .. ': unknown float_precision got: ' .. float_precision)
+    end
 
     local imgViewDesc = ll.ImageViewDescriptor.new()
     imgViewDesc.filterMode = ll.ImageFilterMode.Nearest
