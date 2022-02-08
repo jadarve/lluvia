@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_
-#define LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_
+#ifndef LLUVIA_CORE_NODE_COMPUTE_NODE_DESCRIPTOR_H_
+#define LLUVIA_CORE_NODE_COMPUTE_NODE_DESCRIPTOR_H_
 
 #include "lluvia/core/node/Node.h"
 #include "lluvia/core/Parameter.h"
@@ -341,4 +341,4 @@ private:
 
 } // namespace ll
 
-#endif /* LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_ */
+#endif /* LLUVIA_CORE_NODE_COMPUTE_NODE_DESCRIPTOR_H_ */

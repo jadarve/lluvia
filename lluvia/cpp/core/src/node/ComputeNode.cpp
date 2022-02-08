@@ -9,7 +9,7 @@
 
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
-#include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/node/ComputeNodeDescriptor.h"
 #include "lluvia/core/error.h"
 #include "lluvia/core/image/Image.h"
 #include "lluvia/core/image/ImageView.h"

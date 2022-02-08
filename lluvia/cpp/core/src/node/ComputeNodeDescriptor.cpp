@@ -5,7 +5,7 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/node/ComputeNodeDescriptor.h"
 
 #include "lluvia/core/error.h"
 #include "lluvia/core/utils.h"

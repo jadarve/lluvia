@@ -8,7 +8,7 @@
 #ifndef LLUVIA_CORE_NODE_COMPUTE_NODE_H_
 #define LLUVIA_CORE_NODE_COMPUTE_NODE_H_
 
-#include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/node/ComputeNodeDescriptor.h"
 #include "lluvia/core/node/Node.h"
 
 #include <cstdint>

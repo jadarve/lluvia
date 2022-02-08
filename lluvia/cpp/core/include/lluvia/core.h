@@ -30,6 +30,7 @@
 #include "core/image/ImageViewDescriptor.h"
 
 #include "core/node/ComputeNode.h"
+#include "core/node/ComputeNodeDescriptor.h"
 #include "core/node/Node.h"
 #include "core/node/NodeState.h"
 #include "core/node/NodeType.h"
@@ -38,7 +39,6 @@
 #include "core/node/PortType.h"
 
 #include "core/CommandBuffer.h"
-#include "core/ComputeNodeDescriptor.h"
 #include "core/ContainerNode.h"
 #include "core/ContainerNodeDescriptor.h"
 #include "core/Duration.h"

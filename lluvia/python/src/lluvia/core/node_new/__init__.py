@@ -7,6 +7,7 @@
 """
 
 from lluvia.core.node_new.compute_node import *
+from lluvia.core.node_new.compute_node_descriptor import *
 from lluvia.core.node_new.node_state import *
 from lluvia.core.node_new.node_type import *
 from lluvia.core.node_new.port_descriptor import *

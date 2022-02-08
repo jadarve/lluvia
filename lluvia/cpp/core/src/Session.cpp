@@ -12,7 +12,7 @@
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/node/ComputeNode.h"
-#include "lluvia/core/ComputeNodeDescriptor.h"
+#include "lluvia/core/node/ComputeNodeDescriptor.h"
 #include "lluvia/core/ContainerNode.h"
 #include "lluvia/core/ContainerNodeDescriptor.h"
 #include "lluvia/core/Duration.h"
