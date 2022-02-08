@@ -1,12 +1,12 @@
 /**
 @file       ContainerNodeDescriptor.h
 @brief      ContainerNodeDescriptor class.
-@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+@copyright  2022, Juan David Adarve Bermudez. See AUTHORS for more details.
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_CONTAINER_DESCRIPTOR_NODE_H_
-#define LLUVIA_CORE_CONTAINER_DESCRIPTOR_NODE_H_
+#ifndef LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_
+#define LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_
 
 #include "lluvia/core/types.h"
 #include "lluvia/core/node/Node.h"
@@ -120,4 +120,4 @@ private:
 
 } // namespace ll
 
-#endif // LLUVIA_CORE_CONTAINER_DESCRIPTOR_NODE_H_
+#endif // LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_

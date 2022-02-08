@@ -46,12 +46,12 @@ from lluvia.core.node_new.node_type import NodeType
 
 from lluvia.core.program cimport Program
 
-from lluvia.core.node cimport ContainerNodeDescriptor,\
-                              ContainerNode,\
+from lluvia.core.node cimport ContainerNode,\
                               _buildContainerNode
 
 from lluvia.core.node_new.compute_node cimport ComputeNode, _buildComputeNode
 from lluvia.core.node_new.compute_node_descriptor cimport ComputeNodeDescriptor
+from lluvia.core.node_new.container_node_descriptor cimport ContainerNodeDescriptor
 from lluvia.core.node_new.node_builder_descriptor cimport NodeBuilderDescriptor
 
 from lluvia.core.types cimport _vec3ui

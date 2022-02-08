@@ -43,7 +43,6 @@ from lluvia.core.session cimport Session
 
 
 __all__ = [
-    'ContainerNodeDescriptor',
     'ContainerNode'
 ]
 
@@ -54,36 +53,6 @@ cdef _buildContainerNode(shared_ptr[_ContainerNode] ptr, Session session):
     node.__session = session
 
     return node
-
-cdef class ContainerNodeDescriptor:
-
-    def __cinit__(self):
-        self.__descriptor = _ContainerNodeDescriptor()
-
-    def __dealloc__(self):
-        pass
-
-    property builderName:
-        def __get__(self):
-            return str(self.__descriptor.getBuilderName(), 'utf-8')
-
-        def __set__(self, str builderName):
-            self.__descriptor.setBuilderName(impl.encodeString(builderName))
-
-    def addPort(self, PortDescriptor portDesc):
-
-        self.__descriptor.addPort(portDesc.__descriptor)
-
-    def setParameter(self, str name, Parameter param):
-
-        self.__descriptor.setParameter(impl.encodeString(name), param.__p)
-
-    def getParameter(self, str name):
-
-        cdef Parameter out = Parameter()
-        out.__p = self.__descriptor.getParameter(impl.encodeString(name))
-        return out
-
 
 cdef class ContainerNode:
 

@@ -1,4 +1,4 @@
-#include "lluvia/core/ContainerNodeDescriptor.h"
+#include "lluvia/core/node/ContainerNodeDescriptor.h"
 
 #include "lluvia/core/error.h"
 

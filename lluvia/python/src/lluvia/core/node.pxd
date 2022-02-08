@@ -24,23 +24,7 @@ from lluvia.core.node_new.port_direction cimport _PortDirection
 from lluvia.core.node_new.port_type cimport _PortType
 from lluvia.core.node_new.port_descriptor cimport _PortDescriptor
 from lluvia.core.node_new.node cimport _Node
-
-
-cdef extern from 'lluvia/core/ContainerNodeDescriptor.h' namespace 'll':
-
-    cdef cppclass _ContainerNodeDescriptor 'll::ContainerNodeDescriptor':
-
-        _ContainerNodeDescriptor()
-
-        _ContainerNodeDescriptor& setBuilderName(const string& name)
-        string getBuilderName() const
-
-        _ContainerNodeDescriptor& addPort(_PortDescriptor& port)
-        _PortDescriptor getPort(const string& name) except +
-
-        _ContainerNodeDescriptor& setParameter(const string& name, const _Parameter& value)
-        _Parameter getParameter(const string& name) except +
-
+from lluvia.core.node_new.container_node_descriptor cimport _ContainerNodeDescriptor
 
 cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
 
