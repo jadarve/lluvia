@@ -17,12 +17,11 @@ from cython.operator cimport dereference as deref
 
 from lluvia.core import impl
 
-from lluvia.core.node_new.port_direction cimport PortDirection
-from lluvia.core.node_new.port_direction import PortDirection as PortDirection_t
-from lluvia.core.node_new.port_type cimport PortType
-from lluvia.core.node_new.port_type import PortType as PortType_t
-
-from lluvia.core.node_new.port_descriptor cimport PortDescriptor
+from lluvia.core.node.port_descriptor cimport PortDescriptor
+from lluvia.core.node.port_direction cimport PortDirection
+from lluvia.core.node.port_direction import PortDirection as PortDirection_t
+from lluvia.core.node.port_type cimport PortType
+from lluvia.core.node.port_type import PortType as PortType_t
 
 from lluvia.core.parameter cimport Parameter
 from lluvia.core.program cimport Program, _Program

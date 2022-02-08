@@ -9,7 +9,7 @@
 from libcpp.string cimport string
 
 from lluvia.core.parameter cimport _Parameter
-from lluvia.core.node_new.port_descriptor cimport _PortDescriptor
+from lluvia.core.node.port_descriptor cimport _PortDescriptor
 
 
 cdef extern from 'lluvia/core/node/ContainerNodeDescriptor.h' namespace 'll':

@@ -9,8 +9,8 @@
 from libc.stdint cimport uint32_t
 from libcpp.string cimport string
 
-from lluvia.core.node_new.port_direction cimport _PortDirection
-from lluvia.core.node_new.port_type cimport _PortType
+from lluvia.core.node.port_direction cimport _PortDirection
+from lluvia.core.node.port_type cimport _PortType
 
 cdef extern from 'lluvia/core/node/PortDescriptor.h' namespace 'll':
 

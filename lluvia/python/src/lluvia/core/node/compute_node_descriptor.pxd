@@ -14,8 +14,8 @@ from libcpp.string cimport string
 from lluvia.core.parameter cimport _Parameter
 from lluvia.core.program cimport _Program
 
-from lluvia.core.node_new.port_descriptor cimport _PortDescriptor
-from lluvia.core.node_new.push_constants cimport _PushConstants
+from lluvia.core.node.port_descriptor cimport _PortDescriptor
+from lluvia.core.node.push_constants cimport _PushConstants
 
 
 cdef extern from 'lluvia/core/node/ComputeNodeDescriptor.h' namespace 'll':

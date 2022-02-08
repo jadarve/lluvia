@@ -14,9 +14,9 @@ from lluvia.core.core_object cimport _Object
 from lluvia.core.parameter cimport _Parameter
 from lluvia.core.session cimport Session
 
-from lluvia.core.node_new.node_type cimport _NodeType
-from lluvia.core.node_new.node cimport _Node
-from lluvia.core.node_new.container_node_descriptor cimport _ContainerNodeDescriptor
+from lluvia.core.node.node_type cimport _NodeType
+from lluvia.core.node.node cimport _Node
+from lluvia.core.node.container_node_descriptor cimport _ContainerNodeDescriptor
 
 cdef extern from 'lluvia/core/node/ContainerNode.h' namespace 'll':
 

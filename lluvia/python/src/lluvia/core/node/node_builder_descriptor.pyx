@@ -12,8 +12,8 @@ from libc.stdint cimport uint32_t
 
 from lluvia.core import impl
 
-from lluvia.core.node_new.node_type cimport NodeType
-from lluvia.core.node_new.node_type import NodeType as NodeType_t
+from lluvia.core.node.node_type cimport NodeType
+from lluvia.core.node.node_type import NodeType as NodeType_t
 
 
 __all__ = [

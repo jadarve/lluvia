@@ -42,15 +42,15 @@ from lluvia.core.compute_dimension cimport _ComputeDimension
 
 # from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.node_new.node_type import NodeType
 
 from lluvia.core.program cimport Program
 
-from lluvia.core.node_new.compute_node cimport ComputeNode, _buildComputeNode
-from lluvia.core.node_new.compute_node_descriptor cimport ComputeNodeDescriptor
-from lluvia.core.node_new.container_node_descriptor cimport ContainerNodeDescriptor
-from lluvia.core.node_new.node_builder_descriptor cimport NodeBuilderDescriptor
-from lluvia.core.node_new.container_node cimport ContainerNode, _buildContainerNode
+from lluvia.core.node.compute_node cimport ComputeNode, _buildComputeNode
+from lluvia.core.node.compute_node_descriptor cimport ComputeNodeDescriptor
+from lluvia.core.node.container_node cimport ContainerNode, _buildContainerNode
+from lluvia.core.node.container_node_descriptor cimport ContainerNodeDescriptor
+from lluvia.core.node.node_builder_descriptor cimport NodeBuilderDescriptor
+from lluvia.core.node.node_type import NodeType
 
 from lluvia.core.types cimport _vec3ui
 

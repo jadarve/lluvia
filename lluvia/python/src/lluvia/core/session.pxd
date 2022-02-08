@@ -21,11 +21,11 @@ from lluvia.core.command_buffer cimport _CommandBuffer
 from lluvia.core.compute_dimension cimport _ComputeDimension
 from lluvia.core.duration cimport _Duration
 
-from lluvia.core.node_new.compute_node cimport _ComputeNode
-from lluvia.core.node_new.compute_node_descriptor cimport _ComputeNodeDescriptor
-from lluvia.core.node_new.container_node_descriptor cimport _ContainerNodeDescriptor
-from lluvia.core.node_new.node_builder_descriptor cimport _NodeBuilderDescriptor
-from lluvia.core.node_new.container_node cimport _ContainerNode
+from lluvia.core.node.compute_node cimport _ComputeNode
+from lluvia.core.node.compute_node_descriptor cimport _ComputeNodeDescriptor
+from lluvia.core.node.container_node_descriptor cimport _ContainerNodeDescriptor
+from lluvia.core.node.node_builder_descriptor cimport _NodeBuilderDescriptor
+from lluvia.core.node.container_node cimport _ContainerNode
 
 from lluvia.core.device.device_descriptor cimport _DeviceDescriptor
 from lluvia.core.program cimport _Program

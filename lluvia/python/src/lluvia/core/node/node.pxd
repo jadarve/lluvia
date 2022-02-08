@@ -6,7 +6,7 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from lluvia.core.node_new.node_type cimport _NodeType
+from lluvia.core.node.node_type cimport _NodeType
 
 cdef extern from 'lluvia/core/node/Node.h' namespace 'll':
 

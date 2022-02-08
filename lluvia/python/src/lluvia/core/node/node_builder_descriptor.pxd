@@ -8,7 +8,7 @@
 
 from libcpp.string cimport string
 
-from lluvia.core.node_new.node_type cimport _NodeType
+from lluvia.core.node.node_type cimport _NodeType
 
 
 cdef extern from 'lluvia/core/node/NodeBuilderDescriptor.h' namespace 'll':
