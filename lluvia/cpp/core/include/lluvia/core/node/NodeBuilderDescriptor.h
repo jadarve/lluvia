@@ -5,8 +5,8 @@
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_NODE_BUILDER_DESCRIPTOR_H_
-#define LLUVIA_CORE_NODE_BUILDER_DESCRIPTOR_H_
+#ifndef LLUVIA_CORE_NODE_NODE_BUILDER_DESCRIPTOR_H_
+#define LLUVIA_CORE_NODE_NODE_BUILDER_DESCRIPTOR_H_
 
 #include "lluvia/core/node/Node.h"
 
@@ -38,4 +38,4 @@ struct NodeBuilderDescriptor {
 
 } // namespace ll
 
-#endif // LLUVIA_CORE_NODE_BUILDER_DESCRIPTOR_H_
+#endif // LLUVIA_CORE_NODE_NODE_BUILDER_DESCRIPTOR_H_

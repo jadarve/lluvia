@@ -8,8 +8,6 @@
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-import sys
-
 from libc.stdint cimport uint32_t
 
 from libcpp.memory cimport shared_ptr

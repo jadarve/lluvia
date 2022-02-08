@@ -18,13 +18,13 @@
 #include <tuple>
 #include <vector>
 
+#include "lluvia/core/ComputeDimension.h"
 #include "lluvia/core/device/DeviceDescriptor.h"
 #include "lluvia/core/image/ImageDescriptor.h"
-#include "lluvia/core/SessionDescriptor.h"
-#include "lluvia/core/ComputeDimension.h"
-#include "lluvia/core/NodeBuilderDescriptor.h"
-#include "lluvia/core/types.h"
 #include "lluvia/core/memory/MemoryPropertyFlags.h"
+#include "lluvia/core/node/NodeBuilderDescriptor.h"
+#include "lluvia/core/SessionDescriptor.h"
+#include "lluvia/core/types.h"
 
 namespace ll {
 

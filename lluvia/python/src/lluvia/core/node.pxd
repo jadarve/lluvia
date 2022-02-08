@@ -26,15 +26,6 @@ from lluvia.core.node_new.port_descriptor cimport _PortDescriptor
 from lluvia.core.node_new.node cimport _Node
 
 
-cdef extern from 'lluvia/core/NodeBuilderDescriptor.h' namespace 'll':
-
-    cdef struct _NodeBuilderDescriptor 'll::NodeBuilderDescriptor':
-
-        _NodeType nodeType
-        string name
-        string summary
-        
-
 cdef extern from 'lluvia/core/ContainerNodeDescriptor.h' namespace 'll':
 
     cdef cppclass _ContainerNodeDescriptor 'll::ContainerNodeDescriptor':
@@ -70,9 +61,6 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
 
         void init() except +
         void record(_CommandBuffer& commandBuffer) except +
-
-cdef class NodeBuilderDescriptor:
-    cdef _NodeBuilderDescriptor __descriptor
 
 
 cdef class ContainerNodeDescriptor:

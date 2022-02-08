@@ -30,9 +30,9 @@
 #include "lluvia/core/node/ComputeNode.h"
 #include "lluvia/core/node/ComputeNodeDescriptor.h"
 #include "lluvia/core/node/Node.h"
+#include "lluvia/core/node/NodeBuilderDescriptor.h"
 #include "lluvia/core/node/PushConstants.h"
 
-#include "lluvia/core/NodeBuilderDescriptor.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Parameter.h"
 #include "lluvia/core/Program.h"
