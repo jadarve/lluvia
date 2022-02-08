@@ -10,7 +10,6 @@
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeDimension.h"
-#include "lluvia/core/ContainerNode.h"
 
 #include "lluvia/core/image/Image.h"
 #include "lluvia/core/image/ImageAddressMode.h"
@@ -28,6 +27,7 @@
 
 #include "lluvia/core/node/ComputeNode.h"
 #include "lluvia/core/node/ComputeNodeDescriptor.h"
+#include "lluvia/core/node/ContainerNode.h"
 #include "lluvia/core/node/ContainerNodeDescriptor.h"
 #include "lluvia/core/node/Node.h"
 #include "lluvia/core/node/NodeBuilderDescriptor.h"

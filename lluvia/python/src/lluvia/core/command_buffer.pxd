@@ -19,8 +19,8 @@ from lluvia.core.image.image_layout cimport _ImageLayout
 from lluvia.core.duration cimport _Duration
 from lluvia.core.session cimport Session
 
-from lluvia.core.node cimport _ContainerNode
 from lluvia.core.node_new.compute_node cimport _ComputeNode
+from lluvia.core.node_new.container_node cimport _ContainerNode
 
 cdef extern from 'lluvia/core/CommandBuffer.h' namespace 'll':
 

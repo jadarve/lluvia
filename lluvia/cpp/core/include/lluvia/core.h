@@ -31,6 +31,7 @@
 
 #include "core/node/ComputeNode.h"
 #include "core/node/ComputeNodeDescriptor.h"
+#include "core/node/ContainerNode.h"
 #include "core/node/ContainerNodeDescriptor.h"
 #include "core/node/Node.h"
 #include "core/node/NodeBuilderDescriptor.h"
@@ -42,7 +43,6 @@
 #include "core/node/PushConstants.h"
 
 #include "core/CommandBuffer.h"
-#include "core/ContainerNode.h"
 #include "core/Duration.h"
 #include "core/error.h"
 #include "core/Interpreter.h"

@@ -1,12 +1,12 @@
 /**
-@file       ComputeNode.h
-@brief      ComputeNode class.
-@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+@file       ContainerNode.h
+@brief      ContainerNode class.
+@copyright  2022, Juan David Adarve Bermudez. See AUTHORS for more details.
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_CONTAINER_NODE_H_
-#define LLUVIA_CORE_CONTAINER_NODE_H_
+#ifndef LLUVIA_CORE_NODE_CONTAINER_NODE_H_
+#define LLUVIA_CORE_NODE_CONTAINER_NODE_H_
 
 #include "lluvia/core/node/Node.h"
 #include "lluvia/core/node/ContainerNodeDescriptor.h"
@@ -70,4 +70,4 @@ protected:
 
 } // namespace ll
 
-#endif // LLUVIA_CORE_CONTAINER_NODE_H_
+#endif // LLUVIA_CORE_NODE_CONTAINER_NODE_H_

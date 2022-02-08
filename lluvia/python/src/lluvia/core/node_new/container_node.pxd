@@ -1,32 +1,24 @@
 """
-    lluvia.core.node
-    ----------------
+    lluvia.core.node.container_node
+    -------------------------------
 
-    :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+    :copyright: 2022, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
 """
 
-from libc.stdint cimport int32_t, uint32_t, uint64_t
-
 from libcpp.memory cimport shared_ptr
-from libcpp.vector cimport vector
 from libcpp.string cimport string
 
 from lluvia.core.command_buffer cimport _CommandBuffer
 from lluvia.core.core_object cimport _Object
 from lluvia.core.parameter cimport _Parameter
-from lluvia.core.program cimport _Program
 from lluvia.core.session cimport Session
-from lluvia.core.types cimport _vec3ui
 
 from lluvia.core.node_new.node_type cimport _NodeType
-from lluvia.core.node_new.port_direction cimport _PortDirection
-from lluvia.core.node_new.port_type cimport _PortType
-from lluvia.core.node_new.port_descriptor cimport _PortDescriptor
 from lluvia.core.node_new.node cimport _Node
 from lluvia.core.node_new.container_node_descriptor cimport _ContainerNodeDescriptor
 
-cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
+cdef extern from 'lluvia/core/node/ContainerNode.h' namespace 'll':
 
     cdef cppclass _ContainerNode 'll::ContainerNode':
 
@@ -45,10 +37,6 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
 
         void init() except +
         void record(_CommandBuffer& commandBuffer) except +
-
-
-cdef class ContainerNodeDescriptor:
-    cdef _ContainerNodeDescriptor __descriptor
 
 
 cdef class ContainerNode:

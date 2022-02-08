@@ -14,7 +14,7 @@
 #include "lluvia/core/node/ComputeNode.h"
 #include "lluvia/core/node/ComputeNodeDescriptor.h"
 #include "lluvia/core/node/ContainerNodeDescriptor.h"
-#include "lluvia/core/ContainerNode.h"
+#include "lluvia/core/node/ContainerNode.h"
 #include "lluvia/core/Duration.h"
 #include "lluvia/core/error.h"
 #include "lluvia/core/image/Image.h"
