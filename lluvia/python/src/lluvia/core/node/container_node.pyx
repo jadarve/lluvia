@@ -21,15 +21,14 @@ from lluvia.core.core_object cimport _Object
 
 from lluvia.core.enums.core_object import ObjectType
 
+from lluvia.core.node.compute_node cimport _ComputeNode, _buildComputeNode
 from lluvia.core.node.node_type cimport NodeType
 from lluvia.core.node.node_type import NodeType as NodeType_t
-from lluvia.core.node.compute_node cimport _ComputeNode, _buildComputeNode
+from lluvia.core.node.parameter cimport Parameter
 
 from lluvia.core.image.image cimport Image, ImageView, _ImageView, _buildImageView
 from lluvia.core.impl.stdcpp cimport static_pointer_cast
-from lluvia.core.parameter cimport Parameter
 from lluvia.core.session cimport Session
-
 
 __all__ = [
     'ContainerNode'

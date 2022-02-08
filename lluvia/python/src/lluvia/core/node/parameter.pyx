@@ -1,17 +1,17 @@
 # cython: language_level=3, boundscheck=False, emit_code_comments=True, embedsignature=True
 
 """
-    lluvia.core.parameter
-    ---------------------
+    lluvia.core.node.parameter
+    --------------------------
 
-    :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+    :copyright: 2022, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
 """
 
 from libc.stdint cimport uint32_t
 from libcpp cimport bool as boolean
 
-from lluvia.core.enums.parameter import ParameterType
+from lluvia.core.node.parameter_type import ParameterType
 
 __all__ = [
     'Parameter'

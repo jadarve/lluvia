@@ -1,15 +1,15 @@
 """
-    lluvia.core.enums.parameter
-    ---------------------------
+    lluvia.core.node.parameter_type
+    -------------------------------
 
-    :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+    :copyright: 2022, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
 """
 
 from libc.stdint cimport uint32_t
 
 
-cdef extern from 'lluvia/core/Parameter.h' namespace 'll':
+cdef extern from 'lluvia/core/node/ParameterType.h' namespace 'll':
 
     cdef enum _ParameterType 'll::ParameterType':
         _ParameterType_Int   'll::ParameterType::Int'

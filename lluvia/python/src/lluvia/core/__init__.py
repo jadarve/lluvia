@@ -14,6 +14,5 @@ from .enums import *
 from .image import *
 from .memory import *
 from .node import *
-from .parameter import *
 from .program import *
 from .session import *

@@ -8,11 +8,13 @@
 
 from .compute_node import *
 from .compute_node_descriptor import *
-from .container_node_descriptor import *
 from .container_node import *
+from .container_node_descriptor import *
 from .node_builder_descriptor import *
 from .node_state import *
 from .node_type import *
+from .parameter import *
+from .parameter_type import *
 from .port_descriptor import *
 from .port_direction import *
 from .port_type import *

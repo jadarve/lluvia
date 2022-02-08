@@ -1,16 +1,14 @@
 """
-    lluvia.core.parameter
-    ---------------------
+    lluvia.core.node.parameter
+    --------------------------
 
-    :copyright: 2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+    :copyright: 2022, Juan David Adarve Bermudez. See AUTHORS for more details.
     :license: Apache-2 license, see LICENSE for more details.
 """
 
+from lluvia.core.node.parameter_type cimport _ParameterType
 
-cdef extern from 'lluvia/core/Parameter.h' namespace 'll':
-
-    cdef cppclass _ParameterType 'll::ParameterType':
-        pass
+cdef extern from 'lluvia/core/node/Parameter.h' namespace 'll':
 
     cdef cppclass _Parameter 'll::Parameter':
 

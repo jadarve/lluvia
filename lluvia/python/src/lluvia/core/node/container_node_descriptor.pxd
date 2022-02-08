@@ -8,7 +8,7 @@
 
 from libcpp.string cimport string
 
-from lluvia.core.parameter cimport _Parameter
+from lluvia.core.node.parameter cimport _Parameter
 from lluvia.core.node.port_descriptor cimport _PortDescriptor
 
 

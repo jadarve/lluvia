@@ -10,9 +10,8 @@
 
 from lluvia.core import impl
 
+from lluvia.core.node.parameter cimport Parameter
 from lluvia.core.node.port_descriptor cimport PortDescriptor
-
-from lluvia.core.parameter cimport Parameter
 
 
 __all__ = [

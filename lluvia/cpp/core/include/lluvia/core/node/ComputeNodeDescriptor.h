@@ -9,8 +9,9 @@
 #define LLUVIA_CORE_NODE_COMPUTE_NODE_DESCRIPTOR_H_
 
 #include "lluvia/core/node/Node.h"
+#include "lluvia/core/node/Parameter.h"
 #include "lluvia/core/node/PushConstants.h"
-#include "lluvia/core/Parameter.h"
+
 #include "lluvia/core/types.h"
 
 #include <array>

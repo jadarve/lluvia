@@ -8,4 +8,3 @@
 
 from .compute_dimension import ComputeDimension
 from .vulkan import Format, ImageType
-from .parameter import ParameterType

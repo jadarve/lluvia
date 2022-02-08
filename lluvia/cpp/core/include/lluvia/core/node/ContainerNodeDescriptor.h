@@ -8,9 +8,9 @@
 #ifndef LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_
 #define LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_
 
-#include "lluvia/core/types.h"
 #include "lluvia/core/node/Node.h"
-#include "lluvia/core/Parameter.h"
+#include "lluvia/core/node/Parameter.h"
+#include "lluvia/core/types.h"
 
 #include <map>
 #include <string>

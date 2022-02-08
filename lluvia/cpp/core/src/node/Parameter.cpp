@@ -1,4 +1,4 @@
-#include "lluvia/core/Parameter.h"
+#include "lluvia/core/node/Parameter.h"
 
 namespace ll {
 

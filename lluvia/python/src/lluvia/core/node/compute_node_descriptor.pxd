@@ -11,9 +11,9 @@ from libc.stdint cimport uint32_t
 from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 
-from lluvia.core.parameter cimport _Parameter
 from lluvia.core.program cimport _Program
 
+from lluvia.core.node.parameter cimport _Parameter
 from lluvia.core.node.port_descriptor cimport _PortDescriptor
 from lluvia.core.node.push_constants cimport _PushConstants
 
