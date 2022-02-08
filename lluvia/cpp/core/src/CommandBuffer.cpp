@@ -1,7 +1,7 @@
 #include "lluvia/core/CommandBuffer.h"
 
 #include "lluvia/core/buffer/Buffer.h"
-#include "lluvia/core/ComputeNode.h"
+#include "lluvia/core/node/ComputeNode.h"
 #include "lluvia/core/ContainerNode.h"
 #include "lluvia/core/Duration.h"
 #include "lluvia/core/image/Image.h"

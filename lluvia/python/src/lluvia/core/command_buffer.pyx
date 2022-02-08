@@ -18,7 +18,8 @@ from lluvia.core.duration cimport Duration
 from lluvia.core.image.image_layout cimport _ImageLayout, ImageLayout
 from lluvia.core.image.image cimport Image
 
-from lluvia.core.node cimport ComputeNode, ContainerNode
+from lluvia.core.node cimport ContainerNode
+from lluvia.core.node_new.compute_node cimport ComputeNode
 
 
 __all__ = ['CommandBuffer']

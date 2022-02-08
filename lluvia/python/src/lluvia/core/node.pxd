@@ -93,44 +93,6 @@ cdef extern from 'lluvia/core/ComputeNodeDescriptor.h' namespace 'll':
         uint32_t getLocalZ() const
 
 
-cdef extern from 'lluvia/core/ComputeNode.h' namespace 'll':
-
-    cdef cppclass _ComputeNode 'll::ComputeNode':
-
-        _NodeType getType() const
-
-        string getFunctionName() const
-        shared_ptr[_Program] getProgram() const
-
-        const _ComputeNodeDescriptor& getDescriptor() const
-
-        uint32_t getGridX() const
-        uint32_t getGridY() const
-        uint32_t getGridZ() const
-
-        void setGridX(uint32_t x)
-        void setGridY(uint32_t y)
-        void setGridZ(uint32_t z)
-
-        uint32_t getLocalX() const
-        uint32_t getLocalY() const
-        uint32_t getLocalZ() const
-
-        void setPushConstants(const _PushConstants&)
-        const _PushConstants getPushConstants() const
-
-        void setParameter(const string& name, const _Parameter& value)
-        const _Parameter& getParameter(const string& name) except +
-
-        void configureGridShape(const _vec3ui& globalShape)
-
-        shared_ptr[_Object] getPort(const string& name) except +
-        void bind(const string& name, const shared_ptr[_Object]& obj) except +
-
-        void init() except +
-        void record(_CommandBuffer& commandBuffer) except +
-
-
 cdef extern from 'lluvia/core/ContainerNodeDescriptor.h' namespace 'll':
 
     cdef cppclass _ContainerNodeDescriptor 'll::ContainerNodeDescriptor':
@@ -167,22 +129,12 @@ cdef extern from 'lluvia/core/ContainerNode.h' namespace 'll':
         void init() except +
         void record(_CommandBuffer& commandBuffer) except +
 
-
-cdef class PortDescriptor:
-    cdef _PortDescriptor __descriptor
-
-
 cdef class NodeBuilderDescriptor:
     cdef _NodeBuilderDescriptor __descriptor
 
 
 cdef class ComputeNodeDescriptor:
     cdef _ComputeNodeDescriptor __descriptor
-
-
-cdef class ComputeNode:
-    cdef shared_ptr[_ComputeNode] __node
-    cdef Session                  __session
 
 
 cdef class ContainerNodeDescriptor:
@@ -194,5 +146,4 @@ cdef class ContainerNode:
     cdef Session                    __session
 
 
-cdef _buildComputeNode(shared_ptr[_ComputeNode] ptr, Session session)
 cdef _buildContainerNode(shared_ptr[_ContainerNode] ptr, Session session)

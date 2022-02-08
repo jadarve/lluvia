@@ -21,8 +21,10 @@ from lluvia.core.command_buffer cimport _CommandBuffer
 from lluvia.core.compute_dimension cimport _ComputeDimension
 from lluvia.core.duration cimport _Duration
 
+from lluvia.core.node_new.compute_node cimport _ComputeNode
+
 from lluvia.core.device.device_descriptor cimport _DeviceDescriptor
-from lluvia.core.node cimport _ComputeNodeDescriptor, _ComputeNode, _ContainerNodeDescriptor, _ContainerNode, _NodeBuilderDescriptor
+from lluvia.core.node cimport _ComputeNodeDescriptor, _ContainerNodeDescriptor, _ContainerNode, _NodeBuilderDescriptor
 from lluvia.core.program cimport _Program
 from lluvia.core.types cimport _vec3ui
 
