@@ -37,6 +37,7 @@
 #include "core/node/PortDescriptor.h"
 #include "core/node/PortDirection.h"
 #include "core/node/PortType.h"
+#include "core/node/PushConstants.h"
 
 #include "core/CommandBuffer.h"
 #include "core/ContainerNode.h"
@@ -47,7 +48,6 @@
 #include "core/NodeBuilderDescriptor.h"
 #include "core/Parameter.h"
 #include "core/Program.h"
-#include "core/PushConstants.h"
 #include "core/Session.h"
 #include "core/types.h"
 #include "core/utils.h"

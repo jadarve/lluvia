@@ -18,10 +18,9 @@ from lluvia.core.program cimport _Program
 from lluvia.core.session cimport Session
 from lluvia.core.types cimport _vec3ui
 
-from lluvia.core.node_new.node_type cimport _NodeType
 from lluvia.core.node_new.compute_node_descriptor cimport _ComputeNodeDescriptor
-
-from lluvia.core.node cimport _PushConstants
+from lluvia.core.node_new.node_type cimport _NodeType
+from lluvia.core.node_new.push_constants cimport _PushConstants
 
 cdef extern from 'lluvia/core/node/ComputeNode.h' namespace 'll':
 

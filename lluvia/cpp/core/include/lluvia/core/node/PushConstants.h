@@ -1,12 +1,12 @@
 /**
 @file       PushConstants.h
 @brief      PushConstants class.
-@copyright  2018, Juan David Adarve Bermudez. See AUTHORS for more details.
+@copyright  2022, Juan David Adarve Bermudez. See AUTHORS for more details.
             Distributed under the Apache-2 license, see LICENSE for more details.
 */
 
-#ifndef LLUVIA_CORE_PUSH_CONSTANTS_H_
-#define LLUVIA_CORE_PUSH_CONSTANTS_H_
+#ifndef LLUVIA_CORE_NODE_PUSH_CONSTANTS_H_
+#define LLUVIA_CORE_NODE_PUSH_CONSTANTS_H_
 
 #include "lluvia/core/error.h"
 
@@ -99,4 +99,4 @@ private:
 
 } // namespace ll
 
-#endif // LLUVIA_CORE_PUSH_CONSTANTS_H_
+#endif // LLUVIA_CORENODE__PUSH_CONSTANTS_H_

@@ -8,9 +8,9 @@
 #include "lluvia/core/node/ComputeNodeDescriptor.h"
 
 #include "lluvia/core/error.h"
-#include "lluvia/core/utils.h"
+#include "lluvia/core/node/PushConstants.h"
 #include "lluvia/core/Program.h"
-#include "lluvia/core/PushConstants.h"
+#include "lluvia/core/utils.h"
 
 #include <cassert>
 #include <exception>

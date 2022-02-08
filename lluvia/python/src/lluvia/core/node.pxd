@@ -26,22 +26,6 @@ from lluvia.core.node_new.port_descriptor cimport _PortDescriptor
 from lluvia.core.node_new.node cimport _Node
 
 
-cdef extern from 'lluvia/core/PushConstants.h' namespace 'll':
-
-    cdef cppclass _PushConstants:
-
-        _PushConstants()
-        _PushConstants(const _PushConstants&)
-
-        uint64_t getSize() const
-
-        void setFloat(const float&)
-        float getFloat() const
-
-        void setInt32(const int32_t&)
-        float getInt32() const
-
-
 cdef extern from 'lluvia/core/NodeBuilderDescriptor.h' namespace 'll':
 
     cdef struct _NodeBuilderDescriptor 'll::NodeBuilderDescriptor':
