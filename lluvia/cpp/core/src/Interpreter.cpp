@@ -147,10 +147,10 @@ void registerTypes(sol::table& lib) {
 
     lib.new_usertype<ll::PortDescriptor>("PortDescriptor",
         sol::constructors<ll::PortDescriptor(), ll::PortDescriptor(uint32_t, const std::string&, ll::PortDirection, ll::PortType)>(),
-        "binding"   , &ll::PortDescriptor::binding,
-        "name"      , &ll::PortDescriptor::name,
-        "direction" , &ll::PortDescriptor::direction,
-        "type"      , &ll::PortDescriptor::type
+        "binding"   , sol::property(&ll::PortDescriptor::getBinding),
+        "name"      , sol::property(&ll::PortDescriptor::getName),
+        "direction" , sol::property(&ll::PortDescriptor::getDirection),
+        "type"      , sol::property(&ll::PortDescriptor::getPortType)
         );
 
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",

@@ -57,7 +57,7 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setBuilderName(const std::string& 
 
 ComputeNodeDescriptor& ComputeNodeDescriptor::addPort(const ll::PortDescriptor& port) {
 
-    m_ports[port.name] = port;
+    m_ports[port.getName()] = port;
     return *this;
 }
 
@@ -217,19 +217,19 @@ std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterB
 
         const auto& port = it.second;
         auto binding = vk::DescriptorSetLayoutBinding {}
-                        .setBinding(port.binding)
+                        .setBinding(port.getBinding())
                         .setDescriptorCount(1)
-                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.type))
+                        .setDescriptorType(ll::portTypeToVkDescriptorType(port.getPortType()))
                         .setStageFlags(vk::ShaderStageFlagBits::eCompute)
                         .setPImmutableSamplers(nullptr);
 
-        if (port.binding >= m_ports.size()) {
-            throwSystemError(ll::ErrorCode::PortBindingError, "port [" + port.name +
-                "] has a binding index [" + std::to_string(port.binding) +
+        if (port.getBinding() >= m_ports.size()) {
+            throwSystemError(ll::ErrorCode::PortBindingError, "port [" + port.getName() +
+                "] has a binding index [" + std::to_string(port.getBinding()) +
                 "] greater than the maximum allowed for this node: " + std::to_string(m_ports.size()));
         }
 
-        bindings[port.binding] = binding;
+        bindings[port.getBinding()] = binding;
     }
 
     return bindings;

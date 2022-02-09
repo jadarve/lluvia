@@ -6,7 +6,7 @@ namespace ll {
 
 ContainerNodeDescriptor& ContainerNodeDescriptor::addPort(const ll::PortDescriptor& port) {
     
-    m_ports[port.name] = port;
+    m_ports[port.getName()] = port;
     return *this;
 }
 

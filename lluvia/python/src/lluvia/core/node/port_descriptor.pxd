@@ -14,11 +14,15 @@ from lluvia.core.node.port_type cimport _PortType
 
 cdef extern from 'lluvia/core/node/PortDescriptor.h' namespace 'll':
 
-    cdef struct _PortDescriptor 'll::PortDescriptor':
-        uint32_t binding
-        string name
-        _PortDirection direction
-        _PortType type
+    cdef cppclass _PortDescriptor 'll::PortDescriptor':
+
+        _PortDescriptor()
+        _PortDescriptor(uint32_t,  string&, _PortDirection, _PortType) except +
+
+        uint32_t getBinding() const
+        const string& getName() const
+        _PortDirection getDirection() const
+        _PortType getPortType() const
 
 
 cdef class PortDescriptor:

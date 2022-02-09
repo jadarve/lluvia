@@ -26,12 +26,13 @@ __all__ = [
 
 cdef class PortDescriptor:
 
-    def __init__(self, uint32_t binding, str name, PortDirection direction, PortType type):
+    def __init__(self, uint32_t binding, str name, PortDirection direction, PortType portType):
 
-            self.__descriptor.binding = binding
-            self.__descriptor.name = impl.encodeString(name)
-            self.__descriptor.direction = <_PortDirection> direction
-            self.__descriptor.type = <_PortType> type
+        self.__descriptor = _PortDescriptor(
+            binding,
+            impl.encodeString(name),
+            <_PortDirection>direction,
+            <_PortType> portType)
 
     def __cinit__(self):
         pass
@@ -41,23 +42,23 @@ cdef class PortDescriptor:
 
     property binding:
         def __get__(self):
-            return self.__descriptor.binding
+            return self.__descriptor.getBinding()
 
     property name:
         def __get__(self):
-            return str(self.__descriptor.name, 'utf-8')
+            return str(self.__descriptor.getName(), 'utf-8')
 
     property direction:
         def __get__(self):
-            return PortDirection_t(<uint32_t> self.__descriptor.direction)
+            return PortDirection_t(<uint32_t> self.__descriptor.getDirection())
 
-    property type:
+    property portType:
         def __get__(self):
-            return PortType_t(<uint32_t> self.__descriptor.type)
+            return PortType_t(<uint32_t> self.__descriptor.getPortType())
 
     def __str__(self):
         return '{0}:{1:s}:{2}:{3}'.format(self.binding,
                                           self.name,
                                           self.direction.name,
-                                          self.type.name)
+                                          self.portType.name)
 
