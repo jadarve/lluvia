@@ -264,6 +264,11 @@ void ComputeNode::bind(const std::string& name, const std::shared_ptr<ll::Object
 
     const auto& port = m_descriptor.getPort(name);
 
+    // validate if the object passed is valid under the port descriptor contract
+    const auto validationResult = port.isValid(obj);
+    ll::throwSystemErrorIf(!validationResult.first, ll::ErrorCode::PortBindingError, validationResult.second);
+    
+
     // bind obj according to its type
     switch (obj->getType()) {
         case ll::ObjectType::Buffer:
@@ -343,16 +348,6 @@ void ComputeNode::onInit() {
 
 void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_ptr<ll::Buffer>& buffer) {
 
-    // validate that buffer can be bound at index position
-    // in the vulkan descriptor set
-    const auto& vkBinding = m_parameterBindings.at(port.getBinding());
-    const auto  paramType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
-
-    ll::throwSystemErrorIf(paramType != ll::PortType::Buffer,
-        ll::ErrorCode::PortBindingError,
-        "Port [" + port.getName() + "] of type ll::Buffer cannot be bound at position ["
-        + std::to_string(port.getBinding()) + "] as port type is not ll::PortType::Buffer");
-
     // holds a reference to the object
     m_objects[port.getName()] = buffer;
 
@@ -375,24 +370,6 @@ void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_p
 
 void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::shared_ptr<ll::ImageView>& imgView) {
 
-    const auto isSampled = imgView->getDescriptor().isSampled();
-
-    // validate that imgView can be bound at index position.
-    const auto& vkBinding = m_parameterBindings.at(port.getBinding());
-    const auto portType = ll::vkDescriptorTypeToPortType(vkBinding.descriptorType);
-
-    if (portType == ll::PortType::ImageView) {
-        ll::throwSystemErrorIf(isSampled, ll::ErrorCode::PortBindingError,
-            "Port [" + port.getName() + "] cannot be bound at position [" + std::to_string(port.getBinding()) + 
-            "], expecting ll::PortType::ImageView, got: ll::PortType::SampledImageView");
-
-    } else if(portType == ll::PortType::SampledImageView) {
-        
-        ll::throwSystemErrorIf(!isSampled, ll::ErrorCode::PortBindingError,
-            "Port [" + port.getName() + "] cannot be bound at position [" + std::to_string(port.getBinding()) + 
-            "], expecting ll::PortType::SampledImageView, got: ll::PortType::ImageView");
-    }
-
     // binding
     m_objects[port.getName()] = imgView;
 
@@ -407,6 +384,7 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
 
+    const auto isSampled = imgView->getDescriptor().isSampled();
     writeDescSet.setDescriptorType(isSampled? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
 
     // update the informacion of the descriptor set

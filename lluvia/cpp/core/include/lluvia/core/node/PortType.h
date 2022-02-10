@@ -57,6 +57,11 @@ inline T portTypeToString(ll::PortType &&value) noexcept
     return ll::impl::enumToString<ll::PortType, ll::impl::PortTypeStrings.size(), impl::PortTypeStrings>(std::forward<ll::PortType>(value));
 }
 
+template <typename T = std::string>
+inline T portTypeToString(const ll::PortType& value) noexcept {
+    return ll::impl::enumToString<ll::PortType, ll::impl::PortTypeStrings.size(), impl::PortTypeStrings>(value);
+}
+
 /**
 @brief      Converts from ll::PortType enum to Vulkan DescriptorType.
 
