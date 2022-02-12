@@ -34,7 +34,11 @@ function builder.newDescriptor()
 
     desc:init(builder.name, ll.ComputeDimension.D2)
     
-    desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_gray = ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C1)
+    in_gray:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+
+    desc:addPort(in_gray)
     desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
 
     return desc
@@ -43,13 +47,6 @@ end
 function builder.onNodeInit(node)
 
     local in_gray = node:getPort('in_gray')
-
-    -- validate in_rgba is actually a rgba8ui image
-    -- TODO: remove once port-contracts are implemented
-    local err = ll.isValidImage(in_gray, ll.ChannelCount.C1, ll.ChannelType.Uint8)
-    if err ~= nil then
-        error(builder.name .. ': error validating in_gray: ' .. err)
-    end
 
     -- out_gray descriptors
     local imgDesc = ll.ImageDescriptor.new(in_gray.imageDescriptor)

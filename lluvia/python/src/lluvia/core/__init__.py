@@ -16,3 +16,4 @@ from .memory import *
 from .node import *
 from .program import *
 from .session import *
+from .float_precision import *

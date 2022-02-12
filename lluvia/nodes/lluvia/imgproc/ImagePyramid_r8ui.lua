@@ -36,7 +36,11 @@ function builder.newDescriptor()
 
     desc.builderName = builder.name
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_gray = ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C1)
+    in_gray:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+
+    desc:addPort(in_gray)
 
     -- parameter with default value
     desc:setParameter('levels', 1)

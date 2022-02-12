@@ -47,6 +47,7 @@
 #include "core/CommandBuffer.h"
 #include "core/Duration.h"
 #include "core/error.h"
+#include "core/FloatPrecision.h"
 #include "core/Interpreter.h"
 #include "core/Program.h"
 #include "core/Session.h"

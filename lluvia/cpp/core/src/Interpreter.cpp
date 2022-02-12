@@ -10,6 +10,11 @@
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeDimension.h"
+#include "lluvia/core/FloatPrecision.h"
+#include "lluvia/core/Object.h"
+#include "lluvia/core/Program.h"
+#include "lluvia/core/Session.h"
+#include "lluvia/core/types.h"
 
 #include "lluvia/core/image/Image.h"
 #include "lluvia/core/image/ImageAddressMode.h"
@@ -33,11 +38,6 @@
 #include "lluvia/core/node/NodeBuilderDescriptor.h"
 #include "lluvia/core/node/Parameter.h"
 #include "lluvia/core/node/PushConstants.h"
-
-#include "lluvia/core/Object.h"
-#include "lluvia/core/Program.h"
-#include "lluvia/core/Session.h"
-#include "lluvia/core/types.h"
 
 #include "lluvia/core/impl/LuaLibrary.h"
 
@@ -66,22 +66,23 @@ void registerTypes(sol::table& lib) {
     ///////////////////////////////////////////////////////
     // Enums
     ///////////////////////////////////////////////////////
+    registerEnum<ll::BufferUsageFlagBits, ll::impl::BufferUsageFlagBitsStrings.size(), ll::impl::BufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
     registerEnum<ll::ChannelCount, ll::impl::ChannelCountStrings.size(), ll::impl::ChannelCountStrings>(lib, "ChannelCount");
     registerEnum<ll::ChannelType, ll::impl::ChannelTypeStrings.size(), ll::impl::ChannelTypeStrings>(lib, "ChannelType");
     registerEnum<ll::ComputeDimension, ll::impl::ComputeDimensionStrings.size(), ll::impl::ComputeDimensionStrings>(lib, "ComputeDimension");
+    registerEnum<ll::FloatPrecision, ll::impl::FloatPrecisionStrings.size(), ll::impl::FloatPrecisionStrings>(lib, "FloatPrecision");
     registerEnum<ll::ImageAddressMode, ll::impl::ImageAddressModeStrings.size(), ll::impl::ImageAddressModeStrings>(lib, "ImageAddressMode");
     registerEnum<ll::ImageAxis, ll::impl::ImageAxisStrings.size(), ll::impl::ImageAxisStrings>(lib, "ImageAxis");
     registerEnum<ll::ImageFilterMode, ll::impl::ImageFilterModeStrings.size(), ll::impl::ImageFilterModeStrings>(lib, "ImageFilterMode");
+    registerEnum<ll::ImageLayout, ll::impl::ImageLayoutStrings.size(), ll::impl::ImageLayoutStrings>(lib, "ImageLayout");
+    registerEnum<ll::ImageTiling, ll::impl::ImageTilingStrings.size(), ll::impl::ImageTilingStrings>(lib, "ImageTiling");
+    registerEnum<ll::ImageUsageFlagBits, ll::impl::ImageUsageFlagBitsStrings.size(), ll::impl::ImageUsageFlagBitsStrings>(lib, "ImageUsageFlagBits");
     registerEnum<ll::NodeState, ll::impl::NodeStateStrings.size(), ll::impl::NodeStateStrings>(lib, "NodeState");
     registerEnum<ll::NodeType, ll::impl::NodeTypeStrings.size(), ll::impl::NodeTypeStrings>(lib, "NodeType");
     registerEnum<ll::ObjectType, ll::impl::ObjectTypeStrings.size(), ll::impl::ObjectTypeStrings>(lib, "ObjectType");
     registerEnum<ll::ParameterType, ll::impl::ParameterTypeStrings.size(), ll::impl::ParameterTypeStrings>(lib, "ParameterType");
     registerEnum<ll::PortDirection, ll::impl::PortDirectionStrings.size(), ll::impl::PortDirectionStrings>(lib, "PortDirection");
     registerEnum<ll::PortType, ll::impl::PortTypeStrings.size(), ll::impl::PortTypeStrings>(lib, "PortType");
-    registerEnum<ll::BufferUsageFlagBits, ll::impl::BufferUsageFlagBitsStrings.size(), ll::impl::BufferUsageFlagBitsStrings>(lib, "BufferUsageFlagBits");
-    registerEnum<ll::ImageLayout, ll::impl::ImageLayoutStrings.size(), ll::impl::ImageLayoutStrings>(lib, "ImageLayout");
-    registerEnum<ll::ImageUsageFlagBits, ll::impl::ImageUsageFlagBitsStrings.size(), ll::impl::ImageUsageFlagBitsStrings>(lib, "ImageUsageFlagBits");
-    registerEnum<ll::ImageTiling, ll::impl::ImageTilingStrings.size(), ll::impl::ImageTilingStrings>(lib, "ImageTiling");
 
     ///////////////////////////////////////////////////////
     // Types

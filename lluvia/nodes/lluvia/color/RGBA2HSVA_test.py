@@ -59,7 +59,7 @@ def test_goodUseHalfPrecision():
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
     in_rgba = memory.createImageViewFromHost(imgRGBA)
 
-    node.setParameter('float_precision', ll.Parameter(16))
+    node.setParameter('float_precision', ll.Parameter(ll.FloatPrecision.FP16.value))
     node.bind('in_rgba', in_rgba)
     node.init()
 

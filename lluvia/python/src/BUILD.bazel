@@ -13,6 +13,8 @@ pyx_library (
         "lluvia/core/core_object.pxd",
         "lluvia/core/duration.pxd",
         "lluvia/core/duration.pyx",
+        "lluvia/core/float_precision.pxd",
+        "lluvia/core/float_precision.pyx",
         "lluvia/core/program.pxd",
         "lluvia/core/program.pyx",
         "lluvia/core/session.pxd",

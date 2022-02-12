@@ -95,20 +95,19 @@ function ll.castNode(node)
 end
 
 
-function ll.isValidImage(img, expectedChannelCount, expectedChannelType)
+function ll.floatPrecisionToImageChannelType(floatPrecision)
 
-    local desc = img.imageDescriptor
-    
-    if desc.channelType ~= expectedChannelType then
-        return "expecting channel type " .. expectedChannelType .. ' got: ' .. desc.channelType
+    if floatPrecision == ll.FloatPrecision.FP16 then
+        return ll.ChannelType.Float16
+    elseif floatPrecision == ll.FloatPrecision.FP32 then
+        return ll.ChannelType.Float32
+    elseif floatPrecision == ll.FloatPrecision.FP64 then
+        return ll.ChannelType.Float64
+    else
+        error('unknown float precision value: ' .. floatPrecision)
     end
-
-    if desc.channelCount ~= expectedChannelCount then
-        return "expecting channel count " .. expectedChannelCount .. ' got: ' .. desc.channelCount
-    end
-
-    return nil
 end
+
 -----------------------------------------------------------
 --                     Session
 -----------------------------------------------------------
