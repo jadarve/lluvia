@@ -9,6 +9,7 @@ Enumerations
    ChannelCount
    ChannelType
    ComputeDimension
+   FloatPrecision
    Format
    ImageAddressMode
    ImageAxis
