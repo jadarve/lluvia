@@ -22,6 +22,10 @@ gamma_low : float. Defaults to 0.01
 smooth_iterations : int. Defaults to 1.
     The number of smooth iterations to apply to the estimated flow at each pyramid level.
 
+float_precision : int. Defaults to ll.FloatPrecision.FP32.
+    Floating point precision used accross the algorithm. The outputs out_gray and out_flow
+    will be of this floating point precision.
+
 Inputs
 ------
 in_gray : ImageView
@@ -30,10 +34,12 @@ in_gray : ImageView
 Outputs
 -------
 out_gray : ImageView
-    r32f image. The gray-scale image after one iteration of the algorithm.
+    {r16f, r32f} image. The gray-scale image after one iteration of the algorithm. The floating
+    point precision of this output is affected by the float_precision parameter.
 
 out_flow : ImageView
-    rg32f image. The estimated optical flow.
+    {rg16f, rg32f} image. The estimated optical flow. The floating
+    point precision of this output is affected by the float_precision parameter.
 
 ]]
 
@@ -43,7 +49,11 @@ function builder.newDescriptor()
 
     desc.builderName = builder.name
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_gray = ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C1)
+    in_gray:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+
+    desc:addPort(in_gray)
     desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
@@ -53,6 +63,7 @@ function builder.newDescriptor()
     desc:setParameter('gamma', 0.01)
     desc:setParameter('gamma_low', 0.01)
     desc:setParameter('smooth_iterations', 1)
+    desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
     return desc
 end
@@ -67,6 +78,7 @@ function builder.onNodeInit(node)
     local max_flow = node:getParameter('max_flow')
     local smooth_iterations = node:getParameter('smooth_iterations')
     local levels = node:getParameter('levels')
+    local float_precision = node:getParameter('float_precision')
 
     ll.logd(node.descriptor.builderName, 'onNodeInit: max_flow', max_flow)
 
@@ -82,6 +94,7 @@ function builder.onNodeInit(node)
     filterTop:setParameter('gamma', gamma)
     filterTop:setParameter('max_flow', math.ceil(max_flow / (2^(levels - 1))))
     filterTop:setParameter('smooth_iterations', smooth_iterations)
+    filterTop:setParameter('float_precision', float_precision)
 
     -- use the top level output of the pyramid as input to filterTop
     filterTop:bind('in_gray', imagePyramid:getPort('out_gray'))
@@ -100,6 +113,7 @@ function builder.onNodeInit(node)
         filterLow:setParameter('gamma', gamma_low)
         filterLow:setParameter('max_flow', math.ceil(max_flow / (2^h)))
         filterLow:setParameter('smooth_iterations', smooth_iterations)
+        filterLow:setParameter('float_precision', float_precision)
 
         local in_gray = imagePyramid:getPort(string.format('out_gray_%d', h))
         filterLow:bind('in_gray', in_gray)

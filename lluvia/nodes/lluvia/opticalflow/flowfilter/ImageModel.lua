@@ -7,6 +7,12 @@ Computes the image model from an in_gray image.
 The outputs are a low-pass filtered version of in_gray using a 3x3 Gaussian filter,
 and a 2D image representing the XY partial differences of the low-pass image.
 
+Parameters
+----------
+float_precision : int. Defaults to ll.FloatPrecision.FP32.
+    Floating point precision used accross the algorithm. The outputs out_gray and
+    out_gradient will be of this floating point precision.
+
 Inputs
 ------
 in_gray : ImageView.
@@ -15,11 +21,11 @@ in_gray : ImageView.
 Outputs
 -------
 out_gray : ImageView
-    r32f image. The low-pass filtered version of in_gray.
+    {r16f, r32f} image. The low-pass filtered version of in_gray.
     The values are normalized to the range [0, 1]
 
 out_gradient: ImageView
-    rg32f image. The X and Y gradient components of in_gray.
+    {rg16f, rg32f} image. The X and Y gradient components of in_gray.
     The values are normalized to the range [-1, 1]
 
 ]]
@@ -30,9 +36,15 @@ function builder.newDescriptor()
     
     desc:init(builder.name, ll.ComputeDimension.D2)
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_gray = ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C1)
+    in_gray:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+
+    desc:addPort(in_gray)
     desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(2, 'out_gradient', ll.PortDirection.Out, ll.PortType.ImageView))
+
+    desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
     return desc
 end
@@ -42,13 +54,16 @@ function builder.onNodeInit(node)
 
     local in_gray = node:getPort('in_gray')
 
+    local float_precision = node:getParameter('float_precision')
+    local outChannelType = ll.floatPrecisionToImageChannelType(float_precision)
+
     -- ll::Memory where out_prefilter will be allocated
     local height = in_gray.height
     local width  = in_gray.width
     local memory = in_gray.memory
 
-    local grayImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, ll.ChannelType.Float32)
-    local gradientImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32)
+    local grayImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, outChannelType)
+    local gradientImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, outChannelType)
 
     -- normalizedCoordinates : false
     -- isSampled             : false

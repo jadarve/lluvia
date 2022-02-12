@@ -20,7 +20,7 @@ max_flow : float. Defaults to 1.0.
 Inputs
 ------
 in_flow : ImageView.
-    rg32f image. Input optical flow
+    {rg16f, rg32f} image. Input optical flow
 
 Outputs
 -------
@@ -35,7 +35,11 @@ function builder.newDescriptor()
     
     desc:init(builder.name, ll.ComputeDimension.D2)
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_flow = ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView)
+    in_flow:checkImageChannelCountIs(ll.ChannelCount.C2)
+    in_flow:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    desc:addPort(in_flow)
     desc:addPort(ll.PortDescriptor.new(1, 'out_rgba', ll.PortDirection.Out, ll.PortType.ImageView))
 
     desc:setParameter('max_flow', 1.0)

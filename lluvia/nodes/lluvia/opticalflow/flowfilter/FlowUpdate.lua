@@ -15,22 +15,22 @@ max_flow : float. Defaults to 1.0
 Inputs
 ------
 in_gray : ImageView
-    r32f image. The input gray-scale image at current time step.
+    {r16g, r32f} image. The input gray-scale image at current time step.
 
 in_gradient : ImageView
-    rg32f image. The input gray-scale image gradient at current time step.
+    {rg16f, rg32f} image. The input gray-scale image gradient at current time step.
 
 in_flow : Imageview
-    rg32f image. The current estimation of the optical flow.
+    {rg16f, rg32f} image. The current estimation of the optical flow.
 
 Outputs
 -------
 out_gray : ImageView
-    r32f image. The image estimate for the next time step. It is a memory copy
+    {r16g, r32f} image. The image estimate for the next time step. It is a memory copy
     of in_gray.
 
 out_flow : ImageView
-    rg32f image. The updated optical flow. This image is allocated externally in
+    {rg16f, rg32f} image. The updated optical flow. This image is allocated externally in
     FlowFilterSimple and bound to this node. This way, the loop between FlowPredict
     and FlowUpdate can be broken.
 
@@ -42,9 +42,21 @@ function builder.newDescriptor()
     
     desc:init(builder.name, ll.ComputeDimension.D2)
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(1, 'in_gradient', ll.PortDirection.In, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(2, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_gray = ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C1)
+    in_gray:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    local in_gradient = ll.PortDescriptor.new(1, 'in_gradient', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gradient:checkImageChannelCountIs(ll.ChannelCount.C2)
+    in_gradient:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    local in_flow = ll.PortDescriptor.new(2, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView)
+    in_flow:checkImageChannelCountIs(ll.ChannelCount.C2)
+    in_flow:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    desc:addPort(in_gray)
+    desc:addPort(in_gradient)
+    desc:addPort(in_flow)
 
     desc:addPort(ll.PortDescriptor.new(3, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(4, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))

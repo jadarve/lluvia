@@ -9,7 +9,7 @@ The conversion follows the formulae presented in https://en.wikipedia.org/wiki/H
 Inputs
 ------
 in_hsva : ImageView.
-    rgba32f image. The color componens must lie within the following ranges:
+    {rgba16f, rgba32f} image. The color componens must lie within the following ranges:
 
     * H in [0, 2*pi]
     * S in [0, 1]

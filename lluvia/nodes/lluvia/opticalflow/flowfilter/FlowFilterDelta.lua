@@ -22,13 +22,17 @@ max_flow : float. Defaults to 1.0
 smooth_iterations : int. Defaults to 1.
     The number of smooth iterations to apply to the estimated flow.
 
+float_precision : int. Defaults to ll.FloatPrecision.FP32.
+    Floating point precision used accross the algorithm. The outputs out_gray, out_flow
+    and out_delfa_flow will be of this floating point precision.
+
 Inputs
 ------
 in_gray : ImageView
     r8ui image. The input gray-scale image.
 
 in_flow : ImageView
-    rg32f image. The input optical flow.
+    {rg16f, rg32f} image. The input optical flow.
 
 Outputs
 -------
@@ -49,8 +53,16 @@ function builder.newDescriptor()
 
     desc.builderName = builder.name
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(1, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_gray = ll.PortDescriptor.new(0, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C1)
+    in_gray:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+
+    local in_flow = ll.PortDescriptor.new(1, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C2)
+    in_gray:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    desc:addPort(in_gray)
+    desc:addPort(in_flow)
 
     desc:addPort(ll.PortDescriptor.new(2, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(3, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
@@ -60,6 +72,7 @@ function builder.newDescriptor()
     desc:setParameter('max_flow', 1)
     desc:setParameter('gamma', 0.01)
     desc:setParameter('smooth_iterations', 1)
+    desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
     return desc
 end
@@ -72,6 +85,7 @@ function builder.onNodeInit(node)
     local gamma = node:getParameter('gamma')
     local max_flow = node:getParameter('max_flow')
     local smooth_iterations = node:getParameter('smooth_iterations')
+    local float_precision = node:getParameter('float_precision')
 
     ll.logd(node.descriptor.builderName, 'onNodeInit: max_flow', max_flow)
 
@@ -92,24 +106,26 @@ function builder.onNodeInit(node)
 
 
     local imageModel = ll.createComputeNode('lluvia/opticalflow/flowfilter/ImageModel')
+    imageModel:setParameter('float_precision', float_precision)
     imageModel:bind('in_gray', in_gray)
     imageModel:init()
 
+    local outChannelType = ll.floatPrecisionToImageChannelType(float_precision)
     
     local predict_in_flow = memory:createImageView(
-        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32),
+        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, outChannelType),
         ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
     predict_in_flow:changeImageLayout(ll.ImageLayout.General)
     predict_in_flow:clear()
         
     local predict_in_delta_flow = memory:createImageView(
-        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, ll.ChannelType.Float32),
+        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, outChannelType),
         ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
     predict_in_delta_flow:changeImageLayout(ll.ImageLayout.General)
     predict_in_delta_flow:clear()
     
     local predict_in_gray = memory:createImageView(
-        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, ll.ChannelType.Float32),
+        ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, outChannelType),
         ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
     predict_in_gray:changeImageLayout(ll.ImageLayout.General)
     predict_in_gray:clear()
@@ -117,6 +133,7 @@ function builder.onNodeInit(node)
 
     local predictor = ll.createContainerNode('lluvia/opticalflow/flowfilter/FlowPredictPayload')
     predictor:setParameter('max_flow', max_flow)
+    predictor:setParameter('float_precision', float_precision)
     predictor:bind('in_flow', predict_in_flow)
     predictor:bind('in_gray', predict_in_gray)
     predictor:bind('in_vector', predict_in_delta_flow)
@@ -125,6 +142,7 @@ function builder.onNodeInit(node)
     local update = ll.createComputeNode('lluvia/opticalflow/flowfilter/FlowUpdateDelta')
     update:setParameter('gamma', gamma)
     update:setParameter('max_flow', max_flow)
+    update:setParameter('float_precision', float_precision)
     update:bind('in_gray', imageModel:getPort('out_gray'))
     update:bind('in_gradient', imageModel:getPort('out_gradient'))
     update:bind('in_delta_flow', predictor:getPort('out_vector'))

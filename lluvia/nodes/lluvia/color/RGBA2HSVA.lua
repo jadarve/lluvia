@@ -22,7 +22,7 @@ in_rgba : ImageView.
 Outputs
 -------
 out_hsva : ImageView
-    rgba32f image. This image is allocated in the same memory as in_rgba.
+    {rgba16f, rgba32f} image. This image is allocated in the same memory as in_rgba.
     
     The color componens lie within the following ranges:
 
@@ -83,16 +83,6 @@ function builder.onNodeInit(node)
     imgDesc.depth = depth
     imgDesc.channelCount = ll.ChannelCount.C4
     imgDesc.channelType = ll.floatPrecisionToImageChannelType(float_precision)
-    -- imgDesc.channelType = ll.ChannelType.Float32
-
-    -- factor out in a function
-    -- if float_precision == 16 then
-    --     imgDesc.channelType = ll.ChannelType.Float16
-    -- elseif float_precision == 32 then
-    --     imgDesc.channelType = ll.ChannelType.Float32
-    -- else
-    --     error(builder.name .. ': unknown float_precision got: ' .. float_precision)
-    -- end
 
     local imgViewDesc = ll.ImageViewDescriptor.new()
     imgViewDesc.filterMode = ll.ImageFilterMode.Nearest
