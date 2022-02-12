@@ -4,7 +4,7 @@ import lluvia as ll
 
 def test_compile():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     memory = session.createMemory()
 
     shaderCode = """
@@ -62,6 +62,8 @@ def test_compile():
 
     C_copy = C.toHost(dtype=dtype)
     assert((C_copy == C_host).all())
+    
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

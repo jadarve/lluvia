@@ -15,8 +15,10 @@ def test_getAvailableDevices():
 
 def test_session():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary = False)
     assert(session is not None)
+
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 def test_multipleDevices():
@@ -25,9 +27,11 @@ def test_multipleDevices():
     assert(devices is not None)
 
     for dev in devices:
-        session = ll.createSession(loadNodeLibrary = None, device=dev)
+        session = ll.createSession(enableDebug=True, loadNodeLibrary = None, device=dev)
         assert(session is not None)
         assert(dev == session.deviceDescriptor)
+
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

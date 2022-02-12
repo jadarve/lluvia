@@ -114,6 +114,10 @@ inline T channelTypeToString(ll::ChannelType&& value) noexcept {
     return ll::impl::enumToString<ll::ChannelType, ll::impl::ChannelTypeStrings.size(), impl::ChannelTypeStrings>(std::forward<ll::ChannelType>(value));
 }
 
+template<typename T = std::string>
+inline T channelTypeToString(const ll::ChannelType& value) noexcept {
+    return ll::impl::enumToString<ll::ChannelType, ll::impl::ChannelTypeStrings.size(), impl::ChannelTypeStrings>(value);
+}
 
 /**
 @brief      Converts from a string-like object to ll::ChannelType enum.

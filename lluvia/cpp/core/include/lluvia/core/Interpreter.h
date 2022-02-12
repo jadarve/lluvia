@@ -17,6 +17,8 @@
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-lambda-capture"
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wshadow"
 
 #define SOL_ALL_SAFETIES_ON 1
 #include "sol/sol.hpp"
@@ -25,7 +27,7 @@
 
 #include "lluvia/core/error.h"
 
-namespace ll {
+    namespace ll {
 
 class Session;
 

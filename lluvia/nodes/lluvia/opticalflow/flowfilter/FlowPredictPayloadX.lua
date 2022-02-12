@@ -12,24 +12,27 @@ dt : float. Defaults to 1.0
 Inputs
 ------
 in_flow : ImageView
-    rg32f image. The input optical flow used for the prediction.
+    {rg16f, rg32f} image. The input optical flow used for the prediction.
 
 in_gray : ImageView
-    r32f image. Input scalar field payload.
+    {r16f, r32f} image. Input scalar field payload.
 
 in_vector : Imageview
-    rg32f image. Input vector field payload.
+    {rg16f, rg32f} image. Input vector field payload.
 
 Outputs
 -------
 out_flow : ImageView
-    rg32f image. Predicted optical flow.
+    {rg16f, rg32f} image. Predicted optical flow. The image format will be 
+    the same as in_flow.
 
 out_gray : ImageView
-    r32f image. Predicted scalar field.
+    {r16f, r32f} image. Predicted scalar field. The image format will be 
+    the same as in_gray.
 
 out_vector : ImageView
-    rg32f image. Predicted vector field.
+    {rg16f, rg32f} image. Predicted vector field. The image format will be
+    the same as in_vector.
 
 ]]
 
@@ -39,9 +42,22 @@ function builder.newDescriptor()
     
     desc:init(builder.name, ll.ComputeDimension.D2)
 
-    desc:addPort(ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(1, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(2, 'in_vector', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_flow = ll.PortDescriptor.new(0, 'in_flow', ll.PortDirection.In, ll.PortType.ImageView)
+    in_flow:checkImageChannelCountIs(ll.ChannelCount.C2)
+    in_flow:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    local in_gray = ll.PortDescriptor.new(1, 'in_gray', ll.PortDirection.In, ll.PortType.ImageView)
+    in_gray:checkImageChannelCountIs(ll.ChannelCount.C1)
+    in_gray:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    local in_vector = ll.PortDescriptor.new(2, 'in_vector', ll.PortDirection.In, ll.PortType.ImageView)
+    in_vector:checkImageChannelCountIs(ll.ChannelCount.C2)
+    in_vector:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+
+    desc:addPort(in_flow)
+    desc:addPort(in_gray)
+    desc:addPort(in_vector)
+
     desc:addPort(ll.PortDescriptor.new(3, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(4, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(5, 'out_vector', ll.PortDirection.Out, ll.PortType.ImageView))

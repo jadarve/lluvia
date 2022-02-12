@@ -5,7 +5,7 @@ import lluvia as ll
 import lluvia_test as ll_test
 
 
-def test_goodUse():
+def runTest(dtype, channelType):
 
     nodeName = 'lluvia/opticalflow/flowfilter/FlowUpdateDelta'
 
@@ -21,16 +21,16 @@ def test_goodUse():
     memory = session.createMemory(
         flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
 
-    in_gray = memory.createImageViewFromHost(np.zeros((480, 640), dtype=np.float32))
-    in_gradient = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=np.float32))
-    in_delta_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=np.float32))
-    in_gray_old = memory.createImageViewFromHost(np.zeros((480, 640), dtype=np.float32))
-    in_flow = memory.createImageViewFromHost(np.zeros((240, 320, 2), dtype=np.float32),
+    in_gray = memory.createImageViewFromHost(np.zeros((480, 640), dtype=dtype))
+    in_gradient = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=dtype))
+    in_delta_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=dtype))
+    in_gray_old = memory.createImageViewFromHost(np.zeros((480, 640), dtype=dtype))
+    in_flow = memory.createImageViewFromHost(np.zeros((240, 320, 2), dtype=dtype),
                         normalizedCoordinates=True, sampled=True)
 
     # out_gray and out_delta_flow must be allocated externally
-    out_gray = memory.createImageViewFromHost(np.zeros((480, 640), dtype=np.float32))
-    out_delta_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=np.float32))
+    out_gray = memory.createImageViewFromHost(np.zeros((480, 640), dtype=dtype))
+    out_delta_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=dtype))
 
     node.bind('in_gray', in_gray)
     node.bind('in_gradient', in_gradient)
@@ -47,12 +47,22 @@ def test_goodUse():
     assert(out_gray.width == in_gray.width)
     assert(out_gray.height == in_gray.height)
     assert(out_gray.depth == in_gray.depth)
-    assert(out_gray.channelType == ll.ChannelType.Float32)
+    assert(out_gray.channelType == channelType)
     assert(out_gray.channels == 1)
 
     session.run(node)
 
-    assert(not ll.hasReceivedVulkanWarningMessages())
+    assert(not session.hasReceivedVulkanWarningMessages())
+
+
+def test_goodUse():
+
+    runTest(np.float32, ll.ChannelType.Float32)
+
+
+def test_goodUseFloat16():
+
+    runTest(np.float16, ll.ChannelType.Float16)
 
 
 if __name__ == "__main__":

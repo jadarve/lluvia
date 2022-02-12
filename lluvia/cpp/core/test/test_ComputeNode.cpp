@@ -71,7 +71,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode") {
         }
     } // unamp bufferMap
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -163,5 +163,5 @@ ll.registerNodeBuilder(builder)
         }
     } // unamp bufferMap
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

@@ -69,5 +69,5 @@ TEST_CASE("DurationRecording", "test_Duration")
     
     std::cout << "NANOSECONDS: " << ns.count() << std::endl;
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

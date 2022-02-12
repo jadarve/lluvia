@@ -436,7 +436,7 @@ cdef class Memory:
                                         ll_image.ImageUsageFlagBits.TransferSrc, 
                                         ll_image.ImageUsageFlagBits.TransferDst],
                             ImageFilterMode filterMode=ll_image.ImageFilterMode.Nearest,
-                            ImageAddressMode addressMode=ll_image.ImageAddressMode.Repeat,
+                            ImageAddressMode addressMode=ll_image.ImageAddressMode.ClampToEdge,
                             bool normalizedCoordinates=False,
                             bool sampled=False):
         """

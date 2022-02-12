@@ -4,7 +4,7 @@ import lluvia as ll
 
 def test_create():
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     assert(session is not None)
 
     duration = session.createDuration()
@@ -20,6 +20,8 @@ def test_create():
     commandBuffer.end()
 
     session.run(commandBuffer)
+
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

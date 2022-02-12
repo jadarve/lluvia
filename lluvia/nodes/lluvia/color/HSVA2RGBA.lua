@@ -9,7 +9,7 @@ The conversion follows the formulae presented in https://en.wikipedia.org/wiki/H
 Inputs
 ------
 in_hsva : ImageView.
-    rgba32f image. The color componens must lie within the following ranges:
+    {rgba16f, rgba32f} image. The color componens must lie within the following ranges:
 
     * H in [0, 2*pi]
     * S in [0, 1]
@@ -30,9 +30,11 @@ function builder.newDescriptor()
 
     desc:init(builder.name, ll.ComputeDimension.D2)
 
-    -- TOTHINK: increased port contracts by checking internal attributes of the PortType
-    -- For ImageView, check all image attributes + image view attributes.
-    desc:addPort(ll.PortDescriptor.new(0, 'in_hsva', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_hsva = ll.PortDescriptor.new(0, 'in_hsva', ll.PortDirection.In, ll.PortType.ImageView)
+    in_hsva:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+    in_hsva:checkImageChannelCountIs(ll.ChannelCount.C4)
+
+    desc:addPort(in_hsva)
     desc:addPort(ll.PortDescriptor.new(1, 'out_rgba', ll.PortDirection.Out, ll.PortType.ImageView))
 
     return desc
@@ -44,13 +46,6 @@ function builder.onNodeInit(node)
     -- validate input
     -------------------------------------------------------
     local in_hsva = node:getPort('in_hsva')
-
-    -- validate in_hsva is actually a rgba8ui image
-    -- TODO: remove once port-contracts are implemented
-    local err = ll.isValidImage(in_hsva, ll.ChannelCount.C4, ll.ChannelType.Float32)
-    if err ~= nil then
-        error(builder.name .. ': error validating in_hsva: ' .. err)
-    end
     
     -------------------------------------------------------
     -- allocate out_rgba

@@ -135,7 +135,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage") {
         }
     } // unmap bufMapped and outMapped
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -257,5 +257,5 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage") {
         }
     } // unmap bufMapped and outMapped
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

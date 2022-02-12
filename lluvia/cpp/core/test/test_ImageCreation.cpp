@@ -55,7 +55,7 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 
@@ -108,5 +108,5 @@ TEST_CASE("InvalidImageSize", "test_ImageCreation") {
         .setChannelCount(ll::ChannelCount::C1);
     REQUIRE_THROWS_AS(memory->createImage(desc), std::system_error);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

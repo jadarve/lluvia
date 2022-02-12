@@ -14,5 +14,5 @@ TEST_CASE("DebugEnabled", "test_sessionCreate")
     std::shared_ptr<ll::Session> session = ll::Session::create(desc);
 
     REQUIRE(session != nullptr);
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

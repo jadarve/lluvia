@@ -42,17 +42,15 @@ from lluvia.core.compute_dimension cimport _ComputeDimension
 
 # from lluvia.core cimport vulkan as vk
 from lluvia.core import impl
-from lluvia.core.enums import NodeType
 
 from lluvia.core.program cimport Program
 
-from lluvia.core.node cimport ComputeNode,\
-                              ComputeNodeDescriptor,\
-                              ContainerNodeDescriptor,\
-                              ContainerNode,\
-                              NodeBuilderDescriptor,\
-                              _buildComputeNode,\
-                              _buildContainerNode
+from lluvia.core.node.compute_node cimport ComputeNode, _buildComputeNode
+from lluvia.core.node.compute_node_descriptor cimport ComputeNodeDescriptor
+from lluvia.core.node.container_node cimport ContainerNode, _buildContainerNode
+from lluvia.core.node.container_node_descriptor cimport ContainerNodeDescriptor
+from lluvia.core.node.node_builder_descriptor cimport NodeBuilderDescriptor
+from lluvia.core.node.node_type import NodeType
 
 from lluvia.core.types cimport _vec3ui
 
@@ -802,3 +800,15 @@ cdef class Session:
         """
 
         return str(self.__session.get().help(impl.encodeString(builderName)), 'utf-8')
+
+    def hasReceivedVulkanWarningMessages(self):
+        """
+        Tells whether or not this session has triggered Vulkan warning messages
+
+        Returns
+        -------
+        b : bool
+            Whether or not Vulkan warning messages have been received
+        """
+
+        return self.__session.get().hasReceivedVulkanWarningMessages()

@@ -5,7 +5,7 @@ import lluvia as ll
 import lluvia_test as ll_test
 
 
-def test_goodUse():
+def runTest(dtype):
 
     nodeName = 'lluvia/viz/Flow2RGBA'
 
@@ -18,10 +18,9 @@ def test_goodUse():
 
     node = session.createComputeNode(nodeName)
 
-    memory = session.createMemory(
-        flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
+    memory = session.createMemory(flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
 
-    in_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=np.float32))
+    in_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=dtype))
 
     node.setParameter('max_flow', ll.Parameter(1.0))
     node.bind('in_flow', in_flow)
@@ -37,7 +36,16 @@ def test_goodUse():
 
     session.run(node)
 
-    assert(not ll.hasReceivedVulkanWarningMessages())
+    assert(not session.hasReceivedVulkanWarningMessages())
+
+def test_goodUse():
+
+    runTest(np.float32)
+    
+
+def test_goodUseFloat16():
+
+    runTest(np.float16)
 
 
 if __name__ == "__main__":

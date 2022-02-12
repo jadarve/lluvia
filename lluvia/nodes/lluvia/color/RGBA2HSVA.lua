@@ -11,6 +11,8 @@ Parameters
 min_chroma : float in [0, 1]. Defaults to 0.0.
     The minimum chromacity allowed in the conversion. If the chromacity of a given
     pixel is less than min_chroma, then the hue value is set to 0.
+float_precision : int. Defaults to ll.FloatPrecision.FP32.
+    Floating point precision used to alloate out_hsva.
 
 Inputs
 ------
@@ -20,7 +22,7 @@ in_rgba : ImageView.
 Outputs
 -------
 out_hsva : ImageView
-    rgba32f image. This image is allocated in the same memory as in_rgba.
+    {rgba16f, rgba32f} image. This image is allocated in the same memory as in_rgba.
     
     The color componens lie within the following ranges:
 
@@ -37,16 +39,23 @@ function builder.newDescriptor()
     desc:init(builder.name, ll.ComputeDimension.D2)
 
     desc:setParameter('min_chroma', 0.0)
+    desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
-    -- TOTHINK: increased port contracts by checking internal attributes of the PortType
-    -- For ImageView, check all image attributes + image view attributes.
-    desc:addPort(ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView))
+    local in_rgba = ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView)
+    in_rgba:checkImageChannelCountIs(ll.ChannelCount.C4)
+    in_rgba:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+
+    desc:addPort(in_rgba)
     desc:addPort(ll.PortDescriptor.new(1, 'out_hsva', ll.PortDirection.Out, ll.PortType.ImageView))
 
     return desc
 end
 
 function builder.onNodeInit(node)
+
+    local in_rgba = node:getPort('in_rgba')
+
+    local float_precision = node:getParameter('float_precision')
 
     -------------------------------------------------------
     -- push constants
@@ -62,18 +71,6 @@ function builder.onNodeInit(node)
     node.pushConstants = pushConstants
 
     -------------------------------------------------------
-    -- validate input
-    -------------------------------------------------------
-    local in_rgba = node:getPort('in_rgba')
-
-    -- validate in_rgba is actually a rgba8ui image
-    -- TODO: remove once port-contracts are implemented
-    local err = ll.isValidImage(in_rgba, ll.ChannelCount.C4, ll.ChannelType.Uint8)
-    if err ~= nil then
-        error(builder.name .. ': error validating in_rgba: ' .. err)
-    end
-    
-    -------------------------------------------------------
     -- allocate out_hsva
     -------------------------------------------------------
     local width = in_rgba.width
@@ -85,7 +82,7 @@ function builder.onNodeInit(node)
     imgDesc.height = height
     imgDesc.depth = depth
     imgDesc.channelCount = ll.ChannelCount.C4
-    imgDesc.channelType = ll.ChannelType.Float32
+    imgDesc.channelType = ll.floatPrecisionToImageChannelType(float_precision)
 
     local imgViewDesc = ll.ImageViewDescriptor.new()
     imgViewDesc.filterMode = ll.ImageFilterMode.Nearest

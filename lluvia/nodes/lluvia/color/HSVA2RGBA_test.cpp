@@ -96,5 +96,5 @@ TEST_CASE("goodUse", "HSVA2RGBA_test") {
     ///////////////////////////////////////////////////////
     // Validate good usage of Vulkan :)
     ///////////////////////////////////////////////////////
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

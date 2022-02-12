@@ -15,7 +15,7 @@ def test_memoryFlags():
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags.
     """
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     assert(session is not None)
 
     memFlags = session.getSupportedMemoryPropertyFlags()
@@ -34,19 +34,23 @@ def test_memoryFlags():
 
     assert(hostFlagsFound and devFlagsFound)
 
+    assert(not session.hasReceivedVulkanWarningMessages())
+
 
 def test_createMemoryWithDefaultValues():
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     assert(session is not None)
 
     memory = session.createMemory()
     assert(memory is not None)
 
+    assert(not session.hasReceivedVulkanWarningMessages())
+
 
 def test_createHostMemory():
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     assert(session is not None)
 
     flags = [ll.MemoryPropertyFlagBits.HostVisible,
@@ -55,16 +59,20 @@ def test_createHostMemory():
     memory = session.createMemory(flags=flags, pageSize=4*1024*1024)
     assert(memory is not None)
 
+    assert(not session.hasReceivedVulkanWarningMessages())
+
 
 def test_createDeviceMemory():
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     assert(session is not None)
 
     flags = [ll.MemoryPropertyFlagBits.DeviceLocal]
 
     memory = session.createMemory(flags=flags, pageSize=2*1024*1024)
     assert(memory is not None)
+
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 if __name__ == "__main__":

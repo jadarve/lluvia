@@ -34,5 +34,5 @@ TEST_CASE("create_instance_with_debug", "test_Instance") {
     REQUIRE_NOTHROW(instance = std::make_unique<ll::vulkan::Instance>(true));
     REQUIRE(instance != nullptr);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(instance->hasReceivedVulkanWarningMessages());
 }

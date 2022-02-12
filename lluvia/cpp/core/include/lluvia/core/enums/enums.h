@@ -139,6 +139,17 @@ inline std::string enumToString(E&& value) noexcept {
     return std::get<0>(*it);
 }
 
+template<typename E, std::size_t N, const std::array<std::tuple<const char*, E>, N>& values>
+inline std::string enumToString(const E& value) noexcept {
+
+    auto compare = [&value](const std::tuple<const char*, E>& e) {
+        return std::get<1>(e) == value;
+    };
+
+    auto it = std::find_if(values.cbegin(), values.cend(), compare);
+
+    return std::get<0>(*it);
+}
 
 template<typename E, typename T, std::size_t N, const std::array<std::tuple<const char*, E>, N>& values>
 inline E stringToEnum(T&& stringValue) {

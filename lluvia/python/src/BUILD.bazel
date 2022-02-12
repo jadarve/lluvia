@@ -11,14 +11,10 @@ pyx_library (
         "lluvia/core/command_buffer.pyx",
         "lluvia/core/compute_dimension.pxd",
         "lluvia/core/core_object.pxd",
-        "lluvia/core/debug_utils.pxd",
-        "lluvia/core/debug_utils.pyx",
         "lluvia/core/duration.pxd",
         "lluvia/core/duration.pyx",
-        "lluvia/core/node.pxd",
-        "lluvia/core/node.pyx",
-        "lluvia/core/parameter.pxd",
-        "lluvia/core/parameter.pyx",
+        "lluvia/core/float_precision.pxd",
+        "lluvia/core/float_precision.pyx",
         "lluvia/core/program.pxd",
         "lluvia/core/program.pyx",
         "lluvia/core/session.pxd",
@@ -46,6 +42,11 @@ pyx_library (
         "lluvia/core/memory/*.py",
         "lluvia/core/memory/*.pyx",
         "lluvia/core/memory/*.pxd",
+    ]) +
+    glob([
+        "lluvia/core/node/*.py",
+        "lluvia/core/node/*.pyx",
+        "lluvia/core/node/*.pxd",
     ]) +
     glob([
         "lluvia/core/enums/*.py",

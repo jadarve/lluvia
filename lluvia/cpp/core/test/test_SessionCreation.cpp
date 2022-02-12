@@ -41,7 +41,7 @@ TEST_CASE("DebugEnabled", "SessionCreationTest") {
     REQUIRE_NOTHROW(session = ll::Session::create(desc));
     REQUIRE(session != nullptr);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 TEST_CASE("MultipleDevicesAvailable", "SessionCreationTest") {
@@ -49,6 +49,28 @@ TEST_CASE("MultipleDevicesAvailable", "SessionCreationTest") {
     const auto availableDevices = ll::Session::getAvailableDevices();
 
     for(auto deviceDesc : availableDevices) {
+
+        std::cout << "ID: " << deviceDesc.id
+                  << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceDesc.deviceType))
+                  << " name: " << deviceDesc.name << std::endl;
+
+        auto desc = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
+
+        auto session = ll::Session::create(desc);
+
+        auto sessionDeviceDesc = session->getDeviceDescriptor();
+
+        REQUIRE(deviceDesc == sessionDeviceDesc);
+    }
+}
+
+TEST_CASE("TriggerDebugError", "SessionCreationTest")
+{
+
+    const auto availableDevices = ll::Session::getAvailableDevices();
+
+    for (auto deviceDesc : availableDevices)
+    {
 
         std::cout << "ID: " << deviceDesc.id
                   << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceDesc.deviceType))
@@ -105,5 +127,5 @@ TEST_CASE("MemoryFlags", "SessionCreationTest") {
 
     REQUIRE((hostFlagsFound && deviceFlagsFound) == true);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

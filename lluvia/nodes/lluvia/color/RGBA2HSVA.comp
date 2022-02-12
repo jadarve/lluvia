@@ -21,7 +21,7 @@ min_chroma : float.
 #include <lluvia/core/color.glsl>
 
 layout(binding = 0, rgba8ui) uniform uimage2D in_rgba;
-layout(binding = 1, rgba32f) uniform image2D  out_hsva;
+layout(binding = 1, rgba32f) uniform writeonly image2D  out_hsva;
 
 layout(push_constant) uniform const_0 {
     float min_chroma;

@@ -106,5 +106,5 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
         }
     }
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

@@ -112,7 +112,7 @@ TEST_CASE("ComputeNode", "test_PushConstants") {
         }
     }
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
 TEST_CASE("Push2Constants", "test_PushConstants")
@@ -174,5 +174,5 @@ TEST_CASE("Push2Constants", "test_PushConstants")
         }
     }
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

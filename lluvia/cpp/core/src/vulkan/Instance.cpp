@@ -10,14 +10,20 @@
 #include "lluvia/core/vulkan/Instance.h"
 
 #include "lluvia/core/error.h"
-#include "lluvia/core/debug_utils.h"
 
 // reserve space for the dynamic dispatch loader function pointers.
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
+#ifdef __ANDROID__
+#include <android/log.h>
+#endif
+
+#include <functional>
 #include <iostream>
 
 namespace ll::vulkan {
+
+std::atomic_bool Instance::m_hasReceivedVulkanWarningMessages{false};
 
 Instance::Instance(bool debugEnabled):
     m_loader {},
@@ -64,7 +70,7 @@ Instance::Instance(bool debugEnabled):
                                                      vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
                                                      vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
                                                      vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance,
-                                                     &ll::debugCallback,
+                                                     &Instance::debugCallback,
                                                      nullptr});
     }
 }
@@ -82,6 +88,10 @@ Instance::~Instance() {
 
 vk::Instance& Instance::get() noexcept {
     return m_instance;
+}
+
+bool Instance::hasReceivedVulkanWarningMessages() {
+    return m_hasReceivedVulkanWarningMessages;
 }
 
 std::vector<const char*> Instance::getRequiredLayersNames() {
@@ -131,5 +141,87 @@ std::vector<const char*> Instance::getRequiredExtensionNames() {
 
     return extensions;
 }
+
+#ifdef __ANDROID__
+
+VKAPI_ATTR VkBool32 VKAPI_CALL Instance::debugCallback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+    VkDebugUtilsMessageTypeFlagsEXT messageType,
+    const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
+    void *pUserData)
+{
+
+    // from https://developer.android.com/ndk/guides/graphics/validation-layer
+
+    if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+    {
+        m_hasReceivedVulkanWarningMessages.store(true, std::memory_order_release);
+    }
+
+    const char validation[] = "Validation";
+    const char performance[] = "Performance";
+    const char error[] = "ERROR";
+    const char warning[] = "WARNING";
+    const char unknownType[] = "UNKNOWN_TYPE";
+    const char unknownSeverity[] = "UNKNOWN_SEVERITY";
+    const char *typeString = unknownType;
+    const char *severityString = unknownSeverity;
+    const char *messageIdName = pCallbackData->pMessageIdName;
+    int32_t messageIdNumber = pCallbackData->messageIdNumber;
+    const char *message = pCallbackData->pMessage;
+    android_LogPriority priority = ANDROID_LOG_UNKNOWN;
+
+    if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
+    {
+        severityString = error;
+        priority = ANDROID_LOG_ERROR;
+    }
+    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+    {
+        severityString = warning;
+        priority = ANDROID_LOG_WARN;
+    }
+
+    if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT)
+    {
+        typeString = validation;
+    }
+    else if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT)
+    {
+        typeString = performance;
+    }
+
+    __android_log_print(priority,
+                        "Lluvia",
+                        "%s %s: [%s] Code %i : %s",
+                        typeString,
+                        severityString,
+                        messageIdName,
+                        messageIdNumber,
+                        message);
+
+    return VK_FALSE;
+}
+
+#else // Other Operating Systems
+
+VKAPI_ATTR VkBool32 VKAPI_CALL Instance::debugCallback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+    [[maybe_unused]] VkDebugUtilsMessageTypeFlagsEXT messageType,
+    const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
+    [[maybe_unused]] void *pUserData) {
+
+    if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+        m_hasReceivedVulkanWarningMessages.store(true, std::memory_order_release);
+    }
+
+    if (messageSeverity >= VkDebugUtilsMessageSeverityFlagBitsEXT::VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+        std::cerr << "Lluvia: " << pCallbackData->pMessage << std::endl;
+    }
+
+    return VK_FALSE;
+}
+
+#endif
 
 } // namespace ll::vulkan

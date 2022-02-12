@@ -4,6 +4,7 @@ import numpy as np
 import lluvia as ll
 import lluvia_test as ll_test
 
+
 def loadNodes(session):
 
     ll_test.loadNode(session,
@@ -68,7 +69,7 @@ def loadNodes(session):
                      builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/FlowFilter.lua')
 
 
-def test_multipleLevels():
+def runTest(levels, precision, channelType):
 
     nodeName = 'lluvia/opticalflow/flowfilter/FlowFilter'
 
@@ -80,11 +81,12 @@ def test_multipleLevels():
     memory = session.createMemory(
         flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
 
-    in_gray = memory.createImageViewFromHost(
-        np.zeros((480, 640), dtype=np.uint8))
+    in_gray = memory.createImageViewFromHost(np.zeros((480, 640), dtype=np.uint8))
 
+    node.setParameter('levels', ll.Parameter(levels))
     node.setParameter('maxflow', ll.Parameter(4))
     node.setParameter('smooth_iterations', ll.Parameter(2))
+    node.setParameter('float_precision', ll.Parameter(precision.value))
     node.bind('in_gray', in_gray)
     node.init()
 
@@ -93,7 +95,7 @@ def test_multipleLevels():
     assert(out_flow.width == in_gray.width)
     assert(out_flow.height == in_gray.height)
     assert(out_flow.depth == in_gray.depth)
-    assert(out_flow.channelType == ll.ChannelType.Float32)
+    assert(out_flow.channelType == channelType)
     assert(out_flow.channels == 2)
 
     out_gray = node.getPort('out_gray')
@@ -101,54 +103,33 @@ def test_multipleLevels():
     assert(out_gray.width == in_gray.width)
     assert(out_gray.height == in_gray.height)
     assert(out_gray.depth == in_gray.depth)
-    assert(out_gray.channelType == ll.ChannelType.Float32)
+    assert(out_gray.channelType == channelType)
     assert(out_gray.channels == 1)
 
     session.run(node)
 
-    assert(not ll.hasReceivedVulkanWarningMessages())
+    assert(not session.hasReceivedVulkanWarningMessages())
+
+
+
+def test_singleLevel():
+
+    runTest(1, ll.FloatPrecision.FP32, ll.ChannelType.Float32)
+
+
+def test_singleLevelFloat16():
+
+    runTest(1, ll.FloatPrecision.FP16, ll.ChannelType.Float16)
+
 
 def test_multipleLevels():
 
-    nodeName = 'lluvia/opticalflow/flowfilter/FlowFilter'
+    runTest(3, ll.FloatPrecision.FP32, ll.ChannelType.Float32)
 
-    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
-    loadNodes(session)
 
-    node = session.createContainerNode(nodeName)
+def test_multipleLevelsFloat16():
 
-    memory = session.createMemory(
-        flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
-
-    in_gray = memory.createImageViewFromHost(
-        np.zeros((480, 640), dtype=np.uint8))
-
-    node.setParameter('maxflow', ll.Parameter(4))
-    node.setParameter('levels', ll.Parameter(2))
-    node.setParameter('smooth_iterations', ll.Parameter(2))
-    node.bind('in_gray', in_gray)
-    node.init()
-
-    out_flow = node.getPort('out_flow')
-    assert(out_flow is not None)
-    assert(out_flow.width == in_gray.width)
-    assert(out_flow.height == in_gray.height)
-    assert(out_flow.depth == in_gray.depth)
-    assert(out_flow.channelType == ll.ChannelType.Float32)
-    assert(out_flow.channels == 2)
-
-    out_gray = node.getPort('out_gray')
-    assert(out_gray is not None)
-    assert(out_gray.width == in_gray.width)
-    assert(out_gray.height == in_gray.height)
-    assert(out_gray.depth == in_gray.depth)
-    assert(out_gray.channelType == ll.ChannelType.Float32)
-    assert(out_gray.channels == 1)
-
-    session.run(node)
-
-    assert(not ll.hasReceivedVulkanWarningMessages())
-
+    runTest(3, ll.FloatPrecision.FP16, ll.ChannelType.Float16)
 
 if __name__ == "__main__":
 

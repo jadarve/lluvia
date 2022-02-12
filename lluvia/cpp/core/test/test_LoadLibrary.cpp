@@ -35,5 +35,5 @@ TEST_CASE("LoadLibrary", "test_LoadLibrary") {
     REQUIRE_NOTHROW(node = session->createComputeNode(desc));
     REQUIRE(node != nullptr);
 
-    REQUIRE_FALSE(ll::hasReceivedVulkanWarningMessages());
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

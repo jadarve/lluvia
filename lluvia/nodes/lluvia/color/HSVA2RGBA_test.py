@@ -6,7 +6,7 @@ import lluvia.util as ll_util
 import lluvia_test as ll_test
 
 
-def test_goodUse():
+def runTest(dtype):
 
     nodeName = 'lluvia/color/HSVA2RGBA'
 
@@ -19,10 +19,9 @@ def test_goodUse():
 
     node = session.createComputeNode(nodeName)
 
-    memory = session.createMemory(
-        flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
+    memory = session.createMemory(flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
 
-    imgHSVA = np.zeros((640, 480, 4), dtype=np.float32)
+    imgHSVA = np.zeros((640, 480, 4), dtype=dtype)
     in_hsva = memory.createImageViewFromHost(imgHSVA)
 
     node.bind('in_hsva', in_hsva)
@@ -38,7 +37,16 @@ def test_goodUse():
 
     session.run(node)
 
-    assert(not ll.hasReceivedVulkanWarningMessages())
+    assert(not session.hasReceivedVulkanWarningMessages())
+
+def test_goodUse():
+
+    runTest(np.float32)
+
+
+def test_goodUseFloat16():
+
+    runTest(np.float16)
 
 
 if __name__ == "__main__":

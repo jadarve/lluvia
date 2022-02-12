@@ -4,7 +4,7 @@ import lluvia as ll
 
 def test_create():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary = False)
 
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
@@ -31,11 +31,13 @@ def test_create():
     assert(len(flags) == len(img.usageFlags))
     for f in img.usageFlags:
         assert(f in flags)
+    
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 def test_incorrectSize():
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary = False)
 
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
@@ -56,6 +58,8 @@ def test_incorrectSize():
 
         for shape in shapes:
             _ = mem.createImage(shape, channelType)
+    
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 
 def test_createFromHost():
@@ -63,7 +67,7 @@ def test_createFromHost():
 
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
 
-    session = ll.createSession(loadNodeLibrary = False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary = False)
     mem = session.createMemory()
 
     devImg = mem.createImageFromHost(imgRGBA)
@@ -79,10 +83,12 @@ def test_createFromHost():
     # pixel-wise check
     assert((hostImg[:] == imgRGBA[:]).all())
 
+    assert(not session.hasReceivedVulkanWarningMessages())
+
 def test_fromAndToHost():
     import lluvia.util as ll_util
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     mem = session.createMemory()
 
     imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
@@ -98,9 +104,11 @@ def test_fromAndToHost():
     # pixel-wise check
     assert((hostImg[:] == imgRGBA[:]).all())
 
+    assert(not session.hasReceivedVulkanWarningMessages())
+
 def test_changeLayout():
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
     devImg = mem.createImage((640, 480), ll.ChannelType.Uint8)
@@ -108,10 +116,12 @@ def test_changeLayout():
     devImg.changeLayout(ll.ImageLayout.TransferDstOptimal)
     assert(devImg.layout == ll.ImageLayout.TransferDstOptimal)
 
+    assert(not session.hasReceivedVulkanWarningMessages())
+
 
 def test_clear():
 
-    session = ll.createSession(loadNodeLibrary=False)
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     mem = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
 
     devImg = mem.createImage((640, 480), ll.ChannelType.Uint8)
@@ -121,6 +131,8 @@ def test_clear():
 
     # pixel-wise check
     assert((hostImg[:] == 0).all())
+
+    assert(not session.hasReceivedVulkanWarningMessages())
 
 if __name__ == "__main__":
 

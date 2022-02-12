@@ -11,10 +11,10 @@
 
 #include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
-#include "lluvia/core/ComputeNode.h"
-#include "lluvia/core/ComputeNodeDescriptor.h"
-#include "lluvia/core/ContainerNode.h"
-#include "lluvia/core/ContainerNodeDescriptor.h"
+#include "lluvia/core/node/ComputeNode.h"
+#include "lluvia/core/node/ComputeNodeDescriptor.h"
+#include "lluvia/core/node/ContainerNodeDescriptor.h"
+#include "lluvia/core/node/ContainerNode.h"
 #include "lluvia/core/Duration.h"
 #include "lluvia/core/error.h"
 #include "lluvia/core/image/Image.h"
@@ -416,6 +416,11 @@ std::string Session::help(const std::string& builderName) const {
     )";
 
     return m_interpreter->loadAndRun<std::string>(lua, builderName);
+}
+
+bool Session::hasReceivedVulkanWarningMessages() const noexcept {
+
+    return m_instance->hasReceivedVulkanWarningMessages();
 }
 
 void Session::initDescriptor() {

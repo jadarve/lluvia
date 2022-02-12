@@ -18,13 +18,13 @@
 #include <tuple>
 #include <vector>
 
+#include "lluvia/core/ComputeDimension.h"
 #include "lluvia/core/device/DeviceDescriptor.h"
 #include "lluvia/core/image/ImageDescriptor.h"
-#include "lluvia/core/SessionDescriptor.h"
-#include "lluvia/core/ComputeDimension.h"
-#include "lluvia/core/NodeBuilderDescriptor.h"
-#include "lluvia/core/types.h"
 #include "lluvia/core/memory/MemoryPropertyFlags.h"
+#include "lluvia/core/node/NodeBuilderDescriptor.h"
+#include "lluvia/core/SessionDescriptor.h"
+#include "lluvia/core/types.h"
 
 namespace ll {
 
@@ -399,6 +399,15 @@ public:
     @return     The help string of the builder.
     */
     std::string help(const std::string& builderName) const;
+
+    /**
+    @brief      Tells whether or not this session has triggered Vulkan warning messages.
+
+    For this method to return a correct value, the session must be created enabling debug.
+
+    @return     Whether or not vulkan warning messages have been received.
+    */
+    bool hasReceivedVulkanWarningMessages() const noexcept;
 
 
 private:
