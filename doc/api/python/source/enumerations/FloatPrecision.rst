@@ -1,4 +1,4 @@
-DeviceType
+FloatPrecision
 ==================================
 
 .. autoclass:: lluvia.core.FloatPrecision
