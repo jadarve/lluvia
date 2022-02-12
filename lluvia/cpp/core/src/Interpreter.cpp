@@ -150,7 +150,11 @@ void registerTypes(sol::table& lib) {
         "binding"   , sol::property(&ll::PortDescriptor::getBinding),
         "name"      , sol::property(&ll::PortDescriptor::getName),
         "direction" , sol::property(&ll::PortDescriptor::getDirection),
-        "type"      , sol::property(&ll::PortDescriptor::getPortType)
+        "type"      , sol::property(&ll::PortDescriptor::getPortType),
+        "checkImageChannelCountIs"              , &PortDescriptor::checkImageChannelCountIs,
+        "checkImageChannelTypeIs"               , &PortDescriptor::checkImageChannelTypeIs,
+        "checkImageChannelTypeIsAnyOf"          , &PortDescriptor::checkImageChannelTypeIsAnyOf,
+        "checkImageViewNormalizedCoordinatesIs" , &PortDescriptor::checkImageViewNormalizedCoordinatesIs
         );
 
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",
