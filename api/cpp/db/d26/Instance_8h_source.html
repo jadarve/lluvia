@@ -89,49 +89,60 @@ $(document).ready(function(){initNavTree('db/d26/Instance_8h_source.html','../..
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef LLUVIA_CORE_VULKAN_INSTANCE_H_</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define LLUVIA_CORE_VULKAN_INSTANCE_H_</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/ddf/vulkan_8hpp.html">lluvia/core/vulkan/vulkan.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span>vulkan {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> {</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>(<span class="keyword">const</span> <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;instance) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>(<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;&amp;instance) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>(<span class="keywordtype">bool</span> debugEnabled);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a3fae8b7ad20a645be54549902a71b9f4">~Instance</a>();</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a12ac43ea1797f816ea3a396b118f0095">operator=</a>(<span class="keyword">const</span> <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a>) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a12ac43ea1797f816ea3a396b118f0095">operator=</a>(<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;&amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a>) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    vk::Instance&amp; <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#add48c7bef79e41937008fcf21a567a9f">get</a>() noexcept;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    std::vector&lt;const char*&gt; getRequiredLayersNames();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::vector&lt;const char*&gt; getRequiredExtensionNames();</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;atomic&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/ddf/vulkan_8hpp.html">lluvia/core/vulkan/vulkan.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span>vulkan {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">   19</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a852dcd75841389519dbe40c25d700949">hasReceivedVulkanWarningMessages</a>();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">static</span> VkBool32 VKAPI_CALL <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#aa35349f391c412b9a0ebc12782f36698">debugCallback</a>(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, <span class="keyword">const</span> VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, <span class="keywordtype">void</span> *pUserData);</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    vk::DynamicLoader            m_loader;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    vk::Instance                 m_instance;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    vk::DebugUtilsMessengerEXT   m_debugMessenger;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">bool</span>                         m_debugEnabled;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// namespace vk</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_VULKAN_INSTANCE_H_</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>(<span class="keyword">const</span> <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;instance) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>(<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;&amp;instance) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">Instance</a>(<span class="keywordtype">bool</span> debugEnabled);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a3fae8b7ad20a645be54549902a71b9f4">~Instance</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a12ac43ea1797f816ea3a396b118f0095">operator=</a>(<span class="keyword">const</span> <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a>) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a12ac43ea1797f816ea3a396b118f0095">operator=</a>(<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a> &amp;&amp;<a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html">Instance</a>) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    vk::Instance&amp; <a class="code" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#add48c7bef79e41937008fcf21a567a9f">get</a>() noexcept;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">static</span> std::atomic_bool     m_hasReceivedVulkanWarningMessages;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    std::vector&lt;const char*&gt; getRequiredLayersNames();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::vector&lt;const char*&gt; getRequiredExtensionNames();</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    vk::DynamicLoader            m_loader;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    vk::Instance                 m_instance;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    vk::DebugUtilsMessengerEXT   m_debugMessenger;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">bool</span>                         m_debugEnabled;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;} <span class="comment">// namespace vk</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;} <span class="comment">// namespace ll</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_VULKAN_INSTANCE_H_</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html_add48c7bef79e41937008fcf21a567a9f"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#add48c7bef79e41937008fcf21a567a9f">ll::vulkan::Instance::get</a></div><div class="ttdeci">vk::Instance &amp; get() noexcept</div></div>
-<div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html">ll::vulkan::Instance</a></div><div class="ttdef"><b>Definition:</b> Instance.h:18</div></div>
+<div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html">ll::vulkan::Instance</a></div><div class="ttdef"><b>Definition:</b> Instance.h:19</div></div>
 <div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html_a5913439500eeb9ae0c5e6754bfa6b49c"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a5913439500eeb9ae0c5e6754bfa6b49c">ll::vulkan::Instance::Instance</a></div><div class="ttdeci">Instance()=delete</div></div>
 <div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
+<div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html_a852dcd75841389519dbe40c25d700949"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a852dcd75841389519dbe40c25d700949">ll::vulkan::Instance::hasReceivedVulkanWarningMessages</a></div><div class="ttdeci">static bool hasReceivedVulkanWarningMessages()</div><div class="ttdoc">returns whether or not the application has received messages through the debug callback.</div></div>
+<div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html_aa35349f391c412b9a0ebc12782f36698"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#aa35349f391c412b9a0ebc12782f36698">ll::vulkan::Instance::debugCallback</a></div><div class="ttdeci">static VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)</div><div class="ttdoc">debug callback function to receive messages from the vulkan debug messenger.</div></div>
 <div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html_a12ac43ea1797f816ea3a396b118f0095"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a12ac43ea1797f816ea3a396b118f0095">ll::vulkan::Instance::operator=</a></div><div class="ttdeci">Instance &amp; operator=(const Instance &amp;Instance)=delete</div></div>
 <div class="ttc" id="avulkan_8hpp_html"><div class="ttname"><a href="../../d5/ddf/vulkan_8hpp.html">vulkan.hpp</a></div></div>
 <div class="ttc" id="aclassll_1_1vulkan_1_1Instance_html_a3fae8b7ad20a645be54549902a71b9f4"><div class="ttname"><a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a3fae8b7ad20a645be54549902a71b9f4">ll::vulkan::Instance::~Instance</a></div><div class="ttdeci">~Instance()</div></div>

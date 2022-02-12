@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/ComputeNodeDescriptor.h Source File</title>
+<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/ComputeNodeDescriptor.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -86,140 +86,141 @@ $(document).ready(function(){initNavTree('d1/dab/ComputeNodeDescriptor_8h_source
 </div><!--header-->
 <div class="contents">
 <a href="../../d1/dab/ComputeNodeDescriptor_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef LLUVIA_CORE_NODE_COMPUTE_NODE_DESCRIPTOR_H_</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define LLUVIA_CORE_NODE_COMPUTE_NODE_DESCRIPTOR_H_</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">lluvia/core/Node.h</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/ddd/Parameter_8h.html">lluvia/core/Parameter.h</a>&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/dce/PushConstants_8h.html">lluvia/core/PushConstants.h</a>&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">lluvia/core/types.h</a>&quot;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;array&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">lluvia/core/node/Node.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/ddd/Parameter_8h.html">lluvia/core/node/Parameter.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/dce/PushConstants_8h.html">lluvia/core/node/PushConstants.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">lluvia/core/types.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">class </span>ComputeNode;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">class </span>Program;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">class </span>ComputeNode;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">class </span>Program;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">   34</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a> {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0d850c136eee6ce5439d977fbe95d3b3">ComputeNodeDescriptor</a>()                                                     = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0d850c136eee6ce5439d977fbe95d3b3">ComputeNodeDescriptor</a>(<span class="keyword">const</span> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; descriptor)              = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0d850c136eee6ce5439d977fbe95d3b3">ComputeNodeDescriptor</a>(<a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp;&amp; descriptor)                   = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a6e629f25c5207085b92c98de7f15f639">~ComputeNodeDescriptor</a>()                                                    = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a50a34bdfbcf1815ee6752a58ed7077b8">operator = </a>(<span class="keyword">const</span> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; descriptor) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a50a34bdfbcf1815ee6752a58ed7077b8">operator = </a>(<a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp;&amp; descriptor)      = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">   35</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0d850c136eee6ce5439d977fbe95d3b3">ComputeNodeDescriptor</a>()                                                     = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0d850c136eee6ce5439d977fbe95d3b3">ComputeNodeDescriptor</a>(<span class="keyword">const</span> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; descriptor)              = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0d850c136eee6ce5439d977fbe95d3b3">ComputeNodeDescriptor</a>(<a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp;&amp; descriptor)                   = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a6e629f25c5207085b92c98de7f15f639">~ComputeNodeDescriptor</a>()                                                    = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a50a34bdfbcf1815ee6752a58ed7077b8">operator = </a>(<span class="keyword">const</span> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; descriptor) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a50a34bdfbcf1815ee6752a58ed7077b8">operator = </a>(<a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp;&amp; descriptor)      = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa9a93ab7eeb66c829b13c95f3d9fe26c">setProgram</a>(<span class="keyword">const</span> std::shared_ptr&lt;ll::Program&gt;&amp; tProgram) noexcept;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa9a93ab7eeb66c829b13c95f3d9fe26c">setProgram</a>(<span class="keyword">const</span> std::shared_ptr&lt;ll::Program&gt;&amp; tProgram) noexcept;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa9a93ab7eeb66c829b13c95f3d9fe26c">setProgram</a>(<span class="keyword">const</span> std::shared_ptr&lt;ll::Program&gt;&amp; tProgram, <span class="keyword">const</span> std::string&amp; tFunctionName) noexcept;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa9a93ab7eeb66c829b13c95f3d9fe26c">setProgram</a>(<span class="keyword">const</span> std::shared_ptr&lt;ll::Program&gt;&amp; tProgram, <span class="keyword">const</span> std::string&amp; tFunctionName) noexcept;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#afa9eea1655ef9bef431e8c837a34948a">setParameter</a>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> <a class="code" href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a>&amp; value);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#afa9eea1655ef9bef431e8c837a34948a">setParameter</a>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> <a class="code" href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a>&amp; value);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a31598aebf209328a05613372d5b259cf">setFunctionName</a>(<span class="keyword">const</span> std::string&amp; name) noexcept;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a31598aebf209328a05613372d5b259cf">setFunctionName</a>(<span class="keyword">const</span> std::string&amp; name) noexcept;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#ad3fef1527260751f2dc7d7565c7209a9">setBuilderName</a>(<span class="keyword">const</span> std::string&amp; name) noexcept;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#ad3fef1527260751f2dc7d7565c7209a9">setBuilderName</a>(<span class="keyword">const</span> std::string&amp; name) noexcept;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a96b5d292f5a2733441083c5340c46223">addPort</a>(<span class="keyword">const</span> <a class="code" href="../../d5/d54/structll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; port);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a96b5d292f5a2733441083c5340c46223">addPort</a>(<span class="keyword">const</span> <a class="code" href="../../d8/dea/classll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; port);</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aabb40e3774e8c8754a3122ae30216b13">addPorts</a>(<span class="keyword">const</span> std::initializer_list&lt;ll::PortDescriptor&gt;&amp; ports);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aabb40e3774e8c8754a3122ae30216b13">addPorts</a>(<span class="keyword">const</span> std::initializer_list&lt;ll::PortDescriptor&gt;&amp; ports);</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a455809ca75f0d9db13143dcfb03ed1d1">setGridX</a>(<span class="keyword">const</span> uint32_t x) noexcept;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a455809ca75f0d9db13143dcfb03ed1d1">setGridX</a>(<span class="keyword">const</span> uint32_t x) noexcept;</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a9b1073a5182c1634068162abc0a112fe">setGridY</a>(<span class="keyword">const</span> uint32_t y) noexcept;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a9b1073a5182c1634068162abc0a112fe">setGridY</a>(<span class="keyword">const</span> uint32_t y) noexcept;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa7a5ba92cf5f6e4a922a5bd4c368cf50">setGridZ</a>(<span class="keyword">const</span> uint32_t z) noexcept;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a28597e6be94876886f579897c7bbe7a4">setGridShape</a>(<span class="keyword">const</span> <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a>&amp; shape) noexcept;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa7a5ba92cf5f6e4a922a5bd4c368cf50">setGridZ</a>(<span class="keyword">const</span> uint32_t z) noexcept;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a28597e6be94876886f579897c7bbe7a4">setGridShape</a>(<span class="keyword">const</span> <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a>&amp; shape) noexcept;</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a759c013a48440e03d8ba4cf5a674207a">configureGridShape</a>(<span class="keyword">const</span> <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a>&amp; globalShape) noexcept;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a759c013a48440e03d8ba4cf5a674207a">configureGridShape</a>(<span class="keyword">const</span> <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a>&amp; globalShape) noexcept;</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8398f85d7b5f8247ce5e7f9a6acafbdb">setLocalX</a>(<span class="keyword">const</span> uint32_t x) noexcept;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8398f85d7b5f8247ce5e7f9a6acafbdb">setLocalX</a>(<span class="keyword">const</span> uint32_t x) noexcept;</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a220d072ae3688ac4c2e5bcd56052715e">setLocalY</a>(<span class="keyword">const</span> uint32_t y) noexcept;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a220d072ae3688ac4c2e5bcd56052715e">setLocalY</a>(<span class="keyword">const</span> uint32_t y) noexcept;</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a45e3d4e9f9e98bbf239a14b047fe5e76">setLocalZ</a>(<span class="keyword">const</span> uint32_t z) noexcept;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a45e3d4e9f9e98bbf239a14b047fe5e76">setLocalZ</a>(<span class="keyword">const</span> uint32_t z) noexcept;</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a94c23c39140ab88fd31b2af55711961b">setLocalShape</a>(<span class="keyword">const</span> <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a>&amp; shape) noexcept;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a94c23c39140ab88fd31b2af55711961b">setLocalShape</a>(<span class="keyword">const</span> <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a>&amp; shape) noexcept;</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a> &amp;<a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a6c4cfba57fbb9af48998eec684f487ea">setPushConstants</a>(<span class="keyword">const</span> <a class="code" href="../../d6/d48/classll_1_1PushConstants.html">ll::PushConstants</a>&amp; constants) noexcept;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a> &amp;<a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a6c4cfba57fbb9af48998eec684f487ea">setPushConstants</a>(<span class="keyword">const</span> <a class="code" href="../../d6/d48/classll_1_1PushConstants.html">ll::PushConstants</a>&amp; constants) noexcept;</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    std::shared_ptr&lt;ll::Program&gt; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8abe4d58c13578021984188ab0ffde03">getProgram</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    std::shared_ptr&lt;ll::Program&gt; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8abe4d58c13578021984188ab0ffde03">getProgram</a>() <span class="keyword">const</span> noexcept;</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d5/d54/structll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0583375c3885c1532e7a208d305d15a3">getPort</a>(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d8/dea/classll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0583375c3885c1532e7a208d305d15a3">getPort</a>(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0ac8a92c44b45c392bcdb78cd8a1c2af">getParameter</a>(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a0ac8a92c44b45c392bcdb78cd8a1c2af">getParameter</a>(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keyword">const</span> std::string&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a6e096a3d5ef9afa76c34eaef54edb5c2">getFunctionName</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keyword">const</span> std::string&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a6e096a3d5ef9afa76c34eaef54edb5c2">getFunctionName</a>() <span class="keyword">const</span> noexcept;</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keyword">const</span> std::string&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8a068fdbb1c3bd3c7f7903cdb4a78b52">getBuilderName</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keyword">const</span> std::string&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8a068fdbb1c3bd3c7f7903cdb4a78b52">getBuilderName</a>() <span class="keyword">const</span> noexcept;</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a509709c0a9280caa09b50876773d021a">getGridShape</a>()  <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a75a8729f5346d7452bcc0776822640c7">getLocalShape</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a3e2da94d312ab67312c2ce35c2fc4a5e">getGridX</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a9199d1340994164a61771126dd6b9632">getGridY</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aba9dc47e45cf1b207100fad0904394d9">getGridZ</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa6ebcf58fe40cf3ad8d1a66ead394ad6">getLocalX</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a5e216daf2cc53def68d81cf18a7157a0">getLocalY</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a39236c887813026a98a11e9662f8c1ec">getLocalZ</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d6/d48/classll_1_1PushConstants.html">ll::PushConstants</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a61b8a4997603445c5b2ca09321cd8f00">getPushConstants</a>() <span class="keyword">const</span> noexcept;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    std::vector&lt;vk::DescriptorSetLayoutBinding&gt; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#ac02b44747bd3356fe3b3060802a3a2a7">getParameterBindings</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    std::shared_ptr&lt;ll::Program&gt;                m_program;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    std::string                                 m_functionName;</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    std::string                                 m_builderName;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="comment">// local and global work group</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> m_localShape {1, 1, 1};</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> m_gridShape  {1, 1, 1};</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    std::map&lt;std::string, ll::PortDescriptor&gt; m_ports;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    std::map&lt;std::string, ll::Parameter&gt;      m_parameters;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <a class="code" href="../../d6/d48/classll_1_1PushConstants.html">ll::PushConstants</a>                         m_pushConstants;</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;};</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a509709c0a9280caa09b50876773d021a">getGridShape</a>()  <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a75a8729f5346d7452bcc0776822640c7">getLocalShape</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a3e2da94d312ab67312c2ce35c2fc4a5e">getGridX</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a9199d1340994164a61771126dd6b9632">getGridY</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aba9dc47e45cf1b207100fad0904394d9">getGridZ</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa6ebcf58fe40cf3ad8d1a66ead394ad6">getLocalX</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a5e216daf2cc53def68d81cf18a7157a0">getLocalY</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    uint32_t <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a39236c887813026a98a11e9662f8c1ec">getLocalZ</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d6/d48/classll_1_1PushConstants.html">ll::PushConstants</a>&amp; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a61b8a4997603445c5b2ca09321cd8f00">getPushConstants</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    std::vector&lt;vk::DescriptorSetLayoutBinding&gt; <a class="code" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#ac02b44747bd3356fe3b3060802a3a2a7">getParameterBindings</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    std::shared_ptr&lt;ll::Program&gt;                m_program;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    std::string                                 m_functionName;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    std::string                                 m_builderName;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="comment">// local and global work group</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> m_localShape {1, 1, 1};</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <a class="code" href="../../d9/d56/structll_1_1vec3.html">ll::vec3ui</a> m_gridShape  {1, 1, 1};</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    std::map&lt;std::string, ll::PortDescriptor&gt; m_ports;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    std::map&lt;std::string, ll::Parameter&gt;      m_parameters;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <a class="code" href="../../d6/d48/classll_1_1PushConstants.html">ll::PushConstants</a>                         m_pushConstants;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;};</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* LLUVIA_CORE_COMPUTE_NODE_DESCRIPTOR_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;} <span class="comment">// namespace ll</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* LLUVIA_CORE_NODE_COMPUTE_NODE_DESCRIPTOR_H_ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a94c23c39140ab88fd31b2af55711961b"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a94c23c39140ab88fd31b2af55711961b">ll::ComputeNodeDescriptor::setLocalShape</a></div><div class="ttdeci">ComputeNodeDescriptor &amp; setLocalShape(const ll::vec3ui &amp;shape) noexcept</div><div class="ttdoc">Sets the local group shape.</div></div>
@@ -239,9 +240,10 @@ $(document).ready(function(){initNavTree('d1/dab/ComputeNodeDescriptor_8h_source
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_aa7a5ba92cf5f6e4a922a5bd4c368cf50"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aa7a5ba92cf5f6e4a922a5bd4c368cf50">ll::ComputeNodeDescriptor::setGridZ</a></div><div class="ttdeci">ComputeNodeDescriptor &amp; setGridZ(const uint32_t z) noexcept</div><div class="ttdoc">Sets the grid size in the Z axis.</div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_aba9dc47e45cf1b207100fad0904394d9"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#aba9dc47e45cf1b207100fad0904394d9">ll::ComputeNodeDescriptor::getGridZ</a></div><div class="ttdeci">uint32_t getGridZ() const noexcept</div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a96b5d292f5a2733441083c5340c46223"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a96b5d292f5a2733441083c5340c46223">ll::ComputeNodeDescriptor::addPort</a></div><div class="ttdeci">ComputeNodeDescriptor &amp; addPort(const ll::PortDescriptor &amp;port)</div><div class="ttdoc">Adds a port to the descriptor.</div></div>
-<div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ll::ComputeNodeDescriptor</a></div><div class="ttdoc">Class for describing a compute node node.</div><div class="ttdef"><b>Definition:</b> ComputeNodeDescriptor.h:34</div></div>
+<div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ll::ComputeNodeDescriptor</a></div><div class="ttdoc">Class for describing a compute node node.</div><div class="ttdef"><b>Definition:</b> ComputeNodeDescriptor.h:35</div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a31598aebf209328a05613372d5b259cf"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a31598aebf209328a05613372d5b259cf">ll::ComputeNodeDescriptor::setFunctionName</a></div><div class="ttdeci">ComputeNodeDescriptor &amp; setFunctionName(const std::string &amp;name) noexcept</div><div class="ttdoc">Sets the function name within the program object to run in the ll::ComputeNode.</div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a8abe4d58c13578021984188ab0ffde03"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8abe4d58c13578021984188ab0ffde03">ll::ComputeNodeDescriptor::getProgram</a></div><div class="ttdeci">std::shared_ptr&lt; ll::Program &gt; getProgram() const noexcept</div><div class="ttdoc">Gets the program associated to this compute node.</div></div>
+<div class="ttc" id="aclassll_1_1PortDescriptor_html"><div class="ttname"><a href="../../d8/dea/classll_1_1PortDescriptor.html">ll::PortDescriptor</a></div><div class="ttdef"><b>Definition:</b> PortDescriptor.h:28</div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a455809ca75f0d9db13143dcfb03ed1d1"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a455809ca75f0d9db13143dcfb03ed1d1">ll::ComputeNodeDescriptor::setGridX</a></div><div class="ttdeci">ComputeNodeDescriptor &amp; setGridX(const uint32_t x) noexcept</div><div class="ttdoc">Sets the grid size in the X axis.</div></div>
 <div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a509709c0a9280caa09b50876773d021a"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a509709c0a9280caa09b50876773d021a">ll::ComputeNodeDescriptor::getGridShape</a></div><div class="ttdeci">ll::vec3ui getGridShape() const noexcept</div><div class="ttdoc">Gets the grid shape.</div></div>
@@ -251,9 +253,8 @@ $(document).ready(function(){initNavTree('d1/dab/ComputeNodeDescriptor_8h_source
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a39236c887813026a98a11e9662f8c1ec"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a39236c887813026a98a11e9662f8c1ec">ll::ComputeNodeDescriptor::getLocalZ</a></div><div class="ttdeci">uint32_t getLocalZ() const noexcept</div></div>
 <div class="ttc" id="aNode_8h_html"><div class="ttname"><a href="../../db/d92/Node_8h.html">Node.h</a></div><div class="ttdoc">Node class and related enums.</div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a9b1073a5182c1634068162abc0a112fe"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a9b1073a5182c1634068162abc0a112fe">ll::ComputeNodeDescriptor::setGridY</a></div><div class="ttdeci">ComputeNodeDescriptor &amp; setGridY(const uint32_t y) noexcept</div><div class="ttdoc">Sets the grid size in the Y axis.</div></div>
-<div class="ttc" id="aclassll_1_1Parameter_html"><div class="ttname"><a href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a></div><div class="ttdef"><b>Definition:</b> Parameter.h:44</div></div>
+<div class="ttc" id="aclassll_1_1Parameter_html"><div class="ttname"><a href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a></div><div class="ttdef"><b>Definition:</b> Parameter.h:22</div></div>
 <div class="ttc" id="aParameter_8h_html"><div class="ttname"><a href="../../d0/ddd/Parameter_8h.html">Parameter.h</a></div><div class="ttdoc">Parameter class and related enums.</div></div>
-<div class="ttc" id="astructll_1_1PortDescriptor_html"><div class="ttname"><a href="../../d5/d54/structll_1_1PortDescriptor.html">ll::PortDescriptor</a></div><div class="ttdef"><b>Definition:</b> Node.h:171</div></div>
 <div class="ttc" id="aPushConstants_8h_html"><div class="ttname"><a href="../../d0/dce/PushConstants_8h.html">PushConstants.h</a></div><div class="ttdoc">PushConstants class.</div></div>
 <div class="ttc" id="astructll_1_1vec3_html"><div class="ttname"><a href="../../d9/d56/structll_1_1vec3.html">ll::vec3&lt; uint32_t &gt;</a></div></div>
 <div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html_a75a8729f5346d7452bcc0776822640c7"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a75a8729f5346d7452bcc0776822640c7">ll::ComputeNodeDescriptor::getLocalShape</a></div><div class="ttdeci">ll::vec3ui getLocalShape() const noexcept</div><div class="ttdoc">Gets the local group shape.</div></div>
@@ -269,7 +270,7 @@ $(document).ready(function(){initNavTree('d1/dab/ComputeNodeDescriptor_8h_source
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../d1/dab/ComputeNodeDescriptor_8h.html">ComputeNodeDescriptor.h</a></li>
+    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../dir_e5a5b0ec48a41c0c7efc2edefda2c456.html">node</a></li><li class="navelem"><a class="el" href="../../d1/dab/ComputeNodeDescriptor_8h.html">ComputeNodeDescriptor.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

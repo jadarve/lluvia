@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.92.1">
+<meta name=generator content="Hugo 0.92.2">
 <meta name=robots content="noindex, nofollow">
 <link rel="shortcut icon" href=/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="Lluvia">
 <meta itemprop=name content="Flow2RGBA">
 <meta itemprop=description content="Encodes a 2D optical flow field as RGBA color.">
-<meta itemprop=wordCount content="97">
+<meta itemprop=wordCount content="98">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Flow2RGBA">
 <meta name=twitter:description content="Encodes a 2D optical flow field as RGBA color.">
@@ -223,7 +223,7 @@
 The maximum norm of any vector in the field.</p>
 <h2 id=inputs>Inputs</h2>
 <p>in_flow : ImageView.
-rg32f image. Input optical flow</p>
+{rg16f, rg32f} image. Input optical flow</p>
 <h2 id=outputs>Outputs</h2>
 <p>out_rgba : ImageView
 rgba8ui image. The encoded color of the optical flow field.</p>

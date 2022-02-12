@@ -21,6 +21,7 @@ var ImageDescriptor_8h =
       [ "Float64", "da/d1f/ImageDescriptor_8h.html#a34c16d83b42cf768fe094d2ade26a363ad2b556d8a8f5c8ac323f51a4b82e79a0", null ]
     ] ],
     [ "castChannelCount", "da/d1f/ImageDescriptor_8h.html#ad8957fdbdd3ee7e5f02a2fbeef6ebe73", null ],
+    [ "channelTypeToString", "da/d1f/ImageDescriptor_8h.html#aeb5c7048dd02196ce6a046ef160f6d69", null ],
     [ "channelTypeToString", "da/d1f/ImageDescriptor_8h.html#acfde885de1e2b5426c46ac9dbba06586", null ],
     [ "getChannelTypeSize", "da/d1f/ImageDescriptor_8h.html#aff39a4a6f27a24d369805c5b675a15b2", null ],
     [ "getVulkanImageFormat", "da/d1f/ImageDescriptor_8h.html#a863a84965af23c6649c21b2767caff7e", null ],

@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.92.1">
+<meta name=generator content="Hugo 0.92.2">
 <meta name=robots content="noindex, nofollow">
 <link rel="shortcut icon" href=/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="Lluvia">
 <meta itemprop=name content="ImageModel">
 <meta itemprop=description content="Computes the image model from an in_gray image.">
-<meta itemprop=wordCount content="83">
+<meta itemprop=wordCount content="111">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="ImageModel">
 <meta name=twitter:description content="Computes the image model from an in_gray image.">
@@ -215,15 +215,19 @@
 <p>Computes the image model from an in_gray image.</p>
 <p>The outputs are a low-pass filtered version of in_gray using a 3x3 Gaussian filter,
 and a 2D image representing the XY partial differences of the low-pass image.</p>
+<h2 id=parameters>Parameters</h2>
+<p>float_precision : int. Defaults to ll.FloatPrecision.FP32.
+Floating point precision used accross the algorithm. The outputs out_gray and
+out_gradient will be of this floating point precision.</p>
 <h2 id=inputs>Inputs</h2>
 <p>in_gray : ImageView.
 r8ui image.</p>
 <h2 id=outputs>Outputs</h2>
 <p>out_gray : ImageView
-r32f image. The low-pass filtered version of in_gray.
+{r16f, r32f} image. The low-pass filtered version of in_gray.
 The values are normalized to the range [0, 1]</p>
 <p>out_gradient: ImageView
-rg32f image. The X and Y gradient components of in_gray.
+{rg16f, rg32f} image. The X and Y gradient components of in_gray.
 The values are normalized to the range [-1, 1]</p>
 </div>
 </main>

@@ -39,7 +39,7 @@ var hierarchy =
       [ "ll::ImageView", "dd/dd3/classll_1_1ImageView.html", null ]
     ] ],
     [ "ll::Parameter", "dd/dea/classll_1_1Parameter.html", null ],
-    [ "ll::PortDescriptor", "d5/d54/structll_1_1PortDescriptor.html", null ],
+    [ "ll::PortDescriptor", "d8/dea/classll_1_1PortDescriptor.html", null ],
     [ "ll::Program", "d1/d63/classll_1_1Program.html", null ],
     [ "ll::PushConstants", "d6/d48/classll_1_1PushConstants.html", null ],
     [ "ll::SessionDescriptor", "d0/dfa/classll_1_1SessionDescriptor.html", null ],

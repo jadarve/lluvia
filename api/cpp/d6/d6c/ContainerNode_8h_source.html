@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/ContainerNode.h Source File</title>
+<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/ContainerNode.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -86,11 +86,11 @@ $(document).ready(function(){initNavTree('d6/d6c/ContainerNode_8h_source.html','
 </div><!--header-->
 <div class="contents">
 <a href="../../d6/d6c/ContainerNode_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef LLUVIA_CORE_CONTAINER_NODE_H_</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define LLUVIA_CORE_CONTAINER_NODE_H_</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef LLUVIA_CORE_NODE_CONTAINER_NODE_H_</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define LLUVIA_CORE_NODE_CONTAINER_NODE_H_</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">lluvia/core/Node.h</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/d55/ContainerNodeDescriptor_8h.html">lluvia/core/ContainerNodeDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">lluvia/core/node/Node.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/d55/ContainerNodeDescriptor_8h.html">lluvia/core/node/ContainerNodeDescriptor.h</a>&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
@@ -151,7 +151,7 @@ $(document).ready(function(){initNavTree('d6/d6c/ContainerNode_8h_source.html','
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;} <span class="comment">// namespace ll</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_CONTAINER_NODE_H_</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_NODE_CONTAINER_NODE_H_</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassll_1_1ContainerNode_html_ae2c4173aac029c0bb39960983d6dbba7"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html#ae2c4173aac029c0bb39960983d6dbba7">ll::ContainerNode::getPort</a></div><div class="ttdeci">std::shared_ptr&lt; ll::Object &gt; getPort(const std::string &amp;name) const override</div><div class="ttdoc">Gets a port descriptor given its name.</div></div>
@@ -171,11 +171,11 @@ $(document).ready(function(){initNavTree('d6/d6c/ContainerNode_8h_source.html','
 <div class="ttc" id="aclassll_1_1ContainerNode_html_a37e0d10acec345286096cfe5b829b752"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html#a37e0d10acec345286096cfe5b829b752">ll::ContainerNode::record</a></div><div class="ttdeci">void record(ll::CommandBuffer &amp;commandBuffer) const override</div><div class="ttdoc">Records the operations required to run this node in a ll::CommandBuffer.</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNode_html_a1c92021505055443252d39141d87911a"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html#a1c92021505055443252d39141d87911a">ll::ContainerNode::bindNode</a></div><div class="ttdeci">void bindNode(const std::string &amp;name, const std::shared_ptr&lt; ll::Node &gt; &amp;node)</div></div>
 <div class="ttc" id="aNode_8h_html"><div class="ttname"><a href="../../db/d92/Node_8h.html">Node.h</a></div><div class="ttdoc">Node class and related enums.</div></div>
-<div class="ttc" id="anamespacell_html_ab94e77c92b69e40871a2c3888c209402"><div class="ttname"><a href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402">ll::NodeType</a></div><div class="ttdeci">NodeType</div><div class="ttdoc">Class for node type.</div><div class="ttdef"><b>Definition:</b> Node.h:39</div></div>
-<div class="ttc" id="aclassll_1_1Parameter_html"><div class="ttname"><a href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a></div><div class="ttdef"><b>Definition:</b> Parameter.h:44</div></div>
+<div class="ttc" id="anamespacell_html_ab94e77c92b69e40871a2c3888c209402"><div class="ttname"><a href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402">ll::NodeType</a></div><div class="ttdeci">NodeType</div><div class="ttdoc">Class for node type.</div><div class="ttdef"><b>Definition:</b> NodeType.h:21</div></div>
+<div class="ttc" id="aclassll_1_1Parameter_html"><div class="ttname"><a href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a></div><div class="ttdef"><b>Definition:</b> Parameter.h:22</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNode_html_aa9fcafe449142b8af53006eaa8ff06d0"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html#aa9fcafe449142b8af53006eaa8ff06d0">ll::ContainerNode::bind</a></div><div class="ttdeci">void bind(const std::string &amp;name, const std::shared_ptr&lt; ll::Object &gt; &amp;obj) override</div><div class="ttdoc">Binds a ll::Object as port index for this node.</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNode_html_a751b48c427ff2b1e8aff4b1288380a14"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html#a751b48c427ff2b1e8aff4b1288380a14">ll::ContainerNode::m_nodes</a></div><div class="ttdeci">std::map&lt; std::string, std::shared_ptr&lt; ll::Node &gt; &gt; m_nodes</div><div class="ttdef"><b>Definition:</b> ContainerNode.h:66</div></div>
-<div class="ttc" id="aclassll_1_1Node_html"><div class="ttname"><a href="../../d2/d71/classll_1_1Node.html">ll::Node</a></div><div class="ttdef"><b>Definition:</b> Node.h:193</div></div>
+<div class="ttc" id="aclassll_1_1Node_html"><div class="ttname"><a href="../../d2/d71/classll_1_1Node.html">ll::Node</a></div><div class="ttdef"><b>Definition:</b> Node.h:31</div></div>
 <div class="ttc" id="aclassll_1_1CommandBuffer_html"><div class="ttname"><a href="../../dc/d37/classll_1_1CommandBuffer.html">ll::CommandBuffer</a></div><div class="ttdoc">Class for command buffer.</div><div class="ttdef"><b>Definition:</b> CommandBuffer.h:65</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNode_html_a6319464f520b15f85a622316a2cb2ddf"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html#a6319464f520b15f85a622316a2cb2ddf">ll::ContainerNode::getParameter</a></div><div class="ttdeci">const ll::Parameter &amp; getParameter(const std::string &amp;name) const override</div><div class="ttdoc">Gets a parameter.</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNode_html_ace978d839424a18c08a82f877c61e12f"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html#ace978d839424a18c08a82f877c61e12f">ll::ContainerNode::m_interpreter</a></div><div class="ttdeci">std::weak_ptr&lt; ll::Interpreter &gt; m_interpreter</div><div class="ttdef"><b>Definition:</b> ContainerNode.h:68</div></div>
@@ -183,7 +183,7 @@ $(document).ready(function(){initNavTree('d6/d6c/ContainerNode_8h_source.html','
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../d6/d6c/ContainerNode_8h.html">ContainerNode.h</a></li>
+    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../dir_e5a5b0ec48a41c0c7efc2edefda2c456.html">node</a></li><li class="navelem"><a class="el" href="../../d6/d6c/ContainerNode_8h.html">ContainerNode.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

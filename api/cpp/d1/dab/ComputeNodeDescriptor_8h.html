@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/ComputeNodeDescriptor.h File Reference</title>
+<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/ComputeNodeDescriptor.h File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -91,9 +91,9 @@ $(document).ready(function(){initNavTree('d1/dab/ComputeNodeDescriptor_8h.html',
 
 <p>ComputeNodeDescriptor class.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="../../db/d92/Node_8h_source.html">lluvia/core/Node.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="../../d0/ddd/Parameter_8h_source.html">lluvia/core/Parameter.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="../../d0/dce/PushConstants_8h_source.html">lluvia/core/PushConstants.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="../../db/d92/Node_8h_source.html">lluvia/core/node/Node.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="../../d0/ddd/Parameter_8h_source.html">lluvia/core/node/Parameter.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="../../d0/dce/PushConstants_8h_source.html">lluvia/core/node/PushConstants.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../d9/d49/types_8h_source.html">lluvia/core/types.h</a>&quot;</code><br />
 <code>#include &lt;array&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
@@ -103,40 +103,50 @@ $(document).ready(function(){initNavTree('d1/dab/ComputeNodeDescriptor_8h.html',
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ComputeNodeDescriptor.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d1/d8d/ComputeNodeDescriptor_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2ComputeNodeDescriptor_8h" alt=""/></div>
-<map name="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2ComputeNodeDescriptor_8h" id="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2ComputeNodeDescriptor_8h">
-<area shape="rect" title="ComputeNodeDescriptor class." alt="" coords="396,5,639,76"/>
-<area shape="rect" href="../../db/d92/Node_8h.html" title="Node class and related enums." alt="" coords="448,124,588,151"/>
-<area shape="rect" title=" " alt="" coords="50,363,108,389"/>
-<area shape="rect" title=" " alt="" coords="591,206,668,233"/>
-<area shape="rect" title=" " alt="" coords="142,363,198,389"/>
-<area shape="rect" title=" " alt="" coords="408,363,462,389"/>
-<area shape="rect" href="../../d0/ddd/Parameter_8h.html" title="Parameter class and related enums." alt="" coords="106,206,278,233"/>
-<area shape="rect" href="../../d0/dce/PushConstants_8h.html" title="PushConstants class." alt="" coords="663,124,866,151"/>
-<area shape="rect" href="../../d9/d49/types_8h.html" title="Common types." alt="" coords="890,124,1033,151"/>
-<area shape="rect" title=" " alt="" coords="1058,124,1108,151"/>
-<area shape="rect" title=" " alt="" coords="886,363,952,389"/>
-<area shape="rect" href="../../d5/ddf/vulkan_8hpp.html" title=" " alt="" coords="354,199,492,240"/>
-<area shape="rect" href="../../d0/d0b/enums_8h.html" title="Enums." alt="" coords="500,288,698,315"/>
-<area shape="rect" title=" " alt="" coords="511,363,596,389"/>
-<area shape="rect" title=" " alt="" coords="1046,363,1133,389"/>
-<area shape="rect" title=" " alt="" coords="621,363,697,389"/>
-<area shape="rect" title=" " alt="" coords="760,363,822,389"/>
-<area shape="rect" title=" " alt="" coords="46,288,138,315"/>
-<area shape="rect" title=" " alt="" coords="162,288,222,315"/>
-<area shape="rect" href="../../da/d41/error_8h.html" title="error related classes and methods." alt="" coords="692,206,828,233"/>
-<area shape="rect" title=" " alt="" coords="903,206,970,233"/>
-<area shape="rect" title=" " alt="" coords="773,288,881,315"/>
+<div class="center"><img src="../../d1/d8d/ComputeNodeDescriptor_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2node_2ComputeNodeDescriptor_8h" alt=""/></div>
+<map name="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2node_2ComputeNodeDescriptor_8h" id="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2node_2ComputeNodeDescriptor_8h">
+<area shape="rect" title="ComputeNodeDescriptor class." alt="" coords="2059,5,2256,76"/>
+<area shape="rect" href="../../db/d92/Node_8h.html" title="Node class and related enums." alt="" coords="676,124,852,151"/>
+<area shape="rect" title=" " alt="" coords="111,601,169,628"/>
+<area shape="rect" title=" " alt="" coords="1885,273,1963,300"/>
+<area shape="rect" title=" " alt="" coords="2671,601,2727,628"/>
+<area shape="rect" title=" " alt="" coords="2247,601,2302,628"/>
+<area shape="rect" href="../../d9/d49/types_8h.html" title="Common types." alt="" coords="1769,355,1911,382"/>
+<area shape="rect" href="../../d0/ddd/Parameter_8h.html" title="Parameter class and related enums." alt="" coords="2408,355,2616,382"/>
+<area shape="rect" href="../../d0/dce/PushConstants_8h.html" title="PushConstants class." alt="" coords="2038,199,2277,225"/>
+<area shape="rect" title=" " alt="" coords="2888,124,2939,151"/>
+<area shape="rect" title=" " alt="" coords="1777,601,1844,628"/>
+<area shape="rect" href="../../d5/ddf/vulkan_8hpp.html" title=" " alt="" coords="885,437,1022,479"/>
+<area shape="rect" href="../../d0/d0b/enums_8h.html" title="Enums." alt="" coords="1289,527,1487,553"/>
+<area shape="rect" href="../../df/de4/NodeState_8h.html" title="NodeState enum." alt="" coords="680,355,891,382"/>
+<area shape="rect" href="../../d2/da8/NodeType_8h.html" title="NodeType enum." alt="" coords="347,355,554,382"/>
+<area shape="rect" href="../../dc/db6/PortDirection_8h.html" title="PortDirection enum." alt="" coords="500,273,727,300"/>
+<area shape="rect" href="../../de/dda/PortType_8h.html" title="PortType enum." alt="" coords="801,273,999,300"/>
+<area shape="rect" href="../../d2/d7d/PortDescriptor_8h.html" title="PortDescriptor class." alt="" coords="852,199,1087,225"/>
+<area shape="rect" title=" " alt="" coords="1357,601,1443,628"/>
+<area shape="rect" title=" " alt="" coords="1529,601,1615,628"/>
+<area shape="rect" title=" " alt="" coords="1257,601,1333,628"/>
+<area shape="rect" title=" " alt="" coords="227,601,290,628"/>
+<area shape="rect" href="../../da/d1f/ImageDescriptor_8h.html" title="ImageDescriptor class and related enumerations." alt="" coords="1435,273,1693,300"/>
+<area shape="rect" title=" " alt="" coords="1023,273,1097,300"/>
+<area shape="rect" href="../../da/d41/error_8h.html" title="error related classes and methods." alt="" coords="1848,445,1984,471"/>
+<area shape="rect" href="../../d1/d9a/ImageTiling_8h.html" title=" " alt="" coords="1067,355,1295,382"/>
+<area shape="rect" href="../../de/d56/ImageUsageFlags_8h.html" title=" " alt="" coords="1371,348,1592,389"/>
+<area shape="rect" title=" " alt="" coords="2161,445,2253,471"/>
+<area shape="rect" title=" " alt="" coords="1862,527,1970,553"/>
+<area shape="rect" href="../../d2/d11/ParameterType_8h.html" title="ParameterType enum." alt="" coords="2277,437,2475,479"/>
+<area shape="rect" title=" " alt="" coords="2601,445,2661,471"/>
+<area shape="rect" title=" " alt="" coords="2240,273,2307,300"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d8/d43/ComputeNodeDescriptor_8h__dep__incl.png" border="0" usemap="#_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2ComputeNodeDescriptor_8hdep" alt=""/></div>
-<map name="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2ComputeNodeDescriptor_8hdep" id="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2ComputeNodeDescriptor_8hdep">
-<area shape="rect" title="ComputeNodeDescriptor class." alt="" coords="94,5,337,76"/>
-<area shape="rect" href="../../dd/dbf/ComputeNode_8h.html" title="ComputeNode class." alt="" coords="5,124,260,180"/>
-<area shape="rect" href="../../d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="123,228,308,284"/>
+<div class="center"><img src="../../d8/d43/ComputeNodeDescriptor_8h__dep__incl.png" border="0" usemap="#_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2node_2ComputeNodeDescriptor_8hdep" alt=""/></div>
+<map name="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2node_2ComputeNodeDescriptor_8hdep" id="_2home_2runner_2work_2lluvia_2lluvia_2lluvia_2cpp_2core_2include_2lluvia_2core_2node_2ComputeNodeDescriptor_8hdep">
+<area shape="rect" title="ComputeNodeDescriptor class." alt="" coords="65,5,262,76"/>
+<area shape="rect" href="../../dd/dbf/ComputeNode_8h.html" title="ComputeNode class." alt="" coords="5,124,191,195"/>
+<area shape="rect" href="../../d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="71,243,256,299"/>
 </map>
 </div>
 </div>
@@ -161,7 +171,7 @@ Namespaces</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../d1/dab/ComputeNodeDescriptor_8h.html">ComputeNodeDescriptor.h</a></li>
+    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../dir_e5a5b0ec48a41c0c7efc2edefda2c456.html">node</a></li><li class="navelem"><a class="el" href="../../d1/dab/ComputeNodeDescriptor_8h.html">ComputeNodeDescriptor.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

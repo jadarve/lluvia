@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/ContainerNodeDescriptor.h Source File</title>
+<title>Lluvia: /home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/ContainerNodeDescriptor.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -86,12 +86,12 @@ $(document).ready(function(){initNavTree('d1/d55/ContainerNodeDescriptor_8h_sour
 </div><!--header-->
 <div class="contents">
 <a href="../../d1/d55/ContainerNodeDescriptor_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef LLUVIA_CORE_CONTAINER_DESCRIPTOR_NODE_H_</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define LLUVIA_CORE_CONTAINER_DESCRIPTOR_NODE_H_</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">lluvia/core/types.h</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">lluvia/core/Node.h</a>&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/ddd/Parameter_8h.html">lluvia/core/Parameter.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">lluvia/core/node/Node.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/ddd/Parameter_8h.html">lluvia/core/node/Parameter.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">lluvia/core/types.h</a>&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
@@ -113,13 +113,13 @@ $(document).ready(function(){initNavTree('d1/d55/ContainerNodeDescriptor_8h_sour
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ContainerNodeDescriptor</a>&amp; <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#a8dc13df02e1b4ee1cdf80df8c4da0b96">operator = </a>(<a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ContainerNodeDescriptor</a>&amp;&amp; descriptor)      = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ContainerNodeDescriptor</a>&amp; <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#ae0d72f025de1f89a4a7b28ae7cd4bf37">addPort</a>(<span class="keyword">const</span> <a class="code" href="../../d5/d54/structll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; port);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ContainerNodeDescriptor</a>&amp; <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#ae0d72f025de1f89a4a7b28ae7cd4bf37">addPort</a>(<span class="keyword">const</span> <a class="code" href="../../d8/dea/classll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; port);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ContainerNodeDescriptor</a>&amp; <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#aef2ac2aae43d71fc92cf7a88de376577">addPorts</a>(<span class="keyword">const</span> std::initializer_list&lt;ll::PortDescriptor&gt;&amp; ports);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d5/d54/structll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#ac564b77f7668bf01b8d30921f83440fa">getPort</a>(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d8/dea/classll_1_1PortDescriptor.html">ll::PortDescriptor</a>&amp; <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#ac564b77f7668bf01b8d30921f83440fa">getPort</a>(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ContainerNodeDescriptor</a>&amp; <a class="code" href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#ad2a57fcb552e1bcaf0137b8b138c08a9">setParameter</a>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> <a class="code" href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a>&amp; value);</div>
@@ -142,7 +142,7 @@ $(document).ready(function(){initNavTree('d1/d55/ContainerNodeDescriptor_8h_sour
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;} <span class="comment">// namespace ll</span></div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_CONTAINER_DESCRIPTOR_NODE_H_</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_NODE_CONTAINER_DESCRIPTOR_NODE_H_</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html">ll::ContainerNodeDescriptor</a></div><div class="ttdoc">Class for describing a container node.</div><div class="ttdef"><b>Definition:</b> ContainerNodeDescriptor.h:27</div></div>
@@ -150,12 +150,12 @@ $(document).ready(function(){initNavTree('d1/d55/ContainerNodeDescriptor_8h_sour
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html_ae0d72f025de1f89a4a7b28ae7cd4bf37"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#ae0d72f025de1f89a4a7b28ae7cd4bf37">ll::ContainerNodeDescriptor::addPort</a></div><div class="ttdeci">ContainerNodeDescriptor &amp; addPort(const ll::PortDescriptor &amp;port)</div><div class="ttdoc">Adds a port to the descriptor.</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html_a4c3594af8fcdfc300bd930804d1ff7ac"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#a4c3594af8fcdfc300bd930804d1ff7ac">ll::ContainerNodeDescriptor::~ContainerNodeDescriptor</a></div><div class="ttdeci">~ContainerNodeDescriptor()=default</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html_aef2ac2aae43d71fc92cf7a88de376577"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#aef2ac2aae43d71fc92cf7a88de376577">ll::ContainerNodeDescriptor::addPorts</a></div><div class="ttdeci">ContainerNodeDescriptor &amp; addPorts(const std::initializer_list&lt; ll::PortDescriptor &gt; &amp;ports)</div><div class="ttdoc">Adds a list of ports to the descriptor.</div></div>
+<div class="ttc" id="aclassll_1_1PortDescriptor_html"><div class="ttname"><a href="../../d8/dea/classll_1_1PortDescriptor.html">ll::PortDescriptor</a></div><div class="ttdef"><b>Definition:</b> PortDescriptor.h:28</div></div>
 <div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
 <div class="ttc" id="aNode_8h_html"><div class="ttname"><a href="../../db/d92/Node_8h.html">Node.h</a></div><div class="ttdoc">Node class and related enums.</div></div>
-<div class="ttc" id="aclassll_1_1Parameter_html"><div class="ttname"><a href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a></div><div class="ttdef"><b>Definition:</b> Parameter.h:44</div></div>
+<div class="ttc" id="aclassll_1_1Parameter_html"><div class="ttname"><a href="../../dd/dea/classll_1_1Parameter.html">ll::Parameter</a></div><div class="ttdef"><b>Definition:</b> Parameter.h:22</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html_a8f0cbb98c73b1e7e54a523173798746e"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#a8f0cbb98c73b1e7e54a523173798746e">ll::ContainerNodeDescriptor::ContainerNodeDescriptor</a></div><div class="ttdeci">ContainerNodeDescriptor()=default</div></div>
 <div class="ttc" id="aParameter_8h_html"><div class="ttname"><a href="../../d0/ddd/Parameter_8h.html">Parameter.h</a></div><div class="ttdoc">Parameter class and related enums.</div></div>
-<div class="ttc" id="astructll_1_1PortDescriptor_html"><div class="ttname"><a href="../../d5/d54/structll_1_1PortDescriptor.html">ll::PortDescriptor</a></div><div class="ttdef"><b>Definition:</b> Node.h:171</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html_ad2a57fcb552e1bcaf0137b8b138c08a9"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#ad2a57fcb552e1bcaf0137b8b138c08a9">ll::ContainerNodeDescriptor::setParameter</a></div><div class="ttdeci">ContainerNodeDescriptor &amp; setParameter(const std::string &amp;name, const ll::Parameter &amp;value)</div><div class="ttdoc">Adds a parameter.</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html_af02b2e9066af39c530a4bcb0d8abe928"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#af02b2e9066af39c530a4bcb0d8abe928">ll::ContainerNodeDescriptor::getBuilderName</a></div><div class="ttdeci">const std::string &amp; getBuilderName() const noexcept</div><div class="ttdoc">Gets the builder name within the Lua interpreter.</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNodeDescriptor_html_abf34b3a6a360c373b36123b56d151443"><div class="ttname"><a href="../../d7/da8/classll_1_1ContainerNodeDescriptor.html#abf34b3a6a360c373b36123b56d151443">ll::ContainerNodeDescriptor::setBuilderName</a></div><div class="ttdeci">ContainerNodeDescriptor &amp; setBuilderName(const std::string &amp;name) noexcept</div><div class="ttdoc">Sets the builder name this descriptor refers to within the Lua interpreter.</div></div>
@@ -165,7 +165,7 @@ $(document).ready(function(){initNavTree('d1/d55/ContainerNodeDescriptor_8h_sour
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../d1/d55/ContainerNodeDescriptor_8h.html">ContainerNodeDescriptor.h</a></li>
+    <li class="navelem"><a class="el" href="../../dir_e9488c511e9a21b3f85abd9d4eb6808d.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_b548abd9aebe4efd72f75b2a4924c59f.html">cpp</a></li><li class="navelem"><a class="el" href="../../dir_5f5ab2ad72d038f3eec668df6e42d960.html">core</a></li><li class="navelem"><a class="el" href="../../dir_9cd11b8dd777287adb14a01c266b10bf.html">include</a></li><li class="navelem"><a class="el" href="../../dir_e599967250dff34f76fc59a8c1ae5366.html">lluvia</a></li><li class="navelem"><a class="el" href="../../dir_bc855b56c2ee3be9d686b09ebec57028.html">core</a></li><li class="navelem"><a class="el" href="../../dir_e5a5b0ec48a41c0c7efc2edefda2c456.html">node</a></li><li class="navelem"><a class="el" href="../../d1/d55/ContainerNodeDescriptor_8h.html">ContainerNodeDescriptor.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

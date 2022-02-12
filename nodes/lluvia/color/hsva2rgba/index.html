@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.92.1">
+<meta name=generator content="Hugo 0.92.2">
 <meta name=robots content="noindex, nofollow">
 <link rel="shortcut icon" href=/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="Lluvia">
 <meta itemprop=name content="HSVA2RGBA">
 <meta itemprop=description content="Converts a HSV image to RGB color space.">
-<meta itemprop=wordCount content="67">
+<meta itemprop=wordCount content="68">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="HSVA2RGBA">
 <meta name=twitter:description content="Converts a HSV image to RGB color space.">
@@ -213,7 +213,7 @@
 <p>The conversion follows the formulae presented in <a href=https://en.wikipedia.org/wiki/HSL_and_HSV>https://en.wikipedia.org/wiki/HSL_and_HSV</a>.</p>
 <h2 id=inputs>Inputs</h2>
 <p>in_hsva : ImageView.
-rgba32f image. The color componens must lie within the following ranges:</p>
+{rgba16f, rgba32f} image. The color componens must lie within the following ranges:</p>
 <pre><code>* H in [0, 2*pi]
 * S in [0, 1]
 * V in [0, 1]

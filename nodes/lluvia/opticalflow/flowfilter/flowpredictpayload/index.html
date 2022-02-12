@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.92.1">
+<meta name=generator content="Hugo 0.92.2">
 <meta name=robots content="noindex, nofollow">
 <link rel="shortcut icon" href=/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="Lluvia">
 <meta itemprop=name content="FlowPredictPayload">
 <meta itemprop=description content="Computes a forward prediction of an optical flow field and payloads.">
-<meta itemprop=wordCount content="123">
+<meta itemprop=wordCount content="156">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="FlowPredictPayload">
 <meta name=twitter:description content="Computes a forward prediction of an optical flow field and payloads.">
@@ -222,18 +222,21 @@ the FlowPredictX and FlowPredictY compute nodes.</p>
 The max magnitude of any flow vector in in_flow field.</p>
 <h2 id=inputs>Inputs</h2>
 <p>in_flow : ImageView
-rg32f image. The input optical flow used for the prediction.</p>
+{rg16f, rg32f} image. The input optical flow used for the prediction.</p>
 <p>in_gray : ImageView
-r32f image. Input scalar field payload.</p>
+{r16f, r32f} image. Input scalar field payload.</p>
 <p>in_vector : Imageview
-rg32f image. Input vector field payload.</p>
+{rg16f, rg32f} image. Input vector field payload.</p>
 <h2 id=outputs>Outputs</h2>
 <p>out_flow : ImageView
-rg32f image. Predicted optical flow.</p>
+{rg16f, rg32f} image. Predicted optical flow. The image format will be
+the same as in_flow.</p>
 <p>out_gray : ImageView
-r32f image. Predicted scalar field.</p>
+{r16f, r32f} image. Predicted scalar field. The image format will be
+the same as in_gray.</p>
 <p>out_vector : ImageView
-rg32f image. Predicted vector field.</p>
+{rg16f, rg32f} image. Predicted vector field. The image format will be
+the same as in_vector.</p>
 </div>
 </main>
 </div>

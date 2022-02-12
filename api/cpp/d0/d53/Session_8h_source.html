@@ -99,13 +99,13 @@ $(document).ready(function(){initNavTree('d0/d53/Session_8h_source.html','../../
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dd/d97/DeviceDescriptor_8h.html">lluvia/core/device/DeviceDescriptor.h</a>&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../da/d1f/ImageDescriptor_8h.html">lluvia/core/image/ImageDescriptor.h</a>&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dd/dac/SessionDescriptor_8h.html">lluvia/core/SessionDescriptor.h</a>&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d4e/ComputeDimension_8h.html">lluvia/core/ComputeDimension.h</a>&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d03/NodeBuilderDescriptor_8h.html">lluvia/core/NodeBuilderDescriptor.h</a>&quot;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">lluvia/core/types.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d4c/MemoryPropertyFlags_8h.html">lluvia/core/memory/MemoryPropertyFlags.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d4e/ComputeDimension_8h.html">lluvia/core/ComputeDimension.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dd/d97/DeviceDescriptor_8h.html">lluvia/core/device/DeviceDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../da/d1f/ImageDescriptor_8h.html">lluvia/core/image/ImageDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d4c/MemoryPropertyFlags_8h.html">lluvia/core/memory/MemoryPropertyFlags.h</a>&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d03/NodeBuilderDescriptor_8h.html">lluvia/core/node/NodeBuilderDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dd/dac/SessionDescriptor_8h.html">lluvia/core/SessionDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">lluvia/core/types.h</a>&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
@@ -224,33 +224,35 @@ $(document).ready(function(){initNavTree('d0/d53/Session_8h_source.html','../../
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    std::string <a class="code" href="../../d8/d31/classll_1_1Session.html#a04a70bcbdc97270ca8537ba658b219f0">help</a>(<span class="keyword">const</span> std::string&amp; builderName) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="keyword">static</span> uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice&amp; physicalDevice);</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    <span class="comment">// Session objects should be created through factory methods</span></div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <a class="code" href="../../d8/d31/classll_1_1Session.html#ace1169d8f9124f66ca603e852093564a">Session</a>(<span class="keyword">const</span> <a class="code" href="../../d0/dfa/classll_1_1SessionDescriptor.html">ll::SessionDescriptor</a>&amp; descriptor);</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <span class="keywordtype">void</span> initDescriptor();</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keywordtype">void</span> initDevice();</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="../../d8/d31/classll_1_1Session.html#a58d062e1e574b8cb8a005fcf7f5bc636">hasReceivedVulkanWarningMessages</a>() <span class="keyword">const</span> noexcept;</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160; </div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d0/dfa/classll_1_1SessionDescriptor.html">ll::SessionDescriptor</a>              m_descriptor;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <a class="code" href="../../dc/d56/structll_1_1DeviceDescriptor.html">ll::DeviceDescriptor</a>                     m_deviceDescriptor;</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keyword">static</span> uint32_t findComputeFamilyQueueIndex(vk::PhysicalDevice&amp; physicalDevice);</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; </div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    std::shared_ptr&lt;ll::vulkan::Instance&gt;    m_instance;</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    std::shared_ptr&lt;ll::vulkan::Device&gt;      m_device;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <span class="comment">// Session objects should be created through factory methods</span></div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    <a class="code" href="../../d8/d31/classll_1_1Session.html#ace1169d8f9124f66ca603e852093564a">Session</a>(<span class="keyword">const</span> <a class="code" href="../../d0/dfa/classll_1_1SessionDescriptor.html">ll::SessionDescriptor</a>&amp; descriptor);</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    std::shared_ptr&lt;ll::Interpreter&gt;         m_interpreter;</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160; </div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    std::map&lt;std::string, std::shared_ptr&lt;ll::Program&gt;&gt; m_programRegistry;</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    std::once_flag              m_hostMemoryAllocate;</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    std::shared_ptr&lt;ll::Memory&gt; m_hostMemory;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;};</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_SESSION_H_</span></div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordtype">void</span> initDescriptor();</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keywordtype">void</span> initDevice();</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d0/dfa/classll_1_1SessionDescriptor.html">ll::SessionDescriptor</a>              m_descriptor;</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    <a class="code" href="../../dc/d56/structll_1_1DeviceDescriptor.html">ll::DeviceDescriptor</a>                     m_deviceDescriptor;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160; </div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    std::shared_ptr&lt;ll::vulkan::Instance&gt;    m_instance;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    std::shared_ptr&lt;ll::vulkan::Device&gt;      m_device;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    std::shared_ptr&lt;ll::Interpreter&gt;         m_interpreter;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    std::map&lt;std::string, std::shared_ptr&lt;ll::Program&gt;&gt; m_programRegistry;</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    std::once_flag              m_hostMemoryAllocate;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    std::shared_ptr&lt;ll::Memory&gt; m_hostMemory;</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;};</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; </div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;} <span class="comment">// namespace ll</span></div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; </div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_SESSION_H_</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassll_1_1Session_html_aec0ff6f1b244dd2947a211ab563ca313"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#aec0ff6f1b244dd2947a211ab563ca313">ll::Session::createCommandBuffer</a></div><div class="ttdeci">std::unique_ptr&lt; ll::CommandBuffer &gt; createCommandBuffer() const</div><div class="ttdoc">Creates a command buffer.</div></div>
@@ -263,6 +265,7 @@ $(document).ready(function(){initNavTree('d0/d53/Session_8h_source.html','../../
 <div class="ttc" id="aComputeDimension_8h_html"><div class="ttname"><a href="../../d6/d4e/ComputeDimension_8h.html">ComputeDimension.h</a></div></div>
 <div class="ttc" id="aclassll_1_1Session_html_a58c127266a8adc8bb1b6207b8ca63972"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a58c127266a8adc8bb1b6207b8ca63972">ll::Session::getVulkanExtensionProperties</a></div><div class="ttdeci">static std::vector&lt; vk::ExtensionProperties &gt; getVulkanExtensionProperties()</div><div class="ttdoc">Gets the Vulkan extension properties available to this machine.</div></div>
 <div class="ttc" id="aclassll_1_1ContainerNode_html"><div class="ttname"><a href="../../d5/d2d/classll_1_1ContainerNode.html">ll::ContainerNode</a></div><div class="ttdef"><b>Definition:</b> ContainerNode.h:26</div></div>
+<div class="ttc" id="aclassll_1_1Session_html_a58d062e1e574b8cb8a005fcf7f5bc636"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a58d062e1e574b8cb8a005fcf7f5bc636">ll::Session::hasReceivedVulkanWarningMessages</a></div><div class="ttdeci">bool hasReceivedVulkanWarningMessages() const noexcept</div><div class="ttdoc">Tells whether or not this session has triggered Vulkan warning messages.</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_aa0069d6265aebd1a8c528806f44d652d"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#aa0069d6265aebd1a8c528806f44d652d">ll::Session::createMemory</a></div><div class="ttdeci">std::shared_ptr&lt; ll::Memory &gt; createMemory(const ll::MemoryPropertyFlags &amp;flags, const uint64_t pageSize, bool exactFlagsMatch=false)</div><div class="ttdoc">Creates a memory.</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_ace1169d8f9124f66ca603e852093564a"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#ace1169d8f9124f66ca603e852093564a">ll::Session::Session</a></div><div class="ttdeci">Session(const Session &amp;session)=delete</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_aa964a58ec3d43037f9a8ccc2bc302b94"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#aa964a58ec3d43037f9a8ccc2bc302b94">ll::Session::setProgram</a></div><div class="ttdeci">void setProgram(const std::string &amp;name, const std::shared_ptr&lt; ll::Program &gt; &amp;program)</div><div class="ttdoc">Sets a program with a given name into the registry.</div></div>
@@ -270,7 +273,7 @@ $(document).ready(function(){initNavTree('d0/d53/Session_8h_source.html','../../
 <div class="ttc" id="aclassll_1_1Session_html_a1be6fbb182a91d573cfe1fa969051423"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a1be6fbb182a91d573cfe1fa969051423">ll::Session::createContainerNodeDescriptor</a></div><div class="ttdeci">ll::ContainerNodeDescriptor createContainerNodeDescriptor(const std::string &amp;builderName) const</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_aacdcdcb38667a6ea8ebaa8e6d27dc7aa"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#aacdcdcb38667a6ea8ebaa8e6d27dc7aa">ll::Session::run</a></div><div class="ttdeci">void run(const ll::CommandBuffer &amp;cmdBuffer)</div><div class="ttdoc">Runs a ll::CommandBuffer.</div></div>
 <div class="ttc" id="aImageDescriptor_8h_html"><div class="ttname"><a href="../../da/d1f/ImageDescriptor_8h.html">ImageDescriptor.h</a></div><div class="ttdoc">ImageDescriptor class and related enumerations.</div></div>
-<div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ll::ComputeNodeDescriptor</a></div><div class="ttdoc">Class for describing a compute node node.</div><div class="ttdef"><b>Definition:</b> ComputeNodeDescriptor.h:34</div></div>
+<div class="ttc" id="aclassll_1_1ComputeNodeDescriptor_html"><div class="ttname"><a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ll::ComputeNodeDescriptor</a></div><div class="ttdoc">Class for describing a compute node node.</div><div class="ttdef"><b>Definition:</b> ComputeNodeDescriptor.h:35</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_a066bff0a56cb34fc688831da57cf4467"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a066bff0a56cb34fc688831da57cf4467">ll::Session::getDeviceDescriptor</a></div><div class="ttdeci">const ll::DeviceDescriptor &amp; getDeviceDescriptor() const noexcept</div><div class="ttdoc">Gets the device descriptor associated to this session.</div></div>
 <div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_a5f556dd62dbadb1436e6f03b6b2af21d"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a5f556dd62dbadb1436e6f03b6b2af21d">ll::Session::createContainerNode</a></div><div class="ttdeci">std::shared_ptr&lt; ll::ContainerNode &gt; createContainerNode(const ll::ContainerNodeDescriptor &amp;descriptor)</div></div>
@@ -279,7 +282,7 @@ $(document).ready(function(){initNavTree('d0/d53/Session_8h_source.html','../../
 <div class="ttc" id="aclassll_1_1Session_html_a3817f2803662f98ff8137b84f0abd42d"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a3817f2803662f98ff8137b84f0abd42d">ll::Session::getVulkanInstanceLayerProperties</a></div><div class="ttdeci">static std::vector&lt; vk::LayerProperties &gt; getVulkanInstanceLayerProperties()</div><div class="ttdoc">Gets the Vulkan instance layer properties available to this machine.</div></div>
 <div class="ttc" id="aclassll_1_1Session_html"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html">ll::Session</a></div><div class="ttdoc">Class that contains all the state required to run compute operations on a compute device.</div><div class="ttdef"><b>Definition:</b> Session.h:51</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_a04a70bcbdc97270ca8537ba658b219f0"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a04a70bcbdc97270ca8537ba658b219f0">ll::Session::help</a></div><div class="ttdeci">std::string help(const std::string &amp;builderName) const</div><div class="ttdoc">Returns the help string of a given node builder.</div></div>
-<div class="ttc" id="aclassll_1_1ImageDescriptor_html"><div class="ttname"><a href="../../de/d04/classll_1_1ImageDescriptor.html">ll::ImageDescriptor</a></div><div class="ttdoc">Stores all relevant information for creating ll::Image objects.</div><div class="ttdef"><b>Definition:</b> ImageDescriptor.h:193</div></div>
+<div class="ttc" id="aclassll_1_1ImageDescriptor_html"><div class="ttname"><a href="../../de/d04/classll_1_1ImageDescriptor.html">ll::ImageDescriptor</a></div><div class="ttdoc">Stores all relevant information for creating ll::Image objects.</div><div class="ttdef"><b>Definition:</b> ImageDescriptor.h:197</div></div>
 <div class="ttc" id="aclassll_1_1Session_html_a30cf7859c5aff13663e53a0e3c4ec07d"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html#a30cf7859c5aff13663e53a0e3c4ec07d">ll::Session::getNodeBuilderDescriptors</a></div><div class="ttdeci">std::vector&lt; ll::NodeBuilderDescriptor &gt; getNodeBuilderDescriptors() const</div><div class="ttdoc">Gets the node builder descriptors currently registered.</div></div>
 <div class="ttc" id="aDeviceDescriptor_8h_html"><div class="ttname"><a href="../../dd/d97/DeviceDescriptor_8h.html">DeviceDescriptor.h</a></div></div>
 <div class="ttc" id="anamespacell_html_a60a34a98caee536252321f5f94e0c211a7e62bc342f41c946868f0ea6f0b712d8"><div class="ttname"><a href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211a7e62bc342f41c946868f0ea6f0b712d8">ll::PortType::Buffer</a></div><div class="ttdeci">@ Buffer</div></div>

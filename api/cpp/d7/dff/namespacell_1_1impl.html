@@ -110,6 +110,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aa3329c9510585865f3e6b0412151cc0f"><td class="memTemplParams" colspan="2">template&lt;typename E , std::size_t N, const std::array&lt; std::tuple&lt; const char *, E &gt;, N &gt; &amp; values&gt; </td></tr>
 <tr class="memitem:aa3329c9510585865f3e6b0412151cc0f"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#aa3329c9510585865f3e6b0412151cc0f">enumToString</a> (E &amp;&amp;value) noexcept</td></tr>
 <tr class="separator:aa3329c9510585865f3e6b0412151cc0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdd75ba4a52cde152543d0d43530b966"><td class="memTemplParams" colspan="2">template&lt;typename E , std::size_t N, const std::array&lt; std::tuple&lt; const char *, E &gt;, N &gt; &amp; values&gt; </td></tr>
+<tr class="memitem:acdd75ba4a52cde152543d0d43530b966"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#acdd75ba4a52cde152543d0d43530b966">enumToString</a> (const E &amp;value) noexcept</td></tr>
+<tr class="separator:acdd75ba4a52cde152543d0d43530b966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8948128ed508ac7e5082f4aadc3904d6"><td class="memTemplParams" colspan="2">template&lt;typename E , typename T , std::size_t N, const std::array&lt; std::tuple&lt; const char *, E &gt;, N &gt; &amp; values&gt; </td></tr>
 <tr class="memitem:a8948128ed508ac7e5082f4aadc3904d6"><td class="memTemplItemLeft" align="right" valign="top">E&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a8948128ed508ac7e5082f4aadc3904d6">stringToEnum</a> (T &amp;&amp;stringValue)</td></tr>
 <tr class="separator:a8948128ed508ac7e5082f4aadc3904d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,6 +148,8 @@ Variables</h2></td></tr>
 <tr class="separator:a0991150e679b2adedbc7b7501302c443"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e2434ab5589626f52049145fd42cd15"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0">ll::ErrorCode</a> &gt;, 25 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a1e2434ab5589626f52049145fd42cd15">ErrorCodeStrings</a></td></tr>
 <tr class="separator:a1e2434ab5589626f52049145fd42cd15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a144bc1e5ecc0505e36a24f2a30b57fa6"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">ll::FloatPrecision</a> &gt;, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a144bc1e5ecc0505e36a24f2a30b57fa6">FloatPrecisionStrings</a></td></tr>
+<tr class="separator:a144bc1e5ecc0505e36a24f2a30b57fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158a6f972655a902c9840629615d9920"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a1231a63269df4e508ab8b0257b01b7a9">ll::ImageAddressMode</a> &gt;, 5 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a158a6f972655a902c9840629615d9920">ImageAddressModeStrings</a></td></tr>
 <tr class="memdesc:a158a6f972655a902c9840629615d9920"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../dc/da6/classll_1_1Image.html" title="Objects to manage images.">Image</a> filter mode strings used for converting <a class="el" href="../../d8/dda/namespacell.html#a1231a63269df4e508ab8b0257b01b7a9" title="Image address mode.">ll::ImageAddressMode</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#a158a6f972655a902c9840629615d9920">More...</a><br /></td></tr>
 <tr class="separator:a158a6f972655a902c9840629615d9920"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,25 +176,53 @@ Variables</h2></td></tr>
 <tr class="memitem:a8ebd7e05a1457602567cde936915eeae"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1">ll::NodeState</a> &gt;, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">NodeStateStrings</a></td></tr>
 <tr class="memdesc:a8ebd7e05a1457602567cde936915eeae"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d2/d71/classll_1_1Node.html">Node</a> state string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1" title="Class for node state.">ll::NodeState</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">More...</a><br /></td></tr>
 <tr class="separator:a8ebd7e05a1457602567cde936915eeae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52c170b90c5cdf8304025c7ed9bf0b10"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402">ll::NodeType</a> &gt;, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a52c170b90c5cdf8304025c7ed9bf0b10">NodeTypeStrings</a></td></tr>
-<tr class="memdesc:a52c170b90c5cdf8304025c7ed9bf0b10"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d2/d71/classll_1_1Node.html">Node</a> type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402" title="Class for node type.">ll::NodeType</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#a52c170b90c5cdf8304025c7ed9bf0b10">More...</a><br /></td></tr>
-<tr class="separator:a52c170b90c5cdf8304025c7ed9bf0b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9f280f54583de93638886aaa6563be6"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0e">ll::PortDirection</a> &gt;, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#ab9f280f54583de93638886aaa6563be6">PortDirectionStrings</a></td></tr>
-<tr class="memdesc:ab9f280f54583de93638886aaa6563be6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port direction string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0e" title="Class for port direction.">ll::PortDirection</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#ab9f280f54583de93638886aaa6563be6">More...</a><br /></td></tr>
-<tr class="separator:ab9f280f54583de93638886aaa6563be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0be8bacd2909f6df105e16012f2a1c2"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211">ll::PortType</a> &gt;, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#af0be8bacd2909f6df105e16012f2a1c2">PortTypeStrings</a></td></tr>
-<tr class="memdesc:af0be8bacd2909f6df105e16012f2a1c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211" title="Port types.">ll::PortType</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#af0be8bacd2909f6df105e16012f2a1c2">More...</a><br /></td></tr>
-<tr class="separator:af0be8bacd2909f6df105e16012f2a1c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86c6432d0612b740a0a9b42940a8bbc7"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21c">ll::ObjectType</a> &gt;, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a86c6432d0612b740a0a9b42940a8bbc7">ObjectTypeStrings</a></td></tr>
-<tr class="memdesc:a86c6432d0612b740a0a9b42940a8bbc7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d72/classll_1_1Object.html" title="Base class for all types that can be used in computer shaders.">Object</a> type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21c" title="Object types.">ll::ObjectType</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#a86c6432d0612b740a0a9b42940a8bbc7">More...</a><br /></td></tr>
-<tr class="separator:a86c6432d0612b740a0a9b42940a8bbc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0f7303c95c8468c7f736f35d7b74200"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402">ll::NodeType</a> &gt;, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#ac0f7303c95c8468c7f736f35d7b74200">NodeTypeStrings</a></td></tr>
+<tr class="memdesc:ac0f7303c95c8468c7f736f35d7b74200"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d2/d71/classll_1_1Node.html">Node</a> type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402" title="Class for node type.">ll::NodeType</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#ac0f7303c95c8468c7f736f35d7b74200">More...</a><br /></td></tr>
+<tr class="separator:ac0f7303c95c8468c7f736f35d7b74200"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2bd43b154e8c0277695d9f389b0aeed"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">ll::ParameterType</a> &gt;, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">ParameterTypeStrings</a></td></tr>
 <tr class="memdesc:ae2bd43b154e8c0277695d9f389b0aeed"><td class="mdescLeft">&#160;</td><td class="mdescRight">String values used for converting <a class="el" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">ll::ParameterType</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">More...</a><br /></td></tr>
 <tr class="separator:ae2bd43b154e8c0277695d9f389b0aeed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9f280f54583de93638886aaa6563be6"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0e">ll::PortDirection</a> &gt;, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#ab9f280f54583de93638886aaa6563be6">PortDirectionStrings</a></td></tr>
+<tr class="memdesc:ab9f280f54583de93638886aaa6563be6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port direction string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0e" title="Class for port direction.">ll::PortDirection</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#ab9f280f54583de93638886aaa6563be6">More...</a><br /></td></tr>
+<tr class="separator:ab9f280f54583de93638886aaa6563be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae51d93f22e8b6ff76a88c46a89eb4371"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211">ll::PortType</a> &gt;, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#ae51d93f22e8b6ff76a88c46a89eb4371">PortTypeStrings</a></td></tr>
+<tr class="memdesc:ae51d93f22e8b6ff76a88c46a89eb4371"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211" title="Port types.">ll::PortType</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#ae51d93f22e8b6ff76a88c46a89eb4371">More...</a><br /></td></tr>
+<tr class="separator:ae51d93f22e8b6ff76a88c46a89eb4371"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86c6432d0612b740a0a9b42940a8bbc7"><td class="memItemLeft" align="right" valign="top">constexpr const std::array&lt; std::tuple&lt; const char *, <a class="el" href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21c">ll::ObjectType</a> &gt;, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a86c6432d0612b740a0a9b42940a8bbc7">ObjectTypeStrings</a></td></tr>
+<tr class="memdesc:a86c6432d0612b740a0a9b42940a8bbc7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d72/classll_1_1Object.html" title="Base class for all types that can be used in computer shaders.">Object</a> type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21c" title="Object types.">ll::ObjectType</a> to std::string and vice-versa.  <a href="../../d7/dff/namespacell_1_1impl.html#a86c6432d0612b740a0a9b42940a8bbc7">More...</a><br /></td></tr>
+<tr class="separator:a86c6432d0612b740a0a9b42940a8bbc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="acdd75ba4a52cde152543d0d43530b966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdd75ba4a52cde152543d0d43530b966">&#9670;&nbsp;</a></span>enumToString() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename E , std::size_t N, const std::array&lt; std::tuple&lt; const char *, E &gt;, N &gt; &amp; values&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string ll::impl::enumToString </td>
+          <td>(</td>
+          <td class="paramtype">const E &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa3329c9510585865f3e6b0412151cc0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3329c9510585865f3e6b0412151cc0f">&#9670;&nbsp;</a></span>enumToString()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3329c9510585865f3e6b0412151cc0f">&#9670;&nbsp;</a></span>enumToString() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -770,6 +803,33 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
 
 </div>
 </div>
+<a id="a144bc1e5ecc0505e36a24f2a30b57fa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a144bc1e5ecc0505e36a24f2a30b57fa6">&#9670;&nbsp;</a></span>FloatPrecisionStrings</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const std::array&lt;std::tuple&lt;const char *, <a class="el" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">ll::FloatPrecision</a>&gt;, 3&gt; ll::impl::FloatPrecisionStrings</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{{</div>
+<div class="line">    std::make_tuple(<span class="stringliteral">&quot;FP16&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0">ll::FloatPrecision::FP16</a>),</div>
+<div class="line">    std::make_tuple(<span class="stringliteral">&quot;FP32&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d">ll::FloatPrecision::FP32</a>),</div>
+<div class="line">    std::make_tuple(<span class="stringliteral">&quot;FP64&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb">ll::FloatPrecision::FP64</a>),</div>
+<div class="line">}}</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a158a6f972655a902c9840629615d9920"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a158a6f972655a902c9840629615d9920">&#9670;&nbsp;</a></span>ImageAddressModeStrings</h2>
 
@@ -1004,8 +1064,8 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
 
 </div>
 </div>
-<a id="a52c170b90c5cdf8304025c7ed9bf0b10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52c170b90c5cdf8304025c7ed9bf0b10">&#9670;&nbsp;</a></span>NodeTypeStrings</h2>
+<a id="ac0f7303c95c8468c7f736f35d7b74200"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0f7303c95c8468c7f736f35d7b74200">&#9670;&nbsp;</a></span>NodeTypeStrings</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1014,7 +1074,7 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr const std::array&lt;std::tuple&lt;const char*, <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402">ll::NodeType</a>&gt;, 2&gt; ll::impl::NodeTypeStrings</td>
+          <td class="memname">constexpr const std::array&lt;std::tuple&lt;const char *, <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402">ll::NodeType</a>&gt;, 2&gt; ll::impl::NodeTypeStrings</td>
         </tr>
       </table>
   </td>
@@ -1023,10 +1083,8 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{{</div>
-<div class="line">        std::make_tuple(<span class="stringliteral">&quot;Compute&quot;</span>   , <a class="code" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402aa623a8d0366bf079411aa30be45b2d10">ll::NodeType::Compute</a>),</div>
-<div class="line">        std::make_tuple(<span class="stringliteral">&quot;Container&quot;</span> , <a class="code" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402a0e7278cda02a9c0446dcc75a4df34eb2">ll::NodeType::Container</a>)</div>
-<div class="line">    }}</div>
+<b>Initial value:</b><div class="fragment"><div class="line">{{std::make_tuple(<span class="stringliteral">&quot;Compute&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402aa623a8d0366bf079411aa30be45b2d10">ll::NodeType::Compute</a>),</div>
+<div class="line">                                                                                           std::make_tuple(<span class="stringliteral">&quot;Container&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402a0e7278cda02a9c0446dcc75a4df34eb2">ll::NodeType::Container</a>)}}</div>
 </div><!-- fragment -->
 <p><a class="el" href="../../d2/d71/classll_1_1Node.html">Node</a> type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402" title="Class for node type.">ll::NodeType</a> to std::string and vice-versa. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402" title="Class for node type.">ll::NodeType</a> enum values for this array. </dd></dl>
@@ -1121,8 +1179,8 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
 
 </div>
 </div>
-<a id="af0be8bacd2909f6df105e16012f2a1c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af0be8bacd2909f6df105e16012f2a1c2">&#9670;&nbsp;</a></span>PortTypeStrings</h2>
+<a id="ae51d93f22e8b6ff76a88c46a89eb4371"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51d93f22e8b6ff76a88c46a89eb4371">&#9670;&nbsp;</a></span>PortTypeStrings</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1131,7 +1189,7 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr const std::array&lt;std::tuple&lt;const char*, <a class="el" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211">ll::PortType</a>&gt;, 3&gt; ll::impl::PortTypeStrings</td>
+          <td class="memname">constexpr const std::array&lt;std::tuple&lt;const char *, <a class="el" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211">ll::PortType</a>&gt;, 3&gt; ll::impl::PortTypeStrings</td>
         </tr>
       </table>
   </td>
@@ -1141,9 +1199,9 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">{{</div>
-<div class="line">        std::make_tuple(<span class="stringliteral">&quot;Buffer&quot;</span>           , <a class="code" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211a7e62bc342f41c946868f0ea6f0b712d8">ll::PortType::Buffer</a>),</div>
-<div class="line">        std::make_tuple(<span class="stringliteral">&quot;ImageView&quot;</span>        , <a class="code" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211af972f8318e7db88c15add605de3c23d1">ll::PortType::ImageView</a>),</div>
-<div class="line">        std::make_tuple(<span class="stringliteral">&quot;SampledImageView&quot;</span> , <a class="code" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211aa980699d87b24a2b782402c69a1f6470">ll::PortType::SampledImageView</a>),</div>
+<div class="line">        std::make_tuple(<span class="stringliteral">&quot;Buffer&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211a7e62bc342f41c946868f0ea6f0b712d8">ll::PortType::Buffer</a>),</div>
+<div class="line">        std::make_tuple(<span class="stringliteral">&quot;ImageView&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211af972f8318e7db88c15add605de3c23d1">ll::PortType::ImageView</a>),</div>
+<div class="line">        std::make_tuple(<span class="stringliteral">&quot;SampledImageView&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211aa980699d87b24a2b782402c69a1f6470">ll::PortType::SampledImageView</a>),</div>
 <div class="line">    }}</div>
 </div><!-- fragment -->
 <p>Port type string values used for converting <a class="el" href="../../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211" title="Port types.">ll::PortType</a> to std::string and vice-versa. </p>
@@ -1163,6 +1221,7 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
 <div class="ttc" id="anamespacell_html_a34c16d83b42cf768fe094d2ade26a363a166495adc0d0f53bee6baecc577f5204"><div class="ttname"><a href="../../d8/dda/namespacell.html#a34c16d83b42cf768fe094d2ade26a363a166495adc0d0f53bee6baecc577f5204">ll::ChannelType::Float32</a></div><div class="ttdeci">@ Float32</div></div>
 <div class="ttc" id="anamespacell_html_af534378bc7cfaf87120ad129f1451ae0a7939c7574f03e6c51c2815bec3d7c3cd"><div class="ttname"><a href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a7939c7574f03e6c51c2815bec3d7c3cd">ll::ErrorCode::EnumConversionFailed</a></div><div class="ttdeci">@ EnumConversionFailed</div></div>
 <div class="ttc" id="anamespacell_html_a26be6e4eaaf158353dda48d88dca308aaf7948b94454ec8c9421e5dd11426a021"><div class="ttname"><a href="../../d8/dda/namespacell.html#a26be6e4eaaf158353dda48d88dca308aaf7948b94454ec8c9421e5dd11426a021">ll::ImageLayout::Preinitialized</a></div><div class="ttdeci">@ Preinitialized</div></div>
+<div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb">ll::FloatPrecision::FP64</a></div><div class="ttdeci">@ FP64</div></div>
 <div class="ttc" id="anamespacell_html_a2a91275592a55cec2161a8cfaf02b21cabe53a0541a6d36f6ecb879fa2c584b08"><div class="ttname"><a href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21cabe53a0541a6d36f6ecb879fa2c584b08">ll::ObjectType::Image</a></div><div class="ttdeci">@ Image</div></div>
 <div class="ttc" id="anamespacell_html_a34c16d83b42cf768fe094d2ade26a363a26e6ed77470c6f2f830ecf874e6c0d55"><div class="ttname"><a href="../../d8/dda/namespacell.html#a34c16d83b42cf768fe094d2ade26a363a26e6ed77470c6f2f830ecf874e6c0d55">ll::ChannelType::Float16</a></div><div class="ttdeci">@ Float16</div></div>
 <div class="ttc" id="anamespacell_html_a26be6e4eaaf158353dda48d88dca308aaec0fc0100c4fc1ce4eea230c3dc10360"><div class="ttname"><a href="../../d8/dda/namespacell.html#a26be6e4eaaf158353dda48d88dca308aaec0fc0100c4fc1ce4eea230c3dc10360">ll::ImageLayout::Undefined</a></div><div class="ttdeci">@ Undefined</div></div>
@@ -1204,6 +1263,7 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
 <div class="ttc" id="anamespacell_html_ab94e77c92b69e40871a2c3888c209402aa623a8d0366bf079411aa30be45b2d10"><div class="ttname"><a href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402aa623a8d0366bf079411aa30be45b2d10">ll::NodeType::Compute</a></div><div class="ttdeci">@ Compute</div></div>
 <div class="ttc" id="anamespacell_html_aaee1ba7e6884e285bb5673bd1963800fa3abe124ecc82bf2c2e22e6058f38c50c"><div class="ttname"><a href="../../d8/dda/namespacell.html#aaee1ba7e6884e285bb5673bd1963800fa3abe124ecc82bf2c2e22e6058f38c50c">ll::ChannelCount::C3</a></div><div class="ttdeci">@ C3</div></div>
 <div class="ttc" id="anamespacell_html_a26be6e4eaaf158353dda48d88dca308aaaa685dcd1d3c34e89e5084bb711b452f"><div class="ttname"><a href="../../d8/dda/namespacell.html#a26be6e4eaaf158353dda48d88dca308aaaa685dcd1d3c34e89e5084bb711b452f">ll::ImageLayout::ShaderReadOnlyOptimal</a></div><div class="ttdeci">@ ShaderReadOnlyOptimal</div></div>
+<div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0">ll::FloatPrecision::FP16</a></div><div class="ttdeci">@ FP16</div></div>
 <div class="ttc" id="anamespacell_html_a68e9c22a21a6ec46486c151fc7d6a051a32a843da6ea40ab3b17a3421ccdf671b"><div class="ttname"><a href="../../d8/dda/namespacell.html#a68e9c22a21a6ec46486c151fc7d6a051a32a843da6ea40ab3b17a3421ccdf671b">ll::ImageTiling::Linear</a></div><div class="ttdeci">@ Linear</div></div>
 <div class="ttc" id="anamespacell_html_a2a91275592a55cec2161a8cfaf02b21caf972f8318e7db88c15add605de3c23d1"><div class="ttname"><a href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21caf972f8318e7db88c15add605de3c23d1">ll::ObjectType::ImageView</a></div><div class="ttdeci">@ ImageView</div></div>
 <div class="ttc" id="anamespacell_html_a68e9c22a21a6ec46486c151fc7d6a051acb61fef1e5e79e07a80421cb9a073a80"><div class="ttname"><a href="../../d8/dda/namespacell.html#a68e9c22a21a6ec46486c151fc7d6a051acb61fef1e5e79e07a80421cb9a073a80">ll::ImageTiling::Optimal</a></div><div class="ttdeci">@ Optimal</div></div>
@@ -1232,6 +1292,7 @@ template&lt;typename E , typename Ebits , std::size_t N, const std::array&lt; st
 <div class="ttc" id="anamespacell_html_af534378bc7cfaf87120ad129f1451ae0a0776e1fd23aa7ed56e6062af9b46dab2"><div class="ttname"><a href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a0776e1fd23aa7ed56e6062af9b46dab2">ll::ErrorCode::BufferCopyError</a></div><div class="ttdeci">@ BufferCopyError</div></div>
 <div class="ttc" id="anamespacell_html_a40bce76015f8f53e108c074b8c079093af3f30276e28d22974fca049daff66986"><div class="ttname"><a href="../../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093af3f30276e28d22974fca049daff66986">ll::DeviceType::VirtualGPU</a></div><div class="ttdeci">@ VirtualGPU</div></div>
 <div class="ttc" id="anamespacell_html_af534378bc7cfaf87120ad129f1451ae0a2e6fc58c55f2bb7c5b3653673fdf4fbd"><div class="ttname"><a href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a2e6fc58c55f2bb7c5b3653673fdf4fbd">ll::ErrorCode::LayerNotFound</a></div><div class="ttdeci">@ LayerNotFound</div></div>
+<div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d">ll::FloatPrecision::FP32</a></div><div class="ttdeci">@ FP32</div></div>
 <div class="ttc" id="anamespacell_html_af534378bc7cfaf87120ad129f1451ae0a22bf1a4d7abe40178831d3c1faf99b54"><div class="ttname"><a href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a22bf1a4d7abe40178831d3c1faf99b54">ll::ErrorCode::SessionLost</a></div><div class="ttdeci">@ SessionLost</div></div>
 <div class="ttc" id="anamespacell_html_a81ba6255774692f90547d7da5cb544cfac4d62b6dcca08e5caf06c01889282859"><div class="ttname"><a href="../../d8/dda/namespacell.html#a81ba6255774692f90547d7da5cb544cfac4d62b6dcca08e5caf06c01889282859">ll::ComputeDimension::D2</a></div><div class="ttdeci">@ D2</div></div>
 <div class="ttc" id="anamespacell_html_a07473d2f998c8927d29b3a73986b0e89a60494f02d440f316319dd0fad40ad007"><div class="ttname"><a href="../../d8/dda/namespacell.html#a07473d2f998c8927d29b3a73986b0e89a60494f02d440f316319dd0fad40ad007">ll::ImageFilterMode::Nearest</a></div><div class="ttdeci">@ Nearest</div></div>

@@ -203,6 +203,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a04a70bcbdc97270ca8537ba658b219f0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d31/classll_1_1Session.html#a04a70bcbdc97270ca8537ba658b219f0">help</a> (const std::string &amp;builderName) const</td></tr>
 <tr class="memdesc:a04a70bcbdc97270ca8537ba658b219f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the help string of a given node builder.  <a href="../../d8/d31/classll_1_1Session.html#a04a70bcbdc97270ca8537ba658b219f0">More...</a><br /></td></tr>
 <tr class="separator:a04a70bcbdc97270ca8537ba658b219f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58d062e1e574b8cb8a005fcf7f5bc636"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d31/classll_1_1Session.html#a58d062e1e574b8cb8a005fcf7f5bc636">hasReceivedVulkanWarningMessages</a> () const noexcept</td></tr>
+<tr class="memdesc:a58d062e1e574b8cb8a005fcf7f5bc636"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells whether or not this session has triggered Vulkan warning messages.  <a href="../../d8/d31/classll_1_1Session.html#a58d062e1e574b8cb8a005fcf7f5bc636">More...</a><br /></td></tr>
+<tr class="separator:a58d062e1e574b8cb8a005fcf7f5bc636"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -925,6 +928,35 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Gets the Vulkan instance layer properties available to this machine. </p>
 <dl class="section return"><dt>Returns</dt><dd>The Vulkan instance layer properties. </dd></dl>
+
+</div>
+</div>
+<a id="a58d062e1e574b8cb8a005fcf7f5bc636"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58d062e1e574b8cb8a005fcf7f5bc636">&#9670;&nbsp;</a></span>hasReceivedVulkanWarningMessages()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ll::Session::hasReceivedVulkanWarningMessages </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells whether or not this session has triggered Vulkan warning messages. </p>
+<p>For this method to return a correct value, the session must be created enabling debug.</p>
+<dl class="section return"><dt>Returns</dt><dd>Whether or not vulkan warning messages have been received. </dd></dl>
 
 </div>
 </div>

@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('df/d04/classll_1_1vulkan_1_1Instance.h
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../d3/da7/classll_1_1vulkan_1_1Instance-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ll::vulkan::Instance Class Reference</div>  </div>
@@ -109,6 +110,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1c7a11ae58dc6060ce53e977a272a21e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add48c7bef79e41937008fcf21a567a9f"><td class="memItemLeft" align="right" valign="top">vk::Instance &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#add48c7bef79e41937008fcf21a567a9f">get</a> () noexcept</td></tr>
 <tr class="separator:add48c7bef79e41937008fcf21a567a9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a852dcd75841389519dbe40c25d700949"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a852dcd75841389519dbe40c25d700949">hasReceivedVulkanWarningMessages</a> ()</td></tr>
+<tr class="memdesc:a852dcd75841389519dbe40c25d700949"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether or not the application has received messages through the debug callback.  <a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#a852dcd75841389519dbe40c25d700949">More...</a><br /></td></tr>
+<tr class="separator:a852dcd75841389519dbe40c25d700949"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa35349f391c412b9a0ebc12782f36698"><td class="memItemLeft" align="right" valign="top">static VkBool32 VKAPI_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d04/classll_1_1vulkan_1_1Instance.html#aa35349f391c412b9a0ebc12782f36698">debugCallback</a> (VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)</td></tr>
+<tr class="memdesc:aa35349f391c412b9a0ebc12782f36698"><td class="mdescLeft">&#160;</td><td class="mdescRight">debug callback function to receive messages from the vulkan debug messenger.  <a href="../../df/d04/classll_1_1vulkan_1_1Instance.html#aa35349f391c412b9a0ebc12782f36698">More...</a><br /></td></tr>
+<tr class="separator:aa35349f391c412b9a0ebc12782f36698"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5913439500eeb9ae0c5e6754bfa6b49c"></a>
@@ -224,6 +234,66 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa35349f391c412b9a0ebc12782f36698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa35349f391c412b9a0ebc12782f36698">&#9670;&nbsp;</a></span>debugCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static VkBool32 VKAPI_CALL ll::vulkan::Instance::debugCallback </td>
+          <td>(</td>
+          <td class="paramtype">VkDebugUtilsMessageSeverityFlagBitsEXT&#160;</td>
+          <td class="paramname"><em>messageSeverity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkDebugUtilsMessageTypeFlagsEXT&#160;</td>
+          <td class="paramname"><em>messageType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const VkDebugUtilsMessengerCallbackDataEXT *&#160;</td>
+          <td class="paramname"><em>pCallbackData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pUserData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>debug callback function to receive messages from the vulkan debug messenger. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">messageSeverity</td><td></td></tr>
+    <tr><td class="paramname">messageType</td><td></td></tr>
+    <tr><td class="paramname">pCallbackData</td><td></td></tr>
+    <tr><td class="paramname">pUserData</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>false to continue the execution of the app. </dd></dl>
+
+</div>
+</div>
 <a id="add48c7bef79e41937008fcf21a567a9f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add48c7bef79e41937008fcf21a567a9f">&#9670;&nbsp;</a></span>get()</h2>
 
@@ -246,6 +316,33 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a852dcd75841389519dbe40c25d700949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a852dcd75841389519dbe40c25d700949">&#9670;&nbsp;</a></span>hasReceivedVulkanWarningMessages()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool ll::vulkan::Instance::hasReceivedVulkanWarningMessages </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>returns whether or not the application has received messages through the debug callback. </p>
 
 </div>
 </div>

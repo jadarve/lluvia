@@ -21,6 +21,7 @@ var classll_1_1Session =
     [ "getPhysicalDeviceMemoryProperties", "d8/d31/classll_1_1Session.html#a29330dd460f7ae17720f6b11de5d6151", null ],
     [ "getProgram", "d8/d31/classll_1_1Session.html#a7a2975561034de73f10864b494ac1ca9", null ],
     [ "getSupportedMemoryFlags", "d8/d31/classll_1_1Session.html#a83e30ad821669732e784f8c05c202daf", null ],
+    [ "hasReceivedVulkanWarningMessages", "d8/d31/classll_1_1Session.html#a58d062e1e574b8cb8a005fcf7f5bc636", null ],
     [ "help", "d8/d31/classll_1_1Session.html#a04a70bcbdc97270ca8537ba658b219f0", null ],
     [ "isImageDescriptorSupported", "d8/d31/classll_1_1Session.html#aa00f9d0b7c1ae7a5b628d3b7accdbc62", null ],
     [ "loadLibrary", "d8/d31/classll_1_1Session.html#aa76095d57409f8dae1ed0c3d87b223dd", null ],

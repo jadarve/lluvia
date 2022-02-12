@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['types_2eh_587',['types.h',['../d9/d49/types_8h.html',1,'']]]
+  ['session_2eh_609',['Session.h',['../d0/d53/Session_8h.html',1,'']]],
+  ['sessiondescriptor_2eh_610',['SessionDescriptor.h',['../dd/dac/SessionDescriptor_8h.html',1,'']]]
 ];

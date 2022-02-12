@@ -98,87 +98,89 @@ $(document).ready(function(){initNavTree('d6/d9b/Interpreter_8h_source.html','..
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#pragma clang diagnostic push</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wunused-lambda-capture&quot;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="../../d6/d9b/Interpreter_8h.html#af49a65454b3af6c3580a532b5f86028e">   21</a></span>&#160;<span class="preprocessor">#define SOL_ALL_SAFETIES_ON 1</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;sol/sol.hpp&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma clang diagnostic pop</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wunused-parameter&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wshadow&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="../../d6/d9b/Interpreter_8h.html#af49a65454b3af6c3580a532b5f86028e">   23</a></span>&#160;<span class="preprocessor">#define SOL_ALL_SAFETIES_ON 1</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;sol/sol.hpp&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../da/d41/error_8h.html">lluvia/core/error.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma clang diagnostic pop</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../da/d41/error_8h.html">lluvia/core/error.h</a>&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span>Session;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="../../dc/dc0/classll_1_1Interpreter.html">   33</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a> {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class </span>Session;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a216eb590d673eb6082f66ca48bc9da53">Interpreter</a>();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a216eb590d673eb6082f66ca48bc9da53">Interpreter</a>(<span class="keyword">const</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; interpreter) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a216eb590d673eb6082f66ca48bc9da53">Interpreter</a>(<a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp;&amp; interpreter)      = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#abd6eea9543fd620861f2e955f1903cdb">~Interpreter</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="../../dc/dc0/classll_1_1Interpreter.html">   35</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a216eb590d673eb6082f66ca48bc9da53">Interpreter</a>();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a216eb590d673eb6082f66ca48bc9da53">Interpreter</a>(<span class="keyword">const</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; interpreter) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a216eb590d673eb6082f66ca48bc9da53">Interpreter</a>(<a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp;&amp; interpreter)      = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a2bafa0fde65326e0ad35a18b018f2359">operator = </a>(<span class="keyword">const</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; interpreter) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a2bafa0fde65326e0ad35a18b018f2359">operator = </a>(<a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp;&amp; interpreter)      = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a85595ccff2e9150a90ce3135ce10f170">run</a>(<span class="keyword">const</span> std::string&amp; code);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#acdf50d80ecc38318dfc69e9b3766a3d9">runFile</a>(<span class="keyword">const</span> std::string&amp; filename);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    sol::load_result <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a564507b4b0e7cf2b0bde9fb86aced497">load</a>(<span class="keyword">const</span> std::string&amp; code);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#abd6eea9543fd620861f2e955f1903cdb">~Interpreter</a>();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a2bafa0fde65326e0ad35a18b018f2359">operator = </a>(<span class="keyword">const</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; interpreter) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp; <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a2bafa0fde65326e0ad35a18b018f2359">operator = </a>(<a class="code" href="../../dc/dc0/classll_1_1Interpreter.html">Interpreter</a>&amp;&amp; interpreter)      = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a85595ccff2e9150a90ce3135ce10f170">run</a>(<span class="keyword">const</span> std::string&amp; code);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#acdf50d80ecc38318dfc69e9b3766a3d9">runFile</a>(<span class="keyword">const</span> std::string&amp; filename);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a270588384c13da51db595c55e9a2dcd4">setActiveSession</a>(<a class="code" href="../../d8/d31/classll_1_1Session.html">ll::Session</a>* session);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    sol::load_result <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a564507b4b0e7cf2b0bde9fb86aced497">load</a>(<span class="keyword">const</span> std::string&amp; code);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="../../dc/dc0/classll_1_1Interpreter.html#a736f6457013342aba5909216af32d784">   53</a></span>&#160;    T <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a736f6457013342aba5909216af32d784">loadAndRun</a>(<span class="keyword">const</span> std::string&amp;&amp; code, Args&amp;&amp;... args) {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">auto</span> loadCode = <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a564507b4b0e7cf2b0bde9fb86aced497">load</a>(std::forward&lt;const std::string&gt;(code));</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a270588384c13da51db595c55e9a2dcd4">setActiveSession</a>(<a class="code" href="../../d8/d31/classll_1_1Session.html">ll::Session</a>* session);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="../../dc/dc0/classll_1_1Interpreter.html#a736f6457013342aba5909216af32d784">   55</a></span>&#160;    T <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a736f6457013342aba5909216af32d784">loadAndRun</a>(<span class="keyword">const</span> std::string&amp;&amp; code, Args&amp;&amp;... args) {</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">auto</span> scriptFunction = <span class="keyword">static_cast&lt;</span>sol::protected_function<span class="keyword">&gt;</span>(loadCode);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        sol::protected_function_result scriptResult = scriptFunction(std::forward&lt;Args&gt;(args)...);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">if</span> (!scriptResult.valid()) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keyword">const</span> sol::error err = scriptResult;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <a class="code" href="../../d8/dda/namespacell.html#a940c7361e550cccb56aac17d4ec4adaa">ll::throwSystemError</a>(<a class="code" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a95a60ecf490ca03e136002a9295acf69">ll::ErrorCode::InterpreterError</a>,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                                 <span class="stringliteral">&quot;error running code: &quot;</span> + sol::to_string(loadCode.status()) + <span class="stringliteral">&quot;\n\t&quot;</span> + err.what());</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="comment">// return static_cast&lt;T&gt;(scriptResult);</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> scriptResult.get&lt;T&gt;();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="../../dc/dc0/classll_1_1Interpreter.html#a5064b409177e9fb40549d9eea8567b33">   72</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a5064b409177e9fb40549d9eea8567b33">loadAndRunNoReturn</a>(<span class="keyword">const</span> std::string&amp;&amp; code, Args&amp;&amp;... args) {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keyword">auto</span> loadCode = <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a564507b4b0e7cf2b0bde9fb86aced497">load</a>(std::forward&lt;const std::string&gt;(code));</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">auto</span> loadCode = <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a564507b4b0e7cf2b0bde9fb86aced497">load</a>(std::forward&lt;const std::string&gt;(code));</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">auto</span> scriptFunction = <span class="keyword">static_cast&lt;</span>sol::protected_function<span class="keyword">&gt;</span>(loadCode);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        sol::protected_function_result scriptResult = scriptFunction(std::forward&lt;Args&gt;(args)...);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">if</span> (!scriptResult.valid()) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keyword">const</span> sol::error err = scriptResult;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <a class="code" href="../../d8/dda/namespacell.html#a940c7361e550cccb56aac17d4ec4adaa">ll::throwSystemError</a>(<a class="code" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a95a60ecf490ca03e136002a9295acf69">ll::ErrorCode::InterpreterError</a>,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                 <span class="stringliteral">&quot;error running code: &quot;</span> + sol::to_string(loadCode.status()) + <span class="stringliteral">&quot;\n\t&quot;</span> + err.what());</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="comment">// return static_cast&lt;T&gt;(scriptResult);</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> scriptResult.get&lt;T&gt;();</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="../../dc/dc0/classll_1_1Interpreter.html#a5064b409177e9fb40549d9eea8567b33">   74</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a5064b409177e9fb40549d9eea8567b33">loadAndRunNoReturn</a>(<span class="keyword">const</span> std::string&amp;&amp; code, Args&amp;&amp;... args) {</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">auto</span> scriptFunction = <span class="keyword">static_cast&lt;</span>sol::protected_function<span class="keyword">&gt;</span>(loadCode);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        sol::protected_function_result scriptResult = scriptFunction(std::forward&lt;Args&gt;(args)...);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">if</span> (!scriptResult.valid()) {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keyword">const</span> sol::error err = scriptResult;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <a class="code" href="../../d8/dda/namespacell.html#a940c7361e550cccb56aac17d4ec4adaa">ll::throwSystemError</a>(<a class="code" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a95a60ecf490ca03e136002a9295acf69">ll::ErrorCode::InterpreterError</a>,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                                 <span class="stringliteral">&quot;error running code: &quot;</span> + sol::to_string(loadCode.status()) + <span class="stringliteral">&quot;\n\t&quot;</span> + err.what());</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    std::unique_ptr&lt;sol::state&gt; m_lua;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    sol::table                  m_lib;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    sol::table                  m_libImpl;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;};</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;} <span class="comment">// namespace ll;</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">auto</span> loadCode = <a class="code" href="../../dc/dc0/classll_1_1Interpreter.html#a564507b4b0e7cf2b0bde9fb86aced497">load</a>(std::forward&lt;const std::string&gt;(code));</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">auto</span> scriptFunction = <span class="keyword">static_cast&lt;</span>sol::protected_function<span class="keyword">&gt;</span>(loadCode);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        sol::protected_function_result scriptResult = scriptFunction(std::forward&lt;Args&gt;(args)...);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">if</span> (!scriptResult.valid()) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keyword">const</span> sol::error err = scriptResult;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <a class="code" href="../../d8/dda/namespacell.html#a940c7361e550cccb56aac17d4ec4adaa">ll::throwSystemError</a>(<a class="code" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a95a60ecf490ca03e136002a9295acf69">ll::ErrorCode::InterpreterError</a>,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                 <span class="stringliteral">&quot;error running code: &quot;</span> + sol::to_string(loadCode.status()) + <span class="stringliteral">&quot;\n\t&quot;</span> + err.what());</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    std::unique_ptr&lt;sol::state&gt; m_lua;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    sol::table                  m_lib;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    sol::table                  m_libImpl;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;};</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_INTERPRETER_H_</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;} <span class="comment">// namespace ll;</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_INTERPRETER_H_</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassll_1_1Interpreter_html"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html">ll::Interpreter</a></div><div class="ttdef"><b>Definition:</b> Interpreter.h:33</div></div>
-<div class="ttc" id="aclassll_1_1Interpreter_html_a5064b409177e9fb40549d9eea8567b33"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a5064b409177e9fb40549d9eea8567b33">ll::Interpreter::loadAndRunNoReturn</a></div><div class="ttdeci">void loadAndRunNoReturn(const std::string &amp;&amp;code, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition:</b> Interpreter.h:72</div></div>
+<div class="ttc" id="aclassll_1_1Interpreter_html"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html">ll::Interpreter</a></div><div class="ttdef"><b>Definition:</b> Interpreter.h:35</div></div>
+<div class="ttc" id="aclassll_1_1Interpreter_html_a5064b409177e9fb40549d9eea8567b33"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a5064b409177e9fb40549d9eea8567b33">ll::Interpreter::loadAndRunNoReturn</a></div><div class="ttdeci">void loadAndRunNoReturn(const std::string &amp;&amp;code, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition:</b> Interpreter.h:74</div></div>
 <div class="ttc" id="aclassll_1_1Interpreter_html_a216eb590d673eb6082f66ca48bc9da53"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a216eb590d673eb6082f66ca48bc9da53">ll::Interpreter::Interpreter</a></div><div class="ttdeci">Interpreter()</div></div>
 <div class="ttc" id="aclassll_1_1Interpreter_html_acdf50d80ecc38318dfc69e9b3766a3d9"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#acdf50d80ecc38318dfc69e9b3766a3d9">ll::Interpreter::runFile</a></div><div class="ttdeci">void runFile(const std::string &amp;filename)</div></div>
 <div class="ttc" id="aclassll_1_1Interpreter_html_a85595ccff2e9150a90ce3135ce10f170"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a85595ccff2e9150a90ce3135ce10f170">ll::Interpreter::run</a></div><div class="ttdeci">void run(const std::string &amp;code)</div></div>
@@ -187,7 +189,7 @@ $(document).ready(function(){initNavTree('d6/d9b/Interpreter_8h_source.html','..
 <div class="ttc" id="aclassll_1_1Interpreter_html_abd6eea9543fd620861f2e955f1903cdb"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#abd6eea9543fd620861f2e955f1903cdb">ll::Interpreter::~Interpreter</a></div><div class="ttdeci">~Interpreter()</div></div>
 <div class="ttc" id="aclassll_1_1Session_html"><div class="ttname"><a href="../../d8/d31/classll_1_1Session.html">ll::Session</a></div><div class="ttdoc">Class that contains all the state required to run compute operations on a compute device.</div><div class="ttdef"><b>Definition:</b> Session.h:51</div></div>
 <div class="ttc" id="aerror_8h_html"><div class="ttname"><a href="../../da/d41/error_8h.html">error.h</a></div><div class="ttdoc">error related classes and methods.</div></div>
-<div class="ttc" id="aclassll_1_1Interpreter_html_a736f6457013342aba5909216af32d784"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a736f6457013342aba5909216af32d784">ll::Interpreter::loadAndRun</a></div><div class="ttdeci">T loadAndRun(const std::string &amp;&amp;code, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition:</b> Interpreter.h:53</div></div>
+<div class="ttc" id="aclassll_1_1Interpreter_html_a736f6457013342aba5909216af32d784"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a736f6457013342aba5909216af32d784">ll::Interpreter::loadAndRun</a></div><div class="ttdeci">T loadAndRun(const std::string &amp;&amp;code, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition:</b> Interpreter.h:55</div></div>
 <div class="ttc" id="aclassll_1_1Interpreter_html_a564507b4b0e7cf2b0bde9fb86aced497"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a564507b4b0e7cf2b0bde9fb86aced497">ll::Interpreter::load</a></div><div class="ttdeci">sol::load_result load(const std::string &amp;code)</div></div>
 <div class="ttc" id="aclassll_1_1Interpreter_html_a2bafa0fde65326e0ad35a18b018f2359"><div class="ttname"><a href="../../dc/dc0/classll_1_1Interpreter.html#a2bafa0fde65326e0ad35a18b018f2359">ll::Interpreter::operator=</a></div><div class="ttdeci">Interpreter &amp; operator=(const Interpreter &amp;interpreter)=delete</div></div>
 <div class="ttc" id="anamespacell_html_a940c7361e550cccb56aac17d4ec4adaa"><div class="ttname"><a href="../../d8/dda/namespacell.html#a940c7361e550cccb56aac17d4ec4adaa">ll::throwSystemError</a></div><div class="ttdeci">void throwSystemError(ll::ErrorCode errorCode, T &amp;&amp;msg)</div><div class="ttdoc">Throws a std::system_error exception with error code and message.</div><div class="ttdef"><b>Definition:</b> error.h:178</div></div>

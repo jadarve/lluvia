@@ -110,27 +110,35 @@ $(document).ready(function(){initNavTree('d5/dc4/core_8h_source.html','../../');
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/dac/ImageView_8h.html">core/image/ImageView.h</a>&quot;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/df6/ImageViewDescriptor_8h.html">core/image/ImageViewDescriptor.h</a>&quot;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/d16/CommandBuffer_8h.html">core/CommandBuffer.h</a>&quot;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dd/dbf/ComputeNode_8h.html">core/ComputeNode.h</a>&quot;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/dab/ComputeNodeDescriptor_8h.html">core/ComputeNodeDescriptor.h</a>&quot;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d6c/ContainerNode_8h.html">core/ContainerNode.h</a>&quot;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/d55/ContainerNodeDescriptor_8h.html">core/ContainerNodeDescriptor.h</a>&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/da6/debug__utils_8h.html">core/debug_utils.h</a>&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d75/Duration_8h.html">core/Duration.h</a>&quot;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../da/d41/error_8h.html">core/error.h</a>&quot;</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d9b/Interpreter_8h.html">core/Interpreter.h</a>&quot;</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">core/Node.h</a>&quot;</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d03/NodeBuilderDescriptor_8h.html">core/NodeBuilderDescriptor.h</a>&quot;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/ddd/Parameter_8h.html">core/Parameter.h</a>&quot;</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d66/Program_8h.html">core/Program.h</a>&quot;</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/dce/PushConstants_8h.html">core/PushConstants.h</a>&quot;</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d53/Session_8h.html">core/Session.h</a>&quot;</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">core/types.h</a>&quot;</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/d60/utils_8h.html">core/utils.h</a>&quot;</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_H_</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dd/dbf/ComputeNode_8h.html">core/node/ComputeNode.h</a>&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/dab/ComputeNodeDescriptor_8h.html">core/node/ComputeNodeDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d6c/ContainerNode_8h.html">core/node/ContainerNode.h</a>&quot;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/d55/ContainerNodeDescriptor_8h.html">core/node/ContainerNodeDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d92/Node_8h.html">core/node/Node.h</a>&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d03/NodeBuilderDescriptor_8h.html">core/node/NodeBuilderDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../df/de4/NodeState_8h.html">core/node/NodeState.h</a>&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/da8/NodeType_8h.html">core/node/NodeType.h</a>&quot;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/ddd/Parameter_8h.html">core/node/Parameter.h</a>&quot;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d11/ParameterType_8h.html">core/node/ParameterType.h</a>&quot;</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d7d/PortDescriptor_8h.html">core/node/PortDescriptor.h</a>&quot;</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dc/db6/PortDirection_8h.html">core/node/PortDirection.h</a>&quot;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../de/dda/PortType_8h.html">core/node/PortType.h</a>&quot;</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/dce/PushConstants_8h.html">core/node/PushConstants.h</a>&quot;</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/d16/CommandBuffer_8h.html">core/CommandBuffer.h</a>&quot;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d75/Duration_8h.html">core/Duration.h</a>&quot;</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../da/d41/error_8h.html">core/error.h</a>&quot;</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/d78/FloatPrecision_8h.html">core/FloatPrecision.h</a>&quot;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/d9b/Interpreter_8h.html">core/Interpreter.h</a>&quot;</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d66/Program_8h.html">core/Program.h</a>&quot;</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d53/Session_8h.html">core/Session.h</a>&quot;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d49/types_8h.html">core/types.h</a>&quot;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/d60/utils_8h.html">core/utils.h</a>&quot;</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#endif // LLUVIA_CORE_H_</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aPortDescriptor_8h_html"><div class="ttname"><a href="../../d2/d7d/PortDescriptor_8h.html">PortDescriptor.h</a></div><div class="ttdoc">PortDescriptor class.</div></div>
 <div class="ttc" id="aContainerNodeDescriptor_8h_html"><div class="ttname"><a href="../../d1/d55/ContainerNodeDescriptor_8h.html">ContainerNodeDescriptor.h</a></div><div class="ttdoc">ContainerNodeDescriptor class.</div></div>
 <div class="ttc" id="aImageView_8h_html"><div class="ttname"><a href="../../db/dac/ImageView_8h.html">ImageView.h</a></div><div class="ttdoc">ImageView class.</div></div>
 <div class="ttc" id="aCommandBuffer_8h_html"><div class="ttname"><a href="../../d1/d16/CommandBuffer_8h.html">CommandBuffer.h</a></div><div class="ttdoc">CommandBuffer class.</div></div>
@@ -142,29 +150,34 @@ $(document).ready(function(){initNavTree('d5/dc4/core_8h_source.html','../../');
 <div class="ttc" id="aImageTiling_8h_html"><div class="ttname"><a href="../../d1/d9a/ImageTiling_8h.html">ImageTiling.h</a></div></div>
 <div class="ttc" id="aImageUsageFlags_8h_html"><div class="ttname"><a href="../../de/d56/ImageUsageFlags_8h.html">ImageUsageFlags.h</a></div></div>
 <div class="ttc" id="aBufferUsageFlags_8h_html"><div class="ttname"><a href="../../d6/d22/BufferUsageFlags_8h.html">BufferUsageFlags.h</a></div></div>
+<div class="ttc" id="aNodeState_8h_html"><div class="ttname"><a href="../../df/de4/NodeState_8h.html">NodeState.h</a></div><div class="ttdoc">NodeState enum.</div></div>
 <div class="ttc" id="aComputeNodeDescriptor_8h_html"><div class="ttname"><a href="../../d1/dab/ComputeNodeDescriptor_8h.html">ComputeNodeDescriptor.h</a></div><div class="ttdoc">ComputeNodeDescriptor class.</div></div>
 <div class="ttc" id="autils_8h_html"><div class="ttname"><a href="../../d5/d60/utils_8h.html">utils.h</a></div><div class="ttdoc">utility functions.</div></div>
 <div class="ttc" id="aImageDescriptor_8h_html"><div class="ttname"><a href="../../da/d1f/ImageDescriptor_8h.html">ImageDescriptor.h</a></div><div class="ttdoc">ImageDescriptor class and related enumerations.</div></div>
 <div class="ttc" id="aMemoryAllocationInfo_8h_html"><div class="ttname"><a href="../../dc/d1a/MemoryAllocationInfo_8h.html">MemoryAllocationInfo.h</a></div><div class="ttdoc">Structures and methods for storing memory allocation information.</div></div>
 <div class="ttc" id="aDeviceType_8h_html"><div class="ttname"><a href="../../d3/d15/DeviceType_8h.html">DeviceType.h</a></div><div class="ttdoc">DeviceType enum.</div></div>
 <div class="ttc" id="aerror_8h_html"><div class="ttname"><a href="../../da/d41/error_8h.html">error.h</a></div><div class="ttdoc">error related classes and methods.</div></div>
-<div class="ttc" id="aContainerNode_8h_html"><div class="ttname"><a href="../../d6/d6c/ContainerNode_8h.html">ContainerNode.h</a></div></div>
+<div class="ttc" id="aContainerNode_8h_html"><div class="ttname"><a href="../../d6/d6c/ContainerNode_8h.html">ContainerNode.h</a></div><div class="ttdoc">ContainerNode class.</div></div>
 <div class="ttc" id="aNode_8h_html"><div class="ttname"><a href="../../db/d92/Node_8h.html">Node.h</a></div><div class="ttdoc">Node class and related enums.</div></div>
 <div class="ttc" id="aBuffer_8h_html"><div class="ttname"><a href="../../d9/d17/Buffer_8h.html">Buffer.h</a></div><div class="ttdoc">Buffer class.</div></div>
+<div class="ttc" id="aPortType_8h_html"><div class="ttname"><a href="../../de/dda/PortType_8h.html">PortType.h</a></div><div class="ttdoc">PortType enum.</div></div>
 <div class="ttc" id="aImage_8h_html"><div class="ttname"><a href="../../d8/d0f/Image_8h.html">Image.h</a></div><div class="ttdoc">Image class.</div></div>
 <div class="ttc" id="aComputeNode_8h_html"><div class="ttname"><a href="../../dd/dbf/ComputeNode_8h.html">ComputeNode.h</a></div><div class="ttdoc">ComputeNode class.</div></div>
 <div class="ttc" id="aDeviceDescriptor_8h_html"><div class="ttname"><a href="../../dd/d97/DeviceDescriptor_8h.html">DeviceDescriptor.h</a></div></div>
 <div class="ttc" id="aImageLayout_8h_html"><div class="ttname"><a href="../../d7/dff/ImageLayout_8h.html">ImageLayout.h</a></div><div class="ttdoc">ImageLayout enum.</div></div>
 <div class="ttc" id="aParameter_8h_html"><div class="ttname"><a href="../../d0/ddd/Parameter_8h.html">Parameter.h</a></div><div class="ttdoc">Parameter class and related enums.</div></div>
+<div class="ttc" id="aFloatPrecision_8h_html"><div class="ttname"><a href="../../d1/d78/FloatPrecision_8h.html">FloatPrecision.h</a></div></div>
 <div class="ttc" id="aPushConstants_8h_html"><div class="ttname"><a href="../../d0/dce/PushConstants_8h.html">PushConstants.h</a></div><div class="ttdoc">PushConstants class.</div></div>
 <div class="ttc" id="aMemory_8h_html"><div class="ttname"><a href="../../de/d5c/Memory_8h.html">Memory.h</a></div><div class="ttdoc">Memory class.</div></div>
+<div class="ttc" id="aPortDirection_8h_html"><div class="ttname"><a href="../../dc/db6/PortDirection_8h.html">PortDirection.h</a></div><div class="ttdoc">PortDirection enum.</div></div>
 <div class="ttc" id="aMemoryPropertyFlags_8h_html"><div class="ttname"><a href="../../d6/d4c/MemoryPropertyFlags_8h.html">MemoryPropertyFlags.h</a></div><div class="ttdoc">MemoryPropertyFlags class.</div></div>
-<div class="ttc" id="adebug__utils_8h_html"><div class="ttname"><a href="../../d7/da6/debug__utils_8h.html">debug_utils.h</a></div><div class="ttdoc">Debug util methods.</div></div>
+<div class="ttc" id="aNodeType_8h_html"><div class="ttname"><a href="../../d2/da8/NodeType_8h.html">NodeType.h</a></div><div class="ttdoc">NodeType enum.</div></div>
 <div class="ttc" id="aProgram_8h_html"><div class="ttname"><a href="../../d2/d66/Program_8h.html">Program.h</a></div><div class="ttdoc">Program class.</div></div>
 <div class="ttc" id="aNodeBuilderDescriptor_8h_html"><div class="ttname"><a href="../../d0/d03/NodeBuilderDescriptor_8h.html">NodeBuilderDescriptor.h</a></div><div class="ttdoc">NodeBuilderDescriptor class.</div></div>
 <div class="ttc" id="aImageAddressMode_8h_html"><div class="ttname"><a href="../../d5/db1/ImageAddressMode_8h.html">ImageAddressMode.h</a></div></div>
 <div class="ttc" id="aSession_8h_html"><div class="ttname"><a href="../../d0/d53/Session_8h.html">Session.h</a></div><div class="ttdoc">Session class.</div></div>
 <div class="ttc" id="aImageAxis_8h_html"><div class="ttname"><a href="../../d6/df7/ImageAxis_8h.html">ImageAxis.h</a></div><div class="ttdoc">ImageAxis enum.</div></div>
+<div class="ttc" id="aParameterType_8h_html"><div class="ttname"><a href="../../d2/d11/ParameterType_8h.html">ParameterType.h</a></div><div class="ttdoc">ParameterType enum.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

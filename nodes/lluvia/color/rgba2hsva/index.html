@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.92.1">
+<meta name=generator content="Hugo 0.92.2">
 <meta name=robots content="noindex, nofollow">
 <link rel="shortcut icon" href=/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="Lluvia">
 <meta itemprop=name content="RGBA2HSVA">
 <meta itemprop=description content="Converts a RGB image to HSV color space.">
-<meta itemprop=wordCount content="102">
+<meta itemprop=wordCount content="116">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="RGBA2HSVA">
 <meta name=twitter:description content="Converts a RGB image to HSV color space.">
@@ -214,13 +214,15 @@
 <h2 id=parameters>Parameters</h2>
 <p>min_chroma : float in [0, 1]. Defaults to 0.0.
 The minimum chromacity allowed in the conversion. If the chromacity of a given
-pixel is less than min_chroma, then the hue value is set to 0.</p>
+pixel is less than min_chroma, then the hue value is set to 0.
+float_precision : int. Defaults to ll.FloatPrecision.FP32.
+Floating point precision used to alloate out_hsva.</p>
 <h2 id=inputs>Inputs</h2>
 <p>in_rgba : ImageView.
 rgba8ui image.</p>
 <h2 id=outputs>Outputs</h2>
 <p>out_hsva : ImageView
-rgba32f image. This image is allocated in the same memory as in_rgba.</p>
+{rgba16f, rgba32f} image. This image is allocated in the same memory as in_rgba.</p>
 <pre><code>The color componens lie within the following ranges:
 
 * H in [0, 2*pi]

@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.92.1">
+<meta name=generator content="Hugo 0.92.2">
 <meta name=robots content="noindex, nofollow">
 <link rel="shortcut icon" href=/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="Lluvia">
 <meta itemprop=name content="FlowUpdateDelta">
 <meta itemprop=description content="Computes one step update of the optical flow based on image data and previous estimate.">
-<meta itemprop=wordCount content="212">
+<meta itemprop=wordCount content="233">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="FlowUpdateDelta">
 <meta name=twitter:description content="Computes one step update of the optical flow based on image data and previous estimate.">
@@ -220,27 +220,28 @@ The filter gains for the update step.</p>
 The max magnitude allowed for the optical flow output.</p>
 <h2 id=inputs>Inputs</h2>
 <p>in_gray : ImageView
-r32f image. The input gray-scale image at current time step.</p>
+{r16f, r32f} image. The input gray-scale image at current time step.</p>
 <p>in_gradient : ImageView
-rg32f image. The input gray-scale image gradient at current time step.</p>
+{rg16f, rg32f} image. The input gray-scale image gradient at current time step.</p>
 <p>in_delta_flow : Imageview
-rg32f image. The current estimation of the optical flow.</p>
+{rg16f, rg32f} image. The current estimation of the optical flow.</p>
 <p>in_gray_old : ImageView
-r32f image. The input gray-scale image at current time step.</p>
+{r16f, r32f} image. The input gray-scale image at current time step.</p>
 <p>in_flow : SampledImageview
-rg32f image. The current estimation of the optical flow from a level
+{rg16f, rg32f} image. The current estimation of the optical flow from a level
 above in the pyramid. This image view has half the resolution
 of the other inputs.</p>
 <h2 id=outputs>Outputs</h2>
 <p>out_gray : ImageView
-r32f image. The image estimate for the next time step. It is a memory copy
+{r16f, r32f} image. The image estimate for the next time step. It is a memory copy
 of in_gray. This image is allocated externally in FlowFilterDelta and bound
 to this node. This way, the loop between FlowPredictPayload and FlowUpdateDelta
 can be broken.</p>
 <p>out_flow : ImageView
-rg32f image. The updated optical flow.</p>
+{rg16f, rg32f} image. The updated optical flow. The floating point precision of this
+port depends on the precision of in_flow.</p>
 <p>out_delta_flow : ImageView
-rg32f image. The updated optical flow. This image is allocated externally in
+{rg16f, rg32f} image. The updated optical flow. This image is allocated externally in
 FlowFilterDelta and bound to this node. This way, the loop between
 FlowPredictPayload and FlowUpdateDelta can be broken.</p>
 </div>

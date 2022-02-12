@@ -23,7 +23,7 @@ var namespacell =
     [ "NodeBuilderDescriptor", "dd/dcf/structll_1_1NodeBuilderDescriptor.html", "dd/dcf/structll_1_1NodeBuilderDescriptor" ],
     [ "Object", "d8/d72/classll_1_1Object.html", "d8/d72/classll_1_1Object" ],
     [ "Parameter", "dd/dea/classll_1_1Parameter.html", "dd/dea/classll_1_1Parameter" ],
-    [ "PortDescriptor", "d5/d54/structll_1_1PortDescriptor.html", "d5/d54/structll_1_1PortDescriptor" ],
+    [ "PortDescriptor", "d8/dea/classll_1_1PortDescriptor.html", "d8/dea/classll_1_1PortDescriptor" ],
     [ "Program", "d1/d63/classll_1_1Program.html", "d1/d63/classll_1_1Program" ],
     [ "PushConstants", "d6/d48/classll_1_1PushConstants.html", "d6/d48/classll_1_1PushConstants" ],
     [ "Session", "d8/d31/classll_1_1Session.html", "d8/d31/classll_1_1Session" ],
