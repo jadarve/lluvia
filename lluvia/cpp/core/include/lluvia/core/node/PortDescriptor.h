@@ -50,7 +50,7 @@ public:
     // optional checks
     PortDescriptor& checkImageChannelCountIs(ll::ChannelCount channelCount) noexcept;
     PortDescriptor &checkImageChannelTypeIs(ll::ChannelType channelType) noexcept;
-    PortDescriptor &checkImageChannelTypeIsAnyOf(const std::vector<ll::ChannelType> &channelTypes) noexcept;
+    PortDescriptor &checkImageChannelTypeIsAnyOf(std::vector<ll::ChannelType> channelTypes) noexcept;
     PortDescriptor &checkImageViewNormalizedCoordinatesIs(bool normalizedCoordinates) noexcept;
     /**
      * @brief Checks whether or not a given Object is a valid port.

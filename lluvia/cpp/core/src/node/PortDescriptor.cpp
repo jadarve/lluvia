@@ -52,7 +52,7 @@ PortDescriptor& PortDescriptor::checkImageChannelTypeIs(ll::ChannelType channelT
     return *this;
 }
 
-PortDescriptor& PortDescriptor::checkImageChannelTypeIsAnyOf(const std::vector<ll::ChannelType> &channelTypes) noexcept {
+PortDescriptor& PortDescriptor::checkImageChannelTypeIsAnyOf(std::vector<ll::ChannelType> channelTypes) noexcept {
 
     m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>>{channelTypes};
     return *this;

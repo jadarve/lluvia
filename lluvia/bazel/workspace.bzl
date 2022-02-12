@@ -43,10 +43,10 @@ def lluvia_workspace():
         repo_rule = http_archive,
         name = "sol",
         urls = [
-            "https://github.com/ThePhD/sol2/archive/v3.0.3.tar.gz"
+            "https://github.com/ThePhD/sol2/archive/v3.2.2.tar.gz"
         ],
-        sha256 = "bf089e50387edfc70063e24fd7fbb693cceba4a50147d864fabedd1b33483582",
-        strip_prefix = "sol2-3.0.3",
+        sha256 = "141790dae0c1821dd2dbac3595433de49ba72545845efc3ec7d88de8b0a3b2da",
+        strip_prefix = "sol2-3.2.2",
         build_file = "@lluvia//:external/sol.bzl"
     )
 

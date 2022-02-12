@@ -39,11 +39,19 @@ function builder.newDescriptor()
     desc:init(builder.name, ll.ComputeDimension.D2)
 
     desc:setParameter('min_chroma', 0.0)
+
+    -- FIXME: use a enum
     desc:setParameter('float_precision', 32)
 
     -- TOTHINK: increased port contracts by checking internal attributes of the PortType
     -- For ImageView, check all image attributes + image view attributes.
-    desc:addPort(ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView))
+
+    local in_rgba = ll.PortDescriptor.new(0, 'in_rgba', ll.PortDirection.In, ll.PortType.ImageView)
+    -- in_rgba:checkChannelCount(ll.ChannelCount.C4)
+    -- in_rgba:checkChannelType(ll.ChannelType.Uint8)
+    -- in_rgba:checkChannelTypeIsOneOf([ll.ChannelType.Uint8, ll.ChannelType.Uint16])
+
+    desc:addPort(in_rgba)
     desc:addPort(ll.PortDescriptor.new(1, 'out_hsva', ll.PortDirection.Out, ll.PortType.ImageView))
 
     return desc
