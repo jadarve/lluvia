@@ -157,7 +157,7 @@ std::pair<bool, std::string> PortDescriptor::validateImageView(const std::shared
 std::string PortDescriptor::toString() const noexcept {
     return "{binding: " + std::to_string(m_binding) 
         + ", name: " + m_name
-        + " portType: ll::PortType::" + ll::portTypeToString(m_portType) + "}";
+        + ", portType: ll::PortType::" + ll::portTypeToString(m_portType) + "}";
 }
 
 } // namespace ll
