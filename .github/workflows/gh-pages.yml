@@ -70,7 +70,7 @@ jobs:
           git submodule update --init --recursive --depth 1
           cd doc/site
           npm install
-          hugo --environment "gh-pages" --minify
+          hugo --environment "production" --minify
       
       - name: Configure custom domain
         run: |
