@@ -51,6 +51,9 @@ Python  C++   1 2 3 4  import lluvia as ll for device in ll.getAvailableDevices(
 <a class="nav-link active" href=/docs/><span class=active>Documentation</span></a>
 </li>
 <li class="nav-item mr-4 mb-2 mb-lg-0">
+<a class=nav-link href=/blog/><span>Blog</span></a>
+</li>
+<li class="nav-item mr-4 mb-2 mb-lg-0">
 <a class=nav-link href=/nodes/><span>Node Library</span></a>
 </li>
 <li class="nav-item mr-4 mb-2 mb-lg-0">
@@ -347,6 +350,21 @@ device from the list of available ones.
     Session --&gt; ContainerNode
 </code></pre><h2 id=whats-next>What&rsquo;s next</h2>
 <p>Check the <a href=/docs/reference/memory>Memory</a> page to know about the different memory types in Lluvia.</p>
+<style>.feedback--answer{display:inline-block}.feedback--answer-no{margin-left:1em}.feedback--response{display:none;margin-top:1em}.feedback--response__visible{display:block}</style>
+<div class=d-print-none>
+<h2 class=feedback--title>Feedback</h2>
+<p class=feedback--question>Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button>
+<p class="feedback--response feedback--response-yes">
+Glad to hear it! Please <a href=https://github.com/jadarve/lluvia/issues/new>tell us how we can improve</a>.
+</p>
+<p class="feedback--response feedback--response-no">
+Sorry to hear that. Please <a href=https://github.com/jadarve/lluvia/issues/new>tell us how we can improve</a>.
+</p>
+</div>
+<script>const yesButton=document.querySelector('.feedback--answer-yes'),noButton=document.querySelector('.feedback--answer-no'),yesResponse=document.querySelector('.feedback--response-yes'),noResponse=document.querySelector('.feedback--response-no'),disableButtons=()=>{yesButton.disabled=!0,noButton.disabled=!0},sendFeedback=b=>{if(typeof ga!='function')return;const a={command:'send',hitType:'event',category:'Helpful',action:'click',label:window.location.pathname,value:b};ga(a.command,a.hitType,a.category,a.action,a.label,a.value)};yesButton.addEventListener('click',()=>{yesResponse.classList.add('feedback--response__visible'),disableButtons(),sendFeedback(1)}),noButton.addEventListener('click',()=>{noResponse.classList.add('feedback--response__visible'),disableButtons(),sendFeedback(0)})</script>
+<br>
 <div class="text-muted mt-5 pt-3 border-top">
 Last modified January 31, 2022: <a href=https://github.com/jadarve/lluvia/commit/ea330e382beed4c086b035f98a3052353ebe7761>#112 enable selecting compute device (#113) (ea330e3)</a>
 </div>

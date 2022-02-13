@@ -1,1 +1,340 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Working with floating point precision</title><link>/blog/2022/02/12/working-with-floating-point-precision/</link><pubDate>Sat, 12 Feb 2022 00:00:00 +0000</pubDate><guid>/blog/2022/02/12/working-with-floating-point-precision/</guid><description>
+&lt;div class="alert alert-primary" role="alert">
+&lt;h4 class="alert-heading">Jupyter notebook:&lt;/h4>
+A Jupyter notebook with the code in this article is available in &lt;a href="https://colab.research.google.com/drive/1bddxWnYp8Rloiv4helVJznFe7NzwxxsJ?usp=sharing">Google Colab&lt;/a>. Check it out!
+&lt;/div>
+&lt;p>GPU devices support several floating point number precisions, where precision refers to the number of bits used for representing a given number. Typical representations are:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>&lt;code>FP16&lt;/code>&lt;/strong>: or half precision. Numbers are represented in 16 bits.&lt;/li>
+&lt;li>&lt;strong>&lt;code>FP32&lt;/code>&lt;/strong>: or single precision. It uses 32 bits for representing a number.&lt;/li>
+&lt;li>&lt;strong>&lt;code>FP64&lt;/code>&lt;/strong>: or doble precision. 64 bits are used for represeting a number.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>&lt;code>FP64&lt;/code>&lt;/strong> is used when numerical precision is required, while &lt;strong>&lt;code>FP16&lt;/code>&lt;/strong> is suitable for fast, less exact calculations, and &lt;strong>&lt;code>FP32&lt;/code>&lt;/strong> sits in the middle. The &lt;a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE 754 standard&lt;/a> defines the specification of floating point numbers used in modern computers. It defines the rules for interpreting the bit fields that form a number, as well as the arithmetic rules to process them.&lt;/p>
+&lt;p>The Vulkan API offers support for the three floating point precisions. However, not all GPUs support every format. The &lt;a href="http://vulkan.gpuinfo.org/listdevices.php">Vulkan GPU Info page&lt;/a> is great tool to check support for a given feature.&lt;/p>
+&lt;h2 id="improvements-in-runtime-performance">Improvements in runtime performance&lt;/h2>
+&lt;p>Smaller bit representation of floating point numbers have an advantage in terms of runtime performance. Consider the case of a &lt;strong>RGBA&lt;/strong> image. If the image channel type is &lt;code>ll.ChannelType.Float16&lt;/code>, the four pixel values will fit in 8 bytes, compared to the 16 bytes needed if &lt;code>ll.ChannelType.Float32&lt;/code> was used. This reduction in memory footprint increases the pixel transfer rate from memory to the compute device.&lt;/p>
+&lt;p>To illustrate this, let&amp;rsquo;s consider the &lt;a href="nodes/lluvia/opticalflow/flowfilter/flowfilter/">&lt;em>optical flow filter&lt;/em> node&lt;/a>. The code below configures the flowfilter algorithm both with &lt;code>ll.FloatPrecision.FP16&lt;/code> and &lt;code>ll.FloatPrecision.FP32&lt;/code>, it runs each node for &lt;code>N = 10000&lt;/code> iterations and collects its runtime using the &lt;code>duration&lt;/code> probe.&lt;/p>
+&lt;ul class="nav nav-tabs" id="tabs-1" role="tablist">&lt;li class="nav-item">
+&lt;a class="nav-link active tab-Python"
+id="tabs-1-0-tab" data-toggle="tab" href="#tabs-1-0" role="tab" onclick="handleClick(&amp;#34;Python&amp;#34;);"
+aria-controls="tabs-1-0" aria-selected="true">
+Python
+&lt;/a>
+&lt;/li>&lt;/ul>
+&lt;div class="tab-content" id="tabs-1-content">&lt;div class="tab-pane fade show active"
+id="tabs-1-0" role="tabpanel" aria-labelled-by="tabs-1-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-python" data-lang="python">&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">lluvia&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">ll&lt;/span>
+&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">numpy&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">np&lt;/span>
+session &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>createSession()
+memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createMemory([ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>DeviceLocal])
+host_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((&lt;span style="color:#099">1016&lt;/span>, &lt;span style="color:#099">544&lt;/span>, &lt;span style="color:#099">4&lt;/span>), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>uint8)
+in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory&lt;span style="color:#000;font-weight:bold">.&lt;/span>createImageViewFromHost(host_rgba)
+RGBA2Gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createComputeNode(&lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2Gray&amp;#39;&lt;/span>)
+RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, in_rgba)
+RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+N &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">10000&lt;/span>
+runtimeMilliseconds &lt;span style="color:#000;font-weight:bold">=&lt;/span> {
+ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP16 : np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((N), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>float32),
+ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP32 : np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((N), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>float32)
+}
+&lt;span style="color:#000;font-weight:bold">for&lt;/span> precision &lt;span style="color:#000;font-weight:bold">in&lt;/span> [ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP32, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP16]:
+flowFilter &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createContainerNode(&lt;span style="color:#d14">&amp;#39;lluvia/opticalflow/flowfilter/FlowFilter&amp;#39;&lt;/span>)
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;levels&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;max_flow&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;smooth_iterations&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;gamma&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0.0005&lt;/span>))
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;gamma_low&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0.0005&lt;/span>))
+&lt;span style="color:#998;font-style:italic"># use selected floating point precision&lt;/span>
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(precision&lt;span style="color:#000;font-weight:bold">.&lt;/span>value))
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_gray&amp;#39;&lt;/span>, RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_gray&amp;#39;&lt;/span>))
+flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+duration &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createDuration()
+cmdBuffer &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createCommandBuffer()
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>begin()
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(RGBA2Gray)
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
+&lt;span style="color:#998;font-style:italic"># probe the runtime of the flowfilter node&lt;/span>
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationStart(duration)
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(flowFilter)
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationEnd(duration)
+cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>end()
+&lt;span style="color:#998;font-style:italic"># run the command buffer N times and collect the runtime of the flow algorithm&lt;/span>
+&lt;span style="color:#000;font-weight:bold">for&lt;/span> n &lt;span style="color:#000;font-weight:bold">in&lt;/span> &lt;span style="color:#0086b3">range&lt;/span>(N):
+session&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(cmdBuffer)
+runtimeMilliseconds[precision][n] &lt;span style="color:#000;font-weight:bold">=&lt;/span> duration&lt;span style="color:#000;font-weight:bold">.&lt;/span>nanoseconds &lt;span style="color:#000;font-weight:bold">/&lt;/span> &lt;span style="color:#099">1e6&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>
+&lt;/div>
+&lt;p>Here, the &lt;code>ll.FloatPrecision.FP16, ll.FloatPrecision.FP32&lt;/code> are new enum values for representing 16-bit and 32-bit floating point precision, respectively. The line &lt;code>flowFilter.setParameter('float_precision', ll.Parameter(precision.value))&lt;/code> configures the node with the given precision. Internally, the &lt;code>float_precision&lt;/code> is used to instantiate any floating point image with the requested precision.&lt;/p>
+&lt;div class="alert alert-primary" role="alert">
+&lt;h4 class="alert-heading">Note:&lt;/h4>
+By convention, any node that allows selecting floating point precision will define the &lt;strong>&lt;code>float_precision&lt;/code>&lt;/strong> parameter and will expect one of the &lt;code>ll.FloatPrecision&lt;/code> enum values.
+&lt;/div>
+&lt;p>The figure below shows the collected runtime for both floating point precisions. The median runtime for &lt;strong>&lt;code>FP16&lt;/code>&lt;/strong> is 0.501ms, while for &lt;strong>&lt;code>FP32&lt;/code>&lt;/strong> is 0.770ms. That is, the &lt;strong>&lt;code>FP16&lt;/code>&lt;/strong> algorithm improves the runtime by 35% compared to &lt;strong>&lt;code>FP32&lt;/code>&lt;/strong>.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1090px">
+&lt;img class="card-img-top" src="/blog/2022/02/12/working-with-floating-point-precision/flowfilter_fp_comparison_hud9d88ea9fb9f1e39cebf655ece1d7d28_34275_1080x360_fill_catmullrom_smart1_3.png" width="1080" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+Optical flow filter runtime using FP16 and FP32 floating point precision. Results collected on a Nvidia GTX-1080 (driver 460.91.03) running Ubuntu 20.04.
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h2 id="modifications-to-glsl-shader-code">Modifications to GLSL shader code&lt;/h2>
+&lt;p>In terms of GLSL shader code, there are no changes to support FP16 or FP32 images. However, it is important to understand the underlying functioning. For instance, consider the GLSL implementation of the &lt;a href="/nodes/lluvia/color/rgba2hsva/">&lt;code>RGBA2HSVA&lt;/code>&lt;/a> compute node. Notice that the &lt;strong>&lt;code>out_hsva&lt;/code>&lt;/strong> port is bound to the shader as a &lt;code>rgba32f&lt;/code> image:&lt;/p>
+&lt;ul class="nav nav-tabs" id="tabs-4" role="tablist">&lt;li class="nav-item">
+&lt;a class="nav-link active tab-GLSL"
+id="tabs-4-0-tab" data-toggle="tab" href="#tabs-4-0" role="tab" onclick="handleClick(&amp;#34;GLSL&amp;#34;);"
+aria-controls="tabs-4-0" aria-selected="true">
+GLSL
+&lt;/a>
+&lt;/li>&lt;/ul>
+&lt;div class="tab-content" id="tabs-4-content">&lt;div class="tab-pane fade show active"
+id="tabs-4-0" role="tabpanel" aria-labelled-by="tabs-4-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-glsl" data-lang="glsl">&lt;span style="color:#999;font-weight:bold;font-style:italic">#version 450&lt;/span>
+&lt;span style="color:#999;font-weight:bold;font-style:italic">#include &amp;lt;lluvia/core.glsl&amp;gt;&lt;/span>
+&lt;span style="color:#999;font-weight:bold;font-style:italic">#include &amp;lt;lluvia/core/color.glsl&amp;gt;&lt;/span>
+layout(binding &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">0&lt;/span>, rgba8ui) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> uimage2D in_rgba;
+layout(binding &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">1&lt;/span>, rgba32f) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> writeonly image2D out_hsva;
+layout(push_constant) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> const_0 {
+&lt;span style="color:#000;font-weight:bold">float&lt;/span> min_chroma;
+} params;
+&lt;span style="color:#000;font-weight:bold">void&lt;/span> main() {
+&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">float&lt;/span> min_chroma &lt;span style="color:#000;font-weight:bold">=&lt;/span> params.min_chroma;
+&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">ivec2&lt;/span> coords &lt;span style="color:#000;font-weight:bold">=&lt;/span> LL_GLOBAL_COORDS_2D;
+&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">ivec2&lt;/span> imgSize &lt;span style="color:#000;font-weight:bold">=&lt;/span> imageSize(out_hsva);
+&lt;span style="color:#000;font-weight:bold">if&lt;/span> (coords.x &lt;span style="color:#000;font-weight:bold">&amp;gt;&lt;/span> imgSize.x &lt;span style="color:#000;font-weight:bold">||&lt;/span> coords.y &lt;span style="color:#000;font-weight:bold">&amp;gt;&lt;/span> imgSize.y) {
+&lt;span style="color:#000;font-weight:bold">return&lt;/span>;
+}
+&lt;span style="color:#000;font-weight:bold">const&lt;/span> uvec4 RGBA &lt;span style="color:#000;font-weight:bold">=&lt;/span> imageLoad(in_rgba, coords);
+&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">vec4&lt;/span> HSVA &lt;span style="color:#000;font-weight:bold">=&lt;/span> color_rgba2hsva(RGBA, min_chroma);
+imageStore(out_hsva, coords, HSVA);
+}&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>
+&lt;/div>
+&lt;p>Images compatible with the &lt;code>rgba32f&lt;/code> image format can be bound as output. The &lt;a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shader_image_load_store.txt">shader image load store extension&lt;/a> defines the compatibility rules to be able to bind images to shaders. For this case in particular, it is possible to bind either a &lt;code>rgba16f&lt;/code> or &lt;code>rgba32f&lt;/code> images to the output. The shader will execute all arithmetic operations using 32-bit floating point precision. When storing an image texel using &lt;code>imageStore(out_hsva, coords, HSVA)&lt;/code>, the shader will reinterpret the &lt;code>vec4 HSVA&lt;/code> either as a 16 or 32-bit floating vector, according to the image bound to &lt;code>out_hsva&lt;/code>.&lt;/p>
+&lt;div class="alert alert-primary" role="alert">
+The &lt;a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shader_image_load_store.txt">shader image load store extension&lt;/a> describes the way texels are re-interepret during load/store operations.
+&lt;/div>
+&lt;p>In terms of &lt;em>Lua&lt;/em> code to build the node, these are the considerations to support different precisions:&lt;/p>
+&lt;ul>
+&lt;li>Define the &lt;strong>&lt;code>float_precision&lt;/code>&lt;/strong> parameter with default value to &lt;code>ll.FloatPrecision.FP32&lt;/code>.&lt;/li>
+&lt;li>Allocate the node objects according to the selected precision.&lt;/li>
+&lt;/ul>
+&lt;p>In the code below, line &lt;code>local outImageChannelType = ll.floatPrecisionToImageChannelType(float_precision)&lt;/code> transforms the recevied &lt;code>ll.FloatPrecision&lt;/code> value to the corresponding &lt;code>ll.ChannelType&lt;/code>. Then, &lt;code>out_hsva&lt;/code> is created and bound to the node.&lt;/p>
+&lt;ul class="nav nav-tabs" id="tabs-6" role="tablist">&lt;li class="nav-item">
+&lt;a class="nav-link active tab-Lua"
+id="tabs-6-0-tab" data-toggle="tab" href="#tabs-6-0" role="tab" onclick="handleClick(&amp;#34;Lua&amp;#34;);"
+aria-controls="tabs-6-0" aria-selected="true">
+Lua
+&lt;/a>
+&lt;/li>&lt;/ul>
+&lt;div class="tab-content" id="tabs-6-content">&lt;div class="tab-pane fade show active"
+id="tabs-6-0" role="tabpanel" aria-labelled-by="tabs-6-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-lua" data-lang="lua">&lt;span style="color:#000;font-weight:bold">local&lt;/span> builder &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.class(ll.ComputeNodeBuilder)
+builder.name &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2HSVA&amp;#39;&lt;/span>
+&lt;span style="color:#000;font-weight:bold">function&lt;/span> &lt;span style="color:#458;font-weight:bold">builder&lt;/span>.&lt;span style="color:#900;font-weight:bold">newDescriptor&lt;/span>()
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> desc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ComputeNodeDescriptor.new()
+desc:init(builder.name, ll.ComputeDimension.D2)
+&lt;span style="color:#998;font-style:italic">-- define the float_precision parameter with default value&lt;/span>
+desc:setParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>, ll.FloatPrecision.FP32)
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.PortDescriptor.new(&lt;span style="color:#099">0&lt;/span>, &lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, ll.PortDirection.In, ll.PortType.ImageView)
+in_rgba:checkImageChannelCountIs(ll.ChannelCount.C4)
+in_rgba:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+desc:addPort(in_rgba)
+desc:addPort(ll.PortDescriptor.new(&lt;span style="color:#099">1&lt;/span>, &lt;span style="color:#d14">&amp;#39;out_hsva&amp;#39;&lt;/span>, ll.PortDirection.Out, ll.PortType.ImageView))
+&lt;span style="color:#000;font-weight:bold">return&lt;/span> desc
+&lt;span style="color:#000;font-weight:bold">end&lt;/span>
+&lt;span style="color:#000;font-weight:bold">function&lt;/span> &lt;span style="color:#458;font-weight:bold">builder&lt;/span>.&lt;span style="color:#900;font-weight:bold">onNodeInit&lt;/span>(node)
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> node:getPort(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>)
+&lt;span style="color:#998;font-style:italic">-- receive the selected float_precision&lt;/span>
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> float_precision &lt;span style="color:#000;font-weight:bold">=&lt;/span> node:getParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>)
+&lt;span style="color:#998;font-style:italic">-- transform float precision to a suitable image channel type&lt;/span>
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> outImageChannelType &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.floatPrecisionToImageChannelType(float_precision)
+&lt;span style="color:#998;font-style:italic">-------------------------------------------------------&lt;/span>
+&lt;span style="color:#998;font-style:italic">-- allocate out_hsva&lt;/span>
+&lt;span style="color:#998;font-style:italic">-------------------------------------------------------&lt;/span>
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> imgDesc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageDescriptor.new()
+imgDesc.width &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.width
+imgDesc.height &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.height
+imgDesc.depth &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.depth
+imgDesc.channelCount &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ChannelCount.C4
+imgDesc.channelType &lt;span style="color:#000;font-weight:bold">=&lt;/span> outImageChannelType
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> imgViewDesc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageViewDescriptor.new()
+imgViewDesc.filterMode &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageFilterMode.Nearest
+imgViewDesc.normalizedCoordinates &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">false&lt;/span>
+imgViewDesc.isSampled &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">false&lt;/span>
+imgViewDesc:setAddressMode(ll.ImageAddressMode.Repeat)
+&lt;span style="color:#998;font-style:italic">-- ll::Memory where out_hsva will be allocated&lt;/span>
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.memory
+&lt;span style="color:#000;font-weight:bold">local&lt;/span> out_hsva &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory:createImageView(imgDesc, imgViewDesc)
+&lt;span style="color:#998;font-style:italic">-- need to change image layout before binding&lt;/span>
+out_hsva:changeImageLayout(ll.ImageLayout.General)
+node:bind(&lt;span style="color:#d14">&amp;#39;out_hsva&amp;#39;&lt;/span>, out_hsva)
+node:configureGridShape(ll.vec3ui.new(out_hsva.width, out_hsva.height, &lt;span style="color:#099">1&lt;/span>))
+&lt;span style="color:#000;font-weight:bold">end&lt;/span>
+&lt;span style="color:#998;font-style:italic">-- register builder in the system&lt;/span>
+ll.registerNodeBuilder(builder)&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>
+&lt;/div>
+&lt;h2 id="discussion">Discussion&lt;/h2>
+&lt;p>There are several floating point precisions available to use in compute shaders: &lt;strong>&lt;code>FP16&lt;/code>&lt;/strong>, &lt;strong>&lt;code>FP132&lt;/code>&lt;/strong>, and &lt;strong>&lt;code>FP64&lt;/code>&lt;/strong>, are the ones more commonly available in commodity GPU hardware. The ability to control the underlying floating point precision used in compute pipelines can improve runtime performance, as the transfer rate of data from and to memory can increase. The choice of a given precision must be made carefully, as it might affect the accuracy of the algorithm.&lt;/p>
+&lt;h2 id="references">References&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE 754 standard&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://vulkan.gpuinfo.org/listdevices.php">Vulkan GPU Info page&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shader_image_load_store.txt">OpenGL shader image load-store extension&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

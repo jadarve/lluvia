@@ -72,6 +72,9 @@ python -m pip install jinja2 …">
 <a class="nav-link active" href=/docs/><span class=active>Documentation</span></a>
 </li>
 <li class="nav-item mr-4 mb-2 mb-lg-0">
+<a class=nav-link href=/blog/><span>Blog</span></a>
+</li>
+<li class="nav-item mr-4 mb-2 mb-lg-0">
 <a class=nav-link href=/nodes/><span>Node Library</span></a>
 </li>
 <li class="nav-item mr-4 mb-2 mb-lg-0">
@@ -332,6 +335,21 @@ session <span style=color:#000;font-weight:700>=</span> ll<span style=color:#000
 </code></pre></td></tr></table>
 </div>
 </div><p>If the import completes successfully, lluvia is ready to use.</p>
+<style>.feedback--answer{display:inline-block}.feedback--answer-no{margin-left:1em}.feedback--response{display:none;margin-top:1em}.feedback--response__visible{display:block}</style>
+<div class=d-print-none>
+<h2 class=feedback--title>Feedback</h2>
+<p class=feedback--question>Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button>
+<p class="feedback--response feedback--response-yes">
+Glad to hear it! Please <a href=https://github.com/jadarve/lluvia/issues/new>tell us how we can improve</a>.
+</p>
+<p class="feedback--response feedback--response-no">
+Sorry to hear that. Please <a href=https://github.com/jadarve/lluvia/issues/new>tell us how we can improve</a>.
+</p>
+</div>
+<script>const yesButton=document.querySelector('.feedback--answer-yes'),noButton=document.querySelector('.feedback--answer-no'),yesResponse=document.querySelector('.feedback--response-yes'),noResponse=document.querySelector('.feedback--response-no'),disableButtons=()=>{yesButton.disabled=!0,noButton.disabled=!0},sendFeedback=b=>{if(typeof ga!='function')return;const a={command:'send',hitType:'event',category:'Helpful',action:'click',label:window.location.pathname,value:b};ga(a.command,a.hitType,a.category,a.action,a.label,a.value)};yesButton.addEventListener('click',()=>{yesResponse.classList.add('feedback--response__visible'),disableButtons(),sendFeedback(1)}),noButton.addEventListener('click',()=>{noResponse.classList.add('feedback--response__visible'),disableButtons(),sendFeedback(0)})</script>
+<br>
 <div class="text-muted mt-5 pt-3 border-top">
 Last modified January 26, 2022: <a href=https://github.com/jadarve/lluvia/commit/cb6632fbddc6acb63fdbcb9f65551ed7f2ba5608>#107 put the doc site in this repo (#108) (cb6632f)</a>
 </div>
