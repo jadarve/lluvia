@@ -1,3 +1,7 @@
 # See https://discourse.gohugo.io/t/docsy-theme-not-rendering-using-github-pages/28109/2
 # NOTE: No need for /lluvia anymore as I started using a custom domain.
 baseURL = "/"
+
+[services]
+[services.googleAnalytics]
+id = "G-2LVGWPRNS4"
