@@ -2,28 +2,32 @@
 date: 2022-02-12
 title: "Working with floating point precision"
 linkTitle: "Working with floating point precision"
-description: "Discusses how to use different floating point precision available in our device, and how to take advange of smaller representations to improve runtime performance."
+description: "Discusses how to use different floating point precisions available in the GPU, and how to take advantage of smaller representations to improve runtime performance."
 author: Juan Adarve
 resources:
 - src: "**.{png,jpg}"
   title: "Image #:counter"
 ---
 
-GPU devices support several working with floating point numbers of several precisions. Here precision refers to the number of bits used for representing a given number. Typical representations are:
+{{< alert title="Jupyter notebook:" >}}
+A Jupyter notebook with the code in this article is available in [Google Colab](https://colab.research.google.com/drive/1bddxWnYp8Rloiv4helVJznFe7NzwxxsJ?usp=sharing). Check it out!
+{{< /alert >}}
+
+GPU devices support several floating point number precisions, where precision refers to the number of bits used for representing a given number. Typical representations are:
 
 * **`FP16`**: or half precision. Numbers are represented in 16 bits.
 * **`FP32`**: or single precision. It uses 32 bits for representing a number.
 * **`FP64`**: or doble precision. 64 bits are used for represeting a number.
 
-Where **`FP64`** is used when numerical precision is required, **`FP16`** is suitable for fast, less exact calculations, and **`FP32`** sits in the middle. The [IEEE 754 standard][3] defines the specification of floating point numbers used in modern computers. It defines the rules for interpreting the bit fields that form a number, as well as the arithmetic rules to process them.
+**`FP64`** is used when numerical precision is required, while **`FP16`** is suitable for fast, less exact calculations, and **`FP32`** sits in the middle. The [IEEE 754 standard][3] defines the specification of floating point numbers used in modern computers. It defines the rules for interpreting the bit fields that form a number, as well as the arithmetic rules to process them.
 
 The Vulkan API offers support for the three floating point precisions. However, not all GPUs support every format. The [Vulkan GPU Info page][2] is great tool to check support for a given feature.
 
 ## Improvements in runtime performance
 
-Smaller bit representation of floating point numbers have an advantage in terms of runtime performance. Consider the case of a **RGBA** image. If the image channel type is `ll.ChannelType.Float16`, the four pixel values will fit in 8 bytes, compared to 16 bytes if `ll.ChannelType.Float32` was used. This reduction in memory footprint increases the pixel transfer rate from memory to the compute device.
+Smaller bit representation of floating point numbers have an advantage in terms of runtime performance. Consider the case of a **RGBA** image. If the image channel type is `ll.ChannelType.Float16`, the four pixel values will fit in 8 bytes, compared to the 16 bytes needed if `ll.ChannelType.Float32` was used. This reduction in memory footprint increases the pixel transfer rate from memory to the compute device.
 
-To illustrate this, let's consider the [*optical flow filter* node](nodes/lluvia/opticalflow/flowfilter/flowfilter/). The code below configures the flowfilter algorithm both with `ll.FloatPrecision.FP16` and `ll.FloatPrecision.FP32`, it runs each node for `N = 10000` times and collects the runtime using the `duration` probe.
+To illustrate this, let's consider the [*optical flow filter* node](nodes/lluvia/opticalflow/flowfilter/flowfilter/). The code below configures the flowfilter algorithm both with `ll.FloatPrecision.FP16` and `ll.FloatPrecision.FP32`, it runs each node for `N = 10000` iterations and collects its runtime using the `duration` probe.
 
 {{< tabpane >}}
 {{< tab header="Python" lang="python">}}
@@ -83,22 +87,22 @@ for precision in [ll.FloatPrecision.FP32, ll.FloatPrecision.FP16]:
 {{< /tab >}}
 {{< /tabpane >}}
 
-Here, the `ll.FloatPrecision.FP16, ll.FloatPrecision.FP32` are new enum values for representing 16-bit and 32-bit floating point precision, respectively. The line `flowFilter.setParameter('float_precision', ll.Parameter(precision.value))` configures the node with the given precision. Internally, the `float_precision` is used to instanciate any floating point image with the requested precision.
+Here, the `ll.FloatPrecision.FP16, ll.FloatPrecision.FP32` are new enum values for representing 16-bit and 32-bit floating point precision, respectively. The line `flowFilter.setParameter('float_precision', ll.Parameter(precision.value))` configures the node with the given precision. Internally, the `float_precision` is used to instantiate any floating point image with the requested precision.
 
 {{< alert title="Note:" >}}
 By convention, any node that allows selecting floating point precision will define the **`float_precision`** parameter and will expect one of the `ll.FloatPrecision` enum values.
 {{< /alert >}}
 
 
-The figure below shows the collected runtime for both floating point precisions. The median runtime for **`FP16`** is 0.501ms, and for **`FP32`** is 0.770ms. That is, the **`FP16`** algorithm improves the runtime by 35% compared to **`FP32`**.
+The figure below shows the collected runtime for both floating point precisions. The median runtime for **`FP16`** is 0.501ms, while for **`FP32`** is 0.770ms. That is, the **`FP16`** algorithm improves the runtime by 35% compared to **`FP32`**.
 
 {{< imgproc flowfilter_fp_comparison Fill "1080x360" >}}
-Optical flow filter runtime using FP16 and FP32 floating point precision.
+Optical flow filter runtime using FP16 and FP32 floating point precision. Results collected on a Nvidia GTX-1080 (driver 460.91.03) running Ubuntu 20.04.
 {{< /imgproc >}}
 
 ## Modifications to GLSL shader code
 
-In terms of GLSL shader code, there are no changes to make to support FP16 or FP32 imagse. However, it is important to understand the underlying functioning. For instance, consider the GLSL implementation of the [`RGBA2HSVA`](/nodes/lluvia/color/rgba2hsva/) compute node. Notice that the **`out_hsva`** port is bound to the shader as a `rgba32f` image:
+In terms of GLSL shader code, there are no changes to support FP16 or FP32 images. However, it is important to understand the underlying functioning. For instance, consider the GLSL implementation of the [`RGBA2HSVA`](/nodes/lluvia/color/rgba2hsva/) compute node. Notice that the **`out_hsva`** port is bound to the shader as a `rgba32f` image:
 
 {{< tabpane >}}
 {{< tab header="GLSL" lang="glsl">}}
@@ -133,16 +137,18 @@ void main() {
 {{< /tab >}}
 {{< /tabpane >}}
 
-Images compatible with the `rgba32f` image format can be bound as output. The [shader image load store extension][1] defines the compatibility rules to be able to bind images to shaders. For this case in particular, it is possible to bind either a `rgba16f` or `rgba32f` images to the output. The shader will execute all arithmetic operations using 32-bit floating point precision. When storing an image texel using `imageStore(out_hsva, coords, HSVA);`, the shader will reinterpret it the `HSVA` `vec4` either as a 16 or 32 bit floating vector, according to the image bound to `out_hsva`.
+Images compatible with the `rgba32f` image format can be bound as output. The [shader image load store extension][1] defines the compatibility rules to be able to bind images to shaders. For this case in particular, it is possible to bind either a `rgba16f` or `rgba32f` images to the output. The shader will execute all arithmetic operations using 32-bit floating point precision. When storing an image texel using `imageStore(out_hsva, coords, HSVA)`, the shader will reinterpret the `vec4 HSVA` either as a 16 or 32-bit floating vector, according to the image bound to `out_hsva`.
 
 {{< alert >}}
 The [shader image load store extension](https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_shader_image_load_store.txt) describes the way texels are re-interepret during load/store operations.
 {{< /alert >}}
 
-In terms of *Lua* code to describe the node, these are the considerations to support different precisions:
+In terms of *Lua* code to build the node, these are the considerations to support different precisions:
 
-* Define the `float_precision` parameter with default value to `ll.FloatPrecision.FP32`.
+* Define the **`float_precision`** parameter with default value to `ll.FloatPrecision.FP32`.
 * Allocate the node objects according to the selected precision.
+
+In the code below, line `local outImageChannelType = ll.floatPrecisionToImageChannelType(float_precision)` transforms the recevied `ll.FloatPrecision` value to the corresponding `ll.ChannelType`. Then, `out_hsva` is created and bound to the node.
 
 {{< tabpane >}}
 {{< tab header="Lua" lang="lua">}}
@@ -210,12 +216,9 @@ ll.registerNodeBuilder(builder)
 {{< /tab >}}
 {{< /tabpane >}}
 
-In there, line `local outImageChannelType = ll.floatPrecisionToImageChannelType(float_precision)` transforms the recevied `ll.FloatPrecision` value to the corresponding `ll.ChannelType` needed to create `out_hsva`. After the `out_hsva` image is created, it is bound to the node and is ready for running.
-
-
 ## Discussion
 
-There are several floating point precisions available to use in compute shaders: **`FP16`**, **`FP132`**, and **`FP64`**, are the ones more commonly available in commodity GPU hardware. The ability to control the underlying floating point precision used in compute pipelines can enable improvements in runtime performance, as the transfer rate of data from and to memory can increase. The choice of a given precision must be made carefully, as it might affect the accuracy of the algorithm.
+There are several floating point precisions available to use in compute shaders: **`FP16`**, **`FP132`**, and **`FP64`**, are the ones more commonly available in commodity GPU hardware. The ability to control the underlying floating point precision used in compute pipelines can improve runtime performance, as the transfer rate of data from and to memory can increase. The choice of a given precision must be made carefully, as it might affect the accuracy of the algorithm.
 
 ## References
 
