@@ -51,7 +51,7 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     auto dst = deviceMemory->createImage(desc);
     REQUIRE(dst != nullptr);
 
-    auto srcBuffer = hostMemory->createBuffer(src->getSize());
+    auto srcBuffer = hostMemory->createBuffer(width * height * static_cast<uint64_t>(src->getChannelCount()) * src->getChannelTypeSize());
     REQUIRE(srcBuffer != nullptr);
 
     {
