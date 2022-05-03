@@ -21,10 +21,10 @@ def lluvia_workspace():
         repo_rule = http_archive,
         name = "catch",
         urls = [
-            "https://github.com/catchorg/Catch2/archive/v2.11.0.tar.gz"
+            "https://github.com/catchorg/Catch2/archive/v2.13.9.tar.gz"
         ],
-        sha256 = "b9957af46a04327d80833960ae51cf5e67765fd264389bd1e275294907f1a3e0",
-        strip_prefix = "Catch2-2.11.0",
+        sha256 = "06dbc7620e3b96c2b69d57bf337028bf245a211b3cddb843835bfe258f427a52",
+        strip_prefix = "Catch2-2.13.9",
         build_file = "catch.bzl"
     )
 
