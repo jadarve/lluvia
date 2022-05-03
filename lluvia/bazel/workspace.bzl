@@ -83,8 +83,8 @@ def lluvia_workspace():
     maybe (
         repo_rule = http_archive,
         name = "cython",
-        url = "https://github.com/cython/cython/archive/3.0a1.tar.gz",
-        sha256 = "afd96c9113fc334ca14adea53900fa9e28d70a45b44a39e950825f85aed39b04",
-        strip_prefix = "cython-3.0a1",
+        url = "https://github.com/cython/cython/releases/download/0.29.28/Cython-0.29.28.tar.gz",
+        sha256 = "d6fac2342802c30e51426828fe084ff4deb1b3387367cf98976bb2e64b6f8e45",
+        strip_prefix = "Cython-0.29.28",
         build_file = "cython.bzl",
     )
