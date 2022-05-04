@@ -3,3 +3,6 @@ markupsafe
 numpy
 imageio
 pytest
+sphinx
+sphinxcontrib-napoleon
+sphinx-rtd-theme
