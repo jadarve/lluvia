@@ -5,9 +5,12 @@ on: [push]
 jobs:
   build-linux:
     name: Build Linux
-    runs-on: jadarve/lluvia:latest
+    runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v1
+    - name: Pull Docker image
+      uses: docker://jadarve/lluvia:latest
+    - name: Checkout 
+      uses: actions/checkout@v1
     - name: Build
       run: bazel build //...
     - name: Test
