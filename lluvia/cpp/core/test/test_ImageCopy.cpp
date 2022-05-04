@@ -57,7 +57,7 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     {
         auto ptr = srcBuffer->map<uint8_t[]>();
 
-        for(auto i = 0u; i < src->getSize(); ++i) {
+        for(auto i = 0u; i < srcBuffer->getSize(); ++i) {
             ptr[i] = i % 255;
         }
     }
