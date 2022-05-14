@@ -3,9 +3,12 @@
 # and vulkaninfo from the LunarG SDK works correctly.
 FROM ubuntu:22.04
 
-MAINTAINER Juan David Adarve Bermudez <juanda0718@gmail.com>
+LABEL Author="Juan David Adarve Bermudez <juanda0718@gmail.com>"
 
-ENV LUNARG_VERSION="1.3.211"
+ARG DEBIAN_FRONTEND=noninteractive
+ARG LUNARG_VERSION="1.3.211"
+
+ENV TZ=Etc/UTC
 
 # Base dependencies
 RUN apt update \
@@ -25,7 +28,7 @@ RUN apt update \
 RUN wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add - \
     && wget -qO /etc/apt/sources.list.d/lunarg-vulkan-$LUNARG_VERSION-focal.list https://packages.lunarg.com/vulkan/$LUNARG_VERSION/lunarg-vulkan-$LUNARG_VERSION-focal.list \
     && apt update \
-    && apt upgrade \
+    && apt upgrade -y \
     && apt install -y vulkan-sdk mesa-vulkan-drivers \
     && rm -rf /var/lib/apt/lists/*
 

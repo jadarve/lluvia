@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build-linux:
+    docker:
+      - image: jadarve/lluvia:22.04
+        auth:
+          username: jadarve
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run: bazel build //...
+  test-linux:
+    docker:
+      - image: jadarve/lluvia:22.04
+        auth:
+          username: jadarve
+          password: $DOCKERHUB_PASSWORD 
+    steps:
+      - checkout
+      - run: bazel test //...
+
+workflows:
+  version: 2
+  linux:
+    jobs:
+      - build-linux
+      - test-linux
