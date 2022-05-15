@@ -1,25 +1,25 @@
-version: 2
+version: 2.1
 
 orbs:
   win: circleci/windows@4.1
 
 jobs:
-  linux-test:
-    docker:
-      - image: jadarve/lluvia:22.04
-        auth:
-          username: jadarve
-          password: $DOCKERHUB_PASSWORD
-    steps:
-      - checkout
-      - run: bazel test --test_output=errors //...
-      - store_test_results:
-          path: bazel-testlogs
+  # linux-test:
+  #   docker:
+  #     - image: jadarve/lluvia:22.04
+  #       auth:
+  #         username: jadarve
+  #         password: $DOCKERHUB_PASSWORD
+  #   steps:
+  #     - checkout
+  #     - run: bazel test --test_output=errors //...
+  #     - store_test_results:
+  #         path: bazel-testlogs
   
   windows-build:
     executor:
       name: win/default
-      size: "medium"
+      size: medium
     steps:
       - run:
           name: Install tools
@@ -51,5 +51,5 @@ workflows:
   version: 2
   linux:
     jobs:
-      - linux-test
+      # - linux-test
       - windows-build
