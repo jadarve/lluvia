@@ -30,7 +30,7 @@ jobs:
           name: Install Python dependencies
           command: |
             python -m pip install jinja2
-            pip3 install cython numpy pytest jinja2 markupsafe
+            python3 -m pip install cython numpy pytest jinja2 markupsafe
       - run:
           name: Install Vulkan SDK
           command: |
