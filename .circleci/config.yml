@@ -25,12 +25,13 @@ jobs:
           name: Install tools
           command: |
             choco install --no-progress wget
-            choco install --no-progress python2
+            choco install --no-progress python
+            # choco install --no-progress python2
       - run:
           name: Install Python dependencies
           command: |
-            python -m pip install jinja2
-            python3 -m pip install cython numpy pytest jinja2 markupsafe
+            # python2 -m pip install jinja2
+            python -m pip install cython numpy pytest jinja2 markupsafe
       - run:
           name: Install Vulkan SDK
           command: |
@@ -42,7 +43,7 @@ jobs:
           name: Build
           command: |
             $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
-            $Env:Path += ";C:/Python27"
+            $Env:Path += ";C:/Python310"
             $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
             bazel build //...
 
