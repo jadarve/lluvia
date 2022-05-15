@@ -35,16 +35,18 @@ jobs:
       - run:
           name: Install Vulkan SDK
           command: |
-            Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
+            Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.3.211.0/windows/VulkanSDK-1.3.211.0-Installer.exe" -OutFile VulkanSDK.exe
             $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
             $installer.WaitForExit();
-      - checkout
+      - checkout:
+          path: lluvia
       - run:
           name: Build
           command: |
-            $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
+            cd lluvia
+            $Env:VULKAN_SDK = "C:/VulkanSDK/1.3.211.0"
             $Env:Path += ";C:/Python310"
-            $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
+            $Env:Path += ";C:/VulkanSDK/1.3.211.0/Bin"
             bazel build //...
 
 
