@@ -46,9 +46,9 @@ jobs:
           name: Build
           command: |
             cd lluvia
-            $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.176.1"
+            $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.182.0"
             $Env:Path += ";C:/Python310"
-            $Env:Path += ";C:/VulkanSDK/1.2.176.1/Bin"
+            $Env:Path += ";C:/VulkanSDK/1.2.182.0/Bin"
             bazel build //...
 
 
