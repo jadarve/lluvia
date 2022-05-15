@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run: bazel test --test_output=errors //...
       - store_test_results:
-        path: bazel-testlogs
+          path: bazel-testlogs
 
 workflows:
   version: 2
