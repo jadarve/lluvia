@@ -4,7 +4,7 @@
 def _impl(repository_ctx):
   
     result = repository_ctx.execute(
-        ["python3",
+        ["python",
          "-c", 
          "import platform; from distutils.sysconfig import get_config_var; print(get_config_var('prefix')); print(''.join(platform.python_version_tuple()[:2]))"
         ])
@@ -34,7 +34,7 @@ cc_library(
 
 def _impl_numpy(repository_ctx):
 
-    result = repository_ctx.execute(["python3", "-c", "import numpy as np; print(np.get_include())"])
+    result = repository_ctx.execute(["python", "-c", "import numpy as np; print(np.get_include())"])
     prefix = result.stdout.splitlines()[0]
     
     repository_ctx.symlink(prefix, "numpy")
