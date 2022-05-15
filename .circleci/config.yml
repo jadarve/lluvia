@@ -10,6 +10,7 @@ jobs:
         auth:
           username: jadarve
           password: $DOCKERHUB_PASSWORD
+    resource_class: xlarge
     steps:
       - checkout
       - run:
