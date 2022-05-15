@@ -6,7 +6,7 @@ orbs:
 jobs:
   linux-test:
     docker:
-      - image: jadarve/lluvia:22.04
+      - image: jadarve/lluvia@sha256:e649e5bc35eb14f489fcaaf44f6d10c48a6b153d1b165566cedc6f804d13df3d
         auth:
           username: jadarve
           password: $DOCKERHUB_PASSWORD
@@ -14,10 +14,51 @@ jobs:
       - checkout
       - run:
           name: Bazel test
-          command: bazel test --local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-1 --test_output=errors //...
+          command: bazel test --test_output=errors //...
       # - store_test_results:
       #     path: bazel-testlogs
   
+  gh-pages:
+    docker:
+      - image: jadarve/lluvia@sha256:e649e5bc35eb14f489fcaaf44f6d10c48a6b153d1b165566cedc6f804d13df3d
+        auth:
+          username: jadarve
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run:
+          name: Cpp API docs
+          command: |
+            mkdir -p doc/site/static/api/cpp
+            cd doc/api/cpp
+            doxygen Doxyfile
+      - run:
+          name: Python API docs
+          command: |
+            bazel build //lluvia/python:lluvia_wheel
+            pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/python/build/python
+
+            mkdir -p doc/site/static/api/
+            cd doc/api/python
+            make html
+            mv build/html ../../site/static/api/python
+      
+      - run:
+          name: Nodes API docs
+          command: |
+            bazel build //lluvia/python:lluvia_wheel
+            pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/nodes/build/python
+
+            cd doc/api/nodes
+            ./generate_nodes_markdown.py ../../site/content/en/nodes
+      
+      - run:
+          name: Build Hugo site
+          command: |
+            cd doc/site
+            npm install
+            hugo --environment "production" --minify
+
   # windows-build:
   #   executor:
   #     name: win/default
@@ -61,4 +102,5 @@ workflows:
   linux:
     jobs:
       - linux-test
+      - gh-pages
       # - windows-build

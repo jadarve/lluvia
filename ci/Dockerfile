@@ -7,6 +7,7 @@ LABEL Author="Juan David Adarve Bermudez <juanda0718@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LUNARG_VERSION="1.3.211"
+ARG HUGO_VERSION="0.98.0"
 
 ENV TZ=Etc/UTC
 
@@ -23,6 +24,11 @@ RUN apt update \
         python3-pip \
         git \
         unzip \
+        golang \
+        doxygen \
+        graphviz \
+        nodejs \
+        npm \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add - \
@@ -37,7 +43,13 @@ RUN pip3 install --no-cache-dir \
     pytest \
     jinja2 \
     markupsafe \
-    imageio
+    imageio \
+    sphinx \
+    sphinx-rtd-theme
+
+RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.deb \
+    && dpkg -i hugo_extended_${HUGO_VERSION}_Linux-64bit.deb \
+    && rm hugo_extended_${HUGO_VERSION}_Linux-64bit.deb
 
 # Bazel
 RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg \

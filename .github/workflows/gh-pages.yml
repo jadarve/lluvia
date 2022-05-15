@@ -63,7 +63,7 @@ jobs:
           pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/nodes/build/python
 
           cd doc/api/nodes
-           ./generate_nodes_markdown.py ../../site/content/en/nodes
+          ./generate_nodes_markdown.py ../../site/content/en/nodes
 
       - name: Build Site
         run: |

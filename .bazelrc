@@ -1,6 +1,8 @@
 
 # General build settings
 build --enable_platform_specific_config
+build --local_ram_resources=HOST_RAM*0.8
+build --local_cpu_resources=HOST_CPUS-1
 
 # Linux
 build:linux --action_env=CC=clang
