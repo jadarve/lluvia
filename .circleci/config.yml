@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run: bazel test --test_output=errors //...
-      - store_test_results
+      - store_test_results:
         path: bazel-testlogs
 
 workflows:
