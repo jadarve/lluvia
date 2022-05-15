@@ -25,10 +25,12 @@ jobs:
           name: Install tools
           command: |
             choco install --no-progress wget
-            choco install --no-progress python
+            choco install --no-progress python2
+            choco install --no-progress python3
             choco install --no-progress vulkan-sdk
             choco install --no-progress bazel
             # choco install --no-progress python2
+            mklink "C:/Python310/python3.exe" "C:/Python310/python.exe"
       - run:
           name: Install Python dependencies
           command: |
