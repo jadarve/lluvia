@@ -26,18 +26,20 @@ jobs:
           command: |
             choco install --no-progress wget
             choco install --no-progress python
+            choco install --no-progress vulkan-sdk
+            choco install --no-progress bazel
             # choco install --no-progress python2
       - run:
           name: Install Python dependencies
           command: |
             # python2 -m pip install jinja2
             python -m pip install cython numpy pytest jinja2 markupsafe
-      - run:
-          name: Install Vulkan SDK
-          command: |
-            Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
-            $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
-            $installer.WaitForExit();
+      # - run:
+      #     name: Install Vulkan SDK
+      #     command: |
+      #       Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
+      #       $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
+      #       $installer.WaitForExit();
       - checkout:
           path: lluvia
       - run:
