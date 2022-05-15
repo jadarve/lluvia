@@ -10,12 +10,11 @@ jobs:
         auth:
           username: jadarve
           password: $DOCKERHUB_PASSWORD
-    resource_class: xlarge
     steps:
       - checkout
       - run:
-          name: Basel test
-          command: bazel test --test_output=errors //...
+          name: Bazel test
+          command: bazel test --local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-1 --test_output=errors //...
       # - store_test_results:
       #     path: bazel-testlogs
   
