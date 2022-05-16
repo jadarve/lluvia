@@ -74,10 +74,10 @@ jobs:
     docker:
       - image: node:8.10.0
     steps:
-      - checkout
       - add_ssh_keys:
           fingerprints:
-            - 58:03:40:54:60:aa:69:d1:a1:c8:04:1c:36:30:f7:80
+            - da:b3:02:e1:a8:73:be:8f:2b:f3:5d:94:9a:87:c2:a0
+      - checkout
       - attach_workspace:
           at: doc/site
       - run:
