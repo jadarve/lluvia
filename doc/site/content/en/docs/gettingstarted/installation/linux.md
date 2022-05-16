@@ -10,7 +10,7 @@ weight: 1
 * Install the following packages in your system if they not available yet:
 
     ```bash
-    apt install \
+    sudo apt install \
         build-essential \
         clang
     ```
@@ -18,19 +18,19 @@ weight: 1
 * [Bazel](https://bazel.build/):
 
     ```bash
-    curl https://bazel.build/bazel-release.pub.gpg | apt-key add -
-    echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
-    apt update
-    apt install bazel
+    curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
+    echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+    sudo apt update
+    sudo apt install bazel
     ```
 
 * [LunarG Vulkan SDK](https://www.lunarg.com/vulkan-sdk/):
 
     ```bash
     wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-    sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.176-focal.list https://packages.lunarg.com/vulkan/1.2.176/lunarg-vulkan-1.2.176-focal.list
+    sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.3.211-focal.list https://packages.lunarg.com/vulkan/1.3.211/lunarg-vulkan-1.3.211-focal.list
     sudo apt update
-    sudo apt install -y vulkan-sdk
+    sudo apt install vulkan-sdk
     ```
 
     Verify that the SDK was successfully installed by running:

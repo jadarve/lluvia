@@ -1,0 +1,143 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@4.1
+
+jobs:
+  linux-test:
+    docker:
+      - image: jadarve/lluvia@sha256:e649e5bc35eb14f489fcaaf44f6d10c48a6b153d1b165566cedc6f804d13df3d
+        auth:
+          username: jadarve
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run:
+          name: Bazel test
+          command: bazel test --test_output=errors //...
+      # - store_test_results:
+      #     path: bazel-testlogs
+  
+  gh-pages-build:
+    docker:
+      - image: jadarve/lluvia@sha256:e649e5bc35eb14f489fcaaf44f6d10c48a6b153d1b165566cedc6f804d13df3d
+        auth:
+          username: jadarve
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run:
+          name: Cpp API docs
+          command: |
+            mkdir -p doc/site/static/api/cpp
+            cd doc/api/cpp
+            doxygen Doxyfile
+      - run:
+          name: Python API docs
+          command: |
+            bazel build //lluvia/python:lluvia_wheel
+            pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/python/build/python
+
+            mkdir -p doc/site/static/api/
+            cd doc/api/python
+            make html
+            mv build/html ../../site/static/api/python
+      
+      - run:
+          name: Nodes API docs
+          command: |
+            bazel build //lluvia/python:lluvia_wheel
+            pip3 install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl --upgrade -t doc/api/nodes/build/python
+
+            cd doc/api/nodes
+            ./generate_nodes_markdown.py ../../site/content/en/nodes
+      
+      - run:
+          name: Build Hugo site
+          command: |
+            cd doc/site
+            npm install
+            hugo --environment "production" --minify
+      
+      - run:
+          name: Configure custom domain
+          command: |
+            # Copy CNAME file to the generated public folder
+            # This is needed for the "gh-pages" branch to properly point to the custom domain
+            cp CNAME doc/site/public
+
+      - persist_to_workspace:
+          root: doc/site/
+          paths: public
+
+  gh-pages-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 58:03:40:54:60:aa:69:d1:a1:c8:04:1c:36:30:f7:80
+      - checkout
+      - attach_workspace:
+          at: doc/site
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@2.0.1
+            git config user.email "ci-build@lluvia.ai"
+            git config user.name "ci-build"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dist doc/site/public
+
+  # windows-build:
+  #   executor:
+  #     name: win/default
+  #     size: medium
+  #   steps:
+  #     - run:
+  #         name: Install tools
+  #         command: |
+  #           choco install --no-progress wget
+  #           choco install --no-progress python2
+  #           choco install --no-progress python3
+  #           choco install --no-progress vulkan-sdk
+  #           choco install --no-progress bazel
+  #           # choco install --no-progress python2
+  #           mklink "C:/Python310/python3.exe" "C:/Python310/python.exe"
+  #     - run:
+  #         name: Install Python dependencies
+  #         command: |
+  #           # python2 -m pip install jinja2
+  #           python -m pip install cython numpy pytest jinja2 markupsafe
+  #     # - run:
+  #     #     name: Install Vulkan SDK
+  #     #     command: |
+  #     #       Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.2.176.1/windows/VulkanSDK-1.2.176.1-Installer.exe" -OutFile VulkanSDK.exe
+  #     #       $installer = Start-Process -FilePath VulkanSDK.exe -Wait -PassThru -ArgumentList @("/S");
+  #     #       $installer.WaitForExit();
+  #     - checkout:
+  #         path: lluvia
+  #     - run:
+  #         name: Build
+  #         command: |
+  #           cd lluvia
+  #           $Env:VULKAN_SDK = "C:/VulkanSDK/1.2.182.0"
+  #           $Env:Path += ";C:/Python310"
+  #           $Env:Path += ";C:/VulkanSDK/1.2.182.0/Bin"
+  #           bazel build //...
+
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - linux-test
+      - gh-pages-build
+      - gh-pages-deploy:
+          requires:
+            - linux-test
+            - gh-pages-build
+          filters:
+            branches:
+              only: master

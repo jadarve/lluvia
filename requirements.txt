@@ -1,4 +1,8 @@
-jinja2==2.11.3
-markupsafe==1.1.1
+jinja2
+markupsafe
 numpy
+imageio
 pytest
+sphinx
+sphinxcontrib-napoleon
+sphinx-rtd-theme
