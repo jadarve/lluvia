@@ -18,7 +18,7 @@ jobs:
       # - store_test_results:
       #     path: bazel-testlogs
   
-  gh-pages:
+  gh-pages-build:
     docker:
       - image: jadarve/lluvia@sha256:e649e5bc35eb14f489fcaaf44f6d10c48a6b153d1b165566cedc6f804d13df3d
         auth:
@@ -58,6 +58,37 @@ jobs:
             cd doc/site
             npm install
             hugo --environment "production" --minify
+      
+      - run:
+          name: Configure custom domain
+          command: |
+            # Copy CNAME file to the generated public folder
+            # This is needed for the "gh-pages" branch to properly point to the custom domain
+            cp CNAME doc/site/public
+
+      - persist_to_workspace:
+          root: doc/site/
+          paths: public
+
+  gh-pages-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 58:03:40:54:60:aa:69:d1:a1:c8:04:1c:36:30:f7:80
+      - checkout
+      - attach_workspace:
+          at: doc/site
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@2.0.1
+            git config user.email "ci-build@lluvia.ai"
+            git config user.name "ci-build"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dist doc/site/public
 
   # windows-build:
   #   executor:
@@ -99,8 +130,14 @@ jobs:
 
 workflows:
   version: 2
-  linux:
+  build:
     jobs:
       - linux-test
-      - gh-pages
-      # - windows-build
+      - gh-pages-build
+      - gh-pages-deploy:
+          requires:
+            - linux-test
+            - gh-pages-build
+          filters:
+            branches:
+              only: master
