@@ -116,9 +116,8 @@
 <dt class="sig sig-object py" id="lluvia.core.ImageView.changeLayout">
 <span class="sig-name descname"><span class="pre">changeLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageLayout</span> <span class="pre">newLayout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.changeLayout" title="Permalink to this definition"></a></dt>
 <dd><p>Changes the layout of the underlying image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>newLayout</strong> (<em>str.</em>) – <dl class="simple">
+<dl class="simple">
+<dt>newLayout<span class="classifier">str.</span></dt><dd><dl class="simple">
 <dt>The new layout. Its value must be one of the values defined in lluvia.ImageLayout:</dt><dd><ul class="simple">
 <li><p>Undefined</p></li>
 <li><p>General</p></li>
@@ -136,7 +135,6 @@
 </ul>
 </dd>
 </dl>
-</p>
 </dd>
 </dl>
 </dd></dl>
@@ -197,12 +195,8 @@ img.width == arr.shape[2] and img.chhanels == arr.chape[3]</p>
 </dl>
 </li>
 </ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>arr</strong> (<em>numpy.ndarray.</em>) – </p>
-</dd>
-</dl>
-<p>:raises ValueError : if arr does not match this image shape.:</p>
+<p>arr : numpy.ndarray.</p>
+<p>ValueError : if arr does not match this image shape.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -254,12 +248,8 @@ img.width == arr.shape[2] and img.chhanels == arr.chape[3]</p>
 <dt class="sig sig-object py" id="lluvia.core.ImageView.toHost">
 <span class="sig-name descname"><span class="pre">toHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndarray</span> <span class="pre">output=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.toHost" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of this image view into a numpy host array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>output</strong> (<em>numpy.ndarray. Defaults to None.</em>) – </p>
-</dd>
-</dl>
-<p>:raises ValueError : if output is different than None and does not match this image shape.:</p>
+<p>output : numpy.ndarray. Defaults to None.</p>
+<p>ValueError : if output is different than None and does not match this image shape.</p>
 </dd></dl>
 
 <dl class="py attribute">

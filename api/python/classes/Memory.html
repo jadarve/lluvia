@@ -101,11 +101,10 @@
 <dt class="sig sig-object py" id="lluvia.core.Memory.createBuffer">
 <span class="sig-name descname"><span class="pre">createBuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">uint64_t</span> <span class="pre">size,</span> <span class="pre">usageFlags=[ll_buffer.BufferUsageFlagBits.StorageBuffer,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferSrc,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferDst]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createBuffer" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new buffer allocated into this memory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>size</strong> (<em>uint64_t greater than zero.</em>) – The size of the buffer in bytes.</p></li>
-<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/BufferUsageFlagBits.html#lluvia.core.BufferUsageFlagBits" title="lluvia.core.BufferUsageFlagBits"><em>BufferUsageFlagBits</em></a><em> or </em><em>list of BufferUsageFlagBits.</em>) – <dl class="simple">
+<dl>
+<dt>size<span class="classifier">uint64_t greater than zero.</span></dt><dd><p>The size of the buffer in bytes.</p>
+</dd>
+<dt>usageFlags<span class="classifier">BufferUsageFlagBits or list of BufferUsageFlagBits.</span></dt><dd><dl class="simple">
 <dt>Defaults to:</dt><dd><dl class="simple">
 <dt>[BufferUsageFlagBits.StorageBuffer,</dt><dd><p>BufferUsageFlagBits.TransferSrc,
 BufferUsageFlagBits.TransferDst]</p>
@@ -116,7 +115,7 @@ BufferUsageFlagBits.TransferDst]</p>
 <p>Usage flags for this buffer. It must be a combination of the
 values defined in lluvia.BufferUsageFlagBits:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>IndexBuffer</p></li>
 <li><p>IndirectBuffer</p></li>
 <li><p>StorageBuffer</p></li>
@@ -128,28 +127,20 @@ values defined in lluvia.BufferUsageFlagBits:</p>
 <li><p>VertexBuffer</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>buf</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.Buffer object.</p>
 </dd>
 </dl>
+<p>buf : lluvia.Buffer object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.Memory.createBufferFromHost">
 <span class="sig-name descname"><span class="pre">createBufferFromHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">ndarray</span> <span class="pre">arr,</span> <span class="pre">usageFlags=[ll_buffer.BufferUsageFlagBits.StorageBuffer,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferSrc,</span> <span class="pre">ll_buffer.BufferUsageFlagBits.TransferDst]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createBufferFromHost" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a buffer from a numpy array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>arr</strong> (<em>np.ndarray.</em>) – Numpy array from which the buffer will be created from. The content
-of the array will be copied into the buffer.</p></li>
-<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/BufferUsageFlagBits.html#lluvia.core.BufferUsageFlagBits" title="lluvia.core.BufferUsageFlagBits"><em>BufferUsageFlagBits</em></a><em> or </em><em>list of BufferUsageFlagBits.</em>) – <dl class="simple">
+<dl>
+<dt>arr<span class="classifier">np.ndarray.</span></dt><dd><p>Numpy array from which the buffer will be created from. The content
+of the array will be copied into the buffer.</p>
+</dd>
+<dt>usageFlags<span class="classifier">BufferUsageFlagBits or list of BufferUsageFlagBits.</span></dt><dd><dl class="simple">
 <dt>Defaults to:</dt><dd><dl class="simple">
 <dt>[BufferUsageFlagBits.StorageBuffer,</dt><dd><p>BufferUsageFlagBits.TransferSrc,
 BufferUsageFlagBits.TransferDst]</p>
@@ -160,7 +151,7 @@ BufferUsageFlagBits.TransferDst]</p>
 <p>Usage flags for this buffer. It must be a combination of the
 values defined in lluvia.BufferUsageFlagBits:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>IndexBuffer</p></li>
 <li><p>IndirectBuffer</p></li>
 <li><p>StorageBuffer</p></li>
@@ -172,14 +163,10 @@ values defined in lluvia.BufferUsageFlagBits:</p>
 <li><p>VertexBuffer</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-</ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>buffer</strong> – Buffer object with the same content as the input array parameter.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Buffer.</p>
+</dl>
+<dl class="simple">
+<dt>buffer<span class="classifier">Buffer.</span></dt><dd><p>Buffer object with the same content as the input array parameter.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -190,11 +177,9 @@ values defined in lluvia.BufferUsageFlagBits:</p>
 <dd><p>Creates a Buffer with the same size in bytes as the other parameter</p>
 <p>The memory allocated to this buffer is not filled with any value
 at the moment of creation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<em>Numpy ndarray</em><em> or </em><em>lluvia Buffer</em><em> or </em><em>Image.</em>) – </p></li>
-<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/BufferUsageFlagBits.html#lluvia.core.BufferUsageFlagBits" title="lluvia.core.BufferUsageFlagBits"><em>BufferUsageFlagBits</em></a><em> or </em><em>list of BufferUsageFlagBits.</em>) – <dl class="simple">
+<p>other : Numpy ndarray or lluvia Buffer or Image.</p>
+<dl>
+<dt>usageFlags<span class="classifier">BufferUsageFlagBits or list of BufferUsageFlagBits.</span></dt><dd><dl class="simple">
 <dt>Defaults to:</dt><dd><dl class="simple">
 <dt>[BufferUsageFlagBits.StorageBuffer,</dt><dd><p>BufferUsageFlagBits.TransferSrc,
 BufferUsageFlagBits.TransferDst]</p>
@@ -205,7 +190,7 @@ BufferUsageFlagBits.TransferDst]</p>
 <p>Usage flags for this buffer. It must be a combination of the
 values defined in lluvia.BufferUsageFlagBits:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>IndexBuffer</p></li>
 <li><p>IndirectBuffer</p></li>
 <li><p>StorageBuffer</p></li>
@@ -217,26 +202,17 @@ values defined in lluvia.BufferUsageFlagBits:</p>
 <li><p>VertexBuffer</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>buf</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.Buffer object.</p>
 </dd>
 </dl>
+<p>buf : lluvia.Buffer object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.Memory.createImage">
 <span class="sig-name descname"><span class="pre">createImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self,</span> <span class="pre">shape,</span> <span class="pre">ChannelType</span> <span class="pre">channelType=ll_image.ChannelType.Uint8,</span> <span class="pre">usageFlags=[ll_image.ImageUsageFlagBits.Storage,</span> <span class="pre">ll_image.ImageUsageFlagBits.Sampled,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferSrc,</span> <span class="pre">ll_image.ImageUsageFlagBits.TransferDst]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Memory.createImage" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new image allocated in this memory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>shape</strong> (<em>list</em><em> or </em><em>tuple of length 1</em><em>, </em><em>2</em><em>, </em><em>3</em><em> or </em><em>4.</em>) – <p>Shape of the image (depth, height , width, channels). Each dimension
+<dl>
+<dt>shape<span class="classifier">list or tuple of length 1, 2, 3 or 4.</span></dt><dd><p>Shape of the image (depth, height , width, channels). Each dimension
 must be greater than zero. The number of channels must in the range [1, 4].
 If one or more dimensions are missing, they are set to 1 by default.</p>
 <p>The shape is interpreted as follows:</p>
@@ -264,13 +240,14 @@ channels = shape[3]</p>
 </dd>
 </dl>
 </div></blockquote>
-</p></li>
-<li><p><strong>channelType</strong> (<em>ll.ChannelType. Defaults to ll.ChannelType.Uint8.</em>) – Channel type.</p></li>
-<li><p><strong>usageFlags</strong> (<a class="reference internal" href="../enumerations/ImageUsageFlagBits.html#lluvia.core.ImageUsageFlagBits" title="lluvia.core.ImageUsageFlagBits"><em>ImageUsageFlagBits</em></a><em> or </em><em>list of ImageUsageFlagBits.</em>) – <p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
+</dd>
+<dt>channelType<span class="classifier">ll.ChannelType. Defaults to ll.ChannelType.Uint8.</span></dt><dd><p>Channel type.</p>
+</dd>
+<dt>usageFlags<span class="classifier">ImageUsageFlagBits or list of ImageUsageFlagBits.</span></dt><dd><p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
 Image usage flags. It must be a combination of th strings defined
 in lluvia.ImageUsageFlags:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>TransferSrc</p></li>
 <li><p>TransferDst</p></li>
 <li><p>Sampled</p></li>
@@ -281,17 +258,13 @@ in lluvia.ImageUsageFlags:</p>
 <li><p>InputAttachment</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>image</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>new Image object.</p>
 </dd>
 </dl>
-<p>:raises ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or: if any parameter is not within its required range.</p>
+<p>image : new Image object.</p>
+<dl class="simple">
+<dt>ValueError<span class="classifier">if the number of dimensions is not in [1, 2, 3, 4] or</span></dt><dd><p>if any parameter is not within its required range.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -315,15 +288,13 @@ if arr.ndim is 3: create a 2D image with the number of channels</p>
 <p>Notice that for creating 1D images with several color channels,
 one needs to specify the 4 dimensions [length, 1, 1, channels].</p>
 <p>The image’s channel type is deduced from arr.dtype.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>arr</strong> (<em>Numpy array.</em>) – </p></li>
-<li><p><strong>usageFlags</strong> (<em>string</em><em> or </em><em>list of strings.</em>) – <p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
+<p>arr : Numpy array.</p>
+<dl>
+<dt>usageFlags<span class="classifier">string or list of strings.</span></dt><dd><p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
 Image usage flags. It must be a combination of th strings defined
 in lluvia.ImageUsageFlags:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>TransferSrc</p></li>
 <li><p>TransferDst</p></li>
 <li><p>Sampled</p></li>
@@ -334,18 +305,17 @@ in lluvia.ImageUsageFlags:</p>
 <li><p>InputAttachment</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img</strong> – A new Image object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.Image</p>
 </dd>
 </dl>
-<p>:raises ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or: if arr.dtype is incompatible with image ChannelType.
-:raises RuntimeError : if the image cannot be created from this memory.:</p>
+<dl class="simple">
+<dt>img<span class="classifier">lluvia.Image</span></dt><dd><p>A new Image object.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>ValueError<span class="classifier">if the number of dimensions is not in [1, 2, 3, 4] or</span></dt><dd><p>if arr.dtype is incompatible with image ChannelType.</p>
+</dd>
+</dl>
+<p>RuntimeError : if the image cannot be created from this memory.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -369,15 +339,13 @@ if arr.ndim is 3: create a 2D image with the number of channels</p>
 <p>Notice that for creating 1D images with several color channels,
 one needs to specify the 4 dimensions [length, 1, 1, channels].</p>
 <p>The image’s channel type is deduced from arr.dtype.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>arr</strong> (<em>Numpy array.</em>) – </p></li>
-<li><p><strong>usageFlags</strong> (<em>string</em><em> or </em><em>list of strings.</em>) – <p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
+<p>arr : Numpy array.</p>
+<dl>
+<dt>usageFlags<span class="classifier">string or list of strings.</span></dt><dd><p>Defaults to [‘Storage’, ‘Sampled’, ‘TransferSrc’, ‘TransferDst’].
 Image usage flags. It must be a combination of th strings defined
 in lluvia.ImageUsageFlags:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>TransferSrc</p></li>
 <li><p>TransferDst</p></li>
 <li><p>Sampled</p></li>
@@ -388,20 +356,20 @@ in lluvia.ImageUsageFlags:</p>
 <li><p>InputAttachment</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-<li><p><strong>filterMode</strong> (<em>str. Defaults to 'Nearest'.</em>) – <p>Filtering more for reading pixels within a shader. Possible
+</dd>
+<dt>filterMode<span class="classifier">str. Defaults to ‘Nearest’.</span></dt><dd><p>Filtering more for reading pixels within a shader. Possible
 values are defined in lluvia.ImageFilterMode:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>Nearest</p></li>
 <li><p>Linear</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-<li><p><strong>addressMode</strong> (<em>str. Defaults to 'Repeat'.</em>) – <p>Addressing mode for reading pixels that are outside of the image
+</dd>
+<dt>addressMode<span class="classifier">str. Defaults to ‘Repeat’.</span></dt><dd><p>Addressing mode for reading pixels that are outside of the image
 boundaries. Possible values are defined in lluvia.ImageAddressMode:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>Repeat</p></li>
 <li><p>MirroredRepeat</p></li>
 <li><p>ClampToEdge</p></li>
@@ -409,22 +377,23 @@ boundaries. Possible values are defined in lluvia.ImageAddressMode:</p>
 <li><p>MirrorClampToEdge</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-<li><p><strong>normalizedCoordinates</strong> (<em>bool. Defaults to False.</em>) – Tells whether or not to use normalized coordinates to read
-pixels within a shader.</p></li>
-<li><p><strong>sampled</strong> (<em>bool. Defaults to False.</em>) – Tells whether or not to use a sampler object for reading
-pixels within a shader.</p></li>
-</ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img</strong> – A new Image object.</p>
+<dt>normalizedCoordinates<span class="classifier">bool. Defaults to False.</span></dt><dd><p>Tells whether or not to use normalized coordinates to read
+pixels within a shader.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.Image</p>
+<dt>sampled<span class="classifier">bool. Defaults to False.</span></dt><dd><p>Tells whether or not to use a sampler object for reading
+pixels within a shader.</p>
 </dd>
 </dl>
-<p>:raises ValueError   : if the number of dimensions is not in [1, 2, 3, 4] or: if arr.dtype is incompatible with image ChannelType.
-:raises RuntimeError : if the image cannot be created from this memory.:</p>
+<dl class="simple">
+<dt>img<span class="classifier">lluvia.Image</span></dt><dd><p>A new Image object.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>ValueError<span class="classifier">if the number of dimensions is not in [1, 2, 3, 4] or</span></dt><dd><p>if arr.dtype is incompatible with image ChannelType.</p>
+</dd>
+</dl>
+<p>RuntimeError : if the image cannot be created from this memory.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -438,17 +407,11 @@ pixels within a shader.</p></li>
 <dd><p>Determines if page is currently available to be mapped.</p>
 <p>This test checks if page is available to be mapped to host-memory by
 a given objects such as a Buffer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>page</strong> (<em>uint64_t</em>) – Page number.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>True if page is mappable, False otherwise</p>
+<dl class="simple">
+<dt>page<span class="classifier">uint64_t</span></dt><dd><p>Page number.</p>
 </dd>
 </dl>
+<p>True if page is mappable, False otherwise</p>
 </dd></dl>
 
 <dl class="py attribute">

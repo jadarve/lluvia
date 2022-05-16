@@ -101,9 +101,8 @@
 <dt class="sig sig-object py" id="lluvia.core.Image.changeLayout">
 <span class="sig-name descname"><span class="pre">changeLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageLayout</span> <span class="pre">newLayout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Image.changeLayout" title="Permalink to this definition"></a></dt>
 <dd><p>Changes image layout.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>newLayout</strong> (<em>str.</em>) – <p>The new layout. Its value must be one of the values defined
+<dl>
+<dt>newLayout<span class="classifier">str.</span></dt><dd><p>The new layout. Its value must be one of the values defined
 in lluvia.ImageLayout:</p>
 <blockquote>
 <div><ul class="simple">
@@ -122,7 +121,6 @@ in lluvia.ImageLayout:</p>
 <li><p>DepthAttachmentStencilReadOnlyOptimalKHR</p></li>
 </ul>
 </div></blockquote>
-</p>
 </dd>
 </dl>
 </dd></dl>
@@ -147,22 +145,20 @@ in lluvia.ImageLayout:</p>
 <dt class="sig sig-object py" id="lluvia.core.Image.createImageView">
 <span class="sig-name descname"><span class="pre">createImageView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageFilterMode</span> <span class="pre">filterMode=ImageFilterMode.Nearest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageAddressMode</span> <span class="pre">addressMode=ImageAddressMode.Repeat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">normalizedCoordinates=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">sampled=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Image.createImageView" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new image view from this image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filterMode</strong> (<em>str. Defaults to 'Nearest'.</em>) – <p>Filtering more for reading pixels within a shader. Possible
+<dl>
+<dt>filterMode<span class="classifier">str. Defaults to ‘Nearest’.</span></dt><dd><p>Filtering more for reading pixels within a shader. Possible
 values are defined in lluvia.ImageFilterMode:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>Nearest</p></li>
 <li><p>Linear</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-<li><p><strong>addressMode</strong> (<em>str. Defaults to 'Repeat'.</em>) – <p>Addressing mode for reading pixels that are outside of the image
+</dd>
+<dt>addressMode<span class="classifier">str. Defaults to ‘Repeat’.</span></dt><dd><p>Addressing mode for reading pixels that are outside of the image
 boundaries. Possible values are defined in lluvia.ImageAddressMode:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>Repeat</p></li>
 <li><p>MirroredRepeat</p></li>
 <li><p>ClampToEdge</p></li>
@@ -170,22 +166,23 @@ boundaries. Possible values are defined in lluvia.ImageAddressMode:</p>
 <li><p>MirrorClampToEdge</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-<li><p><strong>normalizedCoordinates</strong> (<em>bool. Defaults to False.</em>) – Tells whether or not to use normalized coordinates to read
-pixels within a shader.</p></li>
-<li><p><strong>sampled</strong> (<em>bool. Defaults to False.</em>) – Tells whether or not to use a sampler object for reading
-pixels within a shader.</p></li>
-</ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>imgView</strong> – Image view object.</p>
+<dt>normalizedCoordinates<span class="classifier">bool. Defaults to False.</span></dt><dd><p>Tells whether or not to use normalized coordinates to read
+pixels within a shader.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.ImageView</p>
+<dt>sampled<span class="classifier">bool. Defaults to False.</span></dt><dd><p>Tells whether or not to use a sampler object for reading
+pixels within a shader.</p>
 </dd>
 </dl>
-<p>:raises ValueError : if either filterMode or addressMode: parameter have incorrect values.
-:raises RuntimeError : if the image view cannot be created.:</p>
+<dl class="simple">
+<dt>imgView<span class="classifier">lluvia.ImageView</span></dt><dd><p>Image view object.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>ValueError<span class="classifier">if either filterMode or addressMode</span></dt><dd><p>parameter have incorrect values.</p>
+</dd>
+</dl>
+<p>RuntimeError : if the image view cannot be created.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -223,12 +220,8 @@ img.width == arr.shape[2] and img.chhanels == arr.chape[3]</p>
 </dl>
 </li>
 </ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>arr</strong> (<em>numpy.ndarray.</em>) – </p>
-</dd>
-</dl>
-<p>:raises ValueError : if arr does not match this image shape.:</p>
+<p>arr : numpy.ndarray.</p>
+<p>ValueError : if arr does not match this image shape.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -265,12 +258,8 @@ img.width == arr.shape[2] and img.chhanels == arr.chape[3]</p>
 <dt class="sig sig-object py" id="lluvia.core.Image.toHost">
 <span class="sig-name descname"><span class="pre">toHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndarray</span> <span class="pre">output=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Image.toHost" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of this image into a numpy host array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>output</strong> (<em>numpy.ndarray. Defaults to None.</em>) – </p>
-</dd>
-</dl>
-<p>:raises ValueError : if output is different than None and does not match this image shape.:</p>
+<p>output : numpy.ndarray. Defaults to None.</p>
+<p>ValueError : if output is different than None and does not match this image shape.</p>
 </dd></dl>
 
 <dl class="py attribute">

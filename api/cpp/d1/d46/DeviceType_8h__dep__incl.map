@@ -1,7 +1,7 @@
-<map id="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/device/DeviceType.h" name="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/device/DeviceType.h">
-<area shape="rect" id="node1" title="DeviceType enum." alt="" coords="183,5,375,76"/>
-<area shape="rect" id="node2" href="$dd/d97/DeviceDescriptor_8h.html" title=" " alt="" coords="117,124,309,195"/>
-<area shape="rect" id="node4" href="$d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="249,451,435,507"/>
-<area shape="rect" id="node3" href="$d0/d53/Session_8h.html" title="Session class." alt="" coords="61,347,271,403"/>
-<area shape="rect" id="node5" href="$dd/dac/SessionDescriptor_8h.html" title="SessionDescriptor class." alt="" coords="27,243,305,299"/>
+<map id="/root/project/lluvia/cpp/core/include/lluvia/core/device/DeviceType.h" name="/root/project/lluvia/cpp/core/include/lluvia/core/device/DeviceType.h">
+<area shape="rect" id="node1" title="DeviceType enum." alt="" coords="114,5,306,61"/>
+<area shape="rect" id="node2" href="$dd/d97/DeviceDescriptor_8h.html" title=" " alt="" coords="20,109,248,165"/>
+<area shape="rect" id="node4" href="$d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="164,421,336,477"/>
+<area shape="rect" id="node3" href="$d0/d53/Session_8h.html" title="Session class." alt="" coords="34,317,206,373"/>
+<area shape="rect" id="node5" href="$dd/dac/SessionDescriptor_8h.html" title="SessionDescriptor class." alt="" coords="26,213,213,269"/>
 </map>

@@ -22,103 +22,116 @@ Python
 &lt;/a>
 &lt;/li>&lt;/ul>
 &lt;div class="tab-content" id="tabs-1-content">&lt;div class="tab-pane fade show active"
-id="tabs-1-0" role="tabpanel" aria-labelled-by="tabs-1-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+id="tabs-1-0" role="tabpanel" aria-labelled-by="tabs-1-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-python" data-lang="python">&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">lluvia&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">ll&lt;/span>
-&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">numpy&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">np&lt;/span>
-session &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>createSession()
-memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createMemory([ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>DeviceLocal])
-host_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((&lt;span style="color:#099">1016&lt;/span>, &lt;span style="color:#099">544&lt;/span>, &lt;span style="color:#099">4&lt;/span>), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>uint8)
-in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory&lt;span style="color:#000;font-weight:bold">.&lt;/span>createImageViewFromHost(host_rgba)
-RGBA2Gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createComputeNode(&lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2Gray&amp;#39;&lt;/span>)
-RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, in_rgba)
-RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
-N &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">10000&lt;/span>
-runtimeMilliseconds &lt;span style="color:#000;font-weight:bold">=&lt;/span> {
-ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP16 : np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((N), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>float32),
-ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP32 : np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((N), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>float32)
-}
-&lt;span style="color:#000;font-weight:bold">for&lt;/span> precision &lt;span style="color:#000;font-weight:bold">in&lt;/span> [ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP32, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP16]:
-flowFilter &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createContainerNode(&lt;span style="color:#d14">&amp;#39;lluvia/opticalflow/flowfilter/FlowFilter&amp;#39;&lt;/span>)
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;levels&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;max_flow&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;smooth_iterations&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;gamma&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0.0005&lt;/span>))
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;gamma_low&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0.0005&lt;/span>))
-&lt;span style="color:#998;font-style:italic"># use selected floating point precision&lt;/span>
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(precision&lt;span style="color:#000;font-weight:bold">.&lt;/span>value))
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_gray&amp;#39;&lt;/span>, RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_gray&amp;#39;&lt;/span>))
-flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
-duration &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createDuration()
-cmdBuffer &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createCommandBuffer()
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>begin()
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(RGBA2Gray)
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
-&lt;span style="color:#998;font-style:italic"># probe the runtime of the flowfilter node&lt;/span>
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationStart(duration)
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(flowFilter)
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationEnd(duration)
-cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>end()
-&lt;span style="color:#998;font-style:italic"># run the command buffer N times and collect the runtime of the flow algorithm&lt;/span>
-&lt;span style="color:#000;font-weight:bold">for&lt;/span> n &lt;span style="color:#000;font-weight:bold">in&lt;/span> &lt;span style="color:#0086b3">range&lt;/span>(N):
-session&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(cmdBuffer)
-runtimeMilliseconds[precision][n] &lt;span style="color:#000;font-weight:bold">=&lt;/span> duration&lt;span style="color:#000;font-weight:bold">.&lt;/span>nanoseconds &lt;span style="color:#000;font-weight:bold">/&lt;/span> &lt;span style="color:#099">1e6&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">lluvia&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">ll&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">numpy&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">np&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>session &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>createSession()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createMemory([ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>DeviceLocal])
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>host_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((&lt;span style="color:#099">1016&lt;/span>, &lt;span style="color:#099">544&lt;/span>, &lt;span style="color:#099">4&lt;/span>), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>uint8)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory&lt;span style="color:#000;font-weight:bold">.&lt;/span>createImageViewFromHost(host_rgba)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createComputeNode(&lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2Gray&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, in_rgba)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>N &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">10000&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>runtimeMilliseconds &lt;span style="color:#000;font-weight:bold">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP16 : np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((N), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>float32),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP32 : np&lt;span style="color:#000;font-weight:bold">.&lt;/span>zeros((N), dtype&lt;span style="color:#000;font-weight:bold">=&lt;/span>np&lt;span style="color:#000;font-weight:bold">.&lt;/span>float32)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">for&lt;/span> precision &lt;span style="color:#000;font-weight:bold">in&lt;/span> [ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP32, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP16]:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createContainerNode(&lt;span style="color:#d14">&amp;#39;lluvia/opticalflow/flowfilter/FlowFilter&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;levels&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;max_flow&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;smooth_iterations&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">2&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;gamma&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0.0005&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;gamma_low&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0.0005&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic"># use selected floating point precision&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(precision&lt;span style="color:#000;font-weight:bold">.&lt;/span>value))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_gray&amp;#39;&lt;/span>, RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_gray&amp;#39;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> flowFilter&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> duration &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createDuration()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createCommandBuffer()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>begin()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(RGBA2Gray)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic"># probe the runtime of the flowfilter node&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationStart(duration)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(flowFilter)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationEnd(duration)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>end()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic"># run the command buffer N times and collect the runtime of the flow algorithm&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">for&lt;/span> n &lt;span style="color:#000;font-weight:bold">in&lt;/span> &lt;span style="color:#0086b3">range&lt;/span>(N):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(cmdBuffer)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> runtimeMilliseconds[precision][n] &lt;span style="color:#000;font-weight:bold">=&lt;/span> duration&lt;span style="color:#000;font-weight:bold">.&lt;/span>nanoseconds &lt;span style="color:#000;font-weight:bold">/&lt;/span> &lt;span style="color:#099">1e6&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;/div>
 &lt;/div>
@@ -146,57 +159,66 @@ GLSL
 &lt;/a>
 &lt;/li>&lt;/ul>
 &lt;div class="tab-content" id="tabs-4-content">&lt;div class="tab-pane fade show active"
-id="tabs-4-0" role="tabpanel" aria-labelled-by="tabs-4-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+id="tabs-4-0" role="tabpanel" aria-labelled-by="tabs-4-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-glsl" data-lang="glsl">&lt;span style="color:#999;font-weight:bold;font-style:italic">#version 450&lt;/span>
-&lt;span style="color:#999;font-weight:bold;font-style:italic">#include &amp;lt;lluvia/core.glsl&amp;gt;&lt;/span>
-&lt;span style="color:#999;font-weight:bold;font-style:italic">#include &amp;lt;lluvia/core/color.glsl&amp;gt;&lt;/span>
-layout(binding &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">0&lt;/span>, rgba8ui) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> uimage2D in_rgba;
-layout(binding &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">1&lt;/span>, rgba32f) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> writeonly image2D out_hsva;
-layout(push_constant) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> const_0 {
-&lt;span style="color:#000;font-weight:bold">float&lt;/span> min_chroma;
-} params;
-&lt;span style="color:#000;font-weight:bold">void&lt;/span> main() {
-&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">float&lt;/span> min_chroma &lt;span style="color:#000;font-weight:bold">=&lt;/span> params.min_chroma;
-&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">ivec2&lt;/span> coords &lt;span style="color:#000;font-weight:bold">=&lt;/span> LL_GLOBAL_COORDS_2D;
-&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">ivec2&lt;/span> imgSize &lt;span style="color:#000;font-weight:bold">=&lt;/span> imageSize(out_hsva);
-&lt;span style="color:#000;font-weight:bold">if&lt;/span> (coords.x &lt;span style="color:#000;font-weight:bold">&amp;gt;&lt;/span> imgSize.x &lt;span style="color:#000;font-weight:bold">||&lt;/span> coords.y &lt;span style="color:#000;font-weight:bold">&amp;gt;&lt;/span> imgSize.y) {
-&lt;span style="color:#000;font-weight:bold">return&lt;/span>;
-}
-&lt;span style="color:#000;font-weight:bold">const&lt;/span> uvec4 RGBA &lt;span style="color:#000;font-weight:bold">=&lt;/span> imageLoad(in_rgba, coords);
-&lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">vec4&lt;/span> HSVA &lt;span style="color:#000;font-weight:bold">=&lt;/span> color_rgba2hsva(RGBA, min_chroma);
-imageStore(out_hsva, coords, HSVA);
-}&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-glsl" data-lang="glsl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#999;font-weight:bold;font-style:italic">#version 450&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#999;font-weight:bold;font-style:italic">#include &amp;lt;lluvia/core.glsl&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#999;font-weight:bold;font-style:italic">#include &amp;lt;lluvia/core/color.glsl&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>layout(binding &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">0&lt;/span>, rgba8ui) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> uimage2D in_rgba;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>layout(binding &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#099">1&lt;/span>, rgba32f) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> writeonly image2D out_hsva;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>layout(push_constant) &lt;span style="color:#000;font-weight:bold">uniform&lt;/span> const_0 {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">float&lt;/span> min_chroma;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>} params;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">void&lt;/span> main() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">float&lt;/span> min_chroma &lt;span style="color:#000;font-weight:bold">=&lt;/span> params.min_chroma;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">ivec2&lt;/span> coords &lt;span style="color:#000;font-weight:bold">=&lt;/span> LL_GLOBAL_COORDS_2D;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">ivec2&lt;/span> imgSize &lt;span style="color:#000;font-weight:bold">=&lt;/span> imageSize(out_hsva);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">if&lt;/span> (coords.x &lt;span style="color:#000;font-weight:bold">&amp;gt;&lt;/span> imgSize.x &lt;span style="color:#000;font-weight:bold">||&lt;/span> coords.y &lt;span style="color:#000;font-weight:bold">&amp;gt;&lt;/span> imgSize.y) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">const&lt;/span> uvec4 RGBA &lt;span style="color:#000;font-weight:bold">=&lt;/span> imageLoad(in_rgba, coords);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">vec4&lt;/span> HSVA &lt;span style="color:#000;font-weight:bold">=&lt;/span> color_rgba2hsva(RGBA, min_chroma);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imageStore(out_hsva, coords, HSVA);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;/div>
 &lt;/div>
@@ -218,115 +240,132 @@ Lua
 &lt;/a>
 &lt;/li>&lt;/ul>
 &lt;div class="tab-content" id="tabs-6-content">&lt;div class="tab-pane fade show active"
-id="tabs-6-0" role="tabpanel" aria-labelled-by="tabs-6-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+id="tabs-6-0" role="tabpanel" aria-labelled-by="tabs-6-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-lua" data-lang="lua">&lt;span style="color:#000;font-weight:bold">local&lt;/span> builder &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.class(ll.ComputeNodeBuilder)
-builder.name &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2HSVA&amp;#39;&lt;/span>
-&lt;span style="color:#000;font-weight:bold">function&lt;/span> &lt;span style="color:#458;font-weight:bold">builder&lt;/span>.&lt;span style="color:#900;font-weight:bold">newDescriptor&lt;/span>()
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> desc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ComputeNodeDescriptor.new()
-desc:init(builder.name, ll.ComputeDimension.D2)
-&lt;span style="color:#998;font-style:italic">-- define the float_precision parameter with default value&lt;/span>
-desc:setParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>, ll.FloatPrecision.FP32)
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.PortDescriptor.new(&lt;span style="color:#099">0&lt;/span>, &lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, ll.PortDirection.In, ll.PortType.ImageView)
-in_rgba:checkImageChannelCountIs(ll.ChannelCount.C4)
-in_rgba:checkImageChannelTypeIs(ll.ChannelType.Uint8)
-desc:addPort(in_rgba)
-desc:addPort(ll.PortDescriptor.new(&lt;span style="color:#099">1&lt;/span>, &lt;span style="color:#d14">&amp;#39;out_hsva&amp;#39;&lt;/span>, ll.PortDirection.Out, ll.PortType.ImageView))
-&lt;span style="color:#000;font-weight:bold">return&lt;/span> desc
-&lt;span style="color:#000;font-weight:bold">end&lt;/span>
-&lt;span style="color:#000;font-weight:bold">function&lt;/span> &lt;span style="color:#458;font-weight:bold">builder&lt;/span>.&lt;span style="color:#900;font-weight:bold">onNodeInit&lt;/span>(node)
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> node:getPort(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>)
-&lt;span style="color:#998;font-style:italic">-- receive the selected float_precision&lt;/span>
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> float_precision &lt;span style="color:#000;font-weight:bold">=&lt;/span> node:getParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>)
-&lt;span style="color:#998;font-style:italic">-- transform float precision to a suitable image channel type&lt;/span>
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> outImageChannelType &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.floatPrecisionToImageChannelType(float_precision)
-&lt;span style="color:#998;font-style:italic">-------------------------------------------------------&lt;/span>
-&lt;span style="color:#998;font-style:italic">-- allocate out_hsva&lt;/span>
-&lt;span style="color:#998;font-style:italic">-------------------------------------------------------&lt;/span>
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> imgDesc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageDescriptor.new()
-imgDesc.width &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.width
-imgDesc.height &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.height
-imgDesc.depth &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.depth
-imgDesc.channelCount &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ChannelCount.C4
-imgDesc.channelType &lt;span style="color:#000;font-weight:bold">=&lt;/span> outImageChannelType
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> imgViewDesc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageViewDescriptor.new()
-imgViewDesc.filterMode &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageFilterMode.Nearest
-imgViewDesc.normalizedCoordinates &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">false&lt;/span>
-imgViewDesc.isSampled &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">false&lt;/span>
-imgViewDesc:setAddressMode(ll.ImageAddressMode.Repeat)
-&lt;span style="color:#998;font-style:italic">-- ll::Memory where out_hsva will be allocated&lt;/span>
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.memory
-&lt;span style="color:#000;font-weight:bold">local&lt;/span> out_hsva &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory:createImageView(imgDesc, imgViewDesc)
-&lt;span style="color:#998;font-style:italic">-- need to change image layout before binding&lt;/span>
-out_hsva:changeImageLayout(ll.ImageLayout.General)
-node:bind(&lt;span style="color:#d14">&amp;#39;out_hsva&amp;#39;&lt;/span>, out_hsva)
-node:configureGridShape(ll.vec3ui.new(out_hsva.width, out_hsva.height, &lt;span style="color:#099">1&lt;/span>))
-&lt;span style="color:#000;font-weight:bold">end&lt;/span>
-&lt;span style="color:#998;font-style:italic">-- register builder in the system&lt;/span>
-ll.registerNodeBuilder(builder)&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-lua" data-lang="lua">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">local&lt;/span> builder &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.class(ll.ComputeNodeBuilder)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>builder.name &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2HSVA&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">function&lt;/span> &lt;span style="color:#458;font-weight:bold">builder&lt;/span>.&lt;span style="color:#900;font-weight:bold">newDescriptor&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> desc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ComputeNodeDescriptor.new()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> desc:init(builder.name, ll.ComputeDimension.D2)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-- define the float_precision parameter with default value&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> desc:setParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>, ll.FloatPrecision.FP32)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.PortDescriptor.new(&lt;span style="color:#099">0&lt;/span>, &lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, ll.PortDirection.In, ll.PortType.ImageView)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> in_rgba:checkImageChannelCountIs(ll.ChannelCount.C4)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> in_rgba:checkImageChannelTypeIs(ll.ChannelType.Uint8)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> desc:addPort(in_rgba)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> desc:addPort(ll.PortDescriptor.new(&lt;span style="color:#099">1&lt;/span>, &lt;span style="color:#d14">&amp;#39;out_hsva&amp;#39;&lt;/span>, ll.PortDirection.Out, ll.PortType.ImageView))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">return&lt;/span> desc
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">function&lt;/span> &lt;span style="color:#458;font-weight:bold">builder&lt;/span>.&lt;span style="color:#900;font-weight:bold">onNodeInit&lt;/span>(node)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> node:getPort(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-- receive the selected float_precision&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> float_precision &lt;span style="color:#000;font-weight:bold">=&lt;/span> node:getParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-- transform float precision to a suitable image channel type&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> outImageChannelType &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.floatPrecisionToImageChannelType(float_precision)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-------------------------------------------------------&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-- allocate out_hsva&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-------------------------------------------------------&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> imgDesc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageDescriptor.new()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgDesc.width &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.width
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgDesc.height &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.height
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgDesc.depth &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.depth
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgDesc.channelCount &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ChannelCount.C4
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgDesc.channelType &lt;span style="color:#000;font-weight:bold">=&lt;/span> outImageChannelType
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> imgViewDesc &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageViewDescriptor.new()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgViewDesc.filterMode &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll.ImageFilterMode.Nearest
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgViewDesc.normalizedCoordinates &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">false&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgViewDesc.isSampled &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">false&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> imgViewDesc:setAddressMode(ll.ImageAddressMode.Repeat)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-- ll::Memory where out_hsva will be allocated&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> in_rgba.memory
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">local&lt;/span> out_hsva &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory:createImageView(imgDesc, imgViewDesc)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#998;font-style:italic">-- need to change image layout before binding&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> out_hsva:changeImageLayout(ll.ImageLayout.General)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> node:bind(&lt;span style="color:#d14">&amp;#39;out_hsva&amp;#39;&lt;/span>, out_hsva)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> node:configureGridShape(ll.vec3ui.new(out_hsva.width, out_hsva.height, &lt;span style="color:#099">1&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic">-- register builder in the system&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ll.registerNodeBuilder(builder)&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;/div>
 &lt;/div>

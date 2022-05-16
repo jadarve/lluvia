@@ -88,56 +88,36 @@
 <dt class="sig sig-object py" id="lluvia.core.getAvailableDevices">
 <span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">getAvailableDevices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.getAvailableDevices" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the list of available devices.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>devices</strong> – The list of DeviceDescriptor avaiable to create a session from.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of DeviceDescriptor</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#lluvia.core.createSession" title="lluvia.core.createSession"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createSession()</span></code></a></dt><dd><p>Creates a new lluvia.Session object.</p>
+<dt>devices<span class="classifier">list of DeviceDescriptor</span></dt><dd><p>The list of DeviceDescriptor avaiable to create a session from.</p>
 </dd>
 </dl>
-</div>
+<p>createSession : Creates a new lluvia.Session object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.createSession">
 <span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">createSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">enableDebug=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">loadNodeLibrary=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DeviceDescriptor</span> <span class="pre">device=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.createSession" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new lluvia.Session object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>enableDebug</strong> (<em>bool defaults to False.</em>) – <p>Whether or not to enable the debug extensions on the GPU
+<dl>
+<dt>enableDebug<span class="classifier">bool defaults to False.</span></dt><dd><p>Whether or not to enable the debug extensions on the GPU
 device. When enabled, the vulkan VK_LAYER_KHRONOS_validation
 layer is activated, and messages about bad usage of the API
 will appear.</p>
 <p>Disable debug for reducing overhead.</p>
-</p></li>
-<li><p><strong>loadNodeLibrary</strong> (<em>bool defaults to True.</em>) – Whether or not the standard Lluvia node library embedded in the
-Python package should be loaded as part of the session creation.</p></li>
-<li><p><strong>device</strong> (<em>ll.DeviceDescriptor. Defaults to None.</em>) – The device used to create the session from. If None, the session will
-be created from the first device available in getAvailableDevices.</p></li>
-</ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>session</strong> – New session.</p>
+<dt>loadNodeLibrary<span class="classifier">bool defaults to True.</span></dt><dd><p>Whether or not the standard Lluvia node library embedded in the
+Python package should be loaded as part of the session creation.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Session.</p>
+<dt>device<span class="classifier">ll.DeviceDescriptor. Defaults to None.</span></dt><dd><p>The device used to create the session from. If None, the session will
+be created from the first device available in getAvailableDevices.</p>
 </dd>
 </dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#lluvia.core.getAvailableDevices" title="lluvia.core.getAvailableDevices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAvailableDevices()</span></code></a></dt><dd><p>Returns the list of available devices.</p>
+<dt>session<span class="classifier">Session.</span></dt><dd><p>New session.</p>
 </dd>
 </dl>
-</div>
+<p>getAvailableDevices : Returns the list of available devices.</p>
 </dd></dl>
 
 

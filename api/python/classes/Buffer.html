@@ -103,17 +103,14 @@
 <dd><p>Copies the content of this buffer into output.</p>
 <p>If output is None, a new buffer is created in the same memory
 as this one and with the same usage flags.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>output</strong> (<em>Buffer. Defaults to None.</em>) – Buffer where the content of this buffer will be copied to.
+<dl class="simple">
+<dt>output<span class="classifier">Buffer. Defaults to None.</span></dt><dd><p>Buffer where the content of this buffer will be copied to.
 Its size must be equal as this buffer.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>output</strong> – If output parameter is None, returns a new Buffer object,
+</dl>
+<dl class="simple">
+<dt>output<span class="classifier">Buffer.</span></dt><dd><p>If output parameter is None, returns a new Buffer object,
 otherwise returns the same output object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Buffer.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -122,13 +119,15 @@ otherwise returns the same output object.</p>
 <dt class="sig sig-object py" id="lluvia.core.Buffer.fromHost">
 <span class="sig-name descname"><span class="pre">fromHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndarray</span> <span class="pre">input</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Buffer.fromHost" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of a Numpy array to this buffer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input</strong> (<em>numpy.ndarray.</em>) – Input array. Its size in bytes (input.nbytes) must be equal to
+<dl class="simple">
+<dt>input<span class="classifier">numpy.ndarray.</span></dt><dd><p>Input array. Its size in bytes (input.nbytes) must be equal to
 this buffer size.</p>
 </dd>
 </dl>
-<p>:raises ValueError : if the size of the input array in bytes is different: to this buffer size.</p>
+<dl class="simple">
+<dt>ValueError<span class="classifier">if the size of the input array in bytes is different</span></dt><dd><p>to this buffer size.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -155,27 +154,27 @@ this buffer size.</p>
 <dt class="sig sig-object py" id="lluvia.core.Buffer.toHost">
 <span class="sig-name descname"><span class="pre">toHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndarray</span> <span class="pre">output=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=np.uint8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Buffer.toHost" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of this buffer into a numpy host array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>output</strong> (<em>numpy.ndarray. Defaults to None.</em>) – Numpy array where the memory content of this buffer will be
+<dl class="simple">
+<dt>output<span class="classifier">numpy.ndarray. Defaults to None.</span></dt><dd><p>Numpy array where the memory content of this buffer will be
 copied to. If None, a new Numpy array will be created with the
-same size in bytes as this buffer.</p></li>
-<li><p><strong>dtype</strong> (<em>numpy.dtype. Defaults to numpy.uint8.</em>) – Data type of the returned array.</p></li>
-</ul>
+same size in bytes as this buffer.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>output</strong> – or the same output object otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>a new numpy array if input parameter output was None</p>
+<dt>dtype<span class="classifier">numpy.dtype. Defaults to numpy.uint8.</span></dt><dd><p>Data type of the returned array.</p>
 </dd>
 </dl>
-<p>:raises RuntimeError : if the buffer is not mappable to host-visible memory.: This might be caused by another object mapping the same memory
-    page as this one or because the memory this buffer was created from
-    is not mappable to host-visible memory, e.g., memories created with
-    ‘DeviceLocal’ flag.
-:raises ValueError : if output is different than None but its size in bytes: output.nbytes is different than this buffer’s size.</p>
+<dl class="simple">
+<dt>output<span class="classifier">a new numpy array if input parameter output was None</span></dt><dd><p>or the same output object otherwise.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>RuntimeError<span class="classifier">if the buffer is not mappable to host-visible memory.</span></dt><dd><p>This might be caused by another object mapping the same memory
+page as this one or because the memory this buffer was created from
+is not mappable to host-visible memory, e.g., memories created with
+‘DeviceLocal’ flag.</p>
+</dd>
+<dt>ValueError<span class="classifier">if output is different than None but its size in bytes</span></dt><dd><p>output.nbytes is different than this buffer’s size.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">

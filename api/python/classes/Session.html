@@ -97,45 +97,42 @@
 <span class="sig-name descname"><span class="pre">compileComputeNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shaderCode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">functionName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'main'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builderName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeDirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compileFlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['-Werror']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeGlslLibrary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.compileComputeNode" title="Permalink to this definition"></a></dt>
 <dd><p>Compiles a ComputeNode from GLSL shader code.</p>
 <p>This method assumes that glslc command is avialable in the system.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ports</strong> (<em>list of PortDescriptor.</em>) – List of port descriptors the compute node receives.</p></li>
-<li><p><strong>shaderCode</strong> (<em>file</em><em> or </em><em>str.</em>) – <p>If file, it must contain the GLSL code of the shader to compile.
+<dl>
+<dt>ports<span class="classifier">list of PortDescriptor.</span></dt><dd><p>List of port descriptors the compute node receives.</p>
+</dd>
+<dt>shaderCode<span class="classifier">file or str.</span></dt><dd><p>If file, it must contain the GLSL code of the shader to compile.
 The file is not closed during the execution of this method.</p>
 <p>If str,  it must be valid GLSL code. A temporal file is created and
 its path is passed to glslc for compilation.</p>
-</p></li>
-<li><p><strong>functionName</strong> (<em>str. Defaults to 'main'.</em>) – Function name whitin the shader the compute node will execute.</p></li>
-<li><p><strong>builderName</strong> (<em>str. Defaults to ''</em><em> (</em><em>empty string</em><em>)</em><em>.</em>) – Builder name associated to this node.</p></li>
-<li><p><strong>localSize</strong> (<em>list</em><em> or </em><em>tuple of length 3. Defaults to</em><em> (</em><em>1</em><em>, </em><em>1</em><em>, </em><em>1</em><em>)</em><em>.</em>) – Local group size for each XYZ dimension. Each value
-must be greater or equal to 1.</p></li>
-<li><p><strong>gridSize</strong> (<em>list</em><em> or </em><em>tuple of length 3. Defaults to</em><em> (</em><em>1</em><em>, </em><em>1</em><em>, </em><em>1</em><em>)</em><em>.</em>) – Grid size for each XYZ dimension. The grid size defines
+</dd>
+<dt>functionName<span class="classifier">str. Defaults to ‘main’.</span></dt><dd><p>Function name whitin the shader the compute node will execute.</p>
+</dd>
+<dt>builderName<span class="classifier">str. Defaults to ‘’ (empty string).</span></dt><dd><p>Builder name associated to this node.</p>
+</dd>
+<dt>localSize<span class="classifier">list or tuple of length 3. Defaults to (1, 1, 1).</span></dt><dd><p>Local group size for each XYZ dimension. Each value
+must be greater or equal to 1.</p>
+</dd>
+<dt>gridSize<span class="classifier">list or tuple of length 3. Defaults to (1, 1, 1).</span></dt><dd><p>Grid size for each XYZ dimension. The grid size defines
 the number of local groups in each dimension. Each value
-must be greater or equal to 1.</p></li>
-<li><p><strong>includeDirs</strong> (<em>list of strings. Defaults to None.</em>) – List of include directories to pass to glslc through -I flag.</p></li>
-<li><p><strong>compileFlags</strong> (<em>list of strings. Defaults to</em><em> [</em><em>'-Werror'</em><em>]</em><em>.</em>) – Extra compile flags to pass to glslc.</p></li>
-<li><p><strong>includeGlslLibrary</strong> (<em>bool defaults to True.</em>) – Whether or not the standard Lluvia GLSL library embedded in the
-Python package should be included (using -I).</p></li>
-</ul>
+must be greater or equal to 1.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>node</strong> – Compiled node.</p>
+<dt>includeDirs<span class="classifier">list of strings. Defaults to None.</span></dt><dd><p>List of include directories to pass to glslc through -I flag.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.ComputeNode.</p>
+<dt>compileFlags<span class="classifier">list of strings. Defaults to [‘-Werror’].</span></dt><dd><p>Extra compile flags to pass to glslc.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If the compilation fails.</p>
+<dt>includeGlslLibrary<span class="classifier">bool defaults to True.</span></dt><dd><p>Whether or not the standard Lluvia GLSL library embedded in the
+Python package should be included (using -I).</p>
 </dd>
 </dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#lluvia.core.Session.compileProgram" title="lluvia.core.Session.compileProgram"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compileProgram()</span></code></a></dt><dd><p>Compiles a Program from GLSL shader code.</p>
+<dt>node<span class="classifier">lluvia.ComputeNode.</span></dt><dd><p>Compiled node.</p>
 </dd>
 </dl>
-</div>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If the compilation fails.</p>
+</dd>
+</dl>
+<p>compileProgram : Compiles a Program from GLSL shader code.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -143,28 +140,26 @@ Python package should be included (using -I).</p></li>
 <span class="sig-name descname"><span class="pre">compileProgram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shaderCode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeDirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compileFlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['-Werror']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeGlslLibrary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.compileProgram" title="Permalink to this definition"></a></dt>
 <dd><p>Compiles a Program from GLSL shader code.</p>
 <p>This method assumes that glslc command is avialable in the system.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>shaderCode</strong> (<em>file</em><em> or </em><em>str.</em>) – <p>If file, it must contain the GLSL code of the shader to compile.
+<dl>
+<dt>shaderCode<span class="classifier">file or str.</span></dt><dd><p>If file, it must contain the GLSL code of the shader to compile.
 The file is not closed during the execution of this method.</p>
 <p>If str,  it must be valid GLSL code. A temporal file is created and
 its path is passed to glslc for compilation.</p>
-</p></li>
-<li><p><strong>includeDirs</strong> (<em>list of strings. Defaults to None.</em>) – List of include directories to pass to glslc through -I flag.</p></li>
-<li><p><strong>compileFlags</strong> (<em>list of strings. Defaults to</em><em> [</em><em>'-Werror'</em><em>]</em><em>.</em>) – Extra compile flags to pass to glslc.</p></li>
-<li><p><strong>includeGlslLibrary</strong> (<em>bool defaults to True.</em>) – Whether or not the standard Lluvia GLSL library embedded in the
-Python package should be included (using -I).</p></li>
-</ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>program</strong> – Compiled program.</p>
+<dt>includeDirs<span class="classifier">list of strings. Defaults to None.</span></dt><dd><p>List of include directories to pass to glslc through -I flag.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.Program.</p>
+<dt>compileFlags<span class="classifier">list of strings. Defaults to [‘-Werror’].</span></dt><dd><p>Extra compile flags to pass to glslc.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If the compilation fails.</p>
+<dt>includeGlslLibrary<span class="classifier">bool defaults to True.</span></dt><dd><p>Whether or not the standard Lluvia GLSL library embedded in the
+Python package should be included (using -I).</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>program<span class="classifier">lluvia.Program.</span></dt><dd><p>Compiled program.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If the compilation fails.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -176,9 +171,8 @@ Python package should be included (using -I).</p></li>
 <p>Command buffers are used to record commands to be executed
 by the device. Once the recording finishes, the command buffer
 can be sent for execution using the <cite>run</cite> method.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>RuntimeError</strong> – If the command buffer cannot be created.</p>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If the command buffer cannot be created.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -187,22 +181,16 @@ can be sent for execution using the <cite>run</cite> method.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.createComputeNode">
 <span class="sig-name descname"><span class="pre">createComputeNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.createComputeNode" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a ComputeNode from a given descriptor or builder name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>desc</strong> (<em>string</em><em> or </em><em>lluvia.ComputeNodeDescriptor</em>) – If string, denotes the builder name used to create the ComputeNodeDescriptor for this node.
+<dl class="simple">
+<dt>desc<span class="classifier">string or lluvia.ComputeNodeDescriptor</span></dt><dd><p>If string, denotes the builder name used to create the ComputeNodeDescriptor for this node.
 Otherwise, a valid lluvia.ComputeNodeDescriptor must be provided.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>node</strong></p>
+</dl>
+<p>node : lluvia.ComputeNode</p>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If desc is a string and the node builder is not found in the registry.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.ComputeNode</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>RuntimeError</strong> – If desc is a string and the node builder is not found in the registry.</p></li>
-<li><p><strong>ValueError</strong> – If desc type is not string nor ComputeNodeDescriptor.</p></li>
-</ul>
+<dt>ValueError</dt><dd><p>If desc type is not string nor ComputeNodeDescriptor.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -211,18 +199,16 @@ Otherwise, a valid lluvia.ComputeNodeDescriptor must be provided.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.createComputeNodeDescriptor">
 <span class="sig-name descname"><span class="pre">createComputeNodeDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">builderName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.createComputeNodeDescriptor" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a ComputeNodeDescriptor from its name in the registry.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>builderName</strong> (<em>string.</em>) – Name of the builder.</p>
+<dl class="simple">
+<dt>builderName<span class="classifier">string.</span></dt><dd><p>Name of the builder.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>desc</strong> – The descriptor</p>
+</dl>
+<dl class="simple">
+<dt>desc<span class="classifier">lluvia.ComputeNodeDescriptor.</span></dt><dd><p>The descriptor</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.ComputeNodeDescriptor.</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If builderName is not in the registry.</p>
+</dl>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If builderName is not in the registry.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -231,22 +217,16 @@ Otherwise, a valid lluvia.ComputeNodeDescriptor must be provided.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.createContainerNode">
 <span class="sig-name descname"><span class="pre">createContainerNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.createContainerNode" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a ComputeNode from a given descriptor or builder name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>desc</strong> (<em>string</em><em> or </em><em>lluvia.ContainerNodeDescriptor</em>) – If string, denotes the builder name used to create the ContainerNodeDescriptor for this node.
+<dl class="simple">
+<dt>desc<span class="classifier">string or lluvia.ContainerNodeDescriptor</span></dt><dd><p>If string, denotes the builder name used to create the ContainerNodeDescriptor for this node.
 Otherwise, a valid lluvia.ContainerNodeDescriptor must be provided.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>node</strong></p>
+</dl>
+<p>node : lluvia.ComputeNode</p>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If desc is a string and the node builder is not found in the registry.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.ComputeNode</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>RuntimeError</strong> – If desc is a string and the node builder is not found in the registry.</p></li>
-<li><p><strong>ValueError</strong> – If desc type is not string nor ContainerNodeDescriptor.</p></li>
-</ul>
+<dt>ValueError</dt><dd><p>If desc type is not string nor ContainerNodeDescriptor.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -255,18 +235,16 @@ Otherwise, a valid lluvia.ContainerNodeDescriptor must be provided.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.createContainerNodeDescriptor">
 <span class="sig-name descname"><span class="pre">createContainerNodeDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">builderName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.createContainerNodeDescriptor" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a ContainerNodeDescriptor from its name in the registry.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>builderName</strong> (<em>string.</em>) – Name of the builder.</p>
+<dl class="simple">
+<dt>builderName<span class="classifier">string.</span></dt><dd><p>Name of the builder.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>desc</strong> – The descriptor</p>
+</dl>
+<dl class="simple">
+<dt>desc<span class="classifier">lluvia.ContainerNodeDescriptor.</span></dt><dd><p>The descriptor</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.ContainerNodeDescriptor.</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If builderName is not in the registry.</p>
+</dl>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If builderName is not in the registry.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -275,12 +253,8 @@ Otherwise, a valid lluvia.ContainerNodeDescriptor must be provided.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.createDuration">
 <span class="sig-name descname"><span class="pre">createDuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.createDuration" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a Duration object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>d</strong> – A new Duration object.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>ll.Duration.</p>
+<dl class="simple">
+<dt>d<span class="classifier">ll.Duration.</span></dt><dd><p>A new Duration object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -313,51 +287,37 @@ with. The possible values are defined in lluvia.MemoryPropertyFlagBits:</p>
 <li><p>LazilyAllocated</p></li>
 </ul>
 <p>See <a class="reference external" href="https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits">https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits</a> for more information.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>flags</strong> (<em>string</em><em> or </em><em>list of strings. Defaults to 'DeviceLocal'</em>) – Flags to determine the type of memory to be created.
-Each flag should be one of the strings in
-lluvia.MemoryPropertyFlags.</p></li>
-<li><p><strong>pageSize</strong> (<em>uint64_t. Defaults to 32MB</em><em> (</em><em>33554432L</em><em>)</em><em>.</em>) – The size in bytes of each page the new memory object
-will allocate when there is no space for creating new objects.</p></li>
-<li><p><strong>exactFlagsMatch</strong> (<em>bool defaults to False.</em>) – Tells whether or not flags should match exactly one of
-the values in lluvia.Session.getSupportedMemoryFlags()
-or if it is enough that it contains at least the flags values.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>memory</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>a new lluvia.Memory object.</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#lluvia.core.Session.getSupportedMemoryPropertyFlags" title="lluvia.core.Session.getSupportedMemoryPropertyFlags"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getSupportedMemoryPropertyFlags()</span></code></a></dt><dd><p>Returns the supported memory property flags for creating memories in this session.</p>
+<dt>flags<span class="classifier">string or list of strings. Defaults to ‘DeviceLocal’</span></dt><dd><p>Flags to determine the type of memory to be created.
+Each flag should be one of the strings in
+lluvia.MemoryPropertyFlags.</p>
+</dd>
+<dt>pageSize<span class="classifier">uint64_t. Defaults to 32MB (33554432L).</span></dt><dd><p>The size in bytes of each page the new memory object
+will allocate when there is no space for creating new objects.</p>
+</dd>
+<dt>exactFlagsMatch<span class="classifier">bool defaults to False.</span></dt><dd><p>Tells whether or not flags should match exactly one of
+the values in lluvia.Session.getSupportedMemoryFlags()
+or if it is enough that it contains at least the flags values.</p>
 </dd>
 </dl>
-</div>
+<p>memory : a new lluvia.Memory object.</p>
+<dl class="simple">
+<dt>getSupportedMemoryPropertyFlags<span class="classifier">Returns the supported memory property</span></dt><dd><p>flags for creating memories in this session.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.Session.createProgram">
 <span class="sig-name descname"><span class="pre">createProgram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.createProgram" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a Program object reading the SPIR-V code from a given file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>string</em>) – path to the file where the SPIR-V code is stored.</p>
+<dl class="simple">
+<dt>path<span class="classifier">string</span></dt><dd><p>path to the file where the SPIR-V code is stored.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>program</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.Program</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>IOError</strong> – If there is any problem reading the file at the given path.</p>
+</dl>
+<p>program : lluvia.Program</p>
+<dl class="simple">
+<dt>IOError</dt><dd><p>If there is any problem reading the file at the given path.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -372,15 +332,12 @@ or if it is enough that it contains at least the flags values.</p></li>
 <span class="sig-name descname"><span class="pre">getGoodComputeLocalShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ComputeDimension</span> <span class="pre">dimensions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.getGoodComputeLocalShape" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the suggested local grid shape for compute nodes given the number of dimensions.</p>
 <p>The local shape depends on the underlying device used.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dimensions</strong> (<a class="reference internal" href="../enumerations/ComputeDimension.html#lluvia.core.ComputeDimension" title="lluvia.core.ComputeDimension"><em>ComputeDimension</em></a>) – The number of compute dimensions</p>
+<dl class="simple">
+<dt>dimensions<span class="classifier">ComputeDimension</span></dt><dd><p>The number of compute dimensions</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>localShape</strong> – The suggested local shape.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>3-tuple</p>
+</dl>
+<dl class="simple">
+<dt>localShape<span class="classifier">3-tuple</span></dt><dd><p>The suggested local shape.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -390,26 +347,15 @@ or if it is enough that it contains at least the flags values.</p></li>
 <span class="sig-name descname"><span class="pre">getHostMemory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.getHostMemory" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a memory object that is HOST_LOCAL and HOST_COHERENT. This memory can
 be used to create uniform buffers to pass to shaders.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>mem</strong></p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>ll.Memory</p>
-</dd>
-</dl>
+<p>mem : ll.Memory</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.Session.getNodeBuilderDescriptors">
 <span class="sig-name descname"><span class="pre">getNodeBuilderDescriptors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.getNodeBuilderDescriptors" title="Permalink to this definition"></a></dt>
 <dd><p>Gets the node builder descriptors currently registered.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>descriptors</strong> – The list of descriptors.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of NodeBuilderDescriptor</p>
+<dl class="simple">
+<dt>descriptors<span class="classifier">list of NodeBuilderDescriptor</span></dt><dd><p>The list of descriptors.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -418,18 +364,16 @@ be used to create uniform buffers to pass to shaders.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.getProgram">
 <span class="sig-name descname"><span class="pre">getProgram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.getProgram" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a program from the registry</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>string.</em>) – Name of the program.</p>
+<dl class="simple">
+<dt>name<span class="classifier">string.</span></dt><dd><p>Name of the program.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>program</strong> – The program.</p>
+</dl>
+<dl class="simple">
+<dt>program<span class="classifier">lluvia.Program</span></dt><dd><p>The program.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>lluvia.Program</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the program does not exists in the registry</p>
+</dl>
+<dl class="simple">
+<dt>KeyError</dt><dd><p>If the program does not exists in the registry</p>
 </dd>
 </dl>
 </dd></dl>
@@ -444,13 +388,9 @@ of Vulkan memory types available for the physical device
 this session was created from.</p>
 <p>See <a class="reference external" href="https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits">https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkMemoryPropertyFlagBits</a>
 for more information.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>supportedMemoryFlags</strong> – The supported memory property flags combinations supported
+<dl class="simple">
+<dt>supportedMemoryFlags<span class="classifier">list of string lists</span></dt><dd><p>The supported memory property flags combinations supported
 by this session.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of string lists</p>
 </dd>
 </dl>
 </dd></dl>
@@ -459,12 +399,8 @@ by this session.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.hasReceivedVulkanWarningMessages">
 <span class="sig-name descname"><span class="pre">hasReceivedVulkanWarningMessages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.hasReceivedVulkanWarningMessages" title="Permalink to this definition"></a></dt>
 <dd><p>Tells whether or not this session has triggered Vulkan warning messages</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>b</strong> – Whether or not Vulkan warning messages have been received</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
+<dl class="simple">
+<dt>b<span class="classifier">bool</span></dt><dd><p>Whether or not Vulkan warning messages have been received</p>
 </dd>
 </dl>
 </dd></dl>
@@ -473,15 +409,12 @@ by this session.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.help">
 <span class="sig-name descname"><span class="pre">help</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">builderName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.help" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the help string of a given node builder.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>builderName</strong> (<em>str</em>) – The builder name</p>
+<dl class="simple">
+<dt>builderName<span class="classifier">str</span></dt><dd><p>The builder name</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>helpString</strong> – The help string.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
+</dl>
+<dl class="simple">
+<dt>helpString<span class="classifier">str</span></dt><dd><p>The help string.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -490,13 +423,13 @@ by this session.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.loadLibrary">
 <span class="sig-name descname"><span class="pre">loadLibrary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.loadLibrary" title="Permalink to this definition"></a></dt>
 <dd><p>Loads a library made of SPIR-V shader code and Lua scripts.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<em>string</em>) – Path to the library file. The file must be a valid
+<dl class="simple">
+<dt>filename<span class="classifier">string</span></dt><dd><p>Path to the library file. The file must be a valid
 zip archive.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If there is problem reading the library file.</p>
+</dl>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If there is problem reading the library file.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -505,20 +438,15 @@ zip archive.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.run" title="Permalink to this definition"></a></dt>
 <dd><p>Runs a CommandBuffer or ComputeNode</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="CommandBuffer.html#lluvia.core.CommandBuffer" title="lluvia.core.CommandBuffer"><em>CommandBuffer</em></a><em> or </em><a class="reference internal" href="ComputeNode.html#lluvia.core.ComputeNode" title="lluvia.core.ComputeNode"><em>ComputeNode</em></a>) – </p>
-</dd>
-</dl>
+<p>obj : CommandBuffer or ComputeNode</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.Session.script">
 <span class="sig-name descname"><span class="pre">script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">code</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.script" title="Permalink to this definition"></a></dt>
 <dd><p>Runs a Lua script in the session’s interpreter</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>code</strong> (<em>string</em>) – The Lua code.</p>
+<dl class="simple">
+<dt>code<span class="classifier">string</span></dt><dd><p>The Lua code.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -527,9 +455,8 @@ zip archive.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.scriptFile">
 <span class="sig-name descname"><span class="pre">scriptFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.scriptFile" title="Permalink to this definition"></a></dt>
 <dd><p>Read and run a Lua script file in the session’s interpreter</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>code</strong> (<em>string</em>) – Path to the script file.</p>
+<dl class="simple">
+<dt>code<span class="classifier">string</span></dt><dd><p>Path to the script file.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -538,17 +465,16 @@ zip archive.</p>
 <dt class="sig sig-object py" id="lluvia.core.Session.setProgram">
 <span class="sig-name descname"><span class="pre">setProgram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">program</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Session.setProgram" title="Permalink to this definition"></a></dt>
 <dd><p>Sets a program into the registry with a given name</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>string</em>) – The name of the program in the registry.</p></li>
-<li><p><strong>program</strong> (<em>string</em><em> or </em><em>lluvia.Program.</em>) – If string, this parameter denotes a path to a SPIR-V file used to
-build the program. This is equivalent to call
-<cite>session.setProgram(name, session.createProgram(program))</cite></p></li>
-</ul>
+<dl class="simple">
+<dt>name<span class="classifier">string</span></dt><dd><p>The name of the program in the registry.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If program’s type is not string nor lluvia.Program</p>
+<dt>program<span class="classifier">string or lluvia.Program.</span></dt><dd><p>If string, this parameter denotes a path to a SPIR-V file used to
+build the program. This is equivalent to call
+<cite>session.setProgram(name, session.createProgram(program))</cite></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If program’s type is not string nor lluvia.Program</p>
 </dd>
 </dl>
 </dd></dl>

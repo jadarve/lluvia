@@ -88,18 +88,14 @@
 <span class="sig-prename descclassname"><span class="pre">lluvia.util.</span></span><span class="sig-name descname"><span class="pre">calculateGridSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imgShape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.util.calculateGridSize" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the grid size of a compute node given its local size
 and an image parameter.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>local</strong> (<em>3-int tuple.</em>) – local size of the compute node.</p></li>
-<li><p><strong>imgShape</strong> (<em>4-int tuple.</em>) – Image shape in (depth, height, width, channels) format.</p></li>
-</ul>
+<dl class="simple">
+<dt>local<span class="classifier">3-int tuple.</span></dt><dd><p>local size of the compute node.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>grid</strong> – (X, Y, Z) grid size.</p>
+<dt>imgShape<span class="classifier">4-int tuple.</span></dt><dd><p>Image shape in (depth, height, width, channels) format.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>3-int tuple.</p>
+</dl>
+<dl class="simple">
+<dt>grid<span class="classifier">3-int tuple.</span></dt><dd><p>(X, Y, Z) grid size.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -108,13 +104,12 @@ and an image parameter.</p>
 <dt class="sig sig-object py" id="lluvia.util.loadNodes">
 <span class="sig-prename descclassname"><span class="pre">lluvia.util.</span></span><span class="sig-name descname"><span class="pre">loadNodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glslPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">luaPath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.util.loadNodes" title="Permalink to this definition"></a></dt>
 <dd><p>Load GLSL and Lua nodes into a session.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>session</strong> (<em>Session.</em>) – Session where the nodes will be loaded.</p></li>
-<li><p><strong>glslPath</strong> (<em>str.</em>) – Path where the SPIR-V files can be found.</p></li>
-<li><p><strong>luaPath</strong> (<em>std.</em>) – Path where the Lua files can be found.</p></li>
-</ul>
+<dl class="simple">
+<dt>session<span class="classifier">Session.</span></dt><dd><p>Session where the nodes will be loaded.</p>
+</dd>
+<dt>glslPath<span class="classifier">str.</span></dt><dd><p>Path where the SPIR-V files can be found.</p>
+</dd>
+<dt>luaPath<span class="classifier">std.</span></dt><dd><p>Path where the Lua files can be found.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -123,15 +118,12 @@ and an image parameter.</p>
 <dt class="sig sig-object py" id="lluvia.util.readRGBA">
 <span class="sig-prename descclassname"><span class="pre">lluvia.util.</span></span><span class="sig-name descname"><span class="pre">readRGBA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.util.readRGBA" title="Permalink to this definition"></a></dt>
 <dd><p>Reads an image and converts it to RGBA.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str.</em>) – Image path.</p>
+<dl class="simple">
+<dt>path<span class="classifier">str.</span></dt><dd><p>Image path.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>RGBA</strong> – RGBA image.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray.</p>
+</dl>
+<dl class="simple">
+<dt>RGBA<span class="classifier">np.ndarray.</span></dt><dd><p>RGBA image.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -145,15 +137,12 @@ and an image parameter.</p>
 <li><p>mouse</p></li>
 <li><p>koala</p></li>
 </ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the image</p>
+<dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the image</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>RGBA</strong> – RGBA image</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray</p>
+</dl>
+<dl class="simple">
+<dt>RGBA<span class="classifier">np.ndarray</span></dt><dd><p>RGBA image</p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,3 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$dd/de8/classll_1_1ComputeNodeDescriptor.html" title="Class for describing a compute node node." alt="" coords="5,5,204,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,129,151,170"/>
+<area shape="rect" id="node2" href="$d8/d38/classll_1_1ComputeNode.html" title="Class representing compute nodes." alt="" coords="201,5,331,32"/>
+<area shape="rect" id="node3" href="$d5/d2d/classll_1_1ContainerNode.html" title=" " alt="" coords="199,56,333,83"/>
+<area shape="rect" id="node4" href="$dc/da6/classll_1_1Image.html" title="Objects to manage images." alt="" coords="227,259,305,285"/>
+<area shape="rect" id="node5" href="$d6/dfb/classll_1_1Memory.html" title="Class to manage allocation of objects into a specific type of memory." alt="" coords="220,107,312,133"/>
+<area shape="rect" id="node6" href="$d8/d31/classll_1_1Session.html" title="Class that contains all the state required to run compute operations on a compute device." alt="" coords="222,157,310,184"/>
+<area shape="rect" id="node7" href="$dc/ddb/classll_1_1vulkan_1_1Device.html" title=" " alt="" coords="199,208,333,235"/>
+<area shape="rect" id="node8" href="$d2/d71/classll_1_1Node.html" title=" " alt="" coords="42,31,114,57"/>
+<area shape="rect" id="node9" href="$d8/d72/classll_1_1Object.html" title="Base class for all types that can be used in computer shaders." alt="" coords="38,309,118,336"/>
+<area shape="rect" id="node10" href="$d6/d6b/classll_1_1Buffer.html" title="Objects to manage raw portions of allocated memory." alt="" coords="227,309,305,336"/>
+<area shape="rect" id="node11" href="$dd/dd3/classll_1_1ImageView.html" title="Represents portions of a ll::Image to be sent as parameter to a GLSL shader." alt="" coords="211,360,321,387"/>
 </map>

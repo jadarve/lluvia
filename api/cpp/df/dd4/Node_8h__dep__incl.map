@@ -1,10 +1,10 @@
-<map id="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/Node.h" name="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/Node.h">
-<area shape="rect" id="node1" title="Node class and related enums." alt="" coords="202,5,433,61"/>
-<area shape="rect" id="node2" href="$dd/dbf/ComputeNode_8h.html" title="ComputeNode class." alt="" coords="40,228,225,299"/>
-<area shape="rect" id="node3" href="$d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="301,347,486,403"/>
-<area shape="rect" id="node4" href="$d1/dab/ComputeNodeDescriptor_8h.html" title="ComputeNodeDescriptor class." alt="" coords="151,109,348,180"/>
-<area shape="rect" id="node5" href="$d6/d6c/ContainerNode_8h.html" title="ContainerNode class." alt="" coords="301,228,486,299"/>
-<area shape="rect" id="node6" href="$d1/d55/ContainerNodeDescriptor_8h.html" title="ContainerNodeDescriptor class." alt="" coords="424,109,625,180"/>
-<area shape="rect" id="node7" href="$d0/d03/NodeBuilderDescriptor_8h.html" title="NodeBuilderDescriptor class." alt="" coords="649,109,834,180"/>
-<area shape="rect" id="node8" href="$d0/d53/Session_8h.html" title="Session class." alt="" coords="562,235,772,291"/>
+<map id="/root/project/lluvia/cpp/core/include/lluvia/core/node/Node.h" name="/root/project/lluvia/cpp/core/include/lluvia/core/node/Node.h">
+<area shape="rect" id="node1" title="Node class and related enums." alt="" coords="213,5,385,61"/>
+<area shape="rect" id="node2" href="$dd/dbf/ComputeNode_8h.html" title="ComputeNode class." alt="" coords="44,213,242,269"/>
+<area shape="rect" id="node3" href="$d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="332,317,504,373"/>
+<area shape="rect" id="node4" href="$d1/dab/ComputeNodeDescriptor_8h.html" title="ComputeNodeDescriptor class." alt="" coords="81,109,346,165"/>
+<area shape="rect" id="node5" href="$d6/d6c/ContainerNode_8h.html" title="ContainerNode class." alt="" coords="316,213,519,269"/>
+<area shape="rect" id="node6" href="$d1/d55/ContainerNodeDescriptor_8h.html" title="ContainerNodeDescriptor class." alt="" coords="422,109,691,165"/>
+<area shape="rect" id="node7" href="$d0/d03/NodeBuilderDescriptor_8h.html" title="NodeBuilderDescriptor class." alt="" coords="716,109,968,165"/>
+<area shape="rect" id="node8" href="$d0/d53/Session_8h.html" title="Session class." alt="" coords="613,213,785,269"/>
 </map>

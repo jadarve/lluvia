@@ -1,8 +1,8 @@
-<map id="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/Parameter.h" name="/home/runner/work/lluvia/lluvia/lluvia/cpp/core/include/lluvia/core/node/Parameter.h">
-<area shape="rect" id="node1" title="Parameter class and related enums." alt="" coords="187,5,372,76"/>
-<area shape="rect" id="node2" href="$d1/dab/ComputeNodeDescriptor_8h.html" title="ComputeNodeDescriptor class." alt="" coords="45,124,242,195"/>
-<area shape="rect" id="node4" href="$d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="187,361,372,417"/>
-<area shape="rect" id="node5" href="$d1/d55/ContainerNodeDescriptor_8h.html" title="ContainerNodeDescriptor class." alt="" coords="317,124,519,195"/>
-<area shape="rect" id="node3" href="$dd/dbf/ComputeNode_8h.html" title="ComputeNode class." alt="" coords="5,243,191,313"/>
-<area shape="rect" id="node6" href="$d6/d6c/ContainerNode_8h.html" title="ContainerNode class." alt="" coords="368,243,553,313"/>
+<map id="/root/project/lluvia/cpp/core/include/lluvia/core/node/Parameter.h" name="/root/project/lluvia/cpp/core/include/lluvia/core/node/Parameter.h">
+<area shape="rect" id="node1" title="Parameter class and related enums." alt="" coords="223,5,395,61"/>
+<area shape="rect" id="node2" href="$d1/dab/ComputeNodeDescriptor_8h.html" title="ComputeNodeDescriptor class." alt="" coords="5,109,271,165"/>
+<area shape="rect" id="node4" href="$d5/dc4/core_8h.html" title="Lluvia single header for including core classes." alt="" coords="223,317,395,373"/>
+<area shape="rect" id="node5" href="$d1/d55/ContainerNodeDescriptor_8h.html" title="ContainerNodeDescriptor class." alt="" coords="346,109,615,165"/>
+<area shape="rect" id="node3" href="$dd/dbf/ComputeNode_8h.html" title="ComputeNode class." alt="" coords="23,213,221,269"/>
+<area shape="rect" id="node6" href="$d6/d6c/ContainerNode_8h.html" title="ContainerNode class." alt="" coords="397,213,599,269"/>
 </map>

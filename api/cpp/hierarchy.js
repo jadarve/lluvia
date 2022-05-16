@@ -6,7 +6,7 @@ var hierarchy =
     [ "ll::ContainerNodeDescriptor", "d7/da8/classll_1_1ContainerNodeDescriptor.html", null ],
     [ "ll::DeviceDescriptor", "dc/d56/structll_1_1DeviceDescriptor.html", null ],
     [ "ll::Duration", "db/dfd/classll_1_1Duration.html", null ],
-    [ "enable_shared_from_this", null, [
+    [ "std::enable_shared_from_this", null, [
       [ "ll::ComputeNode", "d8/d38/classll_1_1ComputeNode.html", null ],
       [ "ll::ContainerNode", "d5/d2d/classll_1_1ContainerNode.html", null ],
       [ "ll::Image", "dc/da6/classll_1_1Image.html", null ],

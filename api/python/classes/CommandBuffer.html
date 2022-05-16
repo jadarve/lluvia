@@ -102,21 +102,20 @@ the behaviour is undefined.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.changeImageLayout">
-<span class="sig-name descname"><span class="pre">changeImageLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newLayout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.changeImageLayout" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">changeImageLayout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.changeImageLayout" title="Permalink to this definition"></a></dt>
 <dd><p>Changes image layout.</p>
 <p>The actual change in image layout is performed when this command buffer
 is submitted to execution. However, calling <cite>image.getLayout()</cite>
 right after this call will return the new layout value.</p>
 <p>This is necessary to keep track of the current image layout of
 p image parameter after this call.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>img</strong> (<em>Image.</em>) – The image.</p></li>
-<li><p><strong>newLayout</strong> (<em>lluvia.ImageLayout.</em>) – <p>The new layout. Its value must be one of the values
+<dl>
+<dt>img<span class="classifier">Image.</span></dt><dd><p>The image.</p>
+</dd>
+<dt>newLayout<span class="classifier">lluvia.ImageLayout.</span></dt><dd><p>The new layout. Its value must be one of the values
 defined in lluvia.ImageLayout:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>Undefined</p></li>
 <li><p>General</p></li>
 <li><p>ShaderReadOnlyOptimal</p></li>
@@ -125,66 +124,58 @@ defined in lluvia.ImageLayout:</p>
 <li><p>Preinitialized</p></li>
 </ul>
 </div></blockquote>
-</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.clearImage">
-<span class="sig-name descname"><span class="pre">clearImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.clearImage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">clearImage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.clearImage" title="Permalink to this definition"></a></dt>
 <dd><p>Clears the pixels of the image to zero.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyBuffer">
-<span class="sig-name descname"><span class="pre">copyBuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyBuffer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copyBuffer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyBuffer" title="Permalink to this definition"></a></dt>
 <dd><p>Copies src buffer to dst.</p>
 <p>The parameters must satisfy <cite>dst.size &gt;= src.size</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> (<em>Buffer.</em>) – Source buffer.</p></li>
-<li><p><strong>dst</strong> (<em>Buffer.</em>) – Destination buffer.</p></li>
-</ul>
+<dl class="simple">
+<dt>src<span class="classifier">Buffer.</span></dt><dd><p>Source buffer.</p>
+</dd>
+<dt>dst<span class="classifier">Buffer.</span></dt><dd><p>Destination buffer.</p>
 </dd>
 </dl>
-<p>:raises RuntimeError : if dst.size &lt; src.size:</p>
+<p>RuntimeError : if dst.size &lt; src.size</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyBufferToImage">
-<span class="sig-name descname"><span class="pre">copyBufferToImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyBufferToImage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copyBufferToImage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyBufferToImage" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of src Buffer to dst Image</p>
 <p>No size check is currently being tested.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> (<em>Buffer.</em>) – Source Buffer.</p></li>
-<li><p><strong>dst</strong> (<em>Image.</em>) – Source Image.</p></li>
-</ul>
+<dl class="simple">
+<dt>src<span class="classifier">Buffer.</span></dt><dd><p>Source Buffer.</p>
+</dd>
+<dt>dst<span class="classifier">Image.</span></dt><dd><p>Source Image.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyImageToBuffer">
-<span class="sig-name descname"><span class="pre">copyImageToBuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyImageToBuffer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copyImageToBuffer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyImageToBuffer" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of src Image to dst Buffer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> (<em>Image.</em>) – Source image.</p></li>
-<li><p><strong>dst</strong> (<em>Buffer.</em>) – Destination buffer.</p></li>
-</ul>
+<dl class="simple">
+<dt>src<span class="classifier">Image.</span></dt><dd><p>Source image.</p>
+</dd>
+<dt>dst<span class="classifier">Buffer.</span></dt><dd><p>Destination buffer.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.copyImageToImage">
-<span class="sig-name descname"><span class="pre">copyImageToImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyImageToImage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copyImageToImage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.copyImageToImage" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of src Image to dst Image.</p>
 <p>The image parameters must be in the following layouts:</p>
 <ul class="simple">
@@ -194,34 +185,30 @@ defined in lluvia.ImageLayout:</p>
 <p>This method does not check if the images are in the correct
 layout. The results are undefined if the images are in
 any other layout.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> (<em>Image.</em>) – Source image.</p></li>
-<li><p><strong>dst</strong> (<em>Image.</em>) – Destination buffer.</p></li>
-</ul>
+<dl class="simple">
+<dt>src<span class="classifier">Image.</span></dt><dd><p>Source image.</p>
+</dd>
+<dt>dst<span class="classifier">Image.</span></dt><dd><p>Destination buffer.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.durationEnd">
-<span class="sig-name descname"><span class="pre">durationEnd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.durationEnd" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">durationEnd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.durationEnd" title="Permalink to this definition"></a></dt>
 <dd><p>Stops recording the elapsed time between two points.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> (<em>Duration.</em>) – The duration object.</p>
+<dl class="simple">
+<dt>d<span class="classifier">Duration.</span></dt><dd><p>The duration object.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.durationStart">
-<span class="sig-name descname"><span class="pre">durationStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.durationStart" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">durationStart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.durationStart" title="Permalink to this definition"></a></dt>
 <dd><p>Starts recording the elapsed time between two points.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> (<em>Duration.</em>) – The duration object.</p>
+<dl class="simple">
+<dt>d<span class="classifier">Duration.</span></dt><dd><p>The duration object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -243,11 +230,10 @@ behavior.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.CommandBuffer.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.run" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.CommandBuffer.run" title="Permalink to this definition"></a></dt>
 <dd><p>Records running a compute or container node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>node</strong> (<a class="reference internal" href="ComputeNode.html#lluvia.core.ComputeNode" title="lluvia.core.ComputeNode"><em>ComputeNode</em></a><em> or </em><em>ContainerNode.</em>) – The node to run.</p>
+<dl class="simple">
+<dt>node<span class="classifier">ComputeNode or ContainerNode.</span></dt><dd><p>The node to run.</p>
 </dd>
 </dl>
 </dd></dl>
