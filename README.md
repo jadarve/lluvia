@@ -2,7 +2,9 @@
 
 **[lluvia.ai](https://lluvia.ai)**
 
-![Linux](https://github.com/jadarve/lluvia/workflows/linux/badge.svg) ![Windows](https://github.com/jadarve/lluvia/workflows/windows/badge.svg) [![Documentation Status](https://readthedocs.org/projects/lluvia/badge/?version=latest)](https://lluvia.io/en/latest/?badge=latest)
+<!-- ![Linux](https://github.com/jadarve/lluvia/workflows/linux/badge.svg) ![Windows](https://github.com/jadarve/lluvia/workflows/windows/badge.svg) [![Documentation Status](https://readthedocs.org/projects/lluvia/badge/?version=latest)](https://lluvia.io/en/latest/?badge=latest) -->
+
+[![CircleCI](https://circleci.com/gh/jadarve/lluvia/tree/master.svg?style=svg)](https://circleci.com/gh/jadarve/lluvia/tree/master)
 
 Lluvia is a computer vision engined designed for real-time applications. It uses the Vulkan API to access the GPU and dispatch computations. Users can describe computations as a compute pipeline where nodes are compute shaders running on the GPU.
 
