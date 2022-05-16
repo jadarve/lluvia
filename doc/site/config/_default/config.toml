@@ -274,4 +274,4 @@ diagramPadding = 6
     disable = false
   [[module.imports]]
     path = "github.com/google/docsy/dependencies"
-    disable = false    
+    disable = false
