@@ -71,7 +71,7 @@ pyx_library (
     ],
     deps = [
         "//lluvia/cpp/core:core_cc_library",
-        "@lua//:lua_cc_library",
+        "@rules_lua//cc:lua_cc_library",
     ] + select({
         "@lluvia//:windows": [
             "@python_windows//:python3-lib",

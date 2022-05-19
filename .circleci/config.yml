@@ -13,7 +13,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Bazel test
+          name: Build Cpp core
+          command: bazel build //lluvia/cpp/core:core_cc_library
+      - run:
+          name: Test
           command: bazel test --test_output=errors //...
       # - store_test_results:
       #     path: bazel-testlogs

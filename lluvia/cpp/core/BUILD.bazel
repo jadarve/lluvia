@@ -66,16 +66,10 @@ cc_library (
     }),
     deps = [
         "@sol//:sol_cc_library",
-        "@lua//:lua_cc_library",
+        "@rules_lua//cc:lua_cc_library",
         "@miniz//:miniz_cc_library",
-        "@vulkan//:vulkan_cc_library",
-    ] + select({
-        # TODO: I should add @vulkan_linux//:vulkan_cc_library for consistency
-        "@lluvia//:windows": [
-            "@vulkan_windows//:vulkan_cc_library",
-        ],
-        "//conditions:default": [],
-    }),
+        "@rules_vulkan//vulkan:vulkan_cc_library",
+    ],
     visibility = ["//visibility:public"]
 )
 
