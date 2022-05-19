@@ -14,7 +14,7 @@ cc_library(
         ],
     }),
     deps = [
-        "@lua//:lua_cc_library",
+        "@rules_lua//cc:lua_cc_library",
     ],
     visibility = ["//visibility:public"],
 )
