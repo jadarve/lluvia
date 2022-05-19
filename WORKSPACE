@@ -79,10 +79,14 @@ http_archive(
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
 
+###########################################################
+# Vulkan rules
+###########################################################
+
 git_repository(
     name = "rules_vulkan",
     remote = "https://github.com/jadarve/rules_vulkan.git",
-    tag = "v0.0.5"
+    tag = "v0.0.6"
 )
 
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")

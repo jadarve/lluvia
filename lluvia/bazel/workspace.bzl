@@ -30,17 +30,6 @@ def lluvia_workspace():
 
     maybe (
         repo_rule = http_archive,
-        name = "vulkan",
-        urls = [
-            "https://github.com/KhronosGroup/Vulkan-Headers/archive/v1.2.162.zip",
-        ],
-        sha256 = "5f4e1dd009f401d3936b5f3440c7f0d9b7ca40f217f3999e90e55cba1d397de3",
-        strip_prefix = "Vulkan-Headers-1.2.162",
-        build_file = "@lluvia//:external/vulkan.bzl"
-    )
-
-    maybe (
-        repo_rule = http_archive,
         name = "sol",
         urls = [
             "https://github.com/ThePhD/sol2/archive/v3.2.2.tar.gz"
