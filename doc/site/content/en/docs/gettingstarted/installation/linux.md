@@ -39,6 +39,12 @@ weight: 1
     vulkaninfo
     ```
 
+* Python3 dependencies
+
+    ```bash
+    sudo apt install python3-pip
+    ```
+
 
 ## Build C++ Libraries
 
