@@ -7,27 +7,6 @@ load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
 
 ll_node(
-    name = "ImageModel",
-    builder = "ImageModel.lua",
-    shader = "ImageModel.comp",
-    visibility = ["//visibility:public"],
-    deps = [
-        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
-    ],
-)
-
-py_test(
-    name = "ImageModel_test",
-    srcs = ["ImageModel_test.py"],
-    data = [
-        ":ImageModel_runfiles",
-        "//lluvia/resources:resources"
-    ],
-    deps = PY_TEST_DEPS,
-    legacy_create_init = False
-)
-
-ll_node(
     name = "FlowPredictPayloadX",
     builder = "FlowPredictPayloadX.lua",
     shader = "FlowPredictPayloadX.comp",
@@ -219,7 +198,7 @@ py_test(
         ":FlowPredictY_runfiles",
         ":FlowUpdate_runfiles",
         ":FlowSmooth_runfiles",
-        ":ImageModel_runfiles",
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/common:ImageModel_runfiles",
     ],
     deps = PY_TEST_DEPS,
     legacy_create_init = False
@@ -241,7 +220,7 @@ py_test(
         ":FlowPredictPayloadY_runfiles",
         ":FlowUpdateDelta_runfiles",
         ":FlowSmooth_runfiles",
-        ":ImageModel_runfiles",
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/common:ImageModel_runfiles",
     ],
     deps = PY_TEST_DEPS,
     legacy_create_init = False
@@ -269,7 +248,7 @@ py_test(
         ":FlowPredictPayloadY_runfiles",
         ":FlowUpdateDelta_runfiles",
         ":FlowSmooth_runfiles",
-        ":ImageModel_runfiles",
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/common:ImageModel_runfiles",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImagePyramid_r8ui_runfiles",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleX_r8ui_runfiles",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleY_r8ui_runfiles",

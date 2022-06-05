@@ -1,6 +1,6 @@
 local builder = ll.class(ll.ComputeNodeBuilder)
 
-builder.name = 'lluvia/opticalflow/flowfilter/ImageModel'
+builder.name = 'lluvia/opticalflow/common/ImageModel'
 builder.doc = [[
 Computes the image model from an in_gray image.
 

@@ -33,9 +33,9 @@ def runTest(precision, dtype, channelType):
                      programName='lluvia/opticalflow/flowfilter/FlowSmooth.comp'
                      )
     ll_test.loadNode(session,
-                     builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/ImageModel.lua',
-                     programPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/ImageModel.comp.spv',
-                     programName='lluvia/opticalflow/flowfilter/ImageModel.comp'
+                     builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/common/ImageModel.lua',
+                     programPath='lluvia/lluvia/nodes/lluvia/opticalflow/common/ImageModel.comp.spv',
+                     programName='lluvia/opticalflow/common/ImageModel.comp'
                      )
     ll_test.loadNode(session,
                      builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/FlowFilterDelta.lua')

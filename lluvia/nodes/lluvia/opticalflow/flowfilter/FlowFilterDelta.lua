@@ -105,7 +105,7 @@ function builder.onNodeInit(node)
         ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Linear, true, true))
 
 
-    local imageModel = ll.createComputeNode('lluvia/opticalflow/flowfilter/ImageModel')
+    local imageModel = ll.createComputeNode('lluvia/opticalflow/common/ImageModel')
     imageModel:setParameter('float_precision', float_precision)
     imageModel:bind('in_gray', in_gray)
     imageModel:init()

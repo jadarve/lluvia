@@ -9,9 +9,13 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/color:HSVA2RGBA",
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2Gray",
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2HSVA",
+
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleX_r8ui",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleY_r8ui",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImagePyramid_r8ui",
+
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/common:ImageModel",
+
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowFilter",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowFilterDelta",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowFilterSimple",
@@ -24,7 +28,7 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowSmooth",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdate",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdateDelta",
-        "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:ImageModel",
+        
         "@lluvia//lluvia/nodes/lluvia/viz:Flow2RGBA",
     ],
     visibility = ["//visibility:public"]
