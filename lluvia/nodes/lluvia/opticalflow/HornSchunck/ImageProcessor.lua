@@ -9,7 +9,7 @@ The layout of the `out_image_params` vector is as follows:
 * `out_image_params.xy`: The X and Y gradient components of in_gray.
     The values are normalized to the range [-1, 1]
 * `out_image_params.z`: The time difference (in_gray - in_gray_old)
-* `out_image_params.w`:
+* `out_image_params.w`: TODO
 
 Parameters
 ----------

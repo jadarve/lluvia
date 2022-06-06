@@ -25,3 +25,24 @@ py_test(
     deps = PY_TEST_DEPS,
     legacy_create_init = False
 )
+
+ll_node(
+    name = "NumericIteration",
+    builder = "NumericIteration.lua",
+    shader = "NumericIteration.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "NumericIteration_test",
+    srcs = ["NumericIteration_test.py"],
+    data = [
+        ":NumericIteration_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
