@@ -1,0 +1,27 @@
+"""
+"""
+
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
+ll_node(
+    name = "ImageProcessor",
+    builder = "ImageProcessor.lua",
+    shader = "ImageProcessor.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ImageProcessor_test",
+    srcs = ["ImageProcessor_test.py"],
+    data = [
+        ":ImageProcessor_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
