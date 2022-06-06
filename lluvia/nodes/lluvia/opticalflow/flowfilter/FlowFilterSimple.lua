@@ -84,7 +84,7 @@ function builder.onNodeInit(node)
 
     ll.logd(node.descriptor.builderName, string.format('onNodeInit: input shape: [%d, %d]', width, height))
 
-    local imageModel = ll.createComputeNode('lluvia/opticalflow/common/ImageModel')
+    local imageModel = ll.createComputeNode('lluvia/opticalflow/flowfilter/ImageModel')
     imageModel:setParameter('float_precision', float_precision)
     imageModel:bind('in_gray', in_gray)
     imageModel:init()

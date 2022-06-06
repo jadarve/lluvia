@@ -7,13 +7,13 @@ import lluvia_test as ll_test
 
 def runTest(precision, channelType):
 
-    nodeName = 'lluvia/opticalflow/common/ImageModel'
+    nodeName = 'lluvia/opticalflow/flowfilter/ImageModel'
 
     session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     ll_test.loadNode(session,
-                     builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/common/ImageModel.lua',
-                     programPath='lluvia/lluvia/nodes/lluvia/opticalflow/common/ImageModel.comp.spv',
-                     programName='lluvia/opticalflow/common/ImageModel.comp'
+                     builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/ImageModel.lua',
+                     programPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/ImageModel.comp.spv',
+                     programName='lluvia/opticalflow/flowfilter/ImageModel.comp'
                      )
 
     node = session.createComputeNode(nodeName)

@@ -40,9 +40,9 @@ def loadNodes(session):
                      programName='lluvia/opticalflow/flowfilter/FlowSmooth.comp'
                      )
     ll_test.loadNode(session,
-                     builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/common/ImageModel.lua',
-                     programPath='lluvia/lluvia/nodes/lluvia/opticalflow/common/ImageModel.comp.spv',
-                     programName='lluvia/opticalflow/common/ImageModel.comp'
+                     builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/ImageModel.lua',
+                     programPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/ImageModel.comp.spv',
+                     programName='lluvia/opticalflow/flowfilter/ImageModel.comp'
                      )
     ll_test.loadNode(session,
                      builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/flowfilter/FlowFilterSimple.lua')
