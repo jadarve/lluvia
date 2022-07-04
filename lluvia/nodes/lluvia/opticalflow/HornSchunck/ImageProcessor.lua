@@ -69,6 +69,7 @@ function builder.onNodeInit(node)
     ll.logd(node.descriptor.builderName, 'onNodeInit')
 
     local in_gray = node:getPort('in_gray')
+    local in_gray_old = node:getPort('in_gray_old')
 
     local alpha_square = node:getParameter('alpha_square')
     local pushConstants = ll.PushConstants.new()
@@ -82,7 +83,7 @@ function builder.onNodeInit(node)
     local width  = in_gray.width
     local memory = in_gray.memory
 
-    local outGrayImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, outChannelType)
+    -- local outGrayImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, outChannelType)
     local outImageParamsImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C4, outChannelType)
 
     -- normalizedCoordinates : false
@@ -90,19 +91,19 @@ function builder.onNodeInit(node)
     local imgViewDesc = ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false)
 
     -- memory allocation
-    local out_gray = memory:createImageView(outGrayImgDesc, imgViewDesc)
+    -- local out_gray = memory:createImageView(outGrayImgDesc, imgViewDesc)
     local out_image_params = memory:createImageView(outImageParamsImgDesc, imgViewDesc)
 
     -- need to change image layout before binding
-    out_gray:changeImageLayout(ll.ImageLayout.General)
+    -- out_gray:changeImageLayout(ll.ImageLayout.General)
     out_image_params:changeImageLayout(ll.ImageLayout.General)
 
-    node:bind('out_gray', out_gray)
+    node:bind('out_gray', in_gray_old)
     node:bind('out_image_params', out_image_params)
 
     node.pushConstants = pushConstants
 
-    node:configureGridShape(ll.vec3ui.new(out_gray.width, out_gray.height, 1))
+    node:configureGridShape(ll.vec3ui.new(in_gray.width, in_gray.height, 1))
 
     ll.logd(node.descriptor.builderName, 'onNodeInit: finish')
 end

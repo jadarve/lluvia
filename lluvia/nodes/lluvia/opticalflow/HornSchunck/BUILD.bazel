@@ -46,3 +46,25 @@ py_test(
     deps = PY_TEST_DEPS,
     legacy_create_init = False
 )
+
+ll_node(
+    name = "HornSchunck",
+    builder = "HornSchunck.lua",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "HornSchunck_test",
+    srcs = ["HornSchunck_test.py"],
+    data = [
+        ":HornSchunck_runfiles",
+        ":ImageProcessor_runfiles",
+        ":NumericIteration_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)

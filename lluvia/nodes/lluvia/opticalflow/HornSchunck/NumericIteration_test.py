@@ -21,19 +21,13 @@ def runTest(dtype, channelType):
     memory = session.createMemory(flags=[ll.MemoryPropertyFlagBits.DeviceLocal], pageSize=0)
 
     in_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=dtype))
+    out_flow = memory.createImageViewFromHost(np.zeros((480, 640, 2), dtype=dtype))
     in_image_params = memory.createImageViewFromHost(np.zeros((480, 640, 4), dtype=dtype))
 
     node.bind('in_flow', in_flow)
+    node.bind('out_flow', out_flow)
     node.bind('in_image_params', in_image_params)
     node.init()
-
-    out_flow = node.getPort('out_flow')
-    assert(out_flow is not None)
-    assert(out_flow.width == in_flow.width)
-    assert(out_flow.height == in_flow.height)
-    assert(out_flow.depth == in_flow.depth)
-    assert(out_flow.channelType == channelType)
-    assert(out_flow.channels == 2)
 
     session.run(node)
 

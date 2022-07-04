@@ -33,38 +33,39 @@ void main() {
     const bool bottomBorder = coords.y == imgSize.y -1;
 
     // central pixel in the 3x3 window
-    const uint img_11 = imageLoad(in_gray, coords).r;
+    const float img_11 = imageLoad(in_gray, coords).r / 255.0;
 
     // row 0
-    const uint img_00 = leftBorder || topBorder?     img_11 : imageLoad(in_gray, coords + ivec2(-1, -1)).r;
-    const uint img_01 = topBorder?                   img_11 : imageLoad(in_gray, coords + ivec2( 0, -1)).r;
-    const uint img_02 = rightBorder || topBorder?    img_11 : imageLoad(in_gray, coords + ivec2(+1, -1)).r;
+    const float img_00 = leftBorder || topBorder?     img_11 : imageLoad(in_gray, coords + ivec2(-1, -1)).r / 255.0;
+    const float img_01 = topBorder?                   img_11 : imageLoad(in_gray, coords + ivec2( 0, -1)).r / 255.0;
+    const float img_02 = rightBorder || topBorder?    img_11 : imageLoad(in_gray, coords + ivec2(+1, -1)).r / 255.0;
 
     // row 1
-    const uint img_10 = leftBorder?                  img_11 : imageLoad(in_gray, coords + ivec2(-1,  0)).r;
-    const uint img_12 = rightBorder?                 img_11 : imageLoad(in_gray, coords + ivec2(+1,  0)).r;
+    const float img_10 = leftBorder?                  img_11 : imageLoad(in_gray, coords + ivec2(-1,  0)).r / 255.0;
+    const float img_12 = rightBorder?                 img_11 : imageLoad(in_gray, coords + ivec2(+1,  0)).r / 255.0;
 
     // row 2
-    const uint img_20 = leftBorder || bottomBorder?  img_11 : imageLoad(in_gray, coords + ivec2(-1, +1)).r;
-    const uint img_21 = bottomBorder?                img_11 : imageLoad(in_gray, coords + ivec2( 0, +1)).r;
-    const uint img_22 = rightBorder || bottomBorder? img_11 : imageLoad(in_gray, coords + ivec2(+1, +1)).r;
+    const float img_20 = leftBorder || bottomBorder?  img_11 : imageLoad(in_gray, coords + ivec2(-1, +1)).r / 255.0;
+    const float img_21 = bottomBorder?                img_11 : imageLoad(in_gray, coords + ivec2( 0, +1)).r / 255.0;
+    const float img_22 = rightBorder || bottomBorder? img_11 : imageLoad(in_gray, coords + ivec2(+1, +1)).r / 255.0;
 
+    const float imgGrayOld = imageLoad(in_gray_old, coords).r;
 
     ///////////////////////////////////////////////////////
     // Normalized image gradient and smoothed output
     ///////////////////////////////////////////////////////
 
     // gradient values are normalized to [-1, 1]
-    const float grad_x = ( (0.25*(img_02 + img_22) + 0.5*img_12) - (0.25*(img_00 + img_20) + 0.5*img_10) ) / 255;
-    const float grad_y = ( (0.25*(img_20 + img_22) + 0.5*img_21) - (0.25*(img_00 + img_02) + 0.5*img_01) ) / 255;
+    const float grad_x = ( (0.25*(img_02 + img_22) + 0.5*img_12) - (0.25*(img_00 + img_20) + 0.5*img_10) );
+    const float grad_y = ( (0.25*(img_20 + img_22) + 0.5*img_21) - (0.25*(img_00 + img_02) + 0.5*img_01) );
 
     // filtered image is normalized to [0, 1]
     const float imgFiltered = ( 0.0625*(img_00 + img_02 + img_20 + img_22)
                             + 0.125*(img_01 + img_12 + img_21 + img_10)
-                            + 0.25*img_11 ) / 255;
+                            + 0.25*img_11 );
 
     // Temporal difference
-    const float imgTimeDifference = imgFiltered - imageLoad(in_gray_old, coords).x;
+    const float imgTimeDifference = imgFiltered - imgGrayOld;
 
     // Regularization
     const float regularization = 1.0 / (alpha_square + grad_x*grad_x + grad_y*grad_y);

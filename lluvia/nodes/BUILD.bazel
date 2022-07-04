@@ -25,6 +25,7 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdate",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdateDelta",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:ImageModel",
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:HornSchunck",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:ImageProcessor",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:NumericIteration",
         "@lluvia//lluvia/nodes/lluvia/viz:Flow2RGBA",
