@@ -114,6 +114,7 @@ cdef extern from 'lluvia/core/image/Image.h' namespace 'll':
         shared_ptr[_ImageView] createImageView(const _ImageViewDescriptor& descriptor) except +
 
         void clear() except +
+        void copyTo(_Image&) except +
 
 
 cdef extern from 'lluvia/core/image/ImageViewDescriptor.h' namespace 'll':
@@ -174,6 +175,7 @@ cdef extern from 'lluvia/core/image/ImageView.h' namespace 'll':
         uint32_t getDepth()              const
 
         void clear() except +
+        void copyTo(_ImageView&) except +
 
 cpdef enum ChannelType:
     Uint8   = <uint32_t> _ChannelTypeBits_Uint8

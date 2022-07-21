@@ -96,7 +96,7 @@ def test_fromAndToHost():
     devImg = mem.createImage(imgRGBA.shape, channelType=ll.ChannelType.Uint8)
     assert(devImg is not None)
 
-    devImg.toHost(imgRGBA)
+    devImg.fromHost(imgRGBA)
 
     hostImg = devImg.toHost()
     assert(hostImg.shape == imgRGBA.shape)
@@ -133,6 +133,66 @@ def test_clear():
     assert((hostImg[:] == 0).all())
 
     assert(not session.hasReceivedVulkanWarningMessages())
+
+
+def test_copyImageToImage():
+
+    import lluvia.util as ll_util
+
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
+    mem = session.createMemory()
+
+    imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
+
+    devImg = mem.createImage(imgRGBA.shape, channelType=ll.ChannelType.Uint8)
+    assert(devImg is not None)
+
+    # copy pixel content to device image
+    devImg.fromHost(imgRGBA)
+
+    # image copy allocated with undefined memory content
+    devImgCopy = mem.createImage(imgRGBA.shape, channelType=ll.ChannelType.Uint8)
+
+    devImg.copyTo(devImgCopy)
+
+    hostImg = devImg.toHost()
+    hostImgCopy = devImgCopy.toHost()
+
+    # pixel-wise check
+    assert((hostImg[:] == hostImgCopy[:]).all())
+
+    assert(not session.hasReceivedVulkanWarningMessages())
+
+
+def test_copyImageToImageView():
+
+    import lluvia.util as ll_util
+
+    session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
+    mem = session.createMemory()
+
+    imgRGBA = ll_util.readRGBA('lluvia/resources/mouse.jpg')
+
+    devImg = mem.createImage(imgRGBA.shape, channelType=ll.ChannelType.Uint8)
+    assert(devImg is not None)
+
+    # copy pixel content to device image
+    devImg.fromHost(imgRGBA)
+
+    # image copy allocated with undefined memory content
+    devImgCopy = mem.createImage(imgRGBA.shape, channelType=ll.ChannelType.Uint8)
+    devImgViewCopy = devImgCopy.createImageView()
+
+    devImg.copyTo(devImgViewCopy)
+
+    hostImg = devImg.toHost()
+    hostImgViewCopy = devImgViewCopy.toHost()
+
+    # pixel-wise check
+    assert((hostImg[:] == hostImgViewCopy[:]).all())
+
+    assert(not session.hasReceivedVulkanWarningMessages())
+
 
 if __name__ == "__main__":
 

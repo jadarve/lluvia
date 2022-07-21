@@ -230,6 +230,7 @@ void registerTypes(sol::table& lib) {
         "usageFlags", sol::property(&ll::Image::getUsageFlagsUnsafe),
         "changeImageLayout", &ll::Image::changeImageLayout,
         "clear", &ll::Image::clear,
+        "copyTo", &ll::Image::copyTo,
         "createImageView", &ll::Image::createImageView
         );
 
@@ -252,7 +253,8 @@ void registerTypes(sol::table& lib) {
         "tiling", sol::property(&ll::ImageView::getTiling),
         "usageFlags", sol::property(&ll::ImageView::getUsageFlagsUnsafe),
         "changeImageLayout", &ll::ImageView::changeImageLayout,
-        "clear", &ll::ImageView::clear
+        "clear", &ll::ImageView::clear,
+        "copyTo", &ll::ImageView::copyTo
         );
 
 

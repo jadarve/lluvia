@@ -140,4 +140,22 @@ void Image::clear() {
     m_device->run(*cmdBuffer);
 }
 
+void Image::copyTo(ll::Image& dst) {
+
+    const auto srcCurrentLayout = getLayout();
+    const auto dstCurrentLayout = dst.getLayout();
+
+    auto cmdBuffer = m_device->createCommandBuffer();
+
+    cmdBuffer->begin();
+    cmdBuffer->changeImageLayout(*this, ll::ImageLayout::TransferSrcOptimal);
+    cmdBuffer->changeImageLayout(dst, ll::ImageLayout::TransferDstOptimal);
+    cmdBuffer->copyImageToImage(*this, dst);
+    cmdBuffer->changeImageLayout(*this, srcCurrentLayout);
+    cmdBuffer->changeImageLayout(dst, dstCurrentLayout);
+    cmdBuffer->end();
+    
+    m_device->run(*cmdBuffer);
+}
+
 } // namespace ll

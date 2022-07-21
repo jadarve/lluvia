@@ -148,4 +148,8 @@ void ImageView::clear() {
     m_image->clear();
 }
 
+void ImageView::copyTo(ll::ImageView& dst) {
+    m_image->copyTo(*dst.m_image);
+}
+
 } // namespace ll
