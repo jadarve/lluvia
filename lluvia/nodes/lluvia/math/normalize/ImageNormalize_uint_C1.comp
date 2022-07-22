@@ -1,0 +1,41 @@
+/**
+ImageNormalize_uint_C1.comp
+
+Parameters
+----------
+in_image_uint : r32ui uimage2D.
+    input image.
+
+out_image_float : r32f image2D.
+    output image normalized.
+*/
+
+#version 450
+
+#include <lluvia/core.glsl>
+#include <lluvia/core/color.glsl>
+
+layout(binding = 0, r32ui) uniform uimage2D in_image_uint;
+layout(binding = 1, r32f)  uniform image2D out_image_float;
+
+layout(push_constant) uniform const_0 {
+    float max_value;
+} params;
+
+void main() {
+
+    const float max_value = params.max_value;
+
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
+    const ivec2 imgSize = imageSize(out_image_float);
+
+    if (coords.x > imgSize.x || coords.y > imgSize.y) {
+        return;
+    }
+
+    const float in_value = imageLoad(in_image_uint, coords).r;
+
+    const float out_value = max_value > 0.0? in_value / max_value : in_value;
+
+    imageStore(out_image_float, coords, vec4(out_value));
+}

@@ -15,7 +15,7 @@ max_flow : float. Defaults to 1.0
 Inputs
 ------
 in_gray : ImageView
-    {r16g, r32f} image. The input gray-scale image at current time step.
+    {r16f, r32f} image. The input gray-scale image at current time step.
 
 in_gradient : ImageView
     {rg16f, rg32f} image. The input gray-scale image gradient at current time step.
@@ -26,7 +26,7 @@ in_flow : Imageview
 Outputs
 -------
 out_gray : ImageView
-    {r16g, r32f} image. The image estimate for the next time step. It is a memory copy
+    {r16f, r32f} image. The image estimate for the next time step. It is a memory copy
     of in_gray.
 
 out_flow : ImageView
