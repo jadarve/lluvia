@@ -20,7 +20,11 @@ def runTest(precision, channelType):
                      programPath='lluvia/lluvia/nodes/lluvia/opticalflow/HornSchunck/NumericIteration.comp.spv',
                      programName='lluvia/opticalflow/HornSchunck/NumericIteration.comp'
                      )
-    
+    ll_test.loadNode(session,
+                     builderPath='lluvia/lluvia/nodes/lluvia/math/normalize/ImageNormalize_uint_C1.lua',
+                     programPath='lluvia/lluvia/nodes/lluvia/math/normalize/ImageNormalize_uint_C1.comp.spv',
+                     programName='lluvia/math/normalize/ImageNormalize_uint_C1.comp'
+                     )
     ll_test.loadNode(session,
                      builderPath='lluvia/lluvia/nodes/lluvia/opticalflow/HornSchunck/HornSchunck.lua')
 

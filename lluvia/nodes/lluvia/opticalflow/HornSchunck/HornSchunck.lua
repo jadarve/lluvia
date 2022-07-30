@@ -51,7 +51,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:setParameter('alpha_square', 0.01) -- TODO
+    desc:setParameter('alpha', 0.01) -- TODO
     desc:setParameter('iterations', 1)
     desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
@@ -63,7 +63,7 @@ function builder.onNodeInit(node)
 
     ll.logd(node.descriptor.builderName, 'onNodeInit')
 
-    local alpha_square = node:getParameter('alpha_square')
+    local alpha = node:getParameter('alpha')
     local iterations = node:getParameter('iterations')
 
     if iterations < 1 then
@@ -86,11 +86,17 @@ function builder.onNodeInit(node)
     
     local in_gray_old = memory:createImageView(inGrayOldImgDesc, inGrayOldImgViewDesc)
     in_gray_old:changeImageLayout(ll.ImageLayout.General)
-    -- FIXME: instead of clear, copy the content of in_gray here
-    in_gray_old:clear()
+
+    local copyInputGrayComputeNode = ll.createComputeNode('lluvia/math/normalize/ImageNormalize_uint_C1')
+    copyInputGrayComputeNode:bind('in_image_uint', in_gray)
+    copyInputGrayComputeNode:bind('out_image_float', in_gray_old)
+    copyInputGrayComputeNode:setParameter('max_value', 255)
+    copyInputGrayComputeNode:init()
+    ll.run(copyInputGrayComputeNode) -- immediately run the node
+
 
     local imageProcessor = ll.createComputeNode('lluvia/opticalflow/HornSchunck/ImageProcessor')
-    imageProcessor:setParameter('alpha_square', alpha_square)
+    imageProcessor:setParameter('alpha', alpha)
     imageProcessor:setParameter('float_precision', float_precision)
     imageProcessor:bind('in_gray_old', in_gray_old)
     imageProcessor:bind('in_gray', in_gray)

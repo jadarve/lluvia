@@ -4,7 +4,7 @@ ll['activeSession'] = nil
 
 
 function ll.logd(tag, ...)
-    print(tag, ...)
+    -- print(tag, ...)
 end
 
 
@@ -155,6 +155,16 @@ function ll.getGoodComputeLocalShape(dimensions)
     return ll.activeSession:getGoodComputeLocalShape(dimensions)
 end
 
+-- runs a compute node
+-- TODO: overload to support running command buffers and container nodes
+function ll.run(computeNode)
+
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    ll.activeSession:__runComputeNode(computeNode)
+end
 
 -----------------------------------------------------------
 --                 ComputeNodeBuilder

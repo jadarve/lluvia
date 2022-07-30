@@ -64,11 +64,7 @@ void main() {
     const float imgTimeDifference = imgParams.z;
     const float regularization = imgParams.w;
 
-    // const float gain = (imgGradient.x*flowAvg.x + imgGradient.y*flowAvg.y + imgTimeDifference) * regularization;
     const float gain = (dot(imgGradient, flowAvg) + imgTimeDifference) * regularization;
-
-    // const float flow_x = flowAvg.x - imgGradient.x * gain;
-    // const float flow_y = flowAvg.y - imgGradient.y * gain;
 
     const vec2 flow = flowAvg - imgGradient * gain;
 

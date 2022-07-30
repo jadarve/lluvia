@@ -324,7 +324,8 @@ void registerTypes(sol::table& lib) {
         "getProgram", &ll::Session::getProgram,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createComputeNode,
         "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createContainerNode,
-        "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape
+        "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape,
+        "__runComputeNode", (void (ll::Session::*)(const ll::ComputeNode& node)) &ll::Session::run
         );
 
     lib.new_usertype<ll::Memory>("Memory",

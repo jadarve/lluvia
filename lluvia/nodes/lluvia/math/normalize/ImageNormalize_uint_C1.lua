@@ -2,7 +2,7 @@ local builder = ll.class(ll.ComputeNodeBuilder)
 
 builder.name = 'lluvia/math/normalize/ImageNormalize_uint_C1'
 builder.doc = [[
-Normalized the content of a 1-channel unsigned integer image and stores it into a 1-channel floating point image.
+Normalizes the content of a 1-channel unsigned integer image and stores it into a 1-channel floating point image.
 
 Parameters
 ----------

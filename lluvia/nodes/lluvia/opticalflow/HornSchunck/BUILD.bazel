@@ -63,6 +63,7 @@ py_test(
         ":HornSchunck_runfiles",
         ":ImageProcessor_runfiles",
         ":NumericIteration_runfiles",
+        "//lluvia/nodes/lluvia/math/normalize:ImageNormalize_uint_C1_runfiles",
         "//lluvia/resources:resources"
     ],
     deps = PY_TEST_DEPS,

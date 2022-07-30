@@ -13,7 +13,7 @@ The layout of the `out_image_params` vector is as follows:
 
 Parameters
 ----------
-alpha_square : float. Defaults to TODO.
+alpha : float. Defaults to TODO.
     TODO
 
 float_precision : int. Defaults to ll.FloatPrecision.FP32.
@@ -59,7 +59,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(2, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(3, 'out_image_params', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    desc:setParameter('alpha_square', 0.01)
+    desc:setParameter('alpha', 0.01)
     desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
     return desc
@@ -71,9 +71,9 @@ function builder.onNodeInit(node)
     local in_gray = node:getPort('in_gray')
     local in_gray_old = node:getPort('in_gray_old')
 
-    local alpha_square = node:getParameter('alpha_square')
+    local alpha = node:getParameter('alpha')
     local pushConstants = ll.PushConstants.new()
-    pushConstants:pushFloat(alpha_square)
+    pushConstants:pushFloat(alpha*alpha) -- push alpha square
 
     local float_precision = node:getParameter('float_precision')
     local outChannelType = ll.floatPrecisionToImageChannelType(float_precision)
