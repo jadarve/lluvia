@@ -20,6 +20,63 @@ Outputs
 out_image_float : ImageView.
     {r16f, r32f} image. This image must be allocated externally.
 
+Examples
+--------
+
+```python
+import lluvia as ll
+import lluvia.util as ll_util
+import matplotlib.pyplot as plt
+
+# global session and memory objects
+session = ll.createSession()
+memory = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
+
+# read a sample image
+sampleImage = ll_util.readSampleImage('mouse')
+
+# this is the input of the comple pipeline
+in_rgba = memory.createImageViewFromHost(sampleImage)
+
+RGBA2Gray = session.createComputeNode('lluvia/color/RGBA2Gray')
+RGBA2Gray.bind('in_rgba', in_rgba)
+RGBA2Gray.init()
+
+# input and output to ImageNormalize. out_gray_float must be allocated outside of the node
+out_gray_uint = RGBA2Gray.getPort('out_gray')
+out_gray_float = memory.createImage(out_gray_uint.shape, ll.ChannelType.Float32).createImageView()
+
+ImageNormalize = session.createComputeNode('lluvia/math/normalize/ImageNormalize_uint_C1')
+ImageNormalize.setParameter('max_value', ll.Parameter(255))
+ImageNormalize.bind('in_image_uint', out_gray_uint)
+ImageNormalize.bind('out_image_float', out_gray_float)
+ImageNormalize.init()
+
+duration = session.createDuration()
+
+cmdBuffer = session.createCommandBuffer()
+cmdBuffer.begin()
+cmdBuffer.run(RGBA2Gray)
+cmdBuffer.memoryBarrier()
+cmdBuffer.durationStart(duration)
+cmdBuffer.run(ImageNormalize)
+cmdBuffer.memoryBarrier()
+cmdBuffer.durationEnd(duration)
+cmdBuffer.end()
+
+# run the pipeline
+session.run(cmdBuffer)
+
+# print runtime in milliseconds
+print('{0:.04f} ms'.format(duration.nanoseconds / 1e6))
+
+fig = plt.figure(figsize=(30, 6)); fig.set_tight_layout(True)
+plt.subplot2grid((1, 3), (0, 0)); plt.imshow(in_rgba.toHost()[...,:3])
+plt.subplot2grid((1, 3), (0, 1)); plt.imshow(out_gray_uint.toHost(), vmin=0, vmax=255); plt.colorbar()
+plt.subplot2grid((1, 3), (0, 2)); plt.imshow(out_gray_float.toHost(), vmin=0, vmax=1); plt.colorbar()
+plt.show()
+```
+
 ]]
 
 function builder.newDescriptor()

@@ -31,6 +31,80 @@ out_flow : ImageView
     {rg16f, rg32f} image. The estimated optical flow.
     The image format depends on the float_precision parameter.
 
+
+Examples
+--------
+
+```python
+import lluvia as ll
+import lluvia.util as ll_util
+import matplotlib.pyplot as plt
+
+# read two images as numpy arrays
+frame_0 = ll_util.readRGBA('path to first image...')
+frame_1 = ll_util.readRGBA('path to second image...')
+
+# global session and memory objects
+session = ll.createSession()
+memory = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
+
+# this is the input of the comple pipeline
+in_rgba = memory.createImageViewFromHost(frame_0)
+
+RGBA2Gray = session.createComputeNode('lluvia/color/RGBA2Gray')
+RGBA2Gray.bind('in_rgba', in_rgba)
+RGBA2Gray.init()
+RGBA2Gray.run() # run the node immediately in order to populate out_gray with valid values
+
+in_gray = RGBA2Gray.getPort('out_gray')
+
+HornSchunck = session.createContainerNode('lluvia/opticalflow/HornSchunck/HornSchunck')
+HornSchunck.setParameter('alpha', ll.Parameter(0.05))
+HornSchunck.setParameter('iterations', ll.Parameter(1000))
+HornSchunck.setParameter('float_precision', ll.Parameter(ll.FloatPrecision.FP32.value))
+HornSchunck.bind('in_gray', in_gray)
+
+# when the node is initialized, it transfers the content of in_gray to out_gray.
+HornSchunck.init()
+
+out_gray = HornSchunck.getPort('out_gray')
+out_flow = HornSchunck.getPort('out_flow')
+
+flow2RGBA = session.createComputeNode('lluvia/viz/Flow2RGBA')
+flow2RGBA.setParameter('max_flow', ll.Parameter(float(2)))
+flow2RGBA.bind('in_flow', out_flow)
+flow2RGBA.init()
+
+out_flow_rgba = flow2RGBA.getPort('out_rgba')
+
+duration = session.createDuration()
+
+cmdBuffer = session.createCommandBuffer()
+cmdBuffer.begin()
+cmdBuffer.run(RGBA2Gray)
+cmdBuffer.memoryBarrier()
+cmdBuffer.durationStart(duration)
+cmdBuffer.run(HornSchunck)
+cmdBuffer.memoryBarrier()
+cmdBuffer.durationEnd(duration)
+cmdBuffer.run(flow2RGBA)
+cmdBuffer.end()
+
+# copy the content of the second frame to the in_rgba image before running the whole pipeline
+in_rgba.fromHost(frame_1)
+
+# run the pipeline
+session.run(cmdBuffer)
+
+# print runtime in milliseconds
+print('{0:.02f} ms'.format(duration.nanoseconds / 1e6))
+
+fig = plt.figure(figsize=(10, 6)); fig.set_tight_layout(True)
+plt.subplot2grid((1,2), (0, 0)); plt.imshow(out_gray.toHost(), vmin=0, vmax=1, cmap='gray')
+plt.subplot2grid((1,2), (0, 1)); plt.imshow(out_flow_rgba.toHost())
+plt.show()
+```
+
 ]]
 
 function builder.newDescriptor()
