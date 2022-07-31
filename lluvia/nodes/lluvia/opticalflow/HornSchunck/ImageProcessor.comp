@@ -4,8 +4,7 @@
 
 layout(binding = 0, r8ui) uniform uimage2D in_gray;
 layout(binding = 1, r32f) uniform image2D in_gray_old;
-layout(binding = 2, r32f) uniform image2D out_gray;
-layout(binding = 3, rgba32f) uniform image2D out_image_params;
+layout(binding = 2, rgba32f) uniform image2D out_image_params;
 
 layout(push_constant) uniform const_0 {
     float alpha_square;
@@ -24,7 +23,7 @@ void main() {
     }
     
     ///////////////////////////////////////////////////////
-    // Read image values in the 3x3 neighborhood
+    // Read image values in the 2x2 neighborhood
     ///////////////////////////////////////////////////////
 
     const bool rightBorder  = coords.x == imgSize.x - 1;
@@ -38,6 +37,8 @@ void main() {
     const float img_11 = rightBorder || bottomBorder? img_00 : imageLoad(in_gray, coords + ivec2(+1, +1)).r / 255.0;
 
     // old image
+    // NOTE: as this kernel is reading old pixels in a neighborhood, I cannot store the new image value as part
+    //       of this compute shader. Copy must be performed externally.
     const float img_old_00 = imageLoad(in_gray_old, coords).r;
     const float img_old_01 = bottomBorder?                img_old_00 : imageLoad(in_gray_old, coords + ivec2( 0, +1)).r;
 
@@ -53,9 +54,6 @@ void main() {
     const float grad_x = 0.25 * ( (img_10 - img_00) + (img_11 - img_01) + (img_old_10 - img_old_00) + (img_old_11 - img_old_01));
     const float grad_y = 0.25 * ( (img_01 - img_00) + (img_11 - img_10) + (img_old_01 - img_old_00) + (img_old_11 - img_old_10));
 
-    // filtered image is normalized to [0, 1]
-    // const float imgFiltered = 0.25 * (img_00 + img_01 + img_10 + img_11);
-
     // Temporal difference
     const float imgTimeDifference = 0.25 * (img_00 + img_01 + img_10 + img_11 - img_old_00 - img_old_01 - img_old_10 - img_old_11);
 
@@ -66,5 +64,4 @@ void main() {
     const vec4 outputValue = vec4(grad_x, grad_y, imgTimeDifference, regularization);
 
     imageStore(out_image_params, coords, outputValue);
-    imageStore(out_gray, coords, vec4(img_00, 0, 0, 0));
 }

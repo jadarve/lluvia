@@ -51,7 +51,7 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
     -- parameter with default value
-    desc:setParameter('alpha', 0.01) -- TODO
+    desc:setParameter('alpha', 0.05) -- TODO
     desc:setParameter('iterations', 1)
     desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
@@ -87,14 +87,30 @@ function builder.onNodeInit(node)
     local in_gray_old = memory:createImageView(inGrayOldImgDesc, inGrayOldImgViewDesc)
     in_gray_old:changeImageLayout(ll.ImageLayout.General)
 
-    local copyInputGrayComputeNode = ll.createComputeNode('lluvia/math/normalize/ImageNormalize_uint_C1')
-    copyInputGrayComputeNode:bind('in_image_uint', in_gray)
-    copyInputGrayComputeNode:bind('out_image_float', in_gray_old)
-    copyInputGrayComputeNode:setParameter('max_value', 255)
-    copyInputGrayComputeNode:init()
-    ll.run(copyInputGrayComputeNode) -- immediately run the node
+    ---------------------------------------------------------------------------
+    -- Copy of in_gray to in_gray_old. This runs after the ImageProcessor and
+    -- copies + normalizes in_gray and stores it into in_gray_old/out_gray.
+    --
+    -- This is needed as the ImageProcessor shader reads a neighborhood of 
+    -- pixels in in_gray_old, hence it is not possible to write the new
+    -- in_gray_old value as part of the shader, as it will create a race
+    -- condition with neighboring pixel executions.
+    ---------------------------------------------------------------------------
+    local copyInGrayToInGrayOld = ll.createComputeNode('lluvia/math/normalize/ImageNormalize_uint_C1')
+    copyInGrayToInGrayOld:bind('in_image_uint', in_gray)
+    copyInGrayToInGrayOld:bind('out_image_float', in_gray_old)
+    copyInGrayToInGrayOld:setParameter('max_value', 255)
+    copyInGrayToInGrayOld:init()
 
+    -- Immediately run the node as part of the initialization sequence.
+    -- This enables the HornSchunck node to compute good optical flow in the first run.
+    ll.run(copyInGrayToInGrayOld)
 
+    node:bindNode('CopyInGrayToInGrayOld', copyInGrayToInGrayOld)
+
+    ---------------------------------------------------------------------------
+    -- Image processor
+    ---------------------------------------------------------------------------
     local imageProcessor = ll.createComputeNode('lluvia/opticalflow/HornSchunck/ImageProcessor')
     imageProcessor:setParameter('alpha', alpha)
     imageProcessor:setParameter('float_precision', float_precision)
@@ -106,9 +122,9 @@ function builder.onNodeInit(node)
 
     local inImageParms = imageProcessor:getPort('out_image_params')
 
-    -------------------------------------------------------
+    ---------------------------------------------------------------------------
     -- Numeric iterations to linear system
-    -------------------------------------------------------
+    ---------------------------------------------------------------------------
     local inFlowImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C2, outChannelType)
     local inFlowImgViewDesc = ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false)
 
@@ -139,10 +155,10 @@ function builder.onNodeInit(node)
     local numericIterationLast = node:getNode('NumericIteration_' .. iterations)
     numericIterationFirst:bind('in_flow', numericIterationLast:getPort('out_flow'))
 
-    -------------------------------------------------------
+    ---------------------------------------------------------------------------
     
     node:bind('out_flow', numericIterationLast:getPort('out_flow'))
-    node:bind('out_gray', imageProcessor:getPort('out_gray'))
+    node:bind('out_gray', in_gray_old)
 
     ll.logd(node.descriptor.builderName, 'onNodeInit: finish')
 
@@ -156,8 +172,12 @@ function builder.onNodeRecord(node, cmdBuffer)
     local iterations = node:getParameter('iterations')
 
     local imageProcessor = node:getNode('ImageProcessor')
+    local copyInGrayToInGrayOld = node:getNode('CopyInGrayToInGrayOld')
     
+    -- first run the image processor, then copy the content of in_gray into in_gray_old
     cmdBuffer:run(imageProcessor)
+    cmdBuffer:memoryBarrier()
+    cmdBuffer:run(copyInGrayToInGrayOld)
     cmdBuffer:memoryBarrier()
 
     for i = 1, iterations do

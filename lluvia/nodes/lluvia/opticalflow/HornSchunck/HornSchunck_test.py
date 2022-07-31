@@ -5,7 +5,13 @@ import lluvia as ll
 import lluvia_test as ll_test
 
 
-def runTest(precision, channelType):
+@pytest.mark.parametrize(
+    "precision, channelType", [
+        pytest.param(ll.FloatPrecision.FP32, ll.ChannelType.Float32, id="float32"),
+        pytest.param(ll.FloatPrecision.FP16, ll.ChannelType.Float16, id="float16")
+    ],
+)
+def test_goodUse(precision, channelType):
 
     nodeName = 'lluvia/opticalflow/HornSchunck/HornSchunck'
 
@@ -60,16 +66,6 @@ def runTest(precision, channelType):
     session.run(node)
 
     assert(not session.hasReceivedVulkanWarningMessages())
-
-
-def test_goodUse():
-
-    runTest(ll.FloatPrecision.FP32, ll.ChannelType.Float32)
-
-
-def test_goodUseFloat16():
-
-    runTest(ll.FloatPrecision.FP16, ll.ChannelType.Float16)
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ The layout of the `out_image_params` vector is as follows:
 
 Parameters
 ----------
-alpha : float. Defaults to TODO.
+alpha : float. Defaults to 0.05.
     TODO
 
 float_precision : int. Defaults to ll.FloatPrecision.FP32.
@@ -27,17 +27,13 @@ in_gray : ImageView.
 
 in_gray_old: ImageView.
     {r16f, r32f} image. The low-pass filtered version of in_gray.
-    The values are normalized to the range [0, 1]
+    The values are normalized to the range [0, 1].
 
 Outputs
 -------
 out_image_params : ImageView
     {rgba16f, rgba32f} image. The low-pass filtered version of in_gray.
     The values are normalized to the range [0, 1]
-
-out_gray: ImageView
-    {rg16f, rg32f} image. TODO
-
 ]]
 
 function builder.newDescriptor() 
@@ -56,10 +52,9 @@ function builder.newDescriptor()
 
     desc:addPort(in_gray)
     desc:addPort(in_gray_old)
-    desc:addPort(ll.PortDescriptor.new(2, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
-    desc:addPort(ll.PortDescriptor.new(3, 'out_image_params', ll.PortDirection.Out, ll.PortType.ImageView))
+    desc:addPort(ll.PortDescriptor.new(2, 'out_image_params', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    desc:setParameter('alpha', 0.01)
+    desc:setParameter('alpha', 0.05)
     desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
     return desc
@@ -91,14 +86,11 @@ function builder.onNodeInit(node)
     local imgViewDesc = ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false)
 
     -- memory allocation
-    -- local out_gray = memory:createImageView(outGrayImgDesc, imgViewDesc)
     local out_image_params = memory:createImageView(outImageParamsImgDesc, imgViewDesc)
 
     -- need to change image layout before binding
-    -- out_gray:changeImageLayout(ll.ImageLayout.General)
     out_image_params:changeImageLayout(ll.ImageLayout.General)
 
-    node:bind('out_gray', in_gray_old)
     node:bind('out_image_params', out_image_params)
 
     node.pushConstants = pushConstants

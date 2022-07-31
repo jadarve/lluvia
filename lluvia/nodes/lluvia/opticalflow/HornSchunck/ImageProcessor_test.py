@@ -27,18 +27,10 @@ def runTest(precision, dtype, channelType):
     node.bind('in_gray', in_gray)
     node.bind('in_gray_old', in_gray_old)
 
-    node.setParameter('alpha_square', ll.Parameter(0.01))
+    node.setParameter('alpha', ll.Parameter(0.01))
     node.setParameter('float_precision', ll.Parameter(precision.value))
 
     node.init()
-
-    out_gray = node.getPort('out_gray')
-    assert(out_gray is not None)
-    assert(out_gray.width == in_gray.width)
-    assert(out_gray.height == in_gray.height)
-    assert(out_gray.depth == in_gray.depth)
-    assert(out_gray.channelType == channelType)
-    assert(out_gray.channels == 1)
 
     out_image_params = node.getPort('out_image_params')
     assert(out_image_params is not None)
