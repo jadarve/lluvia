@@ -2,23 +2,23 @@ local builder = ll.class(ll.ComputeNodeBuilder)
 
 builder.name = 'lluvia/opticalflow/HornSchunck/ImageProcessor'
 builder.doc = [[
-Computes the parameters from the input image.
+Computes the parameters from the input image sequence.
 
 The layout of the `out_image_params` vector is as follows:
 
 * `out_image_params.xy`: The X and Y gradient components of in_gray.
     The values are normalized to the range [-1, 1]
 * `out_image_params.z`: The time difference (in_gray - in_gray_old)
-* `out_image_params.w`: TODO
+* `out_image_params.w`: The regularization value `1.0 / (alpha_square + grad_x*grad_x + grad_y*grad_y)`
 
 Parameters
 ----------
 alpha : float. Defaults to 0.05.
-    TODO
+    Regularization gain.
 
 float_precision : int. Defaults to ll.FloatPrecision.FP32.
-    Floating point precision used accross the algorithm. The outputs out_gray and
-    out_gradient will be of this floating point precision.
+    Floating point precision used accross the algorithm. The out_image_params
+    output will be of this floating point precision.
 
 Inputs
 ------
@@ -32,8 +32,7 @@ in_gray_old: ImageView.
 Outputs
 -------
 out_image_params : ImageView
-    {rgba16f, rgba32f} image. The low-pass filtered version of in_gray.
-    The values are normalized to the range [0, 1]
+    {rgba16f, rgba32f} image. Output image parameters
 ]]
 
 function builder.newDescriptor() 
@@ -74,11 +73,11 @@ function builder.onNodeInit(node)
     local outChannelType = ll.floatPrecisionToImageChannelType(float_precision)
 
     -- ll::Memory where out_image_params will be allocated
+    local memory = in_gray.memory
+    
     local height = in_gray.height
     local width  = in_gray.width
-    local memory = in_gray.memory
 
-    -- local outGrayImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C1, outChannelType)
     local outImageParamsImgDesc = ll.ImageDescriptor.new(1, height, width, ll.ChannelCount.C4, outChannelType)
 
     -- normalizedCoordinates : false

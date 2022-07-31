@@ -2,22 +2,21 @@ local builder = ll.class(ll.ComputeNodeBuilder)
 
 builder.name = 'lluvia/opticalflow/HornSchunck/NumericIteration'
 builder.doc = [[
-Computes one iteration for solving the system of equations to compute optical flow.
+Computes one numeric iteration for computing the optical flow.
 
-TODO
 
 Inputs
 ------
 in_image_params : ImageView.
-    {rgba16f, rgba32f} image. TODO
+    {rgba16f, rgba32f} image. Image parameters computed by `lluvia/opticalflow/HornSchunck/ImageProcessor`
 
 in_flow: ImageView.
-    {rg16f, rg32f} image.
+    {rg16f, rg32f} image. Optical flow from previous iteration.
 
 Outputs
 -------
-out_flow: ImageView
-    {rg16f, rg32f} image. TODO
+out_flow: ImageView.
+    {rg16f, rg32f} image. Newly estimated flow. This output must be allocated outside of this node.
 
 ]]
 
@@ -35,7 +34,7 @@ function builder.newDescriptor()
     in_flow:checkImageChannelCountIs(ll.ChannelCount.C2)
     in_flow:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
 
-    local out_flow = ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.In, ll.PortType.ImageView)
+    local out_flow = ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView)
     out_flow:checkImageChannelCountIs(ll.ChannelCount.C2)
     out_flow:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
 

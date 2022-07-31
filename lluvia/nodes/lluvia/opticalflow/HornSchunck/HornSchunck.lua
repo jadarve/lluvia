@@ -6,14 +6,11 @@ Horn and Schunck variational optical flow algorithm.
 
 Parameters
 ----------
-gamma : float. Defaults to 0.01
-    The filter gains for the update step.
+alpha : float. Defaults to 0.05.
+    Regularization gain.
 
-max_flow : float. Defaults to 1.0
-    The max magnitude allowed for the optical flow output.
-
-smooth_iterations : int. Defaults to 1.
-    The number of smooth iterations to apply to the estimated flow.
+iterations : int. Defaults to 1.
+    Number of iterations run to compute the optical flow.
 
 float_precision : int. Defaults to ll.FloatPrecision.FP32.
     Floating point precision used accross the algorithm. The outputs out_gray
@@ -50,8 +47,8 @@ function builder.newDescriptor()
     desc:addPort(ll.PortDescriptor.new(1, 'out_gray', ll.PortDirection.Out, ll.PortType.ImageView))
     desc:addPort(ll.PortDescriptor.new(2, 'out_flow', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    -- parameter with default value
-    desc:setParameter('alpha', 0.05) -- TODO
+    -- Parameters
+    desc:setParameter('alpha', 0.05)
     desc:setParameter('iterations', 1)
     desc:setParameter('float_precision', ll.FloatPrecision.FP32)
 
