@@ -16,7 +16,7 @@ cimport numpy as np
 import numpy as np
 
 
-from lluvia.core.memory.memory_property_flags cimport MemoryPropertyFlagBits
+from lluvia.core.memory.memory_property_flags import MemoryPropertyFlagBits
 
 #################################################
 # Buffer
