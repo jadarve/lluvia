@@ -9,7 +9,7 @@
 import math
 import os
 import glob
-import imageio.v2 as imageio
+import imageio
 import numpy as np
 
 
