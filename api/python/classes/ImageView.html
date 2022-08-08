@@ -152,7 +152,23 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.ImageView.clear">
 <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.clear" title="Permalink to this definition"></a></dt>
-<dd><p>Clears the pixels in the image to zero.</p>
+<dd><p>Immediately clears the image pixels to zero.</p>
+<p>This method creates a command buffer and sumbits it to clear
+all the pixels in the underlying image to zero. Execution is
+blocked until the operation is completed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lluvia.core.ImageView.copyTo">
+<span class="sig-name descname"><span class="pre">copyTo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ImageView.copyTo" title="Permalink to this definition"></a></dt>
+<dd><p>Immediately copies the content of this image into the destination.</p>
+<p>This method creates a command buffer and sumbits it to copy the content
+of this image into dst. No valiation of destination image shape is performed.
+Execution is blocked until the operation is completed.</p>
+<dl class="simple">
+<dt>dst<span class="classifier">Image or ImageView</span></dt><dd><p>Destination object.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">

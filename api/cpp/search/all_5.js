@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['familyqueueindices_108',['familyQueueIndices',['../d4/d67/structll_1_1VkHeapInfo.html#a3780e6850f677d96880408e3e9e0fa7a',1,'ll::VkHeapInfo']]],
-  ['flags_109',['Flags',['../d7/dc6/classll_1_1Flags.html#a8dda75c5afa9c470057e0d4c0d191c71',1,'ll::Flags::Flags()=default'],['../d7/dc6/classll_1_1Flags.html#a91e1b157a22cf55889c07b34f9962f32',1,'ll::Flags::Flags(const Flags&lt; BitType, MaskType &gt; &amp;f)=default'],['../d7/dc6/classll_1_1Flags.html#a4046840b944bdf9352fa28d65c7b32e8',1,'ll::Flags::Flags(Flags&lt; BitType, MaskType &gt; &amp;&amp;f)=default'],['../d7/dc6/classll_1_1Flags.html#af4d75b5c60023a87a318084a9a3b2619',1,'ll::Flags::Flags(BitType bit) noexcept'],['../d7/dc6/classll_1_1Flags.html#ab929546975d1b0132bfbe5fb86c12298',1,'ll::Flags::Flags(MaskType mask)']]],
+  ['familyqueueindices_109',['familyQueueIndices',['../d4/d67/structll_1_1VkHeapInfo.html#a3780e6850f677d96880408e3e9e0fa7a',1,'ll::VkHeapInfo']]],
   ['flags_110',['flags',['../d4/d67/structll_1_1VkHeapInfo.html#a5d35bba5600befe712d0d75595119e89',1,'ll::VkHeapInfo']]],
-  ['flags_111',['Flags',['../d7/dc6/classll_1_1Flags.html',1,'ll']]],
+  ['flags_111',['Flags',['../d7/dc6/classll_1_1Flags.html#a8dda75c5afa9c470057e0d4c0d191c71',1,'ll::Flags::Flags()=default'],['../d7/dc6/classll_1_1Flags.html#a91e1b157a22cf55889c07b34f9962f32',1,'ll::Flags::Flags(const Flags&lt; BitType, MaskType &gt; &amp;f)=default'],['../d7/dc6/classll_1_1Flags.html#a4046840b944bdf9352fa28d65c7b32e8',1,'ll::Flags::Flags(Flags&lt; BitType, MaskType &gt; &amp;&amp;f)=default'],['../d7/dc6/classll_1_1Flags.html#af4d75b5c60023a87a318084a9a3b2619',1,'ll::Flags::Flags(BitType bit) noexcept'],['../d7/dc6/classll_1_1Flags.html#ab929546975d1b0132bfbe5fb86c12298',1,'ll::Flags::Flags(MaskType mask)'],['../d7/dc6/classll_1_1Flags.html',1,'ll::Flags&lt; BitType, MaskType &gt;']]],
   ['flags_3c_20bufferusageflagbits_2c_20ll_3a_3aenum_5ft_20_3e_112',['Flags&lt; BufferUsageFlagBits, ll::enum_t &gt;',['../d7/dc6/classll_1_1Flags.html',1,'ll']]],
   ['flags_3c_20imageusageflagbits_2c_20ll_3a_3aenum_5ft_20_3e_113',['Flags&lt; ImageUsageFlagBits, ll::enum_t &gt;',['../d7/dc6/classll_1_1Flags.html',1,'ll']]],
   ['flags_3c_20memorypropertyflagbits_2c_20ll_3a_3aenum_5ft_20_3e_114',['Flags&lt; MemoryPropertyFlagBits, ll::enum_t &gt;',['../d7/dc6/classll_1_1Flags.html',1,'ll']]],

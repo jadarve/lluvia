@@ -184,28 +184,30 @@ $(document).ready(function(){initNavTree('db/dac/ImageView_8h_source.html','../.
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
 <div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="../../dd/dd3/classll_1_1ImageView.html#afee56a7d772b079d5b9c3180fca3fe2a">  343</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dd/dd3/classll_1_1ImageView.html#afee56a7d772b079d5b9c3180fca3fe2a">clear</a>();</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;private:</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <a class="code" href="../../dd/dd3/classll_1_1ImageView.html">ImageView</a>(const std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::vulkan::Device&gt;&amp; device,</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;              const std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../dc/da6/classll_1_1Image.html">Image</a>&gt;&amp; image,</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;              const <a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../d2/d89/classll_1_1ImageViewDescriptor.html">ImageViewDescriptor</a>&amp; descriptor);</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    </div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../d2/d89/classll_1_1ImageViewDescriptor.html">ImageViewDescriptor</a> m_descriptor;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    vk::<a class="code" href="../../dd/dd3/classll_1_1ImageView.html">ImageView</a> m_vkImageView;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    vk::Sampler   m_vkSampler;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::vulkan::Device&gt; m_device;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../dc/da6/classll_1_1Image.html">Image</a>&gt;          m_image;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
-<div class="line"><a name="l00360"></a><span class="lineno"><a class="line" href="../../dd/dd3/classll_1_1ImageView.html#a5d6b29a75202aeeaef335faca9eb55e2">  360</a></span>&#160;friend class <a class="code" href="../../dc/da6/classll_1_1Image.html">Image</a>;</div>
-<div class="line"><a name="l00361"></a><span class="lineno"><a class="line" href="../../dd/dd3/classll_1_1ImageView.html#a07a1e2fed4b858385051df49020b2da4">  361</a></span>&#160;friend class <a class="code" href="../../d8/d38/classll_1_1ComputeNode.html">ComputeNode</a>;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;};</div>
+<div class="line"><a name="l00355"></a><span class="lineno"><a class="line" href="../../dd/dd3/classll_1_1ImageView.html#a6a94a0da7d4cb5acca1c8ca2cc6a8c3f">  355</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dd/dd3/classll_1_1ImageView.html#a6a94a0da7d4cb5acca1c8ca2cc6a8c3f">copyTo</a>(<a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../dd/dd3/classll_1_1ImageView.html">ImageView</a>&amp; dst);</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160; </div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;private:</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <a class="code" href="../../dd/dd3/classll_1_1ImageView.html">ImageView</a>(const std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::vulkan::Device&gt;&amp; device,</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;              const std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../dc/da6/classll_1_1Image.html">Image</a>&gt;&amp; image,</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;              const <a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../d2/d89/classll_1_1ImageViewDescriptor.html">ImageViewDescriptor</a>&amp; descriptor);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    </div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../d2/d89/classll_1_1ImageViewDescriptor.html">ImageViewDescriptor</a> m_descriptor;</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* LLUVIA_CORE_IMAGE_IMAGE_VIEW_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    </div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    vk::<a class="code" href="../../dd/dd3/classll_1_1ImageView.html">ImageView</a> m_vkImageView;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    vk::Sampler   m_vkSampler;</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::vulkan::Device&gt; m_device;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::<a class="code" href="../../dc/da6/classll_1_1Image.html">Image</a>&gt;          m_image;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160; </div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160; </div>
+<div class="line"><a name="l00372"></a><span class="lineno"><a class="line" href="../../dd/dd3/classll_1_1ImageView.html#a5d6b29a75202aeeaef335faca9eb55e2">  372</a></span>&#160;friend class <a class="code" href="../../dc/da6/classll_1_1Image.html">Image</a>;</div>
+<div class="line"><a name="l00373"></a><span class="lineno"><a class="line" href="../../dd/dd3/classll_1_1ImageView.html#a07a1e2fed4b858385051df49020b2da4">  373</a></span>&#160;friend class <a class="code" href="../../d8/d38/classll_1_1ComputeNode.html">ComputeNode</a>;</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;};</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;} <span class="comment">// namespace ll</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* LLUVIA_CORE_IMAGE_IMAGE_VIEW_H_ */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aImageDescriptor_8h_html"><div class="ttname"><a href="../../da/d1f/ImageDescriptor_8h.html">ImageDescriptor.h</a></div><div class="ttdoc">ImageDescriptor class and related enumerations.</div></div>
 <div class="ttc" id="aImageViewDescriptor_8h_html"><div class="ttname"><a href="../../d9/df6/ImageViewDescriptor_8h.html">ImageViewDescriptor.h</a></div><div class="ttdoc">ImageViewDescriptor class and related enumerations and methods.</div></div>
 <div class="ttc" id="aImage_8h_html"><div class="ttname"><a href="../../d8/d0f/Image_8h.html">Image.h</a></div><div class="ttdoc">Image class.</div></div>
@@ -224,6 +226,7 @@ $(document).ready(function(){initNavTree('db/dac/ImageView_8h_source.html','../.
 <div class="ttc" id="aclassll_1_1ImageView_html_a3f02cbccbf2dbe2fd508f2fcde0932d1"><div class="ttname"><a href="../../dd/dd3/classll_1_1ImageView.html#a3f02cbccbf2dbe2fd508f2fcde0932d1">ll::ImageView::getImage</a></div><div class="ttdeci">const std::shared_ptr&lt; ll::Image &gt; &amp; getImage() const noexcept</div><div class="ttdoc">Gets the parent ll::Image this object was created from.</div></div>
 <div class="ttc" id="aclassll_1_1ImageView_html_a509d99d68efaa7b4b16b50220527d101"><div class="ttname"><a href="../../dd/dd3/classll_1_1ImageView.html#a509d99d68efaa7b4b16b50220527d101">ll::ImageView::ImageView</a></div><div class="ttdeci">ImageView()=delete</div></div>
 <div class="ttc" id="aclassll_1_1ImageView_html_a6320e2eadd66fda82f5a0791d87e5ec0"><div class="ttname"><a href="../../dd/dd3/classll_1_1ImageView.html#a6320e2eadd66fda82f5a0791d87e5ec0">ll::ImageView::getHeight</a></div><div class="ttdeci">uint32_t getHeight() const noexcept</div><div class="ttdoc">Gets the image view height in pixels.</div></div>
+<div class="ttc" id="aclassll_1_1ImageView_html_a6a94a0da7d4cb5acca1c8ca2cc6a8c3f"><div class="ttname"><a href="../../dd/dd3/classll_1_1ImageView.html#a6a94a0da7d4cb5acca1c8ca2cc6a8c3f">ll::ImageView::copyTo</a></div><div class="ttdeci">void copyTo(ll::ImageView &amp;dst)</div><div class="ttdoc">Immediately copies the content of this image view into the destination.</div></div>
 <div class="ttc" id="aclassll_1_1ImageView_html_a7089c9c31fc7e5ecf001f09d4238948b"><div class="ttname"><a href="../../dd/dd3/classll_1_1ImageView.html#a7089c9c31fc7e5ecf001f09d4238948b">ll::ImageView::~ImageView</a></div><div class="ttdeci">~ImageView()</div></div>
 <div class="ttc" id="aclassll_1_1ImageView_html_a723c999f6c42e72c62df29080660d20e"><div class="ttname"><a href="../../dd/dd3/classll_1_1ImageView.html#a723c999f6c42e72c62df29080660d20e">ll::ImageView::getChannelTypeSize</a></div><div class="ttdeci">uint64_t getChannelTypeSize() const noexcept</div><div class="ttdoc">Gets the channel type size.</div></div>
 <div class="ttc" id="aclassll_1_1ImageView_html_a7ffc4891da138444078ea35fd12462bb"><div class="ttname"><a href="../../dd/dd3/classll_1_1ImageView.html#a7ffc4891da138444078ea35fd12462bb">ll::ImageView::getShape</a></div><div class="ttdeci">ll::vec3ui getShape() const noexcept</div><div class="ttdoc">Gets the shape of the image view.</div></div>

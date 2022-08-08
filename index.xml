@@ -1,4 +1,501 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Working with floating point precision</title><link>/blog/2022/02/12/working-with-floating-point-precision/</link><pubDate>Sat, 12 Feb 2022 00:00:00 +0000</pubDate><guid>/blog/2022/02/12/working-with-floating-point-precision/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Implementing the Horn and Schunck optical flow algorithm</title><link>/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/</link><pubDate>Sun, 07 Aug 2022 00:00:00 +0000</pubDate><guid>/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/</guid><description>
+&lt;div class="alert alert-primary" role="alert">
+&lt;h4 class="alert-heading">Jupyter notebook:&lt;/h4>
+A Jupyter notebook with the code in this article is available in &lt;a href="https://colab.research.google.com/drive/1SPwxUIdYxCALD0d0w7rE93EuX0fm832S?usp=sharing">Google Colab&lt;/a>. Check it out!
+&lt;/div>
+&lt;h2 id="background">Background&lt;/h2>
+&lt;p>The &lt;a href="https://scholar.google.com/citations?view_op=view_citation&amp;amp;hl=en&amp;amp;user=uWsBKQ0AAAAJ&amp;amp;citation_for_view=uWsBKQ0AAAAJ:u5HHmVD_uO8C">Horn and Schunck&lt;/a> variational method for computing optical flow is one of the seminal works in the field. It introduces the idea of using a global smoothness constrain on the estimated optical flow. This constrain helps the numerical solution to find a good flow estimate even in image regions with poor texture.&lt;/p>
+&lt;p>Let $\mathbf{E}(x, y, t)$ be the image brightness at point $(x, y)$ and time $t$. Considering the constant brightness assumption, where the change in brightness is zero, that is,&lt;/p>
+&lt;p>$$
+\frac{d \mathbf{E}}{d t} = 0
+$$&lt;/p>
+&lt;p>Taking the partial derivatives over $(x, y, t)$, one has:&lt;/p>
+&lt;p>$$
+\frac{\partial \mathbf{E}}{\partial x} \frac{\partial x}{\partial t} + \frac{\partial \mathbf{E}}{\partial y} \frac{\partial y}{\partial t} + \frac{\partial \mathbf{E}}{\partial t} = 0
+$$&lt;/p>
+&lt;p>For convenience, let:&lt;/p>
+&lt;p>$$
+\begin{align*}
+\mathbf{E}_x &amp;amp;= \frac{\partial \mathbf{E}}{\partial x} \\
+\mathbf{E}_y &amp;amp;= \frac{\partial \mathbf{E}}{\partial y} \\
+\mathbf{E}_t &amp;amp;= \frac{\partial \mathbf{E}}{\partial t}
+\end{align*}
+$$&lt;/p>
+&lt;p>be the image gradient in the $x$ and $y$ directions, and the partial derivative in time, respectively, and&lt;/p>
+&lt;p>$$
+\begin{align}
+u &amp;amp;= \frac{\partial x}{\partial t} \\
+v &amp;amp;= \frac{\partial y}{\partial t}
+\end{align}
+$$&lt;/p>
+&lt;p>be the $x$ and $y$ components of the optical flow, respectively. The constant brightness equation is then&lt;/p>
+&lt;p>$$
+\mathbf{E}_x u + \mathbf{E}_y v + \mathbf{E}_t = 0
+$$&lt;/p>
+&lt;p>which is the basis for the differential methods for computing optical flow (e.g. Lukas-Kanade).&lt;/p>
+&lt;h3 id="minimization">Minimization&lt;/h3>
+&lt;p>Differential methods for estimating optical flow try to minimize the cost function&lt;/p>
+&lt;p>$$
+\epsilon_b = \mathbf{E}_x u + \mathbf{E}_y v + \mathbf{E}_t
+$$&lt;/p>
+&lt;p>that is, to try to find values $(u, v)$ of the optical flow such that the constant brightness constrain is maintained. Notice that there is a single cost funcion and two unknowns $(u, v)$. To solve this, the Horn and Schunck algorithm adds a smoothness constrain based on the average value of the flow in a neighborhood, as&lt;/p>
+&lt;p>$$
+\epsilon_c^2 = (\bar{u} - u )^2 + (\bar{v} - v)^2
+$$&lt;/p>
+&lt;p>Combining both cost functions, one has&lt;/p>
+&lt;p>$$
+\epsilon^2 = \alpha^2 \epsilon_b^2 + \epsilon_c^2
+$$&lt;/p>
+&lt;p>From these equations, a numerical solution is derived. The reader is encouraged to go to the &lt;a href="https://scholar.google.com/citations?view_op=view_citation&amp;amp;hl=en&amp;amp;user=uWsBKQ0AAAAJ&amp;amp;citation_for_view=uWsBKQ0AAAAJ:u5HHmVD_uO8C">paper&lt;/a> for more details. The iterative solution for $(u, v)$ is&lt;/p>
+&lt;p>$$
+\begin{align*}
+u^{n+1} &amp;amp;= \bar{u}^n - \mathbf{E}_x \frac{\mathbf{E}_x \bar{u}^n + \mathbf{E}_y \bar{v}^n + \mathbf{E}_t}{\alpha^2 + \mathbf{E}_x^2 + \mathbf{E}_y^2} \\
+v^{n+1} &amp;amp;= \bar{v}^n - \mathbf{E}_y \frac{\mathbf{E}_x \bar{u}^n + \mathbf{E}_y \bar{v}^n + \mathbf{E}_t}{\alpha^2 + \mathbf{E}_x^2 + \mathbf{E}_y^2}
+\end{align*}
+$$&lt;/p>
+&lt;p>where $(u^{n+1}, v^{n+1})$ is the estimated optical flow at iteration $n + 1$, using the estimated flow at previous iterations and image parameters computed from an image pair.&lt;/p>
+&lt;h2 id="implementation">Implementation&lt;/h2>
+&lt;p>The figure below illustrates the pipeline implementing the algorithm:&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-plantuml" data-lang="plantuml">@startuml
+skinparam linetype ortho
+state HS as &amp;#34;HornSchunck&amp;#34; {
+state in_gray &amp;lt;&amp;lt;inputPin&amp;gt;&amp;gt;
+state ImageProcessor
+state ImageNormalize_uint_C1
+state NI_1 as &amp;#34;NumericIteration 1&amp;#34;
+state NI_2 as &amp;#34;NumericIteration 2&amp;#34;
+state NI_3 as &amp;#34;NumericIteration 3&amp;#34;
+state NI_N as &amp;#34;NumericIteration N&amp;#34;
+in_gray -down-&amp;gt; ImageProcessor
+in_gray -down-&amp;gt; ImageNormalize_uint_C1
+ImageNormalize_uint_C1 -down-&amp;gt; ImageProcessor: in_gray_old
+ImageProcessor -down-&amp;gt; NI_1: in_image_params
+ImageProcessor -down-&amp;gt; NI_2
+ImageProcessor -down-&amp;gt; NI_3
+ImageProcessor -down-&amp;gt; NI_N: in_image_params
+NI_1 -&amp;gt; NI_2
+NI_2 -&amp;gt; NI_3
+NI_3 -&amp;gt; NI_N: ...
+NI_N -&amp;gt; NI_1: in_flow, used for next image iteration
+NI_N -down-&amp;gt; out_flow &amp;lt;&amp;lt;outputPin&amp;gt;&amp;gt;
+ImageNormalize_uint_C1 -down&amp;gt; out_gray &amp;lt;&amp;lt;outputPin&amp;gt;&amp;gt;
+}
+note top of HS
+Parameters
+----------
+alpha : float. Defaults to 0.05.
+Regularization gain.
+iterations : int. Defaults to 1.
+Number of iterations run to compute the optical flow.
+float_precision : int. Defaults to ll.FloatPrecision.FP32.
+Floating point precision used accross the algorithm. The outputs out_gray
+and out_flow will be of this floating point precision.
+end note
+@enduml
+&lt;/code>&lt;/pre>&lt;p>The &lt;strong>&lt;code>HornSchunck&lt;/code>&lt;/strong> is a &lt;em>ContainerNode&lt;/em> that instantiates several &lt;em>ComputeNode&lt;/em> implementing the algorithm. In particular, the &lt;strong>&lt;code>ImageProcessor&lt;/code>&lt;/strong> node computes image parameters from the pair of images &lt;code>in_gray&lt;/code> and &lt;code>in_gray_old&lt;/code>. Those parameters are transfered to the instances of &lt;strong>&lt;code>NumericIteration&lt;/code>&lt;/strong> through &lt;code>in_image_params&lt;/code>, organized as follows:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>in_image_params.x&lt;/code>: X component of the image gradient&lt;/li>
+&lt;li>&lt;code>in_image_params.y&lt;/code>: Y component of the image gradient&lt;/li>
+&lt;li>&lt;code>in_image_params.z&lt;/code>: temporal derivative between &lt;code>in_gray&lt;/code> and &lt;code>in_gray_old&lt;/code>.&lt;/li>
+&lt;li>&lt;code>in_image_params.w&lt;/code>: gain for this pixel computed from image gradient and &lt;code>alpha&lt;/code> parameter.&lt;/li>
+&lt;/ul>
+&lt;p>This packaging of the image parameters is convenient as all values are packed together in a singe RGBA pixel. The floating point precision of this, and the estimated optical flow is controlled by the &lt;code>float_precision&lt;/code> parameter.&lt;/p>
+&lt;p>The &lt;strong>&lt;code>NumericIteration&lt;/code>&lt;/strong> node takes the image parameters and a prior estimation of the optical flow, &lt;code>in_flow&lt;/code>, and computes the next iteration of the flow field. The algorithm requires several iterations for the estimated flow to be of acceptable quality. In the figure above, the last iteration is denoted as &lt;code>NumericIteration_N&lt;/code> and it feeds its output back as input to the first one, as well as the output of the &lt;strong>&lt;code>HornSchunck&lt;/code>&lt;/strong> node. The number of iterations is controlled by the &lt;code>iterations&lt;/code> parameter.&lt;/p>
+&lt;p>The code block below shows how to run a simple pipeline:&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-plantuml" data-lang="plantuml">@startuml
+skinparam linetype ortho
+state RGBA2Gray
+state HS as &amp;#34;HornSchunck&amp;#34;
+state Flow2RGBA
+RGBA2Gray -down-&amp;gt; HS: in_gray
+HS -down-&amp;gt; Flow2RGBA: in_flow
+@enduml
+&lt;/code>&lt;/pre>&lt;p>where &lt;strong>&lt;code>RGBA2Gray&lt;/code>&lt;/strong> converts an input RGBA image to gray scale, &lt;strong>&lt;code>HornSchunck&lt;/code>&lt;/strong> computes the optical flow, and &lt;strong>&lt;code>Flow2RGBA&lt;/code>&lt;/strong> converts the optical flow to color representation.&lt;/p>
+&lt;ul class="nav nav-tabs" id="tabs-1" role="tablist">&lt;li class="nav-item">
+&lt;a class="nav-link active tab-Python"
+id="tabs-1-0-tab" data-toggle="tab" href="#tabs-1-0" role="tab" onclick="handleClick(&amp;#34;Python&amp;#34;);"
+aria-controls="tabs-1-0" aria-selected="true">
+Python
+&lt;/a>
+&lt;/li>&lt;/ul>
+&lt;div class="tab-content" id="tabs-1-content">&lt;div class="tab-pane fade show active"
+id="tabs-1-0" role="tabpanel" aria-labelled-by="tabs-1-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">lluvia&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">ll&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">lluvia.util&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">ll_util&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">matplotlib.pyplot&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">plt&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># read two images as numpy arrays&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>frame_0 &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll_util&lt;span style="color:#000;font-weight:bold">.&lt;/span>readRGBA(&lt;span style="color:#d14">&amp;#39;path to first image...&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>frame_1 &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll_util&lt;span style="color:#000;font-weight:bold">.&lt;/span>readRGBA(&lt;span style="color:#d14">&amp;#39;path to second image...&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># global session and memory objects&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>session &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>createSession()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createMemory(ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>DeviceLocal)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># this is the input of the comple pipeline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory&lt;span style="color:#000;font-weight:bold">.&lt;/span>createImageViewFromHost(frame_0)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createComputeNode(&lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2Gray&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, in_rgba)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>run() &lt;span style="color:#998;font-style:italic"># run the node immediately in order to populate out_gray with valid values&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>in_gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_gray&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>HornSchunck &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createContainerNode(&lt;span style="color:#d14">&amp;#39;lluvia/opticalflow/HornSchunck/HornSchunck&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>HornSchunck&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;alpha&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0.05&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>HornSchunck&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;iterations&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">1000&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>HornSchunck&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;float_precision&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>FloatPrecision&lt;span style="color:#000;font-weight:bold">.&lt;/span>FP32&lt;span style="color:#000;font-weight:bold">.&lt;/span>value))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>HornSchunck&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_gray&amp;#39;&lt;/span>, in_gray)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># when the node is initialized, it transfers the content of in_gray to out_gray.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>HornSchunck&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>out_gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> HornSchunck&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_gray&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>out_flow &lt;span style="color:#000;font-weight:bold">=&lt;/span> HornSchunck&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_flow&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># Convert the optical flow field to color images&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>flow2RGBA &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createComputeNode(&lt;span style="color:#d14">&amp;#39;lluvia/viz/Flow2RGBA&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>flow2RGBA&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;max_flow&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#0086b3">float&lt;/span>(&lt;span style="color:#099">2&lt;/span>)))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>flow2RGBA&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_flow&amp;#39;&lt;/span>, out_flow)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>flow2RGBA&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>out_flow_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> flow2RGBA&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_rgba&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>duration &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createDuration()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># Record the command buffer to run the pipeline in one go&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createCommandBuffer()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>begin()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(RGBA2Gray)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationStart(duration) &lt;span style="color:#998;font-style:italic"># start recording the duration to measure runtime&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(HornSchunck)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>memoryBarrier()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>durationEnd(duration) &lt;span style="color:#998;font-style:italic"># stop recording duration&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(flow2RGBA)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cmdBuffer&lt;span style="color:#000;font-weight:bold">.&lt;/span>end()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># copy the content of the second frame to the in_rgba image before running the whole pipeline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>in_rgba&lt;span style="color:#000;font-weight:bold">.&lt;/span>fromHost(frame_1)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># run the pipeline&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>session&lt;span style="color:#000;font-weight:bold">.&lt;/span>run(cmdBuffer)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#998;font-style:italic"># print runtime in milliseconds&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#0086b3">print&lt;/span>(&lt;span style="color:#d14">&amp;#39;&lt;/span>&lt;span style="color:#d14">{0:.02f}&lt;/span>&lt;span style="color:#d14"> ms&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>format(duration&lt;span style="color:#000;font-weight:bold">.&lt;/span>nanoseconds &lt;span style="color:#000;font-weight:bold">/&lt;/span> &lt;span style="color:#099">1e6&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>fig &lt;span style="color:#000;font-weight:bold">=&lt;/span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>figure(figsize&lt;span style="color:#000;font-weight:bold">=&lt;/span>(&lt;span style="color:#099">10&lt;/span>, &lt;span style="color:#099">6&lt;/span>)); fig&lt;span style="color:#000;font-weight:bold">.&lt;/span>set_tight_layout(&lt;span style="color:#000;font-weight:bold">True&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>subplot2grid((&lt;span style="color:#099">1&lt;/span>,&lt;span style="color:#099">2&lt;/span>), (&lt;span style="color:#099">0&lt;/span>, &lt;span style="color:#099">0&lt;/span>)); plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>imshow(out_gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>toHost(), vmin&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#099">0&lt;/span>, vmax&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#099">1&lt;/span>, cmap&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#d14">&amp;#39;gray&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>subplot2grid((&lt;span style="color:#099">1&lt;/span>,&lt;span style="color:#099">2&lt;/span>), (&lt;span style="color:#099">0&lt;/span>, &lt;span style="color:#099">1&lt;/span>)); plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>imshow(out_flow_rgba&lt;span style="color:#000;font-weight:bold">.&lt;/span>toHost())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>show()&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>
+&lt;/div>
+&lt;h2 id="evaluation-on-the-middlebury-dataset">Evaluation on the Middlebury dataset&lt;/h2>
+&lt;p>The &lt;a href="https://vision.middlebury.edu/flow/">Middlebury optical flow dataset&lt;/a> from &lt;a href="https://scholar.google.com/scholar?cluster=5697474256105237450&amp;amp;hl=en&amp;amp;as_sdt=0,5">&lt;em>Baker et. al.&lt;/em>&lt;/a> provides several real-life and synthetic image sequences with ground truth optical flow. The figures below shows the estimated optical flow for the test sequences whose ground truth is available.&lt;/p>
+&lt;p>The Horn ans Schunck algorithm is not well suited for large pixel displacements. Considering this, the input images are scaled to half before entering the compute pipeline. The ground truth flow is scaled accordingly in order to be compared with the estimated flow. The &lt;em>Endpoint Error&lt;/em> measures the different in magnitude between the ground truth and the estimation, it is computed as:&lt;/p>
+&lt;p>$$
+EE = \sqrt{(u - u_\text{gt})^2 + (v - v_\text{gt})^2}
+$$&lt;/p>
+&lt;p>The algorithm is configured as follows:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>alpha&lt;/code>: 15.0/255&lt;/li>
+&lt;li>&lt;code>iterations&lt;/code>: 2000&lt;/li>
+&lt;li>&lt;code>float_precision&lt;/code>: FP32&lt;/li>
+&lt;/ul>
+&lt;p>In general, the estimated optical flow yields acceptable results in image regions with small displacements (e.g. Dimetrodon, Grove2, Hydrangea, and RubberWhale). In image regions with large displacements, the method is not able to compute a good results, as can be visualized in the Urban2 and Urban3 sequences.&lt;/p>
+&lt;p>The results reported in this post were run on a Razer Blade 2021 Laptop equipped with an Nvidia RTX 3070 GPU. The runtime is reported in the title of each figure, and is in the order of 20 milliseconds for most of the image sequences. Section &lt;a href="#runtime-performance">runtime performance&lt;/a> evaluates the performance of the algorithm on different devices, resolutions, and floating point precisions.&lt;/p>
+&lt;p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Dimetrodon_hub61d6bce717e84d12b94ae8f19c44dbe_380986_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Grove2_huf062432bdcc4b0dee6f383ad9b4dc7d4_560879_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Grove3_huf8f2f775eb608ba44f616a33e50d448f_686186_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Hydrangea_huab2d08a346f77aac20a6565f5879c559_512825_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/RubberWhale_hud2733ea7a567c3bc1da0d8b4b35593bf_468171_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Urban2_huda8ebcbe92be0174982d6803f056b859_429284_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Urban3_hu5eb0d8c36b3a768e4992ae76fa94cb32_413470_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Venus_hu82173b313be1466d9e83f77f2cb695e1_410178_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>&lt;/p>
+&lt;h2 id="runtime-performance">Runtime performance&lt;/h2>
+&lt;p>For the runtime analysis of the algorithm, two GPU devices were used:&lt;/p>
+&lt;ul>
+&lt;li>A Nvidia GTX 1080 Desktop GPU.&lt;/li>
+&lt;li>A Nvidia RTX 3070 Laptop GPU running on a Razer Blade 2021.&lt;/li>
+&lt;/ul>
+&lt;p>The Horn and Schunck pipeline is configured using the same number of iterations used for the Middlebury evalatuon, that is, &lt;code>iterations = 2000&lt;/code>. The pipeline is configured for 5 different image resolutions (&lt;code>VGA 640x480&lt;/code>, &lt;code>HD 1280x720&lt;/code>, &lt;code>HD 1920x1080&lt;/code>, &lt;code>WQHD 2560x1440&lt;/code>, &lt;code>UHD 3840x2160&lt;/code>). For each resolution, the pipeline is run both using &lt;code>FP16&lt;/code> and &lt;code>FP32&lt;/code> floating point precision. The table and figure below show the runtime performance for each configuration.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align:left">Resolution&lt;/th>
+&lt;th style="text-align:left">Float precision&lt;/th>
+&lt;th style="text-align:left">Device&lt;/th>
+&lt;th style="text-align:right">Runtime median (ms)&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align:left">VGA 640x480&lt;/td>
+&lt;td style="text-align:left">FP16&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">68.8196&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">39.4354&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">FP32&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">97.5005&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">63.6458&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">HD 1280x720&lt;/td>
+&lt;td style="text-align:left">FP16&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">193.977&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">115.626&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">FP32&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">279.538&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">175.635&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">HD 1920x1080&lt;/td>
+&lt;td style="text-align:left">FP16&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">429.256&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">257.624&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">FP32&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">623.555&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">386.718&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">WQHD 2560x1440&lt;/td>
+&lt;td style="text-align:left">FP16&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">757.101&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">449.536&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">FP32&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">1099.35&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">682.558&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">UHD 3840x2160&lt;/td>
+&lt;td style="text-align:left">FP16&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">1694.16&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">1010.16&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">FP32&lt;/td>
+&lt;td style="text-align:left">GTX 1080&lt;/td>
+&lt;td style="text-align:right">2453.45&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">&lt;/td>
+&lt;td style="text-align:left">RTX 3070&lt;/td>
+&lt;td style="text-align:right">1551.34&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>It is not surprising that the RTX 3070 GPU is faster than the GTX 1080, as the former is of a newer generation than the latter.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2010px">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/runtime_hu8436b281ec8250665a25e3f2104e6842_65108_2000x500_resize_catmullrom_3.png" width="2000" height="500">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h2 id="discussion">Discussion&lt;/h2>
+&lt;p>This post presented a GPU implementation of the Horn and Schunck optical flow algorithm. Evaluation in the Middlebury test sequences show the validity of the implementation. A runtime performance analysis was conducted on two GPUs using several image resolutions and floatin point precisions.&lt;/p>
+&lt;p>Future work includes:&lt;/p>
+&lt;ul>
+&lt;li>Implementing a pyramidal scheme, for instance that of &lt;a href="https://scholar.google.com/scholar?cluster=16090950858323308671&amp;amp;hl=en&amp;amp;as_sdt=0,5">Llopis &lt;em>et. al.&lt;/em>&lt;/a>, to improve the accuracy of the algorithm in presence of large displacements.&lt;/li>
+&lt;li>Use the smoothness constrain and numerical scheme in the &lt;a href="https://scholar.google.com/scholar?cluster=8318694254870078457&amp;amp;hl=en&amp;amp;as_sdt=0,5">FlowFilter algorithm&lt;/a> to improve the accuracy.&lt;/li>
+&lt;/ul>
+&lt;h2 id="references">References&lt;/h2>
+&lt;ul>
+&lt;li>Horn, Berthold KP, and Brian G. Schunck. &amp;ldquo;Determining optical flow.&amp;rdquo; Artificial intelligence 17.1-3 (1981): 185-203. &lt;a href="https://scholar.google.com/citations?view_op=view_citation&amp;amp;hl=en&amp;amp;user=uWsBKQ0AAAAJ&amp;amp;citation_for_view=uWsBKQ0AAAAJ:u5HHmVD_uO8C">Google Scholar&lt;/a>.&lt;/li>
+&lt;li>Baker, S., Scharstein, D., Lewis, J.P., Roth, S., Black, M.J. and Szeliski, R., 2011. A database and evaluation methodology for optical flow. International journal of computer vision, 92(1), pp.1-31. &lt;a href="https://scholar.google.com/scholar?cluster=5697474256105237450&amp;amp;hl=en&amp;amp;as_sdt=0,5">Google Scholar&lt;/a>.&lt;/li>
+&lt;li>Meinhardt-Llopis, E. and Sánchez, J., 2013. Horn-schunck optical flow with a multi-scale strategy. Image Processing on line. &lt;a href="https://scholar.google.com/scholar?cluster=16090950858323308671&amp;amp;hl=en&amp;amp;as_sdt=0,5">Google Scholar&lt;/a>&lt;/li>
+&lt;li>Adarve, Juan David, and Robert Mahony. &amp;ldquo;A filter formulation for computing real time optical flow.&amp;rdquo; IEEE Robotics and Automation Letters 1.2 (2016): 1192-1199. &lt;a href="https://scholar.google.com/scholar?cluster=8318694254870078457&amp;amp;hl=en&amp;amp;as_sdt=0,5">Google Scholar&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Blog: Working with floating point precision</title><link>/blog/2022/02/12/working-with-floating-point-precision/</link><pubDate>Sat, 12 Feb 2022 00:00:00 +0000</pubDate><guid>/blog/2022/02/12/working-with-floating-point-precision/</guid><description>
 &lt;div class="alert alert-primary" role="alert">
 &lt;h4 class="alert-heading">Jupyter notebook:&lt;/h4>
 A Jupyter notebook with the code in this article is available in &lt;a href="https://colab.research.google.com/drive/1bddxWnYp8Rloiv4helVJznFe7NzwxxsJ?usp=sharing">Google Colab&lt;/a>. Check it out!
