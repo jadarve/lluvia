@@ -68,6 +68,33 @@ def readRGBA(path):
 
     return RGBA
 
+
+def readGray(path):
+    """
+    Reads an image and converts it to gray.
+
+    Parameters
+    ----------
+    path : str.
+        Image path.
+
+    Returns
+    -------
+    Gray : np.ndarray.
+        Gray image.
+    """
+
+    img = imageio.imread(path).astype(np.float32)
+
+    height, width = img.shape[:2]
+
+    imgMatrix = np.reshape(img, (height * width, 3))
+
+    gray = np.dot(imgMatrix, np.array([0.29899999, 0.58700001, 0.114]))
+    gray = gray.reshape((height, width))
+
+    return gray.astype(np.uint8)
+
 def readSampleImage(name):
     """
     Reads a sample image packed with Lluvia.

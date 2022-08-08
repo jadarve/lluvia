@@ -11,6 +11,7 @@
 from libc.stdint cimport uint32_t
 
 from libcpp.memory cimport shared_ptr
+from cython.operator cimport dereference as deref
 
 import  numpy as np
 cimport numpy as np
@@ -220,15 +221,43 @@ cdef class Image:
 
     def clear(self):
         """
-        Clears the pixels in the image to zero.
+        Immediately clears the image pixels to zero.
+
+        This method creates a command buffer and sumbits it to clear
+        all the pixels in the underlying image to zero. Execution is
+        blocked until the operation is completed.
         """
 
-        cmdBuffer = self.session.createCommandBuffer()
-        cmdBuffer.begin()
-        cmdBuffer.clearImage(self)
-        cmdBuffer.end()
+        self.__image.get().clear()
 
-        self.session.run(cmdBuffer)
+    def copyTo(self, dst):
+        """
+        Immediately copies the content of this image into the destination.
+
+        This method creates a command buffer and sumbits it to copy the content
+        of this image into dst. No valiation of destination image shape is performed.
+        Execution is blocked until the operation is completed.
+
+        Parameters
+        ----------
+        dst : Image or ImageView
+            Destination object.
+        """
+
+        cdef Image dstImage = None
+        cdef ImageView dstImageView = None
+
+        if type(dst) == Image:
+            dstImage = dst
+            self.__image.get().copyTo(deref(dstImage.__image.get()))
+        
+        elif type(dst) == ImageView:
+            dstImageView = dst
+            dstImage = dstImageView.__image
+            self.__image.get().copyTo(deref(dstImage.__image.get()))
+        
+        else:
+            raise RuntimeError('Unsupported dst type: %s'.format(type(dst)))
 
     def fromHost(self, np.ndarray arr):
         """
@@ -630,7 +659,27 @@ cdef class ImageView:
 
     def clear(self):
         """
-        Clears the pixels in the image to zero.
+        Immediately clears the image pixels to zero.
+
+        This method creates a command buffer and sumbits it to clear
+        all the pixels in the underlying image to zero. Execution is
+        blocked until the operation is completed.
         """
 
         self.image.clear()
+
+    def copyTo(self, dst):
+        """
+        Immediately copies the content of this image into the destination.
+
+        This method creates a command buffer and sumbits it to copy the content
+        of this image into dst. No valiation of destination image shape is performed.
+        Execution is blocked until the operation is completed.
+
+        Parameters
+        ----------
+        dst : Image or ImageView
+            Destination object.
+        """
+
+        self.image.copyTo(dst)

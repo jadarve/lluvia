@@ -261,6 +261,17 @@ public:
     */
     void clear();
 
+    /**
+    @brief      Immediately copies the content of this image into the destination.
+
+    This method creates a command buffer and sumbits it to copy the content
+    of this image into dst. No valiation of destination image shape is performed.
+    Execution is blocked until the operation is completed.
+
+    @param[in]  dst  The destination image.
+    */
+    void copyTo(ll::Image& dst);
+
 private:
     Image(const std::shared_ptr<ll::vulkan::Device>& device,
           const vk::Image& vkImage,

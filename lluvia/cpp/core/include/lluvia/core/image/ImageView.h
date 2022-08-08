@@ -342,6 +342,18 @@ public:
     */
     void clear();
 
+    /**
+    @brief      Immediately copies the content of this image view into the destination.
+
+    This method creates a command buffer and sumbits it to copy the content
+    of this image view underlying Image object into dst Image object.
+    No valiation of destination image shape is performed.
+    Execution is blocked until the operation is completed.
+    
+    @param[in]  dst  The destination image view..
+    */
+    void copyTo(ll::ImageView& dst);
+
 private:
     ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
               const std::shared_ptr<ll::Image>& image,

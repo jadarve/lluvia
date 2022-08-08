@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: Build Cpp core
-          command: bazel build //lluvia/cpp/core:core_cc_library
+          command: bazel build //lluvia/cpp/core:core_cc_library --local_cpu_resources=HOST_CPUS-2
       - run:
           name: Test
           command: bazel test --test_output=errors //...

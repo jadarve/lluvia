@@ -1,0 +1,71 @@
+"""
+"""
+
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
+ll_node(
+    name = "ImageProcessor",
+    builder = "ImageProcessor.lua",
+    shader = "ImageProcessor.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ImageProcessor_test",
+    srcs = ["ImageProcessor_test.py"],
+    data = [
+        ":ImageProcessor_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "NumericIteration",
+    builder = "NumericIteration.lua",
+    shader = "NumericIteration.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "NumericIteration_test",
+    srcs = ["NumericIteration_test.py"],
+    data = [
+        ":NumericIteration_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "HornSchunck",
+    builder = "HornSchunck.lua",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "HornSchunck_test",
+    srcs = ["HornSchunck_test.py"],
+    data = [
+        ":HornSchunck_runfiles",
+        ":ImageProcessor_runfiles",
+        ":NumericIteration_runfiles",
+        "//lluvia/nodes/lluvia/math/normalize:ImageNormalize_uint_C1_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)

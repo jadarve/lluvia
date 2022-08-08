@@ -12,6 +12,7 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleX_r8ui",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleY_r8ui",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImagePyramid_r8ui",
+        "@lluvia//lluvia/nodes/lluvia/math/normalize:ImageNormalize_uint_C1",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowFilter",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowFilterDelta",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowFilterSimple",
@@ -25,6 +26,9 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdate",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:FlowUpdateDelta",
         "@lluvia//lluvia/nodes/lluvia/opticalflow/flowfilter:ImageModel",
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:HornSchunck",
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:ImageProcessor",
+        "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:NumericIteration",
         "@lluvia//lluvia/nodes/lluvia/viz:Flow2RGBA",
     ],
     visibility = ["//visibility:public"]

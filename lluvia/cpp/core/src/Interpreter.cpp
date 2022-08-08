@@ -230,6 +230,7 @@ void registerTypes(sol::table& lib) {
         "usageFlags", sol::property(&ll::Image::getUsageFlagsUnsafe),
         "changeImageLayout", &ll::Image::changeImageLayout,
         "clear", &ll::Image::clear,
+        "copyTo", &ll::Image::copyTo,
         "createImageView", &ll::Image::createImageView
         );
 
@@ -252,7 +253,8 @@ void registerTypes(sol::table& lib) {
         "tiling", sol::property(&ll::ImageView::getTiling),
         "usageFlags", sol::property(&ll::ImageView::getUsageFlagsUnsafe),
         "changeImageLayout", &ll::ImageView::changeImageLayout,
-        "clear", &ll::ImageView::clear
+        "clear", &ll::ImageView::clear,
+        "copyTo", &ll::ImageView::copyTo
         );
 
 
@@ -322,7 +324,8 @@ void registerTypes(sol::table& lib) {
         "getProgram", &ll::Session::getProgram,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createComputeNode,
         "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createContainerNode,
-        "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape
+        "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape,
+        "__runComputeNode", (void (ll::Session::*)(const ll::ComputeNode& node)) &ll::Session::run
         );
 
     lib.new_usertype<ll::Memory>("Memory",
