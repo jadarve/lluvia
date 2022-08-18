@@ -24,6 +24,7 @@ enum class PortType : ll::enum_t {
     Buffer           = 0,   /**< value for ll::Buffer type. */
     ImageView        = 1,   /**< value for ll::ImageView without pixel sampler.*/
     SampledImageView = 2,   /**< value for ll::ImageView objects coupled with a pixel sampler. */
+    UniformBuffer    = 3,   /**< value for ll::Buffer objects allocated to be used as uniform buffer. */
 };
 
 namespace impl
@@ -34,10 +35,11 @@ namespace impl
 
     @sa ll::PortType enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char *, ll::PortType>, 3> PortTypeStrings{{
+    constexpr const std::array<std::tuple<const char *, ll::PortType>, 4> PortTypeStrings{{
         std::make_tuple("Buffer", ll::PortType::Buffer),
         std::make_tuple("ImageView", ll::PortType::ImageView),
         std::make_tuple("SampledImageView", ll::PortType::SampledImageView),
+        std::make_tuple("UniformBuffer", ll::PortType::UniformBuffer),
     }};
 
 } // namespace impl

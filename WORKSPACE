@@ -29,8 +29,6 @@ http_archive(
 #            Only the values for your OS matter.
 register_toolchains("@lluvia//platform:python_toolchain")
 
-load("@rules_python//python:repositories.bzl", "py_repositories")
-py_repositories()
 
 # Only needed if using the packaging rules.
 load("@rules_python//python:pip.bzl", "pip_repositories")

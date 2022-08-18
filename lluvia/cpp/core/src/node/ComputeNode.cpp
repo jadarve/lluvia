@@ -358,7 +358,7 @@ void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_p
         .setBuffer(buffer->m_vkBuffer);
 
     auto writeDescSet = vk::WriteDescriptorSet()
-        .setDescriptorType(vk::DescriptorType::eStorageBuffer)
+        .setDescriptorType(ll::portTypeToVkDescriptorType(port.getPortType()))
         .setDstSet(m_descriptorSet)
         .setDstBinding(port.getBinding())
         .setDescriptorCount(1)
@@ -384,8 +384,7 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
 
-    const auto isSampled = imgView->getDescriptor().isSampled();
-    writeDescSet.setDescriptorType(isSampled? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
+    writeDescSet.setDescriptorType(ll::portTypeToVkDescriptorType(port.getPortType()));
 
     // update the informacion of the descriptor set
     m_device->get().updateDescriptorSets(1, &writeDescSet, 0, nullptr);

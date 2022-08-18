@@ -74,7 +74,7 @@ std::pair<bool, std::string> PortDescriptor::isValid(const std::shared_ptr<ll::O
     switch (port->getType()) {
 
     case ll::ObjectType::Buffer:
-        return validateBuffer();
+        return validateBuffer(std::static_pointer_cast<ll::Buffer>(port));
     
     case ll::ObjectType::ImageView:
         return validateImageView(std::static_pointer_cast<ll::ImageView>(port));
@@ -86,10 +86,19 @@ std::pair<bool, std::string> PortDescriptor::isValid(const std::shared_ptr<ll::O
     return std::make_pair(true, std::string{});
 }
 
-std::pair<bool, std::string> PortDescriptor::validateBuffer() const noexcept {
+std::pair<bool, std::string> PortDescriptor::validateBuffer(const std::shared_ptr<ll::Buffer> &port) const noexcept {
 
-    if (m_portType != ll::PortType::Buffer) {
+    if (m_portType != ll::PortType::Buffer && m_portType != ll::PortType::UniformBuffer) {
         return std::make_pair(false, "Port " + toString() + " cannot receive object of type ll::PortType::Buffer");
+    }
+
+    if (m_portType == ll::PortType::UniformBuffer) {
+
+        // check that the buffer contains UniformBuffer in its usage flags
+        if (static_cast<ll::enum_t>(port->getUsageFlags() & ll::BufferUsageFlagBits::UniformBuffer) == 0 ) {
+            return std::make_pair(false, "Port " + toString() + " has received a "
+                "buffer object without ll::BufferUsageFlagBits::UniformBuffer usage flag");
+        }
     }
 
     return std::make_pair(true, std::string{});

@@ -27,6 +27,9 @@ namespace ll
 
         case ll::PortType::SampledImageView:
             return vk::DescriptorType::eCombinedImageSampler;
+        
+        case ll::PortType::UniformBuffer:
+            return vk::DescriptorType::eUniformBuffer;
         }
     }
 
@@ -43,12 +46,14 @@ namespace ll
 
         case vk::DescriptorType::eCombinedImageSampler:
             return ll::PortType::SampledImageView;
-
+        
+        case vk::DescriptorType::eUniformBuffer:
+            return ll::PortType::UniformBuffer;
+        
         case vk::DescriptorType::eSampler:
         case vk::DescriptorType::eSampledImage:
         case vk::DescriptorType::eUniformTexelBuffer:
         case vk::DescriptorType::eStorageTexelBuffer:
-        case vk::DescriptorType::eUniformBuffer:
         case vk::DescriptorType::eUniformBufferDynamic:
         case vk::DescriptorType::eStorageBufferDynamic:
         case vk::DescriptorType::eInputAttachment:

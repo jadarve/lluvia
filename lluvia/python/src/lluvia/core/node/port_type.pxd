@@ -14,9 +14,11 @@ cdef extern from "lluvia/core/node/PortType.h" namespace 'll':
         _PortType_Buffer           'll::PortType::Buffer'
         _PortType_ImageView        'll::PortType::ImageView'
         _PortType_SampledImageView 'll::PortType::SampledImageView'
+        _PortType_UniformBuffer    'll::PortType::UniformBuffer'
 
 
 cpdef enum PortType:
     Buffer           = <uint32_t> _PortType_Buffer
     ImageView        = <uint32_t> _PortType_ImageView
     SampledImageView = <uint32_t> _PortType_SampledImageView
+    UniformBuffer    = <uint32_t> _PortType_UniformBuffer
