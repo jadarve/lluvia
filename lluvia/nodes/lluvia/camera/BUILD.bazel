@@ -1,0 +1,27 @@
+"""
+"""
+
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
+
+ll_node(
+    name = "CameraRectification_rgba",
+    builder = "CameraRectification_rgba.lua",
+    shader = "CameraRectification_rgba.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "CameraRectification_rgba_test",
+    srcs = ["CameraRectification_rgba_test.py"],
+    data = [
+        ":CameraRectification_rgba_runfiles"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)

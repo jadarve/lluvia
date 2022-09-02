@@ -4,6 +4,7 @@ glsl_header_library(
     name = "lluvia_glsl_library",
     hdrs = [
         "lluvia/core/color.glsl",
+        "lluvia/core/camera.glsl",
         "lluvia/core.glsl"
     ],
     strip_include_prefix = "lluvia/glsl/lib",
