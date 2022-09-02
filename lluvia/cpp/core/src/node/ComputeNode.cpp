@@ -74,11 +74,15 @@ void ComputeNode::initPortBindings() {
         .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
         .setPPoolSizes(descriptorPoolSizes.data());
 
-    ll::throwSystemErrorIf(
-            m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool) != vk::Result::eSuccess,
-            ll::ErrorCode::VulkanError,
-            "error creating descriptor pool for compute node."
-            );
+
+    if (m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool) != vk::Result::eSuccess) {
+
+        // free previously allocated resources
+        m_device->get().destroyDescriptorSetLayout(m_descriptorSetLayout);
+
+        // then throw system error
+        ll::throwSystemError(ll::ErrorCode::VulkanError, "error creating descriptor pool for compute node.");
+    }
 
     // only one descriptor set for this Node object
     vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
@@ -86,11 +90,14 @@ void ComputeNode::initPortBindings() {
         .setDescriptorSetCount(1)
         .setPSetLayouts(&m_descriptorSetLayout);
 
-    ll::throwSystemErrorIf(
-            m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet) != vk::Result::eSuccess,
-            ll::ErrorCode::VulkanError,
-            "error allocating descriptor set."
-            );
+    if (m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet) != vk::Result::eSuccess) {
+
+        // free previously allocated resources
+        m_device->get().destroyDescriptorPool(m_descriptorPool, nullptr);
+        m_device->get().destroyDescriptorSetLayout(m_descriptorSetLayout);
+
+        ll::throwSystemError(ll::ErrorCode::VulkanError, "error allocating descriptor set.");
+    }
 }
 
 
