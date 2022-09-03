@@ -75,13 +75,13 @@ void ComputeNode::initPortBindings() {
         .setPPoolSizes(descriptorPoolSizes.data());
 
 
-    if (m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool) != vk::Result::eSuccess) {
+    if (const auto errCode = m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool); errCode != vk::Result::eSuccess) {
 
         // free previously allocated resources
         m_device->get().destroyDescriptorSetLayout(m_descriptorSetLayout);
 
         // then throw system error
-        ll::throwSystemError(ll::ErrorCode::VulkanError, "error creating descriptor pool for compute node.");
+        ll::throwSystemError(ll::ErrorCode::VulkanError, "error creating descriptor pool for compute node (" + vk::to_string(errCode) + ")");
     }
 
     // only one descriptor set for this Node object
@@ -90,13 +90,14 @@ void ComputeNode::initPortBindings() {
         .setDescriptorSetCount(1)
         .setPSetLayouts(&m_descriptorSetLayout);
 
-    if (m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet) != vk::Result::eSuccess) {
+
+    if (const auto errCode = m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet); errCode != vk::Result::eSuccess) {
 
         // free previously allocated resources
         m_device->get().destroyDescriptorPool(m_descriptorPool, nullptr);
         m_device->get().destroyDescriptorSetLayout(m_descriptorSetLayout);
 
-        ll::throwSystemError(ll::ErrorCode::VulkanError, "error allocating descriptor set.");
+        ll::throwSystemError(ll::ErrorCode::VulkanError, "error allocating descriptor set (" + vk::to_string(errCode) + ")");
     }
 }
 
@@ -410,6 +411,7 @@ std::vector<vk::DescriptorPoolSize> ComputeNode::getDescriptorPoolSizes() const 
 
     std::vector<vk::DescriptorPoolSize> poolSizes;
     pushDescriptorPoolSize(vk::DescriptorType::eStorageBuffer, poolSizes);
+    pushDescriptorPoolSize(vk::DescriptorType::eUniformBuffer, poolSizes);
     pushDescriptorPoolSize(vk::DescriptorType::eStorageImage, poolSizes);
     pushDescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, poolSizes);
         
