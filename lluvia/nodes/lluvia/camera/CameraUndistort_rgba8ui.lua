@@ -1,6 +1,6 @@
 local builder = ll.class(ll.ComputeNodeBuilder)
 
-builder.name = 'lluvia/camera/CameraUndistort_rgba'
+builder.name = 'lluvia/camera/CameraUndistort_rgba8ui'
 builder.doc = [[
 Rectifies an RGBA input image applying camera distortion model.
 
