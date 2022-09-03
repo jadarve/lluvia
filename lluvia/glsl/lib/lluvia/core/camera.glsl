@@ -4,7 +4,7 @@
 /**
 
 */
-struct Camera {
+struct ll_camera {
     mat3 K;
     mat3 Kinv;
     vec4 radialDistortion;
@@ -12,7 +12,7 @@ struct Camera {
 };
 
 
-vec2 camera_standardInterpolationCoordinates(const Camera cam, const vec2 pixCoords) {
+vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 pixCoords) {
 
     const vec3 normalizedCoords = cam.Kinv * vec3(pixCoords.xy, 1);
 
@@ -48,10 +48,45 @@ vec2 camera_standardInterpolationCoordinates(const Camera cam, const vec2 pixCoo
 }
 
 
-vec2 camera_fisheyeInterpolationCoordinates(const Camera cam, const vec2 pixCoords) {
+/**
+See See https://docs.opencv.org/3.4/db/d58/group__calib3d__fisheye.html for more details.
 
-    // TODO
-    return pixCoords;
+FIXME: when the radial coefficients are zero, this model yields pixel coordinates different
+to that of the input.
+*/
+vec2 ll_camera_fisheyeInterpolationCoordinates(const ll_camera cam, const vec2 pixCoords) {
+
+    const vec3 normalizedCoords = cam.Kinv * vec3(pixCoords.xy, 1);
+
+    // unpack the radial distortion coeficients
+    const float k1 = cam.radialDistortion.x;
+    const float k2 = cam.radialDistortion.y;
+    const float k3 = cam.radialDistortion.z;
+    const float k4 = cam.radialDistortion.w;
+
+    // image plane coordinate radius squared
+    const float r2 = dot(normalizedCoords.xy, normalizedCoords.xy);
+    const float r = sqrt(r2);
+
+    // pixel angle
+    const float theta = atan(r);
+
+    const float theta2 = theta * theta;
+    const float theta4 = theta2 * theta2;
+    const float theta6 = theta4 * theta2;
+    const float theta8 = theta4 * theta4;
+
+    const float thetaDist = theta * (1 + k1 * theta2 + k2 * theta4 + k3 * theta6 + k4 * theta8);
+
+    // possible division by zero
+    const float scale = r > 1e-5? thetaDist / r : 0;
+
+    // distorted coordinates
+    const vec3 Pdistorted = vec3(scale * normalizedCoords.xy, 1);
+
+    // Convert back to pixel coordinates
+    const vec3 outPixCoords = cam.K * Pdistorted;
+    return outPixCoords.xy;
 }
 
 

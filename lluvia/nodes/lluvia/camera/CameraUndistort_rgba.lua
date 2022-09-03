@@ -1,10 +1,17 @@
 local builder = ll.class(ll.ComputeNodeBuilder)
 
-builder.name = 'lluvia/camera/CameraRectification_rgba'
+builder.name = 'lluvia/camera/CameraUndistort_rgba'
 builder.doc = [[
 Rectifies an RGBA input image applying camera distortion model.
 
-TODO
+The node 
+
+Parameters
+----------
+camera_model : int. Defaults to 0.
+    The camera model used for rectifying the image. Possible values are:
+
+    * 0: standard model
 
 Inputs
 ------
@@ -12,12 +19,30 @@ in_rgba : ImageView.
     rgba8ui image.
 
 in_camera : UniformBuffer.
-    Uniform buffer containing the cameara struct. TODO.
+    Uniform buffer containing the camera data. The buffer is interpreted as GLSL `ll_camera` struct:
+
+    ```glsl
+    struct ll_camera {
+        mat3 K;
+        mat3 Kinv;
+        vec4 radialDistortion;
+        vec4 tangentialDistortion;
+    };
+    ```
+
+    The alignment of the struct follows the GLSL std140 rules of alignment.
 
 Outputs
 -------
 out_rgba : ImageView
     rgba8ui image. The rectified image.
+
+Examples
+--------
+
+```python
+
+```
 
 ]]
 
@@ -41,12 +66,22 @@ function builder.newDescriptor()
     desc:addPort(in_camera)
     desc:addPort(out_rgba)
 
+    desc:setParameter('camera_model', 0)
+
     return desc
 end
 
 function builder.onNodeInit(node)
 
     local in_rgba = node:getPort('in_rgba')
+
+    local camera_model = node:getParameter('camera_model')
+
+    -- push constants
+    local pushConstants = ll.PushConstants.new()
+    pushConstants:pushInt32(math.tointeger(camera_model))
+
+    node.pushConstants = pushConstants
     
     -------------------------------------------------------
     -- allocate out_rgba
@@ -68,7 +103,6 @@ function builder.onNodeInit(node)
     imgViewDesc.isSampled = false
     imgViewDesc:setAddressMode(ll.ImageAddressMode.Repeat)
 
-    -- ll::Memory where out_gray will be allocated
     local memory = in_rgba.memory
     local out_rgba = memory:createImageView(imgDesc, imgViewDesc)
 

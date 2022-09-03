@@ -5,10 +5,15 @@
 
 layout(binding = 0) uniform usampler2D in_rgba;
 layout(std140, binding = 1) uniform uniform_in_camera {
-    Camera camera;
+    ll_camera camera;
 } in_camera;
 
 layout(binding = 2, rgba8ui) uniform uimage2D out_rgba;
+
+layout(push_constant) uniform const_0 {
+    int camera_model;
+} params;
+
 
 void main() {
 
@@ -19,8 +24,12 @@ void main() {
         return;
     }
 
-    // TODO: select between standard and fisheye distortion with a push constant
-    const vec2 pixCoords = camera_standardInterpolationCoordinates(in_camera.camera, coords);
+    // FIXME: debug fisheye distortion model
+    // const vec2 pixCoords = params.camera_model == 0? 
+    //     ll_camera_standardInterpolationCoordinates(in_camera.camera, coords) :
+    //     ll_camera_fisheyeInterpolationCoordinates(in_camera.camera, coords);
+
+    const vec2 pixCoords = ll_camera_standardInterpolationCoordinates(in_camera.camera, coords);
 
     // texture interpolation and storage
     const uvec4 RGBA = texture(in_rgba, pixCoords.xy);

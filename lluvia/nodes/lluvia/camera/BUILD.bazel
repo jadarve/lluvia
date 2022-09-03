@@ -7,9 +7,9 @@ load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
 
 ll_node(
-    name = "CameraRectification_rgba",
-    builder = "CameraRectification_rgba.lua",
-    shader = "CameraRectification_rgba.comp",
+    name = "CameraUndistort_rgba",
+    builder = "CameraUndistort_rgba.lua",
+    shader = "CameraUndistort_rgba.comp",
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -17,10 +17,10 @@ ll_node(
 )
 
 py_test(
-    name = "CameraRectification_rgba_test",
-    srcs = ["CameraRectification_rgba_test.py"],
+    name = "CameraUndistort_rgba_test",
+    srcs = ["CameraUndistort_rgba_test.py"],
     data = [
-        ":CameraRectification_rgba_runfiles"
+        ":CameraUndistort_rgba_runfiles"
     ],
     deps = PY_TEST_DEPS,
     legacy_create_init = False

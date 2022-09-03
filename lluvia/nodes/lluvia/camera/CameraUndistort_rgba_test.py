@@ -39,13 +39,13 @@ def createCameraUniformBuffer(width, height):
 
 def test_goodUse():
 
-    nodeName = 'lluvia/camera/CameraRectification_rgba'
+    nodeName = 'lluvia/camera/CameraUndistort_rgba'
 
     session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     ll_test.loadNode(session,
-                     builderPath='lluvia/lluvia/nodes/lluvia/camera/CameraRectification_rgba.lua',
-                     programPath='lluvia/lluvia/nodes/lluvia/camera/CameraRectification_rgba.comp.spv',
-                     programName='lluvia/camera/CameraRectification_rgba.comp'
+                     builderPath='lluvia/lluvia/nodes/lluvia/camera/CameraUndistort_rgba.lua',
+                     programPath='lluvia/lluvia/nodes/lluvia/camera/CameraUndistort_rgba.comp.spv',
+                     programName='lluvia/camera/CameraUndistort_rgba.comp'
                      )
 
     node = session.createComputeNode(nodeName)
