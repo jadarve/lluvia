@@ -168,7 +168,8 @@ var namespacell =
     [ "PortType", "d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211", [
       [ "Buffer", "d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211a7e62bc342f41c946868f0ea6f0b712d8", null ],
       [ "ImageView", "d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211af972f8318e7db88c15add605de3c23d1", null ],
-      [ "SampledImageView", "d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211aa980699d87b24a2b782402c69a1f6470", null ]
+      [ "SampledImageView", "d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211aa980699d87b24a2b782402c69a1f6470", null ],
+      [ "UniformBuffer", "d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211a88f133adfed6c854e5731cdffbf208cf", null ]
     ] ],
     [ "bufferUsageFlagsToVectorString", "d8/dda/namespacell.html#a7fe4a7375086053c1b3e92c4fb19ebb8", null ],
     [ "castChannelCount", "d8/dda/namespacell.html#ad8957fdbdd3ee7e5f02a2fbeef6ebe73", null ],

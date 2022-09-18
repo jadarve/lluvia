@@ -8,6 +8,6 @@ var searchData=
   ['uncompressbinaryfile_479',['uncompressBinaryFile',['../d4/d5a/classll_1_1impl_1_1ZipArchive.html#aa87c4c23a1e472a9c9bc500448fbe1e7',1,'ll::impl::ZipArchive']]],
   ['uncompresstextfile_480',['uncompressTextFile',['../d4/d5a/classll_1_1impl_1_1ZipArchive.html#ae86243eb3df75edebc5011c770c5cef4',1,'ll::impl::ZipArchive']]],
   ['undefined_481',['Undefined',['../d8/dda/namespacell.html#a26be6e4eaaf158353dda48d88dca308aaec0fc0100c4fc1ce4eea230c3dc10360',1,'ll']]],
-  ['uniformbuffer_482',['UniformBuffer',['../d8/dda/namespacell.html#ae7ea73ced07f239ccf214e4fd12cfd6ca88f133adfed6c854e5731cdffbf208cf',1,'ll']]],
+  ['uniformbuffer_482',['UniformBuffer',['../d8/dda/namespacell.html#ae7ea73ced07f239ccf214e4fd12cfd6ca88f133adfed6c854e5731cdffbf208cf',1,'ll::UniformBuffer()'],['../d8/dda/namespacell.html#a60a34a98caee536252321f5f94e0c211a88f133adfed6c854e5731cdffbf208cf',1,'ll::UniformBuffer()']]],
   ['utils_2eh_483',['utils.h',['../d5/d60/utils_8h.html',1,'']]]
 ];
