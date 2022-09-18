@@ -15,7 +15,7 @@ A Jupyter notebook with the code in this article is available in &lt;a href="htt
 &lt;h3 id="camera-model">Camera model&lt;/h3>
 &lt;p>The figure below illustrates the camera model.&lt;/p>
 &lt;p>&lt;img src="camera_model.svg" alt="">&lt;/p>
-&lt;p>The 3D point $\mathbf{x} \in \mathbb{R}^3$ is expressed relative to the camera body fixed frame. It projects onto the camera image plane as pixel $\mathbf{p} := (u, v) \in \mathbb{R}^2$ as&lt;/p>
+&lt;p>The 3D point $\mathbf{x} \in \mathbb{R}^3$ is expressed relative to the camera body fixed frame. It projects onto the camera image plane as pixel $\mathbf{p} := (u, v)^\top \in \mathbb{R}^2$ as&lt;/p>
 &lt;p>$$
 \begin{equation}
 \begin{pmatrix}
@@ -28,7 +28,7 @@ v \\
 \end{pmatrix} = \frac{\mathbf{K} \mathbf{x}}{ \left&amp;lt; e_3, \mathbf{x} \right&amp;gt;}
 \end{equation}
 $$&lt;/p>
-&lt;p>where $\mathbf{K} \in \mathbb{R}^{3\times3}$ is the camera intrinsics matrix, $e_3 := (0, 0, 1)^T$, and $\left&amp;lt; e_3, \mathbf{x} \right&amp;gt;$ is the dot product between the two vectors. The units of $\mathbf{p}$ are actual pixel coordinates in the ranges $u \in [0, W)$ and $v \in [0, H)$, with $W$ and $H$ denoting the image width and height respectively.&lt;/p>
+&lt;p>where $\mathbf{K} \in \mathbb{R}^{3\times3}$ is the camera intrinsics matrix, $e_3 := (0, 0, 1)^\top$, and $\left&amp;lt; e_3, \mathbf{x} \right&amp;gt;$ is the dot product between the two vectors. The units of $\mathbf{p}$ are actual pixel coordinates in the ranges $u \in [0, W)$ and $v \in [0, H)$, with $W$ and $H$ denoting the image width and height respectively.&lt;/p>
 &lt;p>Given a pixel point, the corresponding 3D coordinate $\bar{\mathbf{x}}$ in the image plane is defined as:&lt;/p>
 &lt;p>$$
 \begin{equation}
