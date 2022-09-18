@@ -74,11 +74,15 @@ void ComputeNode::initPortBindings() {
         .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
         .setPPoolSizes(descriptorPoolSizes.data());
 
-    ll::throwSystemErrorIf(
-            m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool) != vk::Result::eSuccess,
-            ll::ErrorCode::VulkanError,
-            "error creating descriptor pool for compute node."
-            );
+
+    if (const auto errCode = m_device->get().createDescriptorPool(&descriptorPoolCreateInfo, nullptr, &m_descriptorPool); errCode != vk::Result::eSuccess) {
+
+        // free previously allocated resources
+        m_device->get().destroyDescriptorSetLayout(m_descriptorSetLayout);
+
+        // then throw system error
+        ll::throwSystemError(ll::ErrorCode::VulkanError, "error creating descriptor pool for compute node (" + vk::to_string(errCode) + ")");
+    }
 
     // only one descriptor set for this Node object
     vk::DescriptorSetAllocateInfo descSetAllocInfo = vk::DescriptorSetAllocateInfo()
@@ -86,11 +90,15 @@ void ComputeNode::initPortBindings() {
         .setDescriptorSetCount(1)
         .setPSetLayouts(&m_descriptorSetLayout);
 
-    ll::throwSystemErrorIf(
-            m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet) != vk::Result::eSuccess,
-            ll::ErrorCode::VulkanError,
-            "error allocating descriptor set."
-            );
+
+    if (const auto errCode = m_device->get().allocateDescriptorSets(&descSetAllocInfo, &m_descriptorSet); errCode != vk::Result::eSuccess) {
+
+        // free previously allocated resources
+        m_device->get().destroyDescriptorPool(m_descriptorPool, nullptr);
+        m_device->get().destroyDescriptorSetLayout(m_descriptorSetLayout);
+
+        ll::throwSystemError(ll::ErrorCode::VulkanError, "error allocating descriptor set (" + vk::to_string(errCode) + ")");
+    }
 }
 
 
@@ -358,7 +366,7 @@ void ComputeNode::bindBuffer(const ll::PortDescriptor& port, const std::shared_p
         .setBuffer(buffer->m_vkBuffer);
 
     auto writeDescSet = vk::WriteDescriptorSet()
-        .setDescriptorType(vk::DescriptorType::eStorageBuffer)
+        .setDescriptorType(ll::portTypeToVkDescriptorType(port.getPortType()))
         .setDstSet(m_descriptorSet)
         .setDstBinding(port.getBinding())
         .setDescriptorCount(1)
@@ -384,8 +392,7 @@ void ComputeNode::bindImageView(const ll::PortDescriptor& port, const std::share
         .setDescriptorCount(1)
         .setPImageInfo(&descImgInfo);
 
-    const auto isSampled = imgView->getDescriptor().isSampled();
-    writeDescSet.setDescriptorType(isSampled? vk::DescriptorType::eCombinedImageSampler : vk::DescriptorType::eStorageImage);
+    writeDescSet.setDescriptorType(ll::portTypeToVkDescriptorType(port.getPortType()));
 
     // update the informacion of the descriptor set
     m_device->get().updateDescriptorSets(1, &writeDescSet, 0, nullptr);
@@ -404,6 +411,7 @@ std::vector<vk::DescriptorPoolSize> ComputeNode::getDescriptorPoolSizes() const 
 
     std::vector<vk::DescriptorPoolSize> poolSizes;
     pushDescriptorPoolSize(vk::DescriptorType::eStorageBuffer, poolSizes);
+    pushDescriptorPoolSize(vk::DescriptorType::eUniformBuffer, poolSizes);
     pushDescriptorPoolSize(vk::DescriptorType::eStorageImage, poolSizes);
     pushDescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, poolSizes);
         

@@ -56,6 +56,62 @@ TEST_CASE("CheckBufferIncorrectPortType", "test_PortDescriptor") {
     REQUIRE(result.second == "Port {binding: 0, name: in_img_view, portType: ll::PortType::ImageView} cannot receive object of type ll::PortType::Buffer");
 }
 
+TEST_CASE("CheckUniformBuffer", "test_PortDescriptor") {
+
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    REQUIRE(session != nullptr);
+
+    auto memory = session->createMemory(ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent, 0, false);
+    REQUIRE(memory != nullptr);
+
+    auto buffer = memory->createBuffer(1024, ll::BufferUsageFlagBits::TransferDst | ll::BufferUsageFlagBits::UniformBuffer);
+    REQUIRE(buffer != nullptr);
+
+    auto portDescriptor = ll::PortDescriptor{0, "in_buffer", ll::PortDirection::In, ll::PortType::UniformBuffer};
+
+    auto result = portDescriptor.isValid(buffer);
+    REQUIRE(result.first == true);
+    REQUIRE(result.second == "");
+}
+
+TEST_CASE("CheckUniformBufferMissingUsageFlags", "test_PortDescriptor") {
+
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    REQUIRE(session != nullptr);
+
+    auto memory = session->createMemory(ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent, 0, false);
+    REQUIRE(memory != nullptr);
+
+    // missing ll::BufferUsageFlagBits::UniformBuffer
+    auto buffer = memory->createBuffer(1024, ll::BufferUsageFlagBits::TransferDst);
+    REQUIRE(buffer != nullptr);
+
+    auto portDescriptor = ll::PortDescriptor{0, "in_buffer", ll::PortDirection::In, ll::PortType::UniformBuffer};
+
+    auto result = portDescriptor.isValid(buffer);
+    REQUIRE(result.first == false);
+    REQUIRE(result.second == "Port {binding: 0, name: in_buffer, portType: ll::PortType::UniformBuffer} has received a buffer object without ll::BufferUsageFlagBits::UniformBuffer usage flag");
+}
+
+TEST_CASE("CheckUniformBufferIncorrectPortType", "test_PortDescriptor") {
+
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    REQUIRE(session != nullptr);
+
+    auto memory = session->createMemory(ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent, 0, false);
+    REQUIRE(memory != nullptr);
+
+    auto buffer = memory->createBuffer(1024, ll::BufferUsageFlagBits::TransferDst | ll::BufferUsageFlagBits::UniformBuffer);
+    REQUIRE(buffer != nullptr);
+
+    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+
+    auto result = portDescriptor.isValid(buffer);
+    REQUIRE(result.first == false);
+    REQUIRE(result.second == "Port {binding: 0, name: in_img_view, portType: ll::PortType::ImageView} cannot receive object of type ll::PortType::Buffer");
+}
+
+
 TEST_CASE("CheckImageView", "test_PortDescriptor") {
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));

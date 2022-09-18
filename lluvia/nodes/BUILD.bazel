@@ -6,6 +6,7 @@ ll_node_library(
     strip_prefix = "/lluvia/nodes",
     nodes = [
         "@lluvia//lluvia/nodes/lluvia:Sobel",
+        "@lluvia//lluvia/nodes/lluvia/camera:CameraUndistort_rgba8ui",
         "@lluvia//lluvia/nodes/lluvia/color:HSVA2RGBA",
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2Gray",
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2HSVA",

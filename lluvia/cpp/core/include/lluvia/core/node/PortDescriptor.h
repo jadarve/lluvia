@@ -64,7 +64,7 @@ public:
 private:
 
     // at the moment there is nothing to validate for a Buffer type port
-    std::pair<bool, std::string> validateBuffer() const noexcept;
+    std::pair<bool, std::string> validateBuffer(const std::shared_ptr<ll::Buffer> &port) const noexcept;
     std::pair<bool, std::string> validateImageView(const std::shared_ptr<ll::ImageView> &port) const noexcept;
 
     std::string toString() const noexcept;

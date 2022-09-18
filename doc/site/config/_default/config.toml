@@ -224,7 +224,7 @@ html_dom_element = "document.body"
 # unsupported command or invalid LaTeX. If false, KaTeX will render unsupported
 # commands as text, and render invalid LaTeX as its source code with hover text
 # giving the error, in the color given by errorColor.
-throwOnError = false
+throwOnError = true
 errorColor = "#CD5C5C"
 
 # This is a list of delimiters to look for math, processed in the same order as

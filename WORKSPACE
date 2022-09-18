@@ -29,21 +29,11 @@ http_archive(
 #            Only the values for your OS matter.
 register_toolchains("@lluvia//platform:python_toolchain")
 
-load("@rules_python//python:repositories.bzl", "py_repositories")
-py_repositories()
 
 # Only needed if using the packaging rules.
 load("@rules_python//python:pip.bzl", "pip_repositories")
 pip_repositories()
 
-# pip_import (
-#    name = "python_deps",
-#    requirements = "//:requirements.txt",
-#    python_interpreter = "python3",
-# )
-
-# load("@python_deps//:requirements.bzl", "pip_install")
-# pip_install()
 
 ###########################################################
 # PLATFORM CONFIGURATION
@@ -78,7 +68,6 @@ http_archive(
 )
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
-
 
 ###########################################################
 # Vulkan rules
