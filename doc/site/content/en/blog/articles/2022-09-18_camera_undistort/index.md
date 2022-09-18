@@ -35,7 +35,7 @@ The figure below illustrates the camera model.
 
 ![](camera_model.svg)
 
-The 3D point $\mathbf{x} \in \mathbb{R}^3$ is expressed relative to the camera body fixed frame. It projects onto the camera image plane as pixel $\mathbf{p} := (u, v) \in \mathbb{R}^2$ as
+The 3D point $\mathbf{x} \in \mathbb{R}^3$ is expressed relative to the camera body fixed frame. It projects onto the camera image plane as pixel $\mathbf{p} := (u, v)^\top \in \mathbb{R}^2$ as
 
 $$
 \begin{equation}
@@ -50,7 +50,7 @@ $$
 \end{equation}
 $$
 
-where $\mathbf{K} \in \mathbb{R}^{3\times3}$ is the camera intrinsics matrix, $e_3 := (0, 0, 1)^T$, and $\left< e_3, \mathbf{x} \right>$ is the dot product between the two vectors. The units of $\mathbf{p}$ are actual pixel coordinates in the ranges $u \in [0, W)$ and $v \in [0, H)$, with $W$ and $H$ denoting the image width and height respectively.
+where $\mathbf{K} \in \mathbb{R}^{3\times3}$ is the camera intrinsics matrix, $e_3 := (0, 0, 1)^\top$, and $\left< e_3, \mathbf{x} \right>$ is the dot product between the two vectors. The units of $\mathbf{p}$ are actual pixel coordinates in the ranges $u \in [0, W)$ and $v \in [0, H)$, with $W$ and $H$ denoting the image width and height respectively.
 
 Given a pixel point, the corresponding 3D coordinate $\bar{\mathbf{x}}$ in the image plane is defined as:
 
