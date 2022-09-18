@@ -4,8 +4,113 @@ builder.name = 'lluvia/camera/CameraUndistort_rgba8ui'
 builder.doc = [[
 Rectifies an RGBA input image applying camera distortion model.
 
-For the standard camera model, the undistortion process is as follows:
+### Standard distortion model
 
+For the standard camera model, the undistortion process is as follows.
+A 3D point $\mathbf{x} \in \mathbb{R}^3$ is expressed relative to the camera body fixed frame.
+It projects onto the camera image plane as pixel $\mathbf{p} := (u, v)^\top \in \mathbb{R}^2$ as
+
+$$
+\begin{equation}
+\begin{pmatrix}
+    \mathbf{p} \\\
+    1
+\end{pmatrix} := \begin{pmatrix}
+    u \\\
+    v \\\
+    1
+\end{pmatrix} = \frac{\mathbf{K} \mathbf{x}}{ \left< e_3, \mathbf{x} \right>}
+\end{equation}
+$$
+
+where $\mathbf{K} \in \mathbb{R}^{3\times3}$ is the camera intrinsics matrix, $e_3 := (0, 0, 1)^\top$, and $\left< e_3, \mathbf{x} \right>$ is the dot product between the two vectors. The units of $\mathbf{p}$ are actual pixel coordinates in the ranges $u \in [0, W)$ and $v \in [0, H)$, with $W$ and $H$ denoting the image width and height respectively.
+
+Given a pixel point, the corresponding 3D coordinate $\bar{\mathbf{x}}$ in the image plane is defined as:
+
+$$
+\begin{equation}
+\bar{\mathbf{x}} := \begin{pmatrix}
+\bar{x} \\\
+\bar{y} \\\
+\bar{z} \\\
+\end{pmatrix} = \mathbf{K}^{-1} \begin{pmatrix}
+    \mathbf{p} \\\
+    1
+\end{pmatrix}
+\end{equation}
+$$
+
+The standard distortion model is formed by two components:
+
+* A **radial** component parameterized by three coefficients: $k_1$, $k_2$, and $k_3$.
+* A **tangential** component with two parameters: $p_1$ and $p_2$.
+
+The radial distortion component for a given pixel $\mathbf{p}$ is computed as
+
+$$
+\begin{equation}
+\bar{\mathbf{x}}_r :=
+R \begin{pmatrix}
+  \bar{x} \\\
+  \bar{y} \\\
+  0
+\end{pmatrix}
+\end{equation}
+$$
+
+where $R \in \mathbb{R}$ is
+
+$$
+\begin{equation}
+R = k_1 r^2 + k_2 r^4 + k_3 r^6 
+\end{equation}
+$$
+
+with
+
+$$
+\begin{equation}
+r^2 = \bar{x}^2 + \bar{y}^2
+\end{equation}
+$$
+
+and $\bar{x}, \bar{y}$ are the $x$ and $y$ coordinates of the projection of pixel $\mathbf{p}$ using equation (2).
+
+The tangential distortion is computed as:
+
+$$
+\begin{equation}
+\bar{\mathbf{x}}_p :=
+\begin{pmatrix}
+  2 p_1 \bar{x}\bar{y} + p_2(r^2 + 2\bar{x}^2) \\\
+  p_1(r^2 + 2 \bar{y}^2) + 2 p_2 \bar{x}\bar{y} \\\
+  0
+\end{pmatrix}
+\end{equation}
+$$
+
+Finally, the undistorted image plane coordinates $\bar{\mathbf{x}}_u$ is computed as:
+
+$$
+\begin{equation}
+\bar{\mathbf{x}}_u = \bar{\mathbf{x}} + \bar{\mathbf{x}}_r + \bar{\mathbf{x}}_p
+\end{equation}
+$$
+
+Given $\bar{\mathbf{x}}_u$, the corresponding undistorted pixel coordinate is:
+
+$$
+\begin{equation}
+\begin{pmatrix}
+    \mathbf{p}_u \\\
+    1
+\end{pmatrix} := \begin{pmatrix}
+    u_u \\\
+    v_u \\\
+    1
+\end{pmatrix} = \frac{\mathbf{K} \bar{\mathbf{x}}_u}{ \left< e_3, \bar{\mathbf{x}}_u \right>}
+\end{equation}
+$$
 
 
 Parameters
@@ -21,18 +126,17 @@ in_rgba : ImageView.
     rgba8ui image.
 
 in_camera : UniformBuffer.
-    Uniform buffer containing the camera data. The buffer is interpreted as GLSL `ll_camera` struct:
-
-    ```glsl
-    struct ll_camera {
-        mat3 K;
-        mat3 Kinv;
-        vec4 radialDistortion;
-        vec4 tangentialDistortion;
-    };
-    ```
-
+    Uniform buffer containing the camera data. The buffer is interpreted as GLSL `ll_camera` struct.
     The alignment of the struct follows the GLSL std140 rules of alignment.
+
+```glsl
+struct ll_camera {
+    mat3 K;
+    mat3 Kinv;
+    vec4 radialDistortion;
+    vec4 tangentialDistortion;
+};
+```
 
 Outputs
 -------
@@ -122,6 +226,13 @@ plt.subplot2grid((1,2), (0,1)); plt.imshow(out_rgba.toHost()[..., :3])
 plt.show()
 ```
 
+References
+----------
+
+* Zhang, Z., 2000. A flexible new technique for camera calibration. IEEE Transactions on pattern analysis and machine intelligence, 22(11), pp.1330-1334.
+* Wei, G.Q. and De Ma, S., 1994. Implicit and explicit camera calibration: Theory and experiments. IEEE Transactions on Pattern Analysis and Machine Intelligence, 16(5), pp.469-480.
+* Szeliski, R., 2010. Computer vision: algorithms and applications. Springer Science & Business Media.
+* Hartley, R. and Zisserman, A., 2003. Multiple view geometry in computer vision. Cambridge university press.
 ]]
 
 function builder.newDescriptor()
