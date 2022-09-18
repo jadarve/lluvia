@@ -5,9 +5,19 @@
 
 */
 struct ll_camera {
+
+    // The camera intrinsic matrix. Used to project 3D points expressed in the camera coordinate frame
+    // to the image plane and convert to pixel coordinates.
     mat3 K;
+
+    // The inverse camera intrinsic matrix. Used to convert from pixel to image plane coordinates.
     mat3 Kinv;
+
+    // Radial distortion coefficients. For the standard camera model,
+    // only the first 3 coefficients are used (XYZ).
     vec4 radialDistortion;
+
+    // Tangential distortion coefficients. Only the first 2 coefficients are used (XY).
     vec4 tangentialDistortion;
 };
 
@@ -20,13 +30,17 @@ vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 
     // Radial distortion
     ///////////////////////////////////////////////////////
 
+    const float k1 = cam.radialDistortion.x;
+    const float k2 = cam.radialDistortion.y;
+    const float k3 = cam.radialDistortion.z;
+
     // image plane coordinate radius squared
     const float r2 = dot(normalizedCoords.xy, normalizedCoords.xy);
 
     // radial distortion coefficient
-    const float R = (cam.radialDistortion.x * r2) + 
-                    (cam.radialDistortion.y * r2 * r2) + 
-                    (cam.radialDistortion.z * r2 * r2 * r2);
+    const float R = (k1 * r2) + 
+                    (k2 * r2 * r2) + 
+                    (k3 * r2 * r2 * r2);
     
     // radial distortion coordinates
     const vec2 Pradial = normalizedCoords.xy * (1 + R);
@@ -34,9 +48,12 @@ vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 
     ///////////////////////////////////////////////////////
     // Tangential distortion
     ///////////////////////////////////////////////////////
+    const float p1 = cam.tangentialDistortion.x;
+    const float p2 = cam.tangentialDistortion.y;
+
     const vec2 Ptangential = vec2(
-        (2 * cam.tangentialDistortion.x * normalizedCoords.x * normalizedCoords.y) + cam.tangentialDistortion.y * (R + 2 * normalizedCoords.x * normalizedCoords.x),
-        (cam.tangentialDistortion.x * (R + 2 * normalizedCoords.y * normalizedCoords.y) + (2 * cam.tangentialDistortion.y * normalizedCoords.x * normalizedCoords.y))
+        (2 * p1 * normalizedCoords.x * normalizedCoords.y) + p2 * (r2 + 2 * normalizedCoords.x * normalizedCoords.x),
+        (p1 * (r2 + 2 * normalizedCoords.y * normalizedCoords.y) + (2 * p2 * normalizedCoords.x * normalizedCoords.y))
     );
 
     // Add both distortions
