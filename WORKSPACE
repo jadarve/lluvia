@@ -44,12 +44,12 @@ pip_repositories()
 #       operating system.
 
 # Linux
-load("//platform/linux:python.bzl", "python_linux", "numpy_linux")
+load("@lluvia//platform/linux:python.bzl", "python_linux", "numpy_linux")
 python_linux(name = "python_linux")
 numpy_linux(name = "numpy_linux")
 
 # Windows
-load("//platform/windows:python.bzl", "python_windows", "numpy_windows")
+load("@lluvia//platform/windows:python.bzl", "python_windows", "numpy_windows")
 python_windows(name = "python_windows")
 numpy_windows(name = "numpy_windows")
 
