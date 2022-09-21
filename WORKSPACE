@@ -2,28 +2,17 @@ workspace (
     name = "lluvia"
 )
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-
 ###########################################################
 # download third-party dependencies
 ###########################################################
 
 load("@lluvia//lluvia/bazel:workspace.bzl", "lluvia_workspace")
-
 lluvia_workspace()
 
 
 ###########################################################
 # Python configuration
 ###########################################################
-http_archive(
-    name = "rules_python",
-    sha256 = "a30abdfc7126d497a7698c29c46ea9901c6392d6ed315171a6df5ce433aa4502",
-    strip_prefix = "rules_python-0.6.0",
-    url = "https://github.com/bazelbuild/rules_python/archive/0.6.0.tar.gz",
-)
-
 # CONFIGURE: go to platform/values.bzl and change the paths
 #            of the python interpreters according to your installation.
 #            Only the values for your OS matter.
@@ -57,28 +46,12 @@ numpy_windows(name = "numpy_windows")
 ###########################################################
 # Packaging rules
 ###########################################################
-
-http_archive(
-    name = "rules_pkg",
-    urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.4.0/rules_pkg-0.4.0.tar.gz",
-        "https://github.com/bazelbuild/rules_pkg/releases/download/0.4.0/rules_pkg-0.4.0.tar.gz",
-    ],
-    sha256 = "038f1caa773a7e35b3663865ffb003169c6a71dc995e39bf4815792f385d837d",
-)
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
 
 ###########################################################
 # Vulkan rules
 ###########################################################
-
-git_repository(
-    name = "rules_vulkan",
-    remote = "https://github.com/jadarve/rules_vulkan.git",
-    tag = "v0.0.6"
-)
-
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
 vulkan_repositories()
 
@@ -86,12 +59,5 @@ vulkan_repositories()
 ###########################################################
 # Lua rules
 ###########################################################
-
-git_repository(
-    name = "rules_lua",
-    remote = "https://github.com/jadarve/rules_lua.git",
-    tag = "v0.0.1"
-)
-
 load("@rules_lua//toolchains:repositories.bzl", "lua_repositories")
 lua_repositories()
