@@ -3,11 +3,12 @@
 
 load("@rules_vulkan//glsl:defs.bzl", "glsl_shader")
 load("@ll_rules_pkg//:pkg.bzl", "pkg_zip")
-load("@ll_rules_pkg//experimental:pkg_filegroup.bzl", "pkg_filegroup")
+load("@ll_rules_pkg//pkg:mappings.bzl", "pkg_files", "pkg_filegroup")
 
 def ll_node(
         name,
         builder,
+        archivePath = "",
         shader=None,
         deps = None,
         visibility = None):
@@ -17,6 +18,7 @@ def ll_node(
     Args:
         name:
         builder:
+        archivePath:
         shader:
         deps:
         visibility:
@@ -36,9 +38,15 @@ def ll_node(
 
         srcs.append(shader_name)
 
+    pkg_files(
+        name = name + "_pkg_files",
+        srcs = srcs,
+        prefix = archivePath,
+    )
+
     pkg_filegroup(
         name = name,
-        srcs = srcs,
+        srcs = [name + "_pkg_files"],
         visibility = visibility,
     )
 

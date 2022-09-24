@@ -6,10 +6,13 @@ load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
 
+NODE_ARCHIVE_PATH = "lluvia/camera"
+
 ll_node(
     name = "CameraUndistort_rgba8ui",
     builder = "CameraUndistort_rgba8ui.lua",
     shader = "CameraUndistort_rgba8ui.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",

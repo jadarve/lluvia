@@ -1,10 +1,12 @@
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 
+NODE_ARCHIVE_PATH = "lluvia"
 
 ll_node(
     name = "Sobel",
     shader = "Sobel.comp",
     builder = 'Sobel.lua',
+    archivePath = NODE_ARCHIVE_PATH,
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library"
     ],

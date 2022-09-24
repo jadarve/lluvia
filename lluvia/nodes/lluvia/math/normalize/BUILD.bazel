@@ -5,10 +5,13 @@ load("@rules_python//python:defs.bzl", "py_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
+NODE_ARCHIVE_PATH = "lluvia/math/normalize"
+
 ll_node(
     name = "ImageNormalize_uint_C1",
     builder = "ImageNormalize_uint_C1.lua",
     shader = "ImageNormalize_uint_C1.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",

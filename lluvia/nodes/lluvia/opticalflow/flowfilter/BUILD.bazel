@@ -5,11 +5,13 @@ load("@rules_python//python:defs.bzl", "py_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
+NODE_ARCHIVE_PATH = "lluvia/opticalflow/flowfilter"
 
 ll_node(
     name = "ImageModel",
     builder = "ImageModel.lua",
     shader = "ImageModel.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -31,6 +33,7 @@ ll_node(
     name = "FlowPredictPayloadX",
     builder = "FlowPredictPayloadX.lua",
     shader = "FlowPredictPayloadX.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -51,6 +54,7 @@ ll_node(
     name = "FlowPredictPayloadY",
     builder = "FlowPredictPayloadY.lua",
     shader = "FlowPredictPayloadY.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -71,6 +75,7 @@ ll_node(
     name = "FlowPredictX",
     builder = "FlowPredictX.lua",
     shader = "FlowPredictX.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -91,6 +96,7 @@ ll_node(
     name = "FlowPredictY",
     builder = "FlowPredictY.lua",
     shader = "FlowPredictY.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -111,6 +117,7 @@ ll_node(
     name = "FlowSmooth",
     builder = "FlowSmooth.lua",
     shader = "FlowSmooth.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -131,6 +138,7 @@ ll_node(
     name = "FlowUpdate",
     builder = "FlowUpdate.lua",
     shader = "FlowUpdate.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -151,6 +159,7 @@ ll_node(
     name = "FlowUpdateDelta",
     builder = "FlowUpdateDelta.lua",
     shader = "FlowUpdateDelta.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -170,6 +179,7 @@ py_test(
 ll_node(
     name = "FlowPredict",
     builder = "FlowPredict.lua",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"]
 )
 
@@ -188,6 +198,7 @@ py_test(
 ll_node(
     name = "FlowPredictPayload",
     builder = "FlowPredictPayload.lua",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"]
 )
 
@@ -206,6 +217,7 @@ py_test(
 ll_node(
     name = "FlowFilterSimple",
     builder = "FlowFilterSimple.lua",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"]
 )
 
@@ -228,6 +240,7 @@ py_test(
 ll_node(
     name = "FlowFilterDelta",
     builder = "FlowFilterDelta.lua",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"]
 )
 
@@ -250,6 +263,7 @@ py_test(
 ll_node(
     name = "FlowFilter",
     builder = "FlowFilter.lua",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"]
 )
 

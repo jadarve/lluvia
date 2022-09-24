@@ -5,11 +5,13 @@ load("@rules_python//python:defs.bzl", "py_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
+NODE_ARCHIVE_PATH = "lluvia/imgproc"
 
 ll_node(
     name = "ImageDownsampleX_r8ui",
     builder = "ImageDownsampleX_r8ui.lua",
     shader = "ImageDownsampleX_r8ui.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -31,6 +33,7 @@ ll_node(
     name = "ImageDownsampleY_r8ui",
     builder = "ImageDownsampleY_r8ui.lua",
     shader = "ImageDownsampleY_r8ui.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -51,6 +54,7 @@ py_test(
 ll_node(
     name = "ImagePyramid_r8ui",
     builder = "ImagePyramid_r8ui.lua",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"]
 )
 
