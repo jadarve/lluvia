@@ -2,8 +2,8 @@
 """
 
 load("@rules_vulkan//glsl:defs.bzl", "glsl_shader")
-load("@rules_pkg//:pkg.bzl", "pkg_zip")
-load("@rules_pkg//experimental:pkg_filegroup.bzl", "pkg_filegroup")
+load("@ll_rules_pkg//:pkg.bzl", "pkg_zip")
+load("@ll_rules_pkg//experimental:pkg_filegroup.bzl", "pkg_filegroup")
 
 def ll_node(
         name,

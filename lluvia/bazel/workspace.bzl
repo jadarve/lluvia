@@ -77,7 +77,7 @@ def lluvia_workspace():
 
     maybe (
         repo_rule = http_archive,
-        name = "rules_pkg",
+        name = "ll_rules_pkg",
         urls = [
             "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.4.0/rules_pkg-0.4.0.tar.gz",
             "https://github.com/bazelbuild/rules_pkg/releases/download/0.4.0/rules_pkg-0.4.0.tar.gz",
