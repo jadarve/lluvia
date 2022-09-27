@@ -30,7 +30,7 @@ Image::Image(
     m_descriptor   {descriptor},
     m_allocInfo    (allocInfo),
     m_vkImage      {vkImage},
-    m_layout     {layout},
+    m_layout       {layout},
     m_memory       {memory} {
 
 }
@@ -59,6 +59,11 @@ const std::shared_ptr<ll::Memory>& Image::getMemory() const noexcept {
 
 uint64_t Image::getSize() const noexcept {
     return m_allocInfo.size;
+}
+
+
+uint64_t Image::getMinimumSize() const noexcept {
+    return m_descriptor.getSize();
 }
 
 

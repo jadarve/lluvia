@@ -109,10 +109,30 @@ public:
     @brief      Gets the memory allocation size in bytes.
 
     This methods is equivalent to calling `getAllocationInfo().size`.
+
+    The size reported by this method includes any row stride and padding needed to store the image
+    in memory according to the device. Use :getMinimumSize: to get the minimum amount of memory to
+    allocate all pixels contiguously in memory without any stride.
     
     @return     The image size in bytes.
     */
     uint64_t getSize() const noexcept;
+
+
+    /**
+    @brief      Gets the minimum number of bytes to store the image contiguously in memory.
+
+    This methods is equivalent to:
+    
+        uint64_t minimumSize = getWidth() *
+                               getHeight() *
+                               getDepth() *
+                               getChannelTypeSize() *
+                               static_cast<uint64_t>(getChannelCount())
+    
+    @return     The minimum image size in bytes.
+    */
+    uint64_t getMinimumSize() const noexcept;
 
 
     /**

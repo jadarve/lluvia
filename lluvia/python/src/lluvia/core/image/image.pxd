@@ -99,6 +99,7 @@ cdef extern from 'lluvia/core/image/Image.h' namespace 'll':
         const shared_ptr[_Memory]& getMemory()   const
 
         uint64_t getSize() const
+        uint64_t getMinimumSize() const
         _MemoryAllocationInfo getAllocationInfo() const
 
         _ImageUsageFlags getUsageFlags() const
@@ -162,6 +163,7 @@ cdef extern from 'lluvia/core/image/ImageView.h' namespace 'll':
         _ImageViewDescriptor& getDescriptor() const
 
         uint64_t getSize() const
+        uint64_t getMinimumSize() const
         _MemoryAllocationInfo getAllocationInfo() const
 
         _ImageUsageFlags getUsageFlags() const

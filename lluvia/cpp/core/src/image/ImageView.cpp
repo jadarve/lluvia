@@ -79,6 +79,11 @@ uint64_t ImageView::getSize() const noexcept {
 }
 
 
+uint64_t ImageView::getMinimumSize() const noexcept {
+    return m_image->getMinimumSize();
+}
+
+
 const ll::ImageDescriptor& ImageView::getImageDescriptor() const noexcept {
     return m_image->getDescriptor();
 }
