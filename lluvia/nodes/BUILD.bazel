@@ -9,6 +9,7 @@ ll_node_library(
         "@lluvia//lluvia/nodes/lluvia/camera:CameraUndistort_rgba8ui",
         "@lluvia//lluvia/nodes/lluvia/color:BGRA2Gray",
         "@lluvia//lluvia/nodes/lluvia/color:HSVA2RGBA",
+        "@lluvia//lluvia/nodes/lluvia/color:RGBA2BGRA",
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2Gray",
         "@lluvia//lluvia/nodes/lluvia/color:RGBA2HSVA",
         "@lluvia//lluvia/nodes/lluvia/imgproc:ImageDownsampleX_r8ui",
