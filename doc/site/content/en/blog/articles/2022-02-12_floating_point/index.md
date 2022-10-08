@@ -96,7 +96,7 @@ By convention, any node that allows selecting floating point precision will defi
 
 The figure below shows the collected runtime for both floating point precisions. The median runtime for **`FP16`** is 0.501ms, while for **`FP32`** is 0.770ms. That is, the **`FP16`** algorithm improves the runtime by 35% compared to **`FP32`**.
 
-{{< imgproc flowfilter_fp_comparison Fill "1080x360" >}}
+{{< imgproc featured_flowfilter_fp_comparison Fill "1080x360" >}}
 Optical flow filter runtime using FP16 and FP32 floating point precision. Results collected on a Nvidia GTX-1080 (driver 460.91.03) running Ubuntu 20.04.
 {{< /imgproc >}}
 

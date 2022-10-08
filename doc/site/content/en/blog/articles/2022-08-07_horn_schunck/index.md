@@ -275,7 +275,7 @@ The results reported in this post were run on a Razer Blade 2021 Laptop equipped
 {{< /imgproc >}}
 {{< imgproc Grove3 Resize "2160x360" >}}
 {{< /imgproc >}}
-{{< imgproc Hydrangea Resize "2160x360" >}}
+{{< imgproc featured_Hydrangea Resize "2160x360" >}}
 {{< /imgproc >}}
 {{< imgproc RubberWhale Resize "2160x360" >}}
 {{< /imgproc >}}
