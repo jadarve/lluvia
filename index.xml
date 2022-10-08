@@ -185,6 +185,7 @@ out_image -down-&amp;gt; output_stream &amp;lt;&amp;lt;outputPin&amp;gt;&amp;gt;
 &lt;li>&lt;a href="https://github.com/jadarve/lluvia-mediapipe">lluvia-mediapipe&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://bazel.build/">Bazel&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>Blog: Camera undistort</title><link>/blog/2022/09/18/camera-undistort/</link><pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate><guid>/blog/2022/09/18/camera-undistort/</guid><description>
+&lt;img src="/blog/2022/09/18/camera-undistort/featured_CameraUndistort_rgba8ui_hu7788cecf448c7281bfdd2d0147339e58_655674_640x0_resize_catmullrom_3.png" width="640" height="341"/>
 &lt;div class="alert alert-primary" role="alert">
 &lt;h4 class="alert-heading">Jupyter notebook:&lt;/h4>
 A Jupyter notebook with the code in this article is available in &lt;a href="https://colab.research.google.com/drive/1ZCuY7E904K7IdsI0FW2O13H_bYn-2LYJ?usp=sharing">Google Colab&lt;/a>. Check it out!
@@ -569,7 +570,7 @@ id="tabs-9-0" role="tabpanel" aria-labelled-by="tabs-9-0-tab">&lt;div class="hig
 &lt;/div>
 &lt;p>Lines 36 to 60 create the uniform buffer containing the camera model. Lines 42 and 45 create the camera intrinsics matrix &lt;code>K&lt;/code> and its inverse &lt;code>Kinv&lt;/code>. Then, in lines 50-51, those matrices are aligned to meet the &lt;code>std140&lt;/code> requirements; in this case, storing each matrix in a 4x3 matrix in column-major ordering (using &lt;code>order='F'&lt;/code> in numpy). Finally, lines 54-55 concatenates all camera parameters to create a single numpy array &lt;code>npBuf&lt;/code> which is then used to create the &lt;code>in_camera&lt;/code> uniform buffer in lluvia.&lt;/p>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1090px">
-&lt;img class="card-img-top" src="/blog/2022/09/18/camera-undistort/CameraUndistort_rgba8ui_hu7788cecf448c7281bfdd2d0147339e58_655674_1080x576_resize_catmullrom_3.png" width="1080" height="576">
+&lt;img class="card-img-top" src="/blog/2022/09/18/camera-undistort/featured_CameraUndistort_rgba8ui_hu7788cecf448c7281bfdd2d0147339e58_655674_1080x576_resize_catmullrom_3.png" width="1080" height="576">
 &lt;div class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;/p>
@@ -747,6 +748,7 @@ Notice that the Intel UHD Graphics device reports lower runtime than the discret
 &lt;li>Szeliski, R., 2010. Computer vision: algorithms and applications. Springer Science &amp;amp; Business Media. &lt;a href="https://szeliski.org/Book/">Book&lt;/a>.&lt;/li>
 &lt;li>Hartley, R. and Zisserman, A., 2003. Multiple view geometry in computer vision. Cambridge university press. &lt;a href="https://www.cambridge.org/core/books/multiple-view-geometry-in-computer-vision/0B6F289C78B2B23F596CAA76D3D43F7A">Book&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>Blog: Implementing the Horn and Schunck optical flow algorithm</title><link>/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/</link><pubDate>Sun, 07 Aug 2022 00:00:00 +0000</pubDate><guid>/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/</guid><description>
+&lt;img src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/featured_Hydrangea_huab2d08a346f77aac20a6565f5879c559_512825_640x0_resize_catmullrom_3.png" width="640" height="107"/>
 &lt;div class="alert alert-primary" role="alert">
 &lt;h4 class="alert-heading">Jupyter notebook:&lt;/h4>
 A Jupyter notebook with the code in this article is available in &lt;a href="https://colab.research.google.com/drive/1SPwxUIdYxCALD0d0w7rE93EuX0fm832S?usp=sharing">Google Colab&lt;/a>. Check it out!
@@ -1049,7 +1051,7 @@ $$&lt;/p>
 &lt;/div>
 &lt;/div>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2170px">
-&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/Hydrangea_huab2d08a346f77aac20a6565f5879c559_512825_2160x360_resize_catmullrom_3.png" width="2160" height="360">
+&lt;img class="card-img-top" src="/blog/2022/08/07/implementing-the-horn-and-schunck-optical-flow-algorithm/featured_Hydrangea_huab2d08a346f77aac20a6565f5879c559_512825_2160x360_resize_catmullrom_3.png" width="2160" height="360">
 &lt;div class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;/p>
@@ -1244,6 +1246,7 @@ $$&lt;/p>
 &lt;li>Meinhardt-Llopis, E. and Sánchez, J., 2013. Horn-schunck optical flow with a multi-scale strategy. Image Processing on line. &lt;a href="https://scholar.google.com/scholar?cluster=16090950858323308671&amp;amp;hl=en&amp;amp;as_sdt=0,5">Google Scholar&lt;/a>&lt;/li>
 &lt;li>Adarve, Juan David, and Robert Mahony. &amp;ldquo;A filter formulation for computing real time optical flow.&amp;rdquo; IEEE Robotics and Automation Letters 1.2 (2016): 1192-1199. &lt;a href="https://scholar.google.com/scholar?cluster=8318694254870078457&amp;amp;hl=en&amp;amp;as_sdt=0,5">Google Scholar&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>Blog: Working with floating point precision</title><link>/blog/2022/02/12/working-with-floating-point-precision/</link><pubDate>Sat, 12 Feb 2022 00:00:00 +0000</pubDate><guid>/blog/2022/02/12/working-with-floating-point-precision/</guid><description>
+&lt;img src="/blog/2022/02/12/working-with-floating-point-precision/featured_flowfilter_fp_comparison_hud9d88ea9fb9f1e39cebf655ece1d7d28_34275_640x0_resize_catmullrom_3.png" width="640" height="213"/>
 &lt;div class="alert alert-primary" role="alert">
 &lt;h4 class="alert-heading">Jupyter notebook:&lt;/h4>
 A Jupyter notebook with the code in this article is available in &lt;a href="https://colab.research.google.com/drive/1bddxWnYp8Rloiv4helVJznFe7NzwxxsJ?usp=sharing">Google Colab&lt;/a>. Check it out!
@@ -1387,7 +1390,7 @@ By convention, any node that allows selecting floating point precision will defi
 &lt;/div>
 &lt;p>The figure below shows the collected runtime for both floating point precisions. The median runtime for &lt;strong>&lt;code>FP16&lt;/code>&lt;/strong> is 0.501ms, while for &lt;strong>&lt;code>FP32&lt;/code>&lt;/strong> is 0.770ms. That is, the &lt;strong>&lt;code>FP16&lt;/code>&lt;/strong> algorithm improves the runtime by 35% compared to &lt;strong>&lt;code>FP32&lt;/code>&lt;/strong>.&lt;/p>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1090px">
-&lt;img class="card-img-top" src="/blog/2022/02/12/working-with-floating-point-precision/flowfilter_fp_comparison_hud9d88ea9fb9f1e39cebf655ece1d7d28_34275_1080x360_fill_catmullrom_smart1_3.png" width="1080" height="360">
+&lt;img class="card-img-top" src="/blog/2022/02/12/working-with-floating-point-precision/featured_flowfilter_fp_comparison_hud9d88ea9fb9f1e39cebf655ece1d7d28_34275_1080x360_fill_catmullrom_smart1_3.png" width="1080" height="360">
 &lt;div class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 Optical flow filter runtime using FP16 and FP32 floating point precision. Results collected on a Nvidia GTX-1080 (driver 460.91.03) running Ubuntu 20.04.
