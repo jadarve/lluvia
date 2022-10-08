@@ -223,7 +223,7 @@ function builder.onNodeInit(node)
 
     -- close the ring of numeric iterations
     local numericIterationFirst = node:getNode('NumericIteration_1')
-    local numericIterationLast = node:getNode('NumericIteration_' .. iterations)
+    local numericIterationLast = node:getNode(string.format('NumericIteration_%d', iterations))
     numericIterationFirst:bind('in_flow', numericIterationLast:getPort('out_flow'))
 
     ---------------------------------------------------------------------------

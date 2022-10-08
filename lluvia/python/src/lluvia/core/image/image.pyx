@@ -167,10 +167,25 @@ cdef class Image:
     property size:
         def __get__(self):
             """
-            Size in bytes.
+            Memory allocation size in bytes.
+
+            This is equivalent to allocationInfo.size.
+
+            The size reported includes any row stride and padding needed to store the image
+            in memory according to the device. Use :minimumSize: to get the minimum amount of memory to
+            allocate all pixels contiguously in memory without any stride.
             """
 
             return self.__image.get().getSize()
+    
+    property minimumSize:
+        def __get__(self):
+            """
+            Gets minimum number of bytes to store the image contiguously in memory.
+
+            """
+
+            return self.__image.get().getMinimumSize()
 
     property allocationInfo:
         def __get__(self):
@@ -536,10 +551,25 @@ cdef class ImageView:
     property size:
         def __get__(self):
             """
-            Size in bytes.
+            Memory allocation size in bytes.
+
+            This is equivalent to allocationInfo.size.
+
+            The size reported includes any row stride and padding needed to store the image
+            in memory according to the device. Use :minimumSize: to get the minimum amount of memory to
+            allocate all pixels contiguously in memory without any stride.
             """
 
             return self.__imageView.get().getSize()
+
+    property minimumSize:
+        def __get__(self):
+            """
+            Gets minimum number of bytes to store the image contiguously in memory.
+
+            """
+
+            return self.__image.get().getMinimumSize()
 
     property allocationInfo:
         def __get__(self):

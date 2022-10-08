@@ -3,7 +3,7 @@
 
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository", "git_repository")
 
 def lluvia_workspace():
     """Configure the workspace of an external project to work with the rules defined by Lluvia.
@@ -65,4 +65,38 @@ def lluvia_workspace():
         sha256 = "d6fac2342802c30e51426828fe084ff4deb1b3387367cf98976bb2e64b6f8e45",
         strip_prefix = "Cython-0.29.28",
         build_file = "cython.bzl",
+    )
+
+    maybe (
+        repo_rule = http_archive,
+        name = "rules_python",
+        sha256 = "a30abdfc7126d497a7698c29c46ea9901c6392d6ed315171a6df5ce433aa4502",
+        strip_prefix = "rules_python-0.6.0",
+        url = "https://github.com/bazelbuild/rules_python/archive/0.6.0.tar.gz",
+    )
+
+    maybe (
+        repo_rule = http_archive,
+        name = "ll_rules_pkg",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.7.1/rules_pkg-0.7.1.tar.gz",
+            "https://github.com/bazelbuild/rules_pkg/releases/download/0.7.1/rules_pkg-0.7.1.tar.gz",
+        ],
+        sha256 = "451e08a4d78988c06fa3f9306ec813b836b1d076d0f055595444ba4ff22b867f",
+    )
+
+    maybe (
+        repo_rule = git_repository,
+        name = "rules_vulkan",
+        remote = "https://github.com/jadarve/rules_vulkan.git",
+        commit = "7aa5bd55890c6018583d2b94f446deb33499e27f",
+        shallow_since = "1645375268 -0500",
+    )
+
+    maybe (
+        repo_rule = git_repository,
+        name = "rules_lua",
+        remote = "https://github.com/jadarve/rules_lua.git",
+        commit = "ea7467150e7eec940ba8b9f65b3d399d5078bd6e",
+        shallow_since = "1652921905 -0500",
     )

@@ -5,10 +5,13 @@ load("@rules_python//python:defs.bzl", "py_test")
 load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
+NODE_ARCHIVE_PATH = "lluvia/opticalflow/HornSchunck"
+
 ll_node(
     name = "ImageProcessor",
     builder = "ImageProcessor.lua",
     shader = "ImageProcessor.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -30,6 +33,7 @@ ll_node(
     name = "NumericIteration",
     builder = "NumericIteration.lua",
     shader = "NumericIteration.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -50,6 +54,7 @@ py_test(
 ll_node(
     name = "HornSchunck",
     builder = "HornSchunck.lua",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",

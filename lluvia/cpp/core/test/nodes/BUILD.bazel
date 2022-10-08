@@ -4,6 +4,7 @@ ll_node(
     name = "Assign",
     shader = "Assign.comp",
     builder = 'Assign.lua',
+    archivePath = "nodes",
     deps = [
         "//lluvia/glsl/lib:lluvia_glsl_library"
     ],

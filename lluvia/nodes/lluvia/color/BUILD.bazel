@@ -7,6 +7,7 @@ load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
 load("@lluvia//lluvia/cpp:config.bzl", "CC_TEST_COPTS")
 load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
 
+NODE_ARCHIVE_PATH = "lluvia/color"
 
 CC_TEST_DEPS = [
     "@lluvia//lluvia/cpp/core:core_cc_library",
@@ -15,9 +16,32 @@ CC_TEST_DEPS = [
 ]
 
 ll_node(
+    name = "BGRA2Gray",
+    builder = "BGRA2Gray.lua",
+    shader = "BGRA2Gray.comp",
+    archivePath = NODE_ARCHIVE_PATH,
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "BGRA2Gray_test",
+    srcs = ["BGRA2Gray_test.py"],
+    data = [
+        ":BGRA2Gray_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
     name = "RGBA2Gray",
     builder = "RGBA2Gray.lua",
     shader = "RGBA2Gray.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -49,6 +73,7 @@ ll_node(
     name = "RGBA2HSVA",
     builder = "RGBA2HSVA.lua",
     shader = "RGBA2HSVA.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -80,6 +105,7 @@ ll_node(
     name = "HSVA2RGBA",
     builder = "HSVA2RGBA.lua",
     shader = "HSVA2RGBA.comp",
+    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -101,6 +127,28 @@ py_test(
     srcs = ["HSVA2RGBA_test.py"],
     data = [
         ":HSVA2RGBA_runfiles",
+        "//lluvia/resources:resources"
+    ],
+    deps = PY_TEST_DEPS,
+    legacy_create_init = False
+)
+
+ll_node(
+    name = "RGBA2BGRA",
+    builder = "RGBA2BGRA.lua",
+    shader = "RGBA2BGRA.comp",
+    archivePath = NODE_ARCHIVE_PATH,
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "RGBA2BGRA_test",
+    srcs = ["RGBA2BGRA_test.py"],
+    data = [
+        ":RGBA2BGRA_runfiles",
         "//lluvia/resources:resources"
     ],
     deps = PY_TEST_DEPS,

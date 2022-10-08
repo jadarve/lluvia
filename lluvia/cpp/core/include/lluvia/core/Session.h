@@ -110,7 +110,10 @@ public:
     /**
     @brief      Returns a pointer to ll::Memory object that is HOST_LOCAL and HOST_COHERENT.
     
-    This memory can be used to create uniform buffers to pass to shaders.
+    This memory can be used to create uniform buffers to pass to shaders. The page size is 
+    set to 0 in order to create independent memories for each object allocated in this memory.
+    This allows for each object to be mapped and stay mapped indefinetly, thus 
+    saving map/unmap operations.
     
     @return     The host memory.
      */

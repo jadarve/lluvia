@@ -6,9 +6,12 @@ weight: 2
 
 Install docker following the [official documentation](https://docs.docker.com/engine/install/ubuntu/) and the [post installation guide](https://docs.docker.com/engine/install/linux-postinstall/).
 
-Build the container
+Clone lluvia and build the container
 
 ```bash
+git clone https://github.com/jadarve/lluvia.git
+cd lluvia
+
 docker build ci/ --tag="lluvia:local"
 ```
 
