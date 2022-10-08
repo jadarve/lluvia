@@ -18,6 +18,7 @@ var classll_1_1ImageView =
     [ "getImageDescriptor", "dd/dd3/classll_1_1ImageView.html#ae9f55bb726204eb7f004873f676fb48d", null ],
     [ "getLayout", "dd/dd3/classll_1_1ImageView.html#af56c08fdbbdac454c0b0670e86b50f83", null ],
     [ "getMemory", "dd/dd3/classll_1_1ImageView.html#aa0ee48636f01fcb32784bbe8c8ba17d1", null ],
+    [ "getMinimumSize", "dd/dd3/classll_1_1ImageView.html#aad2f8e4a76daae89cd3981faa087c6ef", null ],
     [ "getShape", "dd/dd3/classll_1_1ImageView.html#a7ffc4891da138444078ea35fd12462bb", null ],
     [ "getSize", "dd/dd3/classll_1_1ImageView.html#a26d740c2c6dd2727d924e7259fd5cecd", null ],
     [ "getTiling", "dd/dd3/classll_1_1ImageView.html#a132f606e9aa12df625527f6d9ff1bb98", null ],

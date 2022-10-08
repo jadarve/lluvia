@@ -141,6 +141,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a12d851e660e236df8bf424070371b679"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/da6/classll_1_1Image.html#a12d851e660e236df8bf424070371b679">getSize</a> () const noexcept</td></tr>
 <tr class="memdesc:a12d851e660e236df8bf424070371b679"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the memory allocation size in bytes.  <a href="../../dc/da6/classll_1_1Image.html#a12d851e660e236df8bf424070371b679">More...</a><br /></td></tr>
 <tr class="separator:a12d851e660e236df8bf424070371b679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af698e029a553909823c10cf9269b5a5d"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/da6/classll_1_1Image.html#af698e029a553909823c10cf9269b5a5d">getMinimumSize</a> () const noexcept</td></tr>
+<tr class="memdesc:af698e029a553909823c10cf9269b5a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the minimum number of bytes to store the image contiguously in memory.  <a href="../../dc/da6/classll_1_1Image.html#af698e029a553909823c10cf9269b5a5d">More...</a><br /></td></tr>
+<tr class="separator:af698e029a553909823c10cf9269b5a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb26935f170e056c7210c89ce2091cf7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../de/d04/classll_1_1ImageDescriptor.html">ll::ImageDescriptor</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/da6/classll_1_1Image.html#afb26935f170e056c7210c89ce2091cf7">getDescriptor</a> () const noexcept</td></tr>
 <tr class="memdesc:afb26935f170e056c7210c89ce2091cf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the descriptor.  <a href="../../dc/da6/classll_1_1Image.html#afb26935f170e056c7210c89ce2091cf7">More...</a><br /></td></tr>
 <tr class="separator:afb26935f170e056c7210c89ce2091cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -711,6 +714,39 @@ template&lt;typename T  = ll::ChannelCount&gt; </div>
 
 </div>
 </div>
+<a id="af698e029a553909823c10cf9269b5a5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af698e029a553909823c10cf9269b5a5d">&#9670;&nbsp;</a></span>getMinimumSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t ll::Image::getMinimumSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the minimum number of bytes to store the image contiguously in memory. </p>
+<p>This methods is equivalent to: </p><pre class="fragment">uint64_t minimumSize = getWidth() *
+                       getHeight() *
+                       getDepth() *
+                       getChannelTypeSize() *
+                       static_cast&lt;uint64_t&gt;(getChannelCount())
+</pre> <dl class="section return"><dt>Returns</dt><dd>The minimum image size in bytes. </dd></dl>
+
+</div>
+</div>
 <a id="a2c4037b36db2d29dba2de191163b9bf1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2c4037b36db2d29dba2de191163b9bf1">&#9670;&nbsp;</a></span>getShape()</h2>
 
@@ -767,6 +803,7 @@ z : depth
 
 <p>Gets the memory allocation size in bytes. </p>
 <p>This methods is equivalent to calling <code><a class="el" href="../../dc/da6/classll_1_1Image.html#a2e7c9d62d8dcadaf5fe67790edea9113" title="Gets the allocation information.">getAllocationInfo()</a>.size</code>.</p>
+<p>The size reported by this method includes any row stride and padding needed to store the image in memory according to the device. Use :getMinimumSize: to get the minimum amount of memory to allocate all pixels contiguously in memory without any stride.</p>
 <dl class="section return"><dt>Returns</dt><dd>The image size in bytes. </dd></dl>
 
 </div>

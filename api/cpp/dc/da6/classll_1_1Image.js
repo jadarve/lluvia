@@ -17,6 +17,7 @@ var classll_1_1Image =
     [ "getHeight", "dc/da6/classll_1_1Image.html#ab4b6c019d201338341f77f91621bcc65", null ],
     [ "getLayout", "dc/da6/classll_1_1Image.html#a02a040c0f666e4d78a002e239ebe1585", null ],
     [ "getMemory", "dc/da6/classll_1_1Image.html#ac64716d3062e0038714a95f2bac59941", null ],
+    [ "getMinimumSize", "dc/da6/classll_1_1Image.html#af698e029a553909823c10cf9269b5a5d", null ],
     [ "getShape", "dc/da6/classll_1_1Image.html#a2c4037b36db2d29dba2de191163b9bf1", null ],
     [ "getSize", "dc/da6/classll_1_1Image.html#a12d851e660e236df8bf424070371b679", null ],
     [ "getTiling", "dc/da6/classll_1_1Image.html#a2451e08f38084280adba8a84ccc59220", null ],

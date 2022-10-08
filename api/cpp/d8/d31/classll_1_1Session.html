@@ -779,7 +779,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns a pointer to <a class="el" href="../../d6/dfb/classll_1_1Memory.html" title="Class to manage allocation of objects into a specific type of memory.">ll::Memory</a> object that is HOST_LOCAL and HOST_COHERENT. </p>
-<p>This memory can be used to create uniform buffers to pass to shaders.</p>
+<p>This memory can be used to create uniform buffers to pass to shaders. The page size is set to 0 in order to create independent memories for each object allocated in this memory. This allows for each object to be mapped and stay mapped indefinetly, thus saving map/unmap operations.</p>
 <dl class="section return"><dt>Returns</dt><dd>The host memory. </dd></dl>
 
 </div>
