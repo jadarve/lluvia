@@ -309,7 +309,7 @@ plt.show()
 
 Lines 36 to 60 create the uniform buffer containing the camera model. Lines 42 and 45 create the camera intrinsics matrix `K` and its inverse `Kinv`. Then, in lines 50-51, those matrices are aligned to meet the `std140` requirements; in this case, storing each matrix in a 4x3 matrix in column-major ordering (using `order='F'` in numpy). Finally, lines 54-55 concatenates all camera parameters to create a single numpy array `npBuf` which is then used to create the `in_camera` uniform buffer in lluvia.
 
-{{< imgproc CameraUndistort_rgba8ui Resize "1080x576" >}}
+{{< imgproc featured_CameraUndistort_rgba8ui Resize "1080x576" >}}
 {{< /imgproc >}}
 
 
