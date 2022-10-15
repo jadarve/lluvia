@@ -241,6 +241,11 @@ ll::vec3ui ComputeNode::getGridShape() const noexcept {
     return m_descriptor.getGridShape();
 }
 
+bool ComputeNode::hasPort(const std::string& name) const noexcept {
+
+    const auto it = m_objects.find(name);
+    return it != m_objects.cend();
+}
 
 std::shared_ptr<ll::Object> ComputeNode::getPort(const std::string& name) const {
 

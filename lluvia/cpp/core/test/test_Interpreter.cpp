@@ -74,3 +74,12 @@ TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
     REQUIRE_THROWS_AS(session->createComputeNodeDescriptor("TestNode"), std::system_error);
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
+
+TEST_CASE("test_non_existing_file", "test_Interpreter") {
+
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    REQUIRE(session != nullptr);
+
+    REQUIRE_THROWS_AS(session->scriptFile("some_invalid_path.lua"), std::system_error);
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());   
+}

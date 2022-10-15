@@ -47,6 +47,16 @@ public:
     */
     virtual ll::NodeType getType() const noexcept = 0;
 
+
+    /**
+    @brief      Returns whether or not a port exists with a given name.
+    
+    @param[in]  name  The name of the port.
+    
+    @return     true if the port exists, false otherwise.
+    */
+    virtual bool hasPort(const std::string& name) const noexcept = 0;
+
     /**
     @brief      Gets a port descriptor given its name
     

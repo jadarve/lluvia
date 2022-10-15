@@ -243,6 +243,8 @@ public:
     */
     ll::vec3ui getGridShape() const noexcept;
 
+    bool hasPort(const std::string& name) const noexcept override;
+
     std::shared_ptr<ll::Object> getPort(const std::string& name) const override;
 
     void setPushConstants(const ll::PushConstants& constants) noexcept;
