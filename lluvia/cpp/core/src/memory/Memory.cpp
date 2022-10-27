@@ -115,11 +115,12 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const ll::
     // query alignment and offset
     const auto memRequirements = m_device->get().getBufferMemoryRequirements(vkBuffer);
 
+    // FIXME: this does not work on Android
     // check that memRequirements.memoryTypeBits is supported in this memory
-    const auto memoryTypeBits = static_cast<uint32_t>(0x01 << m_heapInfo.typeIndex);
-    if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
-        throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(m_heapInfo.typeIndex) + " does not support allocating buffer objects.");
-    }
+    // const auto memoryTypeBits = static_cast<uint32_t>(0x01 << m_heapInfo.typeIndex);
+    // if ((memoryTypeBits & memRequirements.memoryTypeBits) == 0u) {
+    //     throw std::system_error(createErrorCode(ll::ErrorCode::ObjectAllocationError), "memory " + std::to_string(m_heapInfo.typeIndex) + " does not support allocating buffer objects.");
+    // }
 
     // find or create a new memory page where the buffer can be allocated
     auto tryInfo = getSuitableMemoryPage(memRequirements);

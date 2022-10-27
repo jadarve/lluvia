@@ -12,6 +12,14 @@
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #pragma clang diagnostic ignored "-pedantic"
 
+
+// On Android avoid defining the vulkan function prototypes,
+// as those are loaded dynamically when the instance is created.
+// FIXME: However, disabling the prototypes on Linux fails the Python tests.
+#ifdef __ANDROID__
+#define VK_NO_PROTOTYPES 1
+#endif
+
 #include <vulkan/vulkan.hpp>
 
 #pragma clang diagnostic pop

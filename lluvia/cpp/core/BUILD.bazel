@@ -33,24 +33,23 @@ cc_library (
             "-Wnon-virtual-dtor",
             "-pedantic",
         ],
-        # FIXME: this config is triggered for Windows builds
-        # "@lluvia//:android": [
-        #     "-std=c++17",
-        #     "-stdlib=libstdc++",
-        #     "-Werror",
-        #     "-Wall",
-        #     "-Wextra",
-        #     "-Wshadow",
-        #     "-Wshorten-64-to-32",
-        #     "-Wnon-virtual-dtor",
-        #     "-pedantic",
-        # ],
+        "@lluvia//:android": [
+            "-std=c++17",
+            "-stdlib=libstdc++",
+            "-Werror",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wshorten-64-to-32",
+            "-Wnon-virtual-dtor",
+            "-pedantic",
+        ],
         "@lluvia//:windows": [
             "/std:c++17",
             "/w",
         ],
     }),
-    linkstatic = True,
+    # linkstatic = True,
     linkopts = select({
         "@lluvia//:linux": [
             "-lvulkan",

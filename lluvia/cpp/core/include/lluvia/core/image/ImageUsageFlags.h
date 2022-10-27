@@ -48,7 +48,7 @@ namespace impl
         return ll::ImageUsageFlags{static_cast<ll::enum_t>(flags)};
     }
 
-    constexpr vk::ImageUsageFlags toVkImageUsageFlags(const ll::ImageUsageFlags &flags) noexcept
+    inline vk::ImageUsageFlags toVkImageUsageFlags(const ll::ImageUsageFlags &flags) noexcept
     {
         return vk::ImageUsageFlags{static_cast<VkFlags>(flags)};
     }

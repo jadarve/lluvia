@@ -43,9 +43,12 @@
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-#include <filesystem>
 #include <fstream>
 #include <iostream>
+
+#ifndef __ANDROID__
+#include <filesystem>
+#endif
 
 namespace ll {
 
@@ -404,9 +407,12 @@ void Interpreter::run(const std::string& code) {
 
 void Interpreter::runFile(const std::string& filename) {
 
-    if (!std::filesystem::exists(filename)) {
-        ll::throwSystemError(ll::ErrorCode::InterpreterError, "file not found.");
-    }
+    // Android NDK 21e does not have std::filesytem available
+    #ifndef __ANDROID__
+        if (!std::filesystem::exists(filename)) {
+            ll::throwSystemError(ll::ErrorCode::InterpreterError, "file not found.");
+        }
+    #endif
 
     try {
         auto inputFile = std::ifstream(filename, std::fstream::in | std::fstream::ate);
