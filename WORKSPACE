@@ -53,7 +53,9 @@ rules_pkg_dependencies()
 # Vulkan rules
 ###########################################################
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
-vulkan_repositories()
+vulkan_repositories(
+    android_use_host_vulkan_sdk = True
+)
 
 
 ###########################################################
