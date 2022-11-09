@@ -240,7 +240,10 @@ Currently there is no support for `GPU_BUFFER` bindings. All bindings must be `I
 The **lluvia-mediapipe** repo contains an example Android Archive build target that contains the LluviaCalculator as well as some mediapipe graph examples. To build the archive, run:
 
 ```bash
-bazel build -c opt --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --fat_apk_cpu=arm64-v8a //mediapipe/lluvia-mediapipe/java/ai/lluvia:lluvia_aar
+bazel build -c opt \
+    --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
+    --fat_apk_cpu=arm64-v8a \
+    //mediapipe/lluvia-mediapipe/java/ai/lluvia:lluvia_aar
 ```
 
 The generated AAR file will be located at `bazel-bin/mediapipe/lluvia-mediapipe/java/ai/lluvia/lluvia_aar.aar` and can be exported into an Android project.
