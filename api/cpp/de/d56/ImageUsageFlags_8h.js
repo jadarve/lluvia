@@ -12,7 +12,7 @@ var ImageUsageFlags_8h =
     [ "operator&", "de/d56/ImageUsageFlags_8h.html#a4c0d89dbb6fbb9d8d1fa8493051e5095", null ],
     [ "operator^", "de/d56/ImageUsageFlags_8h.html#a59f51771613c2a5d6ef1312f871334cc", null ],
     [ "operator|", "de/d56/ImageUsageFlags_8h.html#afddfe9c0dd5afee51fe502972d61d459", null ],
-    [ "toVkImageUsageFlags", "de/d56/ImageUsageFlags_8h.html#a546e76db1dd8b45bf3fb306eec3d4b6d", null ],
+    [ "toVkImageUsageFlags", "de/d56/ImageUsageFlags_8h.html#a5c843f804dd439748eff2e2344b27a7f", null ],
     [ "vectorStringToImageUsageFlags", "de/d56/ImageUsageFlags_8h.html#a415f245c4f0e918c73ce3f040155e36e", null ],
     [ "ImageUsageFlagBitsStrings", "de/d56/ImageUsageFlags_8h.html#a6099f828d825eab6e86e83365c874868", null ]
 ];

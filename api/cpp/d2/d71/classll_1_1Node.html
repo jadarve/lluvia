@@ -115,6 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a45efc254a7f4f96ce00cbe5216d6c5e1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402">ll::NodeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d71/classll_1_1Node.html#a45efc254a7f4f96ce00cbe5216d6c5e1">getType</a> () const noexcept=0</td></tr>
 <tr class="memdesc:a45efc254a7f4f96ce00cbe5216d6c5e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the node type.  <a href="../../d2/d71/classll_1_1Node.html#a45efc254a7f4f96ce00cbe5216d6c5e1">More...</a><br /></td></tr>
 <tr class="separator:a45efc254a7f4f96ce00cbe5216d6c5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a335b7905801a4fb01e960c93d829cc24"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d71/classll_1_1Node.html#a335b7905801a4fb01e960c93d829cc24">hasPort</a> (const std::string &amp;name) const noexcept=0</td></tr>
+<tr class="memdesc:a335b7905801a4fb01e960c93d829cc24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not a port exists with a given name.  <a href="../../d2/d71/classll_1_1Node.html#a335b7905801a4fb01e960c93d829cc24">More...</a><br /></td></tr>
+<tr class="separator:a335b7905801a4fb01e960c93d829cc24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b8b8df2c76adda83481e53a83e5fefe"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="../../d8/d72/classll_1_1Object.html">ll::Object</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d71/classll_1_1Node.html#a5b8b8df2c76adda83481e53a83e5fefe">getPort</a> (const std::string &amp;name) const =0</td></tr>
 <tr class="memdesc:a5b8b8df2c76adda83481e53a83e5fefe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a port descriptor given its name.  <a href="../../d2/d71/classll_1_1Node.html#a5b8b8df2c76adda83481e53a83e5fefe">More...</a><br /></td></tr>
 <tr class="separator:a5b8b8df2c76adda83481e53a83e5fefe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -355,6 +358,43 @@ Protected Member Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402" title="Class for node type.">ll::NodeType</a> </dd></dl>
 
 <p>Implemented in <a class="el" href="../../d5/d2d/classll_1_1ContainerNode.html#a31ca11d8a287772e135708676b8e0254">ll::ContainerNode</a>, and <a class="el" href="../../d8/d38/classll_1_1ComputeNode.html#a2d91ce0d9a2fa0a3eec4b4929d82d0de">ll::ComputeNode</a>.</p>
+
+</div>
+</div>
+<a id="a335b7905801a4fb01e960c93d829cc24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a335b7905801a4fb01e960c93d829cc24">&#9670;&nbsp;</a></span>hasPort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool ll::Node::hasPort </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether or not a port exists with a given name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The name of the port.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the port exists, false otherwise. </dd></dl>
+
+<p>Implemented in <a class="el" href="../../d5/d2d/classll_1_1ContainerNode.html#a232b431d6f2b2be82f833d26a5654fc3">ll::ContainerNode</a>, and <a class="el" href="../../d8/d38/classll_1_1ComputeNode.html#a8aa49942a235d6f871cdb8e5430b2479">ll::ComputeNode</a>.</p>
 
 </div>
 </div>

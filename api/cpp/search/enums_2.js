@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['devicetype_977',['DeviceType',['../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093',1,'ll']]]
+  ['devicetype_979',['DeviceType',['../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093',1,'ll']]]
 ];

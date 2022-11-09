@@ -183,6 +183,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0de2fa5d2100dbb2bd9d200b4a02a39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">ll::vec3ui</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d38/classll_1_1ComputeNode.html#aa0de2fa5d2100dbb2bd9d200b4a02a39">getGridShape</a> () const noexcept</td></tr>
 <tr class="memdesc:aa0de2fa5d2100dbb2bd9d200b4a02a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the grid shape.  <a href="../../d8/d38/classll_1_1ComputeNode.html#aa0de2fa5d2100dbb2bd9d200b4a02a39">More...</a><br /></td></tr>
 <tr class="separator:aa0de2fa5d2100dbb2bd9d200b4a02a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aa49942a235d6f871cdb8e5430b2479"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d38/classll_1_1ComputeNode.html#a8aa49942a235d6f871cdb8e5430b2479">hasPort</a> (const std::string &amp;name) const noexcept override</td></tr>
+<tr class="memdesc:a8aa49942a235d6f871cdb8e5430b2479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether or not a port exists with a given name.  <a href="../../d8/d38/classll_1_1ComputeNode.html#a8aa49942a235d6f871cdb8e5430b2479">More...</a><br /></td></tr>
+<tr class="separator:a8aa49942a235d6f871cdb8e5430b2479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63f906d6d5e430e3024fc1d656eab0e9"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d8/d72/classll_1_1Object.html">ll::Object</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d38/classll_1_1ComputeNode.html#a63f906d6d5e430e3024fc1d656eab0e9">getPort</a> (const std::string &amp;name) const override</td></tr>
 <tr class="memdesc:a63f906d6d5e430e3024fc1d656eab0e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a port descriptor given its name.  <a href="../../d8/d38/classll_1_1ComputeNode.html#a63f906d6d5e430e3024fc1d656eab0e9">More...</a><br /></td></tr>
 <tr class="separator:a63f906d6d5e430e3024fc1d656eab0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -916,6 +919,43 @@ Protected Member Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d8/dda/namespacell.html#ab94e77c92b69e40871a2c3888c209402" title="Class for node type.">ll::NodeType</a> </dd></dl>
 
 <p>Implements <a class="el" href="../../d2/d71/classll_1_1Node.html#a45efc254a7f4f96ce00cbe5216d6c5e1">ll::Node</a>.</p>
+
+</div>
+</div>
+<a id="a8aa49942a235d6f871cdb8e5430b2479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aa49942a235d6f871cdb8e5430b2479">&#9670;&nbsp;</a></span>hasPort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ll::ComputeNode::hasPort </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether or not a port exists with a given name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The name of the port.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the port exists, false otherwise. </dd></dl>
+
+<p>Implements <a class="el" href="../../d2/d71/classll_1_1Node.html#a335b7905801a4fb01e960c93d829cc24">ll::Node</a>.</p>
 
 </div>
 </div>

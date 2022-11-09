@@ -1,4 +1,66 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Mediapipe integration</title><link>/blog/2022/10/08/mediapipe-integration/</link><pubDate>Sat, 08 Oct 2022 00:00:00 +0000</pubDate><guid>/blog/2022/10/08/mediapipe-integration/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Android integration using mediapipe</title><link>/blog/2022/11/08/android-integration-using-mediapipe/</link><pubDate>Tue, 08 Nov 2022 00:00:00 +0000</pubDate><guid>/blog/2022/11/08/android-integration-using-mediapipe/</guid><description>
+&lt;img src="/blog/2022/11/08/android-integration-using-mediapipe/featured_mobile_graph_hu21c9390c7cfe259837a9a1e4e6d2e48a_20271_640x0_resize_catmullrom_3.png" width="640" height="536"/>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>The &lt;a href="/blog/2022/10/08/mediapipe-integration/">previous post on mediapipe integration&lt;/a> explored how to integrate Lluvia with Mediapipe to create complex Computer Vision pipelines leveraging mediapipe&amp;rsquo;s integration with other frameworks such as OpenCV and Tensorflow. This post expands this integration to run Lluvia on Android systems.&lt;/p>
+&lt;p>The video below shows the &lt;a href="https://doi.org/10.1109/LRA.2016.2532928">Optical Flow Filter algorithm&lt;/a> running on a Samsung Galaxy S22+ phone.&lt;/p>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/wLLmh0e9J0Y" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="graph-for-mobile-applications">Graph for mobile applications&lt;/h2>
+&lt;p>The figure below illustrates the pipeline used on Android for running the &lt;strong>&lt;code>LluviaCalculator&lt;/code>&lt;/strong>. First, a &lt;code>FlowLimiter&lt;/code> calculator receives the images from the &lt;code>input_stream&lt;/code>. This calculator controls the rate at which packets are sent downstream; it receives an additional input from the last calculator, &lt;code>ImageFrameToGpuBuffer&lt;/code>, that indicates processing has been completed and that a new packet can be received.&lt;/p>
+&lt;p>The &lt;code>GpuBufferToImageFrame&lt;/code> and &lt;code>ImageFrameToGpuBuffer&lt;/code> calculators convert packets from &lt;code>GpuBuffer&lt;/code> to &lt;code>ImageFrame&lt;/code> and vice-versa. They are needed for two reasons:&lt;/p>
+&lt;ol>
+&lt;li>On Android, the &lt;code>input_stream&lt;/code> and &lt;code>output_stream&lt;/code> ports of the pipeline expect &lt;code>GpuBuffer&lt;/code> types.&lt;/li>
+&lt;li>Currently, the &lt;code>Lluvia&lt;/code> calculator cannot handle &lt;code>GpuBuffer&lt;/code> packets.&lt;/li>
+&lt;/ol>
+&lt;p>Finally, the &lt;code>Lluvia&lt;/code> calculator runs the configured GPU pipeline.&lt;/p>
+&lt;p>&lt;img src="featured_mobile_graph.png" alt="">&lt;/p>
+&lt;div class="alert alert-warning" role="alert">
+&lt;h4 class="alert-heading">GpuBuffer support&lt;/h4>
+Support for transferring data to and from &lt;code>GpuBuffer&lt;/code> packets in the &lt;code>LluviaCalculator&lt;/code> is planned. This will avoid the use of &lt;code>GpuBufferToImageFrame&lt;/code> and &lt;code>ImageFrameToGpuBuffer&lt;/code> calculators, thus reducing the memory copy overhead.
+&lt;/div>
+&lt;h2 id="android-application">Android application&lt;/h2>
+&lt;p>The &lt;a href="https://github.com/google/mediapipe">mediapipe repository&lt;/a> provides examples on how to build Android applications that run the framework. The dataflow is as follows:&lt;/p>
+&lt;ol>
+&lt;li>In Java/Kotlin, configure the app to open the camera. &lt;a href="https://developer.android.com/training/camera2">Camera2&lt;/a> or &lt;a href="https://developer.android.com/training/camerax">CameraX&lt;/a> APIs can be used.&lt;/li>
+&lt;li>Camera frames are received on Surface objects, opaque objects that hold reference to the image pixel data.&lt;/li>
+&lt;li>The surface objects are transferred to the mediapipe graph, entering through the &lt;code>input_stream&lt;/code>. In there, the packets are sent as &lt;code>GpuBuffer&lt;/code> to be consumed by the calculators.&lt;/li>
+&lt;li>The graph execution takes place, and the output packets are received by the application through the &lt;code>output_stream&lt;/code>. The &lt;code>GpuBuffer&lt;/code> packets are transformed to Android surface objects.&lt;/li>
+&lt;li>The surface objects are rendered in the screen.&lt;/li>
+&lt;/ol>
+&lt;h3 id="mediapipe-android-archive">Mediapipe Android archive&lt;/h3>
+&lt;div class="alert alert-warning" role="alert">
+&lt;h4 class="alert-heading">Build instructions&lt;/h4>
+The &lt;a href="/docs/gettingstarted/mediapipe_integration/">mediapipe integration guide&lt;/a> includes new instructions on how to configure the project to support Android builds.
+&lt;/div>
+&lt;p>Apps can consume medipipe libraries through Android Archive files (AAR). Archives are a special type of library containing JVM classes, assets, and native libraries (compiled for x86, arm64, or other architectures). Archives can be imported to the app either by placing them within the app source tree, or by declaring a dependency to a remote repository (e.g. Maven).&lt;/p>
+&lt;p>Mediapipe bazel rules include targets to build AAR files than be used on Android. The &lt;code>lluvia-mediapipe&lt;/code> repo uses these rules to compile an archive that compiles lluvia along with mediapipe, and export all the required assets (node library, scripts and graphs). The AAR is created by running:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>bazel build &lt;span style="color:#d14">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#d14">&lt;/span> -c opt &lt;span style="color:#d14">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#d14">&lt;/span> --host_crosstool_top&lt;span style="color:#000;font-weight:bold">=&lt;/span>@bazel_tools//tools/cpp:toolchain &lt;span style="color:#d14">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#d14">&lt;/span> --fat_apk_cpu&lt;span style="color:#000;font-weight:bold">=&lt;/span>arm64-v8a &lt;span style="color:#d14">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#d14">&lt;/span> //mediapipe/lluvia-mediapipe/java/ai/lluvia:lluvia_aar
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>where &lt;code>--fat_apk_cpu=arm64-v8a&lt;/code> defines the CPU architectures that the native code will be compiled to. The archive is available at:&lt;/p>
+&lt;pre tabindex="0">&lt;code>bazel-bin/mediapipe/lluvia-mediapipe/java/ai/lluvia/lluvia_aar.aar
+&lt;/code>&lt;/pre>&lt;p>which can directly be copied to the App&amp;rsquo;s libraries, or exported to a remote repository.&lt;/p>
+&lt;h2 id="discussion">Discussion&lt;/h2>
+&lt;p>This post explained how to use Mediapipe to run Lluvia compute pipelines on Android systems. The mobile graph uses the &lt;code>FlowLimiter&lt;/code> calculator to control the rate at which image packets are consumed by the pipeline. Future work includes:&lt;/p>
+&lt;ul>
+&lt;li>Support &lt;code>GpuBuffer&lt;/code> input and output packets in the &lt;code>Lluvia&lt;/code> calculator.&lt;/li>
+&lt;li>Fully working Android code example.&lt;/li>
+&lt;li>Use the &lt;a href="https://developer.android.com/agi/">Android GPU Inspector&lt;/a> to profile the performance of the app.&lt;/li>
+&lt;/ul></description></item><item><title>Blog: Mediapipe integration</title><link>/blog/2022/10/08/mediapipe-integration/</link><pubDate>Sat, 08 Oct 2022 00:00:00 +0000</pubDate><guid>/blog/2022/10/08/mediapipe-integration/</guid><description>
 &lt;img src="/blog/2022/10/08/mediapipe-integration/featured_mediapipe_graph_hu65aecad6560b63c48869209c6ef34afc_11143_640x0_resize_catmullrom_3.png" width="640" height="861"/>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>&lt;a href="https://mediapipe.dev/">Mediapipe&lt;/a> is a cross-platform framework to create complex Computer Vision pipelines both for offline and real-time applications. It leverages popular frameworks such as OpenCV and Tensorflow to process audio, video, and run deep learning models. By integrating Lluvia into mediapipe, it is possible to speed up some of those computations by creating a GPU compute pipeline.&lt;/p>
