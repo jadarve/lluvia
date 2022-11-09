@@ -11,12 +11,12 @@
 
 #include "lluvia/core/error.h"
 
-// reserve space for the dynamic dispatch loader function pointers.
-VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
-
 #ifdef __ANDROID__
 #include <android/log.h>
 #endif
+
+// reserve space for the dynamic dispatch loader function pointers.
+VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
 #include <functional>
 #include <iostream>

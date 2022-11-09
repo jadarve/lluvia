@@ -10,8 +10,8 @@ config_setting (
 config_setting (
     name = "android",
     values = {
-        # at least this works for building mediapipe AAR
-        "host_crosstool_top": "@bazel_tools//tools/cpp:toolchain",
+        # same as that of mediapipe
+        "crosstool_top": "//external:android/crosstool"
     },
     visibility = ["//visibility:public"]
 )

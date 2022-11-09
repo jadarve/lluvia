@@ -13,19 +13,9 @@
 #include <memory>
 #include <vector>
 #include <iomanip>
-
-#ifdef __linux__
-
-// at least in Ubuntu 18.04 and clang 6 <filesystem> is still in experimental
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-
-#elif _WIN32
-
 #include <filesystem>
-namespace fs = std::filesystem;
 
-#endif // OS switch
+namespace fs = std::filesystem;
 
 
 using image_t = struct {

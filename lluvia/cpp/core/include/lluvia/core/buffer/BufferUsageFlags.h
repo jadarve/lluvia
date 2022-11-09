@@ -44,7 +44,7 @@ namespace impl {
         return ll::BufferUsageFlags{static_cast<ll::enum_t>(flags)};
     }
 
-    constexpr vk::BufferUsageFlags toVkBufferUsageFlags(const ll::BufferUsageFlags& flags) noexcept {
+    inline vk::BufferUsageFlags toVkBufferUsageFlags(const ll::BufferUsageFlags& flags) noexcept {
         return vk::BufferUsageFlags{static_cast<VkFlags>(flags)};
     }
 

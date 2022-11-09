@@ -43,9 +43,9 @@ def lluvia_workspace():
         repo_rule = http_archive,
         name = "miniz",
         urls = [
-            "https://github.com/richgel999/miniz/releases/download/2.1.0/miniz-2.1.0.zip"
+            "https://github.com/richgel999/miniz/releases/download/3.0.0/miniz-3.0.0.zip"
         ],
-        sha256 = "d133132721ad5efbcda2507699d44c54b0da5e31379e4ff049d78d6b1a571f0d",
+        sha256 = "e6c1a12d80efe10442a3c40bfc195c7bdf7fedf0de5759e62cb4a935aa1fc17f",
         build_file = "@lluvia//:external/miniz.bzl"
     )
 
@@ -89,8 +89,8 @@ def lluvia_workspace():
         repo_rule = git_repository,
         name = "rules_vulkan",
         remote = "https://github.com/jadarve/rules_vulkan.git",
-        commit = "7aa5bd55890c6018583d2b94f446deb33499e27f",
-        shallow_since = "1645375268 -0500",
+        commit = "e3246b531bed7a567f97ed9e9f10a3587606d9ff",
+        shallow_since = "1666845142 -0500",
     )
 
     maybe (

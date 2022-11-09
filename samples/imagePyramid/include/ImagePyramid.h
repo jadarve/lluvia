@@ -1,4 +1,3 @@
-
 #ifndef IMAGE_PYRAMID_H_
 #define IMAGE_PYRAMID_H_
 
@@ -7,18 +6,8 @@
 #include <memory>
 #include <vector>
 
-#ifdef __linux__
-
-// at least in Ubuntu 18.04 and clang 6 <filesystem> is still in experimental
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-
-#elif _WIN32
-
 #include <filesystem>
 namespace fs = std::filesystem;
-
-#endif // OS switch
 
 
 class ImagePyramid {

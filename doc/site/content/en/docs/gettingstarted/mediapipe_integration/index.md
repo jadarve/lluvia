@@ -95,7 +95,9 @@ rules_pkg_dependencies()
 
 # Vulkan rules
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
-vulkan_repositories()
+vulkan_repositories(
+    android_use_host_vulkan_sdk = True
+)
 
 # Lua rules
 load("@rules_lua//toolchains:repositories.bzl", "lua_repositories")
@@ -111,6 +113,33 @@ bazel run --copt -DMESA_EGL_NO_X11_HEADERS --copt -DEGL_NO_X11 \
     //mediapipe/examples/desktop/hello_world:hello_world
 ```
 
+
+### Extra configuration for Android builds
+
+Install [Android Studio](https://developer.android.com/studio), SDK 33 and SDK 30, and the [NDK 21 (r21e)](https://github.com/android/ndk/wiki/Unsupported-Downloads). Configure the `ANDROID_HOME` and `ANDROID_NDK_HOME` environment variables in your `.bashrc` or `.zshrc` file, for instance:
+
+```bash
+export ANDROID_HOME=~/local/Android/Sdk
+export ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/android-ndk-r21e
+```
+
+Install the default JDK and the ADB in the system:
+
+```
+sudo apt install default-jdk adb
+```
+
+#### WORKSPACE configuration
+
+In addition to the `WORKSPACE` configuration mentioned above, add the following lines for Bazel to configure the Android SDK and NDK.
+
+```python
+###########################################################
+# ANDROID
+###########################################################
+android_sdk_repository(name = "androidsdk", api_level = 33, build_tools_version = "30.0.3")
+android_ndk_repository(name = "androidndk", api_level=21)
+```
 
 ## lluvia-mediapipe repository
 
@@ -175,9 +204,17 @@ node: {
           library_path: "path to .zip node library file"
           script_path: "path to .lua script defining the main container node"
           container_node: "mediapipe/examples/Passthrough"
+          
           input_port_binding:  {
               mediapipe_tag: "IN_0"
               lluvia_port: "in_image"
+              packet_type: IMAGE_FRAME
+          }
+
+          output_port_binding:  {
+              mediapipe_tag: "OUT_0"
+              lluvia_port: "out_image"
+              packet_type: IMAGE_FRAME
           }
       }
   }
@@ -190,11 +227,26 @@ where:
 2. The `library_path` declare paths to node libraries (a `.zip` file) containing Lluvia nodes (Container and Compute). This attribute can be repeated several times.
 3. The `script_path` is the path to a `lua` script declaring a `ContainerNode` that Lluvia will instantiate as the "main" node to run inside the calculator.
 4. `input_port_binding`, maps mediapipe input tags to the main `ContainerNode` port. In the example above, mediapipe's input tag `IN_0` is mapped to lluvia's `in_image` port.
+5. `output_port_binding` does the same for outputs of the `ContainerNode`. Both input and output bindings have a `packet_type` attribute indicating the expected type of the binding. Possible values are: `IMAGE_FRAME` and `GPU_BUFFER`.
 
 
-{{< alert title="Output stream mapping" color="warning" >}}
-Currently there is no support for mapping outputs out of the calculator. The current convention is that the *ContainerNode* run in the *LluviaCalculator* produces an **`output_image`** port of type Imageview. The calculator maps that port to the **`OUT_0`** output stream of the calculator. 
+{{< alert title="GPU_BUFFER support" color="warning" >}}
+Currently there is no support for `GPU_BUFFER` bindings. All bindings must be `IMAGE_FRAME` type.
 {{< /alert >}}
+
+
+## Android Archive build
+
+The **lluvia-mediapipe** repo contains an example Android Archive build target that contains the LluviaCalculator as well as some mediapipe graph examples. To build the archive, run:
+
+```bash
+bazel build -c opt \
+    --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
+    --fat_apk_cpu=arm64-v8a \
+    //mediapipe/lluvia-mediapipe/java/ai/lluvia:lluvia_aar
+```
+
+The generated AAR file will be located at `bazel-bin/mediapipe/lluvia-mediapipe/java/ai/lluvia/lluvia_aar.aar` and can be exported into an Android project.
 
 
 ## Examples

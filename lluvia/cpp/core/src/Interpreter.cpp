@@ -43,7 +43,12 @@
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
+#include <fstream>
 #include <iostream>
+
+#ifndef __ANDROID__
+#include <filesystem>
+#endif
 
 namespace ll {
 
@@ -273,6 +278,7 @@ void registerTypes(sol::table& lib) {
         "record", &ll::Node::record,
         "setParameter", &ll::Node::setParameter,
         "getParameter", &ll::Node::getParameter,
+        "hasPort", &ll::Node::hasPort,
         "__getPort", &ll::Node::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::Node::bind        // user facing bind() implemented in library.lua
         );
@@ -296,6 +302,7 @@ void registerTypes(sol::table& lib) {
         "configureGridShape", &ll::ComputeNode::configureGridShape,
         "init", &ll::ComputeNode::init,
         "record", &ll::ComputeNode::record,
+        "hasPort", &ll::ComputeNode::hasPort,
         "__setParameter", &ll::ComputeNode::setParameter,
         "__getParameter", &ll::ComputeNode::getParameter,
         "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
@@ -309,6 +316,7 @@ void registerTypes(sol::table& lib) {
         "descriptor", sol::property(&ll::ContainerNode::getDescriptor),
         "init", &ll::ContainerNode::init,
         "record", &ll::ContainerNode::record,
+        "hasPort", &ll::ContainerNode::hasPort,
         "__setParameter", &ll::ContainerNode::setParameter,
         "__getParameter", &ll::ContainerNode::getParameter,
         "__getPort", &ll::ContainerNode::getPort,   // user facing getPort() implemented in library.lua
@@ -399,10 +407,27 @@ void Interpreter::run(const std::string& code) {
 
 void Interpreter::runFile(const std::string& filename) {
 
+    // Android NDK 21e does not have std::filesytem available
+    #ifndef __ANDROID__
+        if (!std::filesystem::exists(filename)) {
+            ll::throwSystemError(ll::ErrorCode::InterpreterError, "file not found.");
+        }
+    #endif
+
     try {
-        auto result = m_lua->script_file(filename);
-    }
-    catch (std::runtime_error &e) {
+        auto inputFile = std::ifstream(filename, std::fstream::in | std::fstream::ate);
+        inputFile.exceptions(std::ifstream::failbit);
+
+        const auto size = inputFile.tellg();
+        auto stringBuffer = std::string(size, '\0');
+
+        inputFile.seekg(0);
+        inputFile.read(&stringBuffer[0], size);
+
+        // run the script content
+        run(stringBuffer);
+
+    } catch(std::runtime_error& e) {
         ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
