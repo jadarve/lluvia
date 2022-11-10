@@ -21,8 +21,8 @@ struct ll_camera {
     vec4 tangentialDistortion;
 };
 
-
-vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 pixCoords) {
+vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 pixCoords)
+{
 
     const vec3 normalizedCoords = cam.Kinv * vec3(pixCoords.xy, 1);
 
@@ -38,10 +38,8 @@ vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 
     const float r2 = dot(normalizedCoords.xy, normalizedCoords.xy);
 
     // radial distortion coefficient
-    const float R = (k1 * r2) + 
-                    (k2 * r2 * r2) + 
-                    (k3 * r2 * r2 * r2);
-    
+    const float R = (k1 * r2) + (k2 * r2 * r2) + (k3 * r2 * r2 * r2);
+
     // radial distortion coordinates
     const vec2 Pradial = normalizedCoords.xy * (1 + R);
 
@@ -53,8 +51,7 @@ vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 
 
     const vec2 Ptangential = vec2(
         (2 * p1 * normalizedCoords.x * normalizedCoords.y) + p2 * (r2 + 2 * normalizedCoords.x * normalizedCoords.x),
-        (p1 * (r2 + 2 * normalizedCoords.y * normalizedCoords.y) + (2 * p2 * normalizedCoords.x * normalizedCoords.y))
-    );
+        (p1 * (r2 + 2 * normalizedCoords.y * normalizedCoords.y) + (2 * p2 * normalizedCoords.x * normalizedCoords.y)));
 
     // Add both distortions
     const vec3 Pdistorted = vec3(Pradial + Ptangential, 1);
@@ -64,14 +61,14 @@ vec2 ll_camera_standardInterpolationCoordinates(const ll_camera cam, const vec2 
     return outPixCoords.xy;
 }
 
-
 /**
 See See https://docs.opencv.org/3.4/db/d58/group__calib3d__fisheye.html for more details.
 
 FIXME: when the radial coefficients are zero, this model yields pixel coordinates different
 to that of the input.
 */
-vec2 ll_camera_fisheyeInterpolationCoordinates(const ll_camera cam, const vec2 pixCoords) {
+vec2 ll_camera_fisheyeInterpolationCoordinates(const ll_camera cam, const vec2 pixCoords)
+{
 
     const vec3 normalizedCoords = cam.Kinv * vec3(pixCoords.xy, 1);
 
@@ -96,7 +93,7 @@ vec2 ll_camera_fisheyeInterpolationCoordinates(const ll_camera cam, const vec2 p
     const float thetaDist = theta * (1 + k1 * theta2 + k2 * theta4 + k3 * theta6 + k4 * theta8);
 
     // possible division by zero
-    const float scale = r > 1e-5? thetaDist / r : 0;
+    const float scale = r > 1e-5 ? thetaDist / r : 0;
 
     // distorted coordinates
     const vec3 Pdistorted = vec3(scale * normalizedCoords.xy, 1);
@@ -105,6 +102,5 @@ vec2 ll_camera_fisheyeInterpolationCoordinates(const ll_camera cam, const vec2 p
     const vec3 outPixCoords = cam.K * Pdistorted;
     return outPixCoords.xy;
 }
-
 
 #endif // LLUVIA_CORE_CAMERA_GLSL_

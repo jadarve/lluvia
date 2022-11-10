@@ -11,10 +11,9 @@
 
 // default values for the local group size as well as
 // indexes for the specialization constants to override them.
-layout (
+layout(
     local_size_x_id = 1, local_size_x = 1,
     local_size_y_id = 2, local_size_y = 1,
-    local_size_z_id = 3, local_size_z = 1
-) in;
+    local_size_z_id = 3, local_size_z = 1) in;
 
 #endif // LLUVIA_CORE_GLSL_
