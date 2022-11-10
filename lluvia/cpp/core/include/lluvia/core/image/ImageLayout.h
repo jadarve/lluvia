@@ -11,12 +11,9 @@
 #include "lluvia/core/enums/enums.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
+namespace ll {
 
-namespace ll
-{
-
-enum class ImageLayout : ll::enum_t
-{
+enum class ImageLayout : ll::enum_t {
     Undefined = static_cast<ll::enum_t>(vk::ImageLayout::eUndefined),
     General = static_cast<ll::enum_t>(vk::ImageLayout::eGeneral),
     ShaderReadOnlyOptimal = static_cast<ll::enum_t>(vk::ImageLayout::eShaderReadOnlyOptimal),
@@ -25,28 +22,25 @@ enum class ImageLayout : ll::enum_t
     Preinitialized = static_cast<ll::enum_t>(vk::ImageLayout::ePreinitialized),
 };
 
-namespace impl
-{
+namespace impl {
 
-constexpr ll::ImageLayout fromVkImageLayout(const vk::ImageLayout& flags) noexcept
-{
-    return ll::ImageLayout{static_cast<ll::enum_t>(flags)};
-}
+    constexpr ll::ImageLayout fromVkImageLayout(const vk::ImageLayout& flags) noexcept
+    {
+        return ll::ImageLayout { static_cast<ll::enum_t>(flags) };
+    }
 
-constexpr vk::ImageLayout toVkImageLayout(const ll::ImageLayout& flags) noexcept
-{
-    // return vk::ImageLayout{static_cast<VkFlags>(flags)};
-    return static_cast<vk::ImageLayout>(flags);
-}
+    constexpr vk::ImageLayout toVkImageLayout(const ll::ImageLayout& flags) noexcept
+    {
+        // return vk::ImageLayout{static_cast<VkFlags>(flags)};
+        return static_cast<vk::ImageLayout>(flags);
+    }
 
-constexpr const std::array<std::tuple<const char *, ll::ImageLayout>, 6> ImageLayoutStrings{{
-    std::make_tuple("Undefined", ll::ImageLayout::Undefined),
-    std::make_tuple("General", ll::ImageLayout::General),
-    std::make_tuple("ShaderReadOnlyOptimal", ll::ImageLayout::ShaderReadOnlyOptimal),
-    std::make_tuple("TransferSrcOptimal", ll::ImageLayout::TransferSrcOptimal),
-    std::make_tuple("TransferDstOptimal", ll::ImageLayout::TransferDstOptimal),
-    std::make_tuple("Preinitialized", ll::ImageLayout::Preinitialized)
-}};
+    constexpr const std::array<std::tuple<const char*, ll::ImageLayout>, 6> ImageLayoutStrings { { std::make_tuple("Undefined", ll::ImageLayout::Undefined),
+        std::make_tuple("General", ll::ImageLayout::General),
+        std::make_tuple("ShaderReadOnlyOptimal", ll::ImageLayout::ShaderReadOnlyOptimal),
+        std::make_tuple("TransferSrcOptimal", ll::ImageLayout::TransferSrcOptimal),
+        std::make_tuple("TransferDstOptimal", ll::ImageLayout::TransferDstOptimal),
+        std::make_tuple("Preinitialized", ll::ImageLayout::Preinitialized) } };
 
 } // namespace impl
 
@@ -59,11 +53,11 @@ constexpr const std::array<std::tuple<const char *, ll::ImageLayout>, 6> ImageLa
 
 @return     Returns the corresponding `std::string` in ll::impl::VkImageLayoutStrings for the enum value.
 */
-template<typename T = std::string>
-inline T imageLayoutToString(ll::ImageLayout&& layout) noexcept {
+template <typename T = std::string>
+inline T imageLayoutToString(ll::ImageLayout&& layout) noexcept
+{
     return impl::enumToString<ll::ImageLayout, ll::impl::ImageLayoutStrings.size(), ll::impl::ImageLayoutStrings>(std::forward<ll::ImageLayout>(layout));
 }
-
 
 /**
 @brief      Converts from a string-like object to ll::ImageLayout.
@@ -80,8 +74,9 @@ corresponding enum value is returned. The comparison is case sensitive.
 
 @throws std::out_of_range if \p stringValue is not found in ll::impl::VkImageLayoutStrings.
 */
-template<typename T>
-inline ll::ImageLayout stringToImageLayout(T&& stringValue) {
+template <typename T>
+inline ll::ImageLayout stringToImageLayout(T&& stringValue)
+{
     return impl::stringToEnum<ll::ImageLayout, T, ll::impl::ImageLayoutStrings.size(), ll::impl::ImageLayoutStrings>(std::forward<T>(stringValue));
 }
 

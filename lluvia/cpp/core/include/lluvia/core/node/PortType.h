@@ -11,9 +11,7 @@
 #include "lluvia/core/enums/enums.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-
-namespace ll
-{
+namespace ll {
 
 /**
 @brief      Port types.
@@ -21,26 +19,25 @@ namespace ll
 @sa ll::impl::ParameterTypeStrings string values for this enum.
 */
 enum class PortType : ll::enum_t {
-    Buffer           = 0,   /**< value for ll::Buffer type. */
-    ImageView        = 1,   /**< value for ll::ImageView without pixel sampler.*/
-    SampledImageView = 2,   /**< value for ll::ImageView objects coupled with a pixel sampler. */
-    UniformBuffer    = 3,   /**< value for ll::Buffer objects allocated to be used as uniform buffer. */
+    Buffer = 0, /**< value for ll::Buffer type. */
+    ImageView = 1, /**< value for ll::ImageView without pixel sampler.*/
+    SampledImageView = 2, /**< value for ll::ImageView objects coupled with a pixel sampler. */
+    UniformBuffer = 3, /**< value for ll::Buffer objects allocated to be used as uniform buffer. */
 };
 
-namespace impl
-{
+namespace impl {
 
     /**
     @brief Port type string values used for converting ll::PortType to std::string and vice-versa.
 
     @sa ll::PortType enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char *, ll::PortType>, 4> PortTypeStrings{{
+    constexpr const std::array<std::tuple<const char*, ll::PortType>, 4> PortTypeStrings { {
         std::make_tuple("Buffer", ll::PortType::Buffer),
         std::make_tuple("ImageView", ll::PortType::ImageView),
         std::make_tuple("SampledImageView", ll::PortType::SampledImageView),
         std::make_tuple("UniformBuffer", ll::PortType::UniformBuffer),
-    }};
+    } };
 
 } // namespace impl
 
@@ -54,13 +51,14 @@ namespace impl
 @return     Returns the corresponding std::string in ll::impl::PortTypeStrings for the enum value.
 */
 template <typename T = std::string>
-inline T portTypeToString(ll::PortType &&value) noexcept
+inline T portTypeToString(ll::PortType&& value) noexcept
 {
     return ll::impl::enumToString<ll::PortType, ll::impl::PortTypeStrings.size(), impl::PortTypeStrings>(std::forward<ll::PortType>(value));
 }
 
 template <typename T = std::string>
-inline T portTypeToString(const ll::PortType& value) noexcept {
+inline T portTypeToString(const ll::PortType& value) noexcept
+{
     return ll::impl::enumToString<ll::PortType, ll::impl::PortTypeStrings.size(), impl::PortTypeStrings>(value);
 }
 
@@ -71,7 +69,7 @@ inline T portTypeToString(const ll::PortType& value) noexcept {
 
 @return     The corresponding Vulkan descriptor type for \p param.
 */
-vk::DescriptorType portTypeToVkDescriptorType(const ll::PortType &param);
+vk::DescriptorType portTypeToVkDescriptorType(const ll::PortType& param);
 
 /**
 @brief      Converts from Vulkan DescriptorType to ll::PortType enum.
@@ -84,7 +82,7 @@ vk::DescriptorType portTypeToVkDescriptorType(const ll::PortType &param);
                               Using the values returned by ll::portTypeToVkDescriptorType is guaranteed
                               to not throw exception.
 */
-ll::PortType vkDescriptorTypeToPortType(const vk::DescriptorType &vkDescType);
+ll::PortType vkDescriptorTypeToPortType(const vk::DescriptorType& vkDescType);
 
 /**
 @brief      Converts from a string-like object to ll::PortType enum.
@@ -98,7 +96,7 @@ ll::PortType vkDescriptorTypeToPortType(const vk::DescriptorType &vkDescType);
 @throws std::out_of_range if \p stringValue is not found in ll::impl::ObjectTypeStrings.
 */
 template <typename T>
-inline ll::PortType stringToPortType(T &&stringValue)
+inline ll::PortType stringToPortType(T&& stringValue)
 {
     return impl::stringToEnum<ll::PortType, T, ll::impl::PortTypeStrings.size(), impl::PortTypeStrings>(std::forward<T>(stringValue));
 }

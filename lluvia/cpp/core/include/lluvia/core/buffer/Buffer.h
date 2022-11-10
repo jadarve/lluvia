@@ -8,11 +8,11 @@
 #ifndef LLUVIA_CORE_BUFFER_BUFFER_H_
 #define LLUVIA_CORE_BUFFER_BUFFER_H_
 
-#include "lluvia/core/error.h"
+#include "lluvia/core/Object.h"
 #include "lluvia/core/buffer/BufferUsageFlags.h"
+#include "lluvia/core/error.h"
 #include "lluvia/core/memory/Memory.h"
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
-#include "lluvia/core/Object.h"
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
@@ -25,7 +25,6 @@
 #include <type_traits>
 #include <vector>
 
-
 namespace ll {
 
 class Buffer;
@@ -33,7 +32,6 @@ class CommandBuffer;
 class ComputeGraph;
 class ComputeNode;
 class Session;
-
 
 /**
 @brief      Objects to manage raw portions of allocated memory.
@@ -56,39 +54,37 @@ guaranteeing the memory is not deleted before this buffer is.
 Upon destruction of this object, the underlaying memory space is released
 from the ll::Memory instance.
 */
-class Buffer: public Object {
+class Buffer : public Object {
 
 public:
-    Buffer()                = delete;
+    Buffer() = delete;
     Buffer(const Buffer& b) = delete;
-    Buffer(Buffer&& b)      = delete;
+    Buffer(Buffer&& b) = delete;
 
     ~Buffer();
 
-    Buffer& operator = (const Buffer& buffer) = delete;
-    Buffer& operator = (Buffer&& buffer)      = delete;
+    Buffer& operator=(const Buffer& buffer) = delete;
+    Buffer& operator=(Buffer&& buffer) = delete;
 
     ll::ObjectType getType() const noexcept override;
 
     /**
     @brief      Gets the allocation information.
-    
+
     @return     The allocation information.
     */
     ll::MemoryAllocationInfo getAllocationInfo() const noexcept;
 
-
     /**
     @brief      Gets the memory this buffer was allocated from.
-    
+
     @return     The memory.
     */
     const std::shared_ptr<ll::Memory>& getMemory() const noexcept;
 
-
     /**
     @brief      Gets the size of the buffer in bytes.
-    
+
     The size returned corresponds to the size requested by the user through
     Memory::createBuffer function. This size does not include padding or
     alignment bytes.
@@ -98,53 +94,49 @@ public:
     */
     uint64_t getSize() const noexcept;
 
-
     /**
     @brief      Gets the Vulkan buffer usage flags.
 
     See @VULKAN_DOC#VkBufferUsageFlagBits
     for more information.
-    
+
     @return     The usage flags.
     */
     ll::BufferUsageFlags getUsageFlags() const noexcept;
-
 
     /**
     @brief      Gets the usage flags casted to an integer type.
 
     Please do not use this method. It's for internal use only.
-    
+
     @return     The usage flags unsafe.
     */
     uint32_t getUsageFlagsUnsafe() const noexcept;
-
 
     /**
     @brief      Determines if this buffer is mappable to host-visible memory.
 
     This function calls ll::Memory::isPageMappable from the memory this
     buffer was allocated from.
-    
+
     @return     True if mappable, False otherwise.
     @sa         ll::Memory::isPageMappable Determines if a certain memory page is mappable.
     */
-    bool  isMappable() const noexcept;
-
+    bool isMappable() const noexcept;
 
     /**
     @brief      Deleter for unmapping buffers from host memory.
     */
-    struct BufferMapDeleter{
+    struct BufferMapDeleter {
 
-        template<typename T>
-        void operator ()([[maybe_unused]] T* ptr) const {
+        template <typename T>
+        void operator()([[maybe_unused]] T* ptr) const
+        {
             buffer->unmap();
         }
 
         ll::Buffer* buffer;
     };
-
 
     /**
     @brief      Maps the memory content of this object to host-visible memory.
@@ -159,9 +151,9 @@ public:
 
         constexpr const auto bufferSize = 256u;
         auto hostMemory = session->createMemory(hostMemFlags, bufferSize, false);
-        
+
         auto buffer1 = hostMemory->createBuffer(bufferSize);
-        
+
         {
             // mapped as a uint8_t [] array
             auto ptr = buffer->map<uint8_t[]>();
@@ -171,7 +163,7 @@ public:
                 // print the value of ptr at i
                 std::cout << ptr[i] << std::endl;
             }
-            
+
         } // unmap buffer then ptr goes out of scope
     @endcode
 
@@ -184,17 +176,18 @@ public:
 
     @tparam     T     type of the memory mapped. It can be either a normal type
                       such as int or an array such as int[].
-    
+
     @return     A std::unique_ptr to host-visible memory for this buffer. The buffer
                 is unmapped automatically once this pointer is out of scope.
-                
+
     @throws     std::system_error if the memory page containing this buffer has been
                 previously mapped by this or any other object.
-                
+
     @sa         ll::Buffer::isMappable Determines if this buffer is mappable to host-visible memory.
     */
-    template<typename T>
-    std::unique_ptr<T, ll::Buffer::BufferMapDeleter> map() {
+    template <typename T>
+    std::unique_ptr<T, ll::Buffer::BufferMapDeleter> map()
+    {
 
         if (!m_memory->isPageMappable(m_allocInfo.page)) {
             throw std::system_error(createErrorCode(ll::ErrorCode::MemoryMapFailed), "memory page " + std::to_string(m_allocInfo.page) + " is currently mapped by another object or this memory cannot be mapped");
@@ -208,11 +201,12 @@ public:
         auto deleter = ll::Buffer::BufferMapDeleter {};
         deleter.buffer = this;
 
-        return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> {static_cast<baseType*>(ptr), deleter};
+        return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> { static_cast<baseType*>(ptr), deleter };
     }
 
-    template<typename T>
-    void mapAndSet(T&& obj) {
+    template <typename T>
+    void mapAndSet(T&& obj)
+    {
 
         const auto objSize = sizeof(obj);
         if (objSize > getSize()) {
@@ -224,35 +218,33 @@ public:
         std::memcpy(static_cast<void*>(ptr.get()), &obj, objSize);
     }
 
-
 private:
-    Buffer( const vk::Buffer vkBuffer, const ll::BufferUsageFlags usageFlags,
-            const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
-            const uint64_t requestedSize);
+    Buffer(const vk::Buffer vkBuffer, const ll::BufferUsageFlags usageFlags,
+        const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
+        const uint64_t requestedSize);
 
     void unmap();
 
-    vk::Buffer                  m_vkBuffer;
-    ll::BufferUsageFlags        m_usageFlags;
+    vk::Buffer m_vkBuffer;
+    ll::BufferUsageFlags m_usageFlags;
 
-    ll::MemoryAllocationInfo    m_allocInfo;
+    ll::MemoryAllocationInfo m_allocInfo;
 
     // the size requested for the buffer. It can
     // be less than allocInfo.size due to alignment
     // and size requirements for the given memory.
-    uint64_t                    m_requestedSize;
+    uint64_t m_requestedSize;
 
     // Shared pointer to the memory this buffer was created from
     // This will keep the memory alive until this buffer is deleted
     // avoiding reference to a corrupted memory location.
     std::shared_ptr<ll::Memory> m_memory;
 
-
-friend class ll::CommandBuffer;
-friend class ll::ComputeGraph;
-friend class ll::ComputeNode;
-friend class ll::Memory;
-friend class ll::Session;
+    friend class ll::CommandBuffer;
+    friend class ll::ComputeGraph;
+    friend class ll::ComputeNode;
+    friend class ll::Memory;
+    friend class ll::Session;
 };
 
 } // namespace ll

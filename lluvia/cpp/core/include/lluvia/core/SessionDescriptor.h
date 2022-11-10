@@ -40,16 +40,16 @@ public:
 
     @return    A reference to this object.
      */
-    SessionDescriptor &setDeviceDescriptor(const ll::DeviceDescriptor &deviceDescriptor) noexcept;
+    SessionDescriptor& setDeviceDescriptor(const ll::DeviceDescriptor& deviceDescriptor) noexcept;
 
     const std::optional<ll::DeviceDescriptor>& getDeviceDescriptor() const noexcept;
 
 private:
-    bool m_enableDebug {false};
+    bool m_enableDebug { false };
 
     std::optional<ll::DeviceDescriptor> m_deviceDescriptor {};
 };
 
 } // namespace ll
 
-#endif //LLUVIA_CORE_SESSION_DESCRIPTOR_H_
+#endif // LLUVIA_CORE_SESSION_DESCRIPTOR_H_

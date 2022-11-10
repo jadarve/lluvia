@@ -13,7 +13,6 @@
 
 #include "lluvia/core/device/DeviceType.h"
 
-
 namespace ll {
 
 struct DeviceDescriptor {
@@ -21,10 +20,9 @@ struct DeviceDescriptor {
     ll::DeviceType deviceType;
     std::string name;
 
-    bool operator==(const DeviceDescriptor &other) const {
-        return id == other.id &&
-               deviceType == other.deviceType &&
-               name == other.name;
+    bool operator==(const DeviceDescriptor& other) const
+    {
+        return id == other.id && deviceType == other.deviceType && name == other.name;
     }
 };
 

@@ -10,33 +10,29 @@
 
 #include "lluvia/core/enums/enums.h"
 
-
-namespace ll
-{
+namespace ll {
 
 /**
 @brief      Image filter modes.
 
 @sa         ll::impl::ImageFilterModeStrings string values for this enum.
 */
-enum class ImageFilterMode : ll::enum_t
-{
+enum class ImageFilterMode : ll::enum_t {
     Nearest = 0, /**< Nearest filter. */
-    Linear = 1   /**< Linear filter. */
+    Linear = 1 /**< Linear filter. */
 };
 
-namespace impl
-{
+namespace impl {
 
-/**
-@brief Image filter mode strings used for converting ll::ImageFilterMode to std::string and vice-versa.
+    /**
+    @brief Image filter mode strings used for converting ll::ImageFilterMode to std::string and vice-versa.
 
-@sa         ll::ImageFilterMode enum values for this array.
-*/
-constexpr const std::array<std::tuple<const char *, ll::ImageFilterMode>, 2> ImageFilterModeStrings{{
-    std::make_tuple("Nearest", ll::ImageFilterMode::Nearest),
-    std::make_tuple("Linear", ll::ImageFilterMode::Linear),
-}};
+    @sa         ll::ImageFilterMode enum values for this array.
+    */
+    constexpr const std::array<std::tuple<const char*, ll::ImageFilterMode>, 2> ImageFilterModeStrings { {
+        std::make_tuple("Nearest", ll::ImageFilterMode::Nearest),
+        std::make_tuple("Linear", ll::ImageFilterMode::Linear),
+    } };
 
 } // namespace impl
 
@@ -50,7 +46,7 @@ constexpr const std::array<std::tuple<const char *, ll::ImageFilterMode>, 2> Ima
 @return     Returns the corresponding `std::string` in ll::impl::ImageFilterModeStrings for the enum value.
 */
 template <typename T = std::string>
-inline T imageFilterModeToString(ll::ImageFilterMode &&value) noexcept
+inline T imageFilterModeToString(ll::ImageFilterMode&& value) noexcept
 {
     return ll::impl::enumToString<ll::ImageFilterMode, impl::ImageFilterModeStrings.size(), impl::ImageFilterModeStrings>(std::forward<ll::ImageFilterMode>(value));
 }
@@ -71,7 +67,7 @@ corresponding enum value is returned. The comparison is case sensitive.
 @throws     std::out_of_range if \p stringValue is not found in ll::impl::ImageFilterModeStrings.
 */
 template <typename T>
-inline ll::ImageFilterMode stringToImageFilterMode(T &&stringValue)
+inline ll::ImageFilterMode stringToImageFilterMode(T&& stringValue)
 {
     return impl::stringToEnum<ll::ImageFilterMode, T, ll::impl::ImageFilterModeStrings.size(), impl::ImageFilterModeStrings>(std::forward<T>(stringValue));
 }

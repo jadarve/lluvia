@@ -11,9 +11,7 @@
 #include "lluvia/core/enums/enums.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-
 namespace ll {
-
 
 enum class BufferUsageFlagBits : ll::enum_t {
     StorageBuffer = static_cast<ll::enum_t>(vk::BufferUsageFlagBits::eStorageBuffer),
@@ -22,38 +20,39 @@ enum class BufferUsageFlagBits : ll::enum_t {
     UniformBuffer = static_cast<ll::enum_t>(vk::BufferUsageFlagBits::eUniformBuffer)
 };
 
-
 using BufferUsageFlags = ll::Flags<BufferUsageFlagBits, ll::enum_t>;
 
-inline constexpr BufferUsageFlags operator|(BufferUsageFlagBits bit0, BufferUsageFlagBits bit1) noexcept {
+inline constexpr BufferUsageFlags operator|(BufferUsageFlagBits bit0, BufferUsageFlagBits bit1) noexcept
+{
     return BufferUsageFlags(bit0) | bit1;
 }
 
-inline constexpr BufferUsageFlags operator&(BufferUsageFlagBits bit0, BufferUsageFlagBits bit1) noexcept {
+inline constexpr BufferUsageFlags operator&(BufferUsageFlagBits bit0, BufferUsageFlagBits bit1) noexcept
+{
     return BufferUsageFlags(bit0) & bit1;
 }
 
-inline constexpr BufferUsageFlags operator^(BufferUsageFlagBits bit0, BufferUsageFlagBits bit1) noexcept {
+inline constexpr BufferUsageFlags operator^(BufferUsageFlagBits bit0, BufferUsageFlagBits bit1) noexcept
+{
     return BufferUsageFlags(bit0) ^ bit1;
 }
 
-
 namespace impl {
 
-    constexpr ll::BufferUsageFlags fromVkBufferUsageFlags(const vk::BufferUsageFlags& flags) noexcept {
-        return ll::BufferUsageFlags{static_cast<ll::enum_t>(flags)};
+    constexpr ll::BufferUsageFlags fromVkBufferUsageFlags(const vk::BufferUsageFlags& flags) noexcept
+    {
+        return ll::BufferUsageFlags { static_cast<ll::enum_t>(flags) };
     }
 
-    inline vk::BufferUsageFlags toVkBufferUsageFlags(const ll::BufferUsageFlags& flags) noexcept {
-        return vk::BufferUsageFlags{static_cast<VkFlags>(flags)};
+    inline vk::BufferUsageFlags toVkBufferUsageFlags(const ll::BufferUsageFlags& flags) noexcept
+    {
+        return vk::BufferUsageFlags { static_cast<VkFlags>(flags) };
     }
 
-    constexpr const std::array<std::tuple<const char *, ll::BufferUsageFlagBits>, 4> BufferUsageFlagBitsStrings{{
-        std::make_tuple("StorageBuffer", ll::BufferUsageFlagBits::StorageBuffer),
+    constexpr const std::array<std::tuple<const char*, ll::BufferUsageFlagBits>, 4> BufferUsageFlagBitsStrings { { std::make_tuple("StorageBuffer", ll::BufferUsageFlagBits::StorageBuffer),
         std::make_tuple("TransferDst", ll::BufferUsageFlagBits::TransferDst),
         std::make_tuple("TransferSrc", ll::BufferUsageFlagBits::TransferSrc),
-        std::make_tuple("UniformBuffer", ll::BufferUsageFlagBits::UniformBuffer)
-    }};
+        std::make_tuple("UniformBuffer", ll::BufferUsageFlagBits::UniformBuffer) } };
 
 } // namespace impl
 
@@ -69,7 +68,8 @@ See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
 
 @return     The reconstructed Vulkan BufferUsageFlags.
 */
-inline ll::BufferUsageFlags vectorStringToBufferUsageFlags(const std::vector<std::string> &flagsVector) noexcept {
+inline ll::BufferUsageFlags vectorStringToBufferUsageFlags(const std::vector<std::string>& flagsVector) noexcept
+{
     return impl::vectorStringToFlags<ll::BufferUsageFlags, ll::BufferUsageFlagBits, ll::impl::BufferUsageFlagBitsStrings.size(), impl::BufferUsageFlagBitsStrings>(flagsVector);
 }
 
@@ -82,7 +82,8 @@ See @VULKAN_DOC#VkBufferUsageFlagBits for more information.
 
 @return     A vector of string values. Each element is one of impl::VkBufferUsageFlagBitsStrings
 */
-inline std::vector<std::string> bufferUsageFlagsToVectorString(const ll::BufferUsageFlags flags) noexcept {
+inline std::vector<std::string> bufferUsageFlagsToVectorString(const ll::BufferUsageFlags flags) noexcept
+{
     return impl::flagsToVectorString<ll::BufferUsageFlags, ll::BufferUsageFlagBits, ll::impl::BufferUsageFlagBitsStrings.size(), ll::impl::BufferUsageFlagBitsStrings>(flags);
 }
 

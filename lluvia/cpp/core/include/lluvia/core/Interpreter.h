@@ -27,22 +27,21 @@
 
 #include "lluvia/core/error.h"
 
-    namespace ll {
+namespace ll {
 
 class Session;
-
 
 class Interpreter {
 
 public:
     Interpreter();
     Interpreter(const Interpreter& interpreter) = delete;
-    Interpreter(Interpreter&& interpreter)      = default;
+    Interpreter(Interpreter&& interpreter) = default;
 
     ~Interpreter();
 
-    Interpreter& operator = (const Interpreter& interpreter) = delete;
-    Interpreter& operator = (Interpreter&& interpreter)      = default;
+    Interpreter& operator=(const Interpreter& interpreter) = delete;
+    Interpreter& operator=(Interpreter&& interpreter) = default;
 
     void run(const std::string& code);
     void runFile(const std::string& filename);
@@ -51,8 +50,9 @@ public:
 
     void setActiveSession(ll::Session* session);
 
-    template<typename T, typename... Args>
-    T loadAndRun(const std::string&& code, Args&&... args) {
+    template <typename T, typename... Args>
+    T loadAndRun(const std::string&& code, Args&&... args)
+    {
 
         auto loadCode = load(std::forward<const std::string>(code));
 
@@ -63,15 +63,16 @@ public:
             const sol::error err = scriptResult;
 
             ll::throwSystemError(ll::ErrorCode::InterpreterError,
-                                 "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+                "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
         }
 
         // return static_cast<T>(scriptResult);
         return scriptResult.get<T>();
     }
 
-    template<typename... Args>
-    void loadAndRunNoReturn(const std::string&& code, Args&&... args) {
+    template <typename... Args>
+    void loadAndRunNoReturn(const std::string&& code, Args&&... args)
+    {
 
         auto loadCode = load(std::forward<const std::string>(code));
 
@@ -82,16 +83,15 @@ public:
             const sol::error err = scriptResult;
 
             ll::throwSystemError(ll::ErrorCode::InterpreterError,
-                                 "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+                "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
         }
     }
 
 private:
     std::unique_ptr<sol::state> m_lua;
-    sol::table                  m_lib;
-    sol::table                  m_libImpl;
+    sol::table m_lib;
+    sol::table m_libImpl;
 };
-
 
 } // namespace ll;
 

@@ -8,8 +8,8 @@
 #ifndef LLUVIA_CORE_UTILS_H_
 #define LLUVIA_CORE_UTILS_H_
 
-#include "lluvia/core/types.h"
 #include "lluvia/core/image/ImageLayout.h"
+#include "lluvia/core/types.h"
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
@@ -20,7 +20,6 @@
 #include <type_traits>
 #include <vector>
 
-
 namespace ll {
 
 class Image;
@@ -29,7 +28,6 @@ class ImageView;
 class ImageViewDescriptor;
 class Memory;
 class Session;
-
 
 /**
 @brief      Converts a binary array to base-64 string.
@@ -43,7 +41,6 @@ class Session;
 */
 std::string toBase64(const void* ptr, const size_t size);
 
-
 /**
 @brief      Converts a std::string with base-64 characters to binary.
 
@@ -56,7 +53,6 @@ std::string toBase64(const void* ptr, const size_t size);
 @sa         ll::toBase64 Converts a binary array to base-64 string.
 */
 std::vector<uint8_t> fromBase64(const std::string& code);
-
 
 /**
 @brief      Calculates the grid shape provided local and global shapes.
@@ -78,8 +74,9 @@ This method does not control the case of dividing by zero.
 
 @return     The grid shape.
 */
-template<typename F=float>
-ll::vec3ui configureGridShape(const vec3ui& localShape, const vec3ui& globalShape) noexcept {
+template <typename F = float>
+ll::vec3ui configureGridShape(const vec3ui& localShape, const vec3ui& globalShape) noexcept
+{
 
     static_assert(std::is_floating_point<F>::value, "F must be a floating point type");
 
@@ -89,7 +86,6 @@ ll::vec3ui configureGridShape(const vec3ui& localShape, const vec3ui& globalShap
         static_cast<uint32_t>(std::ceil(static_cast<F>(globalShape.z) / static_cast<F>(localShape.z)))
     };
 }
-
 
 /**
 @brief      Creates and initialize a ll::Image object.
@@ -105,8 +101,7 @@ std::shared_ptr<ll::Image> createAndInitImage(
     std::shared_ptr<ll::Session>& session,
     std::shared_ptr<ll::Memory>& memory,
     const ll::ImageDescriptor& desc,
-    const ll::ImageLayout initialLayout=ll::ImageLayout::General);
-
+    const ll::ImageLayout initialLayout = ll::ImageLayout::General);
 
 /**
 @brief      Creates and initialize a ll::ImageView object.
@@ -124,7 +119,7 @@ std::shared_ptr<ll::ImageView> createAndInitImageView(
     std::shared_ptr<ll::Memory>& memory,
     const ll::ImageDescriptor& imgDescriptor,
     const ll::ImageViewDescriptor& viewDescriptor,
-    const ll::ImageLayout initialLayout=ll::ImageLayout::General);
+    const ll::ImageLayout initialLayout = ll::ImageLayout::General);
 
 } // namespace ll
 

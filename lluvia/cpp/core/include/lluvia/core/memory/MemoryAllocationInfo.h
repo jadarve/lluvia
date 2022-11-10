@@ -33,7 +33,6 @@ struct MemoryAllocationInfo {
 
 } // namespace ll
 
-
 // \brief print memory allocation using "[offset, size, leftPadding, page]" format.
 
 /**
@@ -46,6 +45,6 @@ Parameter allocInfo is printed with format "[offset, size, leftPadding, page]".
 
 @return     returns out parameter.
 */
-std::ostream& operator<< (std::ostream &out, const ll::MemoryAllocationInfo& allocInfo);
+std::ostream& operator<<(std::ostream& out, const ll::MemoryAllocationInfo& allocInfo);
 
 #endif // LLUVIA_CORE_MEMORY_MEMORY_ALLOCATION_INFO_H_

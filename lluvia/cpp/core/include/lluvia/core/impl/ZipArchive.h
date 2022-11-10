@@ -26,32 +26,30 @@
 namespace ll {
 namespace impl {
 
+    class ZipArchive {
 
-class ZipArchive {
+    public:
+        ZipArchive() = delete;
+        ZipArchive(const ZipArchive&) = delete;
+        ZipArchive(ZipArchive&&) = delete;
+        ZipArchive(const std::string& filename);
 
-public:
-    ZipArchive()                               = delete;
-    ZipArchive(const ZipArchive&)              = delete;
-    ZipArchive(ZipArchive&&)                   = delete;
-    ZipArchive(const std::string& filename);
+        ~ZipArchive();
 
-    ~ZipArchive();
+        ZipArchive& operator=(const ZipArchive&) = delete;
+        ZipArchive& operator=(ZipArchive&&) = delete;
 
-    ZipArchive& operator = (const ZipArchive&) = delete;
-    ZipArchive& operator = (ZipArchive&&)      = delete;
+        size_t numberFiles();
 
-    size_t numberFiles();
+        mz_zip_archive_file_stat getFileStat(const size_t i);
 
-    mz_zip_archive_file_stat getFileStat(const size_t i);
+        std::string uncompressTextFile(mz_zip_archive_file_stat& stat);
 
-    std::string uncompressTextFile(mz_zip_archive_file_stat& stat);
+        std::vector<uint8_t> uncompressBinaryFile(mz_zip_archive_file_stat& stat);
 
-    std::vector<uint8_t> uncompressBinaryFile(mz_zip_archive_file_stat& stat);
-
-
-private:
-    mz_zip_archive mArchive{};
-};
+    private:
+        mz_zip_archive mArchive {};
+    };
 
 } // namespace impl
 } // namespace ll
