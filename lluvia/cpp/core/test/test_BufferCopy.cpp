@@ -8,21 +8,22 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <iostream>
 #include "lluvia/core.h"
+#include <iostream>
 
 using memflags = ll::MemoryPropertyFlagBits;
 
-
-TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
+TEST_CASE("HostToDeviceToHost", "BufferCopyTest")
+{
 
     constexpr const auto length = 128u;
-    constexpr const auto bufferSize = length*sizeof(int);
+    constexpr const auto bufferSize = length * sizeof(int);
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
-    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    ;
     const auto deviceMemFlags = memflags::DeviceLocal;
-        
+
     auto hostMemory = session->createMemory(hostMemFlags, bufferSize, false);
     REQUIRE(hostMemory != nullptr);
     REQUIRE(hostMemory->isMappable() == true);
@@ -56,7 +57,6 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
 
     session->run(*cmdBuffer1);
 
-
     // create a second host memory to copy the deviceBuffer into and check
     // if the content is equal to hostBuffer
     auto secMemory = session->createMemory(hostMemFlags, bufferSize, false);
@@ -71,15 +71,14 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
     cmdBuffer2->begin();
     cmdBuffer2->copyBuffer(*deviceBuffer, *secBuffer);
     cmdBuffer2->end();
-    
-    session->run(*cmdBuffer2);
 
+    session->run(*cmdBuffer2);
 
     // compare host and secondary values. If they are equal, then it
     // means that the memory content of deviceBuffer is also equal.
     {
         auto hostPtr = hostBuffer->map<int[]>();
-        auto secPtr  = secBuffer->map<int[]>();
+        auto secPtr = secBuffer->map<int[]>();
 
         REQUIRE(hostPtr != nullptr);
         REQUIRE(secPtr != nullptr);
@@ -93,7 +92,7 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
             if (hostValue != secValue) {
                 std::cout << "values not equal at: " << i << ": " << hostPtr[i] << " != " << secPtr[i] << std::endl;
                 areEqual = false;
-                break;    
+                break;
             }
         }
 
@@ -102,4 +101,3 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest") {
 
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
-

@@ -21,20 +21,21 @@ VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 class InstanceWrapper {
 
 public:
-    InstanceWrapper() {
+    InstanceWrapper()
+    {
 
         auto vkGetInstanceProcAddr = m_loader.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
         VULKAN_HPP_DEFAULT_DISPATCHER.init(vkGetInstanceProcAddr);
 
         auto appInfo = vk::ApplicationInfo()
-                .setPApplicationName("lluvia")
-                .setApplicationVersion(0)
-                .setEngineVersion(0)
-                .setPEngineName("lluvia")
-                .setApiVersion(VK_MAKE_VERSION(1u, 2u, 176u));
+                           .setPApplicationName("lluvia")
+                           .setApplicationVersion(0)
+                           .setEngineVersion(0)
+                           .setPEngineName("lluvia")
+                           .setApiVersion(VK_MAKE_VERSION(1u, 2u, 176u));
 
         const vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
-                .setPApplicationInfo(&appInfo);
+                                                        .setPApplicationInfo(&appInfo);
 
         vk::Result result = vk::createInstance(&instanceInfo, nullptr, &m_instance);
         REQUIRE(result == vk::Result::eSuccess);
@@ -43,7 +44,8 @@ public:
         REQUIRE(VULKAN_HPP_DEFAULT_DISPATCHER.vkDestroyInstance != nullptr);
     }
 
-    ~InstanceWrapper() {
+    ~InstanceWrapper()
+    {
 
         m_instance.destroy();
     }
@@ -53,8 +55,8 @@ private:
     vk::Instance m_instance {};
 };
 
-
-TEST_CASE("create_instance_wrapper", "test_InstanceCreationDynamicDispatch") {
+TEST_CASE("create_instance_wrapper", "test_InstanceCreationDynamicDispatch")
+{
 
     {
         auto instance = std::make_unique<InstanceWrapper>();

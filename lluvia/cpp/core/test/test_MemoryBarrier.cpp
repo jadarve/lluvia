@@ -8,11 +8,11 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <iostream>
 #include "lluvia/core.h"
+#include <iostream>
 
-
-TEST_CASE("EmptyCommandBuffer", "test_MemoryBarrier") {
+TEST_CASE("EmptyCommandBuffer", "test_MemoryBarrier")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -23,7 +23,7 @@ TEST_CASE("EmptyCommandBuffer", "test_MemoryBarrier") {
     cmdBuffer->begin();
     cmdBuffer->memoryBarrier();
     cmdBuffer->end();
-    
+
     session->run(*cmdBuffer);
 
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());

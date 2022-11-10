@@ -8,21 +8,23 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <iostream>
 #include "lluvia/core.h"
+#include <iostream>
 
 using memflags = ll::MemoryPropertyFlagBits;
 
-TEST_CASE("ImageToImage", "ImageCopyTest") {
+TEST_CASE("ImageToImage", "ImageCopyTest")
+{
 
-    constexpr const auto width  = 128;
+    constexpr const auto width = 128;
     constexpr const auto height = 128;
     constexpr const auto pageSize = 32 * 1024 * 1024;
     const ll::ImageUsageFlags imgUsageFlags = {
-          ll::ImageUsageFlagBits::Storage
+        ll::ImageUsageFlagBits::Storage
         | ll::ImageUsageFlagBits::Sampled
         | ll::ImageUsageFlagBits::TransferSrc
-        | ll::ImageUsageFlagBits::TransferDst};
+        | ll::ImageUsageFlagBits::TransferDst
+    };
 
     const auto deviceMemFlags = memflags::DeviceLocal;
     const auto hostMemFlags = memflags::HostCoherent | memflags::HostVisible;
@@ -30,7 +32,6 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    
     auto deviceMemory = session->createMemory(deviceMemFlags, pageSize);
     REQUIRE(deviceMemory != nullptr);
 
@@ -38,12 +39,12 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     REQUIRE(hostMemory != nullptr);
 
     auto desc = ll::ImageDescriptor {}
-        .setWidth(width)
-        .setHeight(height)
-        .setDepth(1)
-        .setChannelCount(ll::ChannelCount::C1)
-        .setChannelType(ll::ChannelType::Uint8)
-        .setUsageFlags(imgUsageFlags);
+                    .setWidth(width)
+                    .setHeight(height)
+                    .setDepth(1)
+                    .setChannelCount(ll::ChannelCount::C1)
+                    .setChannelType(ll::ChannelType::Uint8)
+                    .setUsageFlags(imgUsageFlags);
 
     auto src = deviceMemory->createImage(desc);
     REQUIRE(src != nullptr);
@@ -57,7 +58,7 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
     {
         auto ptr = srcBuffer->map<uint8_t[]>();
 
-        for(auto i = 0u; i < srcBuffer->getSize(); ++i) {
+        for (auto i = 0u; i < srcBuffer->getSize(); ++i) {
             ptr[i] = i % 255;
         }
     }
@@ -101,7 +102,7 @@ TEST_CASE("ImageToImage", "ImageCopyTest") {
         auto srcPtr = srcBuffer->map<uint8_t[]>();
         auto dstPtr = dstBuffer->map<uint8_t[]>();
 
-        for(auto i = 0u; i < srcBuffer->getSize(); ++i) {
+        for (auto i = 0u; i < srcBuffer->getSize(); ++i) {
             REQUIRE(srcPtr[i] == dstPtr[i]);
         }
     }

@@ -8,12 +8,11 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <iostream>
 #include "lluvia/core.h"
+#include <iostream>
 
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
-
 
 TEST_CASE("DurationRecording", "test_Duration")
 {
@@ -40,7 +39,7 @@ TEST_CASE("DurationRecording", "test_Duration")
                               .setProgram(program)
                               .setFunctionName("main")
                               .setLocalX(bufferSize)
-                              .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
+                              .addPort({ 0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer });
 
     // at this point, the node's port binding table and
     // vulkan descriptor set is created. So, it is possible
@@ -66,7 +65,7 @@ TEST_CASE("DurationRecording", "test_Duration")
     session->run(*cmdBuffer);
 
     auto ns = duration->getDuration();
-    
+
     std::cout << "NANOSECONDS: " << ns.count() << std::endl;
 
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());

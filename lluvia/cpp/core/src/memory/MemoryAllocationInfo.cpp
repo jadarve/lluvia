@@ -1,7 +1,8 @@
 #include "lluvia/core/memory/MemoryAllocationInfo.h"
 
-std::ostream& operator<< (std::ostream &out, const ll::MemoryAllocationInfo& allocInfo) {
-    out << "["  << allocInfo.offset;
+std::ostream& operator<<(std::ostream& out, const ll::MemoryAllocationInfo& allocInfo)
+{
+    out << "[" << allocInfo.offset;
     out << ", " << allocInfo.size;
     out << ", " << allocInfo.leftPadding;
     out << ", " << allocInfo.page << "]";

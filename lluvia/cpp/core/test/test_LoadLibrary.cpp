@@ -8,15 +8,15 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
+#include "lluvia/core.h"
 #include <cstdint>
 #include <iostream>
-#include "lluvia/core.h"
 
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
 
-
-TEST_CASE("LoadLibrary", "test_LoadLibrary") {
+TEST_CASE("LoadLibrary", "test_LoadLibrary")
+{
 
     auto runfiles = Runfiles::CreateForTest(nullptr);
     REQUIRE(runfiles != nullptr);
@@ -28,10 +28,10 @@ TEST_CASE("LoadLibrary", "test_LoadLibrary") {
     auto program = session->getProgram("nodes/Assign.comp");
     REQUIRE(program != nullptr);
 
-    auto desc = ll::ComputeNodeDescriptor{};
+    auto desc = ll::ComputeNodeDescriptor {};
     REQUIRE_NOTHROW(desc = session->createComputeNodeDescriptor("nodes/Assign"));
 
-    auto node = std::shared_ptr<ll::ComputeNode>{nullptr};
+    auto node = std::shared_ptr<ll::ComputeNode> { nullptr };
     REQUIRE_NOTHROW(node = session->createComputeNode(desc));
     REQUIRE(node != nullptr);
 

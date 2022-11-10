@@ -15,15 +15,16 @@
 
 using memflags = ll::MemoryPropertyFlagBits;
 
-
-TEST_CASE("DifferentPage", "test_BufferMapping") {
+TEST_CASE("DifferentPage", "test_BufferMapping")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
 
-    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    ;
 
     constexpr const auto bufferSize = 256u;
-        
+
     auto hostMemory = session->createMemory(hostMemFlags, bufferSize, false);
     REQUIRE(hostMemory != nullptr);
     REQUIRE(hostMemory->isMappable() == true);
@@ -45,17 +46,18 @@ TEST_CASE("DifferentPage", "test_BufferMapping") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-
-TEST_CASE("SamePage", "test_BufferMapping") {
+TEST_CASE("SamePage", "test_BufferMapping")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;;
+    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    ;
 
-    constexpr const auto pageSize   = 1024u;
+    constexpr const auto pageSize = 1024u;
     constexpr const auto bufferSize = pageSize / 2;
-        
+
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);
     REQUIRE(hostMemory != nullptr);
     REQUIRE(hostMemory->isMappable() == true);
@@ -78,8 +80,8 @@ TEST_CASE("SamePage", "test_BufferMapping") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-
-TEST_CASE("MapAndSet", "test_BufferMapping") {
+TEST_CASE("MapAndSet", "test_BufferMapping")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -94,15 +96,14 @@ TEST_CASE("MapAndSet", "test_BufferMapping") {
         float b;
     };
 
-    const auto p = params{789456, 3.1415};
-    
+    const auto p = params { 789456, 3.1415 };
 
     auto uniformBuffer = uniformMemory->createBuffer(sizeof(p), ll::BufferUsageFlagBits::UniformBuffer);
     REQUIRE(uniformBuffer != nullptr);
-    
+
     uniformBuffer->mapAndSet(p);
 
-    auto pGet = params{};
+    auto pGet = params {};
 
     {
         auto mapPtr = uniformBuffer->map<params>();

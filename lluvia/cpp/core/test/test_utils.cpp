@@ -15,21 +15,20 @@ using memflags = ll::MemoryPropertyFlagBits;
 #define __attribute__()
 #endif
 
-
-TEST_CASE("createInitImage", "test_utils") {
+TEST_CASE("createInitImage", "test_utils")
+{
 
     // Constants
     const auto memoryFlags = memflags::DeviceLocal;
 
-    const auto width = uint32_t {1080};
-    const auto height = uint32_t {1920};
+    const auto width = uint32_t { 1080 };
+    const auto height = uint32_t { 1920 };
 
     const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-                                              | ll::ImageUsageFlagBits::Sampled
-                                              | ll::ImageUsageFlagBits::TransferDst};
+        | ll::ImageUsageFlagBits::Sampled
+        | ll::ImageUsageFlagBits::TransferDst };
 
-    const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal};
-
+    const auto imgDesc = ll::ImageDescriptor { 1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal };
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     auto memory = session->createMemory(memoryFlags, 0);
@@ -40,20 +39,20 @@ TEST_CASE("createInitImage", "test_utils") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-
-TEST_CASE("configureGraph", "test_utils") {
+TEST_CASE("configureGraph", "test_utils")
+{
 
     // Constants
     const auto memoryFlags = memflags::DeviceLocal;
 
-    const auto width = uint32_t {1080};
-    const auto height = uint32_t {1920};
+    const auto width = uint32_t { 1080 };
+    const auto height = uint32_t { 1920 };
 
     const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-                                              | ll::ImageUsageFlagBits::Sampled
-                                              | ll::ImageUsageFlagBits::TransferDst};
+        | ll::ImageUsageFlagBits::Sampled
+        | ll::ImageUsageFlagBits::TransferDst };
 
-    const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal};
+    const auto imgDesc = ll::ImageDescriptor { 1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal };
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     auto memory = session->createMemory(memoryFlags, 0);

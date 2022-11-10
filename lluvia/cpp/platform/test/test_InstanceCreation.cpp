@@ -10,17 +10,17 @@
 
 #include <vulkan/vulkan.hpp>
 
-
-TEST_CASE("create_instance", "test_InstanceCreation") {
+TEST_CASE("create_instance", "test_InstanceCreation")
+{
 
     const vk::ApplicationInfo appInfo = vk::ApplicationInfo()
-            .setPApplicationName("lluvia")
-            .setApplicationVersion(0)
-            .setEngineVersion(0)
-            .setPEngineName("lluvia");
+                                            .setPApplicationName("lluvia")
+                                            .setApplicationVersion(0)
+                                            .setEngineVersion(0)
+                                            .setPEngineName("lluvia");
 
     const vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
-            .setPApplicationInfo(&appInfo);
+                                                    .setPApplicationInfo(&appInfo);
 
     vk::Instance instance;
     vk::Result result = vk::createInstance(&instanceInfo, nullptr, &instance);

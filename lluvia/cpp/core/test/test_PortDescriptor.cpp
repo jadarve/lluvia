@@ -8,19 +8,21 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <iostream>
 #include "lluvia/core.h"
+#include <iostream>
 
-TEST_CASE("CheckNull", "test_PortDescriptor") {
+TEST_CASE("CheckNull", "test_PortDescriptor")
+{
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_buffer", ll::PortDirection::In, ll::PortType::Buffer};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_buffer", ll::PortDirection::In, ll::PortType::Buffer };
 
     auto result = portDescriptor.isValid(nullptr);
     REQUIRE(result.first == false);
     REQUIRE(result.second == "null port");
 }
 
-TEST_CASE("CheckBuffer", "test_PortDescriptor") {
+TEST_CASE("CheckBuffer", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -31,14 +33,15 @@ TEST_CASE("CheckBuffer", "test_PortDescriptor") {
     auto buffer = memory->createBuffer(1024);
     REQUIRE(buffer != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_buffer", ll::PortDirection::In, ll::PortType::Buffer};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_buffer", ll::PortDirection::In, ll::PortType::Buffer };
 
     auto result = portDescriptor.isValid(buffer);
     REQUIRE(result.first == true);
     REQUIRE(result.second == "");
 }
 
-TEST_CASE("CheckBufferIncorrectPortType", "test_PortDescriptor") {
+TEST_CASE("CheckBufferIncorrectPortType", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -49,14 +52,15 @@ TEST_CASE("CheckBufferIncorrectPortType", "test_PortDescriptor") {
     auto buffer = memory->createBuffer(1024);
     REQUIRE(buffer != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
 
     auto result = portDescriptor.isValid(buffer);
     REQUIRE(result.first == false);
     REQUIRE(result.second == "Port {binding: 0, name: in_img_view, portType: ll::PortType::ImageView} cannot receive object of type ll::PortType::Buffer");
 }
 
-TEST_CASE("CheckUniformBuffer", "test_PortDescriptor") {
+TEST_CASE("CheckUniformBuffer", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -67,14 +71,15 @@ TEST_CASE("CheckUniformBuffer", "test_PortDescriptor") {
     auto buffer = memory->createBuffer(1024, ll::BufferUsageFlagBits::TransferDst | ll::BufferUsageFlagBits::UniformBuffer);
     REQUIRE(buffer != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_buffer", ll::PortDirection::In, ll::PortType::UniformBuffer};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_buffer", ll::PortDirection::In, ll::PortType::UniformBuffer };
 
     auto result = portDescriptor.isValid(buffer);
     REQUIRE(result.first == true);
     REQUIRE(result.second == "");
 }
 
-TEST_CASE("CheckUniformBufferMissingUsageFlags", "test_PortDescriptor") {
+TEST_CASE("CheckUniformBufferMissingUsageFlags", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -86,14 +91,15 @@ TEST_CASE("CheckUniformBufferMissingUsageFlags", "test_PortDescriptor") {
     auto buffer = memory->createBuffer(1024, ll::BufferUsageFlagBits::TransferDst);
     REQUIRE(buffer != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_buffer", ll::PortDirection::In, ll::PortType::UniformBuffer};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_buffer", ll::PortDirection::In, ll::PortType::UniformBuffer };
 
     auto result = portDescriptor.isValid(buffer);
     REQUIRE(result.first == false);
     REQUIRE(result.second == "Port {binding: 0, name: in_buffer, portType: ll::PortType::UniformBuffer} has received a buffer object without ll::BufferUsageFlagBits::UniformBuffer usage flag");
 }
 
-TEST_CASE("CheckUniformBufferIncorrectPortType", "test_PortDescriptor") {
+TEST_CASE("CheckUniformBufferIncorrectPortType", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -104,15 +110,15 @@ TEST_CASE("CheckUniformBufferIncorrectPortType", "test_PortDescriptor") {
     auto buffer = memory->createBuffer(1024, ll::BufferUsageFlagBits::TransferDst | ll::BufferUsageFlagBits::UniformBuffer);
     REQUIRE(buffer != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
 
     auto result = portDescriptor.isValid(buffer);
     REQUIRE(result.first == false);
     REQUIRE(result.second == "Port {binding: 0, name: in_img_view, portType: ll::PortType::ImageView} cannot receive object of type ll::PortType::Buffer");
 }
 
-
-TEST_CASE("CheckImageView", "test_PortDescriptor") {
+TEST_CASE("CheckImageView", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -120,16 +126,16 @@ TEST_CASE("CheckImageView", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -138,7 +144,7 @@ TEST_CASE("CheckImageView", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
 
     auto result = portDescriptor.isValid(imageView);
     REQUIRE(result.first == true);
@@ -147,7 +153,8 @@ TEST_CASE("CheckImageView", "test_PortDescriptor") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewIncorrectPortType", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewIncorrectPortType", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -155,16 +162,16 @@ TEST_CASE("CheckImageViewIncorrectPortType", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -173,7 +180,7 @@ TEST_CASE("CheckImageViewIncorrectPortType", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_buffer", ll::PortDirection::In, ll::PortType::Buffer};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_buffer", ll::PortDirection::In, ll::PortType::Buffer };
 
     auto result = portDescriptor.isValid(imageView);
     REQUIRE(result.first == false);
@@ -182,7 +189,8 @@ TEST_CASE("CheckImageViewIncorrectPortType", "test_PortDescriptor") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewChannelCount_positive", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewChannelCount_positive", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -190,16 +198,16 @@ TEST_CASE("CheckImageViewChannelCount_positive", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -208,7 +216,7 @@ TEST_CASE("CheckImageViewChannelCount_positive", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
     portDescriptor.checkImageChannelCountIs(ll::ChannelCount::C4);
 
     auto result = portDescriptor.isValid(imageView);
@@ -227,16 +235,16 @@ TEST_CASE("CheckImageViewChannelCount_negative", "test_PortDescriptor")
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -245,7 +253,7 @@ TEST_CASE("CheckImageViewChannelCount_negative", "test_PortDescriptor")
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
     portDescriptor.checkImageChannelCountIs(ll::ChannelCount::C1);
 
     auto result = portDescriptor.isValid(imageView);
@@ -255,7 +263,8 @@ TEST_CASE("CheckImageViewChannelCount_negative", "test_PortDescriptor")
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewChannelType_positive", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewChannelType_positive", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -263,16 +272,16 @@ TEST_CASE("CheckImageViewChannelType_positive", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -281,7 +290,7 @@ TEST_CASE("CheckImageViewChannelType_positive", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
     portDescriptor.checkImageChannelTypeIs(ll::ChannelType::Uint8);
 
     auto result = portDescriptor.isValid(imageView);
@@ -291,7 +300,8 @@ TEST_CASE("CheckImageViewChannelType_positive", "test_PortDescriptor") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewChannelType_negative", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewChannelType_negative", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -299,16 +309,16 @@ TEST_CASE("CheckImageViewChannelType_negative", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -317,7 +327,7 @@ TEST_CASE("CheckImageViewChannelType_negative", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
     portDescriptor.checkImageChannelTypeIs(ll::ChannelType::Float32);
 
     auto result = portDescriptor.isValid(imageView);
@@ -327,7 +337,8 @@ TEST_CASE("CheckImageViewChannelType_negative", "test_PortDescriptor") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewChannelTypeAnyOf_positive", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewChannelTypeAnyOf_positive", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -335,16 +346,16 @@ TEST_CASE("CheckImageViewChannelTypeAnyOf_positive", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -353,8 +364,8 @@ TEST_CASE("CheckImageViewChannelTypeAnyOf_positive", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
-    portDescriptor.checkImageChannelTypeIsAnyOf({ll::ChannelType::Uint16, ll::ChannelType::Uint8, ll::ChannelType::Uint32});
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
+    portDescriptor.checkImageChannelTypeIsAnyOf({ ll::ChannelType::Uint16, ll::ChannelType::Uint8, ll::ChannelType::Uint32 });
 
     auto result = portDescriptor.isValid(imageView);
     REQUIRE(result.first == true);
@@ -363,7 +374,8 @@ TEST_CASE("CheckImageViewChannelTypeAnyOf_positive", "test_PortDescriptor") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewChannelTypeAnyOf_negative", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewChannelTypeAnyOf_negative", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -371,16 +383,16 @@ TEST_CASE("CheckImageViewChannelTypeAnyOf_negative", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -389,9 +401,9 @@ TEST_CASE("CheckImageViewChannelTypeAnyOf_negative", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
-    portDescriptor.checkImageChannelTypeIsAnyOf({ll::ChannelType::Float16, ll::ChannelType::Float32, ll::ChannelType::Float64});
-    
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
+    portDescriptor.checkImageChannelTypeIsAnyOf({ ll::ChannelType::Float16, ll::ChannelType::Float32, ll::ChannelType::Float64 });
+
     auto result = portDescriptor.isValid(imageView);
     REQUIRE(result.first == false);
     REQUIRE(result.second == "Port {binding: 0, name: in_img_view, portType: ll::PortType::ImageView} invalid image channel type, expecting any of: [Float16, Float32, Float64, ] got: Uint8");
@@ -399,7 +411,8 @@ TEST_CASE("CheckImageViewChannelTypeAnyOf_negative", "test_PortDescriptor") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewNormalizedCoordinates_positive", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewNormalizedCoordinates_positive", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -407,16 +420,16 @@ TEST_CASE("CheckImageViewNormalizedCoordinates_positive", "test_PortDescriptor")
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -425,7 +438,7 @@ TEST_CASE("CheckImageViewNormalizedCoordinates_positive", "test_PortDescriptor")
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
     portDescriptor.checkImageViewNormalizedCoordinatesIs(false);
 
     auto result = portDescriptor.isValid(imageView);
@@ -435,7 +448,8 @@ TEST_CASE("CheckImageViewNormalizedCoordinates_positive", "test_PortDescriptor")
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckImageViewNormalizedCoordinates_negative", "test_PortDescriptor") {
+TEST_CASE("CheckImageViewNormalizedCoordinates_negative", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -443,16 +457,16 @@ TEST_CASE("CheckImageViewNormalizedCoordinates_negative", "test_PortDescriptor")
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C4)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -461,7 +475,7 @@ TEST_CASE("CheckImageViewNormalizedCoordinates_negative", "test_PortDescriptor")
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
     portDescriptor.checkImageViewNormalizedCoordinatesIs(true);
 
     auto result = portDescriptor.isValid(imageView);
@@ -471,7 +485,8 @@ TEST_CASE("CheckImageViewNormalizedCoordinates_negative", "test_PortDescriptor")
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckSampledImageView", "test_PortDescriptor") {
+TEST_CASE("CheckSampledImageView", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -479,16 +494,16 @@ TEST_CASE("CheckSampledImageView", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -497,7 +512,7 @@ TEST_CASE("CheckSampledImageView", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::SampledImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::SampledImageView };
 
     auto result = portDescriptor.isValid(imageView);
     REQUIRE(result.first == true);
@@ -506,7 +521,8 @@ TEST_CASE("CheckSampledImageView", "test_PortDescriptor") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("CheckSampledImageViewIncorrectPortType", "test_PortDescriptor") {
+TEST_CASE("CheckSampledImageViewIncorrectPortType", "test_PortDescriptor")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
@@ -514,16 +530,16 @@ TEST_CASE("CheckSampledImageViewIncorrectPortType", "test_PortDescriptor") {
     auto memory = session->createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst};
+    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
                     .setChannelCount(ll::ChannelCount::C1)
                     .setUsageFlags(imgUsageFlags);
 
-    auto imgViewDesc = ll::ImageViewDescriptor{}
+    auto imgViewDesc = ll::ImageViewDescriptor {}
                            .setFilterMode(ll::ImageFilterMode::Nearest)
                            .setAddressMode(ll::ImageAddressMode::ClampToEdge)
                            .setNormalizedCoordinates(false)
@@ -532,7 +548,7 @@ TEST_CASE("CheckSampledImageViewIncorrectPortType", "test_PortDescriptor") {
     auto imageView = ll::createAndInitImageView(session, memory, desc, imgViewDesc, ll::ImageLayout::General);
     REQUIRE(imageView != nullptr);
 
-    auto portDescriptor = ll::PortDescriptor{0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView};
+    auto portDescriptor = ll::PortDescriptor { 0, "in_img_view", ll::PortDirection::In, ll::PortType::ImageView };
 
     auto result = portDescriptor.isValid(imageView);
     REQUIRE(result.first == false);

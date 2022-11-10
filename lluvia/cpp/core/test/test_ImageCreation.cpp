@@ -8,25 +8,25 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <iostream>
 #include "lluvia/core.h"
+#include <iostream>
 
-
-TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
+TEST_CASE("DeviceLocalImage", "test_ImageCreation")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto memoryFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
-    
-    auto memory = session->createMemory(memoryFlags, 1024*1024*4, false);
+
+    auto memory = session->createMemory(memoryFlags, 1024 * 1024 * 4, false);
     REQUIRE(memory != nullptr);
 
     const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-                                              | ll::ImageUsageFlagBits::Sampled
-                                              | ll::ImageUsageFlagBits::TransferDst};
+        | ll::ImageUsageFlagBits::Sampled
+        | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}
+    auto desc = ll::ImageDescriptor {}
                     .setWidth(640)
                     .setHeight(480)
                     .setChannelType(ll::ChannelType::Uint8)
@@ -43,14 +43,14 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     cmdBuffer->begin();
     cmdBuffer->changeImageLayout(*image, ll::ImageLayout::General);
     cmdBuffer->end();
-    
+
     session->run(*cmdBuffer);
 
     auto imgViewDesc = ll::ImageViewDescriptor {}
-                        .setFilterMode(ll::ImageFilterMode::Nearest)
-                        .setAddressMode(ll::ImageAddressMode::ClampToEdge)
-                        .setNormalizedCoordinates(false)
-                        .setIsSampled(false);
+                           .setFilterMode(ll::ImageFilterMode::Nearest)
+                           .setAddressMode(ll::ImageAddressMode::ClampToEdge)
+                           .setNormalizedCoordinates(false)
+                           .setIsSampled(false);
 
     auto imageView = image->createImageView(imgViewDesc);
     REQUIRE(imageView != nullptr);
@@ -58,34 +58,32 @@ TEST_CASE("DeviceLocalImage", "test_ImageCreation") {
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-
-TEST_CASE("InvalidImageSize", "test_ImageCreation") {
+TEST_CASE("InvalidImageSize", "test_ImageCreation")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     const auto memoryFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
-    
-    auto memory = session->createMemory(memoryFlags, 1024*1024*4, false);
+
+    auto memory = session->createMemory(memoryFlags, 1024 * 1024 * 4, false);
     REQUIRE(memory != nullptr);
 
     const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-                                              | ll::ImageUsageFlagBits::Sampled
-                                              | ll::ImageUsageFlagBits::TransferDst};
+        | ll::ImageUsageFlagBits::Sampled
+        | ll::ImageUsageFlagBits::TransferDst };
 
-    auto desc = ll::ImageDescriptor{}.setUsageFlags(imgUsageFlags);
-    
+    auto desc = ll::ImageDescriptor {}.setUsageFlags(imgUsageFlags);
+
     // create image from default constructed descriptor
     REQUIRE_NOTHROW(memory->createImage(desc));
-
-    
 
     // valid dimensions
     desc.setWidth(32)
         .setHeight(32)
         .setDepth(32)
         .setChannelCount(ll::ChannelCount::C1);
-    REQUIRE_NOTHROW(memory->createImage(desc));    
+    REQUIRE_NOTHROW(memory->createImage(desc));
 
     // invalid width
     desc.setWidth(0)

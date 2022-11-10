@@ -10,11 +10,11 @@
 
 #include "lluvia/core.h"
 
-#include <string>
 #include <memory>
+#include <string>
 
-
-TEST_CASE("test_error_unknown_method", "test_Interpreter") {
+TEST_CASE("test_error_unknown_method", "test_Interpreter")
+{
 
     auto interpreter = std::make_unique<ll::Interpreter>();
 
@@ -75,11 +75,12 @@ TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
-TEST_CASE("test_non_existing_file", "test_Interpreter") {
+TEST_CASE("test_non_existing_file", "test_Interpreter")
+{
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
     REQUIRE_THROWS_AS(session->scriptFile("some_invalid_path.lua"), std::system_error);
-    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());   
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

@@ -15,21 +15,22 @@
 // reserve space for the dynamic dispatch loader function pointers.
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
-TEST_CASE("create_instance", "test_InstanceCreationDynamicDispatch") {
+TEST_CASE("create_instance", "test_InstanceCreationDynamicDispatch")
+{
 
-    auto dl = vk::DynamicLoader{};
+    auto dl = vk::DynamicLoader {};
     auto vkGetInstanceProcAddr = dl.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
     VULKAN_HPP_DEFAULT_DISPATCHER.init(vkGetInstanceProcAddr);
 
     auto appInfo = vk::ApplicationInfo()
-            .setPApplicationName("lluvia")
-            .setApplicationVersion(0)
-            .setEngineVersion(0)
-            .setPEngineName("lluvia")
-            .setApiVersion(VK_MAKE_VERSION(1u, 2u, 176u));
+                       .setPApplicationName("lluvia")
+                       .setApplicationVersion(0)
+                       .setEngineVersion(0)
+                       .setPEngineName("lluvia")
+                       .setApiVersion(VK_MAKE_VERSION(1u, 2u, 176u));
 
     const vk::InstanceCreateInfo instanceInfo = vk::InstanceCreateInfo()
-            .setPApplicationInfo(&appInfo);
+                                                    .setPApplicationInfo(&appInfo);
 
     vk::Instance instance;
     vk::Result result = vk::createInstance(&instanceInfo, nullptr, &instance);
