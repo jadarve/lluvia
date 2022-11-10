@@ -6,7 +6,7 @@
 namespace ll {
 
 Duration::Duration(const std::shared_ptr<ll::vulkan::Device> device)
-    : m_device { std::move(device) }
+    : m_device {std::move(device)}
 {
 
     // there will be two queries, one for the start time
@@ -37,7 +37,7 @@ int64_t Duration::getNanoseconds() const
     auto result = m_device->get().getQueryPoolResults(
         m_queryPool,
         getStartTimeQueryIndex(),
-        uint32_t { 2 },
+        uint32_t {2},
         sizeof(int64_t) * queryData.size(),
         queryData.data(),
         sizeof(int64_t),

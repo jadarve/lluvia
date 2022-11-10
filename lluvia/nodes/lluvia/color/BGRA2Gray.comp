@@ -21,7 +21,7 @@ layout(binding = 1, r8ui) uniform uimage2D out_gray;
 void main()
 {
 
-    const ivec2 coords = LL_GLOBAL_COORDS_2D;
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(out_gray);
 
     if (coords.x > imgSize.x || coords.y > imgSize.y) {
@@ -30,7 +30,7 @@ void main()
 
     // loads the BGRA image as RGBA by swizzling its coordinates
     const uvec4 RGBA = imageLoad(in_bgra, coords).zyxw;
-    const uint gray = color_rgba2gray(RGBA);
+    const uint  gray = color_rgba2gray(RGBA);
 
     imageStore(out_gray, coords, uvec4(gray));
 }

@@ -26,11 +26,11 @@ TEST_CASE("DurationRecording", "test_Duration")
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
-    auto hostMemory = session->createMemory(hostMemFlags, 1024 * 4, false);
+    auto       hostMemory   = session->createMemory(hostMemFlags, 1024 * 4, false);
     REQUIRE(hostMemory != nullptr);
 
     const auto bufferSize = 128;
-    auto buffer = hostMemory->createBuffer(bufferSize * sizeof(float));
+    auto       buffer     = hostMemory->createBuffer(bufferSize * sizeof(float));
 
     auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.comp.spv"));
     REQUIRE(program != nullptr);
@@ -39,7 +39,7 @@ TEST_CASE("DurationRecording", "test_Duration")
                               .setProgram(program)
                               .setFunctionName("main")
                               .setLocalX(bufferSize)
-                              .addPort({ 0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer });
+                              .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
 
     // at this point, the node's port binding table and
     // vulkan descriptor set is created. So, it is possible

@@ -24,10 +24,10 @@ aviable address modes.
 @sa         ll::impl::ImageAddressModeStrings string values for this enum.
 */
 enum class ImageAddressMode : uint32_t {
-    Repeat = 0,
-    MirroredRepeat = 1,
-    ClampToEdge = 2,
-    ClampToBorder = 3,
+    Repeat            = 0,
+    MirroredRepeat    = 1,
+    ClampToEdge       = 2,
+    ClampToBorder     = 3,
     MirrorClampToEdge = 4
 };
 
@@ -38,13 +38,13 @@ namespace impl {
 
     @sa         ll::ImageAddressMode enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ImageAddressMode>, 5> ImageAddressModeStrings { {
+    constexpr const std::array<std::tuple<const char*, ll::ImageAddressMode>, 5> ImageAddressModeStrings {{
         std::make_tuple("Repeat", ll::ImageAddressMode::Repeat),
         std::make_tuple("MirroredRepeat", ll::ImageAddressMode::MirroredRepeat),
         std::make_tuple("ClampToEdge", ll::ImageAddressMode::ClampToEdge),
         std::make_tuple("ClampToBorder", ll::ImageAddressMode::ClampToBorder),
         std::make_tuple("MirrorClampToEdge", ll::ImageAddressMode::MirrorClampToEdge),
-    } };
+    }};
 
 } // namespace impl
 

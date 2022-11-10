@@ -31,7 +31,7 @@ TEST_CASE("LoadLibrary", "test_LoadLibrary")
     auto desc = ll::ComputeNodeDescriptor {};
     REQUIRE_NOTHROW(desc = session->createComputeNodeDescriptor("nodes/Assign"));
 
-    auto node = std::shared_ptr<ll::ComputeNode> { nullptr };
+    auto node = std::shared_ptr<ll::ComputeNode> {nullptr};
     REQUIRE_NOTHROW(node = session->createComputeNode(desc));
     REQUIRE(node != nullptr);
 

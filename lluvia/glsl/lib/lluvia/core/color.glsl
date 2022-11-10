@@ -53,10 +53,10 @@ vec4 color_rgba2hsva(const uvec4 RGBA, const float minChroma)
     // their floating point counter parts. This way, comparison is
     // exact.
     float H = C <= minChroma ? 0 : M_ui == RGBA.r ? mod((g - b) / C, 6)
-        : M_ui == RGBA.g                          ? ((b - r) / C) + 2
+                               : M_ui == RGBA.g   ? ((b - r) / C) + 2
                                                   : ((r - g) / C) + 4;
 
-    H = radians(60 * H);
+    H             = radians(60 * H);
     const float V = M;
 
     const float S = V == 0 ? 0 : C / V;
@@ -90,13 +90,13 @@ uvec4 color_hsva2rgba(const vec4 HSVA)
     const float m = v - c;
 
     vec3 rgb = 0 <= h && h < 60 ? vec3(c, x, 0) : 60 <= h && h < 120 ? vec3(x, c, 0)
-        : 120 <= h && h < 180                                        ? vec3(0, c, x)
-        : 180 <= h && h < 240                                        ? vec3(0, x, c)
-        : 240 <= h && h < 300                                        ? vec3(x, 0, c)
+                                              : 120 <= h && h < 180  ? vec3(0, c, x)
+                                              : 180 <= h && h < 240  ? vec3(0, x, c)
+                                              : 240 <= h && h < 300  ? vec3(x, 0, c)
                                                                      : vec3(c, 0, x);
 
     // convert rgb range from [0, 1] to [0, 255]
-    rgb = clamp(255 * (rgb + m), 0, 255);
+    rgb        = clamp(255 * (rgb + m), 0, 255);
     uint alpha = uint(clamp(255 * a, 0, 255));
 
     return uvec4(rgb.r, rgb.g, rgb.b, alpha);

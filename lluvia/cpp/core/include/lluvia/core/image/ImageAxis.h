@@ -18,7 +18,7 @@ namespace ll {
 enum class ImageAxis : ll::enum_t {
     U = 0, /**< value for U or X axis. */
     V = 1, /**< value for V or Y axis. */
-    W = 2 /**< value for W or Z axis. */
+    W = 2  /**< value for W or Z axis. */
 };
 
 namespace impl {
@@ -28,11 +28,11 @@ namespace impl {
 
     @sa         ll::ImageAxis enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ImageAxis>, 3> ImageAxisStrings { {
+    constexpr const std::array<std::tuple<const char*, ll::ImageAxis>, 3> ImageAxisStrings {{
         std::make_tuple("U", ll::ImageAxis::U),
         std::make_tuple("V", ll::ImageAxis::V),
         std::make_tuple("W", ll::ImageAxis::W),
-    } };
+    }};
 
 } // namespace impl
 

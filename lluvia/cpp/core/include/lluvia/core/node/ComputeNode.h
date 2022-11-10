@@ -38,9 +38,9 @@ class Program;
 class ComputeNode : public Node, public std::enable_shared_from_this<ll::ComputeNode> {
 
 public:
-    ComputeNode() = delete;
+    ComputeNode()                        = delete;
     ComputeNode(const ComputeNode& node) = delete;
-    ComputeNode(ComputeNode&& node) = delete;
+    ComputeNode(ComputeNode&& node)      = delete;
 
     /**
     @brief      Constructs the object.
@@ -60,13 +60,13 @@ public:
                                   if any of the components of descriptor.localShape is zero.
     */
     ComputeNode(const std::shared_ptr<ll::vulkan::Device>& device,
-        const ll::ComputeNodeDescriptor& descriptor,
-        const std::weak_ptr<ll::Interpreter>& interpreter);
+        const ll::ComputeNodeDescriptor&                   descriptor,
+        const std::weak_ptr<ll::Interpreter>&              interpreter);
 
     virtual ~ComputeNode();
 
     ComputeNode& operator=(const ComputeNode& node) = delete;
-    ComputeNode& operator=(ComputeNode&& node) = delete;
+    ComputeNode& operator=(ComputeNode&& node)      = delete;
 
     ll::NodeType getType() const noexcept override;
 
@@ -257,16 +257,16 @@ private:
     void bindImageView(const ll::PortDescriptor& port, const std::shared_ptr<ll::ImageView>& imageView);
 
     std::vector<vk::DescriptorPoolSize> getDescriptorPoolSizes() const noexcept;
-    uint32_t countDescriptorType(const vk::DescriptorType type) const noexcept;
+    uint32_t                            countDescriptorType(const vk::DescriptorType type) const noexcept;
 
     std::shared_ptr<ll::vulkan::Device> m_device;
 
     vk::DescriptorSetLayout m_descriptorSetLayout;
 
     vk::PipelineLayout m_pipelineLayout;
-    vk::Pipeline m_pipeline;
+    vk::Pipeline       m_pipeline;
 
-    vk::DescriptorSet m_descriptorSet;
+    vk::DescriptorSet  m_descriptorSet;
     vk::DescriptorPool m_descriptorPool;
 
     ll::ComputeNodeDescriptor m_descriptor;

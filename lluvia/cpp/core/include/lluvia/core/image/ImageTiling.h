@@ -15,14 +15,14 @@ namespace ll {
 
 enum class ImageTiling : ll::enum_t {
     Optimal = static_cast<ll::enum_t>(vk::ImageTiling::eOptimal),
-    Linear = static_cast<ll::enum_t>(vk::ImageTiling::eLinear),
+    Linear  = static_cast<ll::enum_t>(vk::ImageTiling::eLinear),
 };
 
 namespace impl {
 
     constexpr ll::ImageTiling fromVkImageTiling(const vk::ImageTiling& flags) noexcept
     {
-        return ll::ImageTiling { static_cast<ll::enum_t>(flags) };
+        return ll::ImageTiling {static_cast<ll::enum_t>(flags)};
     }
 
     constexpr vk::ImageTiling toVkImageTiling(const ll::ImageTiling& flags) noexcept
@@ -31,10 +31,10 @@ namespace impl {
         return static_cast<vk::ImageTiling>(flags);
     }
 
-    constexpr const std::array<std::tuple<const char*, ll::ImageTiling>, 2> ImageTilingStrings { {
+    constexpr const std::array<std::tuple<const char*, ll::ImageTiling>, 2> ImageTilingStrings {{
         std::make_tuple("Optimal", ll::ImageTiling::Optimal),
         std::make_tuple("Linear", ll::ImageTiling::Linear),
-    } };
+    }};
 
 } // namespace impl
 

@@ -23,11 +23,11 @@ enum class FloatPrecision : ll::enum_t {
 
 namespace impl {
 
-    constexpr const std::array<std::tuple<const char*, ll::FloatPrecision>, 3> FloatPrecisionStrings { {
+    constexpr const std::array<std::tuple<const char*, ll::FloatPrecision>, 3> FloatPrecisionStrings {{
         std::make_tuple("FP16", ll::FloatPrecision::FP16),
         std::make_tuple("FP32", ll::FloatPrecision::FP32),
         std::make_tuple("FP64", ll::FloatPrecision::FP64),
-    } };
+    }};
 
 } // namespace impl
 

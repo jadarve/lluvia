@@ -168,14 +168,14 @@ void registerTypes(sol::table& lib)
         "addPort", &ll::ComputeNodeDescriptor::addPort,
         "configureGridShape", &ll::ComputeNodeDescriptor::configureGridShape,
         "__setParameter", &ll::ComputeNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
-        "__getParameter", &ll::ComputeNodeDescriptor::getParameter // user facing getParameter() implemented in library.lua
+        "__getParameter", &ll::ComputeNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
     );
 
     lib.new_usertype<ll::ContainerNodeDescriptor>("ContainerNodeDescriptor",
         "builderName", sol::property(&ll::ContainerNodeDescriptor::getBuilderName, &ll::ContainerNodeDescriptor::setBuilderName),
         "addPort", &ll::ContainerNodeDescriptor::addPort,
         "__setParameter", &ll::ContainerNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
-        "__getParameter", &ll::ContainerNodeDescriptor::getParameter // user facing getParameter() implemented in library.lua
+        "__getParameter", &ll::ContainerNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
     );
 
     lib.new_usertype<ll::PushConstants>("PushConstants",
@@ -267,7 +267,7 @@ void registerTypes(sol::table& lib)
         "getParameter", &ll::Node::getParameter,
         "hasPort", &ll::Node::hasPort,
         "__getPort", &ll::Node::getPort, // user facing getPort() implemented in library.lua
-        "__bind", &ll::Node::bind // user facing bind() implemented in library.lua
+        "__bind", &ll::Node::bind        // user facing bind() implemented in library.lua
     );
 
     lib.new_usertype<ll::ComputeNode>("ComputeNode",
@@ -293,7 +293,7 @@ void registerTypes(sol::table& lib)
         "__setParameter", &ll::ComputeNode::setParameter,
         "__getParameter", &ll::ComputeNode::getParameter,
         "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
-        "__bind", &ll::ComputeNode::bind // user facing bind() implemented in library.lua
+        "__bind", &ll::ComputeNode::bind        // user facing bind() implemented in library.lua
     );
 
     lib.new_usertype<ll::ContainerNode>("ContainerNode",
@@ -306,10 +306,10 @@ void registerTypes(sol::table& lib)
         "hasPort", &ll::ContainerNode::hasPort,
         "__setParameter", &ll::ContainerNode::setParameter,
         "__getParameter", &ll::ContainerNode::getParameter,
-        "__getPort", &ll::ContainerNode::getPort, // user facing getPort() implemented in library.lua
-        "__bind", &ll::ContainerNode::bind, // user facing bind() implemented in library.lua
+        "__getPort", &ll::ContainerNode::getPort,   // user facing getPort() implemented in library.lua
+        "__bind", &ll::ContainerNode::bind,         // user facing bind() implemented in library.lua
         "__bindNode", &ll::ContainerNode::bindNode, // user facing bindNode() implemented in library.lua
-        "__getNode", &ll::ContainerNode::getNode // user facing getNode() implemented in library.lua
+        "__getNode", &ll::ContainerNode::getNode    // user facing getNode() implemented in library.lua
     );
 
     lib.new_usertype<ll::Session>("Session",
@@ -341,30 +341,30 @@ void registerTypes(sol::table& lib)
 }
 
 Interpreter::Interpreter()
-    : m_lua { std::make_unique<sol::state>() }
+    : m_lua {std::make_unique<sol::state>()}
 {
 
     // load default libraries
     m_lua->open_libraries(sol::lib::base, sol::lib::math, sol::lib::string, sol::lib::table);
 
     // ll and impl namespaces
-    m_lib = (*m_lua)["ll"].get_or_create<sol::table>();
+    m_lib     = (*m_lua)["ll"].get_or_create<sol::table>();
     m_libImpl = m_lib["impl"].get_or_create<sol::table>();
 
     registerTypes(m_lib);
 
-    m_libImpl["castObjectToBuffer"] = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::Buffer>(obj); };
-    m_libImpl["castObjectToImage"] = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::Image>(obj); };
+    m_libImpl["castObjectToBuffer"]    = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::Buffer>(obj); };
+    m_libImpl["castObjectToImage"]     = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::Image>(obj); };
     m_libImpl["castObjectToImageView"] = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::ImageView>(obj); };
 
-    m_libImpl["castBufferToObject"] = [](std::shared_ptr<ll::Buffer> buffer) { return std::static_pointer_cast<ll::Object>(buffer); };
-    m_libImpl["castImageToObject"] = [](std::shared_ptr<ll::Image> image) { return std::static_pointer_cast<ll::Object>(image); };
+    m_libImpl["castBufferToObject"]    = [](std::shared_ptr<ll::Buffer> buffer) { return std::static_pointer_cast<ll::Object>(buffer); };
+    m_libImpl["castImageToObject"]     = [](std::shared_ptr<ll::Image> image) { return std::static_pointer_cast<ll::Object>(image); };
     m_libImpl["castImageViewToObject"] = [](std::shared_ptr<ll::ImageView> imageView) { return std::static_pointer_cast<ll::Object>(imageView); };
 
-    m_libImpl["castComputeNodeToNode"] = [](std::shared_ptr<ll::ComputeNode> node) { return std::static_pointer_cast<ll::Node>(node); };
+    m_libImpl["castComputeNodeToNode"]   = [](std::shared_ptr<ll::ComputeNode> node) { return std::static_pointer_cast<ll::Node>(node); };
     m_libImpl["castContainerNodeToNode"] = [](std::shared_ptr<ll::ContainerNode> node) { return std::static_pointer_cast<ll::Node>(node); };
 
-    m_libImpl["castNodeToComputeNode"] = [](std::shared_ptr<ll::Node> node) { return std::static_pointer_cast<ll::ComputeNode>(node); };
+    m_libImpl["castNodeToComputeNode"]   = [](std::shared_ptr<ll::Node> node) { return std::static_pointer_cast<ll::ComputeNode>(node); };
     m_libImpl["castNodeToContainerNode"] = [](std::shared_ptr<ll::Node> node) { return std::static_pointer_cast<ll::ContainerNode>(node); };
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
@@ -398,8 +398,8 @@ void Interpreter::runFile(const std::string& filename)
         auto inputFile = std::ifstream(filename, std::fstream::in | std::fstream::ate);
         inputFile.exceptions(std::ifstream::failbit);
 
-        const auto size = inputFile.tellg();
-        auto stringBuffer = std::string(size, '\0');
+        const auto size         = inputFile.tellg();
+        auto       stringBuffer = std::string(size, '\0');
 
         inputFile.seekg(0);
         inputFile.read(&stringBuffer[0], size);

@@ -45,7 +45,7 @@ std::shared_ptr<ll::Session> Session::create()
 
 std::shared_ptr<ll::Session> Session::create(const ll::SessionDescriptor& descriptor)
 {
-    return std::shared_ptr<Session> { new Session(descriptor) };
+    return std::shared_ptr<Session> {new Session(descriptor)};
 }
 
 std::vector<ll::DeviceDescriptor> Session::getAvailableDevices()
@@ -53,7 +53,7 @@ std::vector<ll::DeviceDescriptor> Session::getAvailableDevices()
 
     auto devices = std::vector<ll::DeviceDescriptor> {};
 
-    auto vulkanInstance = std::make_shared<ll::vulkan::Instance>(false);
+    auto       vulkanInstance        = std::make_shared<ll::vulkan::Instance>(false);
     const auto vulkanPhysicalDevices = vulkanInstance->get().enumeratePhysicalDevices();
 
     for (const auto vkPhysicalDevice : vulkanPhysicalDevices) {
@@ -63,8 +63,7 @@ std::vector<ll::DeviceDescriptor> Session::getAvailableDevices()
         auto desc = DeviceDescriptor {
             vkDeviceProperties.deviceID,
             ll::impl::fromVkPhysicalDeviceType(vkDeviceProperties.deviceType),
-            vkDeviceProperties.deviceName
-        };
+            vkDeviceProperties.deviceName};
 
         devices.push_back(desc);
     }
@@ -85,7 +84,7 @@ std::vector<vk::ExtensionProperties> Session::getVulkanExtensionProperties()
 }
 
 Session::Session(const ll::SessionDescriptor& descriptor)
-    : m_descriptor { descriptor }
+    : m_descriptor {descriptor}
 {
 
     m_instance = std::make_shared<ll::vulkan::Instance>(m_descriptor.isDebugEnabled());
@@ -126,7 +125,7 @@ std::vector<ll::MemoryPropertyFlags> Session::getSupportedMemoryFlags() const
 {
 
     const auto memProperties = m_device->getPhysicalDevice().getMemoryProperties();
-    auto memoryFlags = std::vector<ll::MemoryPropertyFlags> {};
+    auto       memoryFlags   = std::vector<ll::MemoryPropertyFlags> {};
 
     memoryFlags.reserve(memProperties.memoryTypeCount);
 
@@ -178,10 +177,10 @@ std::shared_ptr<ll::Memory> Session::createMemory(const ll::MemoryPropertyFlags&
 
             auto heapInfo = ll::VkHeapInfo {};
 
-            heapInfo.typeIndex = i;
-            heapInfo.size = memProperties.memoryHeaps[memType.heapIndex].size;
-            heapInfo.flags = memoryPropertyFlags;
-            heapInfo.familyQueueIndices = std::vector<uint32_t> { m_device->getComputeFamilyQueueIndex() };
+            heapInfo.typeIndex          = i;
+            heapInfo.size               = memProperties.memoryHeaps[memType.heapIndex].size;
+            heapInfo.flags              = memoryPropertyFlags;
+            heapInfo.familyQueueIndices = std::vector<uint32_t> {m_device->getComputeFamilyQueueIndex()};
 
             // can throw exception. Invariants of Session are kept.
             return std::make_shared<ll::Memory>(m_device, heapInfo, pageSize);
@@ -199,7 +198,7 @@ std::shared_ptr<ll::Program> Session::createProgram(const std::string& spirvPath
 
     try {
         // workaround for GCC 4.8
-        ifstream file { spirvPath, std::ios::ate | std::ios::binary };
+        ifstream file {spirvPath, std::ios::ate | std::ios::binary};
         file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
         const auto fileSize = static_cast<size_t>(file.tellg());
@@ -373,16 +372,16 @@ void Session::scriptFile(const std::string& filename)
 void Session::loadLibrary(const std::string& filename)
 {
 
-    constexpr const auto LUA_EXTENSION = ".lua";
-    constexpr const auto SPV_EXTENSION = ".spv";
+    constexpr const auto LUA_EXTENSION    = ".lua";
+    constexpr const auto SPV_EXTENSION    = ".spv";
     constexpr const auto EXTENSION_LENGTH = 4;
 
-    auto archive = ll::impl::ZipArchive { filename };
+    auto       archive     = ll::impl::ZipArchive {filename};
     const auto numberFiles = archive.numberFiles();
     for (auto i = 0u; i < numberFiles; ++i) {
 
-        auto stat = archive.getFileStat(i);
-        auto filepath = std::string { stat.m_filename };
+        auto stat     = archive.getFileStat(i);
+        auto filepath = std::string {stat.m_filename};
 
         // ignore filepaths whose length is less than the extension length
         if (filepath.size() < EXTENSION_LENGTH) {
@@ -396,7 +395,7 @@ void Session::loadLibrary(const std::string& filename)
         } else if (filepath.compare(filepath.size() - EXTENSION_LENGTH, EXTENSION_LENGTH, SPV_EXTENSION) == 0) {
             auto spirv = archive.uncompressBinaryFile(stat);
 
-            auto program = createProgram(spirv);
+            auto program     = createProgram(spirv);
             auto programName = filepath.substr(0, filepath.size() - EXTENSION_LENGTH);
             setProgram(programName, program);
         }
@@ -409,11 +408,11 @@ ll::vec3ui Session::getGoodComputeLocalShape(ll::ComputeDimension dimensions) co
     // FIXME: add device-specific logic
     switch (dimensions) {
     case ll::ComputeDimension::D1:
-        return ll::vec3ui { 1024, 1, 1 };
+        return ll::vec3ui {1024, 1, 1};
     case ll::ComputeDimension::D2:
-        return ll::vec3ui { 32, 32, 1 };
+        return ll::vec3ui {32, 32, 1};
     case ll::ComputeDimension::D3:
-        return ll::vec3ui { 16, 16, 4 };
+        return ll::vec3ui {16, 16, 4};
     }
 }
 
@@ -452,8 +451,7 @@ void Session::initDescriptor()
         m_deviceDescriptor = DeviceDescriptor {
             physicalDevice.getProperties().deviceID,
             ll::impl::fromVkPhysicalDeviceType(physicalDevice.getProperties().deviceType),
-            physicalDevice.getProperties().deviceName
-        };
+            physicalDevice.getProperties().deviceName};
     }
 }
 
@@ -504,7 +502,7 @@ uint32_t Session::findComputeFamilyQueueIndex(vk::PhysicalDevice& physicalDevice
 
     const auto queueProperties = physicalDevice.getQueueFamilyProperties();
 
-    auto queueIndex = uint32_t { 0 };
+    auto queueIndex = uint32_t {0};
     for (const auto& prop : queueProperties) {
 
         const auto compute = ((prop.queueFlags & vk::QueueFlagBits::eCompute) == vk::QueueFlagBits::eCompute);

@@ -9,14 +9,14 @@ void main()
 {
 
     // this coordinates are relative to out_gray size
-    const ivec2 coords = LL_GLOBAL_COORDS_2D;
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(out_gray);
 
     if (coords.x > imgSize.x || coords.y > imgSize.y) {
         return;
     }
 
-    const bool topBorder = coords.y == 0;
+    const bool topBorder    = coords.y == 0;
     const bool bottomBorder = coords.y == imgSize.y - 1;
 
     const ivec2 inputImgCoords = ivec2(coords.x, 2 * coords.y);

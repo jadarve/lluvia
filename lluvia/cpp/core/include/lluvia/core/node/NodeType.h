@@ -17,8 +17,8 @@ namespace ll {
 @brief      Class for node type.
 */
 enum class NodeType : ll::enum_t {
-    Compute = 0, /**<  value for ll::ComputeNode type. */
-    Container = 1 /**<  value for ll::ContainerNode type. */
+    Compute   = 0, /**<  value for ll::ComputeNode type. */
+    Container = 1  /**<  value for ll::ContainerNode type. */
 };
 
 namespace impl {
@@ -28,8 +28,8 @@ namespace impl {
 
      @sa ll::NodeType enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::NodeType>, 2> NodeTypeStrings { { std::make_tuple("Compute", ll::NodeType::Compute),
-        std::make_tuple("Container", ll::NodeType::Container) } };
+    constexpr const std::array<std::tuple<const char*, ll::NodeType>, 2> NodeTypeStrings {{std::make_tuple("Compute", ll::NodeType::Compute),
+        std::make_tuple("Container", ll::NodeType::Container)}};
 } // namespace impl
 
 } // namespace ll

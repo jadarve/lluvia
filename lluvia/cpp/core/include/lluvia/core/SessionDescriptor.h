@@ -45,7 +45,7 @@ public:
     const std::optional<ll::DeviceDescriptor>& getDeviceDescriptor() const noexcept;
 
 private:
-    bool m_enableDebug { false };
+    bool m_enableDebug {false};
 
     std::optional<ll::DeviceDescriptor> m_deviceDescriptor {};
 };

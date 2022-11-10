@@ -28,13 +28,13 @@ namespace ll {
 using namespace std;
 
 ComputeNode::ComputeNode(const std::shared_ptr<ll::vulkan::Device>& device,
-    const ll::ComputeNodeDescriptor& descriptor,
-    const std::weak_ptr<ll::Interpreter>& interpreter)
+    const ll::ComputeNodeDescriptor&                                descriptor,
+    const std::weak_ptr<ll::Interpreter>&                           interpreter)
     :
 
-    m_device { device }
-    , m_descriptor { descriptor }
-    , m_interpreter { interpreter }
+    m_device {device}
+    , m_descriptor {descriptor}
+    , m_interpreter {interpreter}
 {
 
     ll::throwSystemErrorIf(m_descriptor.getProgram() == nullptr, ll::ErrorCode::InvalidShaderProgram, "Shader program cannot be null.");
@@ -69,7 +69,7 @@ void ComputeNode::initPortBindings()
 
     m_descriptorSetLayout = m_device->get().createDescriptorSetLayout(descLayoutInfo);
 
-    auto descriptorPoolSizes = getDescriptorPoolSizes();
+    auto descriptorPoolSizes      = getDescriptorPoolSizes();
     auto descriptorPoolCreateInfo = vk::DescriptorPoolCreateInfo()
                                         .setMaxSets(1)
                                         .setPoolSizeCount(static_cast<uint32_t>(descriptorPoolSizes.size()))
@@ -106,14 +106,13 @@ void ComputeNode::initPipeline()
     /////////////////////////////////////////////
     // Specialization constants
     /////////////////////////////////////////////
-    const size_t size = sizeof(uint32_t);
-    auto specializationMapEntries = vector<vk::SpecializationMapEntry> {
-        { 1, 0 * size, size },
-        { 2, 1 * size, size },
-        { 3, 2 * size, size }
-    };
+    const size_t size                     = sizeof(uint32_t);
+    auto         specializationMapEntries = vector<vk::SpecializationMapEntry> {
+                {1, 0 * size, size},
+                {2, 1 * size, size},
+                {3, 2 * size, size}};
 
-    auto localShape = m_descriptor.getLocalShape();
+    auto localShape         = m_descriptor.getLocalShape();
     auto specializationInfo = vk::SpecializationInfo()
                                   .setMapEntryCount(static_cast<int>(specializationMapEntries.size()))
                                   .setPMapEntries(specializationMapEntries.data())
@@ -144,7 +143,7 @@ void ComputeNode::initPipeline()
         pipeLayoutInfo.setPPushConstantRanges(&pushConstantRange);
     }
 
-    m_pipelineLayout = m_device->get().createPipelineLayout(pipeLayoutInfo);
+    m_pipelineLayout                              = m_device->get().createPipelineLayout(pipeLayoutInfo);
     vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
                                                         .setStage(stageInfo)
                                                         .setLayout(m_pipelineLayout);
@@ -414,7 +413,7 @@ std::vector<vk::DescriptorPoolSize> ComputeNode::getDescriptorPoolSizes() const 
     auto pushDescriptorPoolSize = [this](const vk::DescriptorType type, std::vector<vk::DescriptorPoolSize>& v) {
         const auto count = countDescriptorType(type);
         if (count > 0) {
-            v.push_back({ type, count });
+            v.push_back({type, count});
         }
     };
 
@@ -430,7 +429,7 @@ std::vector<vk::DescriptorPoolSize> ComputeNode::getDescriptorPoolSizes() const 
 uint32_t ComputeNode::countDescriptorType(const vk::DescriptorType type) const noexcept
 {
 
-    auto count = uint32_t { 0 };
+    auto count = uint32_t {0};
     for (const auto& it : m_parameterBindings) {
         count += static_cast<uint32_t>(it.descriptorType == type);
     }

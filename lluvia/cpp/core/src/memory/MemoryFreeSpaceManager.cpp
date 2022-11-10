@@ -15,9 +15,9 @@ namespace impl {
     constexpr const size_t CAPACITY_INCREASE = 512u;
 
     MemoryFreeSpaceManager::MemoryFreeSpaceManager(const uint64_t tSize)
-        : m_size { tSize }
-        , m_offsetVector { 0 }
-        , m_sizeVector { tSize }
+        : m_size {tSize}
+        , m_offsetVector {0}
+        , m_sizeVector {tSize}
     {
 
         m_offsetVector.reserve(CAPACITY_INCREASE);
@@ -102,9 +102,9 @@ namespace impl {
         infoLocal.offset -= infoLocal.leftPadding;
         infoLocal.size += infoLocal.leftPadding;
 
-        const auto offsetPlusSize = infoLocal.offset + infoLocal.size;
-        auto intervalUpdated = false;
-        auto lowerBoundUpdated = true;
+        const auto offsetPlusSize    = infoLocal.offset + infoLocal.size;
+        auto       intervalUpdated   = false;
+        auto       lowerBoundUpdated = true;
 
         // update the interval offset or size if the input parameters are
         // at the boundaries of the interval.
@@ -112,19 +112,19 @@ namespace impl {
         for (; position < m_offsetVector.size(); ++position) {
 
             auto& offset_i = m_offsetVector[position];
-            auto& size_i = m_sizeVector[position];
+            auto& size_i   = m_sizeVector[position];
 
             if (offsetPlusSize == offset_i) {
                 // update lower bound
                 offset_i -= infoLocal.size;
                 size_i += infoLocal.size;
-                intervalUpdated = true;
+                intervalUpdated   = true;
                 lowerBoundUpdated = true;
                 break;
             } else if (infoLocal.offset == offset_i + size_i) {
                 // update upper bound
                 size_i += infoLocal.size;
-                intervalUpdated = true;
+                intervalUpdated   = true;
                 lowerBoundUpdated = false;
                 break;
             }
@@ -146,7 +146,7 @@ namespace impl {
 
                 if (position > 0) {
                     const auto offsetLeft = m_offsetVector[position - 1];
-                    const auto sizeLeft = m_sizeVector[position - 1];
+                    const auto sizeLeft   = m_sizeVector[position - 1];
 
                     if (offsetLeft + sizeLeft == m_offsetVector[position]) {
 
@@ -203,7 +203,7 @@ namespace impl {
             if (m_offsetVector.size() == m_offsetVector.capacity()) {
 
                 auto newOffsetVector = std::vector<uint64_t> {};
-                auto newSizeVector = std::vector<uint64_t> {};
+                auto newSizeVector   = std::vector<uint64_t> {};
                 newOffsetVector.reserve(m_offsetVector.capacity() + CAPACITY_INCREASE);
                 newSizeVector.reserve(m_offsetVector.capacity() + CAPACITY_INCREASE);
 
@@ -212,7 +212,7 @@ namespace impl {
 
                 // move the new vectors to the members and delete the old ones
                 m_offsetVector = std::move(newOffsetVector);
-                m_sizeVector = std::move(newSizeVector);
+                m_sizeVector   = std::move(newSizeVector);
             }
 
             return true;
@@ -234,7 +234,7 @@ namespace impl {
     bool MemoryFreeSpaceManager::tryAllocate(uint64_t tSize, uint64_t alignment, ll::impl::MemoryAllocationTryInfo& tryInfoOut) noexcept
     {
 
-        auto offsetMask = uint64_t { 0 };
+        auto offsetMask  = uint64_t {0};
         auto maskCounter = alignment;
 
         while (maskCounter > 1u) {
@@ -245,16 +245,16 @@ namespace impl {
         auto position = 0;
         for (auto& s : m_sizeVector) {
 
-            auto offset = m_offsetVector[position];
+            auto offset        = m_offsetVector[position];
             auto offsetModulus = offset & offsetMask;
-            auto leftPadding = (alignment - offsetModulus) & offsetMask;
+            auto leftPadding   = (alignment - offsetModulus) & offsetMask;
 
             if ((tSize + leftPadding) <= s) {
 
-                tryInfoOut.allocInfo.offset = offset + leftPadding;
-                tryInfoOut.allocInfo.size = tSize;
+                tryInfoOut.allocInfo.offset      = offset + leftPadding;
+                tryInfoOut.allocInfo.size        = tSize;
                 tryInfoOut.allocInfo.leftPadding = leftPadding;
-                tryInfoOut.index = position;
+                tryInfoOut.index                 = position;
 
                 return true;
             }

@@ -22,21 +22,21 @@ namespace impl {
 
     struct MemoryAllocationTryInfo {
         ll::MemoryAllocationInfo allocInfo;
-        uint32_t index;
+        uint32_t                 index;
     };
 
     class MemoryFreeSpaceManager {
 
     public:
-        MemoryFreeSpaceManager() = default;
+        MemoryFreeSpaceManager()                                = default;
         MemoryFreeSpaceManager(const MemoryFreeSpaceManager& m) = default;
-        MemoryFreeSpaceManager(MemoryFreeSpaceManager&& m) = default;
+        MemoryFreeSpaceManager(MemoryFreeSpaceManager&& m)      = default;
         MemoryFreeSpaceManager(const uint64_t tSize);
 
         ~MemoryFreeSpaceManager() = default;
 
         MemoryFreeSpaceManager& operator=(const MemoryFreeSpaceManager& heap) = default;
-        MemoryFreeSpaceManager& operator=(MemoryFreeSpaceManager&& heap) = default;
+        MemoryFreeSpaceManager& operator=(MemoryFreeSpaceManager&& heap)      = default;
 
         friend std::ostream& operator<<(std::ostream& out, const MemoryFreeSpaceManager& manager);
 
@@ -56,7 +56,7 @@ namespace impl {
         void commitAllocation(const ll::impl::MemoryAllocationTryInfo& tryInfo) noexcept;
 
     private:
-        uint64_t m_size { 0 };
+        uint64_t m_size {0};
 
         // separate offset and size vectors help to keep data locality
         // when scanning for inserting or deleting a new interval.

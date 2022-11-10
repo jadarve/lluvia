@@ -29,7 +29,7 @@ TEST_CASE("create_instance", "test_Instance")
 TEST_CASE("create_instance_with_debug", "test_Instance")
 {
 
-    auto instance = std::unique_ptr<ll::vulkan::Instance> { nullptr };
+    auto instance = std::unique_ptr<ll::vulkan::Instance> {nullptr};
 
     // create instance with debug enabled
     REQUIRE_NOTHROW(instance = std::make_unique<ll::vulkan::Instance>(true));

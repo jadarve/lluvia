@@ -8,14 +8,14 @@
 
 namespace ll::vulkan {
 
-Device::Device(const vk::Device& device,
-    const vk::PhysicalDevice& physicalDevice,
-    const uint32_t computeQueueFamilyIndex,
+Device::Device(const vk::Device&                 device,
+    const vk::PhysicalDevice&                    physicalDevice,
+    const uint32_t                               computeQueueFamilyIndex,
     const std::shared_ptr<ll::vulkan::Instance>& instance)
-    : m_device { device }
-    , m_physicalDevice { physicalDevice }
-    , m_computeQueueFamilyIndex { computeQueueFamilyIndex }
-    , m_instance { instance }
+    : m_device {device}
+    , m_physicalDevice {physicalDevice}
+    , m_computeQueueFamilyIndex {computeQueueFamilyIndex}
+    , m_instance {instance}
 {
 
     m_computeQueueFamilyIndex = getComputeFamilyQueueIndex();
@@ -24,7 +24,7 @@ Device::Device(const vk::Device& device,
                                 .setQueueFamilyIndex(m_computeQueueFamilyIndex);
 
     m_commandPool = m_device.createCommandPool(createInfo);
-    m_queue = m_device.getQueue(m_computeQueueFamilyIndex, 0);
+    m_queue       = m_device.getQueue(m_computeQueueFamilyIndex, 0);
 }
 
 Device::~Device()

@@ -22,16 +22,16 @@ namespace vulkan {
 class Duration {
 
 public:
-    Duration() = delete;
+    Duration()                         = delete;
     Duration(const Duration& duration) = delete;
-    Duration(Duration&& duration) = delete;
+    Duration(Duration&& duration)      = delete;
 
     Duration(const std::shared_ptr<ll::vulkan::Device> device);
 
     ~Duration();
 
     Duration& operator=(const Duration& duration) = delete;
-    Duration& operator=(Duration&& duration) = delete;
+    Duration& operator=(Duration&& duration)      = delete;
 
     std::chrono::nanoseconds getDuration() const;
 

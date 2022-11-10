@@ -47,7 +47,7 @@ namespace impl {
         ll::throwSystemErrorIf(!mz_zip_reader_extract_file_to_mem(&mArchive, stat.m_filename, &buffer[0], buffer.size(), 0),
             ll::ErrorCode::IOError, "Error extracting text file from archive.");
 
-        return std::string { &buffer[0], buffer.size() };
+        return std::string {&buffer[0], buffer.size()};
     }
 
     std::vector<uint8_t> ZipArchive::uncompressBinaryFile(mz_zip_archive_file_stat& stat)

@@ -20,14 +20,14 @@ namespace ll {
 class PushConstants {
 
 public:
-    PushConstants() = default;
+    PushConstants()                     = default;
     PushConstants(const PushConstants&) = default;
-    PushConstants(PushConstants&&) = default;
+    PushConstants(PushConstants&&)      = default;
 
     ~PushConstants() = default;
 
     PushConstants& operator=(const PushConstants&) = default;
-    PushConstants& operator=(PushConstants&&) = default;
+    PushConstants& operator=(PushConstants&&)      = default;
 
     template <typename T>
     void set(T&& data)
@@ -88,12 +88,12 @@ public:
         return m_data.size();
     }
 
-    void pushFloat(const float& d) { push(d); };
-    void setFloat(const float& d) { set(d); }
+    void  pushFloat(const float& d) { push(d); };
+    void  setFloat(const float& d) { set(d); }
     float getFloat() const { return get<float>(); }
 
-    void pushInt32(const int32_t& d) { push(d); };
-    void setInt32(const int32_t& d) { set(d); }
+    void    pushInt32(const int32_t& d) { push(d); };
+    void    setInt32(const int32_t& d) { set(d); }
     int32_t getInt32() const { return get<int32_t>(); }
 
 private:

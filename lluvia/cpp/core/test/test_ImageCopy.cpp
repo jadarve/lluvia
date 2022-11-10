@@ -16,18 +16,17 @@ using memflags = ll::MemoryPropertyFlagBits;
 TEST_CASE("ImageToImage", "ImageCopyTest")
 {
 
-    constexpr const auto width = 128;
-    constexpr const auto height = 128;
-    constexpr const auto pageSize = 32 * 1024 * 1024;
+    constexpr const auto      width         = 128;
+    constexpr const auto      height        = 128;
+    constexpr const auto      pageSize      = 32 * 1024 * 1024;
     const ll::ImageUsageFlags imgUsageFlags = {
         ll::ImageUsageFlagBits::Storage
         | ll::ImageUsageFlagBits::Sampled
         | ll::ImageUsageFlagBits::TransferSrc
-        | ll::ImageUsageFlagBits::TransferDst
-    };
+        | ll::ImageUsageFlagBits::TransferDst};
 
     const auto deviceMemFlags = memflags::DeviceLocal;
-    const auto hostMemFlags = memflags::HostCoherent | memflags::HostVisible;
+    const auto hostMemFlags   = memflags::HostCoherent | memflags::HostVisible;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);

@@ -40,7 +40,7 @@ TEST_CASE("DebugEnabled", "SessionCreationTest")
 
     auto desc = ll::SessionDescriptor().enableDebug(true);
 
-    auto session = std::shared_ptr<ll::Session> { nullptr };
+    auto session = std::shared_ptr<ll::Session> {nullptr};
     REQUIRE_NOTHROW(session = ll::Session::create(desc));
     REQUIRE(session != nullptr);
 
@@ -113,9 +113,9 @@ TEST_CASE("MemoryFlags", "SessionCreationTest")
     auto memoryFlags = session->getSupportedMemoryFlags();
 
     auto hostVisibleCoherentFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
-    auto deviceLocalFlags = ll::MemoryPropertyFlagBits::DeviceLocal;
+    auto deviceLocalFlags         = ll::MemoryPropertyFlagBits::DeviceLocal;
 
-    auto hostFlagsFound = false;
+    auto hostFlagsFound   = false;
     auto deviceFlagsFound = false;
 
     for (auto flags : memoryFlags) {

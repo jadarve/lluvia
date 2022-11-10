@@ -52,7 +52,7 @@ public:
 
 private:
     vk::DynamicLoader m_loader {};
-    vk::Instance m_instance {};
+    vk::Instance      m_instance {};
 };
 
 TEST_CASE("create_instance_wrapper", "test_InstanceCreationDynamicDispatch")

@@ -13,14 +13,14 @@
 namespace ll {
 
 ContainerNode::ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter)
-    : m_interpreter { interpreter }
+    : m_interpreter {interpreter}
 {
 }
 
 ContainerNode::ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter,
-    const ll::ContainerNodeDescriptor& descriptor)
-    : m_descriptor { descriptor }
-    , m_interpreter { interpreter }
+    const ll::ContainerNodeDescriptor&                             descriptor)
+    : m_descriptor {descriptor}
+    , m_interpreter {interpreter}
 {
 }
 

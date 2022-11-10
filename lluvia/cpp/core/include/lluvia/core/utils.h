@@ -83,8 +83,7 @@ ll::vec3ui configureGridShape(const vec3ui& localShape, const vec3ui& globalShap
     return vec3ui {
         static_cast<uint32_t>(std::ceil(static_cast<F>(globalShape.x) / static_cast<F>(localShape.x))),
         static_cast<uint32_t>(std::ceil(static_cast<F>(globalShape.y) / static_cast<F>(localShape.y))),
-        static_cast<uint32_t>(std::ceil(static_cast<F>(globalShape.z) / static_cast<F>(localShape.z)))
-    };
+        static_cast<uint32_t>(std::ceil(static_cast<F>(globalShape.z) / static_cast<F>(localShape.z)))};
 }
 
 /**
@@ -99,9 +98,9 @@ ll::vec3ui configureGridShape(const vec3ui& localShape, const vec3ui& globalShap
 */
 std::shared_ptr<ll::Image> createAndInitImage(
     std::shared_ptr<ll::Session>& session,
-    std::shared_ptr<ll::Memory>& memory,
-    const ll::ImageDescriptor& desc,
-    const ll::ImageLayout initialLayout = ll::ImageLayout::General);
+    std::shared_ptr<ll::Memory>&  memory,
+    const ll::ImageDescriptor&    desc,
+    const ll::ImageLayout         initialLayout = ll::ImageLayout::General);
 
 /**
 @brief      Creates and initialize a ll::ImageView object.
@@ -115,11 +114,11 @@ std::shared_ptr<ll::Image> createAndInitImage(
 @return     A new ll::ImageViewObject.
 */
 std::shared_ptr<ll::ImageView> createAndInitImageView(
-    std::shared_ptr<ll::Session>& session,
-    std::shared_ptr<ll::Memory>& memory,
-    const ll::ImageDescriptor& imgDescriptor,
+    std::shared_ptr<ll::Session>&  session,
+    std::shared_ptr<ll::Memory>&   memory,
+    const ll::ImageDescriptor&     imgDescriptor,
     const ll::ImageViewDescriptor& viewDescriptor,
-    const ll::ImageLayout initialLayout = ll::ImageLayout::General);
+    const ll::ImageLayout          initialLayout = ll::ImageLayout::General);
 
 } // namespace ll
 

@@ -36,12 +36,12 @@ class Interpreter {
 public:
     Interpreter();
     Interpreter(const Interpreter& interpreter) = delete;
-    Interpreter(Interpreter&& interpreter) = default;
+    Interpreter(Interpreter&& interpreter)      = default;
 
     ~Interpreter();
 
     Interpreter& operator=(const Interpreter& interpreter) = delete;
-    Interpreter& operator=(Interpreter&& interpreter) = default;
+    Interpreter& operator=(Interpreter&& interpreter)      = default;
 
     void run(const std::string& code);
     void runFile(const std::string& filename);
@@ -56,8 +56,8 @@ public:
 
         auto loadCode = load(std::forward<const std::string>(code));
 
-        auto scriptFunction = static_cast<sol::protected_function>(loadCode);
-        sol::protected_function_result scriptResult = scriptFunction(std::forward<Args>(args)...);
+        auto                           scriptFunction = static_cast<sol::protected_function>(loadCode);
+        sol::protected_function_result scriptResult   = scriptFunction(std::forward<Args>(args)...);
 
         if (!scriptResult.valid()) {
             const sol::error err = scriptResult;
@@ -76,8 +76,8 @@ public:
 
         auto loadCode = load(std::forward<const std::string>(code));
 
-        auto scriptFunction = static_cast<sol::protected_function>(loadCode);
-        sol::protected_function_result scriptResult = scriptFunction(std::forward<Args>(args)...);
+        auto                           scriptFunction = static_cast<sol::protected_function>(loadCode);
+        sol::protected_function_result scriptResult   = scriptFunction(std::forward<Args>(args)...);
 
         if (!scriptResult.valid()) {
             const sol::error err = scriptResult;
@@ -89,8 +89,8 @@ public:
 
 private:
     std::unique_ptr<sol::state> m_lua;
-    sol::table m_lib;
-    sol::table m_libImpl;
+    sol::table                  m_lib;
+    sol::table                  m_libImpl;
 };
 
 } // namespace ll;

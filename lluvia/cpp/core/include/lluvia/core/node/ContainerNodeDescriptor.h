@@ -25,14 +25,14 @@ Descriptors are used to construct ll::ContainerNode objects.
 class ContainerNodeDescriptor {
 
 public:
-    ContainerNodeDescriptor() = default;
+    ContainerNodeDescriptor()                                          = default;
     ContainerNodeDescriptor(const ContainerNodeDescriptor& descriptor) = default;
-    ContainerNodeDescriptor(ContainerNodeDescriptor&& descriptor) = default;
+    ContainerNodeDescriptor(ContainerNodeDescriptor&& descriptor)      = default;
 
     ~ContainerNodeDescriptor() = default;
 
     ContainerNodeDescriptor& operator=(const ContainerNodeDescriptor& descriptor) = default;
-    ContainerNodeDescriptor& operator=(ContainerNodeDescriptor&& descriptor) = default;
+    ContainerNodeDescriptor& operator=(ContainerNodeDescriptor&& descriptor)      = default;
 
     /**
     @brief      Adds a port to the descriptor.
@@ -103,9 +103,9 @@ public:
     const std::string& getBuilderName() const noexcept;
 
 private:
-    std::string m_builderName;
+    std::string                               m_builderName;
     std::map<std::string, ll::PortDescriptor> m_ports;
-    std::map<std::string, ll::Parameter> m_parameters;
+    std::map<std::string, ll::Parameter>      m_parameters;
 };
 
 } // namespace ll

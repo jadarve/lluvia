@@ -22,9 +22,9 @@ TEST_CASE("UndefinedToGeneral", "test_ImageLayout")
     auto memory = session->createMemory(memoryFlags, 1024 * 1024 * 4, false);
     REQUIRE(memory != nullptr);
 
-    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-        | ll::ImageUsageFlagBits::Sampled
-        | ll::ImageUsageFlagBits::TransferDst };
+    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage
+                                               | ll::ImageUsageFlagBits::Sampled
+                                               | ll::ImageUsageFlagBits::TransferDst};
 
     auto desc = ll::ImageDescriptor {}
                     .setWidth(640)

@@ -36,15 +36,15 @@ namespace vulkan {
         static VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
 
     public:
-        Instance() = delete;
+        Instance()                         = delete;
         Instance(const Instance& instance) = delete;
-        Instance(Instance&& instance) = delete;
+        Instance(Instance&& instance)      = delete;
 
         Instance(bool debugEnabled);
         ~Instance();
 
         Instance& operator=(const Instance& Instance) = delete;
-        Instance& operator=(Instance&& Instance) = delete;
+        Instance& operator=(Instance&& Instance)      = delete;
 
         vk::Instance& get() noexcept;
 
@@ -55,10 +55,10 @@ namespace vulkan {
         std::vector<const char*> getRequiredLayersNames();
         std::vector<const char*> getRequiredExtensionNames();
 
-        vk::DynamicLoader m_loader;
-        vk::Instance m_instance;
+        vk::DynamicLoader          m_loader;
+        vk::Instance               m_instance;
         vk::DebugUtilsMessengerEXT m_debugMessenger;
-        bool m_debugEnabled;
+        bool                       m_debugEnabled;
     };
 
 } // namespace vk

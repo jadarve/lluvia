@@ -92,9 +92,9 @@ ll::Memory objects are constructed by calling ll::Session::createMemory on a val
 class Memory : public std::enable_shared_from_this<ll::Memory> {
 
 public:
-    Memory() = delete;
+    Memory()                     = delete;
     Memory(const Memory& memory) = delete;
-    Memory(Memory&& memory) = delete;
+    Memory(Memory&& memory)      = delete;
 
     /**
     @brief      Constructs a new ll::Memory object.
@@ -105,13 +105,13 @@ public:
     @param[in]  pageSize  The page size in bytes.
     */
     Memory(const std::shared_ptr<ll::vulkan::Device>& device,
-        const ll::VkHeapInfo& heapInfo,
-        const uint64_t pageSize);
+        const ll::VkHeapInfo&                         heapInfo,
+        const uint64_t                                pageSize);
 
     ~Memory();
 
     Memory& operator=(const Memory& memory) = delete;
-    Memory& operator=(Memory&& memory) = delete;
+    Memory& operator=(Memory&& memory)      = delete;
 
     /**
     @brief      Gets the Vulkan memory property flags used to create this memory.
@@ -242,27 +242,27 @@ public:
     @return     A new ImageView with the underlying image storage created in thise memory.
     */
     std::shared_ptr<ll::ImageView> createImageView(
-        const ll::ImageDescriptor& imgDescriptor,
+        const ll::ImageDescriptor&     imgDescriptor,
         const ll::ImageViewDescriptor& viewDescriptor);
 
 private:
     impl::MemoryAllocationTryInfo getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements);
-    void releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
+    void                          releaseMemoryAllocation(const ll::MemoryAllocationInfo& allocInfo);
 
-    void releaseBuffer(const ll::Buffer& buffer);
+    void  releaseBuffer(const ll::Buffer& buffer);
     void* mapBuffer(const ll::Buffer& buffer);
-    void unmapBuffer(const ll::Buffer& buffer);
+    void  unmapBuffer(const ll::Buffer& buffer);
 
     void releaseImage(const ll::Image& image);
 
     std::shared_ptr<ll::vulkan::Device> m_device;
 
     const ll::VkHeapInfo m_heapInfo {};
-    const uint64_t m_pageSize { 0u };
+    const uint64_t       m_pageSize {0u};
 
-    std::vector<vk::DeviceMemory> m_memoryPages;
+    std::vector<vk::DeviceMemory>                 m_memoryPages;
     std::vector<ll::impl::MemoryFreeSpaceManager> m_pageManagers;
-    std::vector<bool> m_memoryPageMappingFlags;
+    std::vector<bool>                             m_memoryPageMappingFlags;
 
     friend class ll::Buffer;
     friend class ll::Image;

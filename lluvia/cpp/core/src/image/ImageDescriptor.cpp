@@ -150,16 +150,16 @@ vk::Format getVulkanImageFormat(ll::ChannelCount channelCount, ll::ChannelType c
 }
 
 ImageDescriptor::ImageDescriptor(const uint32_t depth,
-    const uint32_t height,
-    const uint32_t width,
-    const ll::ChannelCount channelCount,
-    const ll::ChannelType channelType,
-    const ll::ImageUsageFlags usageFlags,
-    const ll::ImageTiling tiling)
-    : m_channelType { channelType }
-    , m_channelCount { channelCount }
-    , m_tiling { tiling }
-    , m_usageFlags { usageFlags }
+    const uint32_t                              height,
+    const uint32_t                              width,
+    const ll::ChannelCount                      channelCount,
+    const ll::ChannelType                       channelType,
+    const ll::ImageUsageFlags                   usageFlags,
+    const ll::ImageTiling                       tiling)
+    : m_channelType {channelType}
+    , m_channelCount {channelCount}
+    , m_tiling {tiling}
+    , m_usageFlags {usageFlags}
 {
 
     setWidth(width);
@@ -168,12 +168,12 @@ ImageDescriptor::ImageDescriptor(const uint32_t depth,
 }
 
 ImageDescriptor::ImageDescriptor(const uint32_t depth,
-    const uint32_t height,
-    const uint32_t width,
-    const ll::ChannelCount channelCount,
-    const ll::ChannelType channelType)
-    : m_channelType { channelType }
-    , m_channelCount { channelCount }
+    const uint32_t                              height,
+    const uint32_t                              width,
+    const ll::ChannelCount                      channelCount,
+    const ll::ChannelType                       channelType)
+    : m_channelType {channelType}
+    , m_channelCount {channelCount}
 {
 
     setWidth(width);
@@ -260,9 +260,9 @@ uint32_t ImageDescriptor::getDepth() const noexcept
 uint64_t ImageDescriptor::getSize() const noexcept
 {
 
-    auto w = uint64_t { m_shape.x };
-    auto h = uint64_t { m_shape.y };
-    auto d = uint64_t { m_shape.z };
+    auto w = uint64_t {m_shape.x};
+    auto h = uint64_t {m_shape.y};
+    auto d = uint64_t {m_shape.z};
     auto c = static_cast<uint64_t>(m_channelCount);
     return w * h * d * c * getChannelTypeSize(m_channelType);
 }

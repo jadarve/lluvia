@@ -21,17 +21,17 @@ TEST_CASE("createInitImage", "test_utils")
     // Constants
     const auto memoryFlags = memflags::DeviceLocal;
 
-    const auto width = uint32_t { 1080 };
-    const auto height = uint32_t { 1920 };
+    const auto width  = uint32_t {1080};
+    const auto height = uint32_t {1920};
 
-    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-        | ll::ImageUsageFlagBits::Sampled
-        | ll::ImageUsageFlagBits::TransferDst };
+    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage
+                                               | ll::ImageUsageFlagBits::Sampled
+                                               | ll::ImageUsageFlagBits::TransferDst};
 
-    const auto imgDesc = ll::ImageDescriptor { 1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal };
+    const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal};
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
-    auto memory = session->createMemory(memoryFlags, 0);
+    auto memory  = session->createMemory(memoryFlags, 0);
 
     // could create several images at the same time
     auto image = ll::createAndInitImage(session, memory, imgDesc, ll::ImageLayout::General);
@@ -45,17 +45,17 @@ TEST_CASE("configureGraph", "test_utils")
     // Constants
     const auto memoryFlags = memflags::DeviceLocal;
 
-    const auto width = uint32_t { 1080 };
-    const auto height = uint32_t { 1920 };
+    const auto width  = uint32_t {1080};
+    const auto height = uint32_t {1920};
 
-    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-        | ll::ImageUsageFlagBits::Sampled
-        | ll::ImageUsageFlagBits::TransferDst };
+    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage
+                                               | ll::ImageUsageFlagBits::Sampled
+                                               | ll::ImageUsageFlagBits::TransferDst};
 
-    const auto imgDesc = ll::ImageDescriptor { 1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal };
+    const auto imgDesc = ll::ImageDescriptor {1, height, width, ll::ChannelCount::C1, ll::ChannelType::Uint8, imgUsageFlags, ll::ImageTiling::Optimal};
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
-    auto memory = session->createMemory(memoryFlags, 0);
+    auto memory  = session->createMemory(memoryFlags, 0);
 
     const auto RGBADesc = ll::ImageDescriptor(imgDesc).setChannelCount(ll::ChannelCount::C4);
     const auto grayDesc = ll::ImageDescriptor(imgDesc).setChannelCount(ll::ChannelCount::C1);

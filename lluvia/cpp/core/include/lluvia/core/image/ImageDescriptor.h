@@ -32,18 +32,18 @@ namespace ll {
 */
 enum class ChannelType : ll::enum_t {
     Uint8 = 0, /**< 8-bit unsigned int. */
-    Int8 = 1, /**< 8-bit signed int. */
+    Int8  = 1, /**< 8-bit signed int. */
 
-    Uint16 = 2, /**< 16-bit unsigned int. */
-    Int16 = 3, /**< 16-bit signed int. */
+    Uint16  = 2, /**< 16-bit unsigned int. */
+    Int16   = 3, /**< 16-bit signed int. */
     Float16 = 4, /**< 16-bit floating point. */
 
-    Uint32 = 5, /**< 32-bit unsigned int. */
-    Int32 = 6, /**< 32-bit signed int. */
+    Uint32  = 5, /**< 32-bit unsigned int. */
+    Int32   = 6, /**< 32-bit signed int. */
     Float32 = 7, /**< 32-bit floating point. */
 
-    Uint64 = 8, /**< 64-bit unsigned int. */
-    Int64 = 9, /**< 64-bit signed int. */
+    Uint64  = 8, /**< 64-bit unsigned int. */
+    Int64   = 9, /**< 64-bit signed int. */
     Float64 = 10 /**< 64-bit floating point. */
 };
 
@@ -64,7 +64,7 @@ namespace impl {
 
     @sa ll::ChannelType enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ChannelType>, 11> ChannelTypeStrings { {
+    constexpr const std::array<std::tuple<const char*, ll::ChannelType>, 11> ChannelTypeStrings {{
         std::make_tuple("Uint8", ll::ChannelType::Uint8),
         std::make_tuple("Int8", ll::ChannelType::Int8),
 
@@ -79,17 +79,17 @@ namespace impl {
         std::make_tuple("Uint64", ll::ChannelType::Uint64),
         std::make_tuple("Int64", ll::ChannelType::Int64),
         std::make_tuple("Float64", ll::ChannelType::Float64),
-    } };
+    }};
 
     /**
     @brief Channel type string values used for converting ll::ChannelType to std::string and vice-versa.
 
     @sa ll::ChannelType enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ChannelCount>, 4> ChannelCountStrings { { std::make_tuple("C1", ll::ChannelCount::C1),
+    constexpr const std::array<std::tuple<const char*, ll::ChannelCount>, 4> ChannelCountStrings {{std::make_tuple("C1", ll::ChannelCount::C1),
         std::make_tuple("C2", ll::ChannelCount::C2),
         std::make_tuple("C3", ll::ChannelCount::C3),
-        std::make_tuple("C4", ll::ChannelCount::C4) } };
+        std::make_tuple("C4", ll::ChannelCount::C4)}};
 
 } // namespace impl
 
@@ -189,9 +189,9 @@ and 8-bit unsigned int channel type.
 class ImageDescriptor {
 
 public:
-    ImageDescriptor() = default;
+    ImageDescriptor()                                  = default;
     ImageDescriptor(const ImageDescriptor& descriptor) = default;
-    ImageDescriptor(ImageDescriptor&& descriptor) = default;
+    ImageDescriptor(ImageDescriptor&& descriptor)      = default;
 
     /**
     @brief      Constructs the object.
@@ -203,10 +203,10 @@ public:
     @param[in]  channelType    The channel type.
     */
     ImageDescriptor(const uint32_t depth,
-        const uint32_t height,
-        const uint32_t width,
-        const ll::ChannelCount channelCount,
-        const ll::ChannelType channelType);
+        const uint32_t             height,
+        const uint32_t             width,
+        const ll::ChannelCount     channelCount,
+        const ll::ChannelType      channelType);
 
     /**
     @brief      Constructs the object.
@@ -220,17 +220,17 @@ public:
     @param[in]  tiling         The image tiling. See @VULKAN_DOC#VkImageTiling.
     */
     ImageDescriptor(const uint32_t depth,
-        const uint32_t height,
-        const uint32_t width,
-        const ll::ChannelCount channelCount,
-        const ll::ChannelType channelType,
-        const ll::ImageUsageFlags usageFlags,
-        const ll::ImageTiling tiling);
+        const uint32_t             height,
+        const uint32_t             width,
+        const ll::ChannelCount     channelCount,
+        const ll::ChannelType      channelType,
+        const ll::ImageUsageFlags  usageFlags,
+        const ll::ImageTiling      tiling);
 
     ~ImageDescriptor() = default;
 
     ImageDescriptor& operator=(const ImageDescriptor& descriptor) = default;
-    ImageDescriptor& operator=(ImageDescriptor&& descriptor) = default;
+    ImageDescriptor& operator=(ImageDescriptor&& descriptor)      = default;
 
     /**
     @brief      Sets the channel type.
@@ -435,17 +435,17 @@ public:
     uint32_t getUsageFlagsUnsafe() const noexcept;
 
 private:
-    ll::ChannelType m_channelType { ll::ChannelType::Uint8 };
-    ll::ChannelCount m_channelCount { ll::ChannelCount::C1 };
+    ll::ChannelType  m_channelType {ll::ChannelType::Uint8};
+    ll::ChannelCount m_channelCount {ll::ChannelCount::C1};
 
     // dimensions along each axis
     // x : width
     // y : height
     // z : depth
-    ll::vec3ui m_shape { 1, 1, 1 };
+    ll::vec3ui m_shape {1, 1, 1};
 
-    ll::ImageTiling m_tiling { ll::ImageTiling::Optimal };
-    ll::ImageUsageFlags m_usageFlags { ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferSrc | ll::ImageUsageFlagBits::TransferDst };
+    ll::ImageTiling     m_tiling {ll::ImageTiling::Optimal};
+    ll::ImageUsageFlags m_usageFlags {ll::ImageUsageFlagBits::Storage | ll::ImageUsageFlagBits::Sampled | ll::ImageUsageFlagBits::TransferSrc | ll::ImageUsageFlagBits::TransferDst};
 };
 
 } // namespace ll

@@ -37,9 +37,9 @@ are created using Session::createProgram methods.
 class Program {
 
 public:
-    Program() = delete;
+    Program()                       = delete;
     Program(const Program& program) = delete;
-    Program(Program&& program) = delete;
+    Program(Program&& program)      = delete;
 
     /**
     @brief      Constructs the object from a Vulkan device and SPIR-V code.
@@ -50,12 +50,12 @@ public:
     */
     Program(
         const std::shared_ptr<ll::vulkan::Device>& device,
-        const std::vector<uint8_t>& spirvCode);
+        const std::vector<uint8_t>&                spirvCode);
 
     ~Program();
 
     Program& operator=(const Program& program) = delete;
-    Program& operator=(Program&& program) = delete;
+    Program& operator=(Program&& program)      = delete;
 
     /**
     @brief      Gets the corresponding Vulkan shader module for this program object.
@@ -74,7 +74,7 @@ public:
 private:
     std::shared_ptr<ll::vulkan::Device> m_device;
 
-    vk::ShaderModule m_module;
+    vk::ShaderModule     m_module;
     std::vector<uint8_t> m_spirvCode;
 };
 

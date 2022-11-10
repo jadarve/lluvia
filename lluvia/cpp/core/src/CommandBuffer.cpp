@@ -12,7 +12,7 @@
 namespace ll {
 
 CommandBuffer::CommandBuffer(const std::shared_ptr<ll::vulkan::Device>& device)
-    : m_device { device }
+    : m_device {device}
 {
 
     const auto allocInfo = vk::CommandBufferAllocateInfo()
@@ -88,8 +88,8 @@ void CommandBuffer::copyBufferToImage(const ll::Buffer& src, const ll::Image& ds
                         .setBufferImageHeight(0) // thightly packed
                         .setBufferRowLength(0)
                         .setImageSubresource(imgSubresourceLayers)
-                        .setImageOffset({ 0, 0, 0 })
-                        .setImageExtent({ dst.getWidth(), dst.getHeight(), dst.getDepth() });
+                        .setImageOffset({0, 0, 0})
+                        .setImageExtent({dst.getWidth(), dst.getHeight(), dst.getDepth()});
 
     m_commandBuffer.copyBufferToImage(src.m_vkBuffer, dst.m_vkImage,
         ll::impl::toVkImageLayout(dst.m_layout), 1, &copyInfo);
@@ -109,8 +109,8 @@ void CommandBuffer::copyImageToBuffer(const ll::Image& src, const ll::Buffer& ds
                         .setBufferImageHeight(0) // thightly packed
                         .setBufferRowLength(0)
                         .setImageSubresource(imgSubresourceLayers)
-                        .setImageOffset({ 0, 0, 0 })
-                        .setImageExtent({ src.getWidth(), src.getHeight(), src.getDepth() });
+                        .setImageOffset({0, 0, 0})
+                        .setImageExtent({src.getWidth(), src.getHeight(), src.getDepth()});
 
     m_commandBuffer.copyImageToBuffer(src.m_vkImage,
         ll::impl::toVkImageLayout(src.m_layout), dst.m_vkBuffer, 1, &copyInfo);
@@ -126,11 +126,11 @@ void CommandBuffer::copyImageToImage(const ll::Image& src, const ll::Image& dst)
                                     .setLayerCount(1);
 
     auto copyRegion = vk::ImageCopy {}
-                          .setSrcOffset({ 0, 0, 0 })
+                          .setSrcOffset({0, 0, 0})
                           .setSrcSubresource(imgSubresourceLayers)
-                          .setDstOffset({ 0, 0, 0 })
+                          .setDstOffset({0, 0, 0})
                           .setDstSubresource(imgSubresourceLayers)
-                          .setExtent({ src.getWidth(), src.getHeight(), src.getDepth() });
+                          .setExtent({src.getWidth(), src.getHeight(), src.getDepth()});
 
     m_commandBuffer.copyImage(src.m_vkImage,
         ll::impl::toVkImageLayout(src.m_layout),
@@ -144,8 +144,8 @@ void CommandBuffer::changeImageLayout(ll::Image& image, const ll::ImageLayout ne
 {
 
     // FIXME: compute according to current and new layout
-    const auto srcAccessFlags = vk::AccessFlags { vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite };
-    const auto dstAccessFlags = vk::AccessFlags { vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite };
+    const auto srcAccessFlags = vk::AccessFlags {vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite};
+    const auto dstAccessFlags = vk::AccessFlags {vk::AccessFlagBits::eMemoryRead | vk::AccessFlagBits::eMemoryWrite};
 
     auto barrier = vk::ImageMemoryBarrier {}
                        .setOldLayout(ll::impl::toVkImageLayout(image.m_layout))
@@ -198,7 +198,7 @@ void CommandBuffer::memoryBarrier()
 void CommandBuffer::clearImage(ll::Image& image)
 {
 
-    auto clearColor = vk::ClearColorValue { std::array<int32_t, 4> { 0, 0, 0, 0 } };
+    auto clearColor = vk::ClearColorValue {std::array<int32_t, 4> {0, 0, 0, 0}};
 
     auto range = vk::ImageSubresourceRange()
                      .setAspectMask(vk::ImageAspectFlagBits::eColor)

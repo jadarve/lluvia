@@ -21,16 +21,16 @@ namespace ll {
 class Parameter {
 
 public:
-    Parameter() = default;
+    Parameter()                 = default;
     Parameter(const Parameter&) = default;
-    Parameter(Parameter&&) = default;
+    Parameter(Parameter&&)      = default;
 
     Parameter(ParameterType type);
 
     ~Parameter() = default;
 
     Parameter& operator=(const Parameter&) = default;
-    Parameter& operator=(Parameter&&) = default;
+    Parameter& operator=(Parameter&&)      = default;
 
     ll::ParameterType getType() const noexcept;
 
@@ -39,10 +39,10 @@ public:
     {
 
         if constexpr (std::is_integral_v<T>) {
-            m_type = ll::ParameterType::Int;
+            m_type        = ll::ParameterType::Int;
             m_value.v_int = static_cast<int32_t>(value);
         } else if constexpr (std::is_floating_point_v<T>) {
-            m_type = ll::ParameterType::Float;
+            m_type          = ll::ParameterType::Float;
             m_value.v_float = static_cast<float>(value);
         } else {
             // at least we are sure the first if is false
@@ -63,12 +63,12 @@ public:
     }
 
 private:
-    ll::ParameterType m_type { ll::ParameterType::Int };
+    ll::ParameterType m_type {ll::ParameterType::Int};
 
     struct {
         union {
             int32_t v_int;
-            float v_float;
+            float   v_float;
         };
     } m_value;
 };

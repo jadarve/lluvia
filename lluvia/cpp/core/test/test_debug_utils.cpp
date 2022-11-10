@@ -24,7 +24,7 @@ TEST_CASE("hasReceivedVulkanWarningMessages", "SessionCreationTest")
                   << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceDesc.deviceType))
                   << " name: " << deviceDesc.name << std::endl;
 
-        auto desc = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
+        auto desc    = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
         auto session = ll::Session::create(desc);
         REQUIRE(session != nullptr);
 

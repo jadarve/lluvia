@@ -14,11 +14,11 @@ namespace ll {
 
 Program::Program(
     const std::shared_ptr<ll::vulkan::Device>& device,
-    const std::vector<uint8_t>& spirvCode)
+    const std::vector<uint8_t>&                spirvCode)
     :
 
-    m_device { device }
-    , m_spirvCode { spirvCode }
+    m_device {device}
+    , m_spirvCode {spirvCode}
 {
 
     ll::throwSystemErrorIf(m_spirvCode.empty(), ll::ErrorCode::ProgramCompilationError, "Zero size SPIR-V code.");

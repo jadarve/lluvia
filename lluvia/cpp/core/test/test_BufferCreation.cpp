@@ -47,7 +47,7 @@ TEST_CASE("HostVisibleCoherentCached", "test_BufferCreation")
     REQUIRE(session != nullptr);
 
     const auto memoryFlags = ll::MemoryPropertyFlagBits::HostVisible
-        | ll::MemoryPropertyFlagBits::HostCoherent;
+                             | ll::MemoryPropertyFlagBits::HostCoherent;
 
     auto memory = session->createMemory(memoryFlags, 2048, false);
     REQUIRE(memory != nullptr);

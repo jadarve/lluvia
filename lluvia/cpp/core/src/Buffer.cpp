@@ -14,11 +14,11 @@ namespace ll {
 Buffer::Buffer(const vk::Buffer vkBuffer, const ll::BufferUsageFlags usageFlags,
     const std::shared_ptr<ll::Memory>& memory, const ll::MemoryAllocationInfo& allocInfo,
     const uint64_t requestedSize)
-    : m_vkBuffer { vkBuffer }
-    , m_usageFlags { usageFlags }
+    : m_vkBuffer {vkBuffer}
+    , m_usageFlags {usageFlags}
     , m_allocInfo(allocInfo)
-    , m_requestedSize { requestedSize }
-    , m_memory { memory }
+    , m_requestedSize {requestedSize}
+    , m_memory {memory}
 {
 }
 

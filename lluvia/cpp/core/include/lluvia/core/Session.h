@@ -97,12 +97,12 @@ public:
     static std::shared_ptr<ll::Session> create(const ll::SessionDescriptor& descriptor);
 
     Session(const Session& session) = delete;
-    Session(Session&& session) = delete;
+    Session(Session&& session)      = delete;
 
     ~Session();
 
     Session& operator=(const Session& session) = delete;
-    Session& operator=(Session&& session) = delete;
+    Session& operator=(Session&& session)      = delete;
 
     /**
     @brief      Returns a pointer to ll::Memory object that is HOST_LOCAL and HOST_COHERENT.
@@ -401,16 +401,16 @@ private:
     void initDevice();
 
     const ll::SessionDescriptor m_descriptor;
-    ll::DeviceDescriptor m_deviceDescriptor;
+    ll::DeviceDescriptor        m_deviceDescriptor;
 
     std::shared_ptr<ll::vulkan::Instance> m_instance;
-    std::shared_ptr<ll::vulkan::Device> m_device;
+    std::shared_ptr<ll::vulkan::Device>   m_device;
 
     std::shared_ptr<ll::Interpreter> m_interpreter;
 
     std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
 
-    std::once_flag m_hostMemoryAllocate;
+    std::once_flag              m_hostMemoryAllocate;
     std::shared_ptr<ll::Memory> m_hostMemory;
 };
 

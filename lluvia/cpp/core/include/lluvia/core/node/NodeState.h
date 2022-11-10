@@ -20,7 +20,7 @@ namespace ll {
 */
 enum class NodeState : ll::enum_t {
     Created = 0,
-    Init = 1
+    Init    = 1
 };
 
 namespace impl {
@@ -30,8 +30,8 @@ namespace impl {
 
      @sa ll::NodeState enum values for this array.
      */
-    constexpr const std::array<std::tuple<const char*, ll::NodeState>, 2> NodeStateStrings { { std::make_tuple("Created", ll::NodeState::Created),
-        std::make_tuple("Init", ll::NodeState::Init) } };
+    constexpr const std::array<std::tuple<const char*, ll::NodeState>, 2> NodeStateStrings {{std::make_tuple("Created", ll::NodeState::Created),
+        std::make_tuple("Init", ll::NodeState::Init)}};
 
 } // namespace impl
 

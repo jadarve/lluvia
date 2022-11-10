@@ -55,7 +55,7 @@ TEST_CASE("SamePage", "test_BufferMapping")
     const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
     ;
 
-    constexpr const auto pageSize = 1024u;
+    constexpr const auto pageSize   = 1024u;
     constexpr const auto bufferSize = pageSize / 2;
 
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);
@@ -92,11 +92,11 @@ TEST_CASE("MapAndSet", "test_BufferMapping")
     REQUIRE(uniformMemory != nullptr);
 
     using params = struct {
-        int a;
+        int   a;
         float b;
     };
 
-    const auto p = params { 789456, 3.1415 };
+    const auto p = params {789456, 3.1415};
 
     auto uniformBuffer = uniformMemory->createBuffer(sizeof(p), ll::BufferUsageFlagBits::UniformBuffer);
     REQUIRE(uniformBuffer != nullptr);
@@ -107,7 +107,7 @@ TEST_CASE("MapAndSet", "test_BufferMapping")
 
     {
         auto mapPtr = uniformBuffer->map<params>();
-        pGet = *mapPtr;
+        pGet        = *mapPtr;
     }
 
     REQUIRE(p.a == pGet.a);

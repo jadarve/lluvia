@@ -16,10 +16,10 @@ using memflags = ll::MemoryPropertyFlagBits;
 TEST_CASE("HostToDeviceToHost", "BufferCopyTest")
 {
 
-    constexpr const auto length = 128u;
+    constexpr const auto length     = 128u;
     constexpr const auto bufferSize = length * sizeof(int);
 
-    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    auto       session      = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
     ;
     const auto deviceMemFlags = memflags::DeviceLocal;
@@ -78,7 +78,7 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest")
     // means that the memory content of deviceBuffer is also equal.
     {
         auto hostPtr = hostBuffer->map<int[]>();
-        auto secPtr = secBuffer->map<int[]>();
+        auto secPtr  = secBuffer->map<int[]>();
 
         REQUIRE(hostPtr != nullptr);
         REQUIRE(secPtr != nullptr);
@@ -87,7 +87,7 @@ TEST_CASE("HostToDeviceToHost", "BufferCopyTest")
         for (auto i = 0u; i < length; ++i) {
 
             const auto& hostValue = hostPtr[i];
-            const auto& secValue = secPtr[i];
+            const auto& secValue  = secPtr[i];
 
             if (hostValue != secValue) {
                 std::cout << "values not equal at: " << i << ": " << hostPtr[i] << " != " << secPtr[i] << std::endl;

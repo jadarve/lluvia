@@ -23,7 +23,7 @@ TEST_CASE("create_instance", "test_InstanceCreation")
                                                     .setPApplicationInfo(&appInfo);
 
     vk::Instance instance;
-    vk::Result result = vk::createInstance(&instanceInfo, nullptr, &instance);
+    vk::Result   result = vk::createInstance(&instanceInfo, nullptr, &instance);
 
     // check that the instance is created successfully
     REQUIRE(result == vk::Result::eSuccess);

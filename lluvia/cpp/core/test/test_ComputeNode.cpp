@@ -18,12 +18,12 @@ using bazel::tools::cpp::runfiles::Runfiles;
 TEST_CASE("BufferAssignment", "test_ComputeNode")
 {
 
-    auto error = std::string {};
+    auto error    = std::string {};
     auto runfiles = Runfiles::CreateForTest(&error);
     REQUIRE(runfiles != nullptr);
 
     constexpr const size_t length = 128;
-    constexpr const size_t size = sizeof(float);
+    constexpr const size_t size   = sizeof(float);
 
     using memflags = ll::MemoryPropertyFlagBits;
 
@@ -31,7 +31,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode")
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
-    auto hostMemory = session->createMemory(hostMemFlags, length * size, false);
+    auto       hostMemory   = session->createMemory(hostMemFlags, length * size, false);
     REQUIRE(hostMemory != nullptr);
 
     auto buffer = hostMemory->createBuffer(length * sizeof(float));
@@ -44,7 +44,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode")
                               .setProgram(program)
                               .setFunctionName("main")
                               .setLocalX(length)
-                              .addPort({ 0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer });
+                              .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer});
 
     // at this point, the node's port binding table and
     // vulkan descriptor set is created. So, it is possible
@@ -77,7 +77,7 @@ TEST_CASE("BufferAssignment", "test_ComputeNode")
 TEST_CASE("ConstructWithInterpreter", "test_ComputeNode")
 {
 
-    auto error = std::string {};
+    auto error    = std::string {};
     auto runfiles = Runfiles::CreateForTest(&error);
     REQUIRE(runfiles != nullptr);
 
@@ -87,11 +87,11 @@ TEST_CASE("ConstructWithInterpreter", "test_ComputeNode")
     REQUIRE(session != nullptr);
 
     const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
-    auto hostMemory = session->createMemory(hostMemFlags, 1024 * 4, false);
+    auto       hostMemory   = session->createMemory(hostMemFlags, 1024 * 4, false);
     REQUIRE(hostMemory != nullptr);
 
     const auto bufferSize = 128;
-    auto buffer = hostMemory->createBuffer(bufferSize * sizeof(float));
+    auto       buffer     = hostMemory->createBuffer(bufferSize * sizeof(float));
     REQUIRE(buffer != nullptr);
 
     auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/assign.comp.spv"));

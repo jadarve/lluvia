@@ -19,19 +19,19 @@ namespace ll {
 
 Image::Image(
     const std::shared_ptr<ll::vulkan::Device>& device,
-    const vk::Image& vkImage,
-    const ll::ImageDescriptor& descriptor,
-    const std::shared_ptr<ll::Memory>& memory,
-    const ll::MemoryAllocationInfo& allocInfo,
-    const ll::ImageLayout layout)
+    const vk::Image&                           vkImage,
+    const ll::ImageDescriptor&                 descriptor,
+    const std::shared_ptr<ll::Memory>&         memory,
+    const ll::MemoryAllocationInfo&            allocInfo,
+    const ll::ImageLayout                      layout)
     :
 
-    m_device { device }
-    , m_descriptor { descriptor }
+    m_device {device}
+    , m_descriptor {descriptor}
     , m_allocInfo(allocInfo)
-    , m_vkImage { vkImage }
-    , m_layout { layout }
-    , m_memory { memory }
+    , m_vkImage {vkImage}
+    , m_layout {layout}
+    , m_memory {memory}
 {
 }
 
@@ -123,7 +123,7 @@ ll::vec3ui Image::getShape() const noexcept
 
 std::shared_ptr<ll::ImageView> Image::createImageView(const ll::ImageViewDescriptor& tDescriptor)
 {
-    return std::shared_ptr<ll::ImageView> { new ll::ImageView { m_device, shared_from_this(), tDescriptor } };
+    return std::shared_ptr<ll::ImageView> {new ll::ImageView {m_device, shared_from_this(), tDescriptor}};
 }
 
 void Image::changeImageLayout(const ll::ImageLayout newLayout)

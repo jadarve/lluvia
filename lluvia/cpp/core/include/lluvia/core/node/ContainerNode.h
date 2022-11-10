@@ -26,15 +26,15 @@ class ContainerNode : public Node, public std::enable_shared_from_this<ll::Conta
 public:
     ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter);
     ContainerNode(const std::weak_ptr<ll::Interpreter>& interpreter,
-        const ll::ContainerNodeDescriptor& descriptor);
+        const ll::ContainerNodeDescriptor&              descriptor);
 
     ContainerNode(const ll::ContainerNode&) = delete;
-    ContainerNode(ll::ContainerNode&&) = delete;
+    ContainerNode(ll::ContainerNode&&)      = delete;
 
     virtual ~ContainerNode() = default;
 
     ll::ContainerNode& operator=(const ll::ContainerNode&) = delete;
-    ll::ContainerNode& operator=(ll::ContainerNode&&) = delete;
+    ll::ContainerNode& operator=(ll::ContainerNode&&)      = delete;
 
     ll::NodeType getType() const noexcept override;
 
@@ -62,7 +62,7 @@ protected:
     ll::ContainerNodeDescriptor m_descriptor;
 
     std::map<std::string, std::shared_ptr<ll::Object>> m_objects;
-    std::map<std::string, std::shared_ptr<ll::Node>> m_nodes;
+    std::map<std::string, std::shared_ptr<ll::Node>>   m_nodes;
 
     std::weak_ptr<ll::Interpreter> m_interpreter;
 };

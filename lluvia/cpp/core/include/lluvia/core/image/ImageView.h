@@ -149,14 +149,14 @@ ImageView objects are mapped to GLSL objects as follows:
 class ImageView : public Object {
 
 public:
-    ImageView() = delete;
+    ImageView()                 = delete;
     ImageView(const ImageView&) = delete;
-    ImageView(ImageView&&) = delete;
+    ImageView(ImageView&&)      = delete;
 
     ~ImageView();
 
     ImageView& operator=(const ImageView&) = delete;
-    ImageView& operator=(ImageView&&) = delete;
+    ImageView& operator=(ImageView&&)      = delete;
 
     ll::ObjectType getType() const noexcept override;
 
@@ -357,16 +357,16 @@ public:
 
 private:
     ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
-        const std::shared_ptr<ll::Image>& image,
-        const ll::ImageViewDescriptor& descriptor);
+        const std::shared_ptr<ll::Image>&                image,
+        const ll::ImageViewDescriptor&                   descriptor);
 
     ll::ImageViewDescriptor m_descriptor;
 
     vk::ImageView m_vkImageView;
-    vk::Sampler m_vkSampler;
+    vk::Sampler   m_vkSampler;
 
     std::shared_ptr<ll::vulkan::Device> m_device;
-    std::shared_ptr<ll::Image> m_image;
+    std::shared_ptr<ll::Image>          m_image;
 
     friend class Image;
     friend class ComputeNode;

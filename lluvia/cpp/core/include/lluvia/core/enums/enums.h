@@ -27,17 +27,17 @@ template <typename BitType, typename MaskType = enum_t>
 class Flags {
 
 public:
-    Flags() = default;
+    Flags()                                  = default;
     Flags(const Flags<BitType, MaskType>& f) = default;
-    Flags(Flags<BitType, MaskType>&& f) = default;
+    Flags(Flags<BitType, MaskType>&& f)      = default;
 
     constexpr Flags(BitType bit) noexcept
-        : m_mask { static_cast<MaskType>(bit) }
+        : m_mask {static_cast<MaskType>(bit)}
     {
     }
 
     constexpr explicit Flags(MaskType mask)
-        : m_mask { mask }
+        : m_mask {mask}
     {
     }
 
@@ -137,7 +137,7 @@ public:
     }
 
 private:
-    MaskType m_mask { 0 };
+    MaskType m_mask {0};
 };
 
 namespace impl {

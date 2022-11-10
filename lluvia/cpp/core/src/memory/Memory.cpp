@@ -30,11 +30,11 @@ constexpr const ll::ImageLayout InitialImageLayout = ll::ImageLayout::Undefined;
 
 Memory::Memory(
     const std::shared_ptr<ll::vulkan::Device>& device,
-    const ll::VkHeapInfo& heapInfo,
-    const uint64_t pageSize)
-    : m_device { device }
+    const ll::VkHeapInfo&                      heapInfo,
+    const uint64_t                             pageSize)
+    : m_device {device}
     , m_heapInfo(heapInfo)
-    , m_pageSize { pageSize }
+    , m_pageSize {pageSize}
 {
 }
 
@@ -79,9 +79,9 @@ bool Memory::isPageMappable(const uint32_t page) const noexcept
 std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size)
 {
 
-    const auto usageFlags = ll::BufferUsageFlags { ll::BufferUsageFlagBits::StorageBuffer
-        | ll::BufferUsageFlagBits::TransferSrc
-        | ll::BufferUsageFlagBits::TransferDst };
+    const auto usageFlags = ll::BufferUsageFlags {ll::BufferUsageFlagBits::StorageBuffer
+                                                  | ll::BufferUsageFlagBits::TransferSrc
+                                                  | ll::BufferUsageFlagBits::TransferDst};
 
     return createBuffer(size, usageFlags);
 }
@@ -134,7 +134,7 @@ std::shared_ptr<ll::Buffer> Memory::createBuffer(const uint64_t size, const ll::
         m_device->get().bindBufferMemory(vkBuffer, memoryPage, tryInfo.allocInfo.offset);
 
         // ll::Buffer can throw exception.
-        auto buffer = std::shared_ptr<ll::Buffer> { new ll::Buffer { vkBuffer, usageFlags, shared_from_this(), tryInfo.allocInfo, size } };
+        auto buffer = std::shared_ptr<ll::Buffer> {new ll::Buffer {vkBuffer, usageFlags, shared_from_this(), tryInfo.allocInfo, size}};
         m_pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return buffer;
 
@@ -155,12 +155,12 @@ void Memory::releaseBuffer(const ll::Buffer& buffer)
 void* Memory::mapBuffer(const ll::Buffer& buffer)
 {
 
-    const auto page = buffer.m_allocInfo.page;
+    const auto page   = buffer.m_allocInfo.page;
     const auto offset = buffer.m_allocInfo.offset + buffer.m_allocInfo.leftPadding;
-    const auto size = buffer.m_allocInfo.size;
+    const auto size   = buffer.m_allocInfo.size;
 
     if (m_memoryPageMappingFlags[page]) {
-        throw std::system_error { ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] is already mapped by another object." };
+        throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] is already mapped by another object."};
     }
 
     // set mapping flag for this page to mapped
@@ -174,7 +174,7 @@ void Memory::unmapBuffer(const ll::Buffer& buffer)
     const auto page = buffer.m_allocInfo.page;
 
     if (!m_memoryPageMappingFlags[page]) {
-        throw std::system_error { ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] has not been mapped by any object." };
+        throw std::system_error {ll::createErrorCode(ll::ErrorCode::MemoryMapFailed), "Memory page [" + std::to_string(page) + "] has not been mapped by any object."};
     }
 
     m_device->get().unmapMemory(m_memoryPages[page]);
@@ -197,7 +197,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
         "combination of shape, tiling and usageFlags.");
 
     auto imgInfo = vk::ImageCreateInfo {}
-                       .setExtent({ descriptor.getWidth(), descriptor.getHeight(), descriptor.getDepth() })
+                       .setExtent({descriptor.getWidth(), descriptor.getHeight(), descriptor.getDepth()})
                        .setImageType(descriptor.getImageType())
                        .setArrayLayers(1)
                        .setMipLevels(1)
@@ -228,12 +228,12 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
         const auto& memoryPage = m_memoryPages[tryInfo.allocInfo.page];
         m_device->get().bindImageMemory(vkImage, memoryPage, tryInfo.allocInfo.offset);
 
-        auto image = std::shared_ptr<ll::Image> { new ll::Image { m_device,
+        auto image = std::shared_ptr<ll::Image> {new ll::Image {m_device,
             vkImage,
             descriptor,
             shared_from_this(),
             tryInfo.allocInfo,
-            InitialImageLayout } };
+            InitialImageLayout}};
 
         m_pageManagers[tryInfo.allocInfo.page].commitAllocation(tryInfo);
         return image;
@@ -246,7 +246,7 @@ std::shared_ptr<ll::Image> Memory::createImage(const ll::ImageDescriptor& descri
 }
 
 std::shared_ptr<ll::ImageView> Memory::createImageView(
-    const ll::ImageDescriptor& imgDescriptor,
+    const ll::ImageDescriptor&     imgDescriptor,
     const ll::ImageViewDescriptor& viewDescriptor)
 {
 
@@ -264,7 +264,7 @@ void Memory::releaseImage(const ll::Image& image)
 impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequirements& memRequirements)
 {
 
-    auto tryInfo = impl::MemoryAllocationTryInfo {};
+    auto tryInfo   = impl::MemoryAllocationTryInfo {};
     auto pageIndex = 0u;
     for (auto& manager : m_pageManagers) {
 
@@ -306,7 +306,7 @@ impl::MemoryAllocationTryInfo Memory::getSuitableMemoryPage(const vk::MemoryRequ
     // Safe to not try-catch the creation of manager and memory.
     // If exception is thrown, this object is left in its previous
     // state plus the reserved space in memoryPages and pageManagers.
-    auto manager = impl::MemoryFreeSpaceManager { newPageSize };
+    auto manager = impl::MemoryFreeSpaceManager {newPageSize};
     manager.reserveManagerSpace();
 
     auto memory = m_device->get().allocateMemory(allocateInfo);

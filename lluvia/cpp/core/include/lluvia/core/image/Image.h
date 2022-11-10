@@ -74,14 +74,14 @@ class Image : public Object,
               public std::enable_shared_from_this<ll::Image> {
 
 public:
-    Image() = delete;
+    Image()             = delete;
     Image(const Image&) = delete;
-    Image(Image&&) = delete;
+    Image(Image&&)      = delete;
 
     ~Image();
 
     Image& operator=(const Image&) = delete;
-    Image& operator=(Image&&) = delete;
+    Image& operator=(Image&&)      = delete;
 
     ll::ObjectType getType() const noexcept override;
 
@@ -276,18 +276,18 @@ public:
 
 private:
     Image(const std::shared_ptr<ll::vulkan::Device>& device,
-        const vk::Image& vkImage,
-        const ll::ImageDescriptor& descriptor,
-        const std::shared_ptr<ll::Memory>& memory,
-        const ll::MemoryAllocationInfo& allocInfo,
-        const ll::ImageLayout layout);
+        const vk::Image&                             vkImage,
+        const ll::ImageDescriptor&                   descriptor,
+        const std::shared_ptr<ll::Memory>&           memory,
+        const ll::MemoryAllocationInfo&              allocInfo,
+        const ll::ImageLayout                        layout);
 
     std::shared_ptr<ll::vulkan::Device> m_device;
 
-    ll::ImageDescriptor m_descriptor;
+    ll::ImageDescriptor      m_descriptor;
     ll::MemoryAllocationInfo m_allocInfo;
 
-    vk::Image m_vkImage;
+    vk::Image       m_vkImage;
     ll::ImageLayout m_layout;
 
     // Shared pointer to the memory this image was created from

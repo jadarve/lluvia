@@ -63,16 +63,16 @@ ll::CommandBuffers are created through ll::Session objects.
 class CommandBuffer {
 
 public:
-    CommandBuffer() = delete;
+    CommandBuffer()                               = delete;
     CommandBuffer(const CommandBuffer& cmdBuffer) = delete;
-    CommandBuffer(CommandBuffer&& cmdBuffer) = delete;
+    CommandBuffer(CommandBuffer&& cmdBuffer)      = delete;
 
     CommandBuffer(const std::shared_ptr<ll::vulkan::Device>& device);
 
     ~CommandBuffer();
 
     CommandBuffer& operator=(const CommandBuffer& cmdBuffer) = delete;
-    CommandBuffer& operator=(CommandBuffer&& cmdBuffer) = delete;
+    CommandBuffer& operator=(CommandBuffer&& cmdBuffer)      = delete;
 
     const vk::CommandBuffer& getVkCommandBuffer() const noexcept;
 

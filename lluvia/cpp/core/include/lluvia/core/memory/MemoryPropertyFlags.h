@@ -16,10 +16,10 @@
 namespace ll {
 
 enum class MemoryPropertyFlagBits : ll::enum_t {
-    DeviceLocal = static_cast<ll::enum_t>(vk::MemoryPropertyFlagBits::eDeviceLocal),
-    HostVisible = static_cast<ll::enum_t>(vk::MemoryPropertyFlagBits::eHostVisible),
+    DeviceLocal  = static_cast<ll::enum_t>(vk::MemoryPropertyFlagBits::eDeviceLocal),
+    HostVisible  = static_cast<ll::enum_t>(vk::MemoryPropertyFlagBits::eHostVisible),
     HostCoherent = static_cast<ll::enum_t>(vk::MemoryPropertyFlagBits::eHostCoherent),
-    HostCached = static_cast<ll::enum_t>(vk::MemoryPropertyFlagBits::eHostCached)
+    HostCached   = static_cast<ll::enum_t>(vk::MemoryPropertyFlagBits::eHostCached)
 };
 
 using MemoryPropertyFlags = ll::Flags<MemoryPropertyFlagBits, ll::enum_t>;
@@ -48,7 +48,7 @@ namespace impl {
 
     constexpr ll::MemoryPropertyFlags fromVkMemoryPropertyFlags(const vk::MemoryPropertyFlags& flags) noexcept
     {
-        return ll::MemoryPropertyFlags { static_cast<ll::enum_t>(flags) };
+        return ll::MemoryPropertyFlags {static_cast<ll::enum_t>(flags)};
     }
 
     /**
@@ -56,10 +56,10 @@ namespace impl {
 
     See @VULKAN_DOC#VkMemoryPropertyFlagBits for more information.
     */
-    constexpr const std::array<std::tuple<const char*, ll::MemoryPropertyFlagBits>, 4> MemoryPropertyFlagBitsStrings { { std::make_tuple("DeviceLocal", ll::MemoryPropertyFlagBits::DeviceLocal),
+    constexpr const std::array<std::tuple<const char*, ll::MemoryPropertyFlagBits>, 4> MemoryPropertyFlagBitsStrings {{std::make_tuple("DeviceLocal", ll::MemoryPropertyFlagBits::DeviceLocal),
         std::make_tuple("HostCached", ll::MemoryPropertyFlagBits::HostCached),
         std::make_tuple("HostCoherent", ll::MemoryPropertyFlagBits::HostCoherent),
-        std::make_tuple("HostVisible", ll::MemoryPropertyFlagBits::HostVisible) } };
+        std::make_tuple("HostVisible", ll::MemoryPropertyFlagBits::HostVisible)}};
 
 } // namespace impl
 

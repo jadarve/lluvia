@@ -21,31 +21,31 @@ namespace ll {
 @brief      Error codes
 */
 enum class ErrorCode : ll::enum_t {
-    EnumConversionFailed, /**< Conversion between enum types failed */
-    MemoryMapFailed, /**< Memory mapping operation (map or unmap) failed */
-    ObjectAllocationError, /**< Error trying to allocate objects in a memory */
-    PortBindingError, /**< Error binding a port to a ll::Node */
+    EnumConversionFailed,      /**< Conversion between enum types failed */
+    MemoryMapFailed,           /**< Memory mapping operation (map or unmap) failed */
+    ObjectAllocationError,     /**< Error trying to allocate objects in a memory */
+    PortBindingError,          /**< Error binding a port to a ll::Node */
     InvalidShaderFunctionName, /**< Shader function name has invalid name, such as empty string */
-    InvalidShaderProgram, /**< Shader program is not valid*/
-    BufferCopyError, /**< Error copying data between buffers*/
-    ProgramCompilationError, /**< Error compiling shader module for program*/
-    InvalidLocalShape, /**< Local shape passed to a Compute node is invalid*/
-    InvalidGridShape, /**< Grid shape for a ComputeNode is invalid */
-    BadEnumCasting, /**< Bad casting of integral value to enum type */
-    PhysicalDevicesNotFound, /**< No physical devices found */
-    KeyNotFound, /**< Key not found in a given look up method */
-    MemoryCreationError, /**< Error creating ll::Memory object */
-    InvalidNodeState, /**< Invalid ll::Node state */
-    InterpreterError, /**< Error evaluating interpreter script*/
-    PushConstantError, /**< Error regarding push constant operation*/
-    IOError, /**< IO Error accessing files*/
-    InvalidArgument, /**< Invalid argument*/
-    InstanceCreationError, /**< Incompatible driver */
-    SessionLost, /**< An object is trying to access a Session already destroyed */
-    LayerNotFound, /**< A layer required to create a Session was not found */
-    ExtensionNotFound, /**< An extension required to create a Session was not found */
-    PipelineCreationError, /**< Error creating a vulkan pipeline object */
-    VulkanError /**< Error calling a vulkan function that does not fit on any of the categories above */
+    InvalidShaderProgram,      /**< Shader program is not valid*/
+    BufferCopyError,           /**< Error copying data between buffers*/
+    ProgramCompilationError,   /**< Error compiling shader module for program*/
+    InvalidLocalShape,         /**< Local shape passed to a Compute node is invalid*/
+    InvalidGridShape,          /**< Grid shape for a ComputeNode is invalid */
+    BadEnumCasting,            /**< Bad casting of integral value to enum type */
+    PhysicalDevicesNotFound,   /**< No physical devices found */
+    KeyNotFound,               /**< Key not found in a given look up method */
+    MemoryCreationError,       /**< Error creating ll::Memory object */
+    InvalidNodeState,          /**< Invalid ll::Node state */
+    InterpreterError,          /**< Error evaluating interpreter script*/
+    PushConstantError,         /**< Error regarding push constant operation*/
+    IOError,                   /**< IO Error accessing files*/
+    InvalidArgument,           /**< Invalid argument*/
+    InstanceCreationError,     /**< Incompatible driver */
+    SessionLost,               /**< An object is trying to access a Session already destroyed */
+    LayerNotFound,             /**< A layer required to create a Session was not found */
+    ExtensionNotFound,         /**< An extension required to create a Session was not found */
+    PipelineCreationError,     /**< Error creating a vulkan pipeline object */
+    VulkanError                /**< Error calling a vulkan function that does not fit on any of the categories above */
 };
 
 namespace impl {
@@ -53,7 +53,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 25> ErrorCodeStrings { { std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 25> ErrorCodeStrings {{std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
         std::make_tuple("PortBindingError", ll::ErrorCode::PortBindingError),
@@ -77,7 +77,7 @@ namespace impl {
         std::make_tuple("LayerNotFound", ll::ErrorCode::LayerNotFound),
         std::make_tuple("ExtensionNotFound", ll::ErrorCode::ExtensionNotFound),
         std::make_tuple("PipelineCreationError", ll::ErrorCode::PipelineCreationError),
-        std::make_tuple("VulkanError", ll::ErrorCode::VulkanError) } };
+        std::make_tuple("VulkanError", ll::ErrorCode::VulkanError)}};
 
 } // namespace impl
 
@@ -135,7 +135,7 @@ public:
 */
 inline std::error_code createErrorCode(ll::ErrorCode errorCode)
 {
-    return std::error_code { static_cast<int>(errorCode), ErrorCategory::getInstance() };
+    return std::error_code {static_cast<int>(errorCode), ErrorCategory::getInstance()};
 }
 
 /**

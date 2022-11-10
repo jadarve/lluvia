@@ -21,16 +21,16 @@ struct NodeBuilderDescriptor {
 
     NodeBuilderDescriptor() { }
     NodeBuilderDescriptor(ll::NodeType pNodeType,
-        const std::string& pName,
-        const std::string& pSummary)
-        : nodeType { pNodeType }
-        , name { pName }
-        , summary { pSummary }
+        const std::string&             pName,
+        const std::string&             pSummary)
+        : nodeType {pNodeType}
+        , name {pName}
+        , summary {pSummary}
     {
     }
 
     ll::NodeType nodeType;
-    std::string name;
+    std::string  name;
 
     // corresponds to the first line of the builder's docstring
     std::string summary;

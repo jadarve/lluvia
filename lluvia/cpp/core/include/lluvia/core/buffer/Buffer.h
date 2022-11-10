@@ -57,14 +57,14 @@ from the ll::Memory instance.
 class Buffer : public Object {
 
 public:
-    Buffer() = delete;
+    Buffer()                = delete;
     Buffer(const Buffer& b) = delete;
-    Buffer(Buffer&& b) = delete;
+    Buffer(Buffer&& b)      = delete;
 
     ~Buffer();
 
     Buffer& operator=(const Buffer& buffer) = delete;
-    Buffer& operator=(Buffer&& buffer) = delete;
+    Buffer& operator=(Buffer&& buffer)      = delete;
 
     ll::ObjectType getType() const noexcept override;
 
@@ -198,10 +198,10 @@ public:
 
         auto ptr = m_memory->mapBuffer(*this);
 
-        auto deleter = ll::Buffer::BufferMapDeleter {};
+        auto deleter   = ll::Buffer::BufferMapDeleter {};
         deleter.buffer = this;
 
-        return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> { static_cast<baseType*>(ptr), deleter };
+        return std::unique_ptr<T, ll::Buffer::BufferMapDeleter> {static_cast<baseType*>(ptr), deleter};
     }
 
     template <typename T>
@@ -225,7 +225,7 @@ private:
 
     void unmap();
 
-    vk::Buffer m_vkBuffer;
+    vk::Buffer           m_vkBuffer;
     ll::BufferUsageFlags m_usageFlags;
 
     ll::MemoryAllocationInfo m_allocInfo;

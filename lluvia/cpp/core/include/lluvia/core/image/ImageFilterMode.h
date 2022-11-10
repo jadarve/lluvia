@@ -19,7 +19,7 @@ namespace ll {
 */
 enum class ImageFilterMode : ll::enum_t {
     Nearest = 0, /**< Nearest filter. */
-    Linear = 1 /**< Linear filter. */
+    Linear  = 1  /**< Linear filter. */
 };
 
 namespace impl {
@@ -29,10 +29,10 @@ namespace impl {
 
     @sa         ll::ImageFilterMode enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ImageFilterMode>, 2> ImageFilterModeStrings { {
+    constexpr const std::array<std::tuple<const char*, ll::ImageFilterMode>, 2> ImageFilterModeStrings {{
         std::make_tuple("Nearest", ll::ImageFilterMode::Nearest),
         std::make_tuple("Linear", ll::ImageFilterMode::Linear),
-    } };
+    }};
 
 } // namespace impl
 

@@ -3,7 +3,7 @@
 namespace ll {
 
 Parameter::Parameter(ParameterType type)
-    : m_type { type }
+    : m_type {type}
 {
 }
 

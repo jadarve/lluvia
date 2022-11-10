@@ -14,19 +14,19 @@
 namespace ll {
 
 enum class ImageLayout : ll::enum_t {
-    Undefined = static_cast<ll::enum_t>(vk::ImageLayout::eUndefined),
-    General = static_cast<ll::enum_t>(vk::ImageLayout::eGeneral),
+    Undefined             = static_cast<ll::enum_t>(vk::ImageLayout::eUndefined),
+    General               = static_cast<ll::enum_t>(vk::ImageLayout::eGeneral),
     ShaderReadOnlyOptimal = static_cast<ll::enum_t>(vk::ImageLayout::eShaderReadOnlyOptimal),
-    TransferSrcOptimal = static_cast<ll::enum_t>(vk::ImageLayout::eTransferSrcOptimal),
-    TransferDstOptimal = static_cast<ll::enum_t>(vk::ImageLayout::eTransferDstOptimal),
-    Preinitialized = static_cast<ll::enum_t>(vk::ImageLayout::ePreinitialized),
+    TransferSrcOptimal    = static_cast<ll::enum_t>(vk::ImageLayout::eTransferSrcOptimal),
+    TransferDstOptimal    = static_cast<ll::enum_t>(vk::ImageLayout::eTransferDstOptimal),
+    Preinitialized        = static_cast<ll::enum_t>(vk::ImageLayout::ePreinitialized),
 };
 
 namespace impl {
 
     constexpr ll::ImageLayout fromVkImageLayout(const vk::ImageLayout& flags) noexcept
     {
-        return ll::ImageLayout { static_cast<ll::enum_t>(flags) };
+        return ll::ImageLayout {static_cast<ll::enum_t>(flags)};
     }
 
     constexpr vk::ImageLayout toVkImageLayout(const ll::ImageLayout& flags) noexcept
@@ -35,12 +35,12 @@ namespace impl {
         return static_cast<vk::ImageLayout>(flags);
     }
 
-    constexpr const std::array<std::tuple<const char*, ll::ImageLayout>, 6> ImageLayoutStrings { { std::make_tuple("Undefined", ll::ImageLayout::Undefined),
+    constexpr const std::array<std::tuple<const char*, ll::ImageLayout>, 6> ImageLayoutStrings {{std::make_tuple("Undefined", ll::ImageLayout::Undefined),
         std::make_tuple("General", ll::ImageLayout::General),
         std::make_tuple("ShaderReadOnlyOptimal", ll::ImageLayout::ShaderReadOnlyOptimal),
         std::make_tuple("TransferSrcOptimal", ll::ImageLayout::TransferSrcOptimal),
         std::make_tuple("TransferDstOptimal", ll::ImageLayout::TransferDstOptimal),
-        std::make_tuple("Preinitialized", ll::ImageLayout::Preinitialized) } };
+        std::make_tuple("Preinitialized", ll::ImageLayout::Preinitialized)}};
 
 } // namespace impl
 

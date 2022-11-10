@@ -41,19 +41,19 @@ for pixels outside the image boundaries.
 class ImageViewDescriptor {
 
 public:
-    ImageViewDescriptor() = default;
+    ImageViewDescriptor()                                      = default;
     ImageViewDescriptor(const ImageViewDescriptor& descriptor) = default;
-    ImageViewDescriptor(ImageViewDescriptor&& descriptor) = default;
+    ImageViewDescriptor(ImageViewDescriptor&& descriptor)      = default;
 
     ImageViewDescriptor(const ll::ImageAddressMode addressmode,
-        const ll::ImageFilterMode filterMode,
-        const bool normalizedCoordinates,
-        const bool isSampled);
+        const ll::ImageFilterMode                  filterMode,
+        const bool                                 normalizedCoordinates,
+        const bool                                 isSampled);
 
     ~ImageViewDescriptor() = default;
 
     ImageViewDescriptor& operator=(const ImageViewDescriptor& descriptor) = default;
-    ImageViewDescriptor& operator=(ImageViewDescriptor&& descriptor) = default;
+    ImageViewDescriptor& operator=(ImageViewDescriptor&& descriptor)      = default;
 
     /**
     @brief      Sets the filtering mode.
@@ -153,17 +153,17 @@ public:
     vk::SamplerCreateInfo getVkSamplerCreateInfo() const noexcept;
 
 private:
-    ll::ImageFilterMode m_filterMode { ll::ImageFilterMode::Nearest };
+    ll::ImageFilterMode m_filterMode {ll::ImageFilterMode::Nearest};
 
     /**
      * Address mode for U, V, W axes
      */
-    std::array<ll::ImageAddressMode, 3> m_addressMode { { ll::ImageAddressMode::Repeat,
+    std::array<ll::ImageAddressMode, 3> m_addressMode {{ll::ImageAddressMode::Repeat,
         ll::ImageAddressMode::Repeat,
-        ll::ImageAddressMode::Repeat } };
+        ll::ImageAddressMode::Repeat}};
 
-    bool m_normalizedCoordinates { false };
-    bool m_isSampled { false };
+    bool m_normalizedCoordinates {false};
+    bool m_isSampled {false};
 };
 
 } // namespace ll

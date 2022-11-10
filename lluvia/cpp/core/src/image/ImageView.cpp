@@ -16,11 +16,11 @@
 namespace ll {
 
 ImageView::ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
-    const std::shared_ptr<ll::Image>& image,
-    const ll::ImageViewDescriptor& descriptor)
-    : m_descriptor { descriptor }
-    , m_device { device }
-    , m_image { image }
+    const std::shared_ptr<ll::Image>&                           image,
+    const ll::ImageViewDescriptor&                              descriptor)
+    : m_descriptor {descriptor}
+    , m_device {device}
+    , m_image {image}
 {
 
     auto imageViewInfo = vk::ImageViewCreateInfo {}

@@ -16,8 +16,8 @@ namespace ll {
 enum class ImageUsageFlagBits : ll::enum_t {
     TransferSrc = static_cast<ll::enum_t>(vk::ImageUsageFlagBits::eTransferSrc),
     TransferDst = static_cast<ll::enum_t>(vk::ImageUsageFlagBits::eTransferDst),
-    Sampled = static_cast<ll::enum_t>(vk::ImageUsageFlagBits::eSampled),
-    Storage = static_cast<ll::enum_t>(vk::ImageUsageFlagBits::eStorage)
+    Sampled     = static_cast<ll::enum_t>(vk::ImageUsageFlagBits::eSampled),
+    Storage     = static_cast<ll::enum_t>(vk::ImageUsageFlagBits::eStorage)
 };
 
 using ImageUsageFlags = ll::Flags<ImageUsageFlagBits, ll::enum_t>;
@@ -41,18 +41,18 @@ namespace impl {
 
     constexpr ll::ImageUsageFlags fromVkImageUsageFlags(const vk::ImageUsageFlags& flags) noexcept
     {
-        return ll::ImageUsageFlags { static_cast<ll::enum_t>(flags) };
+        return ll::ImageUsageFlags {static_cast<ll::enum_t>(flags)};
     }
 
     inline vk::ImageUsageFlags toVkImageUsageFlags(const ll::ImageUsageFlags& flags) noexcept
     {
-        return vk::ImageUsageFlags { static_cast<VkFlags>(flags) };
+        return vk::ImageUsageFlags {static_cast<VkFlags>(flags)};
     }
 
-    constexpr const std::array<std::tuple<const char*, ll::ImageUsageFlagBits>, 4> ImageUsageFlagBitsStrings { { std::make_tuple("TransferSrc", ll::ImageUsageFlagBits::TransferSrc),
+    constexpr const std::array<std::tuple<const char*, ll::ImageUsageFlagBits>, 4> ImageUsageFlagBitsStrings {{std::make_tuple("TransferSrc", ll::ImageUsageFlagBits::TransferSrc),
         std::make_tuple("TransferDst", ll::ImageUsageFlagBits::TransferDst),
         std::make_tuple("Sampled", ll::ImageUsageFlagBits::Sampled),
-        std::make_tuple("Storage", ll::ImageUsageFlagBits::Storage) } };
+        std::make_tuple("Storage", ll::ImageUsageFlagBits::Storage)}};
 
 } // namespace impl
 

@@ -8,16 +8,16 @@ layout(binding = 1, rg32f) uniform image2D out_flow;
 void main()
 {
 
-    const ivec2 coords = LL_GLOBAL_COORDS_2D;
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(out_flow);
 
     if (coords.x > imgSize.x || coords.y > imgSize.y) {
         return;
     }
 
-    const bool leftBorder = coords.x == 0;
-    const bool rightBorder = coords.x == imgSize.x - 1;
-    const bool topBorder = coords.y == 0;
+    const bool leftBorder   = coords.x == 0;
+    const bool rightBorder  = coords.x == imgSize.x - 1;
+    const bool topBorder    = coords.y == 0;
     const bool bottomBorder = coords.y == imgSize.y - 1;
 
     // central pixel in the 3x3 window
@@ -42,8 +42,8 @@ void main()
     //  [ 0.125   0.25    0.125 ]
     //  [ 0.0625  0.125   0.0625]]
     const vec2 flow_smooth = 0.0625 * (flow_00 + flow_02 + flow_20 + flow_22)
-        + 0.125 * (flow_01 + flow_10 + flow_12 + flow_21)
-        + 0.25 * flow_11;
+                             + 0.125 * (flow_01 + flow_10 + flow_12 + flow_21)
+                             + 0.25 * flow_11;
 
     imageStore(out_flow, coords, vec4(flow_smooth.x, flow_smooth.y, 0, 0));
 }

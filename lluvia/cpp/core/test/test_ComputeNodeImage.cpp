@@ -18,25 +18,25 @@ using bazel::tools::cpp::runfiles::Runfiles;
 TEST_CASE("textureToBuffer", "test_ComputeNodeImage")
 {
 
-    auto error = std::string {};
+    auto error    = std::string {};
     auto runfiles = Runfiles::CreateForTest(&error);
     REQUIRE(runfiles != nullptr);
 
-    constexpr const uint32_t WIDTH = 32u;
+    constexpr const uint32_t WIDTH  = 32u;
     constexpr const uint32_t HEIGHT = 32u;
 
-    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-        | ll::ImageUsageFlagBits::Sampled
-        | ll::ImageUsageFlagBits::TransferDst };
+    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage
+                                               | ll::ImageUsageFlagBits::Sampled
+                                               | ll::ImageUsageFlagBits::TransferDst};
 
     using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;
     const auto deviceMemFlags = memflags::DeviceLocal;
-    const auto pageSize = uint64_t { 1024 * 1024 * 4 };
+    const auto pageSize       = uint64_t {1024 * 1024 * 4};
 
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);
     REQUIRE(hostMemory != nullptr);
@@ -58,7 +58,7 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage")
                        .setChannelCount(ll::ChannelCount::C1)
                        .setUsageFlags(imgUsageFlags);
 
-    auto stageBuffer = hostMemory->createBuffer(imgDesc.getSize());
+    auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize() * sizeof(uint32_t));
     REQUIRE(stageBuffer != nullptr);
     REQUIRE(outputBuffer != nullptr);
@@ -94,8 +94,8 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage")
                               .setFunctionName("main")
                               .setLocalX(32)
                               .setLocalY(32)
-                              .addPort({ 0, "in", ll::PortDirection::In, ll::PortType::SampledImageView })
-                              .addPort({ 1, "out", ll::PortDirection::Out, ll::PortType::Buffer });
+                              .addPort({0, "in", ll::PortDirection::In, ll::PortType::SampledImageView})
+                              .addPort({1, "out", ll::PortDirection::Out, ll::PortType::Buffer});
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);
@@ -142,25 +142,25 @@ TEST_CASE("textureToBuffer", "test_ComputeNodeImage")
 TEST_CASE("imageToBuffer", "test_ComputeNodeImage")
 {
 
-    auto error = std::string {};
+    auto error    = std::string {};
     auto runfiles = Runfiles::CreateForTest(&error);
     REQUIRE(runfiles != nullptr);
 
-    constexpr const uint32_t WIDTH = 32u;
+    constexpr const uint32_t WIDTH  = 32u;
     constexpr const uint32_t HEIGHT = 32u;
 
-    const ll::ImageUsageFlags imgUsageFlags = { ll::ImageUsageFlagBits::Storage
-        | ll::ImageUsageFlagBits::Sampled
-        | ll::ImageUsageFlagBits::TransferDst };
+    const ll::ImageUsageFlags imgUsageFlags = {ll::ImageUsageFlagBits::Storage
+                                               | ll::ImageUsageFlagBits::Sampled
+                                               | ll::ImageUsageFlagBits::TransferDst};
 
     using memflags = ll::MemoryPropertyFlagBits;
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    const auto hostMemFlags = memflags::HostVisible | memflags::HostCoherent;
+    const auto hostMemFlags   = memflags::HostVisible | memflags::HostCoherent;
     const auto deviceMemFlags = memflags::DeviceLocal;
-    const auto pageSize = uint64_t { 1024 * 1024 * 4 };
+    const auto pageSize       = uint64_t {1024 * 1024 * 4};
 
     auto hostMemory = session->createMemory(hostMemFlags, pageSize, false);
     REQUIRE(hostMemory != nullptr);
@@ -182,7 +182,7 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage")
                        .setChannelCount(ll::ChannelCount::C1)
                        .setUsageFlags(imgUsageFlags);
 
-    auto stageBuffer = hostMemory->createBuffer(imgDesc.getSize());
+    auto stageBuffer  = hostMemory->createBuffer(imgDesc.getSize());
     auto outputBuffer = hostOutputMemory->createBuffer(imgDesc.getSize() * sizeof(uint32_t));
 
     {
@@ -215,8 +215,8 @@ TEST_CASE("imageToBuffer", "test_ComputeNodeImage")
                               .setFunctionName("main")
                               .setLocalX(32)
                               .setLocalY(32)
-                              .addPort({ 0, "in", ll::PortDirection::In, ll::PortType::ImageView })
-                              .addPort({ 1, "out", ll::PortDirection::Out, ll::PortType::Buffer });
+                              .addPort({0, "in", ll::PortDirection::In, ll::PortType::ImageView})
+                              .addPort({1, "out", ll::PortDirection::Out, ll::PortType::Buffer});
 
     auto node = session->createComputeNode(nodeDescriptor);
     REQUIRE(node != nullptr);

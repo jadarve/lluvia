@@ -33,14 +33,14 @@ Descriptors are used to construct ll::ComputeNode objects.
 class ComputeNodeDescriptor {
 
 public:
-    ComputeNodeDescriptor() = default;
+    ComputeNodeDescriptor()                                        = default;
     ComputeNodeDescriptor(const ComputeNodeDescriptor& descriptor) = default;
-    ComputeNodeDescriptor(ComputeNodeDescriptor&& descriptor) = default;
+    ComputeNodeDescriptor(ComputeNodeDescriptor&& descriptor)      = default;
 
     ~ComputeNodeDescriptor() = default;
 
     ComputeNodeDescriptor& operator=(const ComputeNodeDescriptor& descriptor) = default;
-    ComputeNodeDescriptor& operator=(ComputeNodeDescriptor&& descriptor) = default;
+    ComputeNodeDescriptor& operator=(ComputeNodeDescriptor&& descriptor)      = default;
 
     /**
     @brief      Sets the program object.
@@ -302,15 +302,15 @@ public:
 
 private:
     std::shared_ptr<ll::Program> m_program;
-    std::string m_functionName;
-    std::string m_builderName;
+    std::string                  m_functionName;
+    std::string                  m_builderName;
 
     // local and global work group
-    ll::vec3ui m_localShape { 1, 1, 1 };
-    ll::vec3ui m_gridShape { 1, 1, 1 };
+    ll::vec3ui m_localShape {1, 1, 1};
+    ll::vec3ui m_gridShape {1, 1, 1};
 
     std::map<std::string, ll::PortDescriptor> m_ports;
-    std::map<std::string, ll::Parameter> m_parameters;
+    std::map<std::string, ll::Parameter>      m_parameters;
 
     ll::PushConstants m_pushConstants;
 };

@@ -14,13 +14,13 @@
 namespace ll {
 
 PortDescriptor::PortDescriptor(uint32_t binding,
-    const std::string& name,
-    ll::PortDirection direction,
-    ll::PortType portType)
-    : m_binding { binding }
-    , m_name { name }
-    , m_direction { direction }
-    , m_portType { portType }
+    const std::string&                  name,
+    ll::PortDirection                   direction,
+    ll::PortType                        portType)
+    : m_binding {binding}
+    , m_name {name}
+    , m_direction {direction}
+    , m_portType {portType}
 {
 }
 
@@ -47,28 +47,28 @@ ll::PortType PortDescriptor::getPortType() const noexcept
 PortDescriptor& PortDescriptor::checkImageChannelCountIs(ll::ChannelCount channelCount) noexcept
 {
 
-    m_checkImageChannelCount = std::optional<ll::ChannelCount> { channelCount };
+    m_checkImageChannelCount = std::optional<ll::ChannelCount> {channelCount};
     return *this;
 }
 
 PortDescriptor& PortDescriptor::checkImageChannelTypeIs(ll::ChannelType channelType) noexcept
 {
 
-    m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>> { { channelType } };
+    m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>> {{channelType}};
     return *this;
 }
 
 PortDescriptor& PortDescriptor::checkImageChannelTypeIsAnyOf(std::vector<ll::ChannelType> channelTypes) noexcept
 {
 
-    m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>> { channelTypes };
+    m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>> {channelTypes};
     return *this;
 }
 
 PortDescriptor& PortDescriptor::checkImageViewNormalizedCoordinatesIs(bool normalizedCoordinates) noexcept
 {
 
-    m_checkImageViewNormalizedCoordinates = std::optional<bool> { normalizedCoordinates };
+    m_checkImageViewNormalizedCoordinates = std::optional<bool> {normalizedCoordinates};
     return *this;
 }
 
@@ -166,8 +166,8 @@ std::pair<bool, std::string> PortDescriptor::validateImageView(const std::shared
 std::string PortDescriptor::toString() const noexcept
 {
     return "{binding: " + std::to_string(m_binding)
-        + ", name: " + m_name
-        + ", portType: ll::PortType::" + ll::portTypeToString(m_portType) + "}";
+           + ", name: " + m_name
+           + ", portType: ll::PortType::" + ll::portTypeToString(m_portType) + "}";
 }
 
 } // namespace ll

@@ -32,7 +32,7 @@ class Node {
 public:
     virtual ~Node() = default;
 
-    void setState(const ll::NodeState tState);
+    void          setState(const ll::NodeState tState);
     ll::NodeState getState() const noexcept;
 
     void init();
@@ -112,7 +112,7 @@ protected:
     virtual void onInit() = 0;
 
 private:
-    ll::NodeState m_state { ll::NodeState::Created };
+    ll::NodeState m_state {ll::NodeState::Created};
 };
 
 } // namespace ll

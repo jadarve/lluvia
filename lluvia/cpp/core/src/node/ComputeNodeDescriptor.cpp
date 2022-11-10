@@ -219,8 +219,8 @@ std::vector<vk::DescriptorSetLayoutBinding> ComputeNodeDescriptor::getParameterB
 
     for (const auto& it : m_ports) {
 
-        const auto& port = it.second;
-        auto binding = vk::DescriptorSetLayoutBinding {}
+        const auto& port    = it.second;
+        auto        binding = vk::DescriptorSetLayoutBinding {}
                            .setBinding(port.getBinding())
                            .setDescriptorCount(1)
                            .setDescriptorType(ll::portTypeToVkDescriptorType(port.getPortType()))

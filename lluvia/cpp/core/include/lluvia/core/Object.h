@@ -27,9 +27,9 @@ Each value represent one of the ll::Object child classes.
 @sa ll::impl::ObjectTypeStrings string values for this enum.
 */
 enum class ObjectType : ll::enum_t {
-    Buffer = 0, /**< value for ll::Buffer. */
-    Image = 1, /**< value for ll::Image. */
-    ImageView = 2 /**< value for ll::ImageView. */
+    Buffer    = 0, /**< value for ll::Buffer. */
+    Image     = 1, /**< value for ll::Image. */
+    ImageView = 2  /**< value for ll::ImageView. */
 };
 
 namespace impl {
@@ -39,11 +39,11 @@ namespace impl {
 
     @sa ll::ObjectType enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ObjectType>, 3> ObjectTypeStrings { {
+    constexpr const std::array<std::tuple<const char*, ll::ObjectType>, 3> ObjectTypeStrings {{
         std::make_tuple("Buffer", ll::ObjectType::Buffer),
         std::make_tuple("Image", ll::ObjectType::Image),
         std::make_tuple("ImageView", ll::ObjectType::ImageView),
-    } };
+    }};
 
 } // namespace impl
 

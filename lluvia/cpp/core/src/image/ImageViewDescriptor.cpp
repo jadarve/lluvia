@@ -10,13 +10,13 @@
 namespace ll {
 
 ImageViewDescriptor::ImageViewDescriptor(const ll::ImageAddressMode addressMode,
-    const ll::ImageFilterMode filterMode,
-    const bool normalizedCoordinates,
-    const bool isSampled)
-    : m_filterMode { filterMode }
-    , m_addressMode { addressMode }
-    , m_normalizedCoordinates { normalizedCoordinates }
-    , m_isSampled { isSampled }
+    const ll::ImageFilterMode                                       filterMode,
+    const bool                                                      normalizedCoordinates,
+    const bool                                                      isSampled)
+    : m_filterMode {filterMode}
+    , m_addressMode {addressMode}
+    , m_normalizedCoordinates {normalizedCoordinates}
+    , m_isSampled {isSampled}
 {
 }
 

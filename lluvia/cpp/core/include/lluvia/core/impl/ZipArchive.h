@@ -29,15 +29,15 @@ namespace impl {
     class ZipArchive {
 
     public:
-        ZipArchive() = delete;
+        ZipArchive()                  = delete;
         ZipArchive(const ZipArchive&) = delete;
-        ZipArchive(ZipArchive&&) = delete;
+        ZipArchive(ZipArchive&&)      = delete;
         ZipArchive(const std::string& filename);
 
         ~ZipArchive();
 
         ZipArchive& operator=(const ZipArchive&) = delete;
-        ZipArchive& operator=(ZipArchive&&) = delete;
+        ZipArchive& operator=(ZipArchive&&)      = delete;
 
         size_t numberFiles();
 

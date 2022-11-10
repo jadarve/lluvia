@@ -19,7 +19,7 @@ params;
 void main()
 {
 
-    const ivec2 coords = LL_GLOBAL_COORDS_2D;
+    const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(in_flow);
 
     const float dt = params.dt;
@@ -28,7 +28,7 @@ void main()
         return;
     }
 
-    const bool leftBorder = coords.x == 0;
+    const bool leftBorder  = coords.x == 0;
     const bool rightBorder = coords.x == imgSize.x - 1;
 
     //#################################
@@ -92,13 +92,13 @@ void main()
     //#################################
     // BORDER REMOVAL
     //#################################
-    const uint border = 2; // FIXME: parameter
+    const uint border  = 2; // FIXME: parameter
     const bool inRange = (coords.x >= border && coords.x < imgSize.x - border) && (coords.y >= border && coords.y < imgSize.y - border);
 
     // if the pixel coordinate lies on the image border,
     // take the original value of flow (flow_0) as the propagated flow
-    flowPropU = inRange ? flowPropU : flow_0;
-    grayPropU = inRange ? grayPropU : gray_0;
+    flowPropU   = inRange ? flowPropU : flow_0;
+    grayPropU   = inRange ? grayPropU : gray_0;
     vectorPropU = inRange ? vectorPropU : vector_0;
 
     //#################################

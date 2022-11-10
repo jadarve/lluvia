@@ -80,7 +80,7 @@ vec2 ll_camera_fisheyeInterpolationCoordinates(const ll_camera cam, const vec2 p
 
     // image plane coordinate radius squared
     const float r2 = dot(normalizedCoords.xy, normalizedCoords.xy);
-    const float r = sqrt(r2);
+    const float r  = sqrt(r2);
 
     // pixel angle
     const float theta = atan(r);
