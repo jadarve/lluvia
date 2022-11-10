@@ -9,7 +9,8 @@
 
 namespace ll {
 
-ErrorCategory& ErrorCategory::getInstance() noexcept {
+ErrorCategory& ErrorCategory::getInstance() noexcept
+{
     static ErrorCategory instance {};
     return instance;
 }

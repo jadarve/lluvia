@@ -11,9 +11,7 @@
 #include "lluvia/core/enums/enums.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-
-namespace ll
-{
+namespace ll {
 
 /**
 @brief      Class for node state.
@@ -25,21 +23,17 @@ enum class NodeState : ll::enum_t {
     Init    = 1
 };
 
-namespace impl
-{
+namespace impl {
 
     /**
      @brief Node state string values used for converting ll::NodeState to std::string and vice-versa.
 
      @sa ll::NodeState enum values for this array.
      */
-    constexpr const std::array<std::tuple<const char*, ll::NodeState>, 2> NodeStateStrings {{
-        std::make_tuple("Created" , ll::NodeState::Created),
-        std::make_tuple("Init"    , ll::NodeState::Init)
-    }};
+    constexpr const std::array<std::tuple<const char*, ll::NodeState>, 2> NodeStateStrings {{std::make_tuple("Created", ll::NodeState::Created),
+        std::make_tuple("Init", ll::NodeState::Init)}};
 
 } // namespace impl
-
 
 } // namespace ll
 

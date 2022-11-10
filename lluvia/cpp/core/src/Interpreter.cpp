@@ -7,13 +7,13 @@
 
 #include "lluvia/core/Interpreter.h"
 
-#include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/CommandBuffer.h"
 #include "lluvia/core/ComputeDimension.h"
 #include "lluvia/core/FloatPrecision.h"
 #include "lluvia/core/Object.h"
 #include "lluvia/core/Program.h"
 #include "lluvia/core/Session.h"
+#include "lluvia/core/buffer/Buffer.h"
 #include "lluvia/core/types.h"
 
 #include "lluvia/core/image/Image.h"
@@ -52,12 +52,14 @@
 
 namespace ll {
 
-inline int failOnNewIndex(lua_State* L) {
+inline int failOnNewIndex(lua_State* L)
+{
     return luaL_error(L, "cannot modify the elements of a read-only table");
 }
 
-template<typename T, std::size_t N, const std::array<std::tuple<const char*, T>, N>& values>
-void registerEnum(sol::table& lib, const std::string& enumName) {
+template <typename T, std::size_t N, const std::array<std::tuple<const char*, T>, N>& values>
+void registerEnum(sol::table& lib, const std::string& enumName)
+{
 
     // TODO: make table read only and not able to add new elements
     auto target = lib.create(enumName);
@@ -66,7 +68,8 @@ void registerEnum(sol::table& lib, const std::string& enumName) {
     }
 }
 
-void registerTypes(sol::table& lib) {
+void registerTypes(sol::table& lib)
+{
 
     ///////////////////////////////////////////////////////
     // Enums
@@ -102,19 +105,17 @@ void registerTypes(sol::table& lib) {
         "offset", &ll::MemoryAllocationInfo::offset,
         "size", &ll::MemoryAllocationInfo::size,
         "leftPadding", &ll::MemoryAllocationInfo::leftPadding,
-        "page", &ll::MemoryAllocationInfo::page
-        );
+        "page", &ll::MemoryAllocationInfo::page);
 
     lib.new_usertype<ll::Parameter>("Parameter",
-        sol::constructors<ll::Parameter(), ll::Parameter(const ll::Parameter&), ll::Parameter(ll::Parameter&&)>(),
+        sol::constructors<ll::Parameter(), ll::Parameter(const ll::Parameter&), ll::Parameter(ll::Parameter &&)>(),
         "type", sol::property(&ll::Parameter::getType),
         "__getInt", &ll::Parameter::get<int32_t>,
         "__getFloat", &ll::Parameter::get<float>,
         "__getBool", &ll::Parameter::get<bool>,
         "__setInt", &ll::Parameter::set<int32_t>,
         "__setFloat", &ll::Parameter::set<float>,
-        "__setBool", &ll::Parameter::set<bool>
-        );
+        "__setBool", &ll::Parameter::set<bool>);
 
     ///////////////////////////////////////////////////////
     // Descriptors
@@ -131,8 +132,7 @@ void registerTypes(sol::table& lib) {
         "depth", sol::property(&ll::ImageDescriptor::getDepth, &ll::ImageDescriptor::setDepth),
         "shape", sol::property(&ll::ImageDescriptor::getShape, &ll::ImageDescriptor::setShape),
         "tiling", sol::property(&ll::ImageDescriptor::getTiling, &ll::ImageDescriptor::setTiling),
-        "usageFlags", sol::property(&ll::ImageDescriptor::getUsageFlagsUnsafe, &ll::ImageDescriptor::setUsageFlagsUnsafe)
-        );
+        "usageFlags", sol::property(&ll::ImageDescriptor::getUsageFlagsUnsafe, &ll::ImageDescriptor::setUsageFlagsUnsafe));
 
     lib.new_usertype<ll::ImageViewDescriptor>("ImageViewDescriptor",
         sol::constructors<
@@ -145,28 +145,23 @@ void registerTypes(sol::table& lib) {
         "addressModeW", sol::property(&ll::ImageViewDescriptor::getAddressModeW),
         "normalizedCoordinates", sol::property(&ll::ImageViewDescriptor::isNormalizedCoordinates, &ll::ImageViewDescriptor::setNormalizedCoordinates),
         "isSampled", sol::property(&ll::ImageViewDescriptor::isSampled, &ll::ImageViewDescriptor::setIsSampled),
-        "setAddressMode", sol::overload(
-            (ll::ImageViewDescriptor& (ll::ImageViewDescriptor::*)(ll::ImageAddressMode) noexcept) &ll::ImageViewDescriptor::setAddressMode,
-            (ll::ImageViewDescriptor& (ll::ImageViewDescriptor::*)(ll::ImageAxis, ll::ImageAddressMode) noexcept) &ll::ImageViewDescriptor::setAddressMode
-            )
-        );
+        "setAddressMode", sol::overload((ll::ImageViewDescriptor & (ll::ImageViewDescriptor::*)(ll::ImageAddressMode) noexcept) & ll::ImageViewDescriptor::setAddressMode, (ll::ImageViewDescriptor & (ll::ImageViewDescriptor::*)(ll::ImageAxis, ll::ImageAddressMode) noexcept) & ll::ImageViewDescriptor::setAddressMode));
 
     lib.new_usertype<ll::PortDescriptor>("PortDescriptor",
         sol::constructors<ll::PortDescriptor(), ll::PortDescriptor(uint32_t, const std::string&, ll::PortDirection, ll::PortType)>(),
-        "binding"   , sol::property(&ll::PortDescriptor::getBinding),
-        "name"      , sol::property(&ll::PortDescriptor::getName),
-        "direction" , sol::property(&ll::PortDescriptor::getDirection),
-        "type"      , sol::property(&ll::PortDescriptor::getPortType),
-        "checkImageChannelCountIs"              , &PortDescriptor::checkImageChannelCountIs,
-        "checkImageChannelTypeIs"               , &PortDescriptor::checkImageChannelTypeIs,
-        "checkImageChannelTypeIsAnyOf"          , &PortDescriptor::checkImageChannelTypeIsAnyOf,
-        "checkImageViewNormalizedCoordinatesIs" , &PortDescriptor::checkImageViewNormalizedCoordinatesIs
-        );
+        "binding", sol::property(&ll::PortDescriptor::getBinding),
+        "name", sol::property(&ll::PortDescriptor::getName),
+        "direction", sol::property(&ll::PortDescriptor::getDirection),
+        "type", sol::property(&ll::PortDescriptor::getPortType),
+        "checkImageChannelCountIs", &PortDescriptor::checkImageChannelCountIs,
+        "checkImageChannelTypeIs", &PortDescriptor::checkImageChannelTypeIs,
+        "checkImageChannelTypeIsAnyOf", &PortDescriptor::checkImageChannelTypeIsAnyOf,
+        "checkImageViewNormalizedCoordinatesIs", &PortDescriptor::checkImageViewNormalizedCoordinatesIs);
 
     lib.new_usertype<ll::ComputeNodeDescriptor>("ComputeNodeDescriptor",
         "functionName", sol::property(&ll::ComputeNodeDescriptor::getFunctionName, &ll::ComputeNodeDescriptor::setFunctionName),
         "builderName", sol::property(&ll::ComputeNodeDescriptor::getBuilderName, &ll::ComputeNodeDescriptor::setBuilderName),
-        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram, (ComputeNodeDescriptor & (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program> &)noexcept) & ll::ComputeNodeDescriptor::setProgram),
+        "program", sol::property(&ll::ComputeNodeDescriptor::getProgram, (ComputeNodeDescriptor & (ll::ComputeNodeDescriptor::*)(const std::shared_ptr<ll::Program>&) noexcept) & ll::ComputeNodeDescriptor::setProgram),
         "localShape", sol::property(&ll::ComputeNodeDescriptor::getLocalShape, &ll::ComputeNodeDescriptor::setLocalShape),
         "gridShape", sol::property(&ll::ComputeNodeDescriptor::getGridShape, &ll::ComputeNodeDescriptor::setGridShape),
         "pushConstants", sol::property(&ll::ComputeNodeDescriptor::getPushConstants, &ll::ComputeNodeDescriptor::setPushConstants),
@@ -181,7 +176,7 @@ void registerTypes(sol::table& lib) {
         "addPort", &ll::ContainerNodeDescriptor::addPort,
         "__setParameter", &ll::ContainerNodeDescriptor::setParameter, // user facing setParameter() implemented in library.lua
         "__getParameter", &ll::ContainerNodeDescriptor::getParameter  // user facing getParameter() implemented in library.lua
-        );
+    );
 
     lib.new_usertype<ll::PushConstants>("PushConstants",
         sol::constructors<ll::PushConstants(), ll::PushConstants(const ll::PushConstants&)>(),
@@ -189,23 +184,20 @@ void registerTypes(sol::table& lib) {
         "float", sol::property(&ll::PushConstants::getFloat, &ll::PushConstants::setFloat),
         "int32", sol::property(&ll::PushConstants::getInt32, &ll::PushConstants::setInt32),
         "pushFloat", &ll::PushConstants::pushFloat,
-        "pushInt32", &ll::PushConstants::pushInt32
-    );
+        "pushInt32", &ll::PushConstants::pushInt32);
 
     lib.new_usertype<ll::NodeBuilderDescriptor>("NodeBuilderDescriptor",
         sol::constructors<ll::NodeBuilderDescriptor(), ll::NodeBuilderDescriptor(ll::NodeType, const std::string&, const std::string&)>(),
         "name", &ll::NodeBuilderDescriptor::name,
         "summary", &ll::NodeBuilderDescriptor::summary,
-        "nodeType", &ll::NodeBuilderDescriptor::nodeType
-    );
+        "nodeType", &ll::NodeBuilderDescriptor::nodeType);
 
     ///////////////////////////////////////////////////////
     // Objects
     ///////////////////////////////////////////////////////
     lib.new_usertype<ll::Object>("Object",
         sol::no_constructor,
-        "type", sol::property(&ll::Object::getType)
-        );
+        "type", sol::property(&ll::Object::getType));
 
     lib.new_usertype<ll::Buffer>("Buffer",
         sol::no_constructor,
@@ -214,8 +206,7 @@ void registerTypes(sol::table& lib) {
         "isMappable", sol::property(&ll::Buffer::isMappable),
         "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo),
         "usageFlags", sol::property(&ll::Buffer::getUsageFlagsUnsafe),
-        "memory", sol::property(&ll::Buffer::getMemory)
-        );
+        "memory", sol::property(&ll::Buffer::getMemory));
 
     lib.new_usertype<ll::Image>("Image",
         sol::no_constructor,
@@ -236,8 +227,7 @@ void registerTypes(sol::table& lib) {
         "changeImageLayout", &ll::Image::changeImageLayout,
         "clear", &ll::Image::clear,
         "copyTo", &ll::Image::copyTo,
-        "createImageView", &ll::Image::createImageView
-        );
+        "createImageView", &ll::Image::createImageView);
 
     lib.new_usertype<ll::ImageView>("ImageView",
         sol::no_constructor,
@@ -259,16 +249,13 @@ void registerTypes(sol::table& lib) {
         "usageFlags", sol::property(&ll::ImageView::getUsageFlagsUnsafe),
         "changeImageLayout", &ll::ImageView::changeImageLayout,
         "clear", &ll::ImageView::clear,
-        "copyTo", &ll::ImageView::copyTo
-        );
-
+        "copyTo", &ll::ImageView::copyTo);
 
     ///////////////////////////////////////////////////////
     // Nodes
     ///////////////////////////////////////////////////////
     lib.new_usertype<ll::Program>("Program",
-        sol::no_constructor
-        );
+        sol::no_constructor);
 
     lib.new_usertype<ll::Node>("Node",
         sol::no_constructor,
@@ -281,7 +268,7 @@ void registerTypes(sol::table& lib) {
         "hasPort", &ll::Node::hasPort,
         "__getPort", &ll::Node::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::Node::bind        // user facing bind() implemented in library.lua
-        );
+    );
 
     lib.new_usertype<ll::ComputeNode>("ComputeNode",
         sol::no_constructor,
@@ -307,7 +294,7 @@ void registerTypes(sol::table& lib) {
         "__getParameter", &ll::ComputeNode::getParameter,
         "__getPort", &ll::ComputeNode::getPort, // user facing getPort() implemented in library.lua
         "__bind", &ll::ComputeNode::bind        // user facing bind() implemented in library.lua
-        );
+    );
 
     lib.new_usertype<ll::ContainerNode>("ContainerNode",
         sol::no_constructor,
@@ -321,20 +308,19 @@ void registerTypes(sol::table& lib) {
         "__getParameter", &ll::ContainerNode::getParameter,
         "__getPort", &ll::ContainerNode::getPort,   // user facing getPort() implemented in library.lua
         "__bind", &ll::ContainerNode::bind,         // user facing bind() implemented in library.lua
-        "__bindNode", &ll::ContainerNode::bindNode, // user facing bindNode() implemented in library.lua 
+        "__bindNode", &ll::ContainerNode::bindNode, // user facing bindNode() implemented in library.lua
         "__getNode", &ll::ContainerNode::getNode    // user facing getNode() implemented in library.lua
-        );
+    );
 
     lib.new_usertype<ll::Session>("Session",
         sol::no_constructor,
         "getHostMemory", &ll::Session::getHostMemory,
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram,
-        "createComputeNode", (std::shared_ptr<ll::ComputeNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createComputeNode,
-        "createContainerNode", (std::shared_ptr<ll::ContainerNode> (ll::Session::*)(const std::string& builderName)) &ll::Session::createContainerNode,
+        "createComputeNode", (std::shared_ptr<ll::ComputeNode>(ll::Session::*)(const std::string& builderName)) & ll::Session::createComputeNode,
+        "createContainerNode", (std::shared_ptr<ll::ContainerNode>(ll::Session::*)(const std::string& builderName)) & ll::Session::createContainerNode,
         "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape,
-        "__runComputeNode", (void (ll::Session::*)(const ll::ComputeNode& node)) &ll::Session::run
-        );
+        "__runComputeNode", (void(ll::Session::*)(const ll::ComputeNode& node)) & ll::Session::run);
 
     lib.new_usertype<ll::Memory>("Memory",
         sol::no_constructor,
@@ -342,84 +328,78 @@ void registerTypes(sol::table& lib) {
         "pageCount", sol::property(&ll::Memory::getPageCount),
         "isMappable", sol::property(&ll::Memory::isMappable),
         "isPageMappable", &ll::Memory::isPageMappable,
-        "createBuffer", sol::overload(
-            (std::shared_ptr<ll::Buffer> (ll::Memory::*)(const uint64_t)) &ll::Memory::createBuffer,
-            &ll::Memory::createBufferWithUnsafeFlags
-            ),
+        "createBuffer", sol::overload((std::shared_ptr<ll::Buffer>(ll::Memory::*)(const uint64_t)) & ll::Memory::createBuffer, &ll::Memory::createBufferWithUnsafeFlags),
         "createImage", &ll::Memory::createImage,
-        "createImageView", &ll::Memory::createImageView
-        );
+        "createImageView", &ll::Memory::createImageView);
 
     lib.new_usertype<ll::CommandBuffer>("CommandBuffer",
         sol::no_constructor,
-        "run",  (void (ll::CommandBuffer::*)(const ll::ComputeNode& node)) &ll::CommandBuffer::run,
+        "run", (void(ll::CommandBuffer::*)(const ll::ComputeNode& node)) & ll::CommandBuffer::run,
         "memoryBarrier", &ll::CommandBuffer::memoryBarrier,
-        "changeImageLayout", (void (ll::CommandBuffer::*)(ll::Image& image, const ll::ImageLayout newLayout)) &ll::CommandBuffer::changeImageLayout,
-        "copyImageToImage", &ll::CommandBuffer::copyImageToImage
-        );
+        "changeImageLayout", (void(ll::CommandBuffer::*)(ll::Image & image, const ll::ImageLayout newLayout)) & ll::CommandBuffer::changeImageLayout,
+        "copyImageToImage", &ll::CommandBuffer::copyImageToImage);
 }
 
-
-Interpreter::Interpreter() :
-    m_lua {std::make_unique<sol::state>()} {
+Interpreter::Interpreter()
+    : m_lua {std::make_unique<sol::state>()}
+{
 
     // load default libraries
     m_lua->open_libraries(sol::lib::base, sol::lib::math, sol::lib::string, sol::lib::table);
 
     // ll and impl namespaces
-    m_lib = (*m_lua)["ll"].get_or_create<sol::table>();
+    m_lib     = (*m_lua)["ll"].get_or_create<sol::table>();
     m_libImpl = m_lib["impl"].get_or_create<sol::table>();
 
     registerTypes(m_lib);
-    
-    m_libImpl["castObjectToBuffer"]    = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Buffer>(obj);};
-    m_libImpl["castObjectToImage"]     = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::Image>(obj);};
-    m_libImpl["castObjectToImageView"] = [](std::shared_ptr<ll::Object> obj) {return std::static_pointer_cast<ll::ImageView>(obj);};
 
-    m_libImpl["castBufferToObject"] = [](std::shared_ptr<ll::Buffer> buffer) {return std::static_pointer_cast<ll::Object>(buffer);};
-    m_libImpl["castImageToObject"] = [](std::shared_ptr<ll::Image> image) {return std::static_pointer_cast<ll::Object>(image);};
-    m_libImpl["castImageViewToObject"] = [](std::shared_ptr<ll::ImageView> imageView) {return std::static_pointer_cast<ll::Object>(imageView);};
+    m_libImpl["castObjectToBuffer"]    = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::Buffer>(obj); };
+    m_libImpl["castObjectToImage"]     = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::Image>(obj); };
+    m_libImpl["castObjectToImageView"] = [](std::shared_ptr<ll::Object> obj) { return std::static_pointer_cast<ll::ImageView>(obj); };
 
-    m_libImpl["castComputeNodeToNode"] = [](std::shared_ptr<ll::ComputeNode> node) {return std::static_pointer_cast<ll::Node>(node);};
-    m_libImpl["castContainerNodeToNode"] = [](std::shared_ptr<ll::ContainerNode> node) {return std::static_pointer_cast<ll::Node>(node);};
+    m_libImpl["castBufferToObject"]    = [](std::shared_ptr<ll::Buffer> buffer) { return std::static_pointer_cast<ll::Object>(buffer); };
+    m_libImpl["castImageToObject"]     = [](std::shared_ptr<ll::Image> image) { return std::static_pointer_cast<ll::Object>(image); };
+    m_libImpl["castImageViewToObject"] = [](std::shared_ptr<ll::ImageView> imageView) { return std::static_pointer_cast<ll::Object>(imageView); };
 
-    m_libImpl["castNodeToComputeNode"] = [](std::shared_ptr<ll::Node> node) {return std::static_pointer_cast<ll::ComputeNode>(node);};
-    m_libImpl["castNodeToContainerNode"] = [](std::shared_ptr<ll::Node> node) {return std::static_pointer_cast<ll::ContainerNode>(node);};
+    m_libImpl["castComputeNodeToNode"]   = [](std::shared_ptr<ll::ComputeNode> node) { return std::static_pointer_cast<ll::Node>(node); };
+    m_libImpl["castContainerNodeToNode"] = [](std::shared_ptr<ll::ContainerNode> node) { return std::static_pointer_cast<ll::Node>(node); };
+
+    m_libImpl["castNodeToComputeNode"]   = [](std::shared_ptr<ll::Node> node) { return std::static_pointer_cast<ll::ComputeNode>(node); };
+    m_libImpl["castNodeToContainerNode"] = [](std::shared_ptr<ll::Node> node) { return std::static_pointer_cast<ll::ContainerNode>(node); };
 
     m_lua->script(ll::impl::LUA_LIBRARY_SRC);
 }
 
-
-Interpreter::~Interpreter() {
-
+Interpreter::~Interpreter()
+{
 }
 
+void Interpreter::run(const std::string& code)
+{
 
-void Interpreter::run(const std::string& code) {
-    
     try {
         auto result = m_lua->script(code);
-    } catch(std::runtime_error& e) {
+    } catch (std::runtime_error& e) {
         ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
 
+void Interpreter::runFile(const std::string& filename)
+{
 
-void Interpreter::runFile(const std::string& filename) {
-
-    // Android NDK 21e does not have std::filesytem available
-    #ifndef __ANDROID__
-        if (!std::filesystem::exists(filename)) {
-            ll::throwSystemError(ll::ErrorCode::InterpreterError, "file not found.");
-        }
-    #endif
+// Android NDK 21e does not have std::filesytem available
+#ifndef __ANDROID__
+    if (!std::filesystem::exists(filename)) {
+        ll::throwSystemError(ll::ErrorCode::InterpreterError, "file not found.");
+    }
+#endif
 
     try {
         auto inputFile = std::ifstream(filename, std::fstream::in | std::fstream::ate);
         inputFile.exceptions(std::ifstream::failbit);
 
-        const auto size = inputFile.tellg();
-        auto stringBuffer = std::string(size, '\0');
+        const auto size         = inputFile.tellg();
+        auto       stringBuffer = std::string(size, '\0');
 
         inputFile.seekg(0);
         inputFile.read(&stringBuffer[0], size);
@@ -427,27 +407,27 @@ void Interpreter::runFile(const std::string& filename) {
         // run the script content
         run(stringBuffer);
 
-    } catch(std::runtime_error& e) {
+    } catch (std::runtime_error& e) {
         ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
 
-
-sol::load_result Interpreter::load(const std::string& code) {
+sol::load_result Interpreter::load(const std::string& code)
+{
 
     auto loadCode = m_lua->load(code);
     if (!loadCode.valid()) {
         const sol::error err = loadCode;
 
         ll::throwSystemError(ll::ErrorCode::InterpreterError,
-                             "error loading code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+            "error loading code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
     }
 
     return loadCode;
 }
 
-
-void Interpreter::setActiveSession(ll::Session* session) {
+void Interpreter::setActiveSession(ll::Session* session)
+{
     m_lib["activeSession"] = session;
 }
 

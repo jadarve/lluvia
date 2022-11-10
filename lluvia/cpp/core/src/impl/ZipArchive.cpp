@@ -9,55 +9,58 @@
 
 #include "lluvia/core/error.h"
 
-
 namespace ll {
 namespace impl {
 
-ZipArchive::ZipArchive(const std::string& filename) {
-    ll::throwSystemErrorIf(mz_zip_reader_init_file(&mArchive, filename.c_str(), 0) == MZ_FALSE, ll::ErrorCode::IOError, "Error reading archive");
-}
+    ZipArchive::ZipArchive(const std::string& filename)
+    {
+        ll::throwSystemErrorIf(mz_zip_reader_init_file(&mArchive, filename.c_str(), 0) == MZ_FALSE, ll::ErrorCode::IOError, "Error reading archive");
+    }
 
-ZipArchive::~ZipArchive() {
-    mz_zip_reader_end(&mArchive);
-}
+    ZipArchive::~ZipArchive()
+    {
+        mz_zip_reader_end(&mArchive);
+    }
 
+    size_t ZipArchive::numberFiles()
+    {
+        return static_cast<size_t>(mz_zip_reader_get_num_files(&mArchive));
+    }
 
-size_t ZipArchive::numberFiles() {
-    return static_cast<size_t>(mz_zip_reader_get_num_files(&mArchive));
-}
+    mz_zip_archive_file_stat ZipArchive::getFileStat(const size_t i)
+    {
 
+        ll::throwSystemErrorIf(i >= numberFiles(), ll::ErrorCode::IOError, "File index must be less than the number of files in the archive.");
 
-mz_zip_archive_file_stat ZipArchive::getFileStat(const size_t i) {
+        auto stat = mz_zip_archive_file_stat {};
+        ll::throwSystemErrorIf(!mz_zip_reader_file_stat(&mArchive, static_cast<mz_uint>(i), &stat), ll::ErrorCode::IOError, "Error reading file stats from zip archive");
 
-    ll::throwSystemErrorIf(i >= numberFiles(), ll::ErrorCode::IOError, "File index must be less than the number of files in the archive.");
+        return stat;
+    }
 
-    auto stat = mz_zip_archive_file_stat{};
-    ll::throwSystemErrorIf(!mz_zip_reader_file_stat(&mArchive, static_cast<mz_uint>(i), &stat), ll::ErrorCode::IOError, "Error reading file stats from zip archive");
+    std::string ZipArchive::uncompressTextFile(mz_zip_archive_file_stat& stat)
+    {
 
-    return stat;
-}
+        auto buffer = std::vector<char> {};
+        buffer.resize(stat.m_uncomp_size);
 
-std::string ZipArchive::uncompressTextFile(mz_zip_archive_file_stat& stat) {
+        ll::throwSystemErrorIf(!mz_zip_reader_extract_file_to_mem(&mArchive, stat.m_filename, &buffer[0], buffer.size(), 0),
+            ll::ErrorCode::IOError, "Error extracting text file from archive.");
 
-    auto buffer = std::vector<char>{};
-    buffer.resize(stat.m_uncomp_size);
+        return std::string {&buffer[0], buffer.size()};
+    }
 
-    ll::throwSystemErrorIf(!mz_zip_reader_extract_file_to_mem(&mArchive, stat.m_filename, &buffer[0], buffer.size(), 0),
-        ll::ErrorCode::IOError, "Error extracting text file from archive.");
+    std::vector<uint8_t> ZipArchive::uncompressBinaryFile(mz_zip_archive_file_stat& stat)
+    {
 
-    return std::string {&buffer[0], buffer.size()};
-}
+        auto buffer = std::vector<uint8_t> {};
+        buffer.resize(stat.m_uncomp_size);
 
-std::vector<uint8_t> ZipArchive::uncompressBinaryFile(mz_zip_archive_file_stat& stat) {
+        ll::throwSystemErrorIf(!mz_zip_reader_extract_file_to_mem(&mArchive, stat.m_filename, &buffer[0], buffer.size(), 0),
+            ll::ErrorCode::IOError, "Error extracting binary file from archive.");
 
-    auto buffer = std::vector<uint8_t>{};
-    buffer.resize(stat.m_uncomp_size);
-
-    ll::throwSystemErrorIf(!mz_zip_reader_extract_file_to_mem(&mArchive, stat.m_filename, &buffer[0], buffer.size(), 0),
-        ll::ErrorCode::IOError, "Error extracting binary file from archive.");
-    
-    return buffer;
-}
+        return buffer;
+    }
 
 } // namespace impl
 } // namespace ll

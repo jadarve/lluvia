@@ -15,10 +15,11 @@ out_rgba : rgba8ui uimage2D.
 #include <lluvia/core.glsl>
 #include <lluvia/core/color.glsl>
 
-layout(binding = 0, rgba32f) uniform image2D   in_hsva;
-layout(binding = 1, rgba8ui) uniform uimage2D  out_rgba;
+layout(binding = 0, rgba32f) uniform image2D in_hsva;
+layout(binding = 1, rgba8ui) uniform uimage2D out_rgba;
 
-void main() {
+void main()
+{
 
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(out_rgba);

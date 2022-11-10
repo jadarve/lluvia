@@ -22,25 +22,26 @@
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
 
-std::vector<uint8_t> readFile(const std::string& path, std::vector<uint8_t>& out) {
+std::vector<uint8_t> readFile(const std::string& path, std::vector<uint8_t>& out)
+{
 
     // auto out = std::vector<uint8_t>();
 
-    std::ifstream file{ path, std::ios::ate | std::ios::binary };
+    std::ifstream file {path, std::ios::ate | std::ios::binary};
     file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
     const auto fileSize = static_cast<size_t>(file.tellg());
     out.resize(fileSize);
 
     file.seekg(0);
-    file.read(reinterpret_cast<char *>(out.data()), fileSize);
+    file.read(reinterpret_cast<char*>(out.data()), fileSize);
     file.close();
 
     return out;
 }
 
-
-TEST_CASE("ComparedContent", "test_miniz") {
+TEST_CASE("ComparedContent", "test_miniz")
+{
 
     auto runfiles = Runfiles::CreateForTest(nullptr);
     REQUIRE(runfiles != nullptr);
@@ -51,7 +52,7 @@ TEST_CASE("ComparedContent", "test_miniz") {
     // compare binary data of both
 
     // read lua and spirv files
-    auto lua_file = std::vector<uint8_t> {};
+    auto lua_file   = std::vector<uint8_t> {};
     auto spirv_file = std::vector<uint8_t> {};
     REQUIRE_NOTHROW(readFile(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/Assign.lua"), lua_file));
     REQUIRE_NOTHROW(readFile(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/Assign.comp.spv"), spirv_file));
@@ -64,7 +65,7 @@ TEST_CASE("ComparedContent", "test_miniz") {
 
     mz_bool status = mz_zip_reader_init_file(&zip_archive, runfiles->Rlocation("lluvia/lluvia/cpp/core/test/nodes/test_node_library.zip").c_str(), 0);
     REQUIRE(status == true);
-    
+
     // Get and print information about each file in the archive.
     for (auto i = 0; i < (int)mz_zip_reader_get_num_files(&zip_archive); i++) {
         mz_zip_archive_file_stat file_stat;
@@ -74,13 +75,13 @@ TEST_CASE("ComparedContent", "test_miniz") {
         std::cout << "Comment      : " << file_stat.m_comment << std::endl;
         std::cout << "Uncompressed : " << file_stat.m_uncomp_size << std::endl;
         std::cout << "Compressed   : " << file_stat.m_comp_size << std::endl;
-        std::cout << "Is dir       : " << file_stat.m_is_directory << std::endl << std::endl;
+        std::cout << "Is dir       : " << file_stat.m_is_directory << std::endl
+                  << std::endl;
 
+        std::vector<uint8_t>& raw_data = std::string {file_stat.m_filename} == "nodes/Assign.lua" ? lua_file : spirv_file;
 
-        std::vector<uint8_t>& raw_data = std::string{file_stat.m_filename} == "nodes/Assign.lua"? lua_file : spirv_file;
-
-        auto uncomp_size = size_t{};
-        auto data = static_cast<uint8_t*>(mz_zip_reader_extract_file_to_heap(&zip_archive, file_stat.m_filename, &uncomp_size, 0));
+        auto uncomp_size = size_t {};
+        auto data        = static_cast<uint8_t*>(mz_zip_reader_extract_file_to_heap(&zip_archive, file_stat.m_filename, &uncomp_size, 0));
 
         REQUIRE(uncomp_size == raw_data.size());
         REQUIRE(std::memcmp(data, raw_data.data(), uncomp_size) == 0);

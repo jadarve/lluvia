@@ -24,37 +24,36 @@ class Object;
 class Buffer;
 class ImageView;
 
-
 class PortDescriptor {
 
 public:
-    PortDescriptor()                                  = default;
-    PortDescriptor(const PortDescriptor& descriptor)  = default;
-    PortDescriptor(PortDescriptor&& descriptor)       = default;
+    PortDescriptor()                                 = default;
+    PortDescriptor(const PortDescriptor& descriptor) = default;
+    PortDescriptor(PortDescriptor&& descriptor)      = default;
 
-    ~PortDescriptor()                                 = default;
+    ~PortDescriptor() = default;
 
     PortDescriptor(uint32_t binding,
-                   const std::string &name,
-                   ll::PortDirection direction,
-                   ll::PortType portType);
+        const std::string&  name,
+        ll::PortDirection   direction,
+        ll::PortType        portType);
 
     PortDescriptor& operator=(const PortDescriptor& descriptor) = default;
-    PortDescriptor& operator=(PortDescriptor&& descriptor) = default;
+    PortDescriptor& operator=(PortDescriptor&& descriptor)      = default;
 
-    uint32_t getBinding() const noexcept;
+    uint32_t           getBinding() const noexcept;
     const std::string& getName() const noexcept;
-    ll::PortDirection getDirection() const noexcept;
-    ll::PortType getPortType() const noexcept;
+    ll::PortDirection  getDirection() const noexcept;
+    ll::PortType       getPortType() const noexcept;
 
     // optional checks
     PortDescriptor& checkImageChannelCountIs(ll::ChannelCount channelCount) noexcept;
-    PortDescriptor &checkImageChannelTypeIs(ll::ChannelType channelType) noexcept;
-    PortDescriptor &checkImageChannelTypeIsAnyOf(std::vector<ll::ChannelType> channelTypes) noexcept;
-    PortDescriptor &checkImageViewNormalizedCoordinatesIs(bool normalizedCoordinates) noexcept;
+    PortDescriptor& checkImageChannelTypeIs(ll::ChannelType channelType) noexcept;
+    PortDescriptor& checkImageChannelTypeIsAnyOf(std::vector<ll::ChannelType> channelTypes) noexcept;
+    PortDescriptor& checkImageViewNormalizedCoordinatesIs(bool normalizedCoordinates) noexcept;
     /**
      * @brief Checks whether or not a given Object is a valid port.
-     * 
+     *
      * @param port The port to validate
      * @return (true, "") if the port is valid or (false, "some message") if the
      * port is not valid under the spec of this descriptor.
@@ -62,25 +61,24 @@ public:
     std::pair<bool, std::string> isValid(const std::shared_ptr<ll::Object>& port) const noexcept;
 
 private:
-
     // at the moment there is nothing to validate for a Buffer type port
-    std::pair<bool, std::string> validateBuffer(const std::shared_ptr<ll::Buffer> &port) const noexcept;
-    std::pair<bool, std::string> validateImageView(const std::shared_ptr<ll::ImageView> &port) const noexcept;
+    std::pair<bool, std::string> validateBuffer(const std::shared_ptr<ll::Buffer>& port) const noexcept;
+    std::pair<bool, std::string> validateImageView(const std::shared_ptr<ll::ImageView>& port) const noexcept;
 
     std::string toString() const noexcept;
 
     /**
     Binding number within shader program.
     */
-    uint32_t          m_binding   {0};
-    std::string       m_name      {};
+    uint32_t          m_binding {0};
+    std::string       m_name {};
     ll::PortDirection m_direction {ll::PortDirection::In};
-    ll::PortType      m_portType  {ll::PortType::Buffer};
+    ll::PortType      m_portType {ll::PortType::Buffer};
 
     // optional checks
-    std::optional<ll::ChannelCount> m_checkImageChannelCount            {};
+    std::optional<ll::ChannelCount>             m_checkImageChannelCount {};
     std::optional<std::vector<ll::ChannelType>> m_checkImageChannelType {};
-    std::optional<bool> m_checkImageViewNormalizedCoordinates           {};
+    std::optional<bool>                         m_checkImageViewNormalizedCoordinates {};
 };
 
 } // namespace ll

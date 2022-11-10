@@ -18,7 +18,8 @@ out_bgra : rgba8ui uimage2D.
 layout(binding = 0, rgba8ui) uniform uimage2D in_rgba;
 layout(binding = 1, rgba8ui) uniform uimage2D out_bgra;
 
-void main() {
+void main()
+{
 
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
     const ivec2 imgSize = imageSize(out_bgra);

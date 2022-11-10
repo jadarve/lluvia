@@ -27,10 +27,9 @@
 
 #include "lluvia/core/error.h"
 
-    namespace ll {
+namespace ll {
 
 class Session;
-
 
 class Interpreter {
 
@@ -41,8 +40,8 @@ public:
 
     ~Interpreter();
 
-    Interpreter& operator = (const Interpreter& interpreter) = delete;
-    Interpreter& operator = (Interpreter&& interpreter)      = default;
+    Interpreter& operator=(const Interpreter& interpreter) = delete;
+    Interpreter& operator=(Interpreter&& interpreter)      = default;
 
     void run(const std::string& code);
     void runFile(const std::string& filename);
@@ -51,38 +50,40 @@ public:
 
     void setActiveSession(ll::Session* session);
 
-    template<typename T, typename... Args>
-    T loadAndRun(const std::string&& code, Args&&... args) {
+    template <typename T, typename... Args>
+    T loadAndRun(const std::string&& code, Args&&... args)
+    {
 
         auto loadCode = load(std::forward<const std::string>(code));
 
-        auto scriptFunction = static_cast<sol::protected_function>(loadCode);
-        sol::protected_function_result scriptResult = scriptFunction(std::forward<Args>(args)...);
+        auto                           scriptFunction = static_cast<sol::protected_function>(loadCode);
+        sol::protected_function_result scriptResult   = scriptFunction(std::forward<Args>(args)...);
 
         if (!scriptResult.valid()) {
             const sol::error err = scriptResult;
 
             ll::throwSystemError(ll::ErrorCode::InterpreterError,
-                                 "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+                "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
         }
 
         // return static_cast<T>(scriptResult);
         return scriptResult.get<T>();
     }
 
-    template<typename... Args>
-    void loadAndRunNoReturn(const std::string&& code, Args&&... args) {
+    template <typename... Args>
+    void loadAndRunNoReturn(const std::string&& code, Args&&... args)
+    {
 
         auto loadCode = load(std::forward<const std::string>(code));
 
-        auto scriptFunction = static_cast<sol::protected_function>(loadCode);
-        sol::protected_function_result scriptResult = scriptFunction(std::forward<Args>(args)...);
+        auto                           scriptFunction = static_cast<sol::protected_function>(loadCode);
+        sol::protected_function_result scriptResult   = scriptFunction(std::forward<Args>(args)...);
 
         if (!scriptResult.valid()) {
             const sol::error err = scriptResult;
 
             ll::throwSystemError(ll::ErrorCode::InterpreterError,
-                                 "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
+                "error running code: " + sol::to_string(loadCode.status()) + "\n\t" + err.what());
         }
     }
 
@@ -91,7 +92,6 @@ private:
     sol::table                  m_lib;
     sol::table                  m_libImpl;
 };
-
 
 } // namespace ll;
 

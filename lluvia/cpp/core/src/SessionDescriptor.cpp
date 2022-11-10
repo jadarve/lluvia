@@ -9,22 +9,26 @@
 
 namespace ll {
 
-SessionDescriptor& SessionDescriptor::enableDebug(const bool enable) noexcept {
+SessionDescriptor& SessionDescriptor::enableDebug(const bool enable) noexcept
+{
     m_enableDebug = enable;
     return *this;
 }
 
-bool SessionDescriptor::isDebugEnabled() const noexcept {
+bool SessionDescriptor::isDebugEnabled() const noexcept
+{
     return m_enableDebug;
 }
 
-SessionDescriptor& SessionDescriptor::setDeviceDescriptor(const ll::DeviceDescriptor &deviceDescriptor) noexcept {
+SessionDescriptor& SessionDescriptor::setDeviceDescriptor(const ll::DeviceDescriptor& deviceDescriptor) noexcept
+{
 
     m_deviceDescriptor = deviceDescriptor;
     return *this;
 }
 
-const std::optional<ll::DeviceDescriptor>& SessionDescriptor::getDeviceDescriptor() const noexcept {
+const std::optional<ll::DeviceDescriptor>& SessionDescriptor::getDeviceDescriptor() const noexcept
+{
     return m_deviceDescriptor;
 }
 

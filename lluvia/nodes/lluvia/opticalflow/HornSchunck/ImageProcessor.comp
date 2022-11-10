@@ -6,11 +6,14 @@ layout(binding = 0, r8ui) uniform uimage2D in_gray;
 layout(binding = 1, r32f) uniform image2D in_gray_old;
 layout(binding = 2, rgba32f) uniform image2D out_image_params;
 
-layout(push_constant) uniform const_0 {
+layout(push_constant) uniform const_0
+{
     float alpha_square;
-} params;
+}
+params;
 
-void main() {
+void main()
+{
 
     const float alpha_square = params.alpha_square;
 
@@ -21,44 +24,43 @@ void main() {
     if (coords.x > imgSize.x || coords.y > imgSize.y) {
         return;
     }
-    
+
     ///////////////////////////////////////////////////////
     // Read image values in the 2x2 neighborhood
     ///////////////////////////////////////////////////////
 
     const bool rightBorder  = coords.x == imgSize.x - 1;
-    const bool bottomBorder = coords.y == imgSize.y -1;
+    const bool bottomBorder = coords.y == imgSize.y - 1;
 
     // current image
     const float img_00 = imageLoad(in_gray, coords).r / 255.0;
-    const float img_01 = bottomBorder?                img_00 : imageLoad(in_gray, coords + ivec2( 0, +1)).r / 255.0;
+    const float img_01 = bottomBorder ? img_00 : imageLoad(in_gray, coords + ivec2(0, +1)).r / 255.0;
 
-    const float img_10 = rightBorder?                 img_00 : imageLoad(in_gray, coords + ivec2(+1, +0)).r / 255.0;
-    const float img_11 = rightBorder || bottomBorder? img_00 : imageLoad(in_gray, coords + ivec2(+1, +1)).r / 255.0;
+    const float img_10 = rightBorder ? img_00 : imageLoad(in_gray, coords + ivec2(+1, +0)).r / 255.0;
+    const float img_11 = rightBorder || bottomBorder ? img_00 : imageLoad(in_gray, coords + ivec2(+1, +1)).r / 255.0;
 
     // old image
     // NOTE: as this kernel is reading old pixels in a neighborhood, I cannot store the new image value as part
     //       of this compute shader. Copy must be performed externally.
     const float img_old_00 = imageLoad(in_gray_old, coords).r;
-    const float img_old_01 = bottomBorder?                img_old_00 : imageLoad(in_gray_old, coords + ivec2( 0, +1)).r;
+    const float img_old_01 = bottomBorder ? img_old_00 : imageLoad(in_gray_old, coords + ivec2(0, +1)).r;
 
-    const float img_old_10 = rightBorder?                 img_old_00 : imageLoad(in_gray_old, coords + ivec2(+1, +0)).r;
-    const float img_old_11 = rightBorder || bottomBorder? img_old_00 : imageLoad(in_gray_old, coords + ivec2(+1, +1)).r;
-    
+    const float img_old_10 = rightBorder ? img_old_00 : imageLoad(in_gray_old, coords + ivec2(+1, +0)).r;
+    const float img_old_11 = rightBorder || bottomBorder ? img_old_00 : imageLoad(in_gray_old, coords + ivec2(+1, +1)).r;
 
     ///////////////////////////////////////////////////////
     // Normalized image gradient and smoothed output
     ///////////////////////////////////////////////////////
 
     // gradient values are normalized to [-1, 1]
-    const float grad_x = 0.25 * ( (img_10 - img_00) + (img_11 - img_01) + (img_old_10 - img_old_00) + (img_old_11 - img_old_01));
-    const float grad_y = 0.25 * ( (img_01 - img_00) + (img_11 - img_10) + (img_old_01 - img_old_00) + (img_old_11 - img_old_10));
+    const float grad_x = 0.25 * ((img_10 - img_00) + (img_11 - img_01) + (img_old_10 - img_old_00) + (img_old_11 - img_old_01));
+    const float grad_y = 0.25 * ((img_01 - img_00) + (img_11 - img_10) + (img_old_01 - img_old_00) + (img_old_11 - img_old_10));
 
     // Temporal difference
     const float imgTimeDifference = 0.25 * (img_00 + img_01 + img_10 + img_11 - img_old_00 - img_old_01 - img_old_10 - img_old_11);
 
     // Regularization
-    const float regularization = 1.0 / (alpha_square + grad_x*grad_x + grad_y*grad_y);
+    const float regularization = 1.0 / (alpha_square + grad_x * grad_x + grad_y * grad_y);
 
     // normalized image intensity in range [0, 1] and gradients in range [-1, 1]
     const vec4 outputValue = vec4(grad_x, grad_y, imgTimeDifference, regularization);

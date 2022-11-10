@@ -11,34 +11,30 @@
 #include "lluvia/core/enums/enums.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
+namespace ll {
 
-namespace ll
-{
-
-enum class ImageTiling : ll::enum_t
-{
+enum class ImageTiling : ll::enum_t {
     Optimal = static_cast<ll::enum_t>(vk::ImageTiling::eOptimal),
-    Linear = static_cast<ll::enum_t>(vk::ImageTiling::eLinear),
+    Linear  = static_cast<ll::enum_t>(vk::ImageTiling::eLinear),
 };
 
-namespace impl
-{
+namespace impl {
 
-constexpr ll::ImageTiling fromVkImageTiling(const vk::ImageTiling& flags) noexcept
-{
-    return ll::ImageTiling{static_cast<ll::enum_t>(flags)};
-}
+    constexpr ll::ImageTiling fromVkImageTiling(const vk::ImageTiling& flags) noexcept
+    {
+        return ll::ImageTiling {static_cast<ll::enum_t>(flags)};
+    }
 
-constexpr vk::ImageTiling toVkImageTiling(const ll::ImageTiling& flags) noexcept
-{
-    // return vk::ImageTiling{static_cast<VkFlags>(flags)};
-    return static_cast<vk::ImageTiling>(flags);
-}
+    constexpr vk::ImageTiling toVkImageTiling(const ll::ImageTiling& flags) noexcept
+    {
+        // return vk::ImageTiling{static_cast<VkFlags>(flags)};
+        return static_cast<vk::ImageTiling>(flags);
+    }
 
-constexpr const std::array<std::tuple<const char *, ll::ImageTiling>, 2> ImageTilingStrings{{
-    std::make_tuple("Optimal", ll::ImageTiling::Optimal),
-    std::make_tuple("Linear", ll::ImageTiling::Linear),
-}};
+    constexpr const std::array<std::tuple<const char*, ll::ImageTiling>, 2> ImageTilingStrings {{
+        std::make_tuple("Optimal", ll::ImageTiling::Optimal),
+        std::make_tuple("Linear", ll::ImageTiling::Linear),
+    }};
 
 } // namespace impl
 
@@ -51,11 +47,11 @@ constexpr const std::array<std::tuple<const char *, ll::ImageTiling>, 2> ImageTi
 
 @return     Returns the corresponding `std::string` in ll::impl::VkImageTilingStrings for the enum value.
 */
-template<typename T = std::string>
-inline T ImageTilingToString(ll::ImageTiling&& layout) noexcept {
+template <typename T = std::string>
+inline T ImageTilingToString(ll::ImageTiling&& layout) noexcept
+{
     return impl::enumToString<ll::ImageTiling, ll::impl::ImageTilingStrings.size(), ll::impl::ImageTilingStrings>(std::forward<ll::ImageTiling>(layout));
 }
-
 
 /**
 @brief      Converts from a string-like object to ll::ImageTiling.
@@ -72,8 +68,9 @@ corresponding enum value is returned. The comparison is case sensitive.
 
 @throws std::out_of_range if \p stringValue is not found in ll::impl::VkImageTilingStrings.
 */
-template<typename T>
-inline ll::ImageTiling stringToImageTiling(T&& stringValue) {
+template <typename T>
+inline ll::ImageTiling stringToImageTiling(T&& stringValue)
+{
     return impl::stringToEnum<ll::ImageTiling, T, ll::impl::ImageTilingStrings.size(), ll::impl::ImageTilingStrings>(std::forward<T>(stringValue));
 }
 

@@ -13,20 +13,20 @@
 
 #include "lluvia/core/vulkan/Device.h"
 
-
 namespace ll {
 
-ImageView::ImageView(const std::shared_ptr<ll::vulkan::Device>& device, 
-                     const std::shared_ptr<ll::Image>& image,
-                     const ll::ImageViewDescriptor& descriptor) :
-    m_descriptor {descriptor},
-    m_device {device},
-    m_image  {image} {
+ImageView::ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
+    const std::shared_ptr<ll::Image>&                           image,
+    const ll::ImageViewDescriptor&                              descriptor)
+    : m_descriptor {descriptor}
+    , m_device {device}
+    , m_image {image}
+{
 
     auto imageViewInfo = vk::ImageViewCreateInfo {}
-                            .setViewType(vk::ImageViewType::e2D)        // TODO: set according to image extend
-                            .setFormat(m_image->getDescriptor().getFormat())
-                            .setImage(m_image->m_vkImage);
+                             .setViewType(vk::ImageViewType::e2D) // TODO: set according to image extend
+                             .setFormat(m_image->getDescriptor().getFormat())
+                             .setImage(m_image->m_vkImage);
 
     // TODO
     imageViewInfo.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
@@ -35,7 +35,6 @@ ImageView::ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
     imageViewInfo.subresourceRange.setBaseArrayLayer(0);
     imageViewInfo.subresourceRange.setLayerCount(1);
 
-    
     m_vkImageView = m_device->get().createImageView(imageViewInfo);
 
     if (m_descriptor.isSampled()) {
@@ -43,8 +42,8 @@ ImageView::ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
     }
 }
 
-
-ImageView::~ImageView() {
+ImageView::~ImageView()
+{
 
     m_device->get().destroyImageView(m_vkImageView);
 
@@ -53,107 +52,108 @@ ImageView::~ImageView() {
     }
 }
 
-
-ll::ObjectType ImageView::getType() const noexcept {
+ll::ObjectType ImageView::getType() const noexcept
+{
     return ll::ObjectType::ImageView;
 }
 
-
-const std::shared_ptr<ll::Image>& ImageView::getImage() const noexcept {
+const std::shared_ptr<ll::Image>& ImageView::getImage() const noexcept
+{
     return m_image;
 }
 
-
-const std::shared_ptr<ll::Memory>& ImageView::getMemory() const noexcept {
+const std::shared_ptr<ll::Memory>& ImageView::getMemory() const noexcept
+{
     return m_image->getMemory();
 }
 
-
-ll::MemoryAllocationInfo ImageView::getAllocationInfo() const noexcept {
+ll::MemoryAllocationInfo ImageView::getAllocationInfo() const noexcept
+{
     return m_image->getAllocationInfo();
 }
 
-
-uint64_t ImageView::getSize() const noexcept {
+uint64_t ImageView::getSize() const noexcept
+{
     return m_image->getSize();
 }
 
-
-uint64_t ImageView::getMinimumSize() const noexcept {
+uint64_t ImageView::getMinimumSize() const noexcept
+{
     return m_image->getMinimumSize();
 }
 
-
-const ll::ImageDescriptor& ImageView::getImageDescriptor() const noexcept {
+const ll::ImageDescriptor& ImageView::getImageDescriptor() const noexcept
+{
     return m_image->getDescriptor();
 }
 
-
-ll::ImageUsageFlags ImageView::getUsageFlags() const noexcept {
+ll::ImageUsageFlags ImageView::getUsageFlags() const noexcept
+{
     return m_image->getUsageFlags();
 }
 
-
-uint32_t ImageView::getUsageFlagsUnsafe() const noexcept {
+uint32_t ImageView::getUsageFlagsUnsafe() const noexcept
+{
     return m_image->getUsageFlagsUnsafe();
 }
 
-
-ll::ImageLayout ImageView::getLayout() const noexcept {
+ll::ImageLayout ImageView::getLayout() const noexcept
+{
     return m_image->getLayout();
 }
 
-
-ll::ImageTiling ImageView::getTiling() const noexcept {
+ll::ImageTiling ImageView::getTiling() const noexcept
+{
     return m_image->getTiling();
 }
 
-
-ll::ChannelType ImageView::getChannelType() const noexcept {
+ll::ChannelType ImageView::getChannelType() const noexcept
+{
     return m_image->getChannelType();
 }
 
-
-uint64_t ImageView::getChannelTypeSize() const noexcept {
+uint64_t ImageView::getChannelTypeSize() const noexcept
+{
     return m_image->getChannelTypeSize();
 }
 
-
-uint32_t ImageView::getWidth() const noexcept {
+uint32_t ImageView::getWidth() const noexcept
+{
     return m_image->getWidth();
 }
 
-
-uint32_t ImageView::getHeight() const noexcept {
+uint32_t ImageView::getHeight() const noexcept
+{
     return m_image->getHeight();
 }
 
-
-uint32_t ImageView::getDepth() const noexcept {
+uint32_t ImageView::getDepth() const noexcept
+{
     return m_image->getDepth();
 }
 
-
-ll::vec3ui ImageView::getShape() const noexcept {
+ll::vec3ui ImageView::getShape() const noexcept
+{
     return m_image->getShape();
 }
 
-
-const ll::ImageViewDescriptor& ImageView::getDescriptor() const noexcept {
+const ll::ImageViewDescriptor& ImageView::getDescriptor() const noexcept
+{
     return m_descriptor;
 }
 
-
-void ImageView::changeImageLayout(const ll::ImageLayout newLayout) {
+void ImageView::changeImageLayout(const ll::ImageLayout newLayout)
+{
     m_image->changeImageLayout(newLayout);
 }
 
-
-void ImageView::clear() {
+void ImageView::clear()
+{
     m_image->clear();
 }
 
-void ImageView::copyTo(ll::ImageView& dst) {
+void ImageView::copyTo(ll::ImageView& dst)
+{
     m_image->copyTo(*dst.m_image);
 }
 

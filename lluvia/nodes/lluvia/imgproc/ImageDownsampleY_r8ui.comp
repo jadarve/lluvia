@@ -5,7 +5,8 @@
 layout(binding = 0, r8ui) uniform uimage2D in_gray;
 layout(binding = 1, r8ui) uniform uimage2D out_gray;
 
-void main() {
+void main()
+{
 
     // this coordinates are relative to out_gray size
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
@@ -16,14 +17,14 @@ void main() {
     }
 
     const bool topBorder    = coords.y == 0;
-    const bool bottomBorder = coords.y == imgSize.y -1;
+    const bool bottomBorder = coords.y == imgSize.y - 1;
 
-    const ivec2 inputImgCoords = ivec2(coords.x, 2*coords.y);
+    const ivec2 inputImgCoords = ivec2(coords.x, 2 * coords.y);
 
     const uint img_0 = imageLoad(in_gray, inputImgCoords).r;
 
-    const uint img_m = topBorder    ? img_0 : imageLoad(in_gray, inputImgCoords + ivec2(0, -1)).r;
-    const uint img_p = bottomBorder ? img_0 : imageLoad(in_gray, inputImgCoords + ivec2(0, +1)).r;    
+    const uint img_m = topBorder ? img_0 : imageLoad(in_gray, inputImgCoords + ivec2(0, -1)).r;
+    const uint img_p = bottomBorder ? img_0 : imageLoad(in_gray, inputImgCoords + ivec2(0, +1)).r;
 
     // this is equivalent to 0.5*img_0 + 0.25*(img_m + img_p)
     const uint filterValue = (img_0 >> 1) + ((img_m + img_p) >> 2);

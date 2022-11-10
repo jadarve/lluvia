@@ -17,21 +17,21 @@
 
 namespace ll {
 
-
 class PushConstants {
 
 public:
-    PushConstants()                                  = default;
-    PushConstants(const PushConstants&)              = default;
-    PushConstants(PushConstants&&)                   = default;
+    PushConstants()                     = default;
+    PushConstants(const PushConstants&) = default;
+    PushConstants(PushConstants&&)      = default;
 
-    ~PushConstants()                                 = default;
+    ~PushConstants() = default;
 
-    PushConstants& operator = (const PushConstants&) = default;
-    PushConstants& operator = (PushConstants&&)      = default;
+    PushConstants& operator=(const PushConstants&) = default;
+    PushConstants& operator=(PushConstants&&)      = default;
 
-    template<typename T>
-    void set(T&& data) {
+    template <typename T>
+    void set(T&& data)
+    {
 
         const auto dataSize = sizeof(data);
 
@@ -42,24 +42,26 @@ public:
         std::memcpy(static_cast<void*>(&m_data[0]), &data, dataSize);
     }
 
-    template<typename T>
-    T get() const {
-        
+    template <typename T>
+    T get() const
+    {
+
         if (sizeof(T) != m_data.size()) {
             ll::throwSystemError(ll::ErrorCode::PushConstantError,
-                "Size of receiving object must be equal to the size of internal buffer, expected: " 
-                + std::to_string(m_data.size())
-                + " got: " + std::to_string(sizeof(T)));
+                "Size of receiving object must be equal to the size of internal buffer, expected: "
+                    + std::to_string(m_data.size())
+                    + " got: " + std::to_string(sizeof(T)));
         }
 
-        T out{};
+        T out {};
         std::memcpy(&out, &m_data[0], sizeof(out));
 
         return out;
     }
 
-    template<typename T>
-    void push(T&& data) {
+    template <typename T>
+    void push(T&& data)
+    {
 
         const auto currentSize = getSize();
         if (currentSize == 0) {
@@ -76,22 +78,23 @@ public:
         m_data = std::move(new_data);
     }
 
-    
-    inline void* getPtr() const noexcept {
+    inline void* getPtr() const noexcept
+    {
         return (void*)(&m_data[0]);
     }
 
-    size_t getSize() const noexcept {
+    size_t getSize() const noexcept
+    {
         return m_data.size();
     }
 
-    void pushFloat(const float& d) {push(d);};
-    void setFloat(const float& d) {set(d);}
-    float getFloat() const {return get<float>();}
+    void  pushFloat(const float& d) { push(d); };
+    void  setFloat(const float& d) { set(d); }
+    float getFloat() const { return get<float>(); }
 
-    void pushInt32(const int32_t& d) {push(d);};
-    void setInt32(const int32_t &d) { set(d); }
-    int32_t getInt32() const { return get<int32_t>();}
+    void    pushInt32(const int32_t& d) { push(d); };
+    void    setInt32(const int32_t& d) { set(d); }
+    int32_t getInt32() const { return get<int32_t>(); }
 
 private:
     std::vector<uint8_t> m_data {};

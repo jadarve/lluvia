@@ -17,78 +17,77 @@
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
 
-TEST_CASE("Creation", "test_PushConstants") {
+TEST_CASE("Creation", "test_PushConstants")
+{
 
     constexpr auto a = int32_t {789456};
     constexpr auto b = float {3.1415f};
 
     using params = struct {
         int32_t a;
-        float b;
-
+        float   b;
     };
 
-    auto c = ll::PushConstants{};
+    auto c = ll::PushConstants {};
 
-    c.set(params{a, b});
+    c.set(params {a, b});
     REQUIRE(c.getSize() == 8);
 
     auto cOut = c.get<params>();
     REQUIRE(cOut.a == a);
     REQUIRE(cOut.b == b);
 
-    c.set(int32_t{456});
+    c.set(int32_t {456});
     REQUIRE(c.getSize() == 4);
 
     auto cInt = c.get<int32_t>();
     REQUIRE(cInt == 456);
 }
 
-
-TEST_CASE("BadSize", "test_PushConstants") {
+TEST_CASE("BadSize", "test_PushConstants")
+{
 
     using params = struct
     {
         int32_t a;
-        float b;
+        float   b;
     };
 
-    auto c = ll::PushConstants{};
-    c.set(params{0, 3.1415f});
+    auto c = ll::PushConstants {};
+    c.set(params {0, 3.1415f});
 
     // c contains a struct of size 8 bytes, while int32_t is only 4
     REQUIRE_THROWS_AS(c.get<int32_t>(), std::system_error);
-
 }
 
-
-TEST_CASE("ComputeNode", "test_PushConstants") {
+TEST_CASE("ComputeNode", "test_PushConstants")
+{
 
     auto runfiles = Runfiles::CreateForTest(nullptr);
     REQUIRE(runfiles != nullptr);
 
-    constexpr const float constantValue = 3.1415f;
-    constexpr const size_t N{32};
+    constexpr const float  constantValue = 3.1415f;
+    constexpr const size_t N {32};
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    auto constants = ll::PushConstants{};
+    auto constants = ll::PushConstants {};
     constants.setFloat(3.1415f);
 
     auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/pushConstants.comp.spv"));
 
-    auto desc = ll::ComputeNodeDescriptor{}
-        .setFunctionName("main")
-        .setProgram(program)
-        .setGridShape({N / 32, 1, 1})
-        .setLocalShape({32, 1, 1})
-        .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer})
-        .setPushConstants(constants);
-    
+    auto desc = ll::ComputeNodeDescriptor {}
+                    .setFunctionName("main")
+                    .setProgram(program)
+                    .setGridShape({N / 32, 1, 1})
+                    .setLocalShape({32, 1, 1})
+                    .addPort({0, "out_buffer", ll::PortDirection::Out, ll::PortType::Buffer})
+                    .setPushConstants(constants);
+
     auto node = session->createComputeNode(desc);
     REQUIRE(node != nullptr);
-    
+
     auto buffer = session->getHostMemory()->createBuffer(N * sizeof(constantValue));
     REQUIRE(buffer != nullptr);
 
@@ -121,20 +120,20 @@ TEST_CASE("Push2Constants", "test_PushConstants")
     auto runfiles = Runfiles::CreateForTest(nullptr);
     REQUIRE(runfiles != nullptr);
 
-    constexpr const float firstValue  = 3.1415f;
-    constexpr const float secondValue = 0.7896f;
-    constexpr const size_t N{32};
+    constexpr const float  firstValue  = 3.1415f;
+    constexpr const float  secondValue = 0.7896f;
+    constexpr const size_t N {32};
 
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    auto constants = ll::PushConstants{};
+    auto constants = ll::PushConstants {};
     constants.pushFloat(firstValue);
     constants.pushFloat(secondValue);
 
     auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/pushConstants2.comp.spv"));
 
-    auto desc = ll::ComputeNodeDescriptor{}
+    auto desc = ll::ComputeNodeDescriptor {}
                     .setFunctionName("main")
                     .setProgram(program)
                     .setGridShape({N / 32, 1, 1})
@@ -170,7 +169,6 @@ TEST_CASE("Push2Constants", "test_PushConstants")
             } else {
                 REQUIRE(bufferMap[i] == secondValue);
             }
-            
         }
     }
 

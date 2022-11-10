@@ -9,8 +9,8 @@
 #define LLUVIA_CORE_H_
 
 #include "core/memory/Memory.h"
-#include "core/memory/MemoryPropertyFlags.h"
 #include "core/memory/MemoryAllocationInfo.h"
+#include "core/memory/MemoryPropertyFlags.h"
 
 #include "core/buffer/Buffer.h"
 #include "core/buffer/BufferUsageFlags.h"
@@ -46,11 +46,11 @@
 
 #include "core/CommandBuffer.h"
 #include "core/Duration.h"
-#include "core/error.h"
 #include "core/FloatPrecision.h"
 #include "core/Interpreter.h"
 #include "core/Program.h"
 #include "core/Session.h"
+#include "core/error.h"
 #include "core/types.h"
 #include "core/utils.h"
 

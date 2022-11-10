@@ -8,13 +8,14 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include <memory>
 #include <iostream>
+#include <memory>
 
 #include "lluvia/core.h"
 #include "lluvia/core/vulkan/Instance.h"
 
-TEST_CASE("create_instance", "test_Instance") {
+TEST_CASE("create_instance", "test_Instance")
+{
 
     {
         auto instance = std::make_unique<ll::vulkan::Instance>(false);
@@ -25,8 +26,8 @@ TEST_CASE("create_instance", "test_Instance") {
     std::cout << "test_instance: finish" << std::endl;
 }
 
-
-TEST_CASE("create_instance_with_debug", "test_Instance") {
+TEST_CASE("create_instance_with_debug", "test_Instance")
+{
 
     auto instance = std::unique_ptr<ll::vulkan::Instance> {nullptr};
 

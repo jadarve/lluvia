@@ -11,9 +11,7 @@
 #include "lluvia/core/enums/enums.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-
-namespace ll
-{
+namespace ll {
 
 /**
 @brief      Class for port direction.
@@ -23,21 +21,17 @@ enum class PortDirection : ll::enum_t {
     Out = 1  /**< The port is an output to this node. */
 };
 
-namespace impl
-{
+namespace impl {
 
     /**
      @brief Port direction string values used for converting ll::PortDirection to std::string and vice-versa.
 
      @sa ll::PortDirection enum values for this array.
     */
-    constexpr const std::array<std::tuple<const char*, ll::PortDirection>, 2> PortDirectionStrings {{
-        std::make_tuple("In"  , ll::PortDirection::In),
-        std::make_tuple("Out" , ll::PortDirection::Out)
-    }};
+    constexpr const std::array<std::tuple<const char*, ll::PortDirection>, 2> PortDirectionStrings {{std::make_tuple("In", ll::PortDirection::In),
+        std::make_tuple("Out", ll::PortDirection::Out)}};
 
 } // namespace impl
-
 
 } // namespace ll
 

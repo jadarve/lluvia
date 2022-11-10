@@ -14,58 +14,66 @@
 namespace ll {
 
 PortDescriptor::PortDescriptor(uint32_t binding,
-                               const std::string& name,
-                               ll::PortDirection direction,
-                               ll::PortType portType) : 
-    m_binding   {binding},
-    m_name      {name},
-    m_direction {direction},
-    m_portType  {portType} {
-
+    const std::string&                  name,
+    ll::PortDirection                   direction,
+    ll::PortType                        portType)
+    : m_binding {binding}
+    , m_name {name}
+    , m_direction {direction}
+    , m_portType {portType}
+{
 }
 
-uint32_t PortDescriptor::getBinding() const noexcept {
+uint32_t PortDescriptor::getBinding() const noexcept
+{
     return m_binding;
 }
 
-const std::string& PortDescriptor::getName() const noexcept {
+const std::string& PortDescriptor::getName() const noexcept
+{
     return m_name;
 }
 
-ll::PortDirection PortDescriptor::getDirection() const noexcept {
+ll::PortDirection PortDescriptor::getDirection() const noexcept
+{
     return m_direction;
 }
 
-ll::PortType PortDescriptor::getPortType() const noexcept {
+ll::PortType PortDescriptor::getPortType() const noexcept
+{
     return m_portType;
 }
 
-PortDescriptor& PortDescriptor::checkImageChannelCountIs(ll::ChannelCount channelCount) noexcept {
+PortDescriptor& PortDescriptor::checkImageChannelCountIs(ll::ChannelCount channelCount) noexcept
+{
 
-    m_checkImageChannelCount = std::optional<ll::ChannelCount>{channelCount};
+    m_checkImageChannelCount = std::optional<ll::ChannelCount> {channelCount};
     return *this;
 }
 
-PortDescriptor& PortDescriptor::checkImageChannelTypeIs(ll::ChannelType channelType) noexcept {
+PortDescriptor& PortDescriptor::checkImageChannelTypeIs(ll::ChannelType channelType) noexcept
+{
 
     m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>> {{channelType}};
     return *this;
 }
 
-PortDescriptor& PortDescriptor::checkImageChannelTypeIsAnyOf(std::vector<ll::ChannelType> channelTypes) noexcept {
+PortDescriptor& PortDescriptor::checkImageChannelTypeIsAnyOf(std::vector<ll::ChannelType> channelTypes) noexcept
+{
 
-    m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>>{channelTypes};
+    m_checkImageChannelType = std::optional<std::vector<ll::ChannelType>> {channelTypes};
     return *this;
 }
 
-PortDescriptor& PortDescriptor::checkImageViewNormalizedCoordinatesIs(bool normalizedCoordinates) noexcept {
+PortDescriptor& PortDescriptor::checkImageViewNormalizedCoordinatesIs(bool normalizedCoordinates) noexcept
+{
 
     m_checkImageViewNormalizedCoordinates = std::optional<bool> {normalizedCoordinates};
     return *this;
 }
 
-
-std::pair<bool, std::string> PortDescriptor::isValid(const std::shared_ptr<ll::Object> &port) const noexcept {
+std::pair<bool, std::string> PortDescriptor::isValid(const std::shared_ptr<ll::Object>& port) const noexcept
+{
 
     if (port == nullptr) {
         return std::make_pair(false, "null port");
@@ -75,7 +83,7 @@ std::pair<bool, std::string> PortDescriptor::isValid(const std::shared_ptr<ll::O
 
     case ll::ObjectType::Buffer:
         return validateBuffer(std::static_pointer_cast<ll::Buffer>(port));
-    
+
     case ll::ObjectType::ImageView:
         return validateImageView(std::static_pointer_cast<ll::ImageView>(port));
 
@@ -83,10 +91,11 @@ std::pair<bool, std::string> PortDescriptor::isValid(const std::shared_ptr<ll::O
         return std::make_pair(false, "Unsupported object type: " + ll::objectTypeToString(port->getType()));
     }
 
-    return std::make_pair(true, std::string{});
+    return std::make_pair(true, std::string {});
 }
 
-std::pair<bool, std::string> PortDescriptor::validateBuffer(const std::shared_ptr<ll::Buffer> &port) const noexcept {
+std::pair<bool, std::string> PortDescriptor::validateBuffer(const std::shared_ptr<ll::Buffer>& port) const noexcept
+{
 
     if (m_portType != ll::PortType::Buffer && m_portType != ll::PortType::UniformBuffer) {
         return std::make_pair(false, "Port " + toString() + " cannot receive object of type ll::PortType::Buffer");
@@ -95,16 +104,17 @@ std::pair<bool, std::string> PortDescriptor::validateBuffer(const std::shared_pt
     if (m_portType == ll::PortType::UniformBuffer) {
 
         // check that the buffer contains UniformBuffer in its usage flags
-        if (static_cast<ll::enum_t>(port->getUsageFlags() & ll::BufferUsageFlagBits::UniformBuffer) == 0 ) {
+        if (static_cast<ll::enum_t>(port->getUsageFlags() & ll::BufferUsageFlagBits::UniformBuffer) == 0) {
             return std::make_pair(false, "Port " + toString() + " has received a "
-                "buffer object without ll::BufferUsageFlagBits::UniformBuffer usage flag");
+                                                                "buffer object without ll::BufferUsageFlagBits::UniformBuffer usage flag");
         }
     }
 
-    return std::make_pair(true, std::string{});
+    return std::make_pair(true, std::string {});
 }
 
-std::pair<bool, std::string> PortDescriptor::validateImageView(const std::shared_ptr<ll::ImageView> &port) const noexcept {
+std::pair<bool, std::string> PortDescriptor::validateImageView(const std::shared_ptr<ll::ImageView>& port) const noexcept
+{
 
     const auto isSampledImageView = port->getDescriptor().isSampled();
 
@@ -126,12 +136,9 @@ std::pair<bool, std::string> PortDescriptor::validateImageView(const std::shared
     // Optional checks
     ///////////////////////////////////////////////////////
 
-    if (m_checkImageChannelCount.has_value() &&
-        m_checkImageChannelCount.value() != port->getChannelCount()) {
-        
-        return std::make_pair(false, "Port " + toString() + " invalid image channel count, expecting: " +
-            std::to_string(static_cast<enum_t>(m_checkImageChannelCount.value())) + 
-            " got: " + std::to_string(static_cast<enum_t>(port->getChannelCount())));
+    if (m_checkImageChannelCount.has_value() && m_checkImageChannelCount.value() != port->getChannelCount()) {
+
+        return std::make_pair(false, "Port " + toString() + " invalid image channel count, expecting: " + std::to_string(static_cast<enum_t>(m_checkImageChannelCount.value())) + " got: " + std::to_string(static_cast<enum_t>(port->getChannelCount())));
     }
 
     if (m_checkImageChannelType.has_value()) {
@@ -139,34 +146,28 @@ std::pair<bool, std::string> PortDescriptor::validateImageView(const std::shared
 
         if (std::find(validChannelTypes.cbegin(), validChannelTypes.cend(), port->getChannelType()) == validChannelTypes.cend()) {
 
-            auto cTypeString = std::string{};
+            auto cTypeString = std::string {};
             for (const auto& cType : validChannelTypes) {
                 cTypeString += ll::channelTypeToString(cType) + ", ";
             }
 
-            return std::make_pair(false, "Port " + toString() + " invalid image channel type," + 
-                " expecting any of: [" + cTypeString + "]" +
-                " got: " + ll::channelTypeToString(port->getChannelType()));
+            return std::make_pair(false, "Port " + toString() + " invalid image channel type," + " expecting any of: [" + cTypeString + "]" + " got: " + ll::channelTypeToString(port->getChannelType()));
         }
     }
 
-    if (m_checkImageViewNormalizedCoordinates.has_value() &&
-        m_checkImageViewNormalizedCoordinates.value() != port->getDescriptor().isNormalizedCoordinates()) {
-        
-        return std::make_pair(false, "Port " + toString() + " invalid image view normalized coordinates flag," +
-            " expecting: " + std::to_string(m_checkImageViewNormalizedCoordinates.value()) +
-            " got: " + std::to_string(port->getDescriptor().isNormalizedCoordinates())
-            );
+    if (m_checkImageViewNormalizedCoordinates.has_value() && m_checkImageViewNormalizedCoordinates.value() != port->getDescriptor().isNormalizedCoordinates()) {
+
+        return std::make_pair(false, "Port " + toString() + " invalid image view normalized coordinates flag," + " expecting: " + std::to_string(m_checkImageViewNormalizedCoordinates.value()) + " got: " + std::to_string(port->getDescriptor().isNormalizedCoordinates()));
     }
 
-
-    return std::make_pair(true, std::string{});
+    return std::make_pair(true, std::string {});
 }
 
-std::string PortDescriptor::toString() const noexcept {
-    return "{binding: " + std::to_string(m_binding) 
-        + ", name: " + m_name
-        + ", portType: ll::PortType::" + ll::portTypeToString(m_portType) + "}";
+std::string PortDescriptor::toString() const noexcept
+{
+    return "{binding: " + std::to_string(m_binding)
+           + ", name: " + m_name
+           + ", portType: ll::PortType::" + ll::portTypeToString(m_portType) + "}";
 }
 
 } // namespace ll

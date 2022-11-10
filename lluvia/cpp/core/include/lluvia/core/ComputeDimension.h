@@ -26,11 +26,9 @@ enum class ComputeDimension : ll::enum_t {
 
 namespace impl {
 
-    constexpr const std::array<std::tuple<const char*, ll::ComputeDimension>, 3> ComputeDimensionStrings {{
-            std::make_tuple("D1", ll::ComputeDimension::D1),
-            std::make_tuple("D2", ll::ComputeDimension::D2),
-            std::make_tuple("D3", ll::ComputeDimension::D3)
-    }};
+    constexpr const std::array<std::tuple<const char*, ll::ComputeDimension>, 3> ComputeDimensionStrings {{std::make_tuple("D1", ll::ComputeDimension::D1),
+        std::make_tuple("D2", ll::ComputeDimension::D2),
+        std::make_tuple("D3", ll::ComputeDimension::D3)}};
 }
 
 } // namespace ll

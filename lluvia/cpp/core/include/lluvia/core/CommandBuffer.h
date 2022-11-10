@@ -13,12 +13,11 @@
 #include "lluvia/core/image/ImageLayout.h"
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-
 namespace ll {
 
 namespace vulkan {
-class Device;
-class CommandPool;
+    class Device;
+    class CommandPool;
 } // namespace vulkan
 
 class Buffer;
@@ -28,7 +27,6 @@ class Duration;
 class Image;
 class ImageView;
 class Session;
-
 
 /**
 @brief      Class for command buffer.
@@ -41,7 +39,7 @@ ll::CommandBuffers are created through ll::Session objects.
 
 @code
     auto session = ll::Session::create();
-    
+
     auto cmdBuffer = session->createCommandBuffer();
     cmdBuffer->begin();
 
@@ -65,17 +63,16 @@ ll::CommandBuffers are created through ll::Session objects.
 class CommandBuffer {
 
 public:
-    CommandBuffer()                                 = delete;
-    CommandBuffer(const CommandBuffer& cmdBuffer)   = delete;
-    CommandBuffer(CommandBuffer&& cmdBuffer)        = delete;
+    CommandBuffer()                               = delete;
+    CommandBuffer(const CommandBuffer& cmdBuffer) = delete;
+    CommandBuffer(CommandBuffer&& cmdBuffer)      = delete;
 
     CommandBuffer(const std::shared_ptr<ll::vulkan::Device>& device);
 
     ~CommandBuffer();
 
-    CommandBuffer& operator = (const CommandBuffer& cmdBuffer) = delete;
-    CommandBuffer& operator = (CommandBuffer&& cmdBuffer)      = delete;
-
+    CommandBuffer& operator=(const CommandBuffer& cmdBuffer) = delete;
+    CommandBuffer& operator=(CommandBuffer&& cmdBuffer)      = delete;
 
     const vk::CommandBuffer& getVkCommandBuffer() const noexcept;
 
@@ -87,7 +84,6 @@ public:
     */
     void begin();
 
-
     /**
     @brief      ends recording.
 
@@ -96,10 +92,9 @@ public:
     */
     void end();
 
-
     /**
     @brief      Records running a ll::ComputeNode
-    
+
     @param[in]  node  The node
     */
     void run(const ll::ComputeNode& node);
@@ -115,7 +110,7 @@ public:
     @brief      Copies \p src buffer into \p dst.
 
     The parameters must satisfy `dst.getSize() >= src.getSize()`.
-    
+
     @param[in]  src   The source buffer.
     @param[in]  dst   The destination buffer.
 
@@ -123,37 +118,33 @@ public:
     */
     void copyBuffer(const ll::Buffer& src, const ll::Buffer& dst);
 
-
     /**
     @brief      Copies the content of \p src buffer into \p dst image.
 
     **TODO:** assert image size.
-    
+
     @param[in]  src   The source
     @param[in]  dst   The destination
     */
     void copyBufferToImage(const ll::Buffer& src, const ll::Image& dst);
 
-
     /**
     @brief      Copies the content of \p src image into \p dst buffer.
 
     *TODO:* assert buffer size.
-    
+
     @param[in]  src   The source
     @param[in]  dst   The destination
     */
     void copyImageToBuffer(const ll::Image& src, const ll::Buffer& dst);
 
-
     /**
     @brief      Copies the content of \p src image into \p dst image.
-    
+
     @param[in]  src   The source
     @param[in]  dst   The destination
     */
     void copyImageToImage(const ll::Image& src, const ll::Image& dst);
-
 
     /**
     @brief      Change \p image layout.
@@ -164,7 +155,7 @@ public:
 
     This is necessary to keep track of the current image layout of \p image parameter
     after this call.
-    
+
     @param      image      The image
     @param[in]  newLayout  The new layout
     */
@@ -179,12 +170,11 @@ public:
 
     This is necessary to keep track of the current image layout of \p image parameter
     after this call.
-    
+
     @param      imageView  The image view.
     @param[in]  newLayout  The new layout
     */
     void changeImageLayout(ll::ImageView& imageView, const ll::ImageLayout newLayout);
-
 
     /**
     @brief      Adds a memory barrier.
@@ -200,14 +190,14 @@ public:
 
     /**
     @brief      Starts recording the elapsed time between two points.
-    
+
     @param      duration  The duration object.
     */
     void durationStart(ll::Duration& duration);
 
     /**
     @brief      Stops recording the elapsed time between two points.
-    
+
     @param      duration  The duration object.
     */
     void durationEnd(ll::Duration& duration);
@@ -217,7 +207,6 @@ private:
 
     std::shared_ptr<ll::vulkan::Device> m_device;
 };
-
 
 } // namespace ll
 

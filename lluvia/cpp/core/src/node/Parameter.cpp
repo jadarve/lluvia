@@ -2,13 +2,13 @@
 
 namespace ll {
 
-
-Parameter::Parameter(ParameterType type):
-    m_type {type} {
+Parameter::Parameter(ParameterType type)
+    : m_type {type}
+{
 }
 
-
-ll::ParameterType Parameter::getType() const noexcept {
+ll::ParameterType Parameter::getType() const noexcept
+{
     return m_type;
 }
 

@@ -1,21 +1,22 @@
 #include "lluvia/core/vulkan/Device.h"
 
-#include "lluvia/core/error.h"
-#include "lluvia/core/image/ImageUsageFlags.h"
-#include "lluvia/core/image/ImageTiling.h"
-#include "lluvia/core/image/ImageDescriptor.h"
 #include "lluvia/core/CommandBuffer.h"
+#include "lluvia/core/error.h"
+#include "lluvia/core/image/ImageDescriptor.h"
+#include "lluvia/core/image/ImageTiling.h"
+#include "lluvia/core/image/ImageUsageFlags.h"
 
 namespace ll::vulkan {
 
-Device::Device(const vk::Device& device,
-               const vk::PhysicalDevice& physicalDevice,
-               const uint32_t computeQueueFamilyIndex,
-               const std::shared_ptr<ll::vulkan::Instance>& instance):
-    m_device {device},
-    m_physicalDevice {physicalDevice},
-    m_computeQueueFamilyIndex {computeQueueFamilyIndex},
-    m_instance {instance} {
+Device::Device(const vk::Device&                 device,
+    const vk::PhysicalDevice&                    physicalDevice,
+    const uint32_t                               computeQueueFamilyIndex,
+    const std::shared_ptr<ll::vulkan::Instance>& instance)
+    : m_device {device}
+    , m_physicalDevice {physicalDevice}
+    , m_computeQueueFamilyIndex {computeQueueFamilyIndex}
+    , m_instance {instance}
+{
 
     m_computeQueueFamilyIndex = getComputeFamilyQueueIndex();
 
@@ -23,42 +24,43 @@ Device::Device(const vk::Device& device,
                                 .setQueueFamilyIndex(m_computeQueueFamilyIndex);
 
     m_commandPool = m_device.createCommandPool(createInfo);
-    m_queue = m_device.getQueue(m_computeQueueFamilyIndex, 0);
+    m_queue       = m_device.getQueue(m_computeQueueFamilyIndex, 0);
 }
 
-
-Device::~Device() {
+Device::~Device()
+{
     m_device.destroyCommandPool(m_commandPool);
     m_device.destroy();
 }
 
-
-vk::Device& Device::get() noexcept {
+vk::Device& Device::get() noexcept
+{
     return m_device;
 }
 
-
-vk::PhysicalDevice& Device::getPhysicalDevice() noexcept {
+vk::PhysicalDevice& Device::getPhysicalDevice() noexcept
+{
     return m_physicalDevice;
 }
 
-
-vk::CommandPool& Device::getCommandPool() noexcept {
+vk::CommandPool& Device::getCommandPool() noexcept
+{
     return m_commandPool;
 }
 
-
-uint32_t Device::getComputeFamilyQueueIndex() const noexcept {
+uint32_t Device::getComputeFamilyQueueIndex() const noexcept
+{
     return m_computeQueueFamilyIndex;
 }
 
-bool Device::isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) const noexcept {
+bool Device::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept
+{
 
     auto formatProperties = vk::ImageFormatProperties {};
 
     auto result = m_physicalDevice.getImageFormatProperties(descriptor.getFormat(),
-        descriptor.getImageType(), 
-        ll::impl::toVkImageTiling(descriptor.getTiling()), 
+        descriptor.getImageType(),
+        ll::impl::toVkImageTiling(descriptor.getTiling()),
         ll::impl::toVkImageUsageFlags(descriptor.getUsageFlags()),
         vk::ImageCreateFlags {},
         &formatProperties);
@@ -68,29 +70,26 @@ bool Device::isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) c
     }
 
     // check extend
-    return !(descriptor.getWidth() > formatProperties.maxExtent.width ||
-             descriptor.getHeight() > formatProperties.maxExtent.height ||
-             descriptor.getDepth() > formatProperties.maxExtent.depth);
-
+    return !(descriptor.getWidth() > formatProperties.maxExtent.width || descriptor.getHeight() > formatProperties.maxExtent.height || descriptor.getDepth() > formatProperties.maxExtent.depth);
 }
 
-
-std::unique_ptr<ll::CommandBuffer> Device::createCommandBuffer() {
+std::unique_ptr<ll::CommandBuffer> Device::createCommandBuffer()
+{
     return std::make_unique<ll::CommandBuffer>(shared_from_this());
 }
 
-
-void Device::run(const ll::CommandBuffer& cmdBuffer) {
+void Device::run(const ll::CommandBuffer& cmdBuffer)
+{
 
     vk::SubmitInfo submitInfo = vk::SubmitInfo()
-        .setCommandBufferCount(1)
-        .setPCommandBuffers(&cmdBuffer.getVkCommandBuffer());
+                                    .setCommandBufferCount(1)
+                                    .setPCommandBuffers(&cmdBuffer.getVkCommandBuffer());
 
     auto result = m_queue.submit(1, &submitInfo, nullptr);
 
     ll::throwSystemErrorIf(result != vk::Result::eSuccess,
-            ll::ErrorCode::VulkanError,
-            "error submitting command buffer for execution.");
+        ll::ErrorCode::VulkanError,
+        "error submitting command buffer for execution.");
 
     m_queue.waitIdle();
 }

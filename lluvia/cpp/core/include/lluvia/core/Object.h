@@ -27,11 +27,10 @@ Each value represent one of the ll::Object child classes.
 @sa ll::impl::ObjectTypeStrings string values for this enum.
 */
 enum class ObjectType : ll::enum_t {
-    Buffer     = 0,     /**< value for ll::Buffer. */
-    Image      = 1,     /**< value for ll::Image. */
-    ImageView  = 2      /**< value for ll::ImageView. */
+    Buffer    = 0, /**< value for ll::Buffer. */
+    Image     = 1, /**< value for ll::Image. */
+    ImageView = 2  /**< value for ll::ImageView. */
 };
-
 
 namespace impl {
 
@@ -41,28 +40,27 @@ namespace impl {
     @sa ll::ObjectType enum values for this array.
     */
     constexpr const std::array<std::tuple<const char*, ll::ObjectType>, 3> ObjectTypeStrings {{
-        std::make_tuple("Buffer"    , ll::ObjectType::Buffer),
-        std::make_tuple("Image"     , ll::ObjectType::Image),
-        std::make_tuple("ImageView" , ll::ObjectType::ImageView),
+        std::make_tuple("Buffer", ll::ObjectType::Buffer),
+        std::make_tuple("Image", ll::ObjectType::Image),
+        std::make_tuple("ImageView", ll::ObjectType::ImageView),
     }};
 
 } // namespace impl
 
-
 /**
 @brief      Converts from ll::ObjectType enum value to std::string.
 
-@param[in]  value      
+@param[in]  value
 
 @tparam     T          function return type. Defaults to std::string.
 
 @return     Returns the corresponding `std::string` in ll::impl::ObjectTypeStrings for the enum value.
 */
-template<typename T = std::string>
-inline T objectTypeToString(ll::ObjectType&& value) noexcept {
+template <typename T = std::string>
+inline T objectTypeToString(ll::ObjectType&& value) noexcept
+{
     return impl::enumToString<ll::ObjectType, ll::impl::ObjectTypeStrings.size(), ll::impl::ObjectTypeStrings>(std::forward<ll::ObjectType>(value));
 }
-
 
 /**
 @brief      Converts from a string-like object to ll::ObjectType enum.
@@ -76,14 +74,14 @@ corresponding enum value is returned. The comparison is case sensitive.
 @tparam     T            \p stringValue type. \p T must satisfies `std::is_convertible<T, std::string>()`
 
 @return     ll::ObjectType value corresponding to stringValue
- 
+
 @throws std::out_of_range if \p stringValue is not found in ll::impl::ObjectTypeStrings.
 */
-template<typename T>
-inline ll::ObjectType stringToObjectType(T&& stringValue) {
+template <typename T>
+inline ll::ObjectType stringToObjectType(T&& stringValue)
+{
     return impl::stringToEnum<ll::ObjectType, T, ll::impl::ObjectTypeStrings.size(), ll::impl::ObjectTypeStrings>(std::forward<T>(stringValue));
 }
-
 
 /**
 @brief Base class for all types that can be used in computer shaders.
@@ -91,7 +89,7 @@ inline ll::ObjectType stringToObjectType(T&& stringValue) {
 Handling of objects in the engine is done through instances allocated in the heap and referenced
 through pointers. The reason is that normal object operations such as copying or moving are hard
 to define for classes that contain some Vulkan resource such as buffers or images.
- 
+
 */
 class Object {
 
@@ -102,8 +100,7 @@ public:
     This constructor needs to be kept in order to construct the child classes. However, this class
     has no members to initialize.
     */
-    Object()              = default;
-
+    Object() = default;
 
     /**
     @brief      Copy constructor.
@@ -114,33 +111,29 @@ public:
     */
     Object(const Object&) = delete;
 
-
     /**
     @brief      Move constructor.
 
     The move constructor is deleted intentionally.
     Moving objects that handle Vulkan resources is not well defined.
     */
-    Object(Object&&)      = delete;
+    Object(Object&&) = delete;
 
-
-    virtual ~Object()     = default;
+    virtual ~Object() = default;
 
     /**
     @brief      Copy assignment.
 
     Copy assignment is not allowed for Object instances.
     */
-    Object& operator = (const Object&) = delete;
-
+    Object& operator=(const Object&) = delete;
 
     /**
     @brief      Move assignment.
 
     Move assignment is not allowed for Object instances.
     */
-    Object& operator = (Object&&)      = delete;
-
+    Object& operator=(Object&&) = delete;
 
     /**
     @brief      Gets the object type.
@@ -155,12 +148,11 @@ public:
         auto bufferPtr = static_cast<ll::Buffer*>(ptr);
     }
     @endcode
-    
+
     @return     The object type.
     */
     virtual ll::ObjectType getType() const noexcept = 0;
 };
-
 
 } // namespace ll
 

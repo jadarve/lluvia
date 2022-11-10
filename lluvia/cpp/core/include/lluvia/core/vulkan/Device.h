@@ -12,58 +12,53 @@
 
 #include "lluvia/core/vulkan/vulkan.hpp"
 
-
 namespace ll {
 
 class ImageDescriptor;
 class CommandBuffer;
 
-
 namespace vulkan {
 
-class Instance;
+    class Instance;
 
-class Device : public std::enable_shared_from_this<ll::vulkan::Device> {
+    class Device : public std::enable_shared_from_this<ll::vulkan::Device> {
 
-public:
-    Device() = delete;
-    Device(const Device& device) = delete;
-    Device(Device&& device) = delete;
+    public:
+        Device()                     = delete;
+        Device(const Device& device) = delete;
+        Device(Device&& device)      = delete;
 
-    Device(const vk::Device& device,
-           const vk::PhysicalDevice& physicalDevice,
-           const uint32_t computeQueueFamilyIndex,
-           const std::shared_ptr<ll::vulkan::Instance>& instance);
-    ~Device();
+        Device(const vk::Device&                         device,
+            const vk::PhysicalDevice&                    physicalDevice,
+            const uint32_t                               computeQueueFamilyIndex,
+            const std::shared_ptr<ll::vulkan::Instance>& instance);
+        ~Device();
 
-    Device& operator = (const Device& device) = delete;
-    Device& operator = (Device&& device) = delete;
+        Device& operator=(const Device& device) = delete;
+        Device& operator=(Device&& device)      = delete;
 
-    vk::Device& get() noexcept;
-    vk::PhysicalDevice& getPhysicalDevice() noexcept;
-    vk::CommandPool& getCommandPool() noexcept;
-    uint32_t getComputeFamilyQueueIndex() const noexcept;
+        vk::Device&         get() noexcept;
+        vk::PhysicalDevice& getPhysicalDevice() noexcept;
+        vk::CommandPool&    getCommandPool() noexcept;
+        uint32_t            getComputeFamilyQueueIndex() const noexcept;
 
+        bool isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept;
 
-    bool isImageDescriptorSupported(const ll::ImageDescriptor &descriptor) const noexcept;
+        std::unique_ptr<ll::CommandBuffer> createCommandBuffer();
 
-    std::unique_ptr<ll::CommandBuffer> createCommandBuffer();
+        void run(const ll::CommandBuffer& cmdBuffer);
 
-    void run(const ll::CommandBuffer& cmdBuffer);
-    
+    private:
+        vk::Device         m_device;
+        vk::PhysicalDevice m_physicalDevice;
+        vk::CommandPool    m_commandPool;
 
-private:
-    vk::Device         m_device;
-    vk::PhysicalDevice m_physicalDevice;
-    vk::CommandPool    m_commandPool;
+        vk::Queue m_queue;
+        uint32_t  m_computeQueueFamilyIndex;
 
-    vk::Queue          m_queue;
-    uint32_t           m_computeQueueFamilyIndex;
-
-    // reference to the instance this device was created from
-    std::shared_ptr<ll::vulkan::Instance> m_instance;
-};
-
+        // reference to the instance this device was created from
+        std::shared_ptr<ll::vulkan::Instance> m_instance;
+    };
 
 } // namespace vulkan
 } // namespace ll

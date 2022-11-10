@@ -2,10 +2,10 @@
 
 #include <lluvia/core.glsl>
 
-layout(binding = 0, r32f)  uniform image2D in_gray;
+layout(binding = 0, r32f) uniform image2D in_gray;
 layout(binding = 1, rg32f) uniform image2D in_gradient;
 layout(binding = 2, rg32f) uniform image2D in_delta_flow;
-layout(binding = 3, r32f)  uniform image2D in_gray_old;
+layout(binding = 3, r32f) uniform image2D in_gray_old;
 
 // input flow from level above. This has half the resolution of the other parameters.
 layout(binding = 4) uniform sampler2D in_flow;
@@ -14,15 +14,17 @@ layout(binding = 5, r32f) uniform image2D out_gray;
 layout(binding = 6, rg32f) uniform image2D out_flow;
 layout(binding = 7, rg32f) uniform image2D out_delta_flow;
 
-layout(push_constant) uniform const_0 {
+layout(push_constant) uniform const_0
+{
     float gamma;
     float max_flow;
-} params;
+}
+params;
 
+void main()
+{
 
-void main() {
-
-    const float gamma = params.gamma;
+    const float gamma    = params.gamma;
     const float max_flow = params.max_flow;
 
     const ivec2 coords  = LL_GLOBAL_COORDS_2D;
@@ -32,9 +34,9 @@ void main() {
         return;
     }
 
-    const float gray = imageLoad(in_gray, coords).r;
-    const float gray_old = imageLoad(in_gray_old, coords).r;
-    const vec2 gray_gradient = imageLoad(in_gradient, coords).xy;
+    const float gray          = imageLoad(in_gray, coords).r;
+    const float gray_old      = imageLoad(in_gray_old, coords).r;
+    const vec2  gray_gradient = imageLoad(in_gradient, coords).xy;
 
     const vec2 delta_flow_old = imageLoad(in_delta_flow, coords).xy;
 
@@ -43,31 +45,30 @@ void main() {
     //#################################
     // temporal derivative
     const float gray_dt = gray_old - gray;
-    
+
     // squared gradient
     const vec2 grad_square = gray_gradient * gray_gradient;
 
     // Adjunt matrix
     const float diag_off = gray_gradient.x * gray_gradient.y;
-    const mat2 M = mat2(gamma + grad_square.y, -diag_off, -diag_off, gamma + grad_square.x);
+    const mat2  M        = mat2(gamma + grad_square.y, -diag_off, -diag_off, gamma + grad_square.x);
 
     // reciprocal determinand of M
     // this calculations are for gamma being a scalar in the cost function
-    // of the form Data + gamma * Regularization    
+    // of the form Data + gamma * Regularization
     const float rdet = 1.0f / (gamma * (gamma + grad_square.x + grad_square.y));
-    const vec2 q = (gamma * delta_flow_old) + (gray_dt * gray_gradient);
+    const vec2  q    = (gamma * delta_flow_old) + (gray_dt * gray_gradient);
 
     // this calculations are for gamma being a weight between data and regularization term
     // of the form (1 - gamma) * Data + gamma * Regularization
     // const float rdet = 1.0f / (gamma * (gamma + (1 - gamma) * (grad_square.x + grad_square.y)));
     // const vec2 q = (gamma * delta_flow_old) + ((1 - gamma) * gray_dt * gray_gradient);
-    
 
     vec2 delta_flow_new = rdet * (M * q);
 
     // sanitaze
     bool needSanitize = any(isnan(delta_flow_new)) || any(isnan(delta_flow_new));
-    delta_flow_new = needSanitize? vec2(0) : delta_flow_new;
+    delta_flow_new    = needSanitize ? vec2(0) : delta_flow_new;
 
     // truncate
     delta_flow_new = clamp(delta_flow_new, vec2(-max_flow), vec2(max_flow));
@@ -77,14 +78,14 @@ void main() {
     //#################################
     // normalized coordinates
     const vec2 flowUpCoords = vec2(coords.x / (imgSize.x - 1.0), coords.y / (imgSize.y - 1.0));
-    
+
     const vec2 flow_old = 2.0 * texture(in_flow, flowUpCoords).xy;
 
     vec2 flow_new = flow_old + delta_flow_new;
-    
+
     // sanitize
     needSanitize = any(isnan(flow_new)) || any(isnan(flow_new));
-    flow_new = needSanitize? vec2(0) : flow_new;
+    flow_new     = needSanitize ? vec2(0) : flow_new;
 
     // truncate
     flow_new = clamp(flow_new, vec2(-max_flow), vec2(max_flow));
