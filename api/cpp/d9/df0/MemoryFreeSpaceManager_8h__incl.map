@@ -1,9 +1,9 @@
 <map id="/root/project/lluvia/cpp/core/include/lluvia/core/memory/MemoryFreeSpaceManager.h" name="/root/project/lluvia/cpp/core/include/lluvia/core/memory/MemoryFreeSpaceManager.h">
-<area shape="rect" id="node1" title="MemoryFreeSpaceManager class." alt="" coords="77,5,384,61"/>
+<area shape="rect" id="node1" title="MemoryFreeSpaceManager class." alt="" coords="73,5,380,61"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,117,83,143"/>
 <area shape="rect" id="node3" title=" " alt="" coords="274,199,350,225"/>
-<area shape="rect" id="node4" title=" " alt="" coords="158,117,221,143"/>
-<area shape="rect" id="node5" title=" " alt="" coords="245,117,299,143"/>
+<area shape="rect" id="node4" title=" " alt="" coords="158,117,213,143"/>
+<area shape="rect" id="node5" title=" " alt="" coords="237,117,299,143"/>
 <area shape="rect" id="node6" href="$d5/ddf/vulkan_8hpp.html" title=" " alt="" coords="323,109,461,151"/>
 <area shape="rect" id="node7" href="$dc/d1a/MemoryAllocationInfo_8h.html" title="Structures and methods for storing memory allocation information." alt="" coords="509,109,691,151"/>
 <area shape="rect" id="node8" title=" " alt="" coords="567,199,633,225"/>

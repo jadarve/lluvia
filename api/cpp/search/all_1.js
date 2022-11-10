@@ -10,7 +10,7 @@ var searchData=
   ['buffercopyerror_11',['BufferCopyError',['../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a0776e1fd23aa7ed56e6062af9b46dab2',1,'ll']]],
   ['buffermapdeleter_12',['BufferMapDeleter',['../dd/d14/structll_1_1Buffer_1_1BufferMapDeleter.html',1,'ll::Buffer']]],
   ['bufferusageflagbits_13',['BufferUsageFlagBits',['../d8/dda/namespacell.html#ae7ea73ced07f239ccf214e4fd12cfd6c',1,'ll']]],
-  ['bufferusageflagbitsstrings_14',['BufferUsageFlagBitsStrings',['../d7/dff/namespacell_1_1impl.html#a549ec78ca46c85aa8632cfcd7f4150a4',1,'ll::impl']]],
+  ['bufferusageflagbitsstrings_14',['BufferUsageFlagBitsStrings',['../d7/dff/namespacell_1_1impl.html#a805b05e4c7f1fb499366e654ddc4b3b6',1,'ll::impl']]],
   ['bufferusageflags_15',['BufferUsageFlags',['../d8/dda/namespacell.html#ad0324a1820533753ed0e46bdb51d5443',1,'ll']]],
   ['bufferusageflags_2eh_16',['BufferUsageFlags.h',['../d6/d22/BufferUsageFlags_8h.html',1,'']]],
   ['bufferusageflagstovectorstring_17',['bufferUsageFlagsToVectorString',['../d8/dda/namespacell.html#a7fe4a7375086053c1b3e92c4fb19ebb8',1,'ll']]]

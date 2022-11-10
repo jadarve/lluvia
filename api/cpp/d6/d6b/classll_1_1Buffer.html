@@ -418,8 +418,8 @@ Friends</h2></td></tr>
 <div class="line">if (ptr-&gt;<a class="code" href="../../d8/d72/classll_1_1Object.html#ae2e574c31e3c483a53c251dc0929067c">getType</a>() == <a class="code" href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21ca7e62bc342f41c946868f0ea6f0b712d8">ll::ObjectType::Buffer</a>) {</div>
 <div class="line">    <span class="keyword">auto</span> bufferPtr = <span class="keyword">static_cast&lt;</span><a class="code" href="../../d6/d6b/classll_1_1Buffer.html">ll::Buffer</a>*<span class="keyword">&gt;</span>(ptr);</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassll_1_1Buffer_html"><div class="ttname"><a href="../../d6/d6b/classll_1_1Buffer.html">ll::Buffer</a></div><div class="ttdoc">Objects to manage raw portions of allocated memory.</div><div class="ttdef"><b>Definition:</b> Buffer.h:59</div></div>
-<div class="ttc" id="aclassll_1_1Object_html"><div class="ttname"><a href="../../d8/d72/classll_1_1Object.html">ll::Object</a></div><div class="ttdoc">Base class for all types that can be used in computer shaders.</div><div class="ttdef"><b>Definition:</b> Object.h:96</div></div>
+<div class="ttc" id="aclassll_1_1Buffer_html"><div class="ttname"><a href="../../d6/d6b/classll_1_1Buffer.html">ll::Buffer</a></div><div class="ttdoc">Objects to manage raw portions of allocated memory.</div><div class="ttdef"><b>Definition:</b> Buffer.h:57</div></div>
+<div class="ttc" id="aclassll_1_1Object_html"><div class="ttname"><a href="../../d8/d72/classll_1_1Object.html">ll::Object</a></div><div class="ttdoc">Base class for all types that can be used in computer shaders.</div><div class="ttdef"><b>Definition:</b> Object.h:94</div></div>
 <div class="ttc" id="aclassll_1_1Object_html_ae2e574c31e3c483a53c251dc0929067c"><div class="ttname"><a href="../../d8/d72/classll_1_1Object.html#ae2e574c31e3c483a53c251dc0929067c">ll::Object::getType</a></div><div class="ttdeci">virtual ll::ObjectType getType() const noexcept=0</div><div class="ttdoc">Gets the object type.</div></div>
 <div class="ttc" id="anamespacell_html_a2a91275592a55cec2161a8cfaf02b21ca7e62bc342f41c946868f0ea6f0b712d8"><div class="ttname"><a href="../../d8/dda/namespacell.html#a2a91275592a55cec2161a8cfaf02b21ca7e62bc342f41c946868f0ea6f0b712d8">ll::ObjectType::Buffer</a></div><div class="ttdeci">@ Buffer</div></div>
 </div><!-- fragment --><dl class="section return"><dt>Returns</dt><dd>The object type. </dd></dl>
@@ -561,7 +561,7 @@ template&lt;typename T &gt; </div>
 <div class="line">        <span class="comment">// print the value of ptr at i</span></div>
 <div class="line">        std::cout &lt;&lt; ptr[i] &lt;&lt; std::endl;</div>
 <div class="line">    }</div>
-<div class="line">    </div>
+<div class="line"> </div>
 <div class="line">} <span class="comment">// unmap buffer then ptr goes out of scope</span></div>
 </div><!-- fragment --><p>Once the returned pointer is no longer needed, the user must call ll::Buffer::unmap to release the mapped object.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This buffer object needs to be kept alive during the whole lifetime of the returned mapped pointer. Otherwise, the behavior is undefined when the mapped pointer is deleted.</dd></dl>

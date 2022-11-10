@@ -9,5 +9,5 @@ var ImageAddressMode_8h =
     ] ],
     [ "imageAddressModeToString", "d5/db1/ImageAddressMode_8h.html#a1342d942fa1aa2218da849d1d8539d75", null ],
     [ "stringToImageAddressMode", "d5/db1/ImageAddressMode_8h.html#a6cc259350111c35c72e4ac2b209c61a0", null ],
-    [ "ImageAddressModeStrings", "d5/db1/ImageAddressMode_8h.html#a158a6f972655a902c9840629615d9920", null ]
+    [ "ImageAddressModeStrings", "d5/db1/ImageAddressMode_8h.html#a7b5550a2962e1add34acd123d9b80952", null ]
 ];

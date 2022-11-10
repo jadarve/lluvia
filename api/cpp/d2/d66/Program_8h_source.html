@@ -94,59 +94,56 @@ $(document).ready(function(){initNavTree('d2/d66/Program_8h_source.html','../../
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/ddf/vulkan_8hpp.html">lluvia/core/vulkan/vulkan.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span>vulkan {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">class </span>Device;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;} <span class="comment">// namespace vulkan</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// forward declarations</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class </span>Session;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html">   39</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a> {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#ac118dfc859b0ddb69c5d614fc1eba951">   42</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#ac118dfc859b0ddb69c5d614fc1eba951">Program</a>()                          = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#ae914284163dab9ea084979b65e7da1e1">   43</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#ae914284163dab9ea084979b65e7da1e1">Program</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; program)    = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#aaee66a8955cacd43e9f18ce49a915555">   44</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#aaee66a8955cacd43e9f18ce49a915555">Program</a>(<a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp;&amp; program)         = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a963bca9caab30b19e10a47e8977f4420">   53</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#a963bca9caab30b19e10a47e8977f4420">Program</a>(</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">const</span> std::shared_ptr&lt;ll::vulkan::Device&gt;&amp; device,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">const</span> std::vector&lt;uint8_t&gt;&amp; spirvCode);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span>vulkan {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">class </span>Device;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;} <span class="comment">// namespace vulkan</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// forward declarations</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span>Session;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html">   37</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#ac118dfc859b0ddb69c5d614fc1eba951">   40</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#ac118dfc859b0ddb69c5d614fc1eba951">Program</a>()                       = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#ae914284163dab9ea084979b65e7da1e1">   41</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#ae914284163dab9ea084979b65e7da1e1">Program</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; program) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#aaee66a8955cacd43e9f18ce49a915555">   42</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#aaee66a8955cacd43e9f18ce49a915555">Program</a>(<a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp;&amp; program)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a963bca9caab30b19e10a47e8977f4420">   51</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#a963bca9caab30b19e10a47e8977f4420">Program</a>(</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">const</span> std::shared_ptr&lt;ll::vulkan::Device&gt;&amp; device,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">const</span> std::vector&lt;uint8_t&gt;&amp;                spirvCode);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a09680423ef4b86afb4af6398f35d2bcb">   55</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#a09680423ef4b86afb4af6398f35d2bcb">~Program</a>();</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a09680423ef4b86afb4af6398f35d2bcb">   57</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html#a09680423ef4b86afb4af6398f35d2bcb">~Program</a>();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a274760738fea49f443e66d6ee952c7c7">   59</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; <a class="code" href="../../d1/d63/classll_1_1Program.html#a274760738fea49f443e66d6ee952c7c7">operator = </a>(<span class="keyword">const</span> <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; program) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a8e86ee175b977eda039633f06486abea">   60</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; <a class="code" href="../../d1/d63/classll_1_1Program.html#a274760738fea49f443e66d6ee952c7c7">operator = </a>(<a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp;&amp; program)      = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a2108abaf03b153537371538cd0d9a036">   68</a></span>&#160;    vk::ShaderModule <a class="code" href="../../d1/d63/classll_1_1Program.html#a2108abaf03b153537371538cd0d9a036">getShaderModule</a>() const noexcept;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a14edbe363a06053b68225ce3296decbe">   76</a></span>&#160;    const std::vector&lt;uint8_t&gt;&amp; <a class="code" href="../../d1/d63/classll_1_1Program.html#a14edbe363a06053b68225ce3296decbe">getSpirV</a>() const noexcept;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;private:</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::vulkan::Device&gt; m_device;</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a274760738fea49f443e66d6ee952c7c7">   57</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; <a class="code" href="../../d1/d63/classll_1_1Program.html#a274760738fea49f443e66d6ee952c7c7">operator=</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; program) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a8e86ee175b977eda039633f06486abea">   58</a></span>&#160;    <a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp; <a class="code" href="../../d1/d63/classll_1_1Program.html#a8e86ee175b977eda039633f06486abea">operator=</a>(<a class="code" href="../../d1/d63/classll_1_1Program.html">Program</a>&amp;&amp; program)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a2108abaf03b153537371538cd0d9a036">   65</a></span>&#160;    vk::ShaderModule <a class="code" href="../../d1/d63/classll_1_1Program.html#a2108abaf03b153537371538cd0d9a036">getShaderModule</a>() const noexcept;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="../../d1/d63/classll_1_1Program.html#a14edbe363a06053b68225ce3296decbe">   72</a></span>&#160;    const std::vector&lt;uint8_t&gt;&amp; <a class="code" href="../../d1/d63/classll_1_1Program.html#a14edbe363a06053b68225ce3296decbe">getSpirV</a>() const noexcept;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;private:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::shared_ptr&lt;<a class="code" href="../../d8/dda/namespacell.html">ll</a>::vulkan::Device&gt; m_device;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    vk::ShaderModule     m_module;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    std::vector&lt;uint8_t&gt; m_spirvCode;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;};</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    vk::ShaderModule     m_module;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    std::vector&lt;uint8_t&gt; m_spirvCode;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;};</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_PROGRAM_H_</span></div>
-<div class="ttc" id="aclassll_1_1Program_html"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html">ll::Program</a></div><div class="ttdoc">Class representing Vulkan shader modules in SPIR-V representation.</div><div class="ttdef"><b>Definition:</b> Program.h:39</div></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// namespace ll</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_PROGRAM_H_</span></div>
+<div class="ttc" id="aclassll_1_1Program_html"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html">ll::Program</a></div><div class="ttdoc">Class representing Vulkan shader modules in SPIR-V representation.</div><div class="ttdef"><b>Definition:</b> Program.h:37</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_a09680423ef4b86afb4af6398f35d2bcb"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#a09680423ef4b86afb4af6398f35d2bcb">ll::Program::~Program</a></div><div class="ttdeci">~Program()</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_a14edbe363a06053b68225ce3296decbe"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#a14edbe363a06053b68225ce3296decbe">ll::Program::getSpirV</a></div><div class="ttdeci">const std::vector&lt; uint8_t &gt; &amp; getSpirV() const noexcept</div><div class="ttdoc">Gets the SPIR-V code of this object.</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_a2108abaf03b153537371538cd0d9a036"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#a2108abaf03b153537371538cd0d9a036">ll::Program::getShaderModule</a></div><div class="ttdeci">vk::ShaderModule getShaderModule() const noexcept</div><div class="ttdoc">Gets the corresponding Vulkan shader module for this program object.</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_a274760738fea49f443e66d6ee952c7c7"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#a274760738fea49f443e66d6ee952c7c7">ll::Program::operator=</a></div><div class="ttdeci">Program &amp; operator=(const Program &amp;program)=delete</div></div>
+<div class="ttc" id="aclassll_1_1Program_html_a8e86ee175b977eda039633f06486abea"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#a8e86ee175b977eda039633f06486abea">ll::Program::operator=</a></div><div class="ttdeci">Program &amp; operator=(Program &amp;&amp;program)=delete</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_a963bca9caab30b19e10a47e8977f4420"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#a963bca9caab30b19e10a47e8977f4420">ll::Program::Program</a></div><div class="ttdeci">Program(const std::shared_ptr&lt; ll::vulkan::Device &gt; &amp;device, const std::vector&lt; uint8_t &gt; &amp;spirvCode)</div><div class="ttdoc">Constructs the object from a Vulkan device and SPIR-V code.</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_aaee66a8955cacd43e9f18ce49a915555"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#aaee66a8955cacd43e9f18ce49a915555">ll::Program::Program</a></div><div class="ttdeci">Program(Program &amp;&amp;program)=delete</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_ac118dfc859b0ddb69c5d614fc1eba951"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#ac118dfc859b0ddb69c5d614fc1eba951">ll::Program::Program</a></div><div class="ttdeci">Program()=delete</div></div>
 <div class="ttc" id="aclassll_1_1Program_html_ae914284163dab9ea084979b65e7da1e1"><div class="ttname"><a href="../../d1/d63/classll_1_1Program.html#ae914284163dab9ea084979b65e7da1e1">ll::Program::Program</a></div><div class="ttdeci">Program(const Program &amp;program)=delete</div></div>
-<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
+<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:28</div></div>
 <div class="ttc" id="avulkan_8hpp_html"><div class="ttname"><a href="../../d5/ddf/vulkan_8hpp.html">vulkan.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

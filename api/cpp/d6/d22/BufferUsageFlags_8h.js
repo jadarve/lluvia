@@ -14,5 +14,5 @@ var BufferUsageFlags_8h =
     [ "operator|", "d6/d22/BufferUsageFlags_8h.html#ab33cf3b42d5cbceab4706f0e04e28e80", null ],
     [ "toVkBufferUsageFlags", "d6/d22/BufferUsageFlags_8h.html#adf29885b0590e892f614b7c0aa75790e", null ],
     [ "vectorStringToBufferUsageFlags", "d6/d22/BufferUsageFlags_8h.html#ab72bdbdc006e4776e81979fec48e18b7", null ],
-    [ "BufferUsageFlagBitsStrings", "d6/d22/BufferUsageFlags_8h.html#a549ec78ca46c85aa8632cfcd7f4150a4", null ]
+    [ "BufferUsageFlagBitsStrings", "d6/d22/BufferUsageFlags_8h.html#a805b05e4c7f1fb499366e654ddc4b3b6", null ]
 ];

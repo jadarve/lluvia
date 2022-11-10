@@ -177,7 +177,7 @@ Friends</h2></td></tr>
 <div class="line"><span class="keyword">const</span> <span class="keyword">auto</span> hostMemFlags   = vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent;;</div>
 <div class="line"><span class="keyword">const</span> <span class="keyword">auto</span> deviceMemFlags = vk::MemoryPropertyFlagBits::eDeviceLocal;</div>
 <div class="line"> </div>
-<div class="line"><span class="comment">// host-visible memory with page size equals to 512 bytes    </span></div>
+<div class="line"><span class="comment">// host-visible memory with page size equals to 512 bytes</span></div>
 <div class="line"><span class="keyword">auto</span> hostMemory = session-&gt;createMemory(hostMemFlags, 512);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// device-local memory with page size equals to 4096 bytes</span></div>
@@ -346,8 +346,7 @@ Friends</h2></td></tr>
 
 <p>Creates a buffer. </p>
 <p>The created buffer will hold a reference to this memory object, preventing it from destroying before the buffer is deleted.</p>
-<p>The usage flags of the buffer will be set to <code>vk::BufferUsageFlagBits::eStorageBuffer | vk::BufferUsageFlagBits::eTransferSrc | vk::BufferUsageFlagBits::eTransferDst</code>. See <a href="https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkBufferUsageFlagBits">https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkBufferUsageFlagBits</a>. <br  />
-</p>
+<p>The usage flags of the buffer will be set to <code>vk::BufferUsageFlagBits::eStorageBuffer | vk::BufferUsageFlagBits::eTransferSrc | vk::BufferUsageFlagBits::eTransferDst</code>. See <a href="https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkBufferUsageFlagBits">https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkBufferUsageFlagBits</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size in bytes</td></tr>

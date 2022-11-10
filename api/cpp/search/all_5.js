@@ -13,7 +13,7 @@ var searchData=
   ['float64_119',['Float64',['../d8/dda/namespacell.html#a34c16d83b42cf768fe094d2ade26a363ad2b556d8a8f5c8ac323f51a4b82e79a0',1,'ll']]],
   ['floatprecision_120',['FloatPrecision',['../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930',1,'ll']]],
   ['floatprecision_2eh_121',['FloatPrecision.h',['../d1/d78/FloatPrecision_8h.html',1,'']]],
-  ['floatprecisionstrings_122',['FloatPrecisionStrings',['../d7/dff/namespacell_1_1impl.html#a144bc1e5ecc0505e36a24f2a30b57fa6',1,'ll::impl']]],
+  ['floatprecisionstrings_122',['FloatPrecisionStrings',['../d7/dff/namespacell_1_1impl.html#a968cece828972a3cd2ef950fa6910896',1,'ll::impl']]],
   ['fp16_123',['FP16',['../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0',1,'ll']]],
   ['fp32_124',['FP32',['../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d',1,'ll']]],
   ['fp64_125',['FP64',['../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb',1,'ll']]],

@@ -13,5 +13,5 @@ var MemoryPropertyFlags_8h =
     [ "operator^", "d6/d4c/MemoryPropertyFlags_8h.html#a56d54c21a81bbb154ad792607ca8413f", null ],
     [ "operator|", "d6/d4c/MemoryPropertyFlags_8h.html#ae3236bee28c0eca9a07668795ef278ab", null ],
     [ "vectorStringToMemoryPropertyFlags", "d6/d4c/MemoryPropertyFlags_8h.html#af0d6c26690a8068468fe79fb74e098e4", null ],
-    [ "MemoryPropertyFlagBitsStrings", "d6/d4c/MemoryPropertyFlags_8h.html#a89d543ffbdab4ccee52226d1d09b2645", null ]
+    [ "MemoryPropertyFlagBitsStrings", "d6/d4c/MemoryPropertyFlags_8h.html#a742149596e23d744f5aa1992274b1418", null ]
 ];

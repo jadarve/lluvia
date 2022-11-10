@@ -10,5 +10,5 @@ var DeviceType_8h =
     [ "deviceTypeToString", "d3/d15/DeviceType_8h.html#a9d5bd5f70738a18c0d77541009b286fb", null ],
     [ "fromVkPhysicalDeviceType", "d3/d15/DeviceType_8h.html#a58e7f016e971af7317117f176e2be0d9", null ],
     [ "stringToDeviceType", "d3/d15/DeviceType_8h.html#a1c540672e3506c9633f9013b862b1472", null ],
-    [ "DeviceTypeStrings", "d3/d15/DeviceType_8h.html#a0991150e679b2adedbc7b7501302c443", null ]
+    [ "DeviceTypeStrings", "d3/d15/DeviceType_8h.html#a470bf64ef894d65d2d6b44283be3bdfc", null ]
 ];

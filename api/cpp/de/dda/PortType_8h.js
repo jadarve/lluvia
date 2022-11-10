@@ -11,5 +11,5 @@ var PortType_8h =
     [ "portTypeToVkDescriptorType", "de/dda/PortType_8h.html#a7809eca05fee10886852a9cc7f0c2c8a", null ],
     [ "stringToPortType", "de/dda/PortType_8h.html#a02d00f427c43a06535089571afaf6000", null ],
     [ "vkDescriptorTypeToPortType", "de/dda/PortType_8h.html#a5a1c72f56657410e1c75bbf862ab0ba0", null ],
-    [ "PortTypeStrings", "de/dda/PortType_8h.html#a7c81b87b920a483e98816664424d0d59", null ]
+    [ "PortTypeStrings", "de/dda/PortType_8h.html#a50068b3e13c9c7ee54cc66412e66ab35", null ]
 ];

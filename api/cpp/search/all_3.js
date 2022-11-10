@@ -12,7 +12,7 @@ var searchData=
   ['devicetype_87',['deviceType',['../dc/d56/structll_1_1DeviceDescriptor.html#a6c1f9b8f5c5c9328bfa48afc079b4660',1,'ll::DeviceDescriptor']]],
   ['devicetype_88',['DeviceType',['../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093',1,'ll']]],
   ['devicetype_2eh_89',['DeviceType.h',['../d3/d15/DeviceType_8h.html',1,'']]],
-  ['devicetypestrings_90',['DeviceTypeStrings',['../d7/dff/namespacell_1_1impl.html#a0991150e679b2adedbc7b7501302c443',1,'ll::impl']]],
+  ['devicetypestrings_90',['DeviceTypeStrings',['../d7/dff/namespacell_1_1impl.html#a470bf64ef894d65d2d6b44283be3bdfc',1,'ll::impl']]],
   ['devicetypetostring_91',['deviceTypeToString',['../d8/dda/namespacell.html#a9d5bd5f70738a18c0d77541009b286fb',1,'ll']]],
   ['discretegpu_92',['DiscreteGPU',['../d8/dda/namespacell.html#a40bce76015f8f53e108c074b8c079093a579514915ed87acffb605512eb600384',1,'ll']]],
   ['duration_93',['Duration',['../db/dfd/classll_1_1Duration.html#a2452ce1cfae69e944d1de56e770c3be2',1,'ll::Duration::Duration(const std::shared_ptr&lt; ll::vulkan::Device &gt; device)'],['../db/dfd/classll_1_1Duration.html#a2182c721759c3f396e9ed31e8350fe2e',1,'ll::Duration::Duration(Duration &amp;&amp;duration)=delete'],['../db/dfd/classll_1_1Duration.html#a5ecb857d7d83fe0308e7ca97f81be53d',1,'ll::Duration::Duration(const Duration &amp;duration)=delete'],['../db/dfd/classll_1_1Duration.html#a2930e174cb2c905b728b6f89dcb3da71',1,'ll::Duration::Duration()=delete'],['../db/dfd/classll_1_1Duration.html',1,'ll::Duration']]],

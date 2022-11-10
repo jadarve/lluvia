@@ -91,37 +91,35 @@ $(document).ready(function(){initNavTree('d1/d78/FloatPrecision_8h_source.html',
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d0b/enums_8h.html">lluvia/core/enums/enums.h</a>&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">   19</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">FloatPrecision</a> : <a class="code" href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a> {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0">FP16</a> = 0,</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d">FP32</a> = 1,</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb">FP64</a> = 2,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;};</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span>impl {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="../../d7/dff/namespacell_1_1impl.html#a144bc1e5ecc0505e36a24f2a30b57fa6">   27</a></span>&#160;constexpr <span class="keyword">const</span> std::array&lt;std::tuple&lt;const char *, ll::FloatPrecision&gt;, 3&gt; <a class="code" href="../../d7/dff/namespacell_1_1impl.html#a144bc1e5ecc0505e36a24f2a30b57fa6">FloatPrecisionStrings</a>{{</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    std::make_tuple(<span class="stringliteral">&quot;FP16&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0">ll::FloatPrecision::FP16</a>),</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    std::make_tuple(<span class="stringliteral">&quot;FP32&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d">ll::FloatPrecision::FP32</a>),</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    std::make_tuple(<span class="stringliteral">&quot;FP64&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb">ll::FloatPrecision::FP64</a>),</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}};</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;} <span class="comment">// namespace impl</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">   18</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">FloatPrecision</a> : <a class="code" href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0">FP16</a> = 0,</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d">FP32</a> = 1,</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb">FP64</a> = 2,</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;};</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>impl {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="../../d7/dff/namespacell_1_1impl.html#a968cece828972a3cd2ef950fa6910896">   26</a></span>&#160;    constexpr <span class="keyword">const</span> std::array&lt;std::tuple&lt;const char*, ll::FloatPrecision&gt;, 3&gt; <a class="code" href="../../d7/dff/namespacell_1_1impl.html#a968cece828972a3cd2ef950fa6910896">FloatPrecisionStrings</a> {{</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;FP16&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0">ll::FloatPrecision::FP16</a>),</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;FP32&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d">ll::FloatPrecision::FP32</a>),</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;FP64&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb">ll::FloatPrecision::FP64</a>),</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    }};</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;} <span class="comment">// namespace impl</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;} <span class="comment">// namespace ll</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_FLOAT_PRECISION_H_</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_FLOAT_PRECISION_H_</span></div>
 <div class="ttc" id="aenums_8h_html"><div class="ttname"><a href="../../d0/d0b/enums_8h.html">enums.h</a></div><div class="ttdoc">Enums.</div></div>
-<div class="ttc" id="anamespacell_1_1impl_html_a144bc1e5ecc0505e36a24f2a30b57fa6"><div class="ttname"><a href="../../d7/dff/namespacell_1_1impl.html#a144bc1e5ecc0505e36a24f2a30b57fa6">ll::impl::FloatPrecisionStrings</a></div><div class="ttdeci">constexpr const std::array&lt; std::tuple&lt; const char *, ll::FloatPrecision &gt;, 3 &gt; FloatPrecisionStrings</div><div class="ttdef"><b>Definition:</b> FloatPrecision.h:27</div></div>
-<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
-<div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">ll::FloatPrecision</a></div><div class="ttdeci">FloatPrecision</div><div class="ttdoc">Floating point precision.</div><div class="ttdef"><b>Definition:</b> FloatPrecision.h:19</div></div>
+<div class="ttc" id="anamespacell_1_1impl_html_a968cece828972a3cd2ef950fa6910896"><div class="ttname"><a href="../../d7/dff/namespacell_1_1impl.html#a968cece828972a3cd2ef950fa6910896">ll::impl::FloatPrecisionStrings</a></div><div class="ttdeci">constexpr const std::array&lt; std::tuple&lt; const char *, ll::FloatPrecision &gt;, 3 &gt; FloatPrecisionStrings</div><div class="ttdef"><b>Definition:</b> FloatPrecision.h:26</div></div>
+<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:28</div></div>
+<div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930">ll::FloatPrecision</a></div><div class="ttdeci">FloatPrecision</div><div class="ttdoc">Floating point precision.</div><div class="ttdef"><b>Definition:</b> FloatPrecision.h:18</div></div>
 <div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a3fc58a0c61fb59a7689728a045f2edbb">ll::FloatPrecision::FP64</a></div><div class="ttdeci">@ FP64</div></div>
 <div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930a693aa0bef84c25fe81c7e62e72f9313d">ll::FloatPrecision::FP32</a></div><div class="ttdeci">@ FP32</div></div>
 <div class="ttc" id="anamespacell_html_aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0"><div class="ttname"><a href="../../d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0">ll::FloatPrecision::FP16</a></div><div class="ttdeci">@ FP16</div></div>
-<div class="ttc" id="anamespacell_html_ae72b0d2dda7fa1f114412a7f7308f05d"><div class="ttname"><a href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a></div><div class="ttdeci">uint32_t enum_t</div><div class="ttdef"><b>Definition:</b> enums.h:24</div></div>
+<div class="ttc" id="anamespacell_html_ae72b0d2dda7fa1f114412a7f7308f05d"><div class="ttname"><a href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a></div><div class="ttdeci">uint32_t enum_t</div><div class="ttdef"><b>Definition:</b> enums.h:23</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -92,36 +92,30 @@ $(document).ready(function(){initNavTree('df/de4/NodeState_8h_source.html','../.
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d0b/enums_8h.html">lluvia/core/enums/enums.h</a>&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/ddf/vulkan_8hpp.html">lluvia/core/vulkan/vulkan.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1">   23</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1">NodeState</a> : <a class="code" href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a> {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a0eceeb45861f9585dd7a97a3e36f85c6">Created</a> = 0,</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a95b19f7739b0b7ea7d6b07586be54f36">Init</a>    = 1</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;};</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1">   21</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1">NodeState</a> : <a class="code" href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a> {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a0eceeb45861f9585dd7a97a3e36f85c6">Created</a> = 0,</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a95b19f7739b0b7ea7d6b07586be54f36">Init</a>    = 1</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;};</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>impl {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>impl</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">   36</a></span>&#160;    constexpr <span class="keyword">const</span> std::array&lt;std::tuple&lt;const char*, ll::NodeState&gt;, 2&gt; <a class="code" href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">NodeStateStrings</a> {{</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;Created&quot;</span> , <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a0eceeb45861f9585dd7a97a3e36f85c6">ll::NodeState::Created</a>),</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;Init&quot;</span>    , <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a95b19f7739b0b7ea7d6b07586be54f36">ll::NodeState::Init</a>)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }};</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;} <span class="comment">// namespace impl</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_NODE_NODE_STATE_H_</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">   33</a></span>&#160;    constexpr <span class="keyword">const</span> std::array&lt;std::tuple&lt;const char*, ll::NodeState&gt;, 2&gt; <a class="code" href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">NodeStateStrings</a> {{std::make_tuple(<span class="stringliteral">&quot;Created&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a0eceeb45861f9585dd7a97a3e36f85c6">ll::NodeState::Created</a>),</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;Init&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a95b19f7739b0b7ea7d6b07586be54f36">ll::NodeState::Init</a>)}};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;} <span class="comment">// namespace impl</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} <span class="comment">// namespace ll</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_NODE_NODE_STATE_H_</span></div>
 <div class="ttc" id="aenums_8h_html"><div class="ttname"><a href="../../d0/d0b/enums_8h.html">enums.h</a></div><div class="ttdoc">Enums.</div></div>
-<div class="ttc" id="anamespacell_1_1impl_html_a8ebd7e05a1457602567cde936915eeae"><div class="ttname"><a href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">ll::impl::NodeStateStrings</a></div><div class="ttdeci">constexpr const std::array&lt; std::tuple&lt; const char *, ll::NodeState &gt;, 2 &gt; NodeStateStrings</div><div class="ttdoc">Node state string values used for converting ll::NodeState to std::string and vice-versa.</div><div class="ttdef"><b>Definition:</b> NodeState.h:36</div></div>
-<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
-<div class="ttc" id="anamespacell_html_a3e0a9b152fad998800740c730a7213e1"><div class="ttname"><a href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1">ll::NodeState</a></div><div class="ttdeci">NodeState</div><div class="ttdoc">Class for node state.</div><div class="ttdef"><b>Definition:</b> NodeState.h:23</div></div>
+<div class="ttc" id="anamespacell_1_1impl_html_a8ebd7e05a1457602567cde936915eeae"><div class="ttname"><a href="../../d7/dff/namespacell_1_1impl.html#a8ebd7e05a1457602567cde936915eeae">ll::impl::NodeStateStrings</a></div><div class="ttdeci">constexpr const std::array&lt; std::tuple&lt; const char *, ll::NodeState &gt;, 2 &gt; NodeStateStrings</div><div class="ttdoc">Node state string values used for converting ll::NodeState to std::string and vice-versa.</div><div class="ttdef"><b>Definition:</b> NodeState.h:33</div></div>
+<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:28</div></div>
+<div class="ttc" id="anamespacell_html_a3e0a9b152fad998800740c730a7213e1"><div class="ttname"><a href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1">ll::NodeState</a></div><div class="ttdeci">NodeState</div><div class="ttdoc">Class for node state.</div><div class="ttdef"><b>Definition:</b> NodeState.h:21</div></div>
 <div class="ttc" id="anamespacell_html_a3e0a9b152fad998800740c730a7213e1a0eceeb45861f9585dd7a97a3e36f85c6"><div class="ttname"><a href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a0eceeb45861f9585dd7a97a3e36f85c6">ll::NodeState::Created</a></div><div class="ttdeci">@ Created</div></div>
 <div class="ttc" id="anamespacell_html_a3e0a9b152fad998800740c730a7213e1a95b19f7739b0b7ea7d6b07586be54f36"><div class="ttname"><a href="../../d8/dda/namespacell.html#a3e0a9b152fad998800740c730a7213e1a95b19f7739b0b7ea7d6b07586be54f36">ll::NodeState::Init</a></div><div class="ttdeci">@ Init</div></div>
-<div class="ttc" id="anamespacell_html_ae72b0d2dda7fa1f114412a7f7308f05d"><div class="ttname"><a href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a></div><div class="ttdeci">uint32_t enum_t</div><div class="ttdef"><b>Definition:</b> enums.h:24</div></div>
+<div class="ttc" id="anamespacell_html_ae72b0d2dda7fa1f114412a7f7308f05d"><div class="ttname"><a href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a></div><div class="ttdeci">uint32_t enum_t</div><div class="ttdef"><b>Definition:</b> enums.h:23</div></div>
 <div class="ttc" id="avulkan_8hpp_html"><div class="ttname"><a href="../../d5/ddf/vulkan_8hpp.html">vulkan.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

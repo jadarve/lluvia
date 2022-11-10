@@ -91,33 +91,29 @@ $(document).ready(function(){initNavTree('d2/d11/ParameterType_8h_source.html','
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d0b/enums_8h.html">lluvia/core/enums/enums.h</a>&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">   16</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">ParameterType</a> : <a class="code" href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a> {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52">Int</a>   = 0,</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b">Float</a> = 1</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;};</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d8/dda/namespacell.html">ll</a> {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">   15</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">ParameterType</a> : <a class="code" href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52">Int</a>   = 0,</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b">Float</a> = 1</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>impl {</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>impl {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">   29</a></span>&#160;    constexpr <span class="keyword">const</span> std::array&lt;std::tuple&lt;const char*, ll::ParameterType&gt;, 2&gt; <a class="code" href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">ParameterTypeStrings</a> {{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;Int&quot;</span>   , <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52">ll::ParameterType::Int</a>),</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;Float&quot;</span> , <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b">ll::ParameterType::Float</a>)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }};</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;} <span class="comment">// namespace impl</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;} <span class="comment">// namespace ll</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_NODE_PARAMETER_TYPE_H_</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">   27</a></span>&#160;    constexpr <span class="keyword">const</span> std::array&lt;std::tuple&lt;const char*, ll::ParameterType&gt;, 2&gt; <a class="code" href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">ParameterTypeStrings</a> {{std::make_tuple(<span class="stringliteral">&quot;Int&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52">ll::ParameterType::Int</a>),</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        std::make_tuple(<span class="stringliteral">&quot;Float&quot;</span>, <a class="code" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b">ll::ParameterType::Float</a>)}};</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;} <span class="comment">// namespace impl</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;} <span class="comment">// namespace ll</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// LLUVIA_CORE_NODE_PARAMETER_TYPE_H_</span></div>
 <div class="ttc" id="aenums_8h_html"><div class="ttname"><a href="../../d0/d0b/enums_8h.html">enums.h</a></div><div class="ttdoc">Enums.</div></div>
-<div class="ttc" id="anamespacell_1_1impl_html_ae2bd43b154e8c0277695d9f389b0aeed"><div class="ttname"><a href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">ll::impl::ParameterTypeStrings</a></div><div class="ttdeci">constexpr const std::array&lt; std::tuple&lt; const char *, ll::ParameterType &gt;, 2 &gt; ParameterTypeStrings</div><div class="ttdoc">String values used for converting ll::ParameterType to std::string and vice-versa.</div><div class="ttdef"><b>Definition:</b> ParameterType.h:29</div></div>
-<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:29</div></div>
-<div class="ttc" id="anamespacell_html_a305d3a429e9e78e5e28f57ac1dd273bf"><div class="ttname"><a href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">ll::ParameterType</a></div><div class="ttdeci">ParameterType</div><div class="ttdef"><b>Definition:</b> ParameterType.h:16</div></div>
+<div class="ttc" id="anamespacell_1_1impl_html_ae2bd43b154e8c0277695d9f389b0aeed"><div class="ttname"><a href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed">ll::impl::ParameterTypeStrings</a></div><div class="ttdeci">constexpr const std::array&lt; std::tuple&lt; const char *, ll::ParameterType &gt;, 2 &gt; ParameterTypeStrings</div><div class="ttdoc">String values used for converting ll::ParameterType to std::string and vice-versa.</div><div class="ttdef"><b>Definition:</b> ParameterType.h:27</div></div>
+<div class="ttc" id="anamespacell_html"><div class="ttname"><a href="../../d8/dda/namespacell.html">ll</a></div><div class="ttdef"><b>Definition:</b> Buffer.h:28</div></div>
+<div class="ttc" id="anamespacell_html_a305d3a429e9e78e5e28f57ac1dd273bf"><div class="ttname"><a href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">ll::ParameterType</a></div><div class="ttdeci">ParameterType</div><div class="ttdef"><b>Definition:</b> ParameterType.h:15</div></div>
 <div class="ttc" id="anamespacell_html_a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52"><div class="ttname"><a href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52">ll::ParameterType::Int</a></div><div class="ttdeci">@ Int</div></div>
 <div class="ttc" id="anamespacell_html_a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b"><div class="ttname"><a href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b">ll::ParameterType::Float</a></div><div class="ttdeci">@ Float</div></div>
-<div class="ttc" id="anamespacell_html_ae72b0d2dda7fa1f114412a7f7308f05d"><div class="ttname"><a href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a></div><div class="ttdeci">uint32_t enum_t</div><div class="ttdef"><b>Definition:</b> enums.h:24</div></div>
+<div class="ttc" id="anamespacell_html_ae72b0d2dda7fa1f114412a7f7308f05d"><div class="ttname"><a href="../../d8/dda/namespacell.html#ae72b0d2dda7fa1f114412a7f7308f05d">ll::enum_t</a></div><div class="ttdeci">uint32_t enum_t</div><div class="ttdef"><b>Definition:</b> enums.h:23</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
