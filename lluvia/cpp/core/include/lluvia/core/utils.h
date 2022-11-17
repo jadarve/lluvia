@@ -10,12 +10,12 @@
 
 #include "lluvia/core/image/ImageLayout.h"
 #include "lluvia/core/types.h"
-
 #include "lluvia/core/vulkan/vulkan.hpp"
 
 #include <array>
 #include <cmath>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <type_traits>
 #include <vector>

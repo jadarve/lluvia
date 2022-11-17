@@ -65,32 +65,34 @@ TEST_CASE("MultipleDevicesAvailable", "SessionCreationTest")
         auto sessionDeviceDesc = session->getDeviceDescriptor();
 
         REQUIRE(deviceDesc == sessionDeviceDesc);
+        REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
     }
 }
 
-TEST_CASE("TriggerDebugError", "SessionCreationTest")
-{
+// TEST_CASE("TriggerDebugError", "SessionCreationTest")
+// {
 
-    const auto availableDevices = ll::Session::getAvailableDevices();
+//     const auto availableDevices = ll::Session::getAvailableDevices();
 
-    for (auto deviceDesc : availableDevices) {
+//     for (auto deviceDesc : availableDevices) {
 
-        std::cout << "ID: " << deviceDesc.id
-                  << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceDesc.deviceType))
-                  << " name: " << deviceDesc.name << std::endl;
+//         std::cout << "ID: " << deviceDesc.id
+//                   << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceDesc.deviceType))
+//                   << " name: " << deviceDesc.name << std::endl;
 
-        auto desc = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
+//         auto desc = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
 
-        auto session = ll::Session::create(desc);
+//         auto session = ll::Session::create(desc);
 
-        auto sessionDeviceDesc = session->getDeviceDescriptor();
+//         auto sessionDeviceDesc = session->getDeviceDescriptor();
 
-        REQUIRE(deviceDesc == sessionDeviceDesc);
-    }
-}
+//         REQUIRE(deviceDesc == sessionDeviceDesc);
+//         REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
+//     }
+// }
 
 /**
- * Test that the returned memory flags meet the Vulkan speficiation
+ * Test that the returned memory flags meet the Vulkan specification
  *
  * From the Vulkan specification:
  *
@@ -129,7 +131,8 @@ TEST_CASE("MemoryFlags", "SessionCreationTest")
         }
     }
 
-    REQUIRE((hostFlagsFound && deviceFlagsFound) == true);
+    REQUIRE(hostFlagsFound);
+    REQUIRE(deviceFlagsFound);
 
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
