@@ -100,7 +100,11 @@ ComputeNodeDescriptor& ComputeNodeDescriptor::setGridShape(const ll::vec3ui& sha
 ComputeNodeDescriptor& ComputeNodeDescriptor::configureGridShape(const ll::vec3ui& globalShape) noexcept
 {
 
-    m_gridShape = ll::configureGridShape(m_localShape, globalShape);
+    m_gridShape = vec3ui {
+        static_cast<uint32_t>(std::ceil(static_cast<float>(globalShape.x) / static_cast<float>(m_localShape.x))),
+        static_cast<uint32_t>(std::ceil(static_cast<float>(globalShape.y) / static_cast<float>(m_localShape.y))),
+        static_cast<uint32_t>(std::ceil(static_cast<float>(globalShape.z) / static_cast<float>(m_localShape.z)))};
+
     return *this;
 }
 
