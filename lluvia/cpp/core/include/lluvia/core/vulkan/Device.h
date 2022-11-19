@@ -37,10 +37,11 @@ namespace vulkan {
         Device& operator=(const Device& device) = delete;
         Device& operator=(Device&& device)      = delete;
 
-        vk::Device&         get() noexcept;
-        vk::PhysicalDevice& getPhysicalDevice() noexcept;
-        vk::CommandPool&    getCommandPool() noexcept;
-        uint32_t            getComputeFamilyQueueIndex() const noexcept;
+        vk::Device&                     get() noexcept;
+        vk::PhysicalDevice&             getPhysicalDevice() noexcept;
+        const vk::PhysicalDeviceLimits& getPhysicalDeviceLimits() noexcept;
+        vk::CommandPool&                getCommandPool() noexcept;
+        uint32_t                        getComputeFamilyQueueIndex() const noexcept;
 
         bool isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept;
 
@@ -49,9 +50,10 @@ namespace vulkan {
         void run(const ll::CommandBuffer& cmdBuffer);
 
     private:
-        vk::Device         m_device;
-        vk::PhysicalDevice m_physicalDevice;
-        vk::CommandPool    m_commandPool;
+        vk::Device               m_device;
+        vk::PhysicalDevice       m_physicalDevice;
+        vk::PhysicalDeviceLimits m_physicalDeviceLimits;
+        vk::CommandPool          m_commandPool;
 
         vk::Queue m_queue;
         uint32_t  m_computeQueueFamilyIndex;

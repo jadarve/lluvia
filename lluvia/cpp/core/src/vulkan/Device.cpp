@@ -18,6 +18,7 @@ Device::Device(const vk::Device&                 device,
     , m_instance {instance}
 {
 
+    m_physicalDeviceLimits    = m_physicalDevice.getProperties().limits;
     m_computeQueueFamilyIndex = getComputeFamilyQueueIndex();
 
     const auto createInfo = vk::CommandPoolCreateInfo()
@@ -41,6 +42,11 @@ vk::Device& Device::get() noexcept
 vk::PhysicalDevice& Device::getPhysicalDevice() noexcept
 {
     return m_physicalDevice;
+}
+
+const vk::PhysicalDeviceLimits& Device::getPhysicalDeviceLimits() noexcept
+{
+    return m_physicalDeviceLimits;
 }
 
 vk::CommandPool& Device::getCommandPool() noexcept
