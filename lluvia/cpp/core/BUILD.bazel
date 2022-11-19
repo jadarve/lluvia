@@ -209,6 +209,13 @@ cc_test(
 )
 
 cc_test(
+    name = "test_Device",
+    srcs = ["test/test_Device.cpp"],
+    copts = CC_TEST_COPTS,
+    deps = CC_TEST_DEPS,
+)
+
+cc_test(
     name = "test_Duration",
     srcs = ["test/test_Duration.cpp"],
     copts = CC_TEST_COPTS,
