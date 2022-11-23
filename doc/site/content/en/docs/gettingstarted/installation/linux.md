@@ -55,7 +55,7 @@ git clone https://github.com/jadarve/lluvia.git
 cd lluvia
 
 # install requirements listed in lluvia's root folder
-sudo pip3 install -r requirements.txt
+sudo python3 -m pip install -r requirements.txt
 
 bazel build //lluvia/cpp/...
 ```
