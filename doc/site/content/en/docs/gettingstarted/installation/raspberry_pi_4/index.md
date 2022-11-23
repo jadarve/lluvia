@@ -1,7 +1,7 @@
 ---
 title: "Raspberry Pi 4"
 date: 2022-11-19T00:00:00-05:00
-weight: 1
+weight: 3
 resources:
 - src: "**.{png,jpg}"
   title: "Image #:counter"

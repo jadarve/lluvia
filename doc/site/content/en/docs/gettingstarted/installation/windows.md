@@ -1,7 +1,7 @@
 ---
 title: "Windows 10"
 date: 2021-06-09T00:00:00-05:00
-weight: 3
+weight: 4
 ---
 
 ## Dependencies
