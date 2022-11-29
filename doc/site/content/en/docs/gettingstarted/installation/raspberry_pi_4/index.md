@@ -11,7 +11,7 @@ resources:
 
 ### OS Installation
 
-Download the Raspberry Pi imager and install a fresh version of the operating system in a micro SD card.
+On the desktop machine, download the Raspberry Pi Imager and install a fresh version of the operating system in a micro SD card.
 
 ```shell
 sudo apt install rpi-imager
@@ -350,8 +350,13 @@ python3 -m pip install bazel-bin/lluvia/python/lluvia-0.0.1-py3-none-any.whl
 
 ### Examples
 
-With the Raspberry Pi camera module installed, it is possible to run the `webcam` demo located at `samples/webcam/webcam.py`
+With the Raspberry Pi camera module installed, it is possible to run the `webcam` demo located at `samples/webcam/webcam.py`. The command below configures the camera to output images at `320x240` resolution and fed to the `webcam/HornSchunck` container node, defined in the `horn_schunck.lua` script:
 
 ```shell
-./samples/webcam/webcam.py --width=320 --height=240 ./samples/webcam/scripts/horn_schunck.lua webcam/HornSchunck
+./samples/webcam/webcam.py --width=320 --height=240 \
+  ./samples/webcam/scripts/horn_schunck.lua webcam/HornSchunck
 ```
+
+The resulting color-encoded optical flow is displayed in a second window.
+
+{{< youtube a3Cf4hbixNs>}}
