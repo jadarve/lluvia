@@ -175,11 +175,21 @@ public:
     ComputeNodeDescriptor& setGridShape(const ll::vec3ui& shape) noexcept;
 
     /**
-    @brief      Configures the grid shape given a global shape.
+    @brief      Calculates the grid shape provided local and global shapes.
+
+    The calculation is done as:
+
+    @code
+        grid.x = ceil(global.x / local.x)
+        grid.y = ceil(global.y / local.y)
+        grid.z = ceil(global.z / local.z)
+    @endcode
+
+    This method does not control the case of dividing by zero.
 
     @param[in]  globalShape  The global shape.
 
-    @return     A reference to this object
+    @return     A reference to this object.
     */
     ComputeNodeDescriptor& configureGridShape(const ll::vec3ui& globalShape) noexcept;
 

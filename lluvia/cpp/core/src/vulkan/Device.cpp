@@ -6,7 +6,56 @@
 #include "lluvia/core/image/ImageTiling.h"
 #include "lluvia/core/image/ImageUsageFlags.h"
 
+#include <algorithm>
+
 namespace ll::vulkan {
+
+ll::vec3ui computeOptimalLocalShape(ll::ComputeDimension dimension, uint32_t maxInvocations, const ll::vec3ui& maxSize)
+{
+    switch (dimension) {
+    case ll::ComputeDimension::D1:
+
+        return ll::vec3ui {maxSize.x, 1, 1};
+
+    case ll::ComputeDimension::D2: {
+        auto current = ll::vec3ui {1, 1, 1};
+        auto next    = ll::vec3ui {1, 1, 1};
+        auto volume  = next.x * next.y * next.z;
+
+        // increase the X and Y size until the volume exceeds the max number of invocations
+        // or any dimension is greater than the maxSize
+        while (volume <= maxInvocations && next.x <= maxSize.x && next.y <= maxSize.y) {
+
+            current = next;
+            next    = ll::vec3ui {next.x + 1, next.y + 1, 1};
+            volume  = next.x * next.y * next.z;
+        }
+
+        return current;
+    }
+
+    case ll::ComputeDimension::D3: {
+
+        // fix the value of Z to 4, then try to find good values for X and Y
+        auto fixedZ = std::min(4u, maxSize.z);
+
+        auto current = ll::vec3ui {1, 1, fixedZ};
+        auto next    = ll::vec3ui {1, 1, fixedZ};
+        auto volume  = next.x * next.y * next.z;
+
+        // increase the X and Y size until the volume exceeds the max number of invocations
+        // or any dimension is greater than the maxSize
+        while (volume <= maxInvocations && next.x <= maxSize.x && next.y <= maxSize.y) {
+
+            current = next;
+            next    = ll::vec3ui {next.x + 1, next.y + 1, fixedZ};
+            volume  = next.x * next.y * next.z;
+        }
+
+        return current;
+    }
+    }
+}
 
 Device::Device(const vk::Device&                 device,
     const vk::PhysicalDevice&                    physicalDevice,
@@ -18,6 +67,7 @@ Device::Device(const vk::Device&                 device,
     , m_instance {instance}
 {
 
+    m_physicalDeviceLimits    = m_physicalDevice.getProperties().limits;
     m_computeQueueFamilyIndex = getComputeFamilyQueueIndex();
 
     const auto createInfo = vk::CommandPoolCreateInfo()
@@ -25,6 +75,18 @@ Device::Device(const vk::Device&                 device,
 
     m_commandPool = m_device.createCommandPool(createInfo);
     m_queue       = m_device.getQueue(m_computeQueueFamilyIndex, 0);
+
+    /////////////////////////////////////////////////////
+    // compute optimal compute shapes for all dimensions
+    const auto maxInvocations = m_physicalDeviceLimits.maxComputeWorkGroupInvocations;
+    const auto maxSize        = ll::vec3ui {
+        m_physicalDeviceLimits.maxComputeWorkGroupSize[0],
+        m_physicalDeviceLimits.maxComputeWorkGroupSize[1],
+        m_physicalDeviceLimits.maxComputeWorkGroupSize[2]};
+
+    m_localComputeShapeD1 = computeOptimalLocalShape(ll::ComputeDimension::D1, maxInvocations, maxSize);
+    m_localComputeShapeD2 = computeOptimalLocalShape(ll::ComputeDimension::D2, maxInvocations, maxSize);
+    m_localComputeShapeD3 = computeOptimalLocalShape(ll::ComputeDimension::D3, maxInvocations, maxSize);
 }
 
 Device::~Device()
@@ -43,6 +105,11 @@ vk::PhysicalDevice& Device::getPhysicalDevice() noexcept
     return m_physicalDevice;
 }
 
+const vk::PhysicalDeviceLimits& Device::getPhysicalDeviceLimits() noexcept
+{
+    return m_physicalDeviceLimits;
+}
+
 vk::CommandPool& Device::getCommandPool() noexcept
 {
     return m_commandPool;
@@ -51,6 +118,18 @@ vk::CommandPool& Device::getCommandPool() noexcept
 uint32_t Device::getComputeFamilyQueueIndex() const noexcept
 {
     return m_computeQueueFamilyIndex;
+}
+
+ll::vec3ui Device::getComputeLocalShape(ll::ComputeDimension dimension) const noexcept
+{
+    switch (dimension) {
+    case ll::ComputeDimension::D1:
+        return m_localComputeShapeD1;
+    case ll::ComputeDimension::D2:
+        return m_localComputeShapeD2;
+    case ll::ComputeDimension::D3:
+        return m_localComputeShapeD3;
+    }
 }
 
 bool Device::isImageDescriptorSupported(const ll::ImageDescriptor& descriptor) const noexcept
