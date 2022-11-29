@@ -511,10 +511,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a7a21c37db3d4fa94ca8e579ccfd2c227"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a7a21c37db3d4fa94ca8e579ccfd2c227">fromBase64</a> (const std::string &amp;code)</td></tr>
 <tr class="memdesc:a7a21c37db3d4fa94ca8e579ccfd2c227"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a std::string with base-64 characters to binary.  <a href="../../d8/dda/namespacell.html#a7a21c37db3d4fa94ca8e579ccfd2c227">More...</a><br /></td></tr>
 <tr class="separator:a7a21c37db3d4fa94ca8e579ccfd2c227"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5f8f373fdbdfe15348855dbdb1fdfaf"><td class="memTemplParams" colspan="2">template&lt;typename F  = float&gt; </td></tr>
-<tr class="memitem:aa5f8f373fdbdfe15348855dbdb1fdfaf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">ll::vec3ui</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#aa5f8f373fdbdfe15348855dbdb1fdfaf">configureGridShape</a> (const <a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">vec3ui</a> &amp;localShape, const <a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">vec3ui</a> &amp;globalShape) noexcept</td></tr>
-<tr class="memdesc:aa5f8f373fdbdfe15348855dbdb1fdfaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the grid shape provided local and global shapes.  <a href="../../d8/dda/namespacell.html#aa5f8f373fdbdfe15348855dbdb1fdfaf">More...</a><br /></td></tr>
-<tr class="separator:aa5f8f373fdbdfe15348855dbdb1fdfaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80fc85701597f6647fd1e0e2f55cc855"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../dc/da6/classll_1_1Image.html">ll::Image</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a80fc85701597f6647fd1e0e2f55cc855">createAndInitImage</a> (std::shared_ptr&lt; <a class="el" href="../../d8/d31/classll_1_1Session.html">ll::Session</a> &gt; &amp;session, std::shared_ptr&lt; <a class="el" href="../../d6/dfb/classll_1_1Memory.html">ll::Memory</a> &gt; &amp;memory, const <a class="el" href="../../de/d04/classll_1_1ImageDescriptor.html">ll::ImageDescriptor</a> &amp;desc, const <a class="el" href="../../d8/dda/namespacell.html#a26be6e4eaaf158353dda48d88dca308a">ll::ImageLayout</a> initialLayout=<a class="el" href="../../d8/dda/namespacell.html#a26be6e4eaaf158353dda48d88dca308aa0db377921f4ce762c62526131097968f">ll::ImageLayout::General</a>)</td></tr>
 <tr class="memdesc:a80fc85701597f6647fd1e0e2f55cc855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and initialize a <a class="el" href="../../dc/da6/classll_1_1Image.html" title="Objects to manage images.">ll::Image</a> object.  <a href="../../d8/dda/namespacell.html#a80fc85701597f6647fd1e0e2f55cc855">More...</a><br /></td></tr>
 <tr class="separator:a80fc85701597f6647fd1e0e2f55cc855"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1385,65 +1381,6 @@ template&lt;typename T  = std::string&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the corresponding <code>std::string</code> in <a class="el" href="../../d7/dff/namespacell_1_1impl.html#a649613137c740b139a2c99f01cb1c876" title="Channel type string values used for converting ll::ChannelType to std::string and vice-versa.">ll::impl::ChannelTypeStrings</a> for the enum value. </dd></dl>
-
-</div>
-</div>
-<a id="aa5f8f373fdbdfe15348855dbdb1fdfaf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5f8f373fdbdfe15348855dbdb1fdfaf">&#9670;&nbsp;</a></span>configureGridShape()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename F  = float&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">ll::vec3ui</a> ll::configureGridShape </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">vec3ui</a> &amp;&#160;</td>
-          <td class="paramname"><em>localShape</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">vec3ui</a> &amp;&#160;</td>
-          <td class="paramname"><em>globalShape</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Calculates the grid shape provided local and global shapes. </p>
-<p>The calculation is done as:</p>
-<div class="fragment"><div class="line">grid.x = ceil(global.x / local.x)</div>
-<div class="line">grid.y = ceil(global.y / local.y)</div>
-<div class="line">grid.z = ceil(global.z / local.z)</div>
-</div><!-- fragment --><p>This method does not control the case of dividing by zero.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">localShape</td><td>The local shape. Its values must be greater than zero. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">globalShape</td><td>The global shape.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">F</td><td>Floating point type used for the calculations. Defaults to float.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The grid shape. </dd></dl>
 
 </div>
 </div>

@@ -1,8 +1,6 @@
 var dir_1e4ae25c95f15484ce5038c70c50741b =
 [
-    [ "Device.h", "de/d05/Device_8h.html", [
-      [ "Device", "dc/ddb/classll_1_1vulkan_1_1Device.html", "dc/ddb/classll_1_1vulkan_1_1Device" ]
-    ] ],
+    [ "Device.h", "de/d05/Device_8h.html", "de/d05/Device_8h" ],
     [ "Instance.h", "db/d26/Instance_8h.html", [
       [ "Instance", "df/d04/classll_1_1vulkan_1_1Instance.html", "df/d04/classll_1_1vulkan_1_1Instance" ]
     ] ],

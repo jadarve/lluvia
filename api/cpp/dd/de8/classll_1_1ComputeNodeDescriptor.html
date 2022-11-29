@@ -142,7 +142,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a28597e6be94876886f579897c7bbe7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the grid shape.  <a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a28597e6be94876886f579897c7bbe7a4">More...</a><br /></td></tr>
 <tr class="separator:a28597e6be94876886f579897c7bbe7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a759c013a48440e03d8ba4cf5a674207a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a759c013a48440e03d8ba4cf5a674207a">configureGridShape</a> (const <a class="el" href="../../d8/dda/namespacell.html#a506d7801f600a713b84c6d43d5b31c3e">ll::vec3ui</a> &amp;globalShape) noexcept</td></tr>
-<tr class="memdesc:a759c013a48440e03d8ba4cf5a674207a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures the grid shape given a global shape.  <a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a759c013a48440e03d8ba4cf5a674207a">More...</a><br /></td></tr>
+<tr class="memdesc:a759c013a48440e03d8ba4cf5a674207a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the grid shape provided local and global shapes.  <a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a759c013a48440e03d8ba4cf5a674207a">More...</a><br /></td></tr>
 <tr class="separator:a759c013a48440e03d8ba4cf5a674207a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8398f85d7b5f8247ce5e7f9a6acafbdb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html">ComputeNodeDescriptor</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8398f85d7b5f8247ce5e7f9a6acafbdb">setLocalX</a> (const uint32_t x) noexcept</td></tr>
 <tr class="memdesc:a8398f85d7b5f8247ce5e7f9a6acafbdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the local group size in the X axis.  <a href="../../dd/de8/classll_1_1ComputeNodeDescriptor.html#a8398f85d7b5f8247ce5e7f9a6acafbdb">More...</a><br /></td></tr>
@@ -382,14 +382,19 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Configures the grid shape given a global shape. </p>
+<p>Calculates the grid shape provided local and global shapes. </p>
+<p>The calculation is done as:</p>
+<div class="fragment"><div class="line">grid.x = ceil(global.x / local.x)</div>
+<div class="line">grid.y = ceil(global.y / local.y)</div>
+<div class="line">grid.z = ceil(global.z / local.z)</div>
+</div><!-- fragment --><p>This method does not control the case of dividing by zero.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">globalShape</td><td>The global shape.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A reference to this object </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference to this object. </dd></dl>
 
 </div>
 </div>

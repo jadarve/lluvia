@@ -1,5 +1,18 @@
 <map id="/root/project/lluvia/cpp/core/include/lluvia/core/vulkan/Device.h" name="/root/project/lluvia/cpp/core/include/lluvia/core/vulkan/Device.h">
-<area shape="rect" id="node1" title="Device class." alt="" coords="23,5,195,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,117,83,143"/>
-<area shape="rect" id="node3" href="$d5/ddf/vulkan_8hpp.html" title=" " alt="" coords="107,109,245,151"/>
+<area shape="rect" id="node1" title="Device class." alt="" coords="359,5,531,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="276,117,353,143"/>
+<area shape="rect" id="node3" href="$d6/d4e/ComputeDimension_8h.html" title=" " alt="" coords="44,199,279,225"/>
+<area shape="rect" id="node13" href="$d9/d49/types_8h.html" title="Common types." alt="" coords="429,117,571,143"/>
+<area shape="rect" id="node16" href="$d5/ddf/vulkan_8hpp.html" title=" " alt="" coords="595,109,733,151"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,348,61,375"/>
+<area shape="rect" id="node5" title=" " alt="" coords="86,348,141,375"/>
+<area shape="rect" id="node6" href="$d0/d0b/enums_8h.html" title="Enums." alt="" coords="197,273,395,300"/>
+<area shape="rect" id="node7" title=" " alt="" coords="352,348,437,375"/>
+<area shape="rect" id="node8" title=" " alt="" coords="656,348,723,375"/>
+<area shape="rect" id="node9" title=" " alt="" coords="545,348,631,375"/>
+<area shape="rect" id="node10" title=" " alt="" coords="461,348,520,375"/>
+<area shape="rect" id="node11" title=" " alt="" coords="165,348,241,375"/>
+<area shape="rect" id="node12" title=" " alt="" coords="265,348,327,375"/>
+<area shape="rect" id="node14" href="$da/d41/error_8h.html" title="error related classes and methods." alt="" coords="316,199,452,225"/>
+<area shape="rect" id="node15" title=" " alt="" coords="419,273,527,300"/>
 </map>

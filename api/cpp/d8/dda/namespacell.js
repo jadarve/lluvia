@@ -175,7 +175,6 @@ var namespacell =
     [ "castChannelCount", "d8/dda/namespacell.html#ad8957fdbdd3ee7e5f02a2fbeef6ebe73", null ],
     [ "channelTypeToString", "d8/dda/namespacell.html#aeb5c7048dd02196ce6a046ef160f6d69", null ],
     [ "channelTypeToString", "d8/dda/namespacell.html#acfde885de1e2b5426c46ac9dbba06586", null ],
-    [ "configureGridShape", "d8/dda/namespacell.html#aa5f8f373fdbdfe15348855dbdb1fdfaf", null ],
     [ "createAndInitImage", "d8/dda/namespacell.html#a80fc85701597f6647fd1e0e2f55cc855", null ],
     [ "createAndInitImageView", "d8/dda/namespacell.html#a461c64ca6897251ed6fb6dca55d3f2cd", null ],
     [ "createErrorCode", "d8/dda/namespacell.html#ae052844ef951c56c69e98b7aa8b79b33", null ],
