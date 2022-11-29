@@ -34,7 +34,7 @@ git clone https://github.com/jadarve/lluvia.git
 cd lluvia
 ```
 
-Open `platform/values.bzl` and change the paths to Python2 and Python3 according to your instalation. Initially the file looks like this:
+Open `platform/values.bzl` and change the paths to Python2 and Python3 according to your installation. Initially the file looks like this:
 
 ```python
 # Linux
