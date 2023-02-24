@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <vector>
 
 namespace ll {
 
@@ -132,16 +133,23 @@ void ComputeNode::initPipeline()
                                                       .setSetLayoutCount(1)
                                                       .setPSetLayouts(&m_descriptorSetLayout);
 
-    const auto& pushConstants = m_descriptor.getPushConstants();
-    if (pushConstants.getSize() != 0) {
-        auto pushConstantRange = vk::PushConstantRange()
-                                     .setOffset(0)
-                                     .setSize(static_cast<uint32_t>(pushConstants.getSize()))
-                                     .setStageFlags(vk::ShaderStageFlagBits::eCompute);
+    /////////////////////////////////////////////
+    // Push constants
+    auto pushConstantRanges = std::vector<vk::PushConstantRange> {};
 
-        pipeLayoutInfo.setPushConstantRangeCount(1);
-        pipeLayoutInfo.setPPushConstantRanges(&pushConstantRange);
+    const auto& pushConstants = m_descriptor.getPushConstants();
+    if (pushConstants.getSize() > 0) {
+        auto range = vk::PushConstantRange()
+                         .setOffset(0)
+                         .setSize(static_cast<uint32_t>(pushConstants.getSize()))
+                         .setStageFlags(vk::ShaderStageFlagBits::eCompute);
+
+        pushConstantRanges.push_back(range);
     }
+
+    pipeLayoutInfo.setPushConstantRangeCount(static_cast<uint32_t>(pushConstantRanges.size()));
+    pipeLayoutInfo.setPPushConstantRanges(pushConstantRanges.data());
+    /////////////////////////////////////////////
 
     m_pipelineLayout                              = m_device->get().createPipelineLayout(pipeLayoutInfo);
     vk::ComputePipelineCreateInfo computePipeInfo = vk::ComputePipelineCreateInfo()
