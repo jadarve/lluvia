@@ -6,7 +6,7 @@ FROM ubuntu:22.04
 LABEL Author="Juan David Adarve Bermudez <juanda0718@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG LUNARG_VERSION="1.3.211"
+ARG LUNARG_VERSION="1.3.239"
 ARG HUGO_VERSION="0.98.0"
 
 ENV TZ=Etc/UTC
@@ -14,25 +14,25 @@ ENV TZ=Etc/UTC
 # Base dependencies
 RUN apt update \
     && apt install -y \
-        python3-dev \
-        software-properties-common \
-        ca-certificates \
-        curl \
-        wget \
-        build-essential \
-        clang \
-        python3-pip \
-        git \
-        unzip \
-        golang \
-        doxygen \
-        graphviz \
-        nodejs \
-        npm \
+    python3-dev \
+    software-properties-common \
+    ca-certificates \
+    curl \
+    wget \
+    build-essential \
+    clang \
+    python3-pip \
+    git \
+    unzip \
+    golang \
+    doxygen \
+    graphviz \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
-RUN wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add - \
-    && wget -qO /etc/apt/sources.list.d/lunarg-vulkan-$LUNARG_VERSION-focal.list https://packages.lunarg.com/vulkan/$LUNARG_VERSION/lunarg-vulkan-$LUNARG_VERSION-focal.list \
+RUN wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | tee /etc/apt/trusted.gpg.d/lunarg.asc \
+    && wget -qO /etc/apt/sources.list.d/lunarg-vulkan-${LUNARG_VERSION}-jammy.list https://packages.lunarg.com/vulkan/${LUNARG_VERSION}/lunarg-vulkan-${LUNARG_VERSION}-jammy.list \
     && apt update \
     && apt upgrade -y \
     && apt install -y vulkan-sdk mesa-vulkan-drivers \

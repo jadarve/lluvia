@@ -28,19 +28,19 @@ TEST_CASE("Creation", "test_PushConstants")
         float   b;
     };
 
-    auto c = ll::PushConstants {};
+    auto pushConstants = ll::PushConstants {};
 
-    c.set(params {a, b});
-    REQUIRE(c.getSize() == 8);
+    pushConstants.set(params {a, b});
+    REQUIRE(pushConstants.getSize() == 8);
 
-    auto cOut = c.get<params>();
+    auto cOut = pushConstants.get<params>();
     REQUIRE(cOut.a == a);
     REQUIRE(cOut.b == b);
 
-    c.set(int32_t {456});
-    REQUIRE(c.getSize() == 4);
+    pushConstants.set(int32_t {456});
+    REQUIRE(pushConstants.getSize() == 4);
 
-    auto cInt = c.get<int32_t>();
+    auto cInt = pushConstants.get<int32_t>();
     REQUIRE(cInt == 456);
 }
 
@@ -53,11 +53,13 @@ TEST_CASE("BadSize", "test_PushConstants")
         float   b;
     };
 
-    auto c = ll::PushConstants {};
-    c.set(params {0, 3.1415f});
+    auto pushConstants = ll::PushConstants {};
+    pushConstants.set(params {0, 3.1415f});
 
-    // c contains a struct of size 8 bytes, while int32_t is only 4
-    REQUIRE_THROWS_AS(c.get<int32_t>(), std::system_error);
+    REQUIRE(pushConstants.getSize() == 8);
+
+    // pushConstants contains a struct of size 8 bytes, while int32_t is only 4
+    REQUIRE_THROWS_AS(pushConstants.get<int32_t>(), std::system_error);
 }
 
 TEST_CASE("ComputeNode", "test_PushConstants")
@@ -74,6 +76,7 @@ TEST_CASE("ComputeNode", "test_PushConstants")
 
     auto constants = ll::PushConstants {};
     constants.setFloat(3.1415f);
+    REQUIRE(constants.getSize() == 4);
 
     auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/pushConstants.comp.spv"));
 
@@ -130,6 +133,7 @@ TEST_CASE("Push2Constants", "test_PushConstants")
     auto constants = ll::PushConstants {};
     constants.pushFloat(firstValue);
     constants.pushFloat(secondValue);
+    REQUIRE(constants.getSize() == 8);
 
     auto program = session->createProgram(runfiles->Rlocation("lluvia/lluvia/cpp/core/test/glsl/pushConstants2.comp.spv"));
 

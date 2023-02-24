@@ -34,10 +34,7 @@ public:
     {
 
         const auto dataSize = sizeof(data);
-
-        if (dataSize != m_data.capacity()) {
-            m_data.resize(dataSize);
-        }
+        m_data.resize(dataSize);
 
         std::memcpy(static_cast<void*>(&m_data[0]), &data, dataSize);
     }
