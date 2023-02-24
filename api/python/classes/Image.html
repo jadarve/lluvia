@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Image &mdash; lluvia 0.0.1 documentation</title>
@@ -11,10 +11,10 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> lluvia
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            lluvia
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -49,7 +53,31 @@
 <li class="toctree-l2"><a class="reference internal" href="ContainerNodeDescriptor.html">ContainerNodeDescriptor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DeviceDescriptor.html">DeviceDescriptor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Duration.html">Duration</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Image</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lluvia.core.Image"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.allocationInfo"><code class="docutils literal notranslate"><span class="pre">Image.allocationInfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.changeLayout"><code class="docutils literal notranslate"><span class="pre">Image.changeLayout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.channelType"><code class="docutils literal notranslate"><span class="pre">Image.channelType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.channels"><code class="docutils literal notranslate"><span class="pre">Image.channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.clear"><code class="docutils literal notranslate"><span class="pre">Image.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.copyTo"><code class="docutils literal notranslate"><span class="pre">Image.copyTo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.createImageView"><code class="docutils literal notranslate"><span class="pre">Image.createImageView()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.depth"><code class="docutils literal notranslate"><span class="pre">Image.depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.fromHost"><code class="docutils literal notranslate"><span class="pre">Image.fromHost()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.height"><code class="docutils literal notranslate"><span class="pre">Image.height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.layout"><code class="docutils literal notranslate"><span class="pre">Image.layout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.memory"><code class="docutils literal notranslate"><span class="pre">Image.memory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.minimumSize"><code class="docutils literal notranslate"><span class="pre">Image.minimumSize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.session"><code class="docutils literal notranslate"><span class="pre">Image.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.shape"><code class="docutils literal notranslate"><span class="pre">Image.shape</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.size"><code class="docutils literal notranslate"><span class="pre">Image.size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.toHost"><code class="docutils literal notranslate"><span class="pre">Image.toHost()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.usageFlags"><code class="docutils literal notranslate"><span class="pre">Image.usageFlags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Image.width"><code class="docutils literal notranslate"><span class="pre">Image.width</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ImageView.html">ImageView</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Memory.html">Memory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="MemoryAllocationInfo.html">MemoryAllocationInfo</a></li>
@@ -75,9 +103,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Classes</a> &raquo;</li>
-      <li>Image</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Classes</a></li>
+      <li class="breadcrumb-item active">Image</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/classes/Image.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,7 +116,7 @@
            <div itemprop="articleBody">
              
   <section id="image">
-<h1>Image<a class="headerlink" href="#image" title="Permalink to this headline"></a></h1>
+<h1>Image<a class="headerlink" href="#image" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="lluvia.core.Image">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><a class="headerlink" href="#lluvia.core.Image" title="Permalink to this definition"></a></dt>
@@ -101,6 +129,8 @@
 <dt class="sig sig-object py" id="lluvia.core.Image.changeLayout">
 <span class="sig-name descname"><span class="pre">changeLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageLayout</span> <span class="pre">newLayout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Image.changeLayout" title="Permalink to this definition"></a></dt>
 <dd><p>Changes image layout.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <dl>
 <dt>newLayout<span class="classifier">str.</span></dt><dd><p>The new layout. Its value must be one of the values defined
 in lluvia.ImageLayout:</p>
@@ -123,6 +153,7 @@ in lluvia.ImageLayout:</p>
 </div></blockquote>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py attribute">
@@ -151,16 +182,21 @@ blocked until the operation is completed.</p>
 <p>This method creates a command buffer and sumbits it to copy the content
 of this image into dst. No valiation of destination image shape is performed.
 Execution is blocked until the operation is completed.</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>dst<span class="classifier">Image or ImageView</span></dt><dd><p>Destination object.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.Image.createImageView">
 <span class="sig-name descname"><span class="pre">createImageView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageFilterMode</span> <span class="pre">filterMode=ImageFilterMode.Nearest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageAddressMode</span> <span class="pre">addressMode=ImageAddressMode.Repeat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">normalizedCoordinates=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">sampled=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Image.createImageView" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new image view from this image.</p>
+<section id="id2">
+<h2>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
 <dl>
 <dt>filterMode<span class="classifier">str. Defaults to ‘Nearest’.</span></dt><dd><p>Filtering more for reading pixels within a shader. Possible
 values are defined in lluvia.ImageFilterMode:</p>
@@ -190,15 +226,22 @@ pixels within a shader.</p>
 pixels within a shader.</p>
 </dd>
 </dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>imgView<span class="classifier">lluvia.ImageView</span></dt><dd><p>Image view object.</p>
 </dd>
 </dl>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>ValueError<span class="classifier">if either filterMode or addressMode</span></dt><dd><p>parameter have incorrect values.</p>
 </dd>
 </dl>
 <p>RuntimeError : if the image view cannot be created.</p>
+</section>
 </dd></dl>
 
 <dl class="py attribute">
@@ -236,8 +279,14 @@ img.width == arr.shape[2] and img.chhanels == arr.chape[3]</p>
 </dl>
 </li>
 </ul>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
 <p>arr : numpy.ndarray.</p>
+</section>
+<section id="id4">
+<h2>Raises<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
 <p>ValueError : if arr does not match this image shape.</p>
+</section>
 </dd></dl>
 
 <dl class="py attribute">
@@ -279,8 +328,14 @@ img.width == arr.shape[2] and img.chhanels == arr.chape[3]</p>
 <dt class="sig sig-object py" id="lluvia.core.Image.toHost">
 <span class="sig-name descname"><span class="pre">toHost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndarray</span> <span class="pre">output=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Image.toHost" title="Permalink to this definition"></a></dt>
 <dd><p>Copies the content of this image into a numpy host array.</p>
+<section id="id5">
+<h2>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
 <p>output : numpy.ndarray. Defaults to None.</p>
+</section>
+<section id="id6">
+<h2>Raises<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
 <p>ValueError : if output is different than None and does not match this image shape.</p>
+</section>
 </dd></dl>
 
 <dl class="py attribute">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ComputeNode &mdash; lluvia 0.0.1 documentation</title>
@@ -11,10 +11,10 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> lluvia
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            lluvia
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -43,7 +47,29 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Buffer.html">Buffer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="CommandBuffer.html">CommandBuffer</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">ComputeNode</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ComputeNode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lluvia.core.ComputeNode"><code class="docutils literal notranslate"><span class="pre">ComputeNode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.bind"><code class="docutils literal notranslate"><span class="pre">ComputeNode.bind()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.getParameter"><code class="docutils literal notranslate"><span class="pre">ComputeNode.getParameter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.getPort"><code class="docutils literal notranslate"><span class="pre">ComputeNode.getPort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.grid"><code class="docutils literal notranslate"><span class="pre">ComputeNode.grid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.gridX"><code class="docutils literal notranslate"><span class="pre">ComputeNode.gridX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.gridY"><code class="docutils literal notranslate"><span class="pre">ComputeNode.gridY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.gridZ"><code class="docutils literal notranslate"><span class="pre">ComputeNode.gridZ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.init"><code class="docutils literal notranslate"><span class="pre">ComputeNode.init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.local"><code class="docutils literal notranslate"><span class="pre">ComputeNode.local</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.localX"><code class="docutils literal notranslate"><span class="pre">ComputeNode.localX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.localY"><code class="docutils literal notranslate"><span class="pre">ComputeNode.localY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.localZ"><code class="docutils literal notranslate"><span class="pre">ComputeNode.localZ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.record"><code class="docutils literal notranslate"><span class="pre">ComputeNode.record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.run"><code class="docutils literal notranslate"><span class="pre">ComputeNode.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.session"><code class="docutils literal notranslate"><span class="pre">ComputeNode.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.setParameter"><code class="docutils literal notranslate"><span class="pre">ComputeNode.setParameter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.ComputeNode.type"><code class="docutils literal notranslate"><span class="pre">ComputeNode.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ComputeNodeDescriptor.html">ComputeNodeDescriptor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ContainerNode.html">ContainerNode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ContainerNodeDescriptor.html">ContainerNodeDescriptor</a></li>
@@ -75,9 +101,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Classes</a> &raquo;</li>
-      <li>ComputeNode</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Classes</a></li>
+      <li class="breadcrumb-item active">ComputeNode</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/classes/ComputeNode.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,7 +114,7 @@
            <div itemprop="articleBody">
              
   <section id="computenode">
-<h1>ComputeNode<a class="headerlink" href="#computenode" title="Permalink to this headline"></a></h1>
+<h1>ComputeNode<a class="headerlink" href="#computenode" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="lluvia.core.ComputeNode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">ComputeNode</span></span><a class="headerlink" href="#lluvia.core.ComputeNode" title="Permalink to this definition"></a></dt>
@@ -96,12 +122,15 @@
 <dt class="sig sig-object py" id="lluvia.core.ComputeNode.bind">
 <span class="sig-name descname"><span class="pre">bind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unicode</span> <span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.ComputeNode.bind" title="Permalink to this definition"></a></dt>
 <dd><p>Binds an object as parameter to this node.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>index<span class="classifier">str</span></dt><dd><p>Name of the object to bind</p>
 </dd>
 <dt>obj<span class="classifier">lluvia.Buffer or lluvia.ImageView</span></dt><dd><p>Parameter to bind.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">

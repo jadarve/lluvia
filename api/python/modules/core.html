@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lluvia.core &mdash; lluvia 0.0.1 documentation</title>
@@ -11,10 +11,10 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> lluvia
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            lluvia
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -41,7 +45,13 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">lluvia.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lluvia.core.getAvailableDevices"><code class="docutils literal notranslate"><span class="pre">core.getAvailableDevices()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lluvia.core.createSession"><code class="docutils literal notranslate"><span class="pre">core.createSession()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">lluvia.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#lluvia.util.calculateGridSize"><code class="docutils literal notranslate"><span class="pre">calculateGridSize()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#lluvia.util.loadNodes"><code class="docutils literal notranslate"><span class="pre">loadNodes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#lluvia.util.readRGBA"><code class="docutils literal notranslate"><span class="pre">readRGBA()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#lluvia.util.readSampleImage"><code class="docutils literal notranslate"><span class="pre">readSampleImage()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../classes/index.html">Classes</a></li>
@@ -61,9 +71,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Modules</a> &raquo;</li>
-      <li>lluvia.core</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Modules</a></li>
+      <li class="breadcrumb-item active">lluvia.core</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/core.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -74,12 +84,12 @@
            <div itemprop="articleBody">
              
   <span class="target" id="module-lluvia.core"></span><section id="lluvia-core">
-<h1>lluvia.core<a class="headerlink" href="#lluvia-core" title="Permalink to this headline"></a></h1>
+<h1>lluvia.core<a class="headerlink" href="#lluvia-core" title="Permalink to this heading"></a></h1>
 <dl class="field-list simple">
-<dt class="field-odd">copyright</dt>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2018, Juan David Adarve Bermudez. See AUTHORS for more details.</p>
 </dd>
-<dt class="field-even">license</dt>
+<dt class="field-even">license<span class="colon">:</span></dt>
 <dd class="field-even"><p>Apache-2 license, see LICENSE for more details.</p>
 </dd>
 </dl>
@@ -88,17 +98,25 @@
 <dt class="sig sig-object py" id="lluvia.core.getAvailableDevices">
 <span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">getAvailableDevices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.getAvailableDevices" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the list of available devices.</p>
+<section id="returns">
+<h1>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h1>
 <dl class="simple">
 <dt>devices<span class="classifier">list of DeviceDescriptor</span></dt><dd><p>The list of DeviceDescriptor avaiable to create a session from.</p>
 </dd>
 </dl>
+</section>
+<section id="see-also">
+<h1>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h1>
 <p>createSession : Creates a new lluvia.Session object.</p>
+</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lluvia.core.createSession">
 <span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">createSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">enableDebug=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool</span> <span class="pre">loadNodeLibrary=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DeviceDescriptor</span> <span class="pre">device=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.createSession" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new lluvia.Session object.</p>
+<section id="parameters">
+<h1>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h1>
 <dl>
 <dt>enableDebug<span class="classifier">bool defaults to False.</span></dt><dd><p>Whether or not to enable the debug extensions on the GPU
 device. When enabled, the vulkan VK_LAYER_KHRONOS_validation
@@ -113,11 +131,18 @@ Python package should be loaded as part of the session creation.</p>
 be created from the first device available in getAvailableDevices.</p>
 </dd>
 </dl>
+</section>
+<section id="id1">
+<h1>Returns<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <dl class="simple">
 <dt>session<span class="classifier">Session.</span></dt><dd><p>New session.</p>
 </dd>
 </dl>
+</section>
+<section id="id2">
+<h1>See Also<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h1>
 <p>getAvailableDevices : Returns the list of available devices.</p>
+</section>
 </dd></dl>
 
 

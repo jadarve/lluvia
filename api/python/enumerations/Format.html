@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Format &mdash; lluvia 0.0.1 documentation</title>
@@ -11,10 +11,10 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -27,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> lluvia
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            lluvia
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -48,7 +52,56 @@
 <li class="toctree-l2"><a class="reference internal" href="ChannelType.html">ChannelType</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ComputeDimension.html">ComputeDimension</a></li>
 <li class="toctree-l2"><a class="reference internal" href="FloatPrecision.html">FloatPrecision</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Format</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lluvia.core.Format"><code class="docutils literal notranslate"><span class="pre">Format</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16B16A16Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R16G16B16A16Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16B16A16Sint"><code class="docutils literal notranslate"><span class="pre">Format.R16G16B16A16Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16B16A16Uint"><code class="docutils literal notranslate"><span class="pre">Format.R16G16B16A16Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16B16Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R16G16B16Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16B16Sint"><code class="docutils literal notranslate"><span class="pre">Format.R16G16B16Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16B16Uint"><code class="docutils literal notranslate"><span class="pre">Format.R16G16B16Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R16G16Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16Sint"><code class="docutils literal notranslate"><span class="pre">Format.R16G16Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16G16Uint"><code class="docutils literal notranslate"><span class="pre">Format.R16G16Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R16Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16Sint"><code class="docutils literal notranslate"><span class="pre">Format.R16Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R16Uint"><code class="docutils literal notranslate"><span class="pre">Format.R16Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32B32A32Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R32G32B32A32Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32B32A32Sint"><code class="docutils literal notranslate"><span class="pre">Format.R32G32B32A32Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32B32A32Uint"><code class="docutils literal notranslate"><span class="pre">Format.R32G32B32A32Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32B32Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R32G32B32Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32B32Sint"><code class="docutils literal notranslate"><span class="pre">Format.R32G32B32Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32B32Uint"><code class="docutils literal notranslate"><span class="pre">Format.R32G32B32Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R32G32Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32Sint"><code class="docutils literal notranslate"><span class="pre">Format.R32G32Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32G32Uint"><code class="docutils literal notranslate"><span class="pre">Format.R32G32Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R32Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32Sint"><code class="docutils literal notranslate"><span class="pre">Format.R32Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R32Uint"><code class="docutils literal notranslate"><span class="pre">Format.R32Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64B64A64Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R64G64B64A64Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64B64A64Sint"><code class="docutils literal notranslate"><span class="pre">Format.R64G64B64A64Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64B64A64Uint"><code class="docutils literal notranslate"><span class="pre">Format.R64G64B64A64Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64B64Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R64G64B64Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64B64Sint"><code class="docutils literal notranslate"><span class="pre">Format.R64G64B64Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64B64Uint"><code class="docutils literal notranslate"><span class="pre">Format.R64G64B64Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R64G64Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64Sint"><code class="docutils literal notranslate"><span class="pre">Format.R64G64Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64G64Uint"><code class="docutils literal notranslate"><span class="pre">Format.R64G64Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64Sfloat"><code class="docutils literal notranslate"><span class="pre">Format.R64Sfloat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64Sint"><code class="docutils literal notranslate"><span class="pre">Format.R64Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R64Uint"><code class="docutils literal notranslate"><span class="pre">Format.R64Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8G8B8A8Sint"><code class="docutils literal notranslate"><span class="pre">Format.R8G8B8A8Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8G8B8A8Uint"><code class="docutils literal notranslate"><span class="pre">Format.R8G8B8A8Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8G8B8Sint"><code class="docutils literal notranslate"><span class="pre">Format.R8G8B8Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8G8B8Uint"><code class="docutils literal notranslate"><span class="pre">Format.R8G8B8Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8G8Sint"><code class="docutils literal notranslate"><span class="pre">Format.R8G8Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8G8Uint"><code class="docutils literal notranslate"><span class="pre">Format.R8G8Uint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8Sint"><code class="docutils literal notranslate"><span class="pre">Format.R8Sint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lluvia.core.Format.R8Uint"><code class="docutils literal notranslate"><span class="pre">Format.R8Uint</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ImageAddressMode.html">ImageAddressMode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ImageAxis.html">ImageAxis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ImageFilterMode.html">ImageFilterMode</a></li>
@@ -79,9 +132,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Enumerations</a> &raquo;</li>
-      <li>Format</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Enumerations</a></li>
+      <li class="breadcrumb-item active">Format</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/enumerations/Format.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -92,7 +145,7 @@
            <div itemprop="articleBody">
              
   <section id="format">
-<h1>Format<a class="headerlink" href="#format" title="Permalink to this headline"></a></h1>
+<h1>Format<a class="headerlink" href="#format" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="lluvia.core.Format">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lluvia.core.</span></span><span class="sig-name descname"><span class="pre">Format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lluvia.core.Format" title="Permalink to this definition"></a></dt>
