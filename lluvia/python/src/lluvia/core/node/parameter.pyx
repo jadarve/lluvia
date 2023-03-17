@@ -43,6 +43,9 @@ cdef class Parameter:
 
         elif vType == float:
             self.__p.set[float](value)
+        
+        elif vType == str:
+            self.__p.set[str](value)
 
         else:
             raise RuntimeError('Unknown parameter type {0}'.format(vType))
@@ -55,6 +58,9 @@ cdef class Parameter:
 
         if pType == ParameterType.Float:
             return self.__p.get[float]()
+        
+        if pType == ParameterType.String:
+            return self.__p.get[str]()
 
         raise RuntimeError('Unknown parameter type: {0}'.format(pType))
 

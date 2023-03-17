@@ -113,9 +113,11 @@ void registerTypes(sol::table& lib)
         "__getInt", &ll::Parameter::get<int32_t>,
         "__getFloat", &ll::Parameter::get<float>,
         "__getBool", &ll::Parameter::get<bool>,
+        "__getString", &ll::Parameter::get<std::string>,
         "__setInt", &ll::Parameter::set<int32_t>,
         "__setFloat", &ll::Parameter::set<float>,
-        "__setBool", &ll::Parameter::set<bool>);
+        "__setBool", &ll::Parameter::set<bool>,
+        "__setString", &ll::Parameter::set<std::string>);
 
     ///////////////////////////////////////////////////////
     // Descriptors

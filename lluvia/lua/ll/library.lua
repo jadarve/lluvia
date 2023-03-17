@@ -212,13 +212,6 @@ end
 
 function ll.Parameter:get()
 
-    -- castTable = {
-    --     [ll.ParameterType.Int]   = self:__getInt(),
-    --     [ll.ParameterType.Float] = self:__getFloat()
-    -- }
-
-    -- return castTable[self.type]()
-
     if self.type == ll.ParameterType.Int then
         return self:__getInt()
     end
@@ -227,9 +220,10 @@ function ll.Parameter:get()
         return self:__getFloat()
     end
 
-    if self.type == ll.ParameterType.Bool then
-        return self:__getBool()
+    if self.type == ll.ParameterType.String then
+        return self:__getString()
     end
+
 end
 
 
@@ -243,11 +237,10 @@ function ll.Parameter:set(value)
         self:__setBool(value)
     end
 
-    -- castTable = {
-    --     ['number'] = self:__setFloat
-    -- }
-
-    -- castTable[type(value)](value)
+    if type(value) == 'string' then
+        self:__setString(value)
+    end
+    
 end
 
 
