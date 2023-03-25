@@ -9,9 +9,9 @@ NODE_ARCHIVE_PATH = "lluvia/viz"
 
 ll_node(
     name = "Flow2RGBA",
+    archivePath = NODE_ARCHIVE_PATH,
     builder = "Flow2RGBA.lua",
     shader = "Flow2RGBA.comp",
-    archivePath = NODE_ARCHIVE_PATH,
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
@@ -22,8 +22,29 @@ py_test(
     name = "Flow2RGBA_test",
     srcs = ["Flow2RGBA_test.py"],
     data = [
-        ":Flow2RGBA_runfiles"
+        ":Flow2RGBA_runfiles",
     ],
+    legacy_create_init = False,
     deps = PY_TEST_DEPS,
-    legacy_create_init = False
+)
+
+ll_node(
+    name = "ColorMap_gray",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap_gray.lua",
+    shader = "ColorMap_gray.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ColorMap_gray_test",
+    srcs = ["ColorMap_gray_test.py"],
+    data = [
+        ":ColorMap_gray_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
 )

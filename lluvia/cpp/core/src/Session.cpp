@@ -100,6 +100,8 @@ Session::Session(const ll::SessionDescriptor& descriptor)
     m_hostMemory = createMemory(
         ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent,
         0, false);
+
+    m_deviceMemory = createMemory(ll::MemoryPropertyFlagBits::DeviceLocal, 0, false);
 }
 
 Session::~Session()
@@ -115,9 +117,13 @@ std::shared_ptr<ll::Memory> Session::getHostMemory() const noexcept
     return m_hostMemory;
 }
 
+std::shared_ptr<ll::Memory> Session::getDeviceMemory() const noexcept
+{
+    return m_deviceMemory;
+}
+
 vk::PhysicalDeviceMemoryProperties Session::getPhysicalDeviceMemoryProperties() const
 {
-
     return m_device->getPhysicalDevice().getMemoryProperties();
 }
 

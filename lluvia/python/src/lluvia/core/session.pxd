@@ -61,6 +61,7 @@ cdef extern from 'lluvia/core/Session.h' namespace 'll':
         const _DeviceDescriptor& getDeviceDescriptor()
 
         shared_ptr[_Memory] getHostMemory() except +
+        shared_ptr[_Memory] getDeviceMemory() except +
 
         shared_ptr[_Memory] createMemory(const _MemoryPropertyFlags& flags, const uint64_t pageSize, bool exactFlagsMatch) except +
         shared_ptr[_Program] createProgram(const string& spirvPath) except +

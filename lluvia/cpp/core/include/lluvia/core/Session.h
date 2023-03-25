@@ -109,12 +109,22 @@ public:
 
     This memory can be used to create uniform buffers to pass to shaders. The page size is
     set to 0 in order to create independent memories for each object allocated in this memory.
-    This allows for each object to be mapped and stay mapped indefinetly, thus
+    This allows for each object to be mapped and stay mapped indefinitely, thus
     saving map/unmap operations.
 
     @return     The host memory.
      */
     std::shared_ptr<ll::Memory> getHostMemory() const noexcept;
+
+    /**
+    @brief Returns a pointer to ll::Memory object that is DEVICE_LOCAL.
+
+    This memory can be used to create images and buffers that will be used in shaders.
+    The page size is set to 0 in order to create independent memories for each object.
+
+    @return The device memory
+     */
+    std::shared_ptr<ll::Memory> getDeviceMemory() const noexcept;
 
     /**
     @brief      Gets the Lua interpreter.
@@ -410,8 +420,8 @@ private:
 
     std::map<std::string, std::shared_ptr<ll::Program>> m_programRegistry;
 
-    std::once_flag              m_hostMemoryAllocate;
     std::shared_ptr<ll::Memory> m_hostMemory;
+    std::shared_ptr<ll::Memory> m_deviceMemory;
 };
 
 } // namespace ll

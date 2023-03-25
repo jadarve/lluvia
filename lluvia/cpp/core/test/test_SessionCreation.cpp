@@ -13,6 +13,11 @@
 
 #include "lluvia/core.h"
 
+bool containMemoryFlags(const ll::MemoryPropertyFlags& actual, const ll::MemoryPropertyFlags& contains)
+{
+    return (actual & contains) == contains;
+}
+
 TEST_CASE("GetAvaialableDevices", "SessionCreationTest")
 {
 
@@ -106,10 +111,6 @@ TEST_CASE("MultipleDevicesAvailable", "SessionCreationTest")
 TEST_CASE("MemoryFlags", "SessionCreationTest")
 {
 
-    auto containFlags = [](const auto& flags, const auto& value) {
-        return (flags & value) == value;
-    };
-
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
 
     auto memoryFlags = session->getSupportedMemoryFlags();
@@ -122,11 +123,11 @@ TEST_CASE("MemoryFlags", "SessionCreationTest")
 
     for (auto flags : memoryFlags) {
 
-        if (containFlags(flags, hostVisibleCoherentFlags)) {
+        if (containMemoryFlags(flags, hostVisibleCoherentFlags)) {
             hostFlagsFound = true;
         }
 
-        if (containFlags(flags, deviceLocalFlags)) {
+        if (containMemoryFlags(flags, deviceLocalFlags)) {
             deviceFlagsFound = true;
         }
     }
@@ -135,4 +136,47 @@ TEST_CASE("MemoryFlags", "SessionCreationTest")
     REQUIRE(deviceFlagsFound);
 
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
+}
+
+TEST_CASE("DefaultMemories", "SessionCreationTest")
+{
+
+    const auto hostVisibleCoherentFlags = ll::MemoryPropertyFlagBits::HostVisible | ll::MemoryPropertyFlagBits::HostCoherent;
+    const auto deviceLocalFlags         = ll::MemoryPropertyFlagBits::DeviceLocal;
+
+    ///////////////////////////////////////////////////////
+    // for each available device
+    const auto availableDevices = ll::Session::getAvailableDevices();
+    for (auto deviceDesc : availableDevices) {
+
+        std::cout << "ID: " << deviceDesc.id
+                  << " type: " << ll::deviceTypeToString(std::forward<ll::DeviceType>(deviceDesc.deviceType))
+                  << " name: " << deviceDesc.name << std::endl;
+
+        ///////////////////////////////////////////////////
+        // given a session with debug enabled
+        auto desc = ll::SessionDescriptor().enableDebug(true).setDeviceDescriptor(deviceDesc);
+
+        auto session = ll::Session::create(desc);
+
+        ///////////////////////////////////////////////////
+        // when the host default memory are requested
+        auto hostMemory = session->getHostMemory();
+
+        // then it should be not null
+        REQUIRE(hostMemory != nullptr);
+
+        // and should have the host visible and coherent flags
+        REQUIRE(containMemoryFlags(hostMemory->getMemoryPropertyFlags(), hostVisibleCoherentFlags));
+
+        ///////////////////////////////////////////////////
+        // and when the device default memory are requested
+        auto deviceMemory = session->getDeviceMemory();
+
+        // then it should be not null
+        REQUIRE(deviceMemory != nullptr);
+
+        // and should have the device local flags
+        REQUIRE(containMemoryFlags(deviceMemory->getMemoryPropertyFlags(), deviceLocalFlags));
+    }
 }
