@@ -10,14 +10,15 @@ jobs:
         auth:
           username: jadarve
           password: $DOCKERHUB_PASSWORD
+    resource_class: xlarge
     steps:
       - checkout
       - run:
           name: Build Cpp core
-          command: bazel build //lluvia/cpp/core:core_cc_library --local_cpu_resources=HOST_CPUS-2
+          command: bazel build //lluvia/cpp/core:core_cc_library --jobs=6
       - run:
           name: Test
-          command: bazel test --test_output=errors //...
+          command: bazel test --jobs=6 --test_output=errors //...
       # - store_test_results:
       #     path: bazel-testlogs
   
