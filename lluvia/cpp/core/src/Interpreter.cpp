@@ -41,6 +41,8 @@
 
 #include "lluvia/core/impl/LuaLibrary.h"
 
+#include "lluvia/core/utils.h"
+
 #include "lluvia/core/vulkan/vulkan.hpp"
 
 #include <fstream>
@@ -208,7 +210,8 @@ void registerTypes(sol::table& lib)
         "isMappable", sol::property(&ll::Buffer::isMappable),
         "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo),
         "usageFlags", sol::property(&ll::Buffer::getUsageFlagsUnsafe),
-        "memory", sol::property(&ll::Buffer::getMemory));
+        "memory", sol::property(&ll::Buffer::getMemory),
+        "mapAndSetFromVectorUint8", &ll::Buffer::mapAndSetFromVector<uint8_t>);
 
     lib.new_usertype<ll::Image>("Image",
         sol::no_constructor,
@@ -341,6 +344,12 @@ void registerTypes(sol::table& lib)
         "memoryBarrier", &ll::CommandBuffer::memoryBarrier,
         "changeImageLayout", (void(ll::CommandBuffer::*)(ll::Image & image, const ll::ImageLayout newLayout)) & ll::CommandBuffer::changeImageLayout,
         "copyImageToImage", &ll::CommandBuffer::copyImageToImage);
+
+    ///////////////////////////////////////////////////////
+    // Utility methods
+    ///////////////////////////////////////////////////////
+    lib.set_function("fromBase64", &ll::fromBase64);
+    lib.set_function("toBase64", &ll::toBase64);
 }
 
 Interpreter::Interpreter()

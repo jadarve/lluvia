@@ -85,10 +85,14 @@ function builder.onNodeInit(node)
     -- Need to check if the color map exists
     local encodedColorMap = builder.colorMaps[color_map]
 
-    local hostMemory = ll.getHostMemory()
-    local stagingBuffer = hostMemory:createBufferFromBase64(encodedColorMap)
+    -- should map to std::vector<uint8_t>
+    local decodedColorMap = ll.fromBase64(encodedColorMap)
+    local bufferSize = decodedColorMap:size()
 
-    -- TODO: texture memory
+    local hostMemory = ll.getHostMemory()
+    local stagingBuffer = hostMemory:createBuffer(bufferSize)
+    stagingBuffer:mapAndSetFromVectorUint8(encodedColorMap)
+
     local textureMemory = ll.getDeviceMemory()
     local colorMap = textureMemory:createImage(
         ll.ImageDescriptor.new(1, 256, 1, ll.ChannelCount.C4, ll.ChannelType.Uint8),
