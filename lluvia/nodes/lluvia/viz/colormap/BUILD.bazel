@@ -1,0 +1,36 @@
+"""
+"""
+
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
+NODE_ARCHIVE_PATH = "lluvia/viz/colormap"
+
+ll_node(
+    name = "ColorMap_float",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap_float.lua",
+    shader = "ColorMap_float.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+ll_node(
+    name = "ColorMap",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap.lua",
+    visibility = ["//visibility:public"],
+)
+
+# py_test(
+#     name = "ColorMap_gray_test",
+#     srcs = ["ColorMap_gray_test.py"],
+#     data = [
+#         ":ColorMap_gray_runfiles",
+#     ],
+#     legacy_create_init = False,
+#     deps = PY_TEST_DEPS,
+# )

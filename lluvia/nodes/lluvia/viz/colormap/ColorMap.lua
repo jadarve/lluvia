@@ -1,4 +1,4 @@
-local builder = ll.class(ll.ComputeNodeBuilder)
+local builder = ll.class(ll.ContainerNodeBuilder)
 
 builder.name = 'lluvia/viz/ColorMap_gray'
 builder.doc = [[
@@ -70,17 +70,11 @@ function builder.onNodeInit(node)
     local alpha = node:getParameter('alpha')
     ll.logd(node.descriptor.builderName, string.format('color_map: %s, min_value: %f, max_value: %f, alpha: %f', color_map, min_value, max_value, alpha))
 
-    if color_map == 'Gray' then
-    else if color_map == 'Viridis' then
-
-        -- Create a Lua array containing the RGBA values for the Viridis map. Could encode using base 64
-        -- Create a ll.Buffer and transfer the RGBA content to it. Might need to support buffer.map here
-        -- Copy the a RGBA ll.Image with the buffer's content
-        -- Create a normalized ll.ImageView using linear interpolation
-        -- Use the image view in the compute shader 
-    else
-        -- error
-    end
+    -- Create a Lua array containing the RGBA values for the Viridis map. Could encode using base 64
+    -- Create a ll.Buffer and transfer the RGBA content to it. Might need to support buffer.map here
+    -- Copy the a RGBA ll.Image with the buffer's content
+    -- Create a normalized ll.ImageView using linear interpolation
+    -- Use the image view in the compute shader
 
     -- Need to check if the color map exists
     local encodedColorMap = builder.colorMaps[color_map]
@@ -94,28 +88,47 @@ function builder.onNodeInit(node)
     stagingBuffer:mapAndSetFromVectorUint8(encodedColorMap)
 
     local textureMemory = ll.getDeviceMemory()
-    local colorMap = textureMemory:createImage(
+    local colorMapImage = textureMemory:createImage(
         ll.ImageDescriptor.new(1, 256, 1, ll.ChannelCount.C4, ll.ChannelType.Uint8),
         ll.ImageLayout.General,
-        ll.MemoryPropertyFlags.HostVisible | ll.MemoryPropertyFlags.HostCoherent)
+        ll.MemoryPropertyFlags.Storage | ll.MemoryPropertyFlags.Sampled | ll.MemoryPropertyFlags.TransferDst)
 
-    local pushConstants = ll.PushConstants.new()
-    pushConstants:pushFloat(min_value)
-    pushConstants:pushFloat(max_value)
-    pushConstants:pushFloat(alpha)
-    node.pushConstants = pushConstants
+    local colorMapImageView = colorMapImage:createImageView(
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Linear, true, true))
 
-    local memory = in_image.memory
+    local cmdBuffer = ll:CommandBuffer:new()
 
-    out_rgba = memory:createImageView(
-        ll.ImageDescriptor.new(1, in_image.height, in_image.width, ll.ChannelCount.C4, ll.ChannelType.Uint8),
-        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, false, false))
+    -- begin
+    cmdBuffer:begin()
+    cmdBuffer:changeImageLayout(colorMapImage, ll.ImageLayout.TransferDstOptimal)
+    cmdBuffer:copyBufferToImage(stagingBuffer, colorMapImage)
+    cmdBuffer:changeImageLayout(colorMapImage, ll.ImageLayout.ShaderReadOnlyOptimal)
+    cmdBuffer:end()
+    cmdBuffer:run()
+    -- end
 
-    out_rgba:changeImageLayout(ll.ImageLayout.General)
-    out_rgba:clear()
+    local colorMapNode = ll.createComputeNode('lluvia/viz/colormap/ColorMap_float')
+    node:bindNode('ColorMap', colorMapNode)
 
-    node:bind('out_rgba', out_rgba)
-    node:configureGridShape(ll.vec3ui.new(in_image.width, in_image.height, 1))
+    colorMapNode:setParameter('min_value', min_value)
+    colorMapNode:setParameter('max_value', max_value)
+    colorMapNode:setParameter('alpha', alpha)
+
+    colorMapNode:bind('in_image', in_image)
+    colorMapNode:bind('in_colormap', colorMapImageView)
+    colorMapNode:init()
+
+    node:bind('out_rgba', colorMapNode:getPort('out_rgba'))
+end
+
+function builder.onNodeRecord(node, cmdBuffer)
+
+    ll.logd(node.descriptor.builderName, 'onNodeRecord')
+
+    local colorMapNode = node:getNode('ColorMap')
+    cmdBuffer:run(colorMapNode)
+    
+    ll.logd(node.descriptor.builderName, 'onNodeRecord: finish')
 end
 
 ll.registerNodeBuilder(builder)

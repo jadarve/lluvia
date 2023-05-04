@@ -340,10 +340,13 @@ void registerTypes(sol::table& lib)
 
     lib.new_usertype<ll::CommandBuffer>("CommandBuffer",
         sol::no_constructor,
+        "begin", &ll::CommandBuffer::begin,
+        "end", &ll::CommandBuffer::end,
         "run", (void(ll::CommandBuffer::*)(const ll::ComputeNode& node)) & ll::CommandBuffer::run,
         "memoryBarrier", &ll::CommandBuffer::memoryBarrier,
         "changeImageLayout", (void(ll::CommandBuffer::*)(ll::Image & image, const ll::ImageLayout newLayout)) & ll::CommandBuffer::changeImageLayout,
-        "copyImageToImage", &ll::CommandBuffer::copyImageToImage);
+        "copyImageToImage", &ll::CommandBuffer::copyImageToImage,
+        "copyBufferToImage", &ll::CommandBuffer::copyBufferToImage);
 
     ///////////////////////////////////////////////////////
     // Utility methods
