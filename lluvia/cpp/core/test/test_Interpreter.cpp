@@ -36,6 +36,42 @@ TEST_CASE("test_error_unknown_method", "test_Interpreter")
     REQUIRE_THROWS_AS(interpreter->loadAndRun<ll::ComputeNodeDescriptor>(lua, "stringParamValue"), std::system_error);
 }
 
+TEST_CASE("test_syntax_error", "test_Interpreter")
+{
+
+    auto interpreter = std::make_unique<ll::Interpreter>();
+
+    constexpr auto lua = R"(
+        function hello()
+            -- missing closing quote and parenthesis
+            print('hello world
+        end
+
+        hello()
+    )";
+
+    REQUIRE_THROWS_AS(interpreter->loadAndRunNoReturn<>(lua), std::system_error);
+}
+
+TEST_CASE("test_session_syntax_error", "test_Interpreter")
+{
+
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    REQUIRE(session != nullptr);
+
+    constexpr auto lua = R"(
+        function hello()
+            -- missing closing quote and parenthesis
+            print('hello world
+        end
+
+        hello()
+    )";
+
+    REQUIRE_THROWS_AS(session->script(lua), std::system_error);
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
+}
+
 TEST_CASE("test_error_unknown_method_from_session", "test_Interpreter")
 {
 
@@ -82,25 +118,6 @@ TEST_CASE("test_non_existing_file", "test_Interpreter")
     REQUIRE(session != nullptr);
 
     REQUIRE_THROWS_AS(session->scriptFile("some_invalid_path.lua"), std::system_error);
-    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
-}
-
-TEST_CASE("test_syntax_error", "test_Interpreter")
-{
-    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
-    REQUIRE(session != nullptr);
-
-    constexpr auto lua = R"(
-
-        function hello()
-            -- missing closing quote and parenthesis
-            print('hello world
-        end
-
-        hello()
-    )";
-
-    REQUIRE_THROWS_AS(session->script(lua), std::system_error);
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 

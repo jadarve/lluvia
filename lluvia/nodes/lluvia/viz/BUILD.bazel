@@ -27,24 +27,3 @@ py_test(
     legacy_create_init = False,
     deps = PY_TEST_DEPS,
 )
-
-ll_node(
-    name = "ColorMap_gray",
-    archivePath = NODE_ARCHIVE_PATH,
-    builder = "ColorMap_gray.lua",
-    shader = "ColorMap_gray.comp",
-    visibility = ["//visibility:public"],
-    deps = [
-        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
-    ],
-)
-
-py_test(
-    name = "ColorMap_gray_test",
-    srcs = ["ColorMap_gray_test.py"],
-    data = [
-        ":ColorMap_gray_runfiles",
-    ],
-    legacy_create_init = False,
-    deps = PY_TEST_DEPS,
-)

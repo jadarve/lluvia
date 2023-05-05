@@ -341,7 +341,7 @@ void registerTypes(sol::table& lib)
     lib.new_usertype<ll::CommandBuffer>("CommandBuffer",
         sol::no_constructor,
         "begin", &ll::CommandBuffer::begin,
-        "end", &ll::CommandBuffer::end,
+        "ends", &ll::CommandBuffer::end,
         "run", (void(ll::CommandBuffer::*)(const ll::ComputeNode& node)) & ll::CommandBuffer::run,
         "memoryBarrier", &ll::CommandBuffer::memoryBarrier,
         "changeImageLayout", (void(ll::CommandBuffer::*)(ll::Image & image, const ll::ImageLayout newLayout)) & ll::CommandBuffer::changeImageLayout,
@@ -391,11 +391,10 @@ Interpreter::~Interpreter()
 
 void Interpreter::run(const std::string& code)
 {
-
-    try {
-        auto result = m_lua->safe_script(code);
-    } catch (const sol::error& e) {
-        ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
+    auto result = m_lua->safe_script(code);
+    if (!result.valid()) {
+        sol::error err = result;
+        ll::throwSystemError(ll::ErrorCode::InterpreterError, err.what());
     }
 }
 
@@ -422,7 +421,7 @@ void Interpreter::runFile(const std::string& filename)
         // run the script content
         run(stringBuffer);
 
-    } catch (std::runtime_error& e) {
+    } catch (std::system_error& e) {
         ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }
