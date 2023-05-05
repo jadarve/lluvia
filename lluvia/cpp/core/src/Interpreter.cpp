@@ -393,8 +393,8 @@ void Interpreter::run(const std::string& code)
 {
 
     try {
-        auto result = m_lua->script(code);
-    } catch (std::runtime_error& e) {
+        auto result = m_lua->safe_script(code);
+    } catch (const sol::error& e) {
         ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }

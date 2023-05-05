@@ -85,6 +85,25 @@ TEST_CASE("test_non_existing_file", "test_Interpreter")
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }
 
+TEST_CASE("test_syntax_error", "test_Interpreter")
+{
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    REQUIRE(session != nullptr);
+
+    constexpr auto lua = R"(
+
+        function hello()
+            -- missing closing quote and parenthesis
+            print('hello world
+        end
+
+        hello()
+    )";
+
+    REQUIRE_THROWS_AS(session->script(lua), std::system_error);
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
+}
+
 TEST_CASE("bufferMapAndSetFromBase64", "test_Interpreter")
 {
 
