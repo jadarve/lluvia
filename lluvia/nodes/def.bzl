@@ -37,6 +37,8 @@ LLUVIA_NODE_LIBRARY_NODES = [
     "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:ImageProcessor",
     "@lluvia//lluvia/nodes/lluvia/opticalflow/HornSchunck:NumericIteration",
     "@lluvia//lluvia/nodes/lluvia/viz:Flow2RGBA",
-    "@lluvia//lluvia/nodes/lluvia/viz/colormap:ColorMap",
     "@lluvia//lluvia/nodes/lluvia/viz/colormap:ColorMap_float",
+    "@lluvia//lluvia/nodes/lluvia/viz/colormap:ColorMap_int",
+    "@lluvia//lluvia/nodes/lluvia/viz/colormap:ColorMap_uint",
+    "@lluvia//lluvia/nodes/lluvia/viz/colormap:ColorMap",
 ]

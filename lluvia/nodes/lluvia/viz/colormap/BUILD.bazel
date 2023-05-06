@@ -19,6 +19,28 @@ ll_node(
 )
 
 ll_node(
+    name = "ColorMap_uint",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap_uint.lua",
+    shader = "ColorMap_uint.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+ll_node(
+    name = "ColorMap_int",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap_int.lua",
+    shader = "ColorMap_int.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+ll_node(
     name = "ColorMap",
     archivePath = NODE_ARCHIVE_PATH,
     builder = "ColorMap.lua",

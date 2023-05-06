@@ -323,10 +323,13 @@ void registerTypes(sol::table& lib)
         "getDeviceMemory", &ll::Session::getDeviceMemory,
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram,
+        "createCommandBuffer", &ll::Session::createCommandBuffer,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode>(ll::Session::*)(const std::string& builderName)) & ll::Session::createComputeNode,
         "createContainerNode", (std::shared_ptr<ll::ContainerNode>(ll::Session::*)(const std::string& builderName)) & ll::Session::createContainerNode,
         "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape,
-        "__runComputeNode", (void(ll::Session::*)(const ll::ComputeNode& node)) & ll::Session::run);
+        "__runComputeNode", (void(ll::Session::*)(const ll::ComputeNode& node)) & ll::Session::run,
+        "__runContainerNode", (void(ll::Session::*)(const ll::ContainerNode& node)) & ll::Session::run,
+        "__runCommandBuffer", (void(ll::Session::*)(const ll::CommandBuffer& node)) & ll::Session::run);
 
     lib.new_usertype<ll::Memory>("Memory",
         sol::no_constructor,

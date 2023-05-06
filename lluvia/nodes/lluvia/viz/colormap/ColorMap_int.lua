@@ -1,6 +1,6 @@
 local builder = ll.class(ll.ComputeNodeBuilder)
 
-builder.name = 'lluvia/viz/colormap/ColorMap_float'
+builder.name = 'lluvia/viz/colormap/ColorMap_int'
 builder.doc = [[
 TODO
 
@@ -18,7 +18,7 @@ alpha : float. Defaults to 1.0.
 Inputs
 ------
 in_image : ImageView.
-    {r16f, r32f} image. Input image.
+    {r8i, r16i, r32i} image. Input image.
 
 in_colormap : ImageView.
     {rgba8ui} image. The color map to use.
@@ -38,9 +38,9 @@ function builder.newDescriptor()
 
     local in_image = ll.PortDescriptor.new(0, 'in_image', ll.PortDirection.In, ll.PortType.ImageView)
     in_image:checkImageChannelCountIs(ll.ChannelCount.C1)
-    in_image:checkImageChannelTypeIsAnyOf({ll.ChannelType.Float16, ll.ChannelType.Float32})
+    in_image:checkImageChannelTypeIsAnyOf({ll.ChannelType.Int8, ll.ChannelType.Int16, ll.ChannelType.Int32})
 
-    local in_colormap = ll.PortDescriptor.new(1, 'in_colormap', ll.PortDirection.In, ll.PortType.SampledImageView)
+    local in_colormap = ll.PortDescriptor.new(1, 'in_colormap', ll.PortDirection.In, ll.PortType.ImageView)
     in_colormap:checkImageChannelCountIs(ll.ChannelCount.C4)
     in_colormap:checkImageChannelTypeIs(ll.ChannelType.Uint8)
 

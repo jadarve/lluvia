@@ -17,7 +17,7 @@ min_value : float. Defaults to 0.0.
 max_value : float. Defaults to 1.0.
     The maximum value of the input image.
 
-alpha : float. Defaults to 1.0.
+alpha : float. Defaults to 0.0.
     The alpha value of the output image.
 
 Inputs
@@ -34,14 +34,23 @@ out_image : ImageView
 
 -- I could add attributes to the builder
 builder.colorMaps = {}
-builder.colorMaps['Gray'] =  'IUBFKRIDKZCQIWCGAZMUMB23IYEVYRYKLVDQYX2HBVQEOD3CJAIGGSASMREBGZSICVTUQFTIJALWUSAZNNERU3CJDNWUSHLPJEPHASI7OFESC4SJEJZUSI3UJESHKSBGOZECO52IFB4EQKLZJAVXUSBMPNEC27CHFZ6UOMD5I4YX4RZSP5DDHACGGWAEMNUBIY3YERJYQJCTVA2EHOCEIPEEIQ6YKQZ6QVBT7BSDIGDEEQUHIJBYOQKERBAULCCAI2EEASEJH5EYSP2KRI7EXCR6JSFD4TMKHVHIWPKPRM6FDCZ4KKFTWU4MHNKIYOSVRQ5FNDBZK6GDSWENHBMY2OC2RU3VXDJXLSGTMXMNGZPI2NK7RY2WBDRUMGHDIYUOGNRY4M3ERYZGLDRSM2HDEZ4OGFUI4MLJRYYGVDRQNOHC63EPF5WY6L3OR4XG7DZOOCHS24MPFVZI6LLTR4WHJDZMOWHSW5UPFN3Y6K3YR4VHTDZKPKHSS64PFF5Y6KL4R4UH3DZIP2HSQ74PE6AI6J4BR4TYFDZGQOHSNBEOEWCY4JMGRYSYPDRERCHCJCMOESFI4I4KRYRYXDRDRSHCFDMOEKHI2IUPRUQZBDJBSGGSDEUNECJY2IEURQQJLDBAS2GCBF4MD6MIWH4ZRMPZVCY7TKFR7G4KD6OIUH45RIPZ5CI7T6ER7IEJD6QYQIFCRAQKHBZAUSDSDJMGEGTIMIVHQYRKRBJDVCCSJKMEESVIGJNLQMTKZARHVWBCRLUBFGXYAKVQQAV3C7ZMWJ7C3MT6F6ZX2MFUPQY3K6ZTWZ5TJN32G24HSN5ZPA43U5Z2XJ3TZO3WH26HKP55ORA3442DX5ZELP3RI3AHASGBN5FME3SMYNWU5Q3MKDCGUUWFNFKMM2CWY5TVRR3GLLEGKXGJMNP4UYTBZJQWHS3AMXGF42GNLVVM2XDMZZNG5T2ZOHHVO46QKZ25CVLY2FJXVUSSPXJVA76TJ6BNITME2RGIPVKKRHLERDGWI6HNORMR25CJHWCCS3MEBGGZH6N5SPM63I52BWRZUPNTRJW3G2UNYNFL3QZ25XJRWDOS7M66FW3N4LFY3YVLXXZIX3PSPQHAEXB6AI6G4ARMRYJAZPQR7TXBD3IOEHOT4IONLYQ33DRRVW7DDHO6GGPA4QM6FZAZ4XSBT2HFDLVOKGXN4UN67ZQ46LTB35HGD736OIHZ44RPXZZD73UCK==='
+builder.colorMaps['Viridis'] =  'RQJVAEUDVgBFBFgARgZZAEYHWwBGCVwARwpdAEcMXwBHDWAARw9iAEgQYwBIEmQASBNmAEgVZwBIFmgASBdqAEgZawBJGmwASRttAEkdbwBJHnAASR9xAEkhcgBJInMASSN0AEkkdQBIJnYASCd3AEgoeABIKXkASCt6AEgsewBILXwARy59AEcwfQBHMX4ARzJ/AEYzgABGNYAARjaBAEY3ggBFOIIARTqDAEQ7hABEPIQARD2FAEM+hQBDP4YAQ0GGAEJChwBCQ4cAQUSIAEFFiABARogAQEiJAD9JiQA/SooAPkuKAD5MigA+TYoAPU6LAD1PiwA8UYsAPFKLADtTjAA7VIwAOlWMADpWjAA5V4wAOViNADhZjQA4Wo0AN1uNADdcjQA2XY0ANl6NADVfjgA1YI4ANGGOADRijgAzY44AM2SOADJljgAyZo4AMmeOADFojgAxaY4AMGqOADBrjgAvbI8AL22PAC9ujwAub48ALnCPAC1xjwAtco8ALXOPACx0jwAsdY8AK3aPACt3jwAreI8AKnmPACp6jwApe48AKXuPACl8jwAofY8AKH6PACh/jwAngI8AJ4GPACeCjwAmg48AJoSOACWFjgAlho4AJYeOACSIjgAkiY4AJIqOACOKjgAji44AI4yOACKNjgAijo0AIo+NACGQjQAhkY0AIZKNACCTjQAglIwAIJWMACCWjAAgl4wAH5iLAB+ZiwAfmosAH5qLAB+bigAfnIoAH52KAB+eiQAfn4kAH6CJAB+hiAAgoogAIKOHACCkhwAhpYYAIaaGACKnhgAiqIUAI6iFACSphAAkqoMAJauDACasggAnrYIAKK6BACmvgAAqsIAAK7F/ACyyfgAtsn4AL7N9ADC0fAAxtXsAM7Z7ADS3egA2uHkAN7l4ADm6dwA6uncAPLt2AD68dQA/vXQAQb5zAEO/cgBFv3EARsBwAEjBbwBKwm4ATMNtAE7DbABQxGoAUsVpAFTGaABWx2cAWMdmAFrIZQBcyWMAX8piAGHKYQBjy2AAZcxeAGjNXQBqzVwAbM5aAG7PWQBxz1cAc9BWAHXRVQB40VMAetJSAH3TUAB/008AgtRNAITUTACH1UoAidZIAIzWRwCO10UAkddEAJPYQgCW2EAAmNk/AJvZPQCe2jsAoNo5AKPbOACm2zYAqNw0AKvcMwCu3TEAsN0vALPeLQC23iwAuN4qALvfKAC+3ycAwOAlAMPgIwDG4CIAyOEgAMvhHwDO4R4A0OIdANPiHADV4hsA2OMaANvjGQDd4xkA4OQZAOLkGQDl5BkA6OUaAOrlGgDt5RsA7+YcAPLmHQD05h8A9+cgAPnnIgD75yMA/uglAA=='
 
+builder.colorMapNodeMap = {}
+builder.colorMapNodeMap[ll.ChannelType.Uint8] = 'lluvia/viz/colormap/ColorMap_uint'
+builder.colorMapNodeMap[ll.ChannelType.Uint16] = 'lluvia/viz/colormap/ColorMap_uint'
+builder.colorMapNodeMap[ll.ChannelType.Uint32] = 'lluvia/viz/colormap/ColorMap_uint'
+builder.colorMapNodeMap[ll.ChannelType.Int8] = 'lluvia/viz/colormap/ColorMap_int'
+builder.colorMapNodeMap[ll.ChannelType.Int16] = 'lluvia/viz/colormap/ColorMap_int'
+builder.colorMapNodeMap[ll.ChannelType.Int32] = 'lluvia/viz/colormap/ColorMap_int'
+builder.colorMapNodeMap[ll.ChannelType.Float16] = 'lluvia/viz/colormap/ColorMap_float'
+builder.colorMapNodeMap[ll.ChannelType.Float32] = 'lluvia/viz/colormap/ColorMap_float'
 
 function builder.newDescriptor() 
     
-    local desc = ll.ComputeNodeDescriptor.new()
-    
-    desc:init(builder.name, ll.ComputeDimension.D2)
+    local desc = ll.ContainerNodeDescriptor.new()
+
+    desc.builderName = builder.name
 
     local in_image = ll.PortDescriptor.new(0, 'in_image', ll.PortDirection.In, ll.PortType.ImageView)
     in_image:checkImageChannelCountIs(ll.ChannelCount.C1)
@@ -52,10 +61,10 @@ function builder.newDescriptor()
     desc:addPort(in_image)
     desc:addPort(ll.PortDescriptor.new(1, 'out_rgba', ll.PortDirection.Out, ll.PortType.ImageView))
 
-    desc:setParameter('color_map', 'Gray')
+    desc:setParameter('colormap', 'Viridis')
     desc:setParameter('min_value', 0.0)
     desc:setParameter('max_value', 1.0)
-    desc:setParameter('alpha', 1.0)
+    desc:setParameter('alpha', 0.0)
 
     return desc
 end
@@ -64,11 +73,14 @@ function builder.onNodeInit(node)
     
     local in_image = node:getPort('in_image')
 
-    local color_map = node:getParameter('color_map')
+    local colormap = node:getParameter('colormap')
     local min_value = node:getParameter('min_value')
     local max_value = node:getParameter('max_value')
     local alpha = node:getParameter('alpha')
-    ll.logd(node.descriptor.builderName, string.format('color_map: %s, min_value: %f, max_value: %f, alpha: %f', color_map, min_value, max_value, alpha))
+    ll.logd(node.descriptor.builderName, string.format('colormap: %s, min_value: %f, max_value: %f, alpha: %f', colormap, min_value, max_value, alpha))
+
+    -- FIXME
+    colormap = 'Viridis'
 
     -- Create a Lua array containing the RGBA values for the Viridis map. Could encode using base 64
     -- Create a ll.Buffer and transfer the RGBA content to it. Might need to support buffer.map here
@@ -77,34 +89,44 @@ function builder.onNodeInit(node)
     -- Use the image view in the compute shader
 
     -- Need to check if the color map exists
-    local encodedColorMap = builder.colorMaps[color_map]
+    local encodedColorMap = builder.colorMaps[colormap]
+    if encodedColorMap == nil then
+        error(node.descriptor.builderName .. ': color map not found: ' .. color_map)
+    end
 
     -- should map to std::vector<uint8_t>
     local decodedColorMap = ll.fromBase64(encodedColorMap)
     local bufferSize = decodedColorMap:size()
+    ll.logd(node.descriptor.builderName, string.format('bufferSize: %d', bufferSize))
 
     local hostMemory = ll.getHostMemory()
     local stagingBuffer = hostMemory:createBuffer(bufferSize)
-    stagingBuffer:mapAndSetFromVectorUint8(encodedColorMap)
+    stagingBuffer:mapAndSetFromVectorUint8(decodedColorMap)
 
     local textureMemory = ll.getDeviceMemory()
     local colorMapImage = textureMemory:createImage(
-        ll.ImageDescriptor.new(1, 256, 1, ll.ChannelCount.C4, ll.ChannelType.Uint8),
+        ll.ImageDescriptor.new(1, 1, 256, ll.ChannelCount.C4, ll.ChannelType.Uint8),
         ll.ImageLayout.General,
-        ll.MemoryPropertyFlags.Storage | ll.MemoryPropertyFlags.Sampled | ll.MemoryPropertyFlags.TransferDst)
+        ll.ImageUsageFlagBits.Storage | ll.ImageUsageFlagBits.Sampled | ll.ImageUsageFlagBits.TransferDst)
 
     local colorMapImageView = colorMapImage:createImageView(
         ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Linear, true, true))
 
-    local cmdBuffer = ll.CommandBuffer.new()
+    local cmdBuffer = ll.createCommandBuffer()
     cmdBuffer:begin()
     cmdBuffer:changeImageLayout(colorMapImage, ll.ImageLayout.TransferDstOptimal)
     cmdBuffer:copyBufferToImage(stagingBuffer, colorMapImage)
     cmdBuffer:changeImageLayout(colorMapImage, ll.ImageLayout.ShaderReadOnlyOptimal)
     cmdBuffer:ends()
-    cmdBuffer:run()
 
-    local colorMapNode = ll.createComputeNode('lluvia/viz/colormap/ColorMap_float')
+    ll.runCommandBuffer(cmdBuffer)
+
+    local colorMapNodePath = builder.colorMapNodeMap[in_image.channelType]
+    if colorMapNodePath == nil then
+        error(node.descriptor.builderName .. ': unsupported channel type: ' .. in_image.channelType)
+    end
+
+    local colorMapNode = ll.createComputeNode(colorMapNodePath)
     node:bindNode('ColorMap', colorMapNode)
 
     colorMapNode:setParameter('min_value', min_value)

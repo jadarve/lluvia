@@ -4,7 +4,7 @@ ll['activeSession'] = nil
 
 
 function ll.logd(tag, ...)
-    -- print(tag, ...)
+    print(tag, ...)
 end
 
 
@@ -136,6 +136,15 @@ function ll.getProgram(name)
     return ll.activeSession:getProgram(name)
 end
 
+function ll.createCommandBuffer()
+    
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:createCommandBuffer()
+end
+
 function ll.createComputeNode(name)
     
     if not ll.activeSession then
@@ -172,6 +181,15 @@ function ll.run(computeNode)
     end
 
     ll.activeSession:__runComputeNode(computeNode)
+end
+
+function ll.runCommandBuffer(cmdBuffer)
+
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    ll.activeSession:__runCommandBuffer(cmdBuffer)
 end
 
 -----------------------------------------------------------
