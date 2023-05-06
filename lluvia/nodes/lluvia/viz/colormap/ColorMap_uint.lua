@@ -51,6 +51,7 @@ function builder.newDescriptor()
     desc:setParameter('min_value', 0.0)
     desc:setParameter('max_value', 1.0)
     desc:setParameter('alpha', 0.0)
+    desc:setParameter('reverse', 0.0)
 
     return desc
 end
@@ -59,6 +60,7 @@ function builder.onNodeInit(node)
     
     local in_image = node:getPort('in_image')
 
+    local reverse = node:getParameter('reverse')
     local min_value = node:getParameter('min_value')
     local max_value = node:getParameter('max_value')
     local alpha = node:getParameter('alpha')
@@ -68,6 +70,7 @@ function builder.onNodeInit(node)
     pushConstants:pushFloat(min_value)
     pushConstants:pushFloat(max_value)
     pushConstants:pushFloat(alpha)
+    pushConstants:pushFloat(reverse)
     node.pushConstants = pushConstants
 
     local memory = in_image.memory

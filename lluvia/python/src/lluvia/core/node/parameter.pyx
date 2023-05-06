@@ -10,8 +10,11 @@
 
 from libc.stdint cimport uint32_t
 from libcpp cimport bool as boolean
+from libcpp.string cimport string
 
 from lluvia.core.node.parameter_type import ParameterType
+
+from lluvia.core import impl
 
 __all__ = [
     'Parameter'
@@ -45,7 +48,7 @@ cdef class Parameter:
             self.__p.set[float](value)
         
         elif vType == str:
-            self.__p.set[str](value)
+            self.__p.set[string](impl.encodeString(value))
 
         else:
             raise RuntimeError('Unknown parameter type {0}'.format(vType))
@@ -60,7 +63,7 @@ cdef class Parameter:
             return self.__p.get[float]()
         
         if pType == ParameterType.String:
-            return self.__p.get[str]()
+            return impl.decodeString(self.__p.get[string]())
 
         raise RuntimeError('Unknown parameter type: {0}'.format(pType))
 

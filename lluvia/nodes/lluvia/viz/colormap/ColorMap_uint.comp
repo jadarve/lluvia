@@ -12,6 +12,7 @@ layout(push_constant) uniform const_0
     float min_value;
     float max_value;
     float alpha;
+    float reverse;
 }
 params;
 
@@ -25,10 +26,11 @@ void main()
         return;
     }
 
-    const uint  imageValue      = imageLoad(in_image, coords).r;
-    const float normalizedValue = clamp((imageValue - params.min_value) / (params.max_value - params.min_value), 0.0, 1.0);
+    const uint imageValue      = imageLoad(in_image, coords).r;
+    float      normalizedValue = clamp((imageValue - params.min_value) / (params.max_value - params.min_value), 0.0, 1.0);
+    normalizedValue            = params.reverse == 1.0 ? 1.0 - normalizedValue : normalizedValue;
 
-    const uvec4 rgba = texture(in_colormap, imageValue / 255.0);
+    const uvec4 rgba = uvec4(texture(in_colormap, normalizedValue).xyz, params.alpha * 255);
 
     imageStore(out_rgba, coords, rgba);
 }
