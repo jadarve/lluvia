@@ -4,7 +4,7 @@ ll['activeSession'] = nil
 
 
 function ll.logd(tag, ...)
-    print(tag, ...)
+    -- print(tag, ...)
 end
 
 

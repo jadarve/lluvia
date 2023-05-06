@@ -2,14 +2,67 @@ local builder = ll.class(ll.ContainerNodeBuilder)
 
 builder.name = 'lluvia/viz/colormap/ColorMap'
 builder.doc = [[
-Maps numeric values to colors.
+Maps a scalar field to a color field using a color map.
+
+The color maps are generated using Matplotlib available color maps as:
+
+```python
+import numpy as np
+import matplotlib as mpl
+import base64
+
+colormap_names = ['viridis', 'plasma', 'inferno', 'magma', 'cividis', 'gray', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds', 'Spectral', 'coolwarm', 'bwr', 'seismic', 'twilight', 'hsv']
+
+x = np.linspace(0, 1, 256)
+
+for name in colormap_names:
+    
+    cmap = mpl.colormaps[name]
+    RGB = cmap(x)
+    
+    RGBA = [[c[0], c[1], c[2], 0] for c in RGB]
+    RGBA = np.ceil(np.array(RGBA) * 255).astype(np.uint8)
+    
+    data = RGBA.data.tobytes()
+    s = str(base64.b64encode(data), 'utf-8')
+    
+    lua_str = "builder.colorMaps['{0}'] = '{1}'".format(name.lower(), s)
+    print(lua_str)
+```
 
 Parameters
 ----------
-color_map : string. Defaults to "Gray".
+color_map : string. Defaults to "viridis".
     The color map to use. Possible values are:
-    - "Gray"
-    - "Viridis"
+
+    Perceptually uniform maps:
+
+    - viridis
+    - plasma
+    - inferno
+    - magma
+    - cividis
+
+    Sequential maps:
+
+    - gray
+    - purples
+    - blues
+    - greens
+    - oranges
+    - reds
+
+    Diverging maps:
+
+    - spectral
+    - coolwarm
+    - bwr
+    - seismic
+
+    Cyclic maps:
+
+    - twilight
+    - hsv
 
 min_value : float. Defaults to 0.0.
     The minimum value of the input image.
@@ -18,7 +71,10 @@ max_value : float. Defaults to 1.0.
     The maximum value of the input image.
 
 alpha : float. Defaults to 0.0.
-    The alpha value of the output image.
+    The alpha value of the output image in range [0, 1].
+
+reverse: float. Defaults to 0.0.
+    If 1.0, the color map is reversed.
 
 Inputs
 ------
@@ -95,15 +151,10 @@ function builder.onNodeInit(node)
     local max_value = node:getParameter('max_value')
     local alpha = node:getParameter('alpha')
     local reverse = node:getParameter('reverse')
-    ll.logd(node.descriptor.builderName, string.format('colormap: %s, min_value: %f, max_value: %f, alpha: %f', colormap, min_value, max_value, alpha))
 
-    -- Create a Lua array containing the RGBA values for the Viridis map. Could encode using base 64
-    -- Create a ll.Buffer and transfer the RGBA content to it. Might need to support buffer.map here
-    -- Copy the a RGBA ll.Image with the buffer's content
-    -- Create a normalized ll.ImageView using linear interpolation
-    -- Use the image view in the compute shader
+    ll.logd(node.descriptor.builderName, string.format('min_value: %f, max_value: %f, alpha: %f, reverse: %f', min_value, max_value, alpha, reverse))
 
-    -- Need to check if the color map exists
+    -- Check if the color map exists
     local encodedColorMap = builder.colorMaps[colormap]
     if encodedColorMap == nil then
         error(node.descriptor.builderName .. ': color map not found: ' .. color_map)
@@ -112,7 +163,6 @@ function builder.onNodeInit(node)
     -- should map to std::vector<uint8_t>
     local decodedColorMap = ll.fromBase64(encodedColorMap)
     local bufferSize = decodedColorMap:size()
-    ll.logd(node.descriptor.builderName, string.format('bufferSize: %d', bufferSize))
 
     local hostMemory = ll.getHostMemory()
     local stagingBuffer = hostMemory:createBuffer(bufferSize)
@@ -158,12 +208,8 @@ end
 
 function builder.onNodeRecord(node, cmdBuffer)
 
-    ll.logd(node.descriptor.builderName, 'onNodeRecord')
-
     local colorMapNode = node:getNode('ColorMap')
     cmdBuffer:run(colorMapNode)
-    
-    ll.logd(node.descriptor.builderName, 'onNodeRecord: finish')
 end
 
 ll.registerNodeBuilder(builder)

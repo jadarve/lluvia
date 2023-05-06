@@ -4,7 +4,7 @@
 #include <lluvia/core/color.glsl>
 
 layout(binding = 0, r32i) uniform iimage2D in_image;
-layout(binding = 1) uniform usampler2D in_colormap;
+layout(binding = 1) uniform usampler1D in_colormap;
 layout(binding = 2, rgba8ui) uniform uimage2D out_rgba;
 
 layout(push_constant) uniform const_0
@@ -12,6 +12,7 @@ layout(push_constant) uniform const_0
     float min_value;
     float max_value;
     float alpha;
+    float reverse;
 }
 params;
 
@@ -25,10 +26,11 @@ void main()
         return;
     }
 
-    const int   imageValue      = imageLoad(in_image, coords).x;
-    const float normalizedValue = clamp((imageValue - params.min_value) / (params.max_value - params.min_value), 0.0, 1.0);
+    const int imageValue      = imageLoad(in_image, coords).r;
+    float     normalizedValue = clamp((imageValue - params.min_value) / (params.max_value - params.min_value), 0.0, 1.0);
+    normalizedValue           = params.reverse == 1.0 ? 1.0 - normalizedValue : normalizedValue;
 
-    const uvec4 rgba = texture(in_colormap, vec2(normalizedValue, 0.0));
+    const uvec4 rgba = uvec4(texture(in_colormap, normalizedValue).xyz, params.alpha * 255);
 
     imageStore(out_rgba, coords, rgba);
 }

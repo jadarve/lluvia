@@ -2,7 +2,7 @@ local builder = ll.class(ll.ComputeNodeBuilder)
 
 builder.name = 'lluvia/viz/colormap/ColorMap_uint'
 builder.doc = [[
-TODO
+Maps an unsigned integer scalar field to a color field using a color map.
 
 Parameters
 ----------
@@ -13,7 +13,10 @@ max_value : float. Defaults to 1.0.
     The maximum value of the input image.
 
 alpha : float. Defaults to 0.0.
-    The alpha value of the output image.
+    The alpha value of the output image in range [0, 1].
+
+reverse: float. Defaults to 0.0.
+    If 1.0, the color map is reversed.
 
 Inputs
 ------
@@ -60,11 +63,12 @@ function builder.onNodeInit(node)
     
     local in_image = node:getPort('in_image')
 
-    local reverse = node:getParameter('reverse')
     local min_value = node:getParameter('min_value')
     local max_value = node:getParameter('max_value')
     local alpha = node:getParameter('alpha')
-    ll.logd(node.descriptor.builderName, string.format('min_value: %f, max_value: %f, alpha: %f', min_value, max_value, alpha))
+    local reverse = node:getParameter('reverse')
+
+    ll.logd(node.descriptor.builderName, string.format('min_value: %f, max_value: %f, alpha: %f, reverse: %f', min_value, max_value, alpha, reverse))
 
     local pushConstants = ll.PushConstants.new()
     pushConstants:pushFloat(min_value)

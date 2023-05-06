@@ -2,7 +2,7 @@ local builder = ll.class(ll.ComputeNodeBuilder)
 
 builder.name = 'lluvia/viz/colormap/ColorMap_int'
 builder.doc = [[
-TODO
+Maps an integer scalar field to a color field using a color map.
 
 Parameters
 ----------
@@ -12,8 +12,11 @@ min_value : float. Defaults to 0.0.
 max_value : float. Defaults to 1.0.
     The maximum value of the input image.
 
-alpha : float. Defaults to 1.0.
-    The alpha value of the output image.
+alpha : float. Defaults to 0.0.
+    The alpha value of the output image in range [0, 1].
+
+reverse: float. Defaults to 0.0.
+    If 1.0, the color map is reversed.
 
 Inputs
 ------
@@ -40,7 +43,7 @@ function builder.newDescriptor()
     in_image:checkImageChannelCountIs(ll.ChannelCount.C1)
     in_image:checkImageChannelTypeIsAnyOf({ll.ChannelType.Int8, ll.ChannelType.Int16, ll.ChannelType.Int32})
 
-    local in_colormap = ll.PortDescriptor.new(1, 'in_colormap', ll.PortDirection.In, ll.PortType.ImageView)
+    local in_colormap = ll.PortDescriptor.new(1, 'in_colormap', ll.PortDirection.In, ll.PortType.SampledImageView)
     in_colormap:checkImageChannelCountIs(ll.ChannelCount.C4)
     in_colormap:checkImageChannelTypeIs(ll.ChannelType.Uint8)
 
@@ -50,7 +53,8 @@ function builder.newDescriptor()
 
     desc:setParameter('min_value', 0.0)
     desc:setParameter('max_value', 1.0)
-    desc:setParameter('alpha', 1.0)
+    desc:setParameter('alpha', 0.0)
+    desc:setParameter('reverse', 0.0)
 
     return desc
 end
@@ -62,12 +66,15 @@ function builder.onNodeInit(node)
     local min_value = node:getParameter('min_value')
     local max_value = node:getParameter('max_value')
     local alpha = node:getParameter('alpha')
-    ll.logd(node.descriptor.builderName, string.format('min_value: %f, max_value: %f, alpha: %f', min_value, max_value, alpha))
+    local reverse = node:getParameter('reverse')
+
+    ll.logd(node.descriptor.builderName, string.format('min_value: %f, max_value: %f, alpha: %f, reverse: %f', min_value, max_value, alpha, reverse))
 
     local pushConstants = ll.PushConstants.new()
     pushConstants:pushFloat(min_value)
     pushConstants:pushFloat(max_value)
     pushConstants:pushFloat(alpha)
+    pushConstants:pushFloat(reverse)
     node.pushConstants = pushConstants
 
     local memory = in_image.memory
