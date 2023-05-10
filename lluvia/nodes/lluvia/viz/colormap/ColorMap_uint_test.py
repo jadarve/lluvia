@@ -6,19 +6,20 @@ import lluvia_test as ll_test
 
 @pytest.mark.parametrize(
     "dtype", [
-        pytest.param(np.float16, id="float16"),
-        pytest.param(np.float32, id="float32"),
+        pytest.param(np.uint8, id="uint8"),
+        pytest.param(np.uint16, id="uint16"),
+        pytest.param(np.uint32, id="uint32"),
     ],
 )
 def test_goodUse(dtype):
 
-    nodeName = 'lluvia/viz/colormap/ColorMap_float'
+    nodeName = 'lluvia/viz/colormap/ColorMap_uint'
 
     session = ll.createSession(enableDebug=True, loadNodeLibrary=False)
     ll_test.loadNode(session,
-                     builderPath='lluvia/lluvia/nodes/lluvia/viz/colormap/ColorMap_float.lua',
-                     programPath='lluvia/lluvia/nodes/lluvia/viz/colormap/ColorMap_float.comp.spv',
-                     programName='lluvia/viz/colormap/ColorMap_float.comp'
+                     builderPath='lluvia/lluvia/nodes/lluvia/viz/colormap/ColorMap_uint.lua',
+                     programPath='lluvia/lluvia/nodes/lluvia/viz/colormap/ColorMap_uint.comp.spv',
+                     programName='lluvia/viz/colormap/ColorMap_uint.comp'
                      )
 
     node = session.createComputeNode(nodeName)

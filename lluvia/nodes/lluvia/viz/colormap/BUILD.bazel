@@ -39,6 +39,16 @@ ll_node(
     ],
 )
 
+py_test(
+    name = "ColorMap_uint_test",
+    srcs = ["ColorMap_uint_test.py"],
+    data = [
+        ":ColorMap_uint_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)
+
 ll_node(
     name = "ColorMap_int",
     archivePath = NODE_ARCHIVE_PATH,
@@ -50,9 +60,32 @@ ll_node(
     ],
 )
 
+py_test(
+    name = "ColorMap_int_test",
+    srcs = ["ColorMap_int_test.py"],
+    data = [
+        ":ColorMap_int_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)
+
 ll_node(
     name = "ColorMap",
     archivePath = NODE_ARCHIVE_PATH,
     builder = "ColorMap.lua",
     visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "ColorMap_test",
+    srcs = ["ColorMap_test.py"],
+    data = [
+        ":ColorMap_float_runfiles",
+        ":ColorMap_int_runfiles",
+        ":ColorMap_runfiles",
+        ":ColorMap_uint_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
 )

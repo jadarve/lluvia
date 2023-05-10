@@ -175,7 +175,7 @@ function builder.onNodeInit(node)
         ll.ImageUsageFlagBits.Storage | ll.ImageUsageFlagBits.Sampled | ll.ImageUsageFlagBits.TransferDst)
 
     local colorMapImageView = colorMapImage:createImageView(
-        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Linear, true, true))
+        ll.ImageViewDescriptor.new(ll.ImageAddressMode.MirroredRepeat, ll.ImageFilterMode.Nearest, true, true))
 
     local cmdBuffer = ll.createCommandBuffer()
     cmdBuffer:begin()
