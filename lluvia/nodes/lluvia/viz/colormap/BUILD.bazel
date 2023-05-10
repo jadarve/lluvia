@@ -18,6 +18,16 @@ ll_node(
     ],
 )
 
+py_test(
+    name = "ColorMap_float_test",
+    srcs = ["ColorMap_float_test.py"],
+    data = [
+        ":ColorMap_float_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)
+
 ll_node(
     name = "ColorMap_uint",
     archivePath = NODE_ARCHIVE_PATH,
@@ -46,13 +56,3 @@ ll_node(
     builder = "ColorMap.lua",
     visibility = ["//visibility:public"],
 )
-
-# py_test(
-#     name = "ColorMap_gray_test",
-#     srcs = ["ColorMap_gray_test.py"],
-#     data = [
-#         ":ColorMap_gray_runfiles",
-#     ],
-#     legacy_create_init = False,
-#     deps = PY_TEST_DEPS,
-# )

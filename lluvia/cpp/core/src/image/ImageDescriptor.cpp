@@ -276,10 +276,13 @@ ll::vec3ui ImageDescriptor::getShape() const noexcept
 vk::ImageType ImageDescriptor::getImageType() const noexcept
 {
 
-    if (getHeight() == 1)
+    if (getHeight() == 1 && getDepth() == 1) {
         return vk::ImageType::e1D;
-    if (getDepth() == 1)
+    }
+
+    if (getDepth() == 1) {
         return vk::ImageType::e2D;
+    }
 
     return vk::ImageType::e3D;
 }
