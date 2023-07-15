@@ -51,7 +51,7 @@ on a specific memory instance.
 
 This object holds a reference to the ll::Memory it was created from,
 guaranteeing the memory is not deleted before this buffer is.
-Upon destruction of this object, the underlaying memory space is released
+Upon destruction of this object, the underlying memory space is released
 from the ll::Memory instance.
 */
 class Buffer : public Object {
@@ -216,6 +216,20 @@ public:
         auto ptr = map<std::remove_const_t<std::remove_reference_t<T>>>();
 
         std::memcpy(static_cast<void*>(ptr.get()), &obj, objSize);
+    }
+
+    template <typename T>
+    void mapAndSetFromVector(const std::vector<T>& vec)
+    {
+
+        const auto vecSize = vec.size() * sizeof(T);
+        if (vecSize > getSize()) {
+            ll::throwSystemError(ll::ErrorCode::MemoryMapFailed, "size of input vector (" + std::to_string(vecSize) + " bytes) is greater than size of buffer (" + std::to_string(getSize()) + " bytes)");
+        }
+
+        auto ptr = map<std::remove_const_t<std::remove_reference_t<T>>>();
+
+        std::memcpy(static_cast<void*>(ptr.get()), vec.data(), vecSize);
     }
 
 private:

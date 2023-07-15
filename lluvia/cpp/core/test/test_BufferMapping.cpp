@@ -8,8 +8,10 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
+#include <cstdint>
 #include <iostream>
 #include <system_error>
+#include <vector>
 
 #include "lluvia/core.h"
 
@@ -86,8 +88,6 @@ TEST_CASE("MapAndSet", "test_BufferMapping")
     auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
     REQUIRE(session != nullptr);
 
-    std::cout << "Getting host memory" << std::endl;
-
     auto uniformMemory = session->getHostMemory();
     REQUIRE(uniformMemory != nullptr);
 
@@ -112,6 +112,41 @@ TEST_CASE("MapAndSet", "test_BufferMapping")
 
     REQUIRE(p.a == pGet.a);
     REQUIRE(p.b == pGet.b);
+
+    REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
+}
+
+TEST_CASE("MapAndSetFromVector", "test_BufferMapping")
+{
+    ///////////////////////////////////////////////////////
+    // Given a session and a host memory
+    auto session = ll::Session::create(ll::SessionDescriptor().enableDebug(true));
+    REQUIRE(session != nullptr);
+
+    auto hostMemory = session->getHostMemory();
+    REQUIRE(hostMemory != nullptr);
+
+    // and a vector of data
+    const auto data = std::vector<uint8_t> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
+    ///////////////////////////////////////////////////////
+    // when a buffer is created with the size of the vector
+    auto buffer = hostMemory->createBuffer(data.size() * sizeof(uint8_t));
+    REQUIRE(buffer != nullptr);
+
+    // and the vector is mapped and set into the buffer
+    REQUIRE_NOTHROW(buffer->mapAndSetFromVector(data));
+
+    ///////////////////////////////////////////////////////
+    // then the buffer should contain the same data as the vector
+    {
+        auto mapPtr = buffer->map<uint8_t[]>();
+        REQUIRE(mapPtr != nullptr);
+
+        for (auto i = 0u; i < data.size(); ++i) {
+            REQUIRE(mapPtr[i] == data[i]);
+        }
+    }
 
     REQUIRE_FALSE(session->hasReceivedVulkanWarningMessages());
 }

@@ -13,8 +13,9 @@
 namespace ll {
 
 enum class ParameterType : ll::enum_t {
-    Int   = 0,
-    Float = 1
+    Int    = 0,
+    Float  = 1,
+    String = 2,
 };
 
 namespace impl {
@@ -24,8 +25,9 @@ namespace impl {
 
      @sa ll::ParameterType enum values for this array.
      */
-    constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 2> ParameterTypeStrings {{std::make_tuple("Int", ll::ParameterType::Int),
-        std::make_tuple("Float", ll::ParameterType::Float)}};
+    constexpr const std::array<std::tuple<const char*, ll::ParameterType>, 3> ParameterTypeStrings {{std::make_tuple("Int", ll::ParameterType::Int),
+        std::make_tuple("Float", ll::ParameterType::Float),
+        std::make_tuple("String", ll::ParameterType::String)}};
 
 } // namespace impl
 } // namespace ll

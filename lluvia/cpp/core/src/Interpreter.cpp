@@ -41,6 +41,8 @@
 
 #include "lluvia/core/impl/LuaLibrary.h"
 
+#include "lluvia/core/utils.h"
+
 #include "lluvia/core/vulkan/vulkan.hpp"
 
 #include <fstream>
@@ -113,9 +115,11 @@ void registerTypes(sol::table& lib)
         "__getInt", &ll::Parameter::get<int32_t>,
         "__getFloat", &ll::Parameter::get<float>,
         "__getBool", &ll::Parameter::get<bool>,
+        "__getString", &ll::Parameter::get<std::string>,
         "__setInt", &ll::Parameter::set<int32_t>,
         "__setFloat", &ll::Parameter::set<float>,
-        "__setBool", &ll::Parameter::set<bool>);
+        "__setBool", &ll::Parameter::set<bool>,
+        "__setString", &ll::Parameter::set<std::string>);
 
     ///////////////////////////////////////////////////////
     // Descriptors
@@ -206,7 +210,8 @@ void registerTypes(sol::table& lib)
         "isMappable", sol::property(&ll::Buffer::isMappable),
         "allocationInfo", sol::property(&ll::Buffer::getAllocationInfo),
         "usageFlags", sol::property(&ll::Buffer::getUsageFlagsUnsafe),
-        "memory", sol::property(&ll::Buffer::getMemory));
+        "memory", sol::property(&ll::Buffer::getMemory),
+        "mapAndSetFromVectorUint8", &ll::Buffer::mapAndSetFromVector<uint8_t>);
 
     lib.new_usertype<ll::Image>("Image",
         sol::no_constructor,
@@ -315,12 +320,16 @@ void registerTypes(sol::table& lib)
     lib.new_usertype<ll::Session>("Session",
         sol::no_constructor,
         "getHostMemory", &ll::Session::getHostMemory,
+        "getDeviceMemory", &ll::Session::getDeviceMemory,
         "isImageDescriptorSupported", &ll::Session::isImageDescriptorSupported,
         "getProgram", &ll::Session::getProgram,
+        "createCommandBuffer", &ll::Session::createCommandBuffer,
         "createComputeNode", (std::shared_ptr<ll::ComputeNode>(ll::Session::*)(const std::string& builderName)) & ll::Session::createComputeNode,
         "createContainerNode", (std::shared_ptr<ll::ContainerNode>(ll::Session::*)(const std::string& builderName)) & ll::Session::createContainerNode,
         "getGoodComputeLocalShape", &ll::Session::getGoodComputeLocalShape,
-        "__runComputeNode", (void(ll::Session::*)(const ll::ComputeNode& node)) & ll::Session::run);
+        "__runComputeNode", (void(ll::Session::*)(const ll::ComputeNode& node)) & ll::Session::run,
+        "__runContainerNode", (void(ll::Session::*)(const ll::ContainerNode& node)) & ll::Session::run,
+        "__runCommandBuffer", (void(ll::Session::*)(const ll::CommandBuffer& node)) & ll::Session::run);
 
     lib.new_usertype<ll::Memory>("Memory",
         sol::no_constructor,
@@ -334,10 +343,19 @@ void registerTypes(sol::table& lib)
 
     lib.new_usertype<ll::CommandBuffer>("CommandBuffer",
         sol::no_constructor,
+        "begin", &ll::CommandBuffer::begin,
+        "ends", &ll::CommandBuffer::end,
         "run", (void(ll::CommandBuffer::*)(const ll::ComputeNode& node)) & ll::CommandBuffer::run,
         "memoryBarrier", &ll::CommandBuffer::memoryBarrier,
         "changeImageLayout", (void(ll::CommandBuffer::*)(ll::Image & image, const ll::ImageLayout newLayout)) & ll::CommandBuffer::changeImageLayout,
-        "copyImageToImage", &ll::CommandBuffer::copyImageToImage);
+        "copyImageToImage", &ll::CommandBuffer::copyImageToImage,
+        "copyBufferToImage", &ll::CommandBuffer::copyBufferToImage);
+
+    ///////////////////////////////////////////////////////
+    // Utility methods
+    ///////////////////////////////////////////////////////
+    lib.set_function("fromBase64", &ll::fromBase64);
+    lib.set_function("toBase64", &ll::toBase64);
 }
 
 Interpreter::Interpreter()
@@ -376,11 +394,10 @@ Interpreter::~Interpreter()
 
 void Interpreter::run(const std::string& code)
 {
-
-    try {
-        auto result = m_lua->script(code);
-    } catch (std::runtime_error& e) {
-        ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
+    auto result = m_lua->safe_script(code);
+    if (!result.valid()) {
+        sol::error err = result;
+        ll::throwSystemError(ll::ErrorCode::InterpreterError, err.what());
     }
 }
 
@@ -407,7 +424,7 @@ void Interpreter::runFile(const std::string& filename)
         // run the script content
         run(stringBuffer);
 
-    } catch (std::runtime_error& e) {
+    } catch (std::system_error& e) {
         ll::throwSystemError(ll::ErrorCode::InterpreterError, e.what());
     }
 }

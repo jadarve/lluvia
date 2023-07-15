@@ -45,7 +45,8 @@ enum class ErrorCode : ll::enum_t {
     LayerNotFound,             /**< A layer required to create a Session was not found */
     ExtensionNotFound,         /**< An extension required to create a Session was not found */
     PipelineCreationError,     /**< Error creating a vulkan pipeline object */
-    VulkanError                /**< Error calling a vulkan function that does not fit on any of the categories above */
+    VulkanError,               /**< Error calling a vulkan function that does not fit on any of the categories above */
+    InvalidParameterType       /**< Invalid parameter type */
 };
 
 namespace impl {
@@ -53,7 +54,7 @@ namespace impl {
     /**
     String values for ll::ErrorCode enum.
     */
-    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 25> ErrorCodeStrings {{std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
+    constexpr const std::array<std::tuple<const char*, ll::ErrorCode>, 26> ErrorCodeStrings {{std::make_tuple("EnumConversionFailed", ll::ErrorCode::EnumConversionFailed),
         std::make_tuple("MemoryMapFailed", ll::ErrorCode::MemoryMapFailed),
         std::make_tuple("ObjectAllocationError", ll::ErrorCode::ObjectAllocationError),
         std::make_tuple("PortBindingError", ll::ErrorCode::PortBindingError),
@@ -77,7 +78,8 @@ namespace impl {
         std::make_tuple("LayerNotFound", ll::ErrorCode::LayerNotFound),
         std::make_tuple("ExtensionNotFound", ll::ErrorCode::ExtensionNotFound),
         std::make_tuple("PipelineCreationError", ll::ErrorCode::PipelineCreationError),
-        std::make_tuple("VulkanError", ll::ErrorCode::VulkanError)}};
+        std::make_tuple("VulkanError", ll::ErrorCode::VulkanError),
+        std::make_tuple("InvalidParameterType", ll::ErrorCode::InvalidParameterType)}};
 
 } // namespace impl
 

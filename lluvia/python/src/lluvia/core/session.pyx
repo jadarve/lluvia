@@ -199,6 +199,21 @@ cdef class Session:
 
         return mem
 
+    def getDeviceMemory(self):
+        """
+        Returns a memory object that is DEVICE_LOCAL. This memory can
+        be used to create buffers and images to pass to shaders.
+
+        Returns
+        -------
+        mem : ll.Memory
+        """
+
+        cdef Memory mem = Memory()
+        mem.__memory = self.__session.get().getDeviceMemory()
+
+        return mem
+
     def createMemory(self,
                      flags=ll_memory.MemoryPropertyFlagBits.DeviceLocal,
                      uint64_t pageSize=33554432L,

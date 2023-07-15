@@ -119,6 +119,14 @@ function ll.getHostMemory()
     return ll.activeSession:getHostMemory()
 end
 
+function ll.getDeviceMemory()
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:getDeviceMemory()
+end
+
 function ll.getProgram(name)
     
     if not ll.activeSession then
@@ -126,6 +134,15 @@ function ll.getProgram(name)
     end
 
     return ll.activeSession:getProgram(name)
+end
+
+function ll.createCommandBuffer()
+    
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    return ll.activeSession:createCommandBuffer()
 end
 
 function ll.createComputeNode(name)
@@ -164,6 +181,15 @@ function ll.run(computeNode)
     end
 
     ll.activeSession:__runComputeNode(computeNode)
+end
+
+function ll.runCommandBuffer(cmdBuffer)
+
+    if not ll.activeSession then
+        error('ll.activeSession nil')
+    end
+
+    ll.activeSession:__runCommandBuffer(cmdBuffer)
 end
 
 -----------------------------------------------------------
@@ -212,13 +238,6 @@ end
 
 function ll.Parameter:get()
 
-    -- castTable = {
-    --     [ll.ParameterType.Int]   = self:__getInt(),
-    --     [ll.ParameterType.Float] = self:__getFloat()
-    -- }
-
-    -- return castTable[self.type]()
-
     if self.type == ll.ParameterType.Int then
         return self:__getInt()
     end
@@ -227,9 +246,10 @@ function ll.Parameter:get()
         return self:__getFloat()
     end
 
-    if self.type == ll.ParameterType.Bool then
-        return self:__getBool()
+    if self.type == ll.ParameterType.String then
+        return self:__getString()
     end
+
 end
 
 
@@ -243,11 +263,10 @@ function ll.Parameter:set(value)
         self:__setBool(value)
     end
 
-    -- castTable = {
-    --     ['number'] = self:__setFloat
-    -- }
-
-    -- castTable[type(value)](value)
+    if type(value) == 'string' then
+        self:__setString(value)
+    end
+    
 end
 
 

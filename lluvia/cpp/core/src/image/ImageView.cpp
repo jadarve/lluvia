@@ -23,8 +23,22 @@ ImageView::ImageView(const std::shared_ptr<ll::vulkan::Device>& device,
     , m_image {image}
 {
 
+    auto imageViewType = vk::ImageViewType::e2D;
+
+    switch (m_image->getDescriptor().getImageType()) {
+    case vk::ImageType::e1D:
+        imageViewType = vk::ImageViewType::e1D;
+        break;
+    case vk::ImageType::e2D:
+        imageViewType = vk::ImageViewType::e2D;
+        break;
+    case vk::ImageType::e3D:
+        imageViewType = vk::ImageViewType::e3D;
+        break;
+    }
+
     auto imageViewInfo = vk::ImageViewCreateInfo {}
-                             .setViewType(vk::ImageViewType::e2D) // TODO: set according to image extend
+                             .setViewType(imageViewType)
                              .setFormat(m_image->getDescriptor().getFormat())
                              .setImage(m_image->m_vkImage);
 

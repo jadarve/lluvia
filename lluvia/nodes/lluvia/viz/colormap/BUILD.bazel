@@ -1,0 +1,91 @@
+"""
+"""
+
+load("@rules_python//python:defs.bzl", "py_test")
+load("@lluvia//lluvia/bazel/node:def.bzl", "ll_node")
+load("@lluvia//lluvia/python/test:config.bzl", "PY_TEST_DEPS")
+
+NODE_ARCHIVE_PATH = "lluvia/viz/colormap"
+
+ll_node(
+    name = "ColorMap_float",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap_float.lua",
+    shader = "ColorMap_float.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ColorMap_float_test",
+    srcs = ["ColorMap_float_test.py"],
+    data = [
+        ":ColorMap_float_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)
+
+ll_node(
+    name = "ColorMap_uint",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap_uint.lua",
+    shader = "ColorMap_uint.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ColorMap_uint_test",
+    srcs = ["ColorMap_uint_test.py"],
+    data = [
+        ":ColorMap_uint_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)
+
+ll_node(
+    name = "ColorMap_int",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap_int.lua",
+    shader = "ColorMap_int.comp",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
+    ],
+)
+
+py_test(
+    name = "ColorMap_int_test",
+    srcs = ["ColorMap_int_test.py"],
+    data = [
+        ":ColorMap_int_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)
+
+ll_node(
+    name = "ColorMap",
+    archivePath = NODE_ARCHIVE_PATH,
+    builder = "ColorMap.lua",
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "ColorMap_test",
+    srcs = ["ColorMap_test.py"],
+    data = [
+        ":ColorMap_float_runfiles",
+        ":ColorMap_int_runfiles",
+        ":ColorMap_runfiles",
+        ":ColorMap_uint_runfiles",
+    ],
+    legacy_create_init = False,
+    deps = PY_TEST_DEPS,
+)
