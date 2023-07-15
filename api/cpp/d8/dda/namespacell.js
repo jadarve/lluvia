@@ -97,7 +97,8 @@ var namespacell =
       [ "LayerNotFound", "d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a2e6fc58c55f2bb7c5b3653673fdf4fbd", null ],
       [ "ExtensionNotFound", "d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a57ebb20495fbd21690127a155537a163", null ],
       [ "PipelineCreationError", "d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0ae8cc8f3c0d652c5925f9bd0abd89fcb6", null ],
-      [ "VulkanError", "d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a4c24679109b687a11d336f5347fea4f2", null ]
+      [ "VulkanError", "d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a4c24679109b687a11d336f5347fea4f2", null ],
+      [ "InvalidParameterType", "d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0aab5e38e0714f72c03ec9a7e7d71ed8dc", null ]
     ] ],
     [ "FloatPrecision", "d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930", [
       [ "FP16", "d8/dda/namespacell.html#aba771d4179d3162b551b31efb8a3c930aa4bf99d6945c25077fd6660d536af8a0", null ],
@@ -159,7 +160,8 @@ var namespacell =
     ] ],
     [ "ParameterType", "d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf", [
       [ "Int", "d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52", null ],
-      [ "Float", "d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b", null ]
+      [ "Float", "d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b", null ],
+      [ "String", "d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa27118326006d3829667a400ad23d5d98", null ]
     ] ],
     [ "PortDirection", "d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0e", [
       [ "In", "d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0eaefeb369cccbd560588a756610865664c", null ],

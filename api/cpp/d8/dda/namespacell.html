@@ -246,6 +246,7 @@ Enumerations</h2></td></tr>
 , <a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0ae8cc8f3c0d652c5925f9bd0abd89fcb6">PipelineCreationError</a>
 , <br />
 &#160;&#160;<a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0a4c24679109b687a11d336f5347fea4f2">VulkanError</a>
+, <a class="el" href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0aab5e38e0714f72c03ec9a7e7d71ed8dc">InvalidParameterType</a>
 <br />
  }</td></tr>
 <tr class="memdesc:af534378bc7cfaf87120ad129f1451ae0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error codes.  <a href="../../d8/dda/namespacell.html#af534378bc7cfaf87120ad129f1451ae0">More...</a><br /></td></tr>
@@ -342,6 +343,7 @@ Enumerations</h2></td></tr>
 <tr class="separator:ab94e77c92b69e40871a2c3888c209402"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a305d3a429e9e78e5e28f57ac1dd273bf"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bf">ParameterType</a> : ll::enum_t { <a class="el" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52">Int</a> = 0
 , <a class="el" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b">Float</a> = 1
+, <a class="el" href="../../d8/dda/namespacell.html#a305d3a429e9e78e5e28f57ac1dd273bfa27118326006d3829667a400ad23d5d98">String</a> = 2
  }</td></tr>
 <tr class="separator:a305d3a429e9e78e5e28f57ac1dd273bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a152b013648337b475dd1004660b55f0e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0e">PortDirection</a> : ll::enum_t { <a class="el" href="../../d8/dda/namespacell.html#a152b013648337b475dd1004660b55f0eaefeb369cccbd560588a756610865664c">In</a> = 0
@@ -830,6 +832,8 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="af534378bc7cfaf87120ad129f1451ae0a4c24679109b687a11d336f5347fea4f2"></a>VulkanError&#160;</td><td class="fielddoc"><p>Error calling a vulkan function that does not fit on any of the categories above </p>
 </td></tr>
+<tr><td class="fieldname"><a id="af534378bc7cfaf87120ad129f1451ae0aab5e38e0714f72c03ec9a7e7d71ed8dc"></a>InvalidParameterType&#160;</td><td class="fielddoc"><p>Invalid parameter type </p>
+</td></tr>
 </table>
 
 </div>
@@ -1187,6 +1191,7 @@ Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a305d3a429e9e78e5e28f57ac1dd273bfa1686a6c336b71b36d77354cea19a8b52"></a>Int&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a305d3a429e9e78e5e28f57ac1dd273bfa22ae0e2b89e5e3d477f988cc36d3272b"></a>Float&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a305d3a429e9e78e5e28f57ac1dd273bfa27118326006d3829667a400ad23d5d98"></a>String&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -1242,7 +1247,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Port types. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dff/namespacell_1_1impl.html#ae2bd43b154e8c0277695d9f389b0aeed" title="String values used for converting ll::ParameterType to std::string and vice-versa.">ll::impl::ParameterTypeStrings</a> string values for this enum. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dff/namespacell_1_1impl.html#a3314e1174036a9b85c00dffccfde6aac" title="String values used for converting ll::ParameterType to std::string and vice-versa.">ll::impl::ParameterTypeStrings</a> string values for this enum. </dd></dl>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a60a34a98caee536252321f5f94e0c211a7e62bc342f41c946868f0ea6f0b712d8"></a>Buffer&#160;</td><td class="fielddoc"><p>value for <a class="el" href="../../d6/d6b/classll_1_1Buffer.html" title="Objects to manage raw portions of allocated memory.">ll::Buffer</a> type. </p>
 </td></tr>
@@ -1597,7 +1602,7 @@ template&lt;typename T  = std::string&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns the corresponding <code>std::string</code> in <a class="el" href="../../d7/dff/namespacell_1_1impl.html#abcb09d0a2b0c028ddd1d9190e96f1298">ll::impl::ErrorCodeStrings</a> for the enum value. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the corresponding <code>std::string</code> in <a class="el" href="../../d7/dff/namespacell_1_1impl.html#a48080e3d4a7d72eebd1d331f812a22df">ll::impl::ErrorCodeStrings</a> for the enum value. </dd></dl>
 
 </div>
 </div>

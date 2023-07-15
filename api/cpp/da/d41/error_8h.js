@@ -26,11 +26,12 @@ var error_8h =
       [ "LayerNotFound", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a2e6fc58c55f2bb7c5b3653673fdf4fbd", null ],
       [ "ExtensionNotFound", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a57ebb20495fbd21690127a155537a163", null ],
       [ "PipelineCreationError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0ae8cc8f3c0d652c5925f9bd0abd89fcb6", null ],
-      [ "VulkanError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a4c24679109b687a11d336f5347fea4f2", null ]
+      [ "VulkanError", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0a4c24679109b687a11d336f5347fea4f2", null ],
+      [ "InvalidParameterType", "da/d41/error_8h.html#af534378bc7cfaf87120ad129f1451ae0aab5e38e0714f72c03ec9a7e7d71ed8dc", null ]
     ] ],
     [ "createErrorCode", "da/d41/error_8h.html#ae052844ef951c56c69e98b7aa8b79b33", null ],
     [ "errorCodeToString", "da/d41/error_8h.html#a58c2e0ab4e8fd702ae39df9315c3473a", null ],
     [ "throwSystemError", "da/d41/error_8h.html#a940c7361e550cccb56aac17d4ec4adaa", null ],
     [ "throwSystemErrorIf", "da/d41/error_8h.html#a68e3e175f88faa87be6809a4636842e4", null ],
-    [ "ErrorCodeStrings", "da/d41/error_8h.html#abcb09d0a2b0c028ddd1d9190e96f1298", null ]
+    [ "ErrorCodeStrings", "da/d41/error_8h.html#a48080e3d4a7d72eebd1d331f812a22df", null ]
 ];

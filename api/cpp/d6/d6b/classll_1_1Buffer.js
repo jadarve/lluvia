@@ -14,6 +14,7 @@ var classll_1_1Buffer =
     [ "isMappable", "d6/d6b/classll_1_1Buffer.html#aa58962bf3176b7f20d1bdf93337479e1", null ],
     [ "map", "d6/d6b/classll_1_1Buffer.html#a90471d3fc306db3c2019ac07f38f67f2", null ],
     [ "mapAndSet", "d6/d6b/classll_1_1Buffer.html#ac67bcb34d0f1f5c06f9ab2d1b35f5001", null ],
+    [ "mapAndSetFromVector", "d6/d6b/classll_1_1Buffer.html#a9ca5f6260a6709fbc370b02c78df6d19", null ],
     [ "operator=", "d6/d6b/classll_1_1Buffer.html#a109c8abf0875599165018f714c37478a", null ],
     [ "operator=", "d6/d6b/classll_1_1Buffer.html#acb89c52e345f7cb949b51f9533ca3c98", null ],
     [ "ll::CommandBuffer", "d6/d6b/classll_1_1Buffer.html#ad5f7d6d72264b7ec83067c41c26b3164", null ],

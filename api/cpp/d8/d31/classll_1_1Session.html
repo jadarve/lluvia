@@ -128,6 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a13ed0f34e36cf61b16392a556d3ae29f"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d6/dfb/classll_1_1Memory.html">ll::Memory</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d31/classll_1_1Session.html#a13ed0f34e36cf61b16392a556d3ae29f">getHostMemory</a> () const noexcept</td></tr>
 <tr class="memdesc:a13ed0f34e36cf61b16392a556d3ae29f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to <a class="el" href="../../d6/dfb/classll_1_1Memory.html" title="Class to manage allocation of objects into a specific type of memory.">ll::Memory</a> object that is HOST_LOCAL and HOST_COHERENT.  <a href="../../d8/d31/classll_1_1Session.html#a13ed0f34e36cf61b16392a556d3ae29f">More...</a><br /></td></tr>
 <tr class="separator:a13ed0f34e36cf61b16392a556d3ae29f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2be60bad52488087aed19d76fcbea0da"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d6/dfb/classll_1_1Memory.html">ll::Memory</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d31/classll_1_1Session.html#a2be60bad52488087aed19d76fcbea0da">getDeviceMemory</a> () const noexcept</td></tr>
+<tr class="memdesc:a2be60bad52488087aed19d76fcbea0da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to <a class="el" href="../../d6/dfb/classll_1_1Memory.html" title="Class to manage allocation of objects into a specific type of memory.">ll::Memory</a> object that is DEVICE_LOCAL.  <a href="../../d8/d31/classll_1_1Session.html#a2be60bad52488087aed19d76fcbea0da">More...</a><br /></td></tr>
+<tr class="separator:a2be60bad52488087aed19d76fcbea0da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29330dd460f7ae17720f6b11de5d6151"><td class="memItemLeft" align="right" valign="top">vk::PhysicalDeviceMemoryProperties&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d31/classll_1_1Session.html#a29330dd460f7ae17720f6b11de5d6151">getPhysicalDeviceMemoryProperties</a> () const</td></tr>
 <tr class="memdesc:a29330dd460f7ae17720f6b11de5d6151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the Lua interpreter.  <a href="../../d8/d31/classll_1_1Session.html#a29330dd460f7ae17720f6b11de5d6151">More...</a><br /></td></tr>
 <tr class="separator:a29330dd460f7ae17720f6b11de5d6151"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -726,6 +729,35 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a2be60bad52488087aed19d76fcbea0da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be60bad52488087aed19d76fcbea0da">&#9670;&nbsp;</a></span>getDeviceMemory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="../../d6/dfb/classll_1_1Memory.html">ll::Memory</a>&gt; ll::Session::getDeviceMemory </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a pointer to <a class="el" href="../../d6/dfb/classll_1_1Memory.html" title="Class to manage allocation of objects into a specific type of memory.">ll::Memory</a> object that is DEVICE_LOCAL. </p>
+<p>This memory can be used to create images and buffers that will be used in shaders. The page size is set to 0 in order to create independent memories for each object.</p>
+<dl class="section return"><dt>Returns</dt><dd>The device memory </dd></dl>
+
+</div>
+</div>
 <a id="a8263f2cfd84e73952ffa2b5ed90cc3ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8263f2cfd84e73952ffa2b5ed90cc3ef">&#9670;&nbsp;</a></span>getGoodComputeLocalShape()</h2>
 
@@ -779,7 +811,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns a pointer to <a class="el" href="../../d6/dfb/classll_1_1Memory.html" title="Class to manage allocation of objects into a specific type of memory.">ll::Memory</a> object that is HOST_LOCAL and HOST_COHERENT. </p>
-<p>This memory can be used to create uniform buffers to pass to shaders. The page size is set to 0 in order to create independent memories for each object allocated in this memory. This allows for each object to be mapped and stay mapped indefinetly, thus saving map/unmap operations.</p>
+<p>This memory can be used to create uniform buffers to pass to shaders. The page size is set to 0 in order to create independent memories for each object allocated in this memory. This allows for each object to be mapped and stay mapped indefinitely, thus saving map/unmap operations.</p>
 <dl class="section return"><dt>Returns</dt><dd>The host memory. </dd></dl>
 
 </div>

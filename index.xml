@@ -1,4 +1,333 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Raspberry Pi 4 build</title><link>/blog/2022/11/28/raspberry-pi-4-build/</link><pubDate>Mon, 28 Nov 2022 00:00:00 +0000</pubDate><guid>/blog/2022/11/28/raspberry-pi-4-build/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lluvia – Lluvia</title><link>/</link><description>Recent content on Lluvia</description><generator>Hugo -- gohugo.io</generator><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Color mapping for data visualization</title><link>/blog/2023/07/07/color-mapping-for-data-visualization/</link><pubDate>Fri, 07 Jul 2023 00:00:00 +0000</pubDate><guid>/blog/2023/07/07/color-mapping-for-data-visualization/</guid><description>
+&lt;img src="/blog/2023/07/07/color-mapping-for-data-visualization/featured_huf5a97208abc310b74b25968f820817ef_59552_640x0_resize_q75_catmullrom.jpg" width="640" height="320"/>
+&lt;div class="alert alert-primary" role="alert">
+&lt;h4 class="alert-heading">Jupyter notebook:&lt;/h4>
+A Jupyter notebook with the code in this article is available in &lt;a href="https://colab.research.google.com/drive/147ywmmX4e5Ozvnf0DVJSqJcea26fx8jS#scrollTo=iYVTQmChletC">Google Colab&lt;/a>. Check it out!
+&lt;/div>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>Data visualization is an important tool for presenting the results of new algorithms. For 2D data in particular, it is possible to visualize the data as colored images so that our brains can interpret the data in a visual way. This article presents new color mapping nodes available in Lluvia to transform 2D data into color images. These nodes use several color maps available in the &lt;a href="https://matplotlib.org/">Matplotlib project&lt;/a> to accelerate data to color conversion using the GPU.&lt;/p>
+&lt;h2 id="color-mapping">Color mapping&lt;/h2>
+&lt;p>Let $F : \mathbb{Z}^{2}_{\ge 0} \rightarrow \mathbb{R}$ be a scalar field defined for $(x, y)$ in the set of integer numbers greater or equal zero (standard image coordinates). The value $F(x, y)$ on each point is an element of the real numbers $\mathbb{R}$.&lt;/p>
+&lt;p>Next, let $c(z) : \mathbb{R} \rightarrow \text{RGB}$ be a color mapping function converting from a real value $z$ to RGB color space. In practice, the color output of $c(z)$ must be in a closed range that enables visualization in a computer screen. Constraining each color component to lie in the range $[0, 255]$ is common. This can be achieved by limiting the range of the input $z$ to values in the interval $[0, 1]$, that is:&lt;/p>
+&lt;p>$$
+\bar{z} = \frac{z}{z_\text{max} - z_\text{min}}
+$$&lt;/p>
+&lt;p>where $z_\text{min}$ and $z_\text{max}$ are known values.&lt;/p>
+&lt;p>The color field $C : \mathbb{Z}^{2}_{\ge 0} \rightarrow \text{RGB}$ is the result of applying the color mapping function of all values of field $F$ as:&lt;/p>
+&lt;p>$$
+C(x, y) := c\left( \frac{F(x, y)}{z_\text{max} - z_\text{min}} \right)
+$$&lt;/p>
+&lt;h3 id="gray-color-mapping">Gray color mapping&lt;/h3>
+&lt;p>A simple color mapping function is the one mapping to gray scale values. $c_\text{gray}(z)$ is defined as:&lt;/p>
+&lt;p>$$
+c_\text{gray}(\bar{z}) = 255 (\bar{z}, \bar{z}, \bar{z})
+$$&lt;/p>
+&lt;p>That is, creating a 3-vector of the normalized input value repeated in each color component and multiplying it by 255 to obtain an RGB color.&lt;/p>
+&lt;h3 id="complex-color-mappings">Complex color mappings&lt;/h3>
+&lt;p>More complex color maps have a whole set of research on color theory, human color perception and physics. Designing new color maps exclusive for Lluvia is out of scope for the project and serves little purpose as there are great color maps readily available from the open source community. In particular, since I work with Python a lot, and use &lt;a href="https://matplotlib.org/">Matplotlib&lt;/a> heavily, I decided to export several of the color maps available there into Lluvia. The reader is highly encouraged to watch the presentation below from Stéfan van der Walt (&lt;a href="https://github.com/stefanv">@stefanv&lt;/a>) and Nathaniel Smith (&lt;a href="https://github.com/njsmith">@njsmith&lt;/a>) on a default perceptually uniform colormap for Matplotlib.&lt;/p>
+&lt;p>The following color maps are extracted from &lt;a href="https://matplotlib.org/stable/tutorials/colors/colormaps.html">Matplotlib&lt;/a> using code similar to that presented in the Appendix section:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Perceptually uniform maps:&lt;/strong>
+&lt;ul>
+&lt;li>viridis.&lt;/li>
+&lt;li>plasma.&lt;/li>
+&lt;li>inferno.&lt;/li>
+&lt;li>magma.&lt;/li>
+&lt;li>cividis.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Sequential maps:&lt;/strong>
+&lt;ul>
+&lt;li>gray.&lt;/li>
+&lt;li>purples.&lt;/li>
+&lt;li>blues.&lt;/li>
+&lt;li>greens.&lt;/li>
+&lt;li>oranges.&lt;/li>
+&lt;li>reds.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Diverging maps:&lt;/strong>
+&lt;ul>
+&lt;li>spectral.&lt;/li>
+&lt;li>coolwarm.&lt;/li>
+&lt;li>bwr.&lt;/li>
+&lt;li>seismic.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Cyclic maps:&lt;/strong>
+&lt;ul>
+&lt;li>twilight.&lt;/li>
+&lt;li>hsv.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/xAoljeRJ3lU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;h2 id="colormap-nodes-in-lluvia">Colormap nodes in Lluvia&lt;/h2>
+&lt;p>There are four new nodes available in Lluvia for color mapping:&lt;/p>
+&lt;pre tabindex="0">&lt;code>lluvia/viz/colormap/ColorMap : Container : Maps a scalar field to a color field using a color map.
+lluvia/viz/colormap/ColorMap_float : Compute : Maps a floating point scalar field to a color field using a color map.
+lluvia/viz/colormap/ColorMap_int : Compute : Maps an integer scalar field to a color field using a color map.
+lluvia/viz/colormap/ColorMap_uint : Compute : Maps an unsigned integer scalar field to a color field using a color map.
+&lt;/code>&lt;/pre>&lt;p>&lt;code>ColorMap_float&lt;/code>, &lt;code>ColorMap_int&lt;/code>, and &lt;code>ColorMap_uint&lt;/code> process input fields of &lt;code>float&lt;/code>, &lt;code>int&lt;/code>, and &lt;code>uint&lt;/code> types respectively. They are aggregated by the &lt;code>ColorMap&lt;/code> container node (no suffix), which instantiates one of the others according to the input image type.&lt;/p>
+&lt;p>The interface of &lt;code>ColorMap&lt;/code> is:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Parameters:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;code>color_map&lt;/code>: string. Defaults to &amp;ldquo;viridis&amp;rdquo;.&lt;/li>
+&lt;li>&lt;code>min_value&lt;/code>: float. Defaults to 0.0. Minimum input value.&lt;/li>
+&lt;li>&lt;code>max_value&lt;/code>: float. Defaults to 1.0. Maximum input value.&lt;/li>
+&lt;li>&lt;code>alpha&lt;/code> : float. Defaults to 0.0. The alpha value of the output image in range [0, 1].&lt;/li>
+&lt;li>&lt;code>reverse&lt;/code>: float. Defaults to 0.0. If 1.0, the color map is reversed.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Inputs:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;code>in_image&lt;/code> : ImageView. {r8ui, r16ui, r32ui, r8i, r16i, r32i r16f, r32f} image. Input image.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>Outputs:&lt;/strong>
+&lt;ul>
+&lt;li>&lt;code>out_image&lt;/code> : ImageView. rgba8ui image. The encoded color of the optical flow field.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>The code bellow shows how to instantiate, configure, and run the &lt;code>ColorMap&lt;/code> node:&lt;/p>
+&lt;ul class="nav nav-tabs" id="tabs-2" role="tablist">&lt;li class="nav-item">
+&lt;a class="nav-link active tab-Python"
+id="tabs-2-0-tab" data-toggle="tab" href="#tabs-2-0" role="tab" onclick="handleClick(&amp;#34;Python&amp;#34;);"
+aria-controls="tabs-2-0" aria-selected="true">
+Python
+&lt;/a>
+&lt;/li>&lt;/ul>
+&lt;div class="tab-content" id="tabs-2-content">&lt;div class="tab-pane fade show active"
+id="tabs-2-0" role="tabpanel" aria-labelled-by="tabs-2-0-tab">&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">lluvia&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">ll&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">lluvia.util&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">ll_util&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">numpy&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">np&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">matplotlib&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">mpl&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">matplotlib.pyplot&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">plt&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>session &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>createSession(device&lt;span style="color:#000;font-weight:bold">=&lt;/span>ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>getAvailableDevices()[&lt;span style="color:#099">0&lt;/span>])
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createMemory(ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>DeviceLocal)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>host_memory &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createMemory([ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>DeviceLocal, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>HostVisible, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>MemoryPropertyFlagBits&lt;span style="color:#000;font-weight:bold">.&lt;/span>HostCoherent])
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>colormap_names &lt;span style="color:#000;font-weight:bold">=&lt;/span> [&lt;span style="color:#d14">&amp;#39;viridis&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;plasma&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;inferno&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;magma&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;cividis&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;gray&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;purples&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;blues&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;greens&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;oranges&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;reds&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;spectral&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;coolwarm&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;bwr&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;seismic&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;twilight&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;hsv&amp;#39;&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA &lt;span style="color:#000;font-weight:bold">=&lt;/span> ll_util&lt;span style="color:#000;font-weight:bold">.&lt;/span>readSampleImage(&lt;span style="color:#d14">&amp;#39;mouse&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>in_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory&lt;span style="color:#000;font-weight:bold">.&lt;/span>createImageViewFromHost(RGBA, filterMode&lt;span style="color:#000;font-weight:bold">=&lt;/span>ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>ImageFilterMode&lt;span style="color:#000;font-weight:bold">.&lt;/span>Nearest, addressMode&lt;span style="color:#000;font-weight:bold">=&lt;/span>ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>ImageAddressMode&lt;span style="color:#000;font-weight:bold">.&lt;/span>Repeat, normalizedCoordinates&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>, sampled&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createComputeNode(&lt;span style="color:#d14">&amp;#39;lluvia/color/RGBA2Gray&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_rgba&amp;#39;&lt;/span>, in_rgba)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>run()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>img_gray &lt;span style="color:#000;font-weight:bold">=&lt;/span> RGBA2Gray&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_gray&amp;#39;&lt;/span>)&lt;span style="color:#000;font-weight:bold">.&lt;/span>toHost()&lt;span style="color:#000;font-weight:bold">.&lt;/span>astype(dtype)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">for&lt;/span> cmap_name &lt;span style="color:#000;font-weight:bold">in&lt;/span> colormap_names:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fig &lt;span style="color:#000;font-weight:bold">=&lt;/span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>figure(figsize&lt;span style="color:#000;font-weight:bold">=&lt;/span>(&lt;span style="color:#099">20&lt;/span>, &lt;span style="color:#099">4&lt;/span>)); fig&lt;span style="color:#000;font-weight:bold">.&lt;/span>set_tight_layout(&lt;span style="color:#000;font-weight:bold">True&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>subplot2grid((&lt;span style="color:#099">1&lt;/span>,&lt;span style="color:#099">3&lt;/span>), (&lt;span style="color:#099">0&lt;/span>,&lt;span style="color:#099">0&lt;/span>)); plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>imshow(img_gray, cmap&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#d14">&amp;#39;gray&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>tick_params(axis&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#d14">&amp;#39;both&amp;#39;&lt;/span>, which&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#d14">&amp;#39;both&amp;#39;&lt;/span>, bottom&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>, top&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>, labelbottom&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>, labelleft&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>title(&lt;span style="color:#d14">&amp;#39;original&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">for&lt;/span> i, reverse &lt;span style="color:#000;font-weight:bold">in&lt;/span> &lt;span style="color:#0086b3">enumerate&lt;/span>([&lt;span style="color:#099">0&lt;/span>, &lt;span style="color:#099">1&lt;/span>]):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> in_image &lt;span style="color:#000;font-weight:bold">=&lt;/span> memory&lt;span style="color:#000;font-weight:bold">.&lt;/span>createImageViewFromHost(img_gray)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap &lt;span style="color:#000;font-weight:bold">=&lt;/span> session&lt;span style="color:#000;font-weight:bold">.&lt;/span>createContainerNode(&lt;span style="color:#d14">&amp;#39;lluvia/viz/colormap/ColorMap&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>bind(&lt;span style="color:#d14">&amp;#39;in_image&amp;#39;&lt;/span>, in_image)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;colormap&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(cmap_name))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;min_value&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;max_value&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">255&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;alpha&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(&lt;span style="color:#099">1.0&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>setParameter(&lt;span style="color:#d14">&amp;#39;reverse&amp;#39;&lt;/span>, ll&lt;span style="color:#000;font-weight:bold">.&lt;/span>Parameter(reverse))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>run()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> out_rgba &lt;span style="color:#000;font-weight:bold">=&lt;/span> ColorMap&lt;span style="color:#000;font-weight:bold">.&lt;/span>getPort(&lt;span style="color:#d14">&amp;#39;out_rgba&amp;#39;&lt;/span>)&lt;span style="color:#000;font-weight:bold">.&lt;/span>toHost()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>subplot2grid((&lt;span style="color:#099">1&lt;/span>,&lt;span style="color:#099">3&lt;/span>), (&lt;span style="color:#099">0&lt;/span>, i&lt;span style="color:#000;font-weight:bold">+&lt;/span>&lt;span style="color:#099">1&lt;/span>)); plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>imshow(out_rgba)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>tick_params(axis&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#d14">&amp;#39;both&amp;#39;&lt;/span>, which&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#d14">&amp;#39;both&amp;#39;&lt;/span>, bottom&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>, top&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>, labelbottom&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>, labelleft&lt;span style="color:#000;font-weight:bold">=&lt;/span>&lt;span style="color:#000;font-weight:bold">False&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>title(&lt;span style="color:#d14">&amp;#39;&lt;/span>&lt;span style="color:#d14">{0}{1}&lt;/span>&lt;span style="color:#d14">&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>format(cmap_name, &lt;span style="color:#d14">&amp;#39; - reversed&amp;#39;&lt;/span> &lt;span style="color:#000;font-weight:bold">if&lt;/span> &lt;span style="color:#0086b3">bool&lt;/span>(reverse) &lt;span style="color:#000;font-weight:bold">else&lt;/span> &lt;span style="color:#d14">&amp;#39;&amp;#39;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> plt&lt;span style="color:#000;font-weight:bold">.&lt;/span>show()&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/div>
+&lt;/div>
+&lt;h3 id="perceptually-uniform-maps">Perceptually uniform maps&lt;/h3>
+&lt;h4 id="viridis">viridis&lt;/h4>
+&lt;p>&lt;img src="viridis.jpg" alt="">&lt;/p>
+&lt;h4 id="plasma">plasma&lt;/h4>
+&lt;p>&lt;img src="plasma.jpg" alt="">&lt;/p>
+&lt;h4 id="inferno">inferno&lt;/h4>
+&lt;p>&lt;img src="inferno.jpg" alt="">&lt;/p>
+&lt;h4 id="magma">magma&lt;/h4>
+&lt;p>&lt;img src="magma.jpg" alt="">&lt;/p>
+&lt;h4 id="cividis">cividis&lt;/h4>
+&lt;p>&lt;img src="cividis.jpg" alt="">&lt;/p>
+&lt;h3 id="sequential-maps">Sequential maps&lt;/h3>
+&lt;h4 id="gray">gray&lt;/h4>
+&lt;p>&lt;img src="gray.jpg" alt="">&lt;/p>
+&lt;h4 id="purples">purples&lt;/h4>
+&lt;p>&lt;img src="purples.jpg" alt="">&lt;/p>
+&lt;h4 id="blues">blues&lt;/h4>
+&lt;p>&lt;img src="blues.jpg" alt="">&lt;/p>
+&lt;h4 id="greens">greens&lt;/h4>
+&lt;p>&lt;img src="greens.jpg" alt="">&lt;/p>
+&lt;h4 id="oranges">oranges&lt;/h4>
+&lt;p>&lt;img src="oranges.jpg" alt="">&lt;/p>
+&lt;h4 id="reds">reds&lt;/h4>
+&lt;p>&lt;img src="reds.jpg" alt="">&lt;/p>
+&lt;h3 id="diverging-maps">Diverging maps&lt;/h3>
+&lt;h4 id="spectral">spectral&lt;/h4>
+&lt;p>&lt;img src="spectral.jpg" alt="">&lt;/p>
+&lt;h4 id="coolwarm">coolwarm&lt;/h4>
+&lt;p>&lt;img src="coolwarm.jpg" alt="">&lt;/p>
+&lt;h4 id="bwr">bwr&lt;/h4>
+&lt;p>&lt;img src="bwr.jpg" alt="">&lt;/p>
+&lt;h4 id="seismic">seismic&lt;/h4>
+&lt;p>&lt;img src="seismic.jpg" alt="">&lt;/p>
+&lt;h3 id="cyclic-maps">Cyclic maps&lt;/h3>
+&lt;h4 id="twilight">twilight&lt;/h4>
+&lt;p>&lt;img src="twilight.jpg" alt="">&lt;/p>
+&lt;h4 id="hsv">hsv&lt;/h4>
+&lt;p>&lt;img src="hsv.jpg" alt="">&lt;/p>
+&lt;h2 id="appendix">Appendix&lt;/h2>
+&lt;h3 id="color-map-extraction-from-matplotlib">Color map extraction from matplotlib&lt;/h3>
+&lt;div class="highlight">&lt;div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">numpy&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">np&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">matplotlib&lt;/span> &lt;span style="color:#000;font-weight:bold">as&lt;/span> &lt;span style="color:#555">mpl&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">import&lt;/span> &lt;span style="color:#555">base64&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>colormap_names &lt;span style="color:#000;font-weight:bold">=&lt;/span> [&lt;span style="color:#d14">&amp;#39;viridis&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;plasma&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;inferno&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;magma&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;cividis&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;gray&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;Purples&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;Blues&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;Greens&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;Oranges&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;Reds&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;Spectral&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;coolwarm&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;bwr&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;seismic&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;twilight&amp;#39;&lt;/span>, &lt;span style="color:#d14">&amp;#39;hsv&amp;#39;&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>x &lt;span style="color:#000;font-weight:bold">=&lt;/span> np&lt;span style="color:#000;font-weight:bold">.&lt;/span>linspace(&lt;span style="color:#099">0&lt;/span>, &lt;span style="color:#099">1&lt;/span>, &lt;span style="color:#099">256&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">for&lt;/span> name &lt;span style="color:#000;font-weight:bold">in&lt;/span> colormap_names:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cmap &lt;span style="color:#000;font-weight:bold">=&lt;/span> mpl&lt;span style="color:#000;font-weight:bold">.&lt;/span>colormaps[name]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RGB &lt;span style="color:#000;font-weight:bold">=&lt;/span> cmap(x)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RGBA &lt;span style="color:#000;font-weight:bold">=&lt;/span> [[c[&lt;span style="color:#099">0&lt;/span>], c[&lt;span style="color:#099">1&lt;/span>], c[&lt;span style="color:#099">2&lt;/span>], &lt;span style="color:#099">0&lt;/span>] &lt;span style="color:#000;font-weight:bold">for&lt;/span> c &lt;span style="color:#000;font-weight:bold">in&lt;/span> RGB]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RGBA &lt;span style="color:#000;font-weight:bold">=&lt;/span> np&lt;span style="color:#000;font-weight:bold">.&lt;/span>ceil(np&lt;span style="color:#000;font-weight:bold">.&lt;/span>array(RGBA) &lt;span style="color:#000;font-weight:bold">*&lt;/span> &lt;span style="color:#099">255&lt;/span>)&lt;span style="color:#000;font-weight:bold">.&lt;/span>astype(np&lt;span style="color:#000;font-weight:bold">.&lt;/span>uint8)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> data &lt;span style="color:#000;font-weight:bold">=&lt;/span> RGBA&lt;span style="color:#000;font-weight:bold">.&lt;/span>data&lt;span style="color:#000;font-weight:bold">.&lt;/span>tobytes()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> s &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#0086b3">str&lt;/span>(base64&lt;span style="color:#000;font-weight:bold">.&lt;/span>b64encode(data), &lt;span style="color:#d14">&amp;#39;utf-8&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> lua_str &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#d14">&amp;#34;builder.colorMaps[&amp;#39;&lt;/span>&lt;span style="color:#d14">{0}&lt;/span>&lt;span style="color:#d14">&amp;#39;] = &amp;#39;&lt;/span>&lt;span style="color:#d14">{1}&lt;/span>&lt;span style="color:#d14">&amp;#39;&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>format(name&lt;span style="color:#000;font-weight:bold">.&lt;/span>lower(), s)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#0086b3">print&lt;/span>(lua_str)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>which produces an output similar to&lt;/p>
+&lt;pre tabindex="0">&lt;code>builder.colorMaps[&amp;#39;viridis&amp;#39;] = &amp;#39;RQJVAEUDVgBFBFgARgZZAEYHWwBGCVwARwpdAEcMXwBHDWAARw9iAEgQYwBI...&amp;#39;
+builder.colorMaps[&amp;#39;plasma&amp;#39;] = &amp;#39;DQiHABEIiAAUB4oAFgeLABkHjAAcB40AHgeOACAGjwAiBpAAJAaRACYGkgAo...&amp;#39;
+builder.colorMaps[&amp;#39;inferno&amp;#39;] = &amp;#39;AQEEAAEBBQABAQcAAgEIAAICCgACAgwAAwIPAAMDEQAEAxMABQQVAAUEFwAG...&amp;#39;
+builder.colorMaps[&amp;#39;magma&amp;#39;] = &amp;#39;AQEEAAEBBQABAQcAAgEIAAICCgACAgwAAwMOAAMDEAAEBBIABQQUAAUFFgAG...&amp;#39;
+builder.colorMaps[&amp;#39;cividis&amp;#39;] = &amp;#39;ACNOAAAkUAAAJFEAACVTAAAmVQAAJ1YAACdYAAAoWgAAKVwAACldAAAqXwAA...&amp;#39;
+builder.colorMaps[&amp;#39;gray&amp;#39;] = &amp;#39;AAAAAAEBAQACAgIAAwMDAAQEBAAFBQUABgYGAAcHBwAICAgACQkJAAoKCgAL...&amp;#39;
+builder.colorMaps[&amp;#39;purples&amp;#39;] = &amp;#39;/Pv9APz7/QD8+/0A+/r9APv6/AD6+fwA+vn8APr4/AD5+PsA+fj7APj3+wD4...&amp;#39;
+builder.colorMaps[&amp;#39;blues&amp;#39;] = &amp;#39;9/v/APf7/wD2+v8A9fr/APT5/gD0+f4A8/j+APL4/gDx9/0A8Pf9APD2/QDv...&amp;#39;
+builder.colorMaps[&amp;#39;greens&amp;#39;] = &amp;#39;9/z1APf89QD2/PQA9vz0APX88wD1+/IA9PvyAPT78QDz+/AA8vvwAPL67wDx...&amp;#39;
+builder.colorMaps[&amp;#39;oranges&amp;#39;] = &amp;#39;//XrAP/16wD/9eoA//TpAP/06AD/8+cA//PmAP/y5QD/8uQA//HjAP/x4gD/...&amp;#39;
+builder.colorMaps[&amp;#39;reds&amp;#39;] = &amp;#39;//XwAP/18AD/9O8A//TuAP/z7QD/8uwA//LrAP/x6gD/8OkA//DoAP/v5wD/...&amp;#39;
+builder.colorMaps[&amp;#39;spectral&amp;#39;] = &amp;#39;ngFCAKEEQwCjBkQApQlEAKcLRQCpDUUAqxBGAK4SRgCwFUcAshdHALQZSAC2...&amp;#39;
+builder.colorMaps[&amp;#39;coolwarm&amp;#39;] = &amp;#39;O03BADxOwgA9UMQAP1LFAEBUxwBBVcgAQlfKAENZywBEW80ARlzOAEde0ABI...&amp;#39;
+builder.colorMaps[&amp;#39;bwr&amp;#39;] = &amp;#39;AAD/AAIC/wAEBP8ABgb/AAgI/wAKCv8ADAz/AA4O/wAQEP8AEhL/ABQU/wAW...&amp;#39;
+builder.colorMaps[&amp;#39;seismic&amp;#39;] = &amp;#39;AABNAAAAUAAAAFMAAABVAAAAWAAAAFsAAABeAAAAYQAAAGMAAABmAAAAaQAA...&amp;#39;
+builder.colorMaps[&amp;#39;twilight&amp;#39;] = &amp;#39;4tnjAOHa4wDg2uIA39rhAN7a4QDc2eAA2tnfANnY3gDX190A1dfcANPW2wDQ...&amp;#39;
+builder.colorMaps[&amp;#39;hsv&amp;#39;] = &amp;#39;/wAAAP8GAAD/DAAA/xIAAP8YAAD/HgAA/yQAAP8qAAD/MAAA/zYAAP88AAD/...&amp;#39;
+&lt;/code>&lt;/pre></description></item><item><title>Blog: Raspberry Pi 4 build</title><link>/blog/2022/11/28/raspberry-pi-4-build/</link><pubDate>Mon, 28 Nov 2022 00:00:00 +0000</pubDate><guid>/blog/2022/11/28/raspberry-pi-4-build/</guid><description>
 &lt;img src="/blog/2022/11/28/raspberry-pi-4-build/featured_optical-flow_hu8366e8cdc6a2eb44e74a1b676d82daf2_216085_640x0_resize_catmullrom_3.png" width="640" height="275"/>
 &lt;h2 id="introduction">Introduction&lt;/h2>
 &lt;p>The Raspberry Pi 4 project announced back in &lt;a href="https://www.raspberrypi.com/news/vulkan-update-were-conformant/">November 2020&lt;/a> that the Vulkan 1.0 conformance tests successfully passed for its GPU driver. More recently in &lt;a href="https://www.raspberrypi.com/news/vulkan-update-version-1-2-conformance-for-raspberry-pi-4/">August 2022&lt;/a>, Vulkan 1.2 conformance testing has been completed.&lt;/p>
