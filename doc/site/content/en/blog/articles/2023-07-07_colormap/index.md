@@ -1,7 +1,7 @@
 ---
 date: 2023-07-07
-title: "Colormap nodes"
-linkTitle: "Colormap nodes"
+title: "Color mapping for data visualization"
+linkTitle: "Color mapping"
 description: "New colormap nodes for data visualization."
 author: Juan Adarve
 resources:
@@ -9,9 +9,13 @@ resources:
   title: "Image #:counter"
 ---
 
+{{< alert title="Jupyter notebook:" >}}
+A Jupyter notebook with the code in this article is available in [Google Colab](https://colab.research.google.com/drive/147ywmmX4e5Ozvnf0DVJSqJcea26fx8jS#scrollTo=iYVTQmChletC). Check it out!
+{{< /alert >}}
+
 ## Introduction
 
-Data visualization is an important tool for developing new algorithms. For 2D data in particular, it is possible to visualize the data as colored images.
+Data visualization is an important tool for presenting the results of new algorithms. For 2D data in particular, it is possible to visualize the data as colored images so that our brains can interpret the data in a visual way. This article presents new color mapping nodes available in Lluvia to transform 2D data into color images. These nodes use several color maps available in the [Matplotlib project][1] to accelerate data to color conversion using the GPU.
 
 ## Color mapping
 
@@ -44,9 +48,35 @@ That is, creating a 3-vector of the normalized input value repeated in each colo
 
 ### Complex color mappings
 
-**TODO:** talk about matplotlib colormaps.
+More complex color maps have a whole set of research on color theory, human color perception and physics. Designing new color maps exclusive for Lluvia is out of scope for the project and serves little purpose as there are great color maps readily available from the open source community. In particular, since I work with Python a lot, and use [Matplotlib][1] heavily, I decided to export several of the color maps available there into Lluvia. The reader is highly encouraged to watch the presentation below from Stéfan van der Walt ([@stefanv](https://github.com/stefanv)) and Nathaniel Smith ([@njsmith](https://github.com/njsmith)) on a default perceptually uniform colormap for Matplotlib.
 
-## Colormap nodes
+The following color maps are extracted from [Matplotlib](https://matplotlib.org/stable/tutorials/colors/colormaps.html) using code similar to that presented in the Appendix section:
+
+* **Perceptually uniform maps:**
+    * viridis.
+    * plasma.
+    * inferno.
+    * magma.
+    * cividis.
+* **Sequential maps:**
+    * gray.
+    * purples.
+    * blues.
+    * greens.
+    * oranges.
+    * reds.
+* **Diverging maps:**
+    * spectral.
+    * coolwarm.
+    * bwr.
+    * seismic.
+* **Cyclic maps:**
+    * twilight.
+    * hsv.
+
+{{<youtube xAoljeRJ3lU>}}
+
+## Colormap nodes in Lluvia
 
 There are four new nodes available in Lluvia for color mapping:
 
@@ -72,11 +102,69 @@ The interface of `ColorMap` is:
 * **Outputs:**
     * `out_image` : ImageView. rgba8ui image. The encoded color of the optical flow field.
 
-**TODO:** Sample usage
 
-## Available color maps
+The code bellow shows how to instantiate, configure, and run the `ColorMap` node:
 
-Below is the list of available color maps to choose from. These color maps are extracted from [Matplotlib](https://matplotlib.org/stable/tutorials/colors/colormaps.html) and stored in the `Colormap` node of Lluvia. The Appendix section provides the script to extract the color map data.
+{{< tabpane >}}
+{{< tab header="Python" lang="python">}}
+import lluvia as ll
+import lluvia.util as ll_util
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+session = ll.createSession(device=ll.getAvailableDevices()[0])
+
+memory = session.createMemory(ll.MemoryPropertyFlagBits.DeviceLocal)
+host_memory = session.createMemory([ll.MemoryPropertyFlagBits.DeviceLocal, ll.MemoryPropertyFlagBits.HostVisible, ll.MemoryPropertyFlagBits.HostCoherent])
+
+colormap_names = ['viridis', 'plasma', 'inferno', 'magma', 'cividis', 'gray', 'purples', 'blues', 'greens', 'oranges', 'reds', 'spectral', 'coolwarm', 'bwr', 'seismic', 'twilight', 'hsv']
+
+RGBA = ll_util.readSampleImage('mouse')
+
+in_rgba = memory.createImageViewFromHost(RGBA, filterMode=ll.ImageFilterMode.Nearest, addressMode=ll.ImageAddressMode.Repeat, normalizedCoordinates=False, sampled=False)
+
+RGBA2Gray = session.createComputeNode('lluvia/color/RGBA2Gray')
+RGBA2Gray.bind('in_rgba', in_rgba)
+RGBA2Gray.init()
+
+RGBA2Gray.run()
+
+img_gray = RGBA2Gray.getPort('out_gray').toHost().astype(dtype)
+        
+for cmap_name in colormap_names:
+    
+    fig = plt.figure(figsize=(20, 4)); fig.set_tight_layout(True)
+    
+    plt.subplot2grid((1,3), (0,0)); plt.imshow(img_gray, cmap='gray')
+    plt.tick_params(axis='both', which='both', bottom=False, top=False, labelbottom=False, labelleft=False)
+    plt.title('original')
+    
+    for i, reverse in enumerate([0, 1]):
+        
+
+        in_image = memory.createImageViewFromHost(img_gray)
+
+        ColorMap = session.createContainerNode('lluvia/viz/colormap/ColorMap')
+        ColorMap.bind('in_image', in_image)
+        ColorMap.setParameter('colormap', ll.Parameter(cmap_name))
+        ColorMap.setParameter('min_value', ll.Parameter(0))
+        ColorMap.setParameter('max_value', ll.Parameter(255))
+        ColorMap.setParameter('alpha', ll.Parameter(1.0))
+        ColorMap.setParameter('reverse', ll.Parameter(reverse))
+        ColorMap.init()
+
+        ColorMap.run()
+
+        out_rgba = ColorMap.getPort('out_rgba').toHost()
+        
+        plt.subplot2grid((1,3), (0, i+1)); plt.imshow(out_rgba)
+        plt.tick_params(axis='both', which='both', bottom=False, top=False, labelbottom=False, labelleft=False)
+        plt.title('{0}{1}'.format(cmap_name, ' - reversed' if bool(reverse) else ''))
+    
+    plt.show()
+{{< /tab >}}
+{{< /tabpane >}}
 
 ### Perceptually uniform maps
 
@@ -157,9 +245,6 @@ Below is the list of available color maps to choose from. These color maps are e
 ![](hsv.jpg)
 
 
-## Discussion
-
-
 ## Appendix
 
 ### Color map extraction from matplotlib
@@ -209,3 +294,6 @@ builder.colorMaps['seismic']  = 'AABNAAAAUAAAAFMAAABVAAAAWAAAAFsAAABeAAAAYQAAAGM
 builder.colorMaps['twilight'] = '4tnjAOHa4wDg2uIA39rhAN7a4QDc2eAA2tnfANnY3gDX190A1dfcANPW2wDQ...'
 builder.colorMaps['hsv']      = '/wAAAP8GAAD/DAAA/xIAAP8YAAD/HgAA/yQAAP8qAAD/MAAA/zYAAP88AAD/...'
 ```
+
+
+[1]: https://matplotlib.org/
