@@ -7,7 +7,7 @@ LABEL Author="Juan David Adarve Bermudez <juanda0718@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LUNARG_VERSION="1.3.239"
-ARG HUGO_VERSION="0.98.0"
+ARG HUGO_VERSION="0.115.3"
 
 ENV TZ=Etc/UTC
 
@@ -47,9 +47,9 @@ RUN pip3 install --no-cache-dir \
     sphinx \
     sphinx-rtd-theme
 
-RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.deb \
-    && dpkg -i hugo_extended_${HUGO_VERSION}_Linux-64bit.deb \
-    && rm hugo_extended_${HUGO_VERSION}_Linux-64bit.deb
+RUN wget "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb" \
+    && dpkg -i hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+    && rm hugo_extended_${HUGO_VERSION}_linux-amd64.deb
 
 # Bazel
 RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg \
