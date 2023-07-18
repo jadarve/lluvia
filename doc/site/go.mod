@@ -3,7 +3,7 @@ module github.com/jadarve/lluvia
 go 1.12
 
 require (
-	github.com/FortAwesome/Font-Awesome v0.0.0-20210804190922-7d3d774145ac // indirect
-	github.com/google/docsy v0.2.0 // indirect
-	github.com/twbs/bootstrap v4.6.1+incompatible // indirect
+	github.com/FortAwesome/Font-Awesome v0.0.0-20230327165841-0698449d50f2 // indirect
+	github.com/google/docsy v0.7.1 // indirect
+	github.com/twbs/bootstrap v5.2.3+incompatible // indirect
 )

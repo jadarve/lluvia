@@ -6,7 +6,7 @@ orbs:
 jobs:
   linux-test:
     docker:
-      - image: jadarve/lluvia@sha256:2d3761b1bfdbd716ed153adc879c04e6202f8c345e12d16d93676a6e3540cd14
+      - image: jadarve/lluvia@sha256:11fc8b0e764455d1806e7cbcb5ddf272e70bf15443d3f8795782f18422c98f2e
         auth:
           username: jadarve
           password: $DOCKERHUB_PASSWORD
@@ -24,7 +24,7 @@ jobs:
   
   gh-pages-build:
     docker:
-      - image: jadarve/lluvia@sha256:2d3761b1bfdbd716ed153adc879c04e6202f8c345e12d16d93676a6e3540cd14
+      - image: jadarve/lluvia@sha256:11fc8b0e764455d1806e7cbcb5ddf272e70bf15443d3f8795782f18422c98f2e
         auth:
           username: jadarve
           password: $DOCKERHUB_PASSWORD
