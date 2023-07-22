@@ -1,33 +1,32 @@
-
-config_setting (
+config_setting(
     name = "linux",
     constraint_values = [
-        "@platforms//os:linux"
+        "@platforms//os:linux",
     ],
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )
 
-config_setting (
+config_setting(
     name = "android",
     values = {
         # same as that of mediapipe
-        "crosstool_top": "//external:android/crosstool"
+        "crosstool_top": "//external:android/crosstool",
     },
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )
 
-config_setting (
+config_setting(
     name = "windows",
     constraint_values = [
-        "@platforms//os:windows"
+        "@platforms//os:windows",
     ],
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )
 
 filegroup(
     name = "readme_file",
     srcs = [
-        "README.md"
+        "README.md",
     ],
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )
