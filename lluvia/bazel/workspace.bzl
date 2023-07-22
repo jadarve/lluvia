@@ -89,8 +89,7 @@ def lluvia_workspace():
         repo_rule = git_repository,
         name = "rules_vulkan",
         remote = "https://github.com/jadarve/rules_vulkan.git",
-        commit = "5be6f73b14d83cac233c811ec295464d74a6f023",
-        shallow_since = "1668364345 -0500",
+        commit = "cdce9274c42b5964452c7e82193daff81d4bfe09",
     )
 
     maybe(
