@@ -1,18 +1,20 @@
 load("@bazel_tools//tools/python:toolchain.bzl", "py_runtime_pair")
 load("@rules_python//python:defs.bzl", "py_runtime")
-load(":values.bzl",
+load(
+    ":values.bzl",
     "python2_path_linux",
-    "python3_path_linux",
     "python2_path_windows",
-    "python3_path_windows")
+    "python3_path_linux",
+    "python3_path_windows",
+)
 
 # SEE https://github.com/bazelbuild/bazel/issues/7899
 
 py_runtime(
     name = "lluvia_py2_runtime",
     interpreter_path = select({
-        "@lluvia//:linux": python2_path_linux,
         "@lluvia//:windows": python2_path_windows,
+        "//conditions:default": python2_path_linux,
     }),
     python_version = "PY2",
 )
@@ -20,8 +22,8 @@ py_runtime(
 py_runtime(
     name = "lluvia_py3_runtime",
     interpreter_path = select({
-        "@lluvia//:linux": python3_path_linux,
         "@lluvia//:windows": python3_path_windows,
+        "//conditions:default": python3_path_linux,
     }),
     python_version = "PY3",
 )

@@ -2,7 +2,7 @@ load("@lluvia//lluvia/bazel/cython:def.bzl", "pyx_library")
 
 package(default_visibility = ["//visibility:public"])
 
-pyx_library (
+pyx_library(
     name = "pyx_library",
     srcs = [
         "lluvia/__init__.py",
@@ -22,75 +22,47 @@ pyx_library (
         "lluvia/core/types.pxd",
         "lluvia/core/vulkan.pxd",
         "lluvia/util.py",
-    ] +
-    glob([
+    ] + glob([
         "lluvia/core/buffer/*.py",
         "lluvia/core/buffer/*.pyx",
         "lluvia/core/buffer/*.pxd",
-    ]) +
-    glob([
+    ]) + glob([
         "lluvia/core/device/*.py",
         "lluvia/core/device/*.pyx",
         "lluvia/core/device/*.pxd",
-    ]) +
-    glob([
+    ]) + glob([
         "lluvia/core/image/*.py",
         "lluvia/core/image/*.pyx",
         "lluvia/core/image/*.pxd",
-    ]) +
-    glob([
+    ]) + glob([
         "lluvia/core/memory/*.py",
         "lluvia/core/memory/*.pyx",
         "lluvia/core/memory/*.pxd",
-    ]) +
-    glob([
+    ]) + glob([
         "lluvia/core/node/*.py",
         "lluvia/core/node/*.pyx",
         "lluvia/core/node/*.pxd",
-    ]) +
-    glob([
+    ]) + glob([
         "lluvia/core/enums/*.py",
         "lluvia/core/enums/*.pyx",
         "lluvia/core/enums/*.pxd",
         "lluvia/core/impl/*.py",
         "lluvia/core/impl/*.pyx",
         "lluvia/core/impl/*.pxd",
-    ]) +
-    glob([
+    ]) + glob([
         "lluvia/nodes/**/*py",
         "lluvia/glsl/**/*py",
         "lluvia/resources/**/*py",
     ]),
-    srcs_version = "PY3",
-    imports = [
-        "."
-    ],
-    directives = [
-        "--3str",
-        "--cplus"
-    ],
-    deps = [
-        "//lluvia/cpp/core:core_cc_library",
-        "@rules_lua//cc:lua_cc_library",
-    ] + select({
-        "@lluvia//:windows": [
-            "@python_windows//:python3-lib",
-            "@numpy_windows//:numpy_cc_library",
-        ],
-        "@lluvia//:linux": [
-            "@python_linux//:python3-lib",
-            "@numpy_linux//:numpy_cc_library",
-        ],
-    }),
     copts = select({
-        "@lluvia//:windows":[
+        "@lluvia//:windows": [
             "/std:c++17",
             "/w",
             "/nologo",
             "/INCREMENTAL:NO",
             "/DLL",
         ],
-        "@lluvia//:linux": [
+        "//conditions:default": [
             "--std=c++17",
             "-stdlib=libstdc++",
             "-fwrapv",
@@ -101,8 +73,19 @@ pyx_library (
             "-DSOL_ALL_SAFETIES_ON=1",
         ],
     }),
+    directives = [
+        "--3str",
+        "--cplus",
+    ],
+    imports = [
+        ".",
+    ],
     linkopts = select({
-        "@lluvia//:linux": [
+        "@lluvia//:windows": [
+            "/MANIFESTUAC:NO",
+            "/MANIFEST:EMBED,ID=2",
+        ],
+        "//conditions:default": [
             "-lvulkan",
             "-lm",
             "-ldl",
@@ -116,11 +99,20 @@ pyx_library (
             "-Wdate-time",
             "-D_FORTIFY_SOURCE=2",
         ],
+    }),
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//lluvia/cpp/core:core_cc_library",
+        "@rules_lua//cc:lua_cc_library",
+    ] + select({
         "@lluvia//:windows": [
-            "/MANIFESTUAC:NO",
-            "/MANIFEST:EMBED,ID=2",
+            "@python_windows//:python3-lib",
+            "@numpy_windows//:numpy_cc_library",
+        ],
+        "//conditions:default": [
+            "@python_linux//:python3-lib",
+            "@numpy_linux//:numpy_cc_library",
         ],
     }),
-    visibility = ["//visibility:public"]
 )
-

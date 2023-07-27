@@ -7,15 +7,12 @@ cc_library(
         "stb_image_write.h",
     ],
     copts = select({
-        "@lluvia//:linux": [
-            "--std=c++17"
-        ],
         "@lluvia//:windows": [
-            "/std:c++17"
+            "/std:c++17",
         ],
         "//conditions:default": [
-            "--std=c++17"
-        ]
+            "--std=c++17",
+        ],
     }),
     visibility = ["//visibility:public"],
 )

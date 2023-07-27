@@ -15,7 +15,7 @@ def pyx_library(
         srcs_version = "PY2AND3",
         directives = [
             "--3str",
-            "--cplus"
+            "--cplus",
         ],
         copts = [],
         linkopts = [],
@@ -61,7 +61,6 @@ def pyx_library(
     py_init = []
 
     for src in srcs:
-
         if src.endswith("__init__.py"):
             py_init.append(src)
             py_srcs.append(src)
@@ -72,23 +71,21 @@ def pyx_library(
         else:
             pxd_srcs.append(src)
 
-
     # Invoke cython to produce the shared object libraries.
     shared_objects_linux = []
     shared_objects_windows = []
     for filename in pyx_srcs:
-
-        filename_noextension = filename[:-4] # remove .pyx
+        filename_noextension = filename[:-4]  # remove .pyx
 
         cy_compile_target = filename_noextension + "_cy_compile"
-        cy_compile (
+        cy_compile(
             name = cy_compile_target,
             pyx = filename,
             headers = pxd_srcs + py_init,
-            directives = directives
+            directives = directives,
         )
 
-        cc_binary (
+        cc_binary(
             name = filename_noextension + "_library",
             srcs = [cy_compile_target],
             deps = deps,
@@ -96,7 +93,7 @@ def pyx_library(
             testonly = testonly,
             copts = copts,
             linkopts = linkopts,
-            visibility = ["//visibility:public"]
+            visibility = ["//visibility:public"],
         )
 
         # for Windows, need to rename the extension of the cc_binary from .dll to .pyd
@@ -128,18 +125,17 @@ def pyx_library(
             srcs = [cp_input],
             outs = [cp_output_windows],
             cmd = "cp $(location {0}) $(location {1})".format(cp_input, cp_output_windows),
-            cmd_bat = "copy $(location {0}) $(location {1})".format(cp_input, cp_output_windows)
+            cmd_bat = "copy $(location {0}) $(location {1})".format(cp_input, cp_output_windows),
         )
 
         shared_objects_windows.append(shared_object_name_windows)
 
     shared_objects = select({
-            "@lluvia//:linux": shared_objects_linux,
-            "@lluvia//:windows": shared_objects_windows,
-            # TODO: MacOS
-            "//conditions:default": [],
-        })
-    
+        "@lluvia//:windows": shared_objects_windows,
+        # TODO: MacOS
+        "//conditions:default": shared_objects_linux,
+    })
+
     # Now create a py_library with these shared objects as data.
     py_library(
         name = name,
@@ -152,9 +148,9 @@ def pyx_library(
         **kwargs
     )
 
-    native.filegroup (
+    native.filegroup(
         name = name + "_files",
         srcs = py_srcs + pxd_srcs + shared_objects,
         data = shared_objects,
-        visibility = ["//visibility:public"]
+        visibility = ["//visibility:public"],
     )
