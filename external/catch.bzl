@@ -5,15 +5,12 @@ cc_library(
     hdrs = ["single_include/catch2/catch.hpp"],
     strip_include_prefix = "single_include/",
     copts = select({
-        "@lluvia//:linux": [
-            "--std=c++17"
-        ],
         "@lluvia//:windows": [
-            "/std:c++17"
+            "/std:c++17",
         ],
         "//conditions:default": [
-            "--std=c++17"
-        ]
+            "--std=c++17",
+        ],
     }),
     visibility = ["//visibility:public"],
 )

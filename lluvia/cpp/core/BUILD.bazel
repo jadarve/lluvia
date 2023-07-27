@@ -24,17 +24,6 @@ cc_library(
         "include/**/*.hpp",
     ]) + [":core_lua_cc_library_header"],
     copts = select({
-        "@lluvia//:linux": [
-            "-std=c++17",
-            "-stdlib=libstdc++",
-            "-Werror",
-            "-Wall",
-            "-Wextra",
-            "-Wshadow",
-            "-Wshorten-64-to-32",
-            "-Wnon-virtual-dtor",
-            "-pedantic",
-        ],
         "@lluvia//:android": [
             "-std=c++17",
             "-stdlib=libstdc++",
@@ -50,20 +39,31 @@ cc_library(
             "/std:c++17",
             "/w",
         ],
+        # Linux
+        "//conditions:default": [
+            "-std=c++17",
+            "-stdlib=libstdc++",
+            "-Werror",
+            "-Wall",
+            "-Wextra",
+            "-Wshadow",
+            "-Wshorten-64-to-32",
+            "-Wnon-virtual-dtor",
+            "-pedantic",
+        ],
     }),
     # linkstatic = True,
     linkopts = select({
-        "@lluvia//:linux": [
-            "-lvulkan",
-            "-lm",
-            "-ldl",
-        ],
         "@lluvia//:android": [
             "-lm",
             "-ldl",
         ],
         "@lluvia//:windows": [],
-        "//conditions:default": [],
+        "//conditions:default": [
+            "-lvulkan",
+            "-lm",
+            "-ldl",
+        ],
     }),
     strip_include_prefix = "include/",
     visibility = ["//visibility:public"],
