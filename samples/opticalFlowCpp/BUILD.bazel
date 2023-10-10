@@ -1,0 +1,36 @@
+"""
+"""
+
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+config_setting(
+    name = "on_linux",
+    constraint_values = [
+        "@platforms//os:linux",
+    ],
+)
+
+config_setting(
+    name = "on_windows",
+    constraint_values = [
+        "@platforms//os:windows",
+    ],
+)
+
+cc_binary(
+    name = "opticalFlowCpp",
+    srcs = ["main.cpp"],
+    copts = select({
+        ":on_linux": [
+            "--std=c++17",
+            "-stdlib=libstdc++",
+        ],
+        ":on_windows": [
+            "/std:c++17",
+        ],
+    }),
+    deps = [
+        "@lluvia//lluvia/cpp/core:core_cc_library",
+        "@opencv",
+    ],
+)

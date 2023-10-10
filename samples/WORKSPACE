@@ -1,0 +1,58 @@
+workspace(
+    name = "lluvia_samples",
+)
+
+local_repository(
+    name = "lluvia",
+    path = "..",
+)
+
+load("@lluvia//lluvia/bazel:workspace.bzl", "lluvia_workspace")
+
+lluvia_workspace()
+
+# Python configuration
+register_toolchains("@lluvia//platform:python_toolchain")
+
+load("@rules_python//python:pip.bzl", "pip_repositories")
+
+pip_repositories()
+
+# Platform configuration
+# Linux
+load("@lluvia//platform/linux:python.bzl", "numpy_linux", "python_linux")
+
+python_linux(name = "python_linux")
+
+numpy_linux(name = "numpy_linux")
+
+# Windows
+load("@lluvia//platform/windows:python.bzl", "numpy_windows", "python_windows")
+
+python_windows(name = "python_windows")
+
+numpy_windows(name = "numpy_windows")
+
+# Packaging rules
+load("@ll_rules_pkg//:deps.bzl", "rules_pkg_dependencies")
+
+rules_pkg_dependencies()
+
+# Vulkan rules
+load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
+
+vulkan_repositories(
+    android_use_host_vulkan_sdk = True,
+)
+
+# Lua rules
+load("@rules_lua//toolchains:repositories.bzl", "lua_repositories")
+
+lua_repositories()
+
+###############################################################################
+new_local_repository(
+    name = "opencv",
+    build_file = "external/opencv_linux.bzl",
+    path = "/usr/local",
+)
