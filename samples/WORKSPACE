@@ -1,7 +1,10 @@
 workspace(
-    name = "lluvia_samples",
+    name = "samples",
 )
 
+###########################################################
+# LLUVIA
+###########################################################
 local_repository(
     name = "lluvia",
     path = "..",
@@ -12,13 +15,22 @@ load("@lluvia//lluvia/bazel:workspace.bzl", "lluvia_workspace")
 lluvia_workspace()
 
 # Python configuration
+# CONFIGURE: go to platform/values.bzl and change the paths
+#            of the python interpreters according to your installation.
+#            Only the values for your OS matter.
 register_toolchains("@lluvia//platform:python_toolchain")
 
-load("@rules_python//python:pip.bzl", "pip_repositories")
+# TODO: review if really needed
+# load("@rules_python//python:pip.bzl", "pip_repositories")
 
-pip_repositories()
+# pip_repositories()
 
 # Platform configuration
+
+# TODO: Room for improvement here. I should be able to have a single
+#       version of both python_lib and numpy_lib regardless of the
+#       operating system.
+
 # Linux
 load("@lluvia//platform/linux:python.bzl", "numpy_linux", "python_linux")
 
@@ -42,6 +54,8 @@ rules_pkg_dependencies()
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
 
 vulkan_repositories(
+    # The headers provided by the NDK are older than those used by lluvia to build,
+    # hence, use the host Vulkan SDK headers.
     android_use_host_vulkan_sdk = True,
 )
 
