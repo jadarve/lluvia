@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("@rules_vulkan//glsl:defs.bzl", "glsl_shader")
 
 config_setting(
@@ -18,29 +18,29 @@ config_setting(
 glsl_shader(
     name = "ImageDownsampleX_shader",
     shader = "glsl/imageDownsampleX.comp",
+    visibility = ["//visibility:public"],
     deps = [
-        "//lluvia/glsl/lib:lluvia_glsl_library"
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
     ],
-    visibility = ["//visibility:public"]
 )
 
 glsl_shader(
     name = "ImageDownsampleY_shader",
     shader = "glsl/imageDownsampleY.comp",
+    visibility = ["//visibility:public"],
     deps = [
-        "//lluvia/glsl/lib:lluvia_glsl_library"
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
     ],
-    visibility = ["//visibility:public"]
 )
 
-cc_library (
+cc_library(
     name = "imagePyramid_cc_library",
-    hdrs = [
-        "include/ImagePyramid.h",
-    ],
     srcs = [
         "src/ImagePyramid.cpp",
     ],
+    hdrs = [
+        "include/ImagePyramid.h",
+    ],
     copts = select({
         ":on_linux": [
             "--std=c++17",
@@ -51,20 +51,20 @@ cc_library (
         ],
     }),
     linkopts = [
-        "-lstdc++fs"
-    ],
-    deps = [
-        "//lluvia/cpp/core:core_cc_library",
-        "@stb//:stb_image_cc_library",
+        "-lstdc++fs",
     ],
     strip_include_prefix = "include",
     visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/cpp/core:core_cc_library",
+        "@stb//:stb_image_cc_library",
+    ],
 )
 
-cc_binary (
+cc_binary(
     name = "imagePyramid",
     srcs = [
-        "src/main.cpp"
+        "src/main.cpp",
     ],
     copts = select({
         ":on_linux": [
@@ -75,14 +75,14 @@ cc_binary (
             "/std:c++17",
         ],
     }),
+    data = [
+        ":ImageDownsampleX_shader",
+        ":ImageDownsampleY_shader",
+    ],
     linkopts = [
-        "-lstdc++fs"
+        "-lstdc++fs",
     ],
     deps = [
         ":imagePyramid_cc_library",
     ],
-    data = [
-        ":ImageDownsampleX_shader",
-        ":ImageDownsampleY_shader"
-    ]
 )

@@ -1,31 +1,31 @@
 workspace(
-    name = "lluvia",
+    name = "examples",
 )
 
 ###########################################################
-# download third-party dependencies
+# LLUVIA
 ###########################################################
+local_repository(
+    name = "lluvia",
+    path = "..",
+)
 
 load("@lluvia//lluvia/bazel:workspace.bzl", "lluvia_workspace")
 
 lluvia_workspace()
 
-###########################################################
 # Python configuration
-###########################################################
 # CONFIGURE: go to platform/values.bzl and change the paths
 #            of the python interpreters according to your installation.
 #            Only the values for your OS matter.
 register_toolchains("@lluvia//platform:python_toolchain")
 
-# Only needed if using the packaging rules.
-load("@rules_python//python:pip.bzl", "pip_repositories")
+# TODO: review if really needed
+# load("@rules_python//python:pip.bzl", "pip_repositories")
 
-pip_repositories()
+# pip_repositories()
 
-###########################################################
-# PLATFORM CONFIGURATION
-###########################################################
+# Platform configuration
 
 # TODO: Room for improvement here. I should be able to have a single
 #       version of both python_lib and numpy_lib regardless of the
@@ -45,35 +45,28 @@ python_windows(name = "python_windows")
 
 numpy_windows(name = "numpy_windows")
 
-###########################################################
 # Packaging rules
-###########################################################
 load("@ll_rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
 
-###########################################################
 # Vulkan rules
-###########################################################
 load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
 
 vulkan_repositories(
+    # The headers provided by the NDK are older than those used by lluvia to build,
+    # hence, use the host Vulkan SDK headers.
     android_use_host_vulkan_sdk = True,
 )
 
-###########################################################
 # Lua rules
-###########################################################
 load("@rules_lua//toolchains:repositories.bzl", "lua_repositories")
 
 lua_repositories()
 
-###########################################################
-# Nested worskspaces
-#
-# See https://stackoverflow.com/questions/65229233/bazel-workspace-file-not-behaving-as-documented
-###########################################################
-# local_repository(
-#     name = "examples_workspace",
-#     path = "examples",
-# )
+###############################################################################
+new_local_repository(
+    name = "opencv",
+    build_file = "external/opencv_linux.bzl",
+    path = "/usr/local",
+)

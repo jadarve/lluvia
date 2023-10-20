@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("@rules_vulkan//glsl:defs.bzl", "glsl_shader")
 
 config_setting(
@@ -18,26 +18,25 @@ config_setting(
 glsl_shader(
     name = "ImageDownsampleX_shader",
     shader = "glsl/ImageDownsampleX.comp",
+    visibility = ["//visibility:public"],
     deps = [
-        "//lluvia/glsl/lib:lluvia_glsl_library"
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
     ],
-    visibility = ["//visibility:public"]
 )
 
 glsl_shader(
     name = "ImageDownsampleY_shader",
     shader = "glsl/ImageDownsampleY.comp",
+    visibility = ["//visibility:public"],
     deps = [
-        "//lluvia/glsl/lib:lluvia_glsl_library"
+        "@lluvia//lluvia/glsl/lib:lluvia_glsl_library",
     ],
-    visibility = ["//visibility:public"]
 )
 
-
-cc_binary (
+cc_binary(
     name = "imagePyramid_lua",
     srcs = [
-        "src/main.cpp"
+        "src/main.cpp",
     ],
     copts = select({
         ":on_linux": [
@@ -48,18 +47,18 @@ cc_binary (
             "/std:c++17",
         ],
     }),
-    linkopts = [
-        "-lstdc++fs"
-    ],
-    deps = [
-        "//lluvia/cpp/core:core_cc_library",
-        "@stb//:stb_image_cc_library",
-    ],
     data = [
-        ":ImageDownsampleX_shader",
-        ":ImageDownsampleY_shader",
         "lua/ImageDownsampleX.lua",
         "lua/ImageDownsampleY.lua",
         "lua/ImagePyramid.lua",
-    ]
+        ":ImageDownsampleX_shader",
+        ":ImageDownsampleY_shader",
+    ],
+    linkopts = [
+        "-lstdc++fs",
+    ],
+    deps = [
+        "@lluvia//lluvia/cpp/core:core_cc_library",
+        "@stb//:stb_image_cc_library",
+    ],
 )

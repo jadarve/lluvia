@@ -1,0 +1,43 @@
+load("@rules_cc//cc:defs.bzl", "cc_proto_library")
+# load("@rules_proto//proto:defs.bzl", "cc_proto_library")
+
+cc_proto_library(
+    name = "core_proto_cc_library",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lluvia//lluvia/proto:core_proto_library",
+    ],
+)
+
+# cc_library(
+#     name = "core_proto_cc_library",
+#     copts = select({
+#         "@lluvia//:linux": [
+#             "-std=c++17",
+#             "-stdlib=libstdc++",
+#             "-Werror",
+#             "-Wall",
+#             "-Wextra",
+#             "-Wshadow",
+#             "-Wshorten-64-to-32",
+#             "-Wnon-virtual-dtor",
+#             "-pedantic",
+#         ],
+#         "@lluvia//:android": [
+#             "-std=c++17",
+#             "-stdlib=libstdc++",
+#             "-Werror",
+#             "-Wall",
+#             "-Wextra",
+#             "-Wshadow",
+#             "-Wshorten-64-to-32",
+#             "-Wnon-virtual-dtor",
+#             "-pedantic",
+#         ],
+#         "@lluvia//:windows": [
+#             "/std:c++17",
+#             "/w",
+#         ],
+#     }),
+#     visibility = ["//visibility:public"],
+# )
