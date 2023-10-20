@@ -67,3 +67,13 @@ vulkan_repositories(
 load("@rules_lua//toolchains:repositories.bzl", "lua_repositories")
 
 lua_repositories()
+
+###########################################################
+# Nested worskspaces
+#
+# See https://stackoverflow.com/questions/65229233/bazel-workspace-file-not-behaving-as-documented
+###########################################################
+# local_repository(
+#     name = "examples_workspace",
+#     path = "examples",
+# )

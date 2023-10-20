@@ -57,7 +57,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "@lluvia//lluvia/cpp/core:core_cc_library",
-        "@lluvia_stb//:stb_image_cc_library",
+        "@stb//:stb_image_cc_library",
     ],
 )
 

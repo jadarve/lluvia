@@ -25,7 +25,7 @@ def lluvia_workspace():
         ],
         sha256 = "06dbc7620e3b96c2b69d57bf337028bf245a211b3cddb843835bfe258f427a52",
         strip_prefix = "Catch2-2.13.9",
-        build_file = "catch.bzl",
+        build_file = "@lluvia//:external/catch.bzl",
     )
 
     maybe(
@@ -55,7 +55,7 @@ def lluvia_workspace():
         remote = "https://github.com/nothings/stb.git",
         commit = "f54acd4e13430c5122cab4ca657705c84aa61b08",
         shallow_since = "1580905940 -0800",
-        build_file = "stb.bzl",
+        build_file = "@lluvia//:external/stb.bzl",
     )
 
     maybe(
@@ -64,7 +64,7 @@ def lluvia_workspace():
         url = "https://github.com/cython/cython/releases/download/0.29.28/Cython-0.29.28.tar.gz",
         sha256 = "d6fac2342802c30e51426828fe084ff4deb1b3387367cf98976bb2e64b6f8e45",
         strip_prefix = "Cython-0.29.28",
-        build_file = "cython.bzl",
+        build_file = "@lluvia//:external/cython.bzl",
     )
 
     maybe(
