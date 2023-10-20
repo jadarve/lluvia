@@ -1,4 +1,5 @@
 
+#include <chrono>
 #include <iostream>
 #include <lluvia/core.h>
 #include <opencv2/opencv.hpp>
@@ -211,7 +212,7 @@ int main(int argc, char** argv)
                                              | ll::ImageUsageFlagBits::Sampled
                                              | ll::ImageUsageFlagBits::TransferDst);
 
-    auto deviceInputImage     = deviceMemory->createImage(inputImageDesc);
+    auto deviceInputImage     = ll::createAndInitImage(session, deviceMemory, inputImageDesc, ll::ImageLayout::General);
     auto deviceInputImageView = deviceInputImage->createImageView(ll::ImageViewDescriptor {ll::ImageAddressMode::ClampToEdge,
         ll::ImageFilterMode::Nearest,
         false,   // normalized coordinates
@@ -226,6 +227,10 @@ int main(int argc, char** argv)
     auto deviceOutputImage     = deviceOutputImageView->getImage();
 
     ///////////////////////////////////////////////////////////////////////////
+    // Duration to record node runtime
+    auto duration = session->createDuration();
+
+    ///////////////////////////////////////////////////////////////////////////
     // Command buffer
     auto cmdBuffer = session->createCommandBuffer();
     cmdBuffer->begin();
@@ -233,7 +238,9 @@ int main(int argc, char** argv)
     cmdBuffer->copyBufferToImage(*inputStagingBuffer, *deviceInputImage);
     cmdBuffer->changeImageLayout(*deviceInputImage, ll::ImageLayout::General);
 
+    cmdBuffer->durationStart(*duration);
     cmdBuffer->run(*opticalFlowNode);
+    cmdBuffer->durationEnd(*duration);
 
     cmdBuffer->changeImageLayout(*deviceOutputImage, ll::ImageLayout::TransferSrcOptimal);
     cmdBuffer->copyImageToBuffer(*deviceOutputImage, *outputStagingBuffer);
@@ -252,6 +259,10 @@ int main(int argc, char** argv)
         }
 
         session->run(*cmdBuffer);
+
+        // display the runtime of the node
+        auto runtime_ms = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(duration->getDuration()).count();
+        cv::putText(inputFrame, std::to_string(runtime_ms) + " ms", cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 255), 2, cv::LINE_AA);
 
         cv::imshow("input image", inputFrame);
         cv::imshow("optical flow", outputFlowColorBGRA);
