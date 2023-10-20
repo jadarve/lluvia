@@ -21,6 +21,21 @@ jobs:
           command: bazel test --jobs=2 --test_output=errors //...
       # - store_test_results:
       #     path: bazel-testlogs
+
+  examples-build:
+    docker:
+      - image: jadarve/lluvia@sha256:11fc8b0e764455d1806e7cbcb5ddf272e70bf15443d3f8795782f18422c98f2e
+        auth:
+          username: jadarve
+          password: $DOCKERHUB_PASSWORD
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Build Examples
+          command: |
+            cd examples
+            bazel build //...
   
   gh-pages-build:
     docker:
@@ -137,6 +152,7 @@ workflows:
   build:
     jobs:
       - linux-test
+      - examples-build
       - gh-pages-build
       - gh-pages-deploy:
           requires:
