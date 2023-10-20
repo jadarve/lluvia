@@ -51,3 +51,23 @@ make -j
 sudo make install
 ```
 
+## Optical Flow Example
+
+First, build the node library target in the `lluvia` project:
+
+```bash
+cd ..
+bazel build //lluvia/nodes:lluvia_node_library
+```
+
+Then, run the example:
+
+```bash
+# back to this folder
+cd examples
+
+# run the example
+bazel run //opticalFlowCpp:opticalFlowCpp $(pwd)/../bazel-bin/lluvia/nodes/lluvia_node_library.zip
+```
+
+where `$(pwd)/../bazel-bin/lluvia/nodes/lluvia_node_library.zip` is the absolute path to the node library target archive containing the GLSL and Lua code that make the nodes.
