@@ -3,6 +3,14 @@
 ### OpenCV
 
 ```bash
+sudo apt install -y \
+    libavcodec-dev \
+    libavformat-dev \
+    libavutil-dev \
+    libswscale-dev 
+```
+
+```bash
 mkdir -p ~/local/opencv && cd ~/local/opencv
 
 # Download and unpack sources

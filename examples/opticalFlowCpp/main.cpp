@@ -41,6 +41,11 @@ function builder.onNodeInit(node)
     BGRA2Gray:init()
     node:bindNode('BGRA2Gray', BGRA2Gray)
 
+    -- immediately run this node to convert the input BGRA to gray. This is necessary
+    -- so that the Horn and Schunck node can be initialized with an actual image and
+    -- not with zeros.
+    ll.run(BGRA2Gray)
+
     local out_gray = BGRA2Gray:getPort('out_gray')
 
     -- Horn and Schunck
@@ -188,6 +193,8 @@ int main(int argc, char** argv)
         std::cerr << "couldn't read frame." << std::endl;
         return EXIT_FAILURE;
     }
+
+    // convert to BGRA the first time to obtain the size of the image buffer needed to allocate the staging buffer
     cv::cvtColor(inputFrame, inputFrameBGRA, cv::COLOR_BGR2BGRA);
 
     auto inputStagingBuffer = hostMemory->createBuffer(inputFrameBGRA.step * inputFrameBGRA.rows);
@@ -195,6 +202,9 @@ int main(int argc, char** argv)
     // recreate the inputFrameBGRA image using the staging buffer as memory storage
     auto inputStagingBufferMapped = inputStagingBuffer->map<uint8_t>();
     inputFrameBGRA                = cv::Mat(cv::Size(inputFrameBGRA.cols, inputFrameBGRA.rows), CV_8UC4, inputStagingBufferMapped.get(), inputFrameBGRA.step);
+
+    // as the inputFrameBGRA was recreated, we need to convert the inputFrame to BGRA again
+    cv::cvtColor(inputFrame, inputFrameBGRA, cv::COLOR_BGR2BGRA);
 
     // CV image to receive the colored optical flow and display on screen
     auto outputStagingBuffer       = hostMemory->createBuffer(inputFrameBGRA.step * inputFrameBGRA.rows);
@@ -221,6 +231,17 @@ int main(int argc, char** argv)
     ///////////////////////////////////////////////////////////////////////////
     // Node initialization
     opticalFlowNode->bind("in_image", deviceInputImageView);
+
+    // Copy the initial image from the staging buffer to deviceInputImage in order to initialize
+    // the optical flow node with actual data
+    auto copyImgCmdBuffer = session->createCommandBuffer();
+    copyImgCmdBuffer->begin();
+    copyImgCmdBuffer->changeImageLayout(*deviceInputImage, ll::ImageLayout::TransferDstOptimal);
+    copyImgCmdBuffer->copyBufferToImage(*inputStagingBuffer, *deviceInputImage);
+    copyImgCmdBuffer->changeImageLayout(*deviceInputImage, ll::ImageLayout::General);
+    copyImgCmdBuffer->end();
+    session->run(*copyImgCmdBuffer);
+
     opticalFlowNode->init();
 
     auto deviceOutputImageView = std::static_pointer_cast<ll::ImageView>(opticalFlowNode->getPort("out_image"));
