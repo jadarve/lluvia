@@ -19,7 +19,9 @@ float_precision : int. Defaults to ll.FloatPrecision.FP32.
 Inputs
 ------
 in_gray : ImageView
-    r8ui image. The input gray-scale image.
+    r8ui image. The input gray-scale image. It should contain valid image data before
+    initializing the node in order to avoid residual flow calculcations in the first
+    iterations of the algorithm.
 
 Outputs
 -------
