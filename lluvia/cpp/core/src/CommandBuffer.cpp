@@ -213,19 +213,7 @@ void CommandBuffer::clearImage(ll::Image& image)
 
 void CommandBuffer::clearImage(ll::ImageView& imageView)
 {
-    auto image = imageView.getImage();
-
-    auto clearColor = vk::ClearColorValue {std::array<int32_t, 4> {0, 0, 0, 0}};
-
-    auto range = vk::ImageSubresourceRange()
-                     .setAspectMask(vk::ImageAspectFlagBits::eColor)
-                     .setBaseMipLevel(0)
-                     .setLevelCount(1)
-                     .setBaseArrayLayer(0)
-                     .setLayerCount(1);
-
-    m_commandBuffer.clearColorImage(image->m_vkImage,
-        ll::impl::toVkImageLayout(image->m_layout), clearColor, range);
+    clearImage(*(imageView.getImage()));
 }
 
 void CommandBuffer::durationStart(ll::Duration& duration)
