@@ -6,12 +6,14 @@ import lluvia_test as ll_test
 
 
 @pytest.mark.parametrize(
-    "precision, channelType", [
-        pytest.param(ll.FloatPrecision.FP32, ll.ChannelType.Float32, id="float32"),
-        pytest.param(ll.FloatPrecision.FP16, ll.ChannelType.Float16, id="float16")
+    "precision, channelType, clearHistory", [
+        pytest.param(ll.FloatPrecision.FP32, ll.ChannelType.Float32, 0, id="float32"),
+        pytest.param(ll.FloatPrecision.FP16, ll.ChannelType.Float16, 0, id="float16"),
+        pytest.param(ll.FloatPrecision.FP32, ll.ChannelType.Float32, 1, id="float32_clear_history"),
+        pytest.param(ll.FloatPrecision.FP16, ll.ChannelType.Float16, 1, id="float16_clear_history")
     ],
 )
-def test_goodUse(precision, channelType):
+def test_goodUse(precision, channelType, clearHistory):
 
     nodeName = 'lluvia/opticalflow/HornSchunck/HornSchunck'
 
@@ -44,6 +46,7 @@ def test_goodUse(precision, channelType):
 
     node.setParameter('iterations', ll.Parameter(5))
     node.setParameter('float_precision', ll.Parameter(precision.value))
+    node.setParameter('clear_history', ll.Parameter(clearHistory))
     node.bind('in_gray', in_gray)
     node.init()
 

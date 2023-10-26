@@ -189,6 +189,11 @@ public:
     void clearImage(ll::Image& image);
 
     /**
+    @brief      Clears the pixels of an image to zero.
+    */
+    void clearImage(ll::ImageView& imageVide);
+
+    /**
     @brief      Starts recording the elapsed time between two points.
 
     @param      duration  The duration object.

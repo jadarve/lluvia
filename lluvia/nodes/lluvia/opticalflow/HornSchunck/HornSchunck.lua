@@ -16,6 +16,10 @@ float_precision : int. Defaults to ll.FloatPrecision.FP32.
     Floating point precision used accross the algorithm. The outputs out_gray
     and out_flow will be of this floating point precision.
 
+clear_history : int. Defaults to 0.
+    If set to 1, the history of the optical flow is cleared before running the
+    algorithm on the next input image.
+
 Inputs
 ------
 in_gray : ImageView
@@ -127,6 +131,7 @@ function builder.newDescriptor()
     desc:setParameter('alpha', 0.05)
     desc:setParameter('iterations', 1)
     desc:setParameter('float_precision', ll.FloatPrecision.FP32)
+    desc:setParameter('clear_history', 0)
 
     return desc
 end
@@ -243,6 +248,7 @@ function builder.onNodeRecord(node, cmdBuffer)
     ll.logd(node.descriptor.builderName, 'onNodeRecord')
 
     local iterations = node:getParameter('iterations')
+    local clear_history = node:getParameter('clear_history')
 
     local imageProcessor = node:getNode('ImageProcessor')
     local copyInGrayToInGrayOld = node:getNode('CopyInGrayToInGrayOld')
@@ -252,6 +258,12 @@ function builder.onNodeRecord(node, cmdBuffer)
     cmdBuffer:memoryBarrier()
     cmdBuffer:run(copyInGrayToInGrayOld)
     cmdBuffer:memoryBarrier()
+
+    -- check if the history of the optical flow should be cleared before the numeric iterations
+    if clear_history > 0 then
+        local out_flow = node:getPort('out_flow')
+        cmdBuffer:clearImage(out_flow)
+    end
 
     for i = 1, iterations do
         local numericIteration = node:getNode(string.format('NumericIteration_%d', i))

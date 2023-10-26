@@ -50,9 +50,10 @@ function builder.onNodeInit(node)
 
     -- Horn and Schunck
     local HornSchunck = ll.createContainerNode('lluvia/opticalflow/HornSchunck/HornSchunck')
-    HornSchunck:setParameter('alpha', 0.03)
+    HornSchunck:setParameter('alpha', 0.05)
     HornSchunck:setParameter('iterations', 20)
     HornSchunck:setParameter('float_precision', ll.FloatPrecision.FP32)
+    HornSchunck:setParameter('clear_history', 1)
     HornSchunck:bind('in_gray', out_gray)
 
     HornSchunck:init()
@@ -176,7 +177,7 @@ int main(int argc, char** argv)
     ///////////////////////////////////////////////////////////////////////////
     // Open camera
     cv::VideoCapture cap;
-    cap.open(0); // open the first camera available
+    cap.open("/home/juan/Downloads/people.mp4"); // open the first camera available
 
     if (!cap.isOpened()) {
         std::cerr << "couldn't open capture." << std::endl;
@@ -288,7 +289,7 @@ int main(int argc, char** argv)
         cv::imshow("input image", inputFrame);
         cv::imshow("optical flow", outputFlowColorBGRA);
 
-        if (cv::waitKey(30) >= 0)
+        if (cv::waitKey(300) >= 0)
 
             break;
     }
