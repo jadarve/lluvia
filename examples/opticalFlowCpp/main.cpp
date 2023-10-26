@@ -177,7 +177,7 @@ int main(int argc, char** argv)
     ///////////////////////////////////////////////////////////////////////////
     // Open camera
     cv::VideoCapture cap;
-    cap.open("/home/juan/Downloads/people.mp4"); // open the first camera available
+    cap.open(0); // open the first camera available
 
     if (!cap.isOpened()) {
         std::cerr << "couldn't open capture." << std::endl;
@@ -289,7 +289,7 @@ int main(int argc, char** argv)
         cv::imshow("input image", inputFrame);
         cv::imshow("optical flow", outputFlowColorBGRA);
 
-        if (cv::waitKey(300) >= 0)
+        if (cv::waitKey(30) >= 0)
 
             break;
     }
