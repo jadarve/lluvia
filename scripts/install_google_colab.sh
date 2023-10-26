@@ -27,7 +27,7 @@ mv bazel.gpg /etc/apt/trusted.gpg.d/
 echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
 
 apt update
-apt install -y vulkan-sdk bazel
+apt install -y libnvidia-gl-525 vulkan-sdk bazel
 
 # Go to lluvia's directory
 cd lluvia
