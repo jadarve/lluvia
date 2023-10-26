@@ -348,6 +348,8 @@ void registerTypes(sol::table& lib)
         "run", (void(ll::CommandBuffer::*)(const ll::ComputeNode& node)) & ll::CommandBuffer::run,
         "memoryBarrier", &ll::CommandBuffer::memoryBarrier,
         "changeImageLayout", (void(ll::CommandBuffer::*)(ll::Image & image, const ll::ImageLayout newLayout)) & ll::CommandBuffer::changeImageLayout,
+        "clearImage", (void(ll::CommandBuffer::*)(ll::Image & image)) & ll::CommandBuffer::clearImage,
+        "clearImage", (void(ll::CommandBuffer::*)(ll::ImageView & imageView)) & ll::CommandBuffer::clearImage,
         "copyImageToImage", &ll::CommandBuffer::copyImageToImage,
         "copyBufferToImage", &ll::CommandBuffer::copyBufferToImage);
 

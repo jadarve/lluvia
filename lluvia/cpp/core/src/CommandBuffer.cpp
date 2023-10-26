@@ -211,6 +211,11 @@ void CommandBuffer::clearImage(ll::Image& image)
         ll::impl::toVkImageLayout(image.m_layout), clearColor, range);
 }
 
+void CommandBuffer::clearImage(ll::ImageView& imageView)
+{
+    clearImage(*(imageView.getImage()));
+}
+
 void CommandBuffer::durationStart(ll::Duration& duration)
 {
 
