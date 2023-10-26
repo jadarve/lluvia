@@ -9,6 +9,7 @@ var classll_1_1CommandBuffer =
     [ "changeImageLayout", "dc/d37/classll_1_1CommandBuffer.html#a5b1381c537e20e61bcf20db60e429063", null ],
     [ "changeImageLayout", "dc/d37/classll_1_1CommandBuffer.html#a5a3398e3bba2baac08e2146eff9f4371", null ],
     [ "clearImage", "dc/d37/classll_1_1CommandBuffer.html#af8a3b2ff73b52864d555a3c7bbb5daa5", null ],
+    [ "clearImage", "dc/d37/classll_1_1CommandBuffer.html#afbc287cb1b18e0da3c66269f5987441f", null ],
     [ "copyBuffer", "dc/d37/classll_1_1CommandBuffer.html#a2c28d9141b620a9bd9f616f2d0382057", null ],
     [ "copyBufferToImage", "dc/d37/classll_1_1CommandBuffer.html#a0828dfb64f76170f346adadce6ab11d0", null ],
     [ "copyImageToBuffer", "dc/d37/classll_1_1CommandBuffer.html#a6a2b0483cfab20b4c7f20125130390d8", null ],
